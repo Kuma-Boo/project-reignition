@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://dgq2mwyi2qr0c"]
+
+[ext_resource type="PackedScene" uid="uid://bo76pw30b3vvs" path="res://area/5 pirate storm/object/model/platforms/BridgeThin.gltf" id="1_iyv71"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iyv71"]
+size = Vector3(3, 10, 10)
+
+[node name="BridgeThin" type="Node3D"]
+
+[node name="BridgeThin" parent="." instance=ExtResource("1_iyv71")]
+
+[node name="BridgeThinMesh" parent="BridgeThin" index="0"]
+layers = 2
+
+[node name="Collision" type="StaticBody3D" parent="." groups=["floor", "splash jump", "wall", "wood"]]
+collision_layer = 17
+collision_mask = 17
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collision"]
+shape = SubResource("BoxShape3D_iyv71")
+
+[editable path="BridgeThin"]

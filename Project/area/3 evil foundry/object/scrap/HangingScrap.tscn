@@ -1,15 +1,19 @@
-[gd_scene load_steps=11 format=3 uid="uid://b5dibkkf5v0en"]
+[gd_scene load_steps=13 format=3 uid="uid://b5dibkkf5v0en"]
 
 [ext_resource type="PackedScene" uid="uid://b7m6ycj60sqx5" path="res://area/3 evil foundry/object/model/scrap/ScrapClaw.gltf" id="1_7go6u"]
-[ext_resource type="Script" path="res://area/3 evil foundry/data/script/HangingScrap.cs" id="1_cv8j3"]
+[ext_resource type="Script" uid="uid://bk7f1koqs4cq0" path="res://area/3 evil foundry/data/script/HangingScrap.cs" id="1_cv8j3"]
 [ext_resource type="PackedScene" uid="uid://cptiijnhwgwjm" path="res://area/3 evil foundry/object/model/scrap/HangingScrap.gltf" id="2_rhjaa"]
-[ext_resource type="AudioStream" uid="uid://db7hww3ufbe68" path="res://sound/sfx/stage/evil foundry/hanging scrap.wav" id="4_rerat"]
+[ext_resource type="PackedScene" uid="uid://cgjdnwcl27ndq" path="res://area/3 evil foundry/object/model/scrap/HangingScrapPieces.gltf" id="4_mqh2e"]
+[ext_resource type="AudioStream" uid="uid://db7hww3ufbe68" path="res://sound/sfx/stage/evil foundry/hanging scrap attacked.wav" id="4_rerat"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hhikk"]
-size = Vector3(4.5, 1.4, 4.5)
+size = Vector3(4.5, 2, 4.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yocea"]
-size = Vector3(4, 1.2, 4)
+size = Vector3(1.5, 1.6, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_48nus"]
+size = Vector3(4, 0.8, 1.5)
 
 [sub_resource type="Animation" id="Animation_tapwj"]
 resource_name = "RESET"
@@ -31,7 +35,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:visible")
+tracks/1/path = NodePath("Collision:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -43,31 +47,31 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Hitbox/CollisionShape3D:disabled")
+tracks/2/path = NodePath("Collision:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Vector3(0, -10.9, 0)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Collision:visible")
+tracks/3/path = NodePath("Collision/CollisionShape3D:disabled")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Collision/CollisionShape3D:disabled")
+tracks/4/path = NodePath("Collision/CollisionShape3D2:disabled")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -79,34 +83,94 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Collision:position")
+tracks/5/path = NodePath("Collision/HangingScrap:position")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0, -10.9, 0)]
+"values": [Vector3(0, 0, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Hitbox:monitorable")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Hitbox/CollisionShape3D:disabled")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
-[sub_resource type="Animation" id="Animation_2q0sr"]
-resource_name = "delay_drop"
-length = 0.5
+[sub_resource type="Animation" id="Animation_kcbku"]
+resource_name = "hide-base-mesh"
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Hitbox/CollisionShape3D:disabled")
+tracks/0/path = NodePath("Collision:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Collision/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Collision/CollisionShape3D2:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Hitbox/CollisionShape3D:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
 "values": [true]
 }
 
-[sub_resource type="Animation" id="Animation_8088o"]
-resource_name = "drop"
+[sub_resource type="Animation" id="Animation_3hncg"]
+resource_name = "shatter"
 length = 2.0
 tracks/0/type = "method"
 tracks/0/imported = false
@@ -126,69 +190,21 @@ tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/path = NodePath("Collision:position")
-tracks/1/interp = 1
+tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(2, 1),
+"times": PackedFloat32Array(0, 0.5, 1.2, 1.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector3(0, -10.9, 0), Vector3(0, -40, 0)]
+"values": [Vector3(0, -10.9, 0), Vector3(0, -15, 0), Vector3(0, -40, 0), Vector3(0, -80, 0)]
 }
-tracks/2/type = "value"
+tracks/2/type = "method"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath(".:visible")
+tracks/2/path = NodePath("SFX")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Hitbox/CollisionShape3D:disabled")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Collision:visible")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("Collision/CollisionShape3D:disabled")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/6/type = "method"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("SFX")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -196,17 +212,50 @@ tracks/6/keys = {
 "method": &"play"
 }]
 }
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1.9),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Despawn"
+}]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Hitbox:monitorable")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_uxish"]
 _data = {
-"RESET": SubResource("Animation_tapwj"),
-"delay_drop": SubResource("Animation_2q0sr"),
-"drop": SubResource("Animation_8088o")
+&"RESET": SubResource("Animation_tapwj"),
+&"hide-base-mesh": SubResource("Animation_kcbku"),
+&"shatter": SubResource("Animation_3hncg")
 }
 
-[node name="HangingScrap" type="Node3D" node_paths=PackedStringArray("animator")]
+[node name="HangingScrap" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator", "snapTransform")]
 script = ExtResource("1_cv8j3")
+pieceMass = 0.2
+shakeScreenOnShatter = false
+shatterFlags = 12
+bounceStrength = 1.0
+root = NodePath("Collision")
+pieceRoot = NodePath("HangingScrapPieces")
 animator = NodePath("AnimationPlayer")
+snapTransform = NodePath("Hitbox")
 
 [node name="ScrapClaw" parent="." instance=ExtResource("1_7go6u")]
 
@@ -229,13 +278,21 @@ collision_mask = 8
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.9, 0)
 shape = SubResource("BoxShape3D_yocea")
 
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Collision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.9, 0)
+shape = SubResource("BoxShape3D_48nus")
+
+[node name="HangingScrapPieces" parent="." instance=ExtResource("4_mqh2e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10.9, 0)
+visible = false
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_uxish")
+&"": SubResource("AnimationLibrary_uxish")
 }
-next/delay_drop = &"drop"
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="."]
+process_mode = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -11, 0)
 stream = ExtResource("4_rerat")
 max_db = 0.0

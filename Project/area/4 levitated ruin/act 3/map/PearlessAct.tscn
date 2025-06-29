@@ -1,0 +1,2918 @@
+[gd_scene load_steps=16 format=3 uid="uid://bysx3noobfu3c"]
+
+[ext_resource type="PackedScene" uid="uid://pqaytcsp2twi" path="res://area/4 levitated ruin/act 3/Static.tscn" id="1_s18oo"]
+[ext_resource type="Resource" uid="uid://cqyx621t6bagx" path="res://resource/level data/levitated ruin/Act3Pearless.tres" id="2_ikxbm"]
+[ext_resource type="Resource" uid="uid://dtlomlnq31bv3" path="res://area/4 levitated ruin/act 3/camera/pearless/PearlessZiplineCam.tres" id="3_288x2"]
+[ext_resource type="Resource" uid="uid://whyie01gfcws" path="res://area/4 levitated ruin/act 3/camera/pearless/SkyroadPearlessCorkscrewCam.tres" id="3_562df"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_rdda6"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_xwevn"]
+[ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="4_oeq3d"]
+[ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_hsvrt"]
+[ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="6_u4p5r"]
+[ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="6_yth8c"]
+[ext_resource type="PackedScene" uid="uid://cggks1kly71mq" path="res://object/enemy/majin/data/levitated ruin/BlueMajin.tscn" id="9_dw0vd"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="11_s18oo"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="14_cc388"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_562df"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_isgee"]
+size = Vector3(10, 20, 2.5)
+
+[node name="World" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_s18oo")]
+Data = ExtResource("2_ikxbm")
+
+[node name="Zipline" parent="Static/Paths/ZiplinePath" index="0"]
+transform = Transform3D(1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, 1, 0, 0.0871555, 0.996195)
+
+[node name="Cam" parent="Static/Paths/ZiplinePath/Zipline" index="2"]
+settings = ExtResource("3_288x2")
+
+[node name="Camera" parent="Static/SkyRoad/SkyRoad01/CorkscrewCamera" index="0"]
+settings = ExtResource("3_562df")
+
+[node name="Camera" parent="Static/SkyRoad/SkyRoad01/Corkscrew2Camera" index="0"]
+settings = ExtResource("3_562df")
+
+[node name="PearlessAct" type="Node3D" parent="."]
+
+[node name="SpawnPosition" type="Node3D" parent="PearlessAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.4, 10, -1375)
+metadata/_edit_lock_ = true
+
+[node name="LockoutTrigger" parent="PearlessAct/SpawnPosition" instance=ExtResource("3_rdda6")]
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PearlessAct/SpawnPosition/LockoutTrigger"]
+shape = SubResource("SphereShape3D_562df")
+
+[node name="CharacterSpawn" parent="PearlessAct/SpawnPosition" instance=ExtResource("3_xwevn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.115204, 0.0168877, 0.0136719)
+
+[node name="Objects" type="Node3D" parent="PearlessAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -40, -1150)
+
+[node name="DashPanelGroup" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 50, -238)
+
+[node name="DashPanelL" parent="PearlessAct/Objects/DashPanelGroup" instance=ExtResource("4_oeq3d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+
+[node name="DashPanelR" parent="PearlessAct/Objects/DashPanelGroup" instance=ExtResource("4_oeq3d")]
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -1, 0, 0)
+
+[node name="PearlsL11" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(0.999954, 8.79468e-05, -0.00958687, -2.58649e-07, 0.999953, 0.00914627, 0.00958732, -0.00914584, 0.999907, -1.39494, 12.7674, -269.275)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 20
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad1")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsL11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0, 1.90735e-06, -0.000610352)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsL11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.00486755, -0.00442696, -1.01404)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsL11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.0195618, -0.0180407, -2.02759)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsL11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.0442963, -0.0409441, -3.04102)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsL11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.0792236, -0.0732555, -4.05408)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsL11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.124573, -0.115072, -5.06677)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsL11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.180481, -0.166492, -6.07861)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsL11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.247147, -0.227595, -7.0896)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsL11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.324738, -0.298463, -8.09937)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsL11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.413391, -0.379156, -9.10779)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsL11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.513275, -0.469714, -10.1145)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsL11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.624542, -0.570177, -11.1194)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsL11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.747284, -0.680576, -12.1221)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsL11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.881699, -0.8009, -13.1224)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsL11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 1.02783, -0.931151, -14.12)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsL11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 1.18579, -1.07129, -15.1146)
+
+[node name="Child17" parent="PearlessAct/Objects/PearlsL11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 1.35568, -1.22126, -16.1061)
+
+[node name="Child18" parent="PearlessAct/Objects/PearlsL11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 1.53754, -1.38102, -17.094)
+
+[node name="Child19" parent="PearlessAct/Objects/PearlsL11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 1.73145, -1.55044, -18.0782)
+
+[node name="Child20" parent="PearlessAct/Objects/PearlsL11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 1.93747, -1.72947, -19.0585)
+
+[node name="PearlsL12" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(0.999954, 8.79468e-05, -0.00958687, -2.58649e-07, 0.999953, 0.00914627, 0.00958732, -0.00914584, 0.999907, -1.395, 13.567, -269.275)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 20
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad1")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsL12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0, 1.90735e-06, -0.000610352)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsL12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.00486755, -0.00442696, -1.01404)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsL12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.0195618, -0.0180407, -2.02759)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsL12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.0442963, -0.0409441, -3.04102)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsL12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.0792236, -0.0732555, -4.05408)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsL12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.124573, -0.115072, -5.06677)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsL12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.180481, -0.166492, -6.07861)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsL12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.247147, -0.227595, -7.0896)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsL12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.324738, -0.298463, -8.09937)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsL12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.413391, -0.379156, -9.10779)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsL12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.513275, -0.469714, -10.1145)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsL12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.624542, -0.570177, -11.1194)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsL12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.747284, -0.680576, -12.1221)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsL12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.881699, -0.8009, -13.1224)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsL12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 1.02783, -0.931151, -14.12)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsL12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 1.18579, -1.07129, -15.1146)
+
+[node name="Child17" parent="PearlessAct/Objects/PearlsL12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 1.35568, -1.22126, -16.1061)
+
+[node name="Child18" parent="PearlessAct/Objects/PearlsL12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 1.53754, -1.38102, -17.094)
+
+[node name="Child19" parent="PearlessAct/Objects/PearlsL12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 1.73145, -1.55044, -18.0782)
+
+[node name="Child20" parent="PearlessAct/Objects/PearlsL12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 1.93747, -1.72947, -19.0585)
+
+[node name="PearlsL13" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(0.999954, 8.79468e-05, -0.00958687, -2.58649e-07, 0.999953, 0.00914627, 0.00958732, -0.00914584, 0.999907, -1.395, 14.367, -269.275)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 20
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad1")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsL13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0, 1.90735e-06, -0.000610352)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsL13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.00486755, -0.00442696, -1.01404)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsL13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.0195618, -0.0180407, -2.02759)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsL13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.0442963, -0.0409441, -3.04102)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsL13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.0792236, -0.0732555, -4.05408)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsL13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.124573, -0.115072, -5.06677)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsL13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.180481, -0.166492, -6.07861)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsL13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.247147, -0.227595, -7.0896)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsL13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.324738, -0.298463, -8.09937)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsL13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.413391, -0.379156, -9.10779)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsL13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.513275, -0.469714, -10.1145)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsL13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.624542, -0.570177, -11.1194)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsL13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.747284, -0.680576, -12.1221)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsL13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 0.881699, -0.8009, -13.1224)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsL13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 1.02783, -0.931151, -14.12)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsL13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 1.18579, -1.07129, -15.1146)
+
+[node name="Child17" parent="PearlessAct/Objects/PearlsL13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 1.35568, -1.22126, -16.1061)
+
+[node name="Child18" parent="PearlessAct/Objects/PearlsL13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 1.53754, -1.38102, -17.094)
+
+[node name="Child19" parent="PearlessAct/Objects/PearlsL13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 1.73145, -1.55044, -18.0782)
+
+[node name="Child20" parent="PearlessAct/Objects/PearlsL13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, -7.27596e-12, 1, 0, -9.31323e-10, 0, 1, 1.93747, -1.72947, -19.0585)
+
+[node name="PearlsR11" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(0.999953, 8.79461e-05, -0.0095868, -2.58649e-07, 0.999946, 0.0091462, 0.00958731, -0.00914578, 0.9999, 1.40492, 12.7674, -269.248)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 20
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad1")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsR11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, -1.52588e-05, -9.53674e-07, 0.000488281)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsR11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.00471497, -0.00466537, -0.985962)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsR11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.0189972, -0.0185175, -1.97217)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsR11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.0430298, -0.0416622, -2.95752)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsR11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.0769806, -0.0742245, -3.94202)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsR11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.121002, -0.116298, -4.92578)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsR11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.175293, -0.167972, -5.9082)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsR11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.23996, -0.229348, -6.88916)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsR11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.31517, -0.300485, -7.86841)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsR11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.401093, -0.381445, -8.8457)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsR11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.497849, -0.472281, -9.82104)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsR11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.605545, -0.57303, -10.7939)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsR11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.724319, -0.68371, -11.7643)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsR11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.854294, -0.804327, -12.7318)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsR11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.995529, -0.93487, -13.696)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsR11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 1.14813, -1.0753, -14.6572)
+
+[node name="Child17" parent="PearlessAct/Objects/PearlsR11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 1.31216, -1.22558, -15.6145)
+
+[node name="Child18" parent="PearlessAct/Objects/PearlsR11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 1.48772, -1.38564, -16.5682)
+
+[node name="Child19" parent="PearlessAct/Objects/PearlsR11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 1.67477, -1.55537, -17.5179)
+
+[node name="Child20" parent="PearlessAct/Objects/PearlsR11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 1.87343, -1.7347, -18.4634)
+
+[node name="PearlsR12" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(0.999953, 8.79461e-05, -0.0095868, -2.58649e-07, 0.999946, 0.0091462, 0.00958731, -0.00914578, 0.9999, 1.405, 13.567, -269.248)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 20
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad1")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsR12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, -1.52588e-05, -9.53674e-07, 0.000488281)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsR12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.00471497, -0.00466537, -0.985962)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsR12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.0189972, -0.0185175, -1.97217)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsR12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.0430298, -0.0416622, -2.95752)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsR12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.0769806, -0.0742245, -3.94202)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsR12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.121002, -0.116298, -4.92578)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsR12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.175293, -0.167972, -5.9082)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsR12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.23996, -0.229348, -6.88916)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsR12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.31517, -0.300485, -7.86841)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsR12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.401093, -0.381445, -8.8457)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsR12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.497849, -0.472281, -9.82104)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsR12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.605545, -0.57303, -10.7939)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsR12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.724319, -0.68371, -11.7643)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsR12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.854294, -0.804327, -12.7318)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsR12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.995529, -0.93487, -13.696)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsR12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 1.14813, -1.0753, -14.6572)
+
+[node name="Child17" parent="PearlessAct/Objects/PearlsR12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 1.31216, -1.22558, -15.6145)
+
+[node name="Child18" parent="PearlessAct/Objects/PearlsR12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 1.48772, -1.38564, -16.5682)
+
+[node name="Child19" parent="PearlessAct/Objects/PearlsR12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 1.67477, -1.55537, -17.5179)
+
+[node name="Child20" parent="PearlessAct/Objects/PearlsR12" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 1.87343, -1.7347, -18.4634)
+
+[node name="PearlsR13" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(0.999953, 8.79461e-05, -0.0095868, -2.58649e-07, 0.999946, 0.0091462, 0.00958731, -0.00914578, 0.9999, 1.405, 14.367, -269.248)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 20
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad1")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsR13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, -1.52588e-05, -9.53674e-07, 0.000488281)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsR13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.00471497, -0.00466537, -0.985962)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsR13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.0189972, -0.0185175, -1.97217)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsR13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.0430298, -0.0416622, -2.95752)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsR13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.0769806, -0.0742245, -3.94202)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsR13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.121002, -0.116298, -4.92578)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsR13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.175293, -0.167972, -5.9082)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsR13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.23996, -0.229348, -6.88916)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsR13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.31517, -0.300485, -7.86841)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsR13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.401093, -0.381445, -8.8457)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsR13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.497849, -0.472281, -9.82104)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsR13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.605545, -0.57303, -10.7939)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsR13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.724319, -0.68371, -11.7643)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsR13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.854294, -0.804327, -12.7318)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsR13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 0.995529, -0.93487, -13.696)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsR13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 1.14813, -1.0753, -14.6572)
+
+[node name="Child17" parent="PearlessAct/Objects/PearlsR13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 1.31216, -1.22558, -15.6145)
+
+[node name="Child18" parent="PearlessAct/Objects/PearlsR13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 1.48772, -1.38564, -16.5682)
+
+[node name="Child19" parent="PearlessAct/Objects/PearlsR13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 1.67477, -1.55537, -17.5179)
+
+[node name="Child20" parent="PearlessAct/Objects/PearlsR13" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -7.27596e-12, 0, 7.27596e-12, 1, 0, 0, 0, 1, 1.87343, -1.7347, -18.4634)
+
+[node name="Pearls11" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(0.864819, 0.158398, -0.476433, 2.23517e-08, 0.948916, 0.315484, 0.50208, -0.272837, 0.820643, 11.0546, 3.86835, -310.261)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 20
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad1")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/Pearls11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0, 0, 0)
+
+[node name="Child02" parent="PearlessAct/Objects/Pearls11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.00387573, 0.00177002, -1.00012)
+
+[node name="Child03" parent="PearlessAct/Objects/Pearls11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.0152893, 0.00778198, -2)
+
+[node name="Child04" parent="PearlessAct/Objects/Pearls11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.0332947, 0.0193481, -2.99927)
+
+[node name="Child05" parent="PearlessAct/Objects/Pearls11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.0574036, 0.0378113, -3.99939)
+
+[node name="Child06" parent="PearlessAct/Objects/Pearls11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.0866089, 0.0646362, -4.99866)
+
+[node name="Child07" parent="PearlessAct/Objects/Pearls11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.120148, 0.101563, -5.99744)
+
+[node name="Child08" parent="PearlessAct/Objects/Pearls11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.15686, 0.15033, -6.99548)
+
+[node name="Child09" parent="PearlessAct/Objects/Pearls11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.195587, 0.213104, -7.99292)
+
+[node name="Child10" parent="PearlessAct/Objects/Pearls11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.235199, 0.292114, -8.98901)
+
+[node name="Child11" parent="PearlessAct/Objects/Pearls11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.274078, 0.389984, -9.98328)
+
+[node name="Child12" parent="PearlessAct/Objects/Pearls11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.310638, 0.509583, -10.9755)
+
+[node name="Child13" parent="PearlessAct/Objects/Pearls11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.342865, 0.654053, -11.9645)
+
+[node name="Child14" parent="PearlessAct/Objects/Pearls11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.368683, 0.827026, -12.949)
+
+[node name="Child15" parent="PearlessAct/Objects/Pearls11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.385529, 1.03238, -13.9275)
+
+[node name="Child16" parent="PearlessAct/Objects/Pearls11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.390533, 1.27429, -14.8977)
+
+[node name="Child17" parent="PearlessAct/Objects/Pearls11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.380737, 1.55725, -15.8567)
+
+[node name="Child18" parent="PearlessAct/Objects/Pearls11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.35556, 1.87476, -16.8048)
+
+[node name="Child19" parent="PearlessAct/Objects/Pearls11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.318817, 2.20749, -17.7469)
+
+[node name="Child20" parent="PearlessAct/Objects/Pearls11" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.269043, 2.5618, -18.6808)
+
+[node name="Pearls21" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(0.864819, 0.158398, -0.476433, 2.23517e-08, 0.948916, 0.315484, 0.50208, -0.272837, 0.820643, 11.0546, 4.66835, -310.261)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 20
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad1")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/Pearls21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, -6.10352e-05, 0, 0.00012207)
+
+[node name="Child02" parent="PearlessAct/Objects/Pearls21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.00491333, 0.0017395, -0.998413)
+
+[node name="Child03" parent="PearlessAct/Objects/Pearls21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.0171204, 0.00775146, -1.99634)
+
+[node name="Child04" parent="PearlessAct/Objects/Pearls21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.0359497, 0.0192871, -2.99304)
+
+[node name="Child05" parent="PearlessAct/Objects/Pearls21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.0606384, 0.0376892, -3.99023)
+
+[node name="Child06" parent="PearlessAct/Objects/Pearls21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.090332, 0.0644226, -4.98572)
+
+[node name="Child07" parent="PearlessAct/Objects/Pearls21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.124023, 0.101135, -5.97998)
+
+[node name="Child08" parent="PearlessAct/Objects/Pearls21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.160889, 0.149689, -6.97302)
+
+[node name="Child09" parent="PearlessAct/Objects/Pearls21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.199585, 0.212036, -7.96423)
+
+[node name="Child10" parent="PearlessAct/Objects/Pearls21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.238831, 0.290527, -8.95337)
+
+[node name="Child11" parent="PearlessAct/Objects/Pearls21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.277344, 0.387604, -9.93982)
+
+[node name="Child12" parent="PearlessAct/Objects/Pearls21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.313293, 0.506042, -10.9226)
+
+[node name="Child13" parent="PearlessAct/Objects/Pearls21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.344727, 0.648956, -11.9009)
+
+[node name="Child14" parent="PearlessAct/Objects/Pearls21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.369751, 0.819824, -12.8734)
+
+[node name="Child15" parent="PearlessAct/Objects/Pearls21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.385803, 1.02228, -13.8381)
+
+[node name="Child16" parent="PearlessAct/Objects/Pearls21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.390442, 1.26035, -14.7927)
+
+[node name="Child17" parent="PearlessAct/Objects/Pearls21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.380493, 1.53818, -15.7345)
+
+[node name="Child18" parent="PearlessAct/Objects/Pearls21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.355591, 1.85309, -16.6748)
+
+[node name="Child19" parent="PearlessAct/Objects/Pearls21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.319244, 2.18323, -17.6097)
+
+[node name="Child20" parent="PearlessAct/Objects/Pearls21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.270294, 2.53375, -18.5334)
+
+[node name="Pearls31" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(0.864819, 0.158398, -0.476433, 2.23517e-08, 0.948916, 0.315484, 0.50208, -0.272837, 0.820643, 11.0546, 5.46835, -310.261)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 20
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad1")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/Pearls31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, -6.10352e-05, 0, 0.00012207)
+
+[node name="Child02" parent="PearlessAct/Objects/Pearls31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.00491333, 0.0017395, -0.998413)
+
+[node name="Child03" parent="PearlessAct/Objects/Pearls31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.0171204, 0.00775146, -1.99634)
+
+[node name="Child04" parent="PearlessAct/Objects/Pearls31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.0359497, 0.0192871, -2.99304)
+
+[node name="Child05" parent="PearlessAct/Objects/Pearls31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.0606384, 0.0376892, -3.99023)
+
+[node name="Child06" parent="PearlessAct/Objects/Pearls31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.090332, 0.0644226, -4.98572)
+
+[node name="Child07" parent="PearlessAct/Objects/Pearls31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.124023, 0.101135, -5.97998)
+
+[node name="Child08" parent="PearlessAct/Objects/Pearls31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.160889, 0.149689, -6.97302)
+
+[node name="Child09" parent="PearlessAct/Objects/Pearls31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.199585, 0.212036, -7.96423)
+
+[node name="Child10" parent="PearlessAct/Objects/Pearls31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.238831, 0.290527, -8.95337)
+
+[node name="Child11" parent="PearlessAct/Objects/Pearls31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.277344, 0.387604, -9.93982)
+
+[node name="Child12" parent="PearlessAct/Objects/Pearls31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.313293, 0.506042, -10.9226)
+
+[node name="Child13" parent="PearlessAct/Objects/Pearls31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.344727, 0.648956, -11.9009)
+
+[node name="Child14" parent="PearlessAct/Objects/Pearls31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.369751, 0.819824, -12.8734)
+
+[node name="Child15" parent="PearlessAct/Objects/Pearls31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.385803, 1.02228, -13.8381)
+
+[node name="Child16" parent="PearlessAct/Objects/Pearls31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.390442, 1.26035, -14.7927)
+
+[node name="Child17" parent="PearlessAct/Objects/Pearls31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.380493, 1.53818, -15.7345)
+
+[node name="Child18" parent="PearlessAct/Objects/Pearls31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.355591, 1.85309, -16.6748)
+
+[node name="Child19" parent="PearlessAct/Objects/Pearls31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.319244, 2.18323, -17.6097)
+
+[node name="Child20" parent="PearlessAct/Objects/Pearls31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.270294, 2.53375, -18.5334)
+
+[node name="PearlsL21" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-0.999804, -0.00649216, -0.0183947, 1.00912e-05, 0.942802, -0.3333, 0.0195069, -0.333235, -0.942627, -9.39569, -38.9215, -285.174)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 16
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad1")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsL21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, 0, -3.05176e-05, -0.000610352)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsL21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.00335693, 0.0410767, -0.955811)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsL21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.0168457, 0.14679, -1.90906)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsL21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.0411072, 0.307007, -2.85718)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsL21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.0766907, 0.512695, -3.79895)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsL21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.124176, 0.755768, -4.73303)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsL21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.184113, 1.02924, -5.66003)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsL21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.257111, 1.32684, -6.58008)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsL21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.343933, 1.64319, -7.49402)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsL21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.445374, 1.9733, -8.40259)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsL21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.562408, 2.3125, -9.30701)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsL21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.696228, 2.65656, -10.208)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsL21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.848083, 3.00104, -11.1068)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsL21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -1.01947, 3.34174, -12.0043)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsL21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -1.21225, 3.67392, -12.9011)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsL21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -1.42838, 3.99286, -13.7985)
+
+[node name="PearlsL22" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-0.999804, -0.00649216, -0.0183947, 1.00912e-05, 0.942802, -0.3333, 0.0195069, -0.333235, -0.942627, -9.39569, -38.1215, -285.174)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 16
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad1")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsL22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, 0, -3.05176e-05, -0.000610352)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsL22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.00335693, 0.0410767, -0.955811)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsL22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.0168457, 0.14679, -1.90906)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsL22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.0411072, 0.307007, -2.85718)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsL22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.0766907, 0.512695, -3.79895)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsL22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.124176, 0.755768, -4.73303)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsL22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.184113, 1.02924, -5.66003)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsL22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.257111, 1.32684, -6.58008)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsL22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.343933, 1.64319, -7.49402)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsL22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.445374, 1.9733, -8.40259)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsL22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.562408, 2.3125, -9.30701)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsL22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.696228, 2.65656, -10.208)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsL22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.848083, 3.00104, -11.1068)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsL22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -1.01947, 3.34174, -12.0043)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsL22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -1.21225, 3.67392, -12.9011)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsL22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -1.42838, 3.99286, -13.7985)
+
+[node name="PearlsL23" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-0.999804, -0.00649216, -0.0183947, 1.00912e-05, 0.942802, -0.3333, 0.0195069, -0.333235, -0.942627, -9.39569, -37.3215, -285.174)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 16
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad1")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsL23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, 0, -3.05176e-05, -0.000610352)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsL23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.00335693, 0.0410767, -0.955811)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsL23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.0168457, 0.14679, -1.90906)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsL23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.0411072, 0.307007, -2.85718)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsL23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.0766907, 0.512695, -3.79895)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsL23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.124176, 0.755768, -4.73303)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsL23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.184113, 1.02924, -5.66003)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsL23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.257111, 1.32684, -6.58008)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsL23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.343933, 1.64319, -7.49402)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsL23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.445374, 1.9733, -8.40259)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsL23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.562408, 2.3125, -9.30701)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsL23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.696228, 2.65656, -10.208)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsL23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.848083, 3.00104, -11.1068)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsL23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -1.01947, 3.34174, -12.0043)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsL23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -1.21225, 3.67392, -12.9011)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsL23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -1.42838, 3.99286, -13.7985)
+
+[node name="PearlsR21" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-0.999804, -0.00649216, -0.0183947, 1.00912e-05, 0.942802, -0.3333, 0.0195069, -0.333235, -0.942627, -12.1952, -38.9215, -285.12)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 16
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad1")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsR21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, 0, -3.05176e-05, -0.00012207)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsR21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.00354004, 0.0300598, -0.986328)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsR21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.0177002, 0.123352, -1.97473)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsR21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.0432739, 0.269958, -2.96143)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsR21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.0809937, 0.460785, -3.94482)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsR21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.131531, 0.687866, -4.92432)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsR21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.195679, 0.944153, -5.89978)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsR21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.2742, 1.22366, -6.87109)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsR21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.368011, 1.52081, -7.83923)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsR21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.478119, 1.83075, -8.80505)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsR21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.605713, 2.14877, -9.76929)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsR21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.752106, 2.47073, -10.7328)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsR21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.918823, 2.7923, -11.6964)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsR21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -1.1076, 3.10919, -12.6611)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsR21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -1.32037, 3.41684, -13.6276)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsR21" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -1.55939, 3.71051, -14.5963)
+
+[node name="PearlsR22" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-0.999804, -0.00649216, -0.0183947, 1.00912e-05, 0.942802, -0.3333, 0.0195069, -0.333235, -0.942627, -12.1952, -38.1215, -285.12)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 16
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad1")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsR22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, 0, -3.05176e-05, -0.00012207)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsR22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.00354004, 0.0300598, -0.986328)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsR22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.0177002, 0.123352, -1.97473)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsR22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.0432739, 0.269958, -2.96143)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsR22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.0809937, 0.460785, -3.94482)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsR22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.131531, 0.687866, -4.92432)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsR22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.195679, 0.944153, -5.89978)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsR22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.2742, 1.22366, -6.87109)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsR22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.368011, 1.52081, -7.83923)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsR22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.478119, 1.83075, -8.80505)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsR22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.605713, 2.14877, -9.76929)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsR22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.752106, 2.47073, -10.7328)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsR22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.918823, 2.7923, -11.6964)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsR22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -1.1076, 3.10919, -12.6611)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsR22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -1.32037, 3.41684, -13.6276)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsR22" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -1.55939, 3.71051, -14.5963)
+
+[node name="PearlsR23" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-0.999804, -0.00649216, -0.0183947, 1.00912e-05, 0.942802, -0.3333, 0.0195069, -0.333235, -0.942627, -12.1952, -37.3215, -285.12)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 16
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad1")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsR23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, 0, -3.05176e-05, -0.00012207)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsR23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.00354004, 0.0300598, -0.986328)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsR23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.0177002, 0.123352, -1.97473)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsR23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.0432739, 0.269958, -2.96143)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsR23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.0809937, 0.460785, -3.94482)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsR23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.131531, 0.687866, -4.92432)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsR23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.195679, 0.944153, -5.89978)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsR23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.2742, 1.22366, -6.87109)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsR23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.368011, 1.52081, -7.83923)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsR23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.478119, 1.83075, -8.80505)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsR23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.605713, 2.14877, -9.76929)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsR23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.752106, 2.47073, -10.7328)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsR23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -0.918823, 2.7923, -11.6964)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsR23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -1.1076, 3.10919, -12.6611)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsR23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -1.32037, 3.41684, -13.6276)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsR23" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -4.65661e-10, -1.86265e-09, 4.65661e-10, 1, 0, -1.86265e-09, 0, 1, -1.55939, 3.71051, -14.5963)
+
+[node name="PearlsL31" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-0.999994, 0, 8.74216e-08, 0, 0.999982, 0, -8.74223e-08, 0, -0.999986, 1.39999, -22.6, -184)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 11
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsL31" instance=ExtResource("6_yth8c")]
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsL31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsL31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsL31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsL31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsL31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsL31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsL31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsL31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsL31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsL31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="PearlsL32" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-0.999994, 0, 8.74216e-08, 0, 0.999982, 0, -8.74223e-08, 0, -0.999986, 1.39999, -21.8, -184)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 11
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsL32" instance=ExtResource("6_yth8c")]
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsL32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsL32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsL32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsL32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsL32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsL32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsL32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsL32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsL32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsL32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="PearlsL33" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-0.999994, 0, 8.74216e-08, 0, 0.999982, 0, -8.74223e-08, 0, -0.999986, 1.39999, -21, -184)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 11
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsL33" instance=ExtResource("6_yth8c")]
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsL33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsL33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsL33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsL33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsL33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsL33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsL33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsL33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsL33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsL33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="PearlsR31" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-0.999994, 0, 8.74216e-08, 0, 0.999982, 0, -8.74223e-08, 0, -0.999986, -1.39999, -22.6, -184)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 11
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsR31" instance=ExtResource("6_yth8c")]
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsR31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsR31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsR31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsR31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsR31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsR31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsR31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsR31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsR31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsR31" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="PearlsR32" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-0.999994, 0, 8.74216e-08, 0, 0.999982, 0, -8.74223e-08, 0, -0.999986, -1.39999, -21.8, -184)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 11
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsR32" instance=ExtResource("6_yth8c")]
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsR32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsR32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsR32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsR32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsR32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsR32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsR32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsR32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsR32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsR32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="PearlsR33" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-0.999994, 0, 8.74216e-08, 0, 0.999982, 0, -8.74223e-08, 0, -0.999986, -1.39999, -21, -184)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 11
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsR33" instance=ExtResource("6_yth8c")]
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsR33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsR33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsR33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsR33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsR33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsR33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsR33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsR33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsR33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsR33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="JumpPanel" parent="PearlessAct/Objects" instance=ExtResource("6_u4p5r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -23.5, -163)
+MiddleHeight = 9.0
+FinalHeight = 7.5
+Distance = 64.0
+
+[node name="Cam" type="Node3D" parent="PearlessAct/Objects/JumpPanel"]
+script = ExtResource("11_s18oo")
+settings = ExtResource("3_288x2")
+
+[node name="PearlsL4" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-1, -7.61934e-09, -1.74512e-07, 7.61935e-09, 0.99619, -0.0871551, 1.74513e-07, -0.0871551, -0.99619, 1, -15.179, -97.731)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 11
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsL4" instance=ExtResource("6_yth8c")]
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsL4" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsL4" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsL4" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsL4" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsL4" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsL4" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsL4" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsL4" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsL4" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsL4" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="PearlsR4" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-1, -7.61934e-09, -1.74512e-07, 7.61935e-09, 0.99619, -0.0871551, 1.74513e-07, -0.0871551, -0.99619, -1, -15.179, -97.731)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 11
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsR4" instance=ExtResource("6_yth8c")]
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsR4" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsR4" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsR4" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsR4" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsR4" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsR4" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsR4" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsR4" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsR4" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsR4" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="PearlsL5" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-1, -7.61933e-09, -1.74512e-07, 7.61934e-09, 0.99619, -0.087155, 1.74513e-07, -0.087155, -0.99619, 1, -11.4312, -59.8942)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 11
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsL5" instance=ExtResource("6_yth8c")]
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsL5" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsL5" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsL5" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsL5" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsL5" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsL5" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsL5" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsL5" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsL5" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsL5" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="PearlsR5" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-1, -7.61933e-09, -1.74512e-07, 7.61934e-09, 0.99619, -0.087155, 1.74513e-07, -0.087155, -0.99619, -1, -11.4312, -59.8942)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 11
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsR5" instance=ExtResource("6_yth8c")]
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsR5" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsR5" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsR5" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsR5" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsR5" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsR5" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsR5" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsR5" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsR5" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsR5" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Pearls2" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-1, -7.61934e-09, -1.74512e-07, 7.61935e-09, 0.99619, -0.0871551, 1.74513e-07, -0.0871551, -0.99619, 0, -9.2523, -29.9893)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/Pearls2" instance=ExtResource("6_yth8c")]
+
+[node name="Child02" parent="PearlessAct/Objects/Pearls2" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="PearlessAct/Objects/Pearls2" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="PearlessAct/Objects/Pearls2" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="PearlessAct/Objects/Pearls2" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="PearlessAct/Objects/Pearls2" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="PearlsL61" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-0.999993, -3.94706e-09, -8.73321e-08, 0, 0.998959, -0.0451492, 8.74222e-08, -0.0451491, -0.998963, 1.2, -11.3279, 1.97778)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 21
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad2")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsL61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 3.8147e-06, 0.00012207)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsL61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.00182724, -0.998413)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsL61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.00727463, -1.99695)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsL61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0163116, -2.99548)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsL61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0288963, -3.99414)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsL61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0449905, -4.99255)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsL61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0645409, -5.99097)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsL61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0875015, -6.98938)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsL61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.113827, -7.98779)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsL61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.143459, -8.98596)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsL61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.176323, -9.98425)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsL61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.212376, -10.9823)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsL61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.25153, -11.9802)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsL61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.293732, -12.9783)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsL61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.338902, -13.9761)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsL61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.386959, -14.9738)
+
+[node name="Child17" parent="PearlessAct/Objects/PearlsL61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.437836, -15.9714)
+
+[node name="Child18" parent="PearlessAct/Objects/PearlsL61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.49144, -16.9689)
+
+[node name="Child19" parent="PearlessAct/Objects/PearlsL61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.547688, -17.9663)
+
+[node name="Child20" parent="PearlessAct/Objects/PearlsL61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.606499, -18.9635)
+
+[node name="Child21" parent="PearlessAct/Objects/PearlsL61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.667774, -19.9607)
+
+[node name="PearlsL62" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-0.999993, -3.94706e-09, -8.73321e-08, 0, 0.998959, -0.0451492, 8.74222e-08, -0.0451491, -0.998963, 1.2, -10.5279, 1.97778)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 21
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad2")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsL62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 3.8147e-06, 0.00012207)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsL62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.00182724, -0.998413)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsL62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.00727463, -1.99695)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsL62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0163116, -2.99548)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsL62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0288963, -3.99414)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsL62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0449905, -4.99255)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsL62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0645409, -5.99097)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsL62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0875015, -6.98938)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsL62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.113827, -7.98779)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsL62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.143459, -8.98596)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsL62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.176323, -9.98425)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsL62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.212376, -10.9823)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsL62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.25153, -11.9802)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsL62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.293732, -12.9783)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsL62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.338902, -13.9761)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsL62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.386959, -14.9738)
+
+[node name="Child17" parent="PearlessAct/Objects/PearlsL62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.437836, -15.9714)
+
+[node name="Child18" parent="PearlessAct/Objects/PearlsL62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.49144, -16.9689)
+
+[node name="Child19" parent="PearlessAct/Objects/PearlsL62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.547688, -17.9663)
+
+[node name="Child20" parent="PearlessAct/Objects/PearlsL62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.606499, -18.9635)
+
+[node name="Child21" parent="PearlessAct/Objects/PearlsL62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.667774, -19.9607)
+
+[node name="PearlsL63" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-0.999993, -3.94706e-09, -8.73321e-08, 0, 0.998959, -0.0451492, 8.74222e-08, -0.0451491, -0.998963, 1.2, -9.72793, 1.97778)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 21
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad2")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsL63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 3.8147e-06, 0.00012207)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsL63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.00182724, -0.998413)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsL63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.00727463, -1.99695)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsL63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0163116, -2.99548)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsL63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0288963, -3.99414)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsL63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0449905, -4.99255)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsL63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0645409, -5.99097)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsL63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0875015, -6.98938)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsL63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.113827, -7.98779)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsL63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.143459, -8.98596)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsL63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.176323, -9.98425)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsL63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.212376, -10.9823)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsL63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.25153, -11.9802)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsL63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.293732, -12.9783)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsL63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.338902, -13.9761)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsL63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.386959, -14.9738)
+
+[node name="Child17" parent="PearlessAct/Objects/PearlsL63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.437836, -15.9714)
+
+[node name="Child18" parent="PearlessAct/Objects/PearlsL63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.49144, -16.9689)
+
+[node name="Child19" parent="PearlessAct/Objects/PearlsL63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.547688, -17.9663)
+
+[node name="Child20" parent="PearlessAct/Objects/PearlsL63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.606499, -18.9635)
+
+[node name="Child21" parent="PearlessAct/Objects/PearlsL63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.667774, -19.9607)
+
+[node name="PearlsR61" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-0.999993, -3.94706e-09, -8.73321e-08, 0, 0.998959, -0.0451492, 8.74222e-08, -0.0451491, -0.998963, -1.2, -11.3279, 1.97778)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 21
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad2")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsR61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 3.8147e-06, 0.00012207)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsR61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.00182724, -0.998413)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsR61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.00727463, -1.99695)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsR61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0163116, -2.99548)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsR61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0288963, -3.99414)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsR61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0449905, -4.99255)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsR61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0645409, -5.99097)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsR61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0875015, -6.98938)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsR61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.113827, -7.98779)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsR61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.143459, -8.98596)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsR61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.176323, -9.98425)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsR61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.212376, -10.9823)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsR61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.25153, -11.9802)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsR61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.293732, -12.9783)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsR61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.338902, -13.9761)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsR61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.386959, -14.9738)
+
+[node name="Child17" parent="PearlessAct/Objects/PearlsR61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.437836, -15.9714)
+
+[node name="Child18" parent="PearlessAct/Objects/PearlsR61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.49144, -16.9689)
+
+[node name="Child19" parent="PearlessAct/Objects/PearlsR61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.547688, -17.9663)
+
+[node name="Child20" parent="PearlessAct/Objects/PearlsR61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.606499, -18.9635)
+
+[node name="Child21" parent="PearlessAct/Objects/PearlsR61" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.667774, -19.9607)
+
+[node name="PearlsR62" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-0.999993, -3.94706e-09, -8.73321e-08, 0, 0.998959, -0.0451492, 8.74222e-08, -0.0451491, -0.998963, -1.2, -10.5279, 1.97778)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 21
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad2")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsR62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 3.8147e-06, 0.00012207)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsR62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.00182724, -0.998413)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsR62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.00727463, -1.99695)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsR62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0163116, -2.99548)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsR62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0288963, -3.99414)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsR62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0449905, -4.99255)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsR62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0645409, -5.99097)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsR62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0875015, -6.98938)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsR62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.113827, -7.98779)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsR62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.143459, -8.98596)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsR62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.176323, -9.98425)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsR62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.212376, -10.9823)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsR62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.25153, -11.9802)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsR62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.293732, -12.9783)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsR62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.338902, -13.9761)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsR62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.386959, -14.9738)
+
+[node name="Child17" parent="PearlessAct/Objects/PearlsR62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.437836, -15.9714)
+
+[node name="Child18" parent="PearlessAct/Objects/PearlsR62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.49144, -16.9689)
+
+[node name="Child19" parent="PearlessAct/Objects/PearlsR62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.547688, -17.9663)
+
+[node name="Child20" parent="PearlessAct/Objects/PearlsR62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.606499, -18.9635)
+
+[node name="Child21" parent="PearlessAct/Objects/PearlsR62" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.667774, -19.9607)
+
+[node name="PearlsR63" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-0.999993, -3.94706e-09, -8.73321e-08, 0, 0.998959, -0.0451492, 8.74222e-08, -0.0451491, -0.998963, -1.2, -9.72793, 1.97778)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 21
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad2")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsR63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 3.8147e-06, 0.00012207)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsR63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.00182724, -0.998413)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsR63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.00727463, -1.99695)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsR63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0163116, -2.99548)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsR63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0288963, -3.99414)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsR63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0449905, -4.99255)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsR63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0645409, -5.99097)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsR63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.0875015, -6.98938)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsR63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.113827, -7.98779)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsR63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.143459, -8.98596)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsR63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.176323, -9.98425)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsR63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.212376, -10.9823)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsR63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.25153, -11.9802)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsR63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 0, 0.293732, -12.9783)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsR63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.338902, -13.9761)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsR63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.386959, -14.9738)
+
+[node name="Child17" parent="PearlessAct/Objects/PearlsR63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.437836, -15.9714)
+
+[node name="Child18" parent="PearlessAct/Objects/PearlsR63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.49144, -16.9689)
+
+[node name="Child19" parent="PearlessAct/Objects/PearlsR63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.547688, -17.9663)
+
+[node name="Child20" parent="PearlessAct/Objects/PearlsR63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.606499, -18.9635)
+
+[node name="Child21" parent="PearlessAct/Objects/PearlsR63" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 0, 0, 4.44089e-16, 1, 0, 0, 0, 1, 1.52588e-05, 0.667774, -19.9607)
+
+[node name="Pearls32" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-0.999993, -1.17053e-08, -8.66339e-08, -9.51376e-16, 0.990972, -0.133894, 8.74221e-08, -0.133893, -0.990976, 0, -7.53831, 39.7388)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 21
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad2")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/Pearls32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0, 0)
+
+[node name="Child02" parent="PearlessAct/Objects/Pearls32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.000267029, -0.999878)
+
+[node name="Child03" parent="PearlessAct/Objects/Pearls32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.000968933, -1.99963)
+
+[node name="Child04" parent="PearlessAct/Objects/Pearls32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00202179, -2.99963)
+
+[node name="Child05" parent="PearlessAct/Objects/Pearls32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00333405, -3.99963)
+
+[node name="Child06" parent="PearlessAct/Objects/Pearls32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00481415, -4.99963)
+
+[node name="Child07" parent="PearlessAct/Objects/Pearls32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00635529, -5.99951)
+
+[node name="Child08" parent="PearlessAct/Objects/Pearls32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00786591, -6.99963)
+
+[node name="Child09" parent="PearlessAct/Objects/Pearls32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00926208, -7.99963)
+
+[node name="Child10" parent="PearlessAct/Objects/Pearls32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.0104446, -8.99988)
+
+[node name="Child11" parent="PearlessAct/Objects/Pearls32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.0113602, -9.99988)
+
+[node name="Child12" parent="PearlessAct/Objects/Pearls32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.0118942, -11.0001)
+
+[node name="Child13" parent="PearlessAct/Objects/Pearls32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.0119858, -12.0004)
+
+[node name="Child14" parent="PearlessAct/Objects/Pearls32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.0115433, -13.0005)
+
+[node name="Child15" parent="PearlessAct/Objects/Pearls32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.0104904, -14.0009)
+
+[node name="Child16" parent="PearlessAct/Objects/Pearls32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00874329, -15.0011)
+
+[node name="Child17" parent="PearlessAct/Objects/Pearls32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00624847, -16.0015)
+
+[node name="Child18" parent="PearlessAct/Objects/Pearls32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00295258, -17.0018)
+
+[node name="Child19" parent="PearlessAct/Objects/Pearls32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, -0.00125885, -18.0022)
+
+[node name="Child20" parent="PearlessAct/Objects/Pearls32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, -0.00641632, -19.0026)
+
+[node name="Child21" parent="PearlessAct/Objects/Pearls32" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, -0.0125809, -20.0032)
+
+[node name="Pearls33" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-0.999993, -1.17053e-08, -8.66339e-08, -9.51376e-16, 0.990972, -0.133894, 8.74221e-08, -0.133893, -0.990976, 0, -6.73832, 39.7388)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 21
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad2")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/Pearls33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0, 0)
+
+[node name="Child02" parent="PearlessAct/Objects/Pearls33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.000267029, -0.999878)
+
+[node name="Child03" parent="PearlessAct/Objects/Pearls33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.000968933, -1.99963)
+
+[node name="Child04" parent="PearlessAct/Objects/Pearls33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00202179, -2.99963)
+
+[node name="Child05" parent="PearlessAct/Objects/Pearls33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00333405, -3.99963)
+
+[node name="Child06" parent="PearlessAct/Objects/Pearls33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00481415, -4.99963)
+
+[node name="Child07" parent="PearlessAct/Objects/Pearls33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00635529, -5.99951)
+
+[node name="Child08" parent="PearlessAct/Objects/Pearls33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00786591, -6.99963)
+
+[node name="Child09" parent="PearlessAct/Objects/Pearls33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00926208, -7.99963)
+
+[node name="Child10" parent="PearlessAct/Objects/Pearls33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.0104446, -8.99988)
+
+[node name="Child11" parent="PearlessAct/Objects/Pearls33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.0113602, -9.99988)
+
+[node name="Child12" parent="PearlessAct/Objects/Pearls33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.0118942, -11.0001)
+
+[node name="Child13" parent="PearlessAct/Objects/Pearls33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.0119858, -12.0004)
+
+[node name="Child14" parent="PearlessAct/Objects/Pearls33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.0115433, -13.0005)
+
+[node name="Child15" parent="PearlessAct/Objects/Pearls33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.0104904, -14.0009)
+
+[node name="Child16" parent="PearlessAct/Objects/Pearls33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00874329, -15.0011)
+
+[node name="Child17" parent="PearlessAct/Objects/Pearls33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00624847, -16.0015)
+
+[node name="Child18" parent="PearlessAct/Objects/Pearls33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00295258, -17.0018)
+
+[node name="Child19" parent="PearlessAct/Objects/Pearls33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, -0.00125885, -18.0022)
+
+[node name="Child20" parent="PearlessAct/Objects/Pearls33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, -0.00641632, -19.0026)
+
+[node name="Child21" parent="PearlessAct/Objects/Pearls33" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, -0.0125809, -20.0032)
+
+[node name="Pearls34" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(-0.999993, -1.17053e-08, -8.66339e-08, -9.51376e-16, 0.990972, -0.133894, 8.74221e-08, -0.133893, -0.990976, 0, -5.93832, 39.7388)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 21
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad2")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/Pearls34" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0, 0)
+
+[node name="Child02" parent="PearlessAct/Objects/Pearls34" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.000267029, -0.999878)
+
+[node name="Child03" parent="PearlessAct/Objects/Pearls34" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.000968933, -1.99963)
+
+[node name="Child04" parent="PearlessAct/Objects/Pearls34" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00202179, -2.99963)
+
+[node name="Child05" parent="PearlessAct/Objects/Pearls34" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00333405, -3.99963)
+
+[node name="Child06" parent="PearlessAct/Objects/Pearls34" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00481415, -4.99963)
+
+[node name="Child07" parent="PearlessAct/Objects/Pearls34" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00635529, -5.99951)
+
+[node name="Child08" parent="PearlessAct/Objects/Pearls34" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00786591, -6.99963)
+
+[node name="Child09" parent="PearlessAct/Objects/Pearls34" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00926208, -7.99963)
+
+[node name="Child10" parent="PearlessAct/Objects/Pearls34" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.0104446, -8.99988)
+
+[node name="Child11" parent="PearlessAct/Objects/Pearls34" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.0113602, -9.99988)
+
+[node name="Child12" parent="PearlessAct/Objects/Pearls34" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.0118942, -11.0001)
+
+[node name="Child13" parent="PearlessAct/Objects/Pearls34" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.0119858, -12.0004)
+
+[node name="Child14" parent="PearlessAct/Objects/Pearls34" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.0115433, -13.0005)
+
+[node name="Child15" parent="PearlessAct/Objects/Pearls34" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.0104904, -14.0009)
+
+[node name="Child16" parent="PearlessAct/Objects/Pearls34" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00874329, -15.0011)
+
+[node name="Child17" parent="PearlessAct/Objects/Pearls34" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00624847, -16.0015)
+
+[node name="Child18" parent="PearlessAct/Objects/Pearls34" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, 0.00295258, -17.0018)
+
+[node name="Child19" parent="PearlessAct/Objects/Pearls34" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, -0.00125885, -18.0022)
+
+[node name="Child20" parent="PearlessAct/Objects/Pearls34" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, -0.00641632, -19.0026)
+
+[node name="Child21" parent="PearlessAct/Objects/Pearls34" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 8.88178e-16, 0, 8.88178e-16, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, 0, -0.0125809, -20.0032)
+
+[node name="PearlsL71" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(0.984642, -0.163638, -0.0606577, 0.171394, 0.972198, 0.159374, 0.032893, -0.167323, 0.985331, -26.9021, 23.3479, 53.2146)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 21
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad2")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsL71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 1.52588e-05, -1.52588e-05, 0.00146484)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsL71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.0214844, 0.00239563, -1.05396)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsL71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.0826721, -0.00769043, -2.11072)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsL71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.18541, -0.0311279, -3.16638)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsL71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.331177, -0.0687561, -4.21899)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsL71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.521103, -0.121292, -5.26526)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsL71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.755539, -0.189346, -6.3031)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsL71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 1.03435, -0.273407, -7.32886)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsL71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 1.35648, -0.373688, -8.33984)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsL71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 1.72028, -0.490204, -9.33362)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsL71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 2.12338, -0.622864, -10.3079)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsL71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 2.56291, -0.77124, -11.2611)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsL71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 3.03554, -0.934814, -12.1919)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsL71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 3.53769, -1.11295, -13.0999)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsL71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 4.06566, -1.30487, -13.9852)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsL71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 4.6158, -1.50977, -14.8488)
+
+[node name="Child17" parent="PearlessAct/Objects/PearlsL71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 5.18456, -1.72682, -15.6913)
+
+[node name="Child18" parent="PearlessAct/Objects/PearlsL71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 5.76854, -1.95528, -16.5143)
+
+[node name="Child19" parent="PearlessAct/Objects/PearlsL71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 6.36447, -2.19427, -17.3197)
+
+[node name="Child20" parent="PearlessAct/Objects/PearlsL71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 6.96942, -2.44312, -18.1093)
+
+[node name="Child21" parent="PearlessAct/Objects/PearlsL71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 7.58061, -2.7011, -18.8851)
+
+[node name="PearlsL72" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(0.984642, -0.163639, -0.060658, 0.171394, 0.972203, 0.159374, 0.032893, -0.167324, 0.985336, -27.0329, 24.1256, 53.0807)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 21
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad2")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsL72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 1.52588e-05, -1.52588e-05, 0.00146484)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsL72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.0214844, 0.00239563, -1.05396)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsL72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.0826721, -0.00769043, -2.11072)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsL72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.18541, -0.0311279, -3.16638)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsL72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.331177, -0.0687561, -4.21899)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsL72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.521103, -0.121292, -5.26526)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsL72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.755539, -0.189346, -6.3031)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsL72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 1.03435, -0.273407, -7.32886)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsL72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 1.35648, -0.373688, -8.33984)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsL72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 1.72028, -0.490204, -9.33362)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsL72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 2.12338, -0.622864, -10.3079)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsL72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 2.56291, -0.77124, -11.2611)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsL72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 3.03554, -0.934814, -12.1919)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsL72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 3.53769, -1.11295, -13.0999)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsL72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 4.06566, -1.30487, -13.9852)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsL72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 4.6158, -1.50977, -14.8488)
+
+[node name="Child17" parent="PearlessAct/Objects/PearlsL72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 5.18456, -1.72682, -15.6913)
+
+[node name="Child18" parent="PearlessAct/Objects/PearlsL72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 5.76854, -1.95528, -16.5143)
+
+[node name="Child19" parent="PearlessAct/Objects/PearlsL72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 6.36447, -2.19427, -17.3197)
+
+[node name="Child20" parent="PearlessAct/Objects/PearlsL72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 6.96942, -2.44312, -18.1093)
+
+[node name="Child21" parent="PearlessAct/Objects/PearlsL72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 7.58061, -2.7011, -18.8851)
+
+[node name="PearlsL73" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(0.984642, -0.163639, -0.060658, 0.171394, 0.972203, 0.159374, 0.032893, -0.167324, 0.985336, -27.1639, 24.9034, 52.9469)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 21
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad2")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsL73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 1.52588e-05, -1.52588e-05, 0.00146484)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsL73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.0214844, 0.00239563, -1.05396)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsL73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.0826721, -0.00769043, -2.11072)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsL73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.18541, -0.0311279, -3.16638)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsL73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.331177, -0.0687561, -4.21899)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsL73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.521103, -0.121292, -5.26526)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsL73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.755539, -0.189346, -6.3031)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsL73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 1.03435, -0.273407, -7.32886)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsL73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 1.35648, -0.373688, -8.33984)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsL73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 1.72028, -0.490204, -9.33362)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsL73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 2.12338, -0.622864, -10.3079)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsL73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 2.56291, -0.77124, -11.2611)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsL73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 3.03554, -0.934814, -12.1919)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsL73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 3.53769, -1.11295, -13.0999)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsL73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 4.06566, -1.30487, -13.9852)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsL73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 4.6158, -1.50977, -14.8488)
+
+[node name="Child17" parent="PearlessAct/Objects/PearlsL73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 5.18456, -1.72682, -15.6913)
+
+[node name="Child18" parent="PearlessAct/Objects/PearlsL73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 5.76854, -1.95528, -16.5143)
+
+[node name="Child19" parent="PearlessAct/Objects/PearlsL73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 6.36447, -2.19427, -17.3197)
+
+[node name="Child20" parent="PearlessAct/Objects/PearlsL73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 6.96942, -2.44312, -18.1093)
+
+[node name="Child21" parent="PearlessAct/Objects/PearlsL73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -1.86265e-08, 0, -6.51926e-09, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 7.58061, -2.7011, -18.8851)
+
+[node name="PearlsR71" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(0.984641, -0.163638, -0.0606577, 0.171394, 0.972198, 0.159374, 0.032893, -0.167323, 0.985331, -24.145, 23.8278, 53.3066)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 21
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad2")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsR71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, -1.52588e-05, 0, -0.00134277)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsR71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.0196686, -0.0144348, -0.954712)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsR71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.0748291, -0.0415039, -1.90442)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsR71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.166794, -0.0818787, -2.84851)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsR71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.296616, -0.136169, -3.78552)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsR71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.464981, -0.204865, -4.71387)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsR71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.672256, -0.288269, -5.63245)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsR71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.918335, -0.386658, -6.53931)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsR71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 1.20271, -0.500061, -7.43359)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsR71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 1.5244, -0.628387, -8.31409)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsR71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 1.88197, -0.771393, -9.1803)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsR71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 2.27367, -0.92865, -10.0317)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsR71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 2.69742, -1.09973, -10.8682)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsR71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 3.15086, -1.28404, -11.6901)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsR71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 3.63144, -1.48099, -12.4979)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsR71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 4.1366, -1.68991, -13.2925)
+
+[node name="Child17" parent="PearlessAct/Objects/PearlsR71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 4.66357, -1.91019, -14.0747)
+
+[node name="Child18" parent="PearlessAct/Objects/PearlsR71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 5.20978, -2.14114, -14.8462)
+
+[node name="Child19" parent="PearlessAct/Objects/PearlsR71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 5.77249, -2.38217, -15.6082)
+
+[node name="Child20" parent="PearlessAct/Objects/PearlsR71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 6.34914, -2.63264, -16.3621)
+
+[node name="Child21" parent="PearlessAct/Objects/PearlsR71" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 6.93724, -2.89201, -17.1095)
+
+[node name="PearlsR72" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(0.984641, -0.163638, -0.0606577, 0.171394, 0.972198, 0.159374, 0.032893, -0.167323, 0.985331, -24.2759, 24.6055, 53.1727)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 21
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad2")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsR72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, -1.52588e-05, 0, -0.00134277)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsR72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.0196686, -0.0144348, -0.954712)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsR72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.0748291, -0.0415039, -1.90442)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsR72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.166794, -0.0818787, -2.84851)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsR72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.296616, -0.136169, -3.78552)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsR72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.464981, -0.204865, -4.71387)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsR72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.672256, -0.288269, -5.63245)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsR72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.918335, -0.386658, -6.53931)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsR72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 1.20271, -0.500061, -7.43359)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsR72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 1.5244, -0.628387, -8.31409)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsR72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 1.88197, -0.771393, -9.1803)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsR72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 2.27367, -0.92865, -10.0317)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsR72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 2.69742, -1.09973, -10.8682)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsR72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 3.15086, -1.28404, -11.6901)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsR72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 3.63144, -1.48099, -12.4979)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsR72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 4.1366, -1.68991, -13.2925)
+
+[node name="Child17" parent="PearlessAct/Objects/PearlsR72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 4.66357, -1.91019, -14.0747)
+
+[node name="Child18" parent="PearlessAct/Objects/PearlsR72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 5.20978, -2.14114, -14.8462)
+
+[node name="Child19" parent="PearlessAct/Objects/PearlsR72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 5.77249, -2.38217, -15.6082)
+
+[node name="Child20" parent="PearlessAct/Objects/PearlsR72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 6.34914, -2.63264, -16.3621)
+
+[node name="Child21" parent="PearlessAct/Objects/PearlsR72" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 6.93724, -2.89201, -17.1095)
+
+[node name="PearlsR73" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(0.984641, -0.163638, -0.0606577, 0.171394, 0.972198, 0.159374, 0.032893, -0.167323, 0.985331, -24.4068, 25.3833, 53.0389)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 21
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad2")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/PearlsR73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, -1.52588e-05, 0, -0.00134277)
+
+[node name="Child02" parent="PearlessAct/Objects/PearlsR73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.0196686, -0.0144348, -0.954712)
+
+[node name="Child03" parent="PearlessAct/Objects/PearlsR73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.0748291, -0.0415039, -1.90442)
+
+[node name="Child04" parent="PearlessAct/Objects/PearlsR73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.166794, -0.0818787, -2.84851)
+
+[node name="Child05" parent="PearlessAct/Objects/PearlsR73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.296616, -0.136169, -3.78552)
+
+[node name="Child06" parent="PearlessAct/Objects/PearlsR73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.464981, -0.204865, -4.71387)
+
+[node name="Child07" parent="PearlessAct/Objects/PearlsR73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.672256, -0.288269, -5.63245)
+
+[node name="Child08" parent="PearlessAct/Objects/PearlsR73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 0.918335, -0.386658, -6.53931)
+
+[node name="Child09" parent="PearlessAct/Objects/PearlsR73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 1.20271, -0.500061, -7.43359)
+
+[node name="Child10" parent="PearlessAct/Objects/PearlsR73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 1.5244, -0.628387, -8.31409)
+
+[node name="Child11" parent="PearlessAct/Objects/PearlsR73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 1.88197, -0.771393, -9.1803)
+
+[node name="Child12" parent="PearlessAct/Objects/PearlsR73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 2.27367, -0.92865, -10.0317)
+
+[node name="Child13" parent="PearlessAct/Objects/PearlsR73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 2.69742, -1.09973, -10.8682)
+
+[node name="Child14" parent="PearlessAct/Objects/PearlsR73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 3.15086, -1.28404, -11.6901)
+
+[node name="Child15" parent="PearlessAct/Objects/PearlsR73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 3.63144, -1.48099, -12.4979)
+
+[node name="Child16" parent="PearlessAct/Objects/PearlsR73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 4.1366, -1.68991, -13.2925)
+
+[node name="Child17" parent="PearlessAct/Objects/PearlsR73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 4.66357, -1.91019, -14.0747)
+
+[node name="Child18" parent="PearlessAct/Objects/PearlsR73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 5.20978, -2.14114, -14.8462)
+
+[node name="Child19" parent="PearlessAct/Objects/PearlsR73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 5.77249, -2.38217, -15.6082)
+
+[node name="Child20" parent="PearlessAct/Objects/PearlsR73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 6.34914, -2.63264, -16.3621)
+
+[node name="Child21" parent="PearlessAct/Objects/PearlsR73" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, -5.12227e-09, 0, -2.14204e-08, 1, -1.49012e-08, 3.72529e-09, -1.49012e-08, 1, 6.93724, -2.89201, -17.1095)
+
+[node name="Pearls41" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(0.752223, 0.104619, -0.650521, 0.163395, 0.926822, 0.337995, 0.638303, -0.360542, 0.6801, -9.99673, 16.1972, 29.5614)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 11
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad2")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/Pearls41" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, 0, 0, 0)
+
+[node name="Child02" parent="PearlessAct/Objects/Pearls41" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.010498, -0.00247192, -1.00177)
+
+[node name="Child03" parent="PearlessAct/Objects/Pearls41" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.0393677, -0.00952148, -2.00299)
+
+[node name="Child04" parent="PearlessAct/Objects/Pearls41" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.0886841, -0.0209045, -3.00336)
+
+[node name="Child05" parent="PearlessAct/Objects/Pearls41" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.160278, -0.0363464, -4.00201)
+
+[node name="Child06" parent="PearlessAct/Objects/Pearls41" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.255798, -0.055603, -4.99841)
+
+[node name="Child07" parent="PearlessAct/Objects/Pearls41" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.37677, -0.0783691, -5.99164)
+
+[node name="Child08" parent="PearlessAct/Objects/Pearls41" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.524597, -0.104309, -6.98102)
+
+[node name="Child09" parent="PearlessAct/Objects/Pearls41" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.700256, -0.133179, -7.96539)
+
+[node name="Child10" parent="PearlessAct/Objects/Pearls41" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.902832, -0.15918, -8.93787)
+
+[node name="Child11" parent="PearlessAct/Objects/Pearls41" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -1.1347, -0.165222, -9.90082)
+
+[node name="Pearls42" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(0.752223, 0.104619, -0.650521, 0.163395, 0.926822, 0.337995, 0.638303, -0.360542, 0.6801, -9.91304, 16.9387, 29.2729)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 11
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad2")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/Pearls42" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, 0, 0, 0)
+
+[node name="Child02" parent="PearlessAct/Objects/Pearls42" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.010498, -0.00247192, -1.00177)
+
+[node name="Child03" parent="PearlessAct/Objects/Pearls42" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.0393677, -0.00952148, -2.00299)
+
+[node name="Child04" parent="PearlessAct/Objects/Pearls42" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.0886841, -0.0209045, -3.00336)
+
+[node name="Child05" parent="PearlessAct/Objects/Pearls42" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.160278, -0.0363464, -4.00201)
+
+[node name="Child06" parent="PearlessAct/Objects/Pearls42" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.255798, -0.055603, -4.99841)
+
+[node name="Child07" parent="PearlessAct/Objects/Pearls42" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.37677, -0.0783691, -5.99164)
+
+[node name="Child08" parent="PearlessAct/Objects/Pearls42" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.524597, -0.104309, -6.98102)
+
+[node name="Child09" parent="PearlessAct/Objects/Pearls42" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.700256, -0.133179, -7.96539)
+
+[node name="Child10" parent="PearlessAct/Objects/Pearls42" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.902832, -0.15918, -8.93787)
+
+[node name="Child11" parent="PearlessAct/Objects/Pearls42" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -1.1347, -0.165222, -9.90082)
+
+[node name="Pearls43" type="Node3D" parent="PearlessAct/Objects"]
+transform = Transform3D(0.752223, 0.104619, -0.650521, 0.163395, 0.926822, 0.337995, 0.638303, -0.360542, 0.6801, -9.82935, 17.6802, 28.9845)
+script = ExtResource("5_hsvrt")
+Source = ExtResource("6_yth8c")
+Amount = 11
+Shape = 2
+Path = NodePath("../../../Static/Paths/SkyRoadPaths/SkyRoad2")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PearlessAct/Objects/Pearls43" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, 0, 0, 0)
+
+[node name="Child02" parent="PearlessAct/Objects/Pearls43" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.010498, -0.00247192, -1.00177)
+
+[node name="Child03" parent="PearlessAct/Objects/Pearls43" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.0393677, -0.00952148, -2.00299)
+
+[node name="Child04" parent="PearlessAct/Objects/Pearls43" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.0886841, -0.0209045, -3.00336)
+
+[node name="Child05" parent="PearlessAct/Objects/Pearls43" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.160278, -0.0363464, -4.00201)
+
+[node name="Child06" parent="PearlessAct/Objects/Pearls43" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.255798, -0.055603, -4.99841)
+
+[node name="Child07" parent="PearlessAct/Objects/Pearls43" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.37677, -0.0783691, -5.99164)
+
+[node name="Child08" parent="PearlessAct/Objects/Pearls43" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.524597, -0.104309, -6.98102)
+
+[node name="Child09" parent="PearlessAct/Objects/Pearls43" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.700256, -0.133179, -7.96539)
+
+[node name="Child10" parent="PearlessAct/Objects/Pearls43" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -0.902832, -0.15918, -8.93787)
+
+[node name="Child11" parent="PearlessAct/Objects/Pearls43" instance=ExtResource("6_yth8c")]
+transform = Transform3D(1, 2.98023e-08, -5.96046e-08, 2.98023e-08, 1, 1.49012e-08, 2.98023e-08, 4.47035e-08, 1, -1.1347, -0.165222, -9.90082)
+
+[node name="MajinTrigger" parent="PearlessAct/Objects" instance=ExtResource("3_rdda6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.1, 2)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PearlessAct/Objects/MajinTrigger"]
+shape = SubResource("BoxShape3D_isgee")
+
+[node name="BlueMajin1" parent="PearlessAct/Objects" instance=ExtResource("9_dw0vd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -30)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-20, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+SpawnMode = 1
+
+[node name="BlueMajin2" parent="PearlessAct/Objects" instance=ExtResource("9_dw0vd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -40)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.5
+"Spawn Settings/Spawn Offset" = Vector3(20, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+SpawnMode = 1
+
+[node name="Goal" parent="PearlessAct/Objects" instance=ExtResource("14_cc388")]
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 10, -54)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PearlessAct/Objects/Goal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 0)
+shape = SubResource("BoxShape3D_isgee")
+
+[connection signal="Activated" from="PearlessAct/SpawnPosition/LockoutTrigger" to="Static/Triggers/TowerLockout" method="Activate"]
+[connection signal="Activated" from="PearlessAct/Objects/JumpPanel" to="PearlessAct/Objects/JumpPanel/Cam" method="Activate"]
+[connection signal="Activated" from="PearlessAct/Objects/MajinTrigger" to="PearlessAct/Objects/BlueMajin1" method="Spawn"]
+[connection signal="Activated" from="PearlessAct/Objects/MajinTrigger" to="PearlessAct/Objects/BlueMajin2" method="Spawn"]
+
+[editable path="Static"]
+[editable path="Static/Collision"]
+[editable path="Static/Visuals/LRSky"]

@@ -1,0 +1,469 @@
+[gd_scene load_steps=24 format=3 uid="uid://cayo6pq1qpjyf"]
+
+[ext_resource type="Script" uid="uid://bn71y6aq3373y" path="res://area/3 evil foundry/data/script/Core.cs" id="1_b5skn"]
+[ext_resource type="PackedScene" uid="uid://db40cw21e0jlv" path="res://area/3 evil foundry/boss/data/model/GolemCore.gltf" id="1_ex3l5"]
+[ext_resource type="Material" uid="uid://cx8t0sy6gaqpm" path="res://area/3 evil foundry/boss/effect/material/Glow.tres" id="3_vh8wr"]
+[ext_resource type="Material" uid="uid://drgtm3le1tx81" path="res://effect/particle/material/Feather.tres" id="4_iisby"]
+[ext_resource type="AudioStream" uid="uid://2xm2qs657b3u" path="res://sound/boss/ifrit golem/core destroyed.wav" id="5_gnejk"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="6_rtt7c"]
+[ext_resource type="AudioStream" uid="uid://cfteos8s62o2" path="res://sound/boss/ifrit golem/core base.wav" id="7_iq5t3"]
+
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_pvw8k"]
+radius = 0.4
+height = 1.6
+
+[sub_resource type="Animation" id="Animation_ifdpq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GolemCore/CoreGlowMesh:transparency")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:monitorable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Glow1:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Glow2:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_qgwl2"]
+resource_name = "damage"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GolemCore/CoreGlowMesh:transparency")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:monitorable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Glow1:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Glow2:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Damage")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("CoreDestroyed")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"PlayInGroup"
+}]
+}
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("CoreBase")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"PlayInGroup"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_17ywy"]
+resource_name = "hide"
+length = 0.16667
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GolemCore/CoreGlowMesh:transparency")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:monitorable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Glow1:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Glow2:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_uaiee"]
+resource_name = "show"
+length = 0.16667
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GolemCore/CoreGlowMesh:transparency")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:monitorable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Glow1:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.16667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Glow2:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.16667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_23op2"]
+_data = {
+&"RESET": SubResource("Animation_ifdpq"),
+&"damage": SubResource("Animation_qgwl2"),
+&"hide": SubResource("Animation_17ywy"),
+&"show": SubResource("Animation_uaiee")
+}
+
+[sub_resource type="Curve" id="Curve_0eea6"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_3w63w"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_0eea6")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_uw28x"]
+direction = Vector3(0, 0, 1)
+spread = 180.0
+initial_velocity_min = 0.1
+initial_velocity_max = 0.1
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+alpha_curve = SubResource("CurveTexture_3w63w")
+
+[sub_resource type="QuadMesh" id="QuadMesh_h1pam"]
+material = ExtResource("3_vh8wr")
+
+[sub_resource type="Curve" id="Curve_emdib"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_xkcpy"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_emdib")
+
+[sub_resource type="Curve" id="Curve_thwtu"]
+_data = [Vector2(1e-05, 0), 0.0, 3.97291, 0, 0, Vector2(0.8, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.842843), -1.56905, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_sfgp3"]
+width = 64
+curve = SubResource("Curve_thwtu")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_a0hi5"]
+lifetime_randomness = 0.5
+spread = 180.0
+flatness = 0.8
+initial_velocity_min = 1.0
+initial_velocity_max = 1.0
+gravity = Vector3(0, 0, 0)
+damping_min = 2.0
+damping_max = 2.0
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_sfgp3")
+color = Color(1, 0.501961, 0, 1)
+alpha_curve = SubResource("CurveTexture_xkcpy")
+
+[sub_resource type="QuadMesh" id="QuadMesh_7e25t"]
+material = ExtResource("4_iisby")
+size = Vector2(0.1, 1)
+center_offset = Vector3(0, 0.3, 0)
+
+[node name="GolemCore" type="Area3D"]
+collision_layer = 4
+collision_mask = 2
+monitoring = false
+monitorable = false
+script = ExtResource("1_b5skn")
+animator = NodePath("AnimationPlayer")
+
+[node name="GolemCore" parent="." instance=ExtResource("1_ex3l5")]
+
+[node name="CoreGlowMesh" parent="GolemCore" index="0"]
+transparency = 1.0
+cast_shadow = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.4, 1.74846e-08, 0)
+shape = SubResource("CapsuleShape3D_pvw8k")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_23op2")
+}
+
+[node name="Glow1" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0.226698, 0.233727)
+layers = 32
+emitting = false
+lifetime = 0.5
+fixed_fps = 0
+fract_delta = false
+visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
+draw_order = 1
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_uw28x")
+draw_pass_1 = SubResource("QuadMesh_h1pam")
+
+[node name="Glow2" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, -0.173303, -0.266273)
+layers = 32
+emitting = false
+lifetime = 0.5
+fixed_fps = 0
+fract_delta = false
+visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
+draw_order = 1
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_uw28x")
+draw_pass_1 = SubResource("QuadMesh_h1pam")
+
+[node name="Damage" type="GPUParticles3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+layers = 32
+emitting = false
+amount = 32
+lifetime = 0.3
+one_shot = true
+explosiveness = 0.6
+fixed_fps = 0
+fract_delta = false
+visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
+draw_order = 1
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_a0hi5")
+draw_pass_1 = SubResource("QuadMesh_7e25t")
+
+[node name="CoreDestroyed" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("5_gnejk")
+volume_db = -12.0
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+process_mode = 1
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("6_rtt7c")
+groupKey = &"core_destroyed"
+
+[node name="CoreBase" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("7_iq5t3")
+volume_db = -12.0
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+process_mode = 1
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("6_rtt7c")
+groupKey = &"core_base"
+
+[connection signal="area_entered" from="." to="." method="OnEntered"]
+[connection signal="area_exited" from="." to="." method="OnExited"]
+
+[editable path="GolemCore"]

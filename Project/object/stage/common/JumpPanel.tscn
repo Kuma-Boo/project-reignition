@@ -1,19 +1,19 @@
 [gd_scene load_steps=5 format=3 uid="uid://87lgwwefd4g4"]
 
-[ext_resource type="Script" path="res://object/stage/common/resource/script/Launcher.cs" id="1"]
+[ext_resource type="Script" uid="uid://betjf8jhc3siu" path="res://object/stage/common/resource/script/Launcher.cs" id="1"]
 [ext_resource type="PackedScene" uid="uid://cu25v6qpo474x" path="res://object/stage/common/resource/model/JumpPanel.gltf" id="2"]
 [ext_resource type="AudioStream" uid="uid://bvyk2p4oq6u67" path="res://sound/sfx/objects/jump panel.wav" id="3_aivm4"]
 
 [sub_resource type="BoxShape3D" id="3"]
 size = Vector3(4, 0.8, 5.4)
 
-[node name="JumpPanel" type="Node3D" node_paths=PackedStringArray("sfxPlayer")]
+[node name="JumpPanel" type="Node3D"]
 script = ExtResource("1")
-"Secondary Settings/Enabled" = false
-startingHeight = 1.0
-recenterSpeed = 128
+StartingHeight = 1.0
+LaunchAnimationType = 2
 sfxPlayer = NodePath("SFX")
 voiceKey = &"jump panel"
+"Secondary Settings/Enabled" = false
 
 [node name="ActivationTrigger" type="Area3D" parent="."]
 collision_layer = 0
@@ -27,10 +27,12 @@ shape = SubResource("3")
 [node name="JumpPanel" parent="." instance=ExtResource("2")]
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="."]
+process_mode = 1
 stream = ExtResource("3_aivm4")
+unit_size = 20.0
 max_db = 0.0
-max_distance = 100.0
+max_distance = 150.0
 bus = &"GAME SFX"
-attenuation_filter_cutoff_hz = 10000.0
+attenuation_filter_cutoff_hz = 20500.0
 
 [connection signal="area_entered" from="ActivationTrigger" to="." method="Activate"]

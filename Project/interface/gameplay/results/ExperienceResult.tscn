@@ -1,7 +1,7 @@
 [gd_scene load_steps=30 format=3 uid="uid://cbt02mctaofmt"]
 
 [ext_resource type="Texture2D" uid="uid://bmwc4e25fnuqd" path="res://interface/gameplay/results/texture/result atlas.png" id="1"]
-[ext_resource type="Script" path="res://interface/gameplay/results/script/ExperienceResult.cs" id="1_xkepa"]
+[ext_resource type="Script" uid="uid://p0ymcefhe3sy" path="res://interface/gameplay/results/script/ExperienceResult.cs" id="1_xkepa"]
 [ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/texture/background.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://bms1u4rvg38nn" path="res://interface/gameplay/results/texture/experience bar background.png" id="5_3fkf3"]
 [ext_resource type="LabelSettings" uid="uid://bd74c653xatd0" path="res://interface/font/ExperienceLabelSettings.tres" id="5_4kecg"]
@@ -12,7 +12,7 @@
 [ext_resource type="AudioStream" uid="uid://cewf47fflp7io" path="res://sound/sfx/system/exp count.wav" id="10_1lyur"]
 [ext_resource type="Texture2D" uid="uid://dxd64k8bn0v2b" path="res://effect/particle/texture/flame/flame menu small.png" id="10_tdeqs"]
 [ext_resource type="AudioStream" uid="uid://o0xrb2myo3bh" path="res://sound/ost/treasure disc/3 The Power of the Ring.mp3" id="10_vlo2b"]
-[ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="11_7rrrm"]
+[ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="11_7rrrm"]
 [ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="11_wtsn7"]
 [ext_resource type="AudioStream" uid="uid://c5x3t5nj4k306" path="res://sound/sfx/system/jingle level up.mp3" id="12_ctc37"]
 [ext_resource type="Texture2D" uid="uid://pen6e1hcd7t4" path="res://interface/gameplay/results/texture/experience sparkle.png" id="12_o0ril"]
@@ -367,7 +367,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_qekjh"]
 resource_name = "init"
-length = 0.10001
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -527,34 +527,46 @@ tracks/12/keys = {
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("Content:position")
+tracks/13/path = NodePath("Content/Experience/Experience/Accumulated:modulate")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 128)]
+"values": [Color(1, 1, 1, 0)]
 }
 tracks/14/type = "value"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("Content/Experience/Result:modulate")
+tracks/14/path = NodePath("Content:position")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 0)]
+"values": [Vector2(0, 128)]
 }
 tracks/15/type = "value"
 tracks/15/imported = false
 tracks/15/enabled = true
-tracks/15/path = NodePath(".:modulate")
+tracks/15/path = NodePath("Content/Experience/Result:modulate")
 tracks/15/interp = 1
 tracks/15/loop_wrap = true
 tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath(".:modulate")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -769,7 +781,6 @@ tracks/14/keys = {
 
 [sub_resource type="Animation" id="Animation_yfi57"]
 resource_name = "show"
-length = 0.833337
 step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -838,10 +849,10 @@ tracks/5/path = NodePath("Content/SeparationDecal/DecalBottom:position")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0.0666667, 0.2),
-"transitions": PackedFloat32Array(0.5, 1),
+"times": PackedFloat32Array(0.0666667, 0.2, 0.999999),
+"transitions": PackedFloat32Array(0.5, 1, 1),
 "update": 0,
-"values": [Vector2(0, 0), Vector2(0, 160)]
+"values": [Vector2(0, 0), Vector2(0, 186), Vector2(0, 190)]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
@@ -853,7 +864,7 @@ tracks/6/keys = {
 "times": PackedFloat32Array(0.0666667, 0.2),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
-"values": [Vector2(0, 0), Vector2(0, -160)]
+"values": [Vector2(0, 0), Vector2(0, -198)]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
@@ -918,34 +929,46 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("Content:position")
+tracks/12/path = NodePath("Content/Experience/Experience/Accumulated:modulate")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0.8, 0.933333),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(0, 128)]
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath(".:visible")
+tracks/13/path = NodePath("Content:position")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"update": 0,
+"values": [Vector2(0, 128)]
 }
 tracks/14/type = "value"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("Content/Experience/Result:modulate")
+tracks/14/path = NodePath(".:visible")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Content/Experience/Result:modulate")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -983,16 +1006,19 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_y357t"]
 _data = {
-"RESET": SubResource("Animation_anadl"),
-"increase": SubResource("Animation_tuna7"),
-"init": SubResource("Animation_qekjh"),
-"level-up": SubResource("Animation_x8ub0"),
-"show": SubResource("Animation_yfi57"),
-"show-level-up": SubResource("Animation_ktalw")
+&"RESET": SubResource("Animation_anadl"),
+&"increase": SubResource("Animation_tuna7"),
+&"init": SubResource("Animation_qekjh"),
+&"level-up": SubResource("Animation_x8ub0"),
+&"show": SubResource("Animation_yfi57"),
+&"show-level-up": SubResource("Animation_ktalw")
 }
 
-[node name="ExperienceResult" type="Control" node_paths=PackedStringArray("expFill", "expLabel", "scoreLabel", "skillLabel", "missionLabel", "levelLabel", "levelGainLabel", "skillPointLabel", "skillPointGainLabel", "soulLabel", "soulGainLabel", "bgm", "animator")]
+[node name="ExperienceResult" type="Control" node_paths=PackedStringArray("expFill", "expLabel", "scoreLabel", "skillLabel", "missionLabel", "accumulatedLabel", "levelLabel", "levelGainLabel", "skillPointLabel", "skillPointGainLabel", "soulLabel", "soulGainLabel", "bgm", "animator")]
+process_mode = 3
 modulate = Color(1, 1, 1, 0)
+z_index = 50
+z_as_relative = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1005,6 +1031,7 @@ expLabel = NodePath("Content/Experience/Bar/Value")
 scoreLabel = NodePath("Content/Experience/Experience/Score/Value")
 skillLabel = NodePath("Content/Experience/Experience/Skill/Value")
 missionLabel = NodePath("Content/Experience/Experience/Mission/Value")
+accumulatedLabel = NodePath("Content/Experience/Experience/Accumulated/Value")
 levelLabel = NodePath("Content/Experience/Result/Level/Value")
 levelGainLabel = NodePath("Content/Experience/Result/Level/Value/Amount")
 skillPointLabel = NodePath("Content/Experience/Result/SP/Value")
@@ -1065,7 +1092,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="SeparationDecal" type="Node2D" parent="Content"]
-position = Vector2(960, 448)
+position = Vector2(960, 482)
 
 [node name="DecalTop" type="Sprite2D" parent="Content/SeparationDecal"]
 position = Vector2(0, -160)
@@ -1183,11 +1210,12 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 464.0
-offset_top = 304.0
+offset_top = 296.0
 offset_right = -448.0
-offset_bottom = -504.0
+offset_bottom = -440.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 16
 alignment = 1
 
 [node name="Score" type="Control" parent="Content/Experience/Experience"]
@@ -1283,15 +1311,46 @@ label_settings = ExtResource("5_4kecg")
 horizontal_alignment = 2
 vertical_alignment = 1
 
+[node name="Accumulated" type="Control" parent="Content/Experience/Experience"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Content/Experience/Experience/Accumulated"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_top = -8.0
+offset_right = 704.0
+offset_bottom = 8.0
+grow_vertical = 2
+text = "exp_accumulated"
+label_settings = ExtResource("5_4kecg")
+vertical_alignment = 1
+uppercase = true
+
+[node name="Value" type="Label" parent="Content/Experience/Experience/Accumulated"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -275.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "0000000"
+label_settings = ExtResource("5_4kecg")
+horizontal_alignment = 2
+vertical_alignment = 1
+
 [node name="Result" type="VBoxContainer" parent="Content/Experience"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 464.0
-offset_top = 640.0
+offset_top = 704.0
 offset_right = -448.0
-offset_bottom = -184.0
+offset_bottom = -144.0
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
@@ -1348,23 +1407,23 @@ vertical_alignment = 1
 material = SubResource("CanvasItemMaterial_ls4jg")
 position = Vector2(944, 40)
 emitting = false
-process_material = SubResource("ParticleProcessMaterial_0jmyd")
 texture = ExtResource("10_tdeqs")
 one_shot = true
 explosiveness = 0.8
 fixed_fps = 0
+process_material = SubResource("ParticleProcessMaterial_0jmyd")
 
 [node name="Sparkle" type="GPUParticles2D" parent="Content/Experience/Result/Level"]
 material = ExtResource("11_wtsn7")
 position = Vector2(496, 36)
 emitting = false
 amount = 12
-process_material = SubResource("ParticleProcessMaterial_la0mi")
 texture = ExtResource("12_o0ril")
 lifetime = 0.3
 one_shot = true
 explosiveness = 0.6
 fixed_fps = 0
+process_material = SubResource("ParticleProcessMaterial_la0mi")
 
 [node name="SP" type="Control" parent="Content/Experience/Result"]
 custom_minimum_size = Vector2(0, 72)
@@ -1418,23 +1477,23 @@ vertical_alignment = 1
 material = SubResource("CanvasItemMaterial_ls4jg")
 position = Vector2(944, 40)
 emitting = false
-process_material = SubResource("ParticleProcessMaterial_0jmyd")
 texture = ExtResource("10_tdeqs")
 one_shot = true
 explosiveness = 0.8
 fixed_fps = 0
+process_material = SubResource("ParticleProcessMaterial_0jmyd")
 
 [node name="Sparkle" type="GPUParticles2D" parent="Content/Experience/Result/SP"]
 material = ExtResource("11_wtsn7")
 position = Vector2(496, 36)
 emitting = false
 amount = 12
-process_material = SubResource("ParticleProcessMaterial_la0mi")
 texture = ExtResource("12_o0ril")
 lifetime = 0.3
 one_shot = true
 explosiveness = 0.6
 fixed_fps = 0
+process_material = SubResource("ParticleProcessMaterial_la0mi")
 
 [node name="Soul" type="Control" parent="Content/Experience/Result"]
 custom_minimum_size = Vector2(0, 72)
@@ -1488,23 +1547,23 @@ vertical_alignment = 1
 material = SubResource("CanvasItemMaterial_ls4jg")
 position = Vector2(944, 40)
 emitting = false
-process_material = SubResource("ParticleProcessMaterial_0jmyd")
 texture = ExtResource("10_tdeqs")
 one_shot = true
 explosiveness = 0.8
 fixed_fps = 0
+process_material = SubResource("ParticleProcessMaterial_0jmyd")
 
 [node name="Sparkle" type="GPUParticles2D" parent="Content/Experience/Result/Soul"]
 material = ExtResource("11_wtsn7")
 position = Vector2(496, 36)
 emitting = false
 amount = 12
-process_material = SubResource("ParticleProcessMaterial_la0mi")
 texture = ExtResource("12_o0ril")
 lifetime = 0.3
 one_shot = true
 explosiveness = 0.6
 fixed_fps = 0
+process_material = SubResource("ParticleProcessMaterial_la0mi")
 
 [node name="BGM" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("10_vlo2b")
@@ -1532,6 +1591,6 @@ bus = &"SFX"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_y357t")
+&"": SubResource("AnimationLibrary_y357t")
 }
 next/show-level-up = &"level-up"

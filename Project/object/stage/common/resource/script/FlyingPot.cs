@@ -8,27 +8,21 @@ namespace Project.Gameplay.Objects;
 [Tool]
 public partial class FlyingPot : Node3D
 {
-	[Export]
-	public Vector2 travelBounds;
-	[Export]
-	public float boundOffset;
+	[Signal] public delegate void PotEnteredEventHandler();
 
-	[Export]
-	private CameraSettingsResource customCameraSettings;
+	[Export] public Vector2 travelBounds;
+	[Export] public float boundOffset;
+	[Export] private CameraSettingsResource customCameraSettings;
 
 	[ExportGroup("Components")]
-	[Export]
-	private Node3D root;
-	[Export]
-	private Area3D lockonArea;
-	[Export]
-	private CollisionShape3D environmentCollider;
-	[Export]
-	private AnimationTree animationTree;
-	[Export]
-	private AudioStreamPlayer enterSFX;
-	[Export]
-	private AudioStreamPlayer exitSFX;
+	[Export] private Node3D root;
+	public Node3D Root => root;
+	[Export] private Area3D lockonArea;
+	[Export] private CollisionShape3D environmentCollider;
+	[Export] private AnimationTree animationTree;
+	[Export] private AnimationPlayer interactionAnimator;
+	[Export] private AudioStreamPlayer enterSFX;
+	[Export] private AudioStreamPlayer exitSFX;
 	private CameraTrigger cameraTrigger;
 
 	private readonly StringName EnterTrigger = "parameters/enter_trigger/request";
@@ -38,175 +32,132 @@ public partial class FlyingPot : Node3D
 	private readonly StringName EnabledState = "enabled";
 	private readonly StringName DisabledState = "disabled";
 
-	private bool isProcessing;
-	private bool isControllingPlayer;
+	private bool isSleeping = true;
 	private bool interactingWithPlayer;
-	private bool isLeavingPot;
-	private bool isEnteringPot;
-
-	private float flapSpeed = 1;
-	private float flapTimer;
+	private bool isPlayerJumpingIntoPot;
 	private float angle;
-	private float velocity;
+	public float Angle => angle;
+	public float Velocity { get; set; }
 	private Vector2 localPosition;
 
-	private const float MaxGravity = -10.0f;
-	private const float WingAcceleration = 4f;
-	private const float MaxSpeed = 12.0f;
 	private const float RotationSpeed = .1f;
-	private const float MaxAngle = Mathf.Pi * .2f;
-	private const float FlapInterval = .5f; // How long is a single flap?
-	private const float FlapAccelerationLength = .4f; // How long does a flap accelerate?
+	private const float MaxGravity = -10.0f;
 
-	public CharacterController Character => CharacterController.instance;
+	public PlayerController Player => StageSettings.Player;
 
 	public override void _Ready()
 	{
 		if (Engine.IsEditorHint()) return;
 
 		animationTree.Active = true;
-		StageSettings.instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.Respawned += Respawn;
 
-		if (customCameraSettings != null) // Create the camera trigger
+		if (customCameraSettings == null)
+			return;
+
+		// Create the camera trigger
+		cameraTrigger = new CameraTrigger()
 		{
-			cameraTrigger = new CameraTrigger()
-			{
-				transitionTime = .2f, // Default to .2 seconds for transitions
-				settings = customCameraSettings
-			};
-			AddChild(cameraTrigger);
-		}
+			transitionTime = .2f, // Default to .2 seconds for transitions
+			settings = customCameraSettings
+		};
+		AddChild(cameraTrigger);
 	}
 
 	private void Respawn()
 	{
-		angle = 0f;
-		velocity = 0f;
-		localPosition = Vector2.Zero;
-		ApplyMovement();
+		ResetPosition();
 
+		interactionAnimator.Play("RESET");
 		lockonArea.SetDeferred("monitorable", true);
 	}
 
 	public override void _PhysicsProcess(double _)
 	{
-		if (!isProcessing || Engine.IsEditorHint()) return;
+		if (isSleeping || Engine.IsEditorHint()) return;
 
-		if (interactingWithPlayer)
-		{
-			if (isControllingPlayer)
-				ProcessMovement();
-			else if (!isEnteringPot && !Character.IsOnGround)
-				StartJump();
-		}
-		else if (!lockonArea.Monitorable) // Re-enable lockon
-		{
-			lockonArea.SetDeferred("monitorable", Character.VerticalSpeed < 0f);
-		}
+		if (!interactingWithPlayer && !lockonArea.Monitorable) // Re-enable lockon
+			lockonArea.SetDeferred("monitorable", Player.VerticalSpeed < 0f);
 
+		if (Player.IsFlyingPotActive)
+			return;
+
+		if (interactingWithPlayer && !Player.IsOnGround && !environmentCollider.Disabled)
+			StartJump();
+
+		UpdateAngle(0);
 		ApplyMovement();
 	}
 
+	private void ResetPosition()
+	{
+		angle = 0f;
+		Velocity = 0f;
+		localPosition = Vector2.Zero;
+		ApplyMovement();
+	}
+
+	public void Flap() => animationTree.Set(FlapTrigger, (uint)AnimationNodeOneShot.OneShotRequest.Fire);
+	public void UpdateFlap(float speed) => animationTree.Set(FlapSpeed, speed);
+	public void UpdateAngle(float targetAngle) => angle = Mathf.Lerp(angle, targetAngle, RotationSpeed);
+
 	private void StartJump()
 	{
-		isEnteringPot = true;
+		isPlayerJumpingIntoPot = true;
 		environmentCollider.Disabled = true;
 
-		float jumpHeight = GlobalPosition.Y + 1 - Character.GlobalPosition.Y;
+		float jumpHeight = GlobalPosition.Y + 1 - Player.GlobalPosition.Y;
 		jumpHeight = Mathf.Clamp(jumpHeight * 2, 0, 2);
-		LaunchSettings settings = LaunchSettings.Create(Character.GlobalPosition, root.GlobalPosition, jumpHeight, false);
+		LaunchSettings settings = LaunchSettings.Create(Player.GlobalPosition, root.GlobalPosition, jumpHeight, false);
 		settings.IsJump = true;
-		Character.StartLauncher(settings);
+		settings.AllowJumpDash = false;
+		Player.StartLauncher(settings);
 
 		lockonArea.SetDeferred("monitorable", false);
 
-		Character.CanJumpDash = false;
-		Character.Skills.IsSpeedBreakEnabled = false; // Disable speed break
+		Player.Skills.IsSpeedBreakEnabled = false;
+		Player.LaunchFinished += OnEnteredPot;
 
-		Character.Lockon.StopHomingAttack();
-		Character.Connect(CharacterController.SignalName.LaunchFinished, new Callable(this, MethodName.OnEnteredPot), (uint)ConnectFlags.OneShot);
+		if (cameraTrigger == null)
+			return;
 
-		// Update camera
-		if (cameraTrigger != null)
-		{
-			cameraTrigger.settings.yawAngle = ExtensionMethods.ModAngle(GlobalRotation.Y + Mathf.Pi); // Sync viewAngle to current flying pot's rotation
-			cameraTrigger.Activate();
-		}
+		// Sync viewAngle to current flying pot's rotation
+		cameraTrigger.settings.yawAngle = ExtensionMethods.ModAngle(GlobalRotation.Y + Mathf.Pi);
+		cameraTrigger.Activate();
 	}
 
 	private void OnEnteredPot()
 	{
-		flapTimer = 0;
-		isControllingPlayer = true;
-		Character.StartExternal(this, root);
-		Character.Animator.Visible = false;
-		animationTree.Set(EnterTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		isPlayerJumpingIntoPot = false;
 		enterSFX.Play();
+		animationTree.Set(EnterTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		Player.StartFlyingPot(this);
+		Player.LaunchFinished -= OnEnteredPot;
+		EmitSignal(SignalName.PotEntered);
 	}
 
-	private void EjectPlayer()
+	public void PlayExitFX()
 	{
-		isLeavingPot = true;
-		isControllingPlayer = false;
-
-		velocity = 0f; // Kill all velocity
-
-		float angleRatio = angle / MaxAngle;
-		Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Back());
-		Character.VerticalSpeed = Runtime.CalculateJumpPower(Character.jumpHeight);
-
-		Character.Animator.JumpAnimation();
-		Character.Animator.Visible = true;
-		Character.Animator.SnapRotation(Character.MovementAngle - (Mathf.Pi * angleRatio));
-		Character.ResetMovementState();
-
-		animationTree.Set(EnterTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		exitSFX.Play();
-
+		animationTree.Set(EnterTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		cameraTrigger?.Deactivate();
 	}
 
-	private void ProcessMovement()
+	public void Shatter()
 	{
-		float targetRotation = Character.InputHorizontal * MaxAngle;
-		angle = Mathf.Lerp(angle, targetRotation, RotationSpeed);
-
-		if (Input.IsActionJustPressed("button_jump"))
-		{
-			EjectPlayer();
-			return;
-		}
-
-		if (Input.IsActionJustPressed("button_action")) // Move upwards
-		{
-			animationTree.Set(FlapTrigger, (uint)AnimationNodeOneShot.OneShotRequest.Fire);
-			flapSpeed = 1.5f + (flapTimer / FlapInterval);
-			flapTimer = FlapInterval;
-		}
-
-		if (!Mathf.IsZeroApprox(flapTimer)) // Accelerate
-		{
-			if (velocity < 0)
-				velocity *= .2f;
-
-			flapTimer = Mathf.MoveToward(flapTimer, 0, PhysicsManager.physicsDelta);
-			if (flapTimer >= FlapAccelerationLength)
-				velocity += WingAcceleration;
-		}
-
-		if (velocity > MaxSpeed)
-			velocity = MaxSpeed;
-
-		flapSpeed = Mathf.Lerp(flapSpeed, 1, .1f);
-		animationTree.Set(FlapSpeed, flapSpeed);
+		interactionAnimator.Play("shatter");
+		cameraTrigger?.Deactivate();
 	}
 
-	private void ApplyMovement()
+	public void ApplyMovement()
 	{
-		if (velocity > 0)
-			localPosition += Vector2.Down.Rotated(-angle) * velocity * PhysicsManager.physicsDelta;
+		if (isPlayerJumpingIntoPot) // Don't move when player is jumping into the pot
+			return;
+
+		if (Velocity > 0)
+			localPosition += Vector2.Down.Rotated(-Angle) * Velocity * PhysicsManager.physicsDelta;
 		else
-			localPosition += Vector2.Down * velocity * PhysicsManager.physicsDelta;
+			localPosition += Vector2.Down * Velocity * PhysicsManager.physicsDelta;
 
 		localPosition.X = Mathf.Clamp(localPosition.X, -travelBounds.X + boundOffset, travelBounds.X + boundOffset);
 		localPosition.Y = Mathf.Clamp(localPosition.Y, 0f, travelBounds.Y);
@@ -214,46 +165,50 @@ public partial class FlyingPot : Node3D
 		if (!Mathf.IsZeroApprox(localPosition.Y)) // Fall
 		{
 			// Update velocity
-			velocity -= Runtime.Gravity * PhysicsManager.physicsDelta; // Floaty fall
-			if (velocity < MaxGravity)
-				velocity = MaxGravity;
+			Velocity -= Runtime.Gravity * PhysicsManager.physicsDelta; // Floaty fall
+			if (Velocity < MaxGravity)
+				Velocity = MaxGravity;
 
-			if (velocity < 0)
+			if (Velocity < 0)
 				animationTree.Set(FallTransition, EnabledState);
 		}
-		else if (velocity != 0) // Return to idle flapping
+		else if (Velocity != 0) // Return to idle flapping
 		{
-			velocity = 0;
+			Velocity = 0;
 			animationTree.Set(FallTransition, DisabledState);
 		}
 
-		if (!isControllingPlayer)
-			angle = Mathf.Lerp(angle, 0f, RotationSpeed);
-
 		root.Position = new Vector3(localPosition.X, localPosition.Y, 0);
-		root.Rotation = Vector3.Forward * angle;
-
-		if (isControllingPlayer)
-			Character.UpdateExternalControl(); // Sync player object
+		root.Rotation = Vector3.Forward * Angle;
 
 		if (lockonArea.Monitorable && !interactingWithPlayer)
-			isProcessing = !Mathf.IsZeroApprox(localPosition.Y) || !Mathf.IsZeroApprox(angle); // Update sleeping status
+			isSleeping = Mathf.IsZeroApprox(localPosition.Y) && Mathf.IsZeroApprox(Angle); // Update sleeping status
 	}
 
-	public void PlayerEntered(Area3D _)
+	private void Activate()
 	{
-		isProcessing = true;
-		isLeavingPot = false;
+		isSleeping = false;
+
+		if (isPlayerJumpingIntoPot)
+			return;
+
+		if (!Player.IsFlyingPotActive && !Player.IsOnGround)
+			StartJump();
+	}
+
+	public void OnEntered(Area3D a)
+	{
+		if (!a.IsInGroup("player detection"))
+			return;
+
 		interactingWithPlayer = true;
+		Activate();
 	}
 
-	public void PlayerExited(Area3D _)
+	public void OnExited(Area3D a)
 	{
-		if (isLeavingPot)
-		{
-			Character.CanJumpDash = true; // So the player isn't completely helpless
-			isEnteringPot = false;
-		}
+		if (!a.IsInGroup("player detection"))
+			return;
 
 		interactingWithPlayer = false;
 		environmentCollider.SetDeferred("disabled", false);

@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://68st06xyjgvp"]
 
-[ext_resource type="Script" path="res://object/stage/pickups/resource/script/Ring.cs" id="1"]
+[ext_resource type="Script" uid="uid://b5odvkwlgmlk3" path="res://object/stage/pickups/resource/script/Ring.cs" id="1"]
 [ext_resource type="PackedScene" uid="uid://c3fvfe7fvrd68" path="res://object/stage/pickups/resource/model/RichRing.gltf" id="2"]
 [ext_resource type="Material" uid="uid://bp84que225vth" path="res://object/stage/pickups/resource/model/material/Ring Spark Process Material.tres" id="3_hj5xx"]
 [ext_resource type="Material" uid="uid://cd8mqsy8lhhcb" path="res://object/stage/pickups/resource/model/material/Ring Spark.tres" id="4_un35g"]
@@ -139,18 +139,18 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_6x35q"]
 _data = {
-"RESET": SubResource("5"),
-"collect": SubResource("15"),
-"loop": SubResource("4")
+&"RESET": SubResource("5"),
+&"collect": SubResource("15"),
+&"loop": SubResource("4")
 }
 
-[node name="RichRing" type="Area3D"]
-collision_layer = 0
+[node name="RichRing" type="Area3D" groups=["ignore destructable", "light dashable"]]
+collision_layer = 8
 collision_mask = 2
-monitorable = false
 script = ExtResource("1")
 isRichRing = true
 animator = NodePath("AnimationPlayer")
+collider = NodePath("CollisionShape3D")
 
 [node name="RichRing" parent="." instance=ExtResource("2")]
 
@@ -169,7 +169,7 @@ draw_pass_1 = SubResource("PlaneMesh_ekr2c")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_6x35q")
+&"": SubResource("AnimationLibrary_6x35q")
 }
 autoplay = "loop"
 

@@ -1,10 +1,10 @@
 [gd_scene load_steps=31 format=3 uid="uid://cc1ft0jnv1sql"]
 
-[ext_resource type="Script" path="res://area/2 dino jungle/data/script/DinoTrio.cs" id="1_6nsvh"]
+[ext_resource type="Script" uid="uid://dtuhegx3a6q0r" path="res://area/2 dino jungle/data/script/DinoTrio.cs" id="1_6nsvh"]
 [ext_resource type="PackedScene" uid="uid://ctbsi13u4rad0" path="res://area/2 dino jungle/object/model/dino/DinoTrio.gltf" id="1_57frd"]
 [ext_resource type="Material" uid="uid://4batii1hel0b" path="res://effect/particle/material/explosion/Explosion Smoke.tres" id="3_p4v8a"]
 [ext_resource type="AudioStream" uid="uid://bcm370ah8g7gf" path="res://sound/sfx/stage/dinosaur jungle/dino trio step.wav" id="4_0q1g7"]
-[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="5_dyp8x"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="5_dyp8x"]
 [ext_resource type="AudioStream" uid="uid://dy0q7366tmdiq" path="res://sound/sfx/stage/dinosaur jungle/dino trio windup.wav" id="6_dfbdg"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_wqtdo"]
@@ -61,9 +61,11 @@ fadeout_time = 1.2
 allow_transition_to_self = true
 input_0/name = "paw"
 input_0/auto_advance = false
+input_0/break_loop_at_end = false
 input_0/reset = true
 input_1/name = "shake"
 input_1/auto_advance = false
+input_1/break_loop_at_end = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_71btw"]
@@ -97,9 +99,11 @@ sync = true
 xfade_time = 0.4
 input_0/name = "disabled"
 input_0/auto_advance = false
+input_0/break_loop_at_end = false
 input_0/reset = true
 input_1/name = "enabled"
 input_1/auto_advance = false
+input_1/break_loop_at_end = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sj3dp"]
@@ -141,7 +145,7 @@ node_connections = [&"attack_speed", 0, &"attack", &"attack_trigger", 0, &"movem
 use_model_front = true
 script = ExtResource("1_6nsvh")
 traction = 20.0
-friction = 40.0
+friction = 60.0
 preferredOffset = 5.0
 rubberbandingStrength = 0.8
 stepSfx = NodePath("Step")
@@ -152,28 +156,17 @@ animationTree = NodePath("AnimationTree")
 [node name="DinoTrio" parent="." instance=ExtResource("1_57frd")]
 
 [node name="Skeleton3D" parent="DinoTrio/DinoTrioRoot" index="0"]
-bones/2/rotation = Quaternion(0.986246, -1.19156e-08, 2.61644e-06, -0.165285)
 bones/2/scale = Vector3(1, 1, 0.999998)
-bones/4/rotation = Quaternion(0.762143, -1.10412e-06, 2.20773e-06, 0.647409)
 bones/4/scale = Vector3(1, 1, 1)
 bones/5/scale = Vector3(1, 1, 1)
-bones/6/rotation = Quaternion(0.762261, 7.26831e-05, -1.01577e-05, 0.64727)
-bones/7/rotation = Quaternion(-0.32846, -9.96382e-06, -3.14188e-05, 0.944518)
 bones/11/scale = Vector3(1, 1, 1)
-bones/13/rotation = Quaternion(1.74276e-05, 3.29326e-12, -4.33084e-07, 1)
-bones/15/rotation = Quaternion(0.959507, 0, 1.30206e-05, -0.281684)
 bones/15/scale = Vector3(1, 1, 1)
-bones/16/rotation = Quaternion(-0.707246, 0.000317547, 0.000317547, 0.706967)
-bones/17/rotation = Quaternion(0.959496, -0.000430705, -0.000939394, -0.281721)
 bones/17/scale = Vector3(1, 1, 1)
-bones/19/rotation = Quaternion(0.957741, 8.91493e-07, -0.000882155, -0.287631)
 bones/19/scale = Vector3(1, 1, 1)
-bones/20/rotation = Quaternion(-0.707108, 0.000270456, 0.000270456, 0.707106)
-bones/21/rotation = Quaternion(0.957741, -0.000367211, 0.000107328, -0.287633)
 bones/21/scale = Vector3(1, 1, 1)
 
 [node name="Head" type="BoneAttachment3D" parent="."]
-transform = Transform3D(1, 1.63549e-07, 5.00352e-07, 5.00373e-07, -0.59062, -0.806948, 1.63549e-07, 0.80695, -0.59062, 1.71783e-06, 2.72624, 1.92318)
+transform = Transform3D(1, 1.6355e-07, 5.00357e-07, 5.00378e-07, -0.590619, -0.806948, 1.63551e-07, 0.80695, -0.590619, 1.71783e-06, 2.72624, 1.92318)
 bone_name = "head"
 bone_idx = 3
 use_external_skeleton = true
@@ -230,6 +223,7 @@ draw_pass_1 = SubResource("QuadMesh_c01v3")
 [node name="AnimationTree" type="AnimationTree" parent="."]
 active = false
 root_node = NodePath("../DinoTrio")
+callback_mode_discrete = 0
 tree_root = SubResource("AnimationNodeBlendTree_dcn5s")
 anim_player = NodePath("../DinoTrio/AnimationPlayer")
 parameters/attack_speed/scale = 1.2
@@ -251,19 +245,22 @@ parameters/movement_transition/transition_request = ""
 parameters/movement_transition/current_index = 0
 
 [node name="Step" type="AudioStreamPlayer3D" parent="."]
+process_mode = 1
 stream = ExtResource("4_0q1g7")
-max_db = -3.0
-max_distance = 100.0
+max_db = -24.0
+max_distance = 50.0
 bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
 script = ExtResource("5_dyp8x")
 groupKey = &"dino_trio_step"
 
 [node name="Windup" type="AudioStreamPlayer3D" parent="."]
+process_mode = 1
 stream = ExtResource("6_dfbdg")
-attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
 
 [connection signal="area_entered" from="Head/Trigger" to="." method="OnEntered"]
 [connection signal="area_exited" from="Head/Trigger" to="." method="OnExited"]

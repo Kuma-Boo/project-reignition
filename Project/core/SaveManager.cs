@@ -10,14 +10,18 @@ public partial class SaveManager : Node
 {
 	public static SaveManager Instance;
 
-	private const string SaveDirectory = "user://";
-
 	[Signal]
 	public delegate void ConfigAppliedEventHandler();
+
+	private static string SaveDirectory;
+	private static string SaveLocationFile => OS.GetExecutablePath().GetBaseDir() + "/saveLocation.txt";
 
 	public override void _EnterTree()
 	{
 		Instance = this;
+
+		CacheInitialInputMap();
+		SaveDirectory = ProjectSettings.GlobalizePath(GetSaveDirectory());
 		MenuData = GameData.CreateDefaultData(); // Create a default game data object for the menu
 
 		LoadConfig();
@@ -42,6 +46,25 @@ public partial class SaveManager : Node
 		}
 	}
 
+	private string GetSaveDirectory()
+	{
+		FileAccess f = FileAccess.Open(SaveLocationFile, FileAccess.ModeFlags.Read);
+		if (f != null && f.GetError() == Error.Ok)
+		{
+			string targetDirectory = f.GetAsText();
+			f.Close();
+
+			if (!string.IsNullOrWhiteSpace(targetDirectory) && DirAccess.DirExistsAbsolute(targetDirectory))
+				return targetDirectory;
+
+			// Fallback to executable path when directory is missing (only when a saveLocation file exists).
+			return OS.GetExecutablePath().GetBaseDir() + "/save/";
+		}
+
+		// Fallback to appdata
+		return "user://";
+	}
+
 	#region Config
 	public static ConfigData Config = new();
 	public static bool UseEnglishVoices => Config.voiceLanguage == VoiceLanguage.English;
@@ -58,10 +81,18 @@ public partial class SaveManager : Node
 		Count
 	}
 
+	public enum ControllerStyle
+	{
+		Style1, // Standard controller theme
+		Style2, // White/Nintendo Wii controller theme
+		Count
+	}
+
 	public enum VoiceLanguage
 	{
 		English,
 		Japanese,
+		Spanish,
 		Count
 	}
 
@@ -75,6 +106,7 @@ public partial class SaveManager : Node
 		Spanish,
 		BrazilianPortuguese,
 		Polish,
+		Chinese,
 		Count
 	}
 
@@ -98,6 +130,15 @@ public partial class SaveManager : Node
 		new(3840, 2160), // 4K
 	];
 
+	public static readonly int[] FrameRates =
+	[
+		0,
+		30,
+		45,
+		60,
+		120,
+	];
+
 	#endregion
 
 	public partial class ConfigData : GodotObject
@@ -107,11 +148,12 @@ public partial class SaveManager : Node
 		public int windowSize = 3; // Defaults to one lower than 1080p
 		public bool useFullscreen = true;
 		public bool useExclusiveFullscreen;
+		public int framerate = 3;
 		public bool useVsync;
 		public int renderScale = 100;
 		public RenderingServer.ViewportScaling3DMode resizeMode = RenderingServer.ViewportScaling3DMode.Bilinear;
 		public int antiAliasing = 1; // Default to FXAA
-		public bool useHDBloom = true;
+		public QualitySetting bloomMode = QualitySetting.High;
 		public bool useMotionBlur = true;
 		public bool useScreenShake = true;
 		public int screenShake = 100;
@@ -121,23 +163,30 @@ public partial class SaveManager : Node
 
 		// Audio
 		public bool isMasterMuted;
-		public int masterVolume = 50;
+		public int masterVolume = 30;
 		public bool isBgmMuted;
-		public int bgmVolume = 100;
+		public int bgmVolume = 50;
 		public bool isSfxMuted;
-		public int sfxVolume = 100;
+		public int sfxVolume = 50;
 		public bool isVoiceMuted;
-		public int voiceVolume = 100;
+		public int voiceVolume = 50;
+		public bool useRetailMenuMusic;
 
 		// Controls
-		public float deadZone = .5f;
+		public float deadZone = .2f;
 		public ControllerType controllerType = ControllerType.Automatic;
-		public Dictionary inputConfiguration = new();
+		public ControllerStyle controllerStyle = ControllerStyle.Style2;
+		public bool useHoldBreakMode = true;
+		public bool useStompJumpButtonMode;
+		public bool useActionPrompts = true;
+		public int[] partyModeDevices = [0, 0, 0, 0];
+		public Dictionary inputConfiguration = [];
 
 		// Language
-		public bool subtitlesEnabled = true;
-		public VoiceLanguage voiceLanguage = VoiceLanguage.English;
-		public TextLanguage textLanguage = TextLanguage.English;
+		public bool isSubtitleDisabled;
+		public bool isDialogDisabled;
+		public TextLanguage textLanguage = AutoDetectTextLocale();
+		public VoiceLanguage voiceLanguage = AutoDetectVoiceLocale();
 
 		/// <summary> Creates a dictionary based on config data. </summary>
 		public Dictionary ToDictionary()
@@ -149,12 +198,13 @@ public partial class SaveManager : Node
 				{ nameof(windowSize), windowSize },
 				{ nameof(useFullscreen), useFullscreen },
 				{ nameof(useExclusiveFullscreen), useExclusiveFullscreen },
+				{ nameof(framerate), framerate },
 				{ nameof(useVsync), useVsync },
 
 				{ nameof(renderScale), renderScale },
 				{ nameof(resizeMode), (int)resizeMode },
 				{ nameof(antiAliasing), antiAliasing },
-				{ nameof(useHDBloom), useHDBloom },
+				{ nameof(bloomMode), (int)bloomMode },
 				{ nameof(softShadowQuality), (int)softShadowQuality },
 				{ nameof(postProcessingQuality), (int)postProcessingQuality },
 				{ nameof(reflectionQuality), (int)reflectionQuality },
@@ -171,13 +221,21 @@ public partial class SaveManager : Node
 				{ nameof(sfxVolume), sfxVolume },
 				{ nameof(isVoiceMuted), isVoiceMuted },
 				{ nameof(voiceVolume), voiceVolume },
+				{ nameof(useRetailMenuMusic), useRetailMenuMusic},
 
+				// Controls
 				{ nameof(deadZone), deadZone },
 				{ nameof(controllerType), (int)controllerType },
-				{ nameof(inputConfiguration), Json.Stringify(inputConfiguration) },
+				{ nameof(controllerStyle), (int)controllerStyle},
+				{ nameof(useHoldBreakMode), useHoldBreakMode },
+				{ nameof(useStompJumpButtonMode), useStompJumpButtonMode },
+				{ nameof(useActionPrompts), useActionPrompts },
+				{ nameof(partyModeDevices), partyModeDevices },
+				{ nameof(inputConfiguration), inputConfiguration },
 
-				// Langauge
-				{ nameof(subtitlesEnabled), subtitlesEnabled },
+				// Language
+				{ nameof(isSubtitleDisabled), isSubtitleDisabled },
+				{ nameof(isDialogDisabled), isDialogDisabled},
 				{ nameof(voiceLanguage), (int)voiceLanguage },
 				{ nameof(textLanguage), (int)textLanguage },
 			};
@@ -195,6 +253,8 @@ public partial class SaveManager : Node
 				useExclusiveFullscreen = (bool)var;
 			if (dictionary.TryGetValue(nameof(windowSize), out var))
 				windowSize = (int)var;
+			if (dictionary.TryGetValue(nameof(framerate), out var))
+				framerate = (int)var;
 			if (dictionary.TryGetValue(nameof(useVsync), out var))
 				useVsync = (bool)var;
 
@@ -204,8 +264,8 @@ public partial class SaveManager : Node
 				resizeMode = (RenderingServer.ViewportScaling3DMode)(int)var;
 			if (dictionary.TryGetValue(nameof(antiAliasing), out var))
 				antiAliasing = (int)var;
-			if (dictionary.TryGetValue(nameof(useHDBloom), out var))
-				useHDBloom = (bool)var;
+			if (dictionary.TryGetValue(nameof(bloomMode), out var))
+				bloomMode = (QualitySetting)(int)var;
 			if (dictionary.TryGetValue(nameof(softShadowQuality), out var))
 				softShadowQuality = (QualitySetting)(int)var;
 			if (dictionary.TryGetValue(nameof(postProcessingQuality), out var))
@@ -219,6 +279,7 @@ public partial class SaveManager : Node
 			if (dictionary.TryGetValue(nameof(screenShake), out var))
 				screenShake = (int)var;
 
+			// Audio
 			if (dictionary.TryGetValue(nameof(isMasterMuted), out var))
 				isMasterMuted = (bool)var;
 			if (dictionary.TryGetValue(nameof(masterVolume), out var))
@@ -235,16 +296,33 @@ public partial class SaveManager : Node
 				isVoiceMuted = (bool)var;
 			if (dictionary.TryGetValue(nameof(voiceVolume), out var))
 				voiceVolume = (int)var;
+			if (dictionary.TryGetValue(nameof(useRetailMenuMusic), out var))
+				useRetailMenuMusic = (bool)var;
 
+
+			// Controls
 			if (dictionary.TryGetValue(nameof(deadZone), out var))
 				deadZone = (float)var;
 			if (dictionary.TryGetValue(nameof(controllerType), out var))
 				controllerType = (ControllerType)(int)var;
+			if (dictionary.TryGetValue(nameof(controllerStyle), out var))
+				controllerStyle = (ControllerStyle)(int)var;
+			if (dictionary.TryGetValue(nameof(useHoldBreakMode), out var))
+				useHoldBreakMode = (bool)var;
+			if (dictionary.TryGetValue(nameof(useStompJumpButtonMode), out var))
+				useStompJumpButtonMode = (bool)var;
+			if (dictionary.TryGetValue(nameof(useActionPrompts), out var))
+				useActionPrompts = (bool)var;
+			if (dictionary.TryGetValue(nameof(partyModeDevices), out var))
+				partyModeDevices = (int[])var;
 			if (dictionary.TryGetValue(nameof(inputConfiguration), out var))
 				inputConfiguration = (Dictionary)Json.ParseString((string)var);
 
-			if (dictionary.TryGetValue(nameof(subtitlesEnabled), out var))
-				subtitlesEnabled = (bool)var;
+			// Language
+			if (dictionary.TryGetValue(nameof(isSubtitleDisabled), out var))
+				isSubtitleDisabled = (bool)var;
+			if (dictionary.TryGetValue(nameof(isDialogDisabled), out var))
+				isDialogDisabled = (bool)var;
 			if (dictionary.TryGetValue(nameof(voiceLanguage), out var))
 				voiceLanguage = (VoiceLanguage)(int)var;
 			if (dictionary.TryGetValue(nameof(textLanguage), out var))
@@ -252,10 +330,41 @@ public partial class SaveManager : Node
 		}
 	}
 
+	private static TextLanguage AutoDetectTextLocale()
+	{
+		return OS.GetLocaleLanguage() switch
+		{
+			"ja" => TextLanguage.Japanese,
+			"de" => TextLanguage.German,
+			"it" => TextLanguage.Italian,
+			"fr" => TextLanguage.French,
+			"es" => TextLanguage.Spanish,
+			"pt" => TextLanguage.BrazilianPortuguese,
+			"pl" => TextLanguage.Polish,
+			"zh" => TextLanguage.Chinese,
+			_ => TextLanguage.English,
+		};
+	}
+
+	private static VoiceLanguage AutoDetectVoiceLocale()
+	{
+		TextLanguage autoTextLocale = AutoDetectTextLocale();
+
+		if (autoTextLocale == TextLanguage.Japanese)
+			return VoiceLanguage.Japanese;
+
+		if (autoTextLocale == TextLanguage.Spanish)
+			return VoiceLanguage.Spanish;
+
+		return VoiceLanguage.English;
+	}
+
+
 	/// <summary> Attempts to load config data from file. </summary>
 	public static void LoadConfig()
 	{
-		FileAccess file = FileAccess.Open(SaveDirectory + ConfigFileName, FileAccess.ModeFlags.Read);
+		string configFile = SaveDirectory.PathJoin(ConfigFileName);
+		FileAccess file = FileAccess.Open(configFile, FileAccess.ModeFlags.Read);
 
 		try
 		{
@@ -278,8 +387,16 @@ public partial class SaveManager : Node
 	/// <summary> Attempts to save config data to file. </summary>
 	public static void SaveConfig()
 	{
-		FileAccess file = FileAccess.Open(SaveDirectory + ConfigFileName, FileAccess.ModeFlags.Write);
+		if (!DirAccess.DirExistsAbsolute(SaveDirectory))
+			DirAccess.MakeDirRecursiveAbsolute(SaveDirectory);
+
+		string configFile = SaveDirectory.PathJoin(ConfigFileName);
+		FileAccess file = FileAccess.Open(configFile, FileAccess.ModeFlags.Write);
 		file.StoreString(Json.Stringify(Config.ToDictionary(), "\t"));
+		file.Close();
+
+		file = FileAccess.Open(SaveLocationFile, FileAccess.ModeFlags.Write);
+		file.StoreString(SaveDirectory);
 		file.Close();
 	}
 
@@ -303,6 +420,7 @@ public partial class SaveManager : Node
 		if (!Config.useFullscreen)
 			DisplayServer.WindowSetSize(WindowSizes[Config.windowSize]);
 
+		Engine.MaxFps = FrameRates[Config.framerate];
 		DisplayServer.VSyncMode targetVSyncMode =
 			Config.useVsync ? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled;
 		if (DisplayServer.WindowGetVsyncMode() != targetVSyncMode)
@@ -334,7 +452,7 @@ public partial class SaveManager : Node
 		RenderingServer.ViewportSetScreenSpaceAA(viewportRid, targetSSAA);
 		RenderingServer.ViewportSetMsaa3D(viewportRid, targetMSAA);
 
-		RenderingServer.EnvironmentGlowSetUseBicubicUpscale(Config.useHDBloom);
+		RenderingServer.EnvironmentGlowSetUseBicubicUpscale(Config.bloomMode == QualitySetting.High);
 
 		int targetShadowAtlasSize = 4096;
 		bool use16BitShadowAtlas = Config.softShadowQuality == QualitySetting.High;
@@ -389,6 +507,102 @@ public partial class SaveManager : Node
 		Instance.EmitSignal(SignalName.ConfigApplied);
 	}
 
+	/// <summary> Applies text localization. Be sure voiceover language is set first. </summary>
+	private static void ApplyLocalization()
+	{
+		switch (Config.textLanguage)
+		{
+			case TextLanguage.Japanese:
+				TranslationServer.SetLocale("ja");
+				break;
+			case TextLanguage.Spanish:
+				TranslationServer.SetLocale("es");
+				break;
+			case TextLanguage.French:
+				TranslationServer.SetLocale("fr");
+				break;
+			case TextLanguage.Italian:
+				TranslationServer.SetLocale("it");
+				break;
+			case TextLanguage.German:
+				TranslationServer.SetLocale("de");
+				break;
+			case TextLanguage.BrazilianPortuguese:
+				TranslationServer.SetLocale("pt_BR");
+				break;
+			case TextLanguage.Polish:
+				TranslationServer.SetLocale("pl");
+				break;
+			case TextLanguage.Chinese:
+				TranslationServer.SetLocale("zh");
+				break;
+			default:
+				// Prefer the retranslation for all languages except when using the voiceover
+				TranslationServer.SetLocale(UseEnglishVoices ? "en" : "en_US");
+				break;
+		}
+	}
+
+	#endregion
+
+	#region Input
+	private static readonly Dictionary initialInputMap = [];
+	private static void CacheInitialInputMap()
+	{
+		foreach (StringName action in InputMap.GetActions())
+		{
+			// Only store gameplay actions
+			if (!action.ToString().StartsWith("move_") && !action.ToString().StartsWith("button_"))
+				continue;
+
+			initialInputMap.Add(action, GenerateInputMappingString(action));
+		}
+	}
+
+	private static string GenerateInputMappingString(StringName action)
+	{
+		Array<InputEvent> eventList = InputMap.ActionGetEvents(action); // Refresh event list
+
+		// Construct the mapping string
+		int[] mappingList = [(int)Key.None, (int)JoyAxis.Invalid, (int)JoyButton.Invalid];
+		int axisSign = 0;
+		foreach (var e in eventList)
+		{
+			if (e is InputEventKey key)
+			{
+				mappingList[0] = (int)key.Keycode;
+			}
+			else if (e is InputEventJoypadMotion motion)
+			{
+				mappingList[1] = (int)motion.Axis;
+				axisSign = Mathf.Sign(motion.AxisValue);
+			}
+			else if (e is InputEventJoypadButton button)
+			{
+				mappingList[2] = (int)button.ButtonIndex;
+			}
+		}
+
+		return $"{mappingList[0]}, {mappingList[1]}, {mappingList[2]}, {axisSign}";
+	}
+
+	public static void SaveInputAction(StringName action)
+	{
+		string mappingString = GenerateInputMappingString(action);
+		if (Config.inputConfiguration.ContainsKey(action))
+			Config.inputConfiguration[action] = mappingString;
+		else
+			Config.inputConfiguration.Add(action, mappingString);
+
+		ApplyConfig();
+	}
+
+	public static void ResetInputMap()
+	{
+		Config.inputConfiguration = initialInputMap.Duplicate(true);
+		ApplyInputMap();
+	}
+
 	/// <summary> Applies input map configuration. </summary>
 	public static void ApplyInputMap()
 	{
@@ -438,39 +652,6 @@ public partial class SaveManager : Node
 			}
 		}
 	}
-
-	/// <summary> Applies text localization. Be sure voiceover language is set first. </summary>
-	private static void ApplyLocalization()
-	{
-		switch (Config.textLanguage)
-		{
-			case TextLanguage.Japanese:
-				TranslationServer.SetLocale("ja");
-				break;
-			case TextLanguage.Spanish:
-				TranslationServer.SetLocale("es");
-				break;
-			case TextLanguage.French:
-				TranslationServer.SetLocale("fr");
-				break;
-			case TextLanguage.Italian:
-				TranslationServer.SetLocale("it");
-				break;
-			case TextLanguage.German:
-				TranslationServer.SetLocale("de");
-				break;
-			case TextLanguage.BrazilianPortuguese:
-				TranslationServer.SetLocale("pt_BR");
-				break;
-			case TextLanguage.Polish:
-				TranslationServer.SetLocale("pl");
-				break;
-			default:
-				TranslationServer.SetLocale(UseEnglishVoices ? "en" : "en_US");
-				break;
-		}
-	}
-
 	#endregion
 
 	#region Game data
@@ -513,14 +694,17 @@ public partial class SaveManager : Node
 	/// <summary> Maximum number of save slots that can be created. </summary>
 	public const int SaveSlotCount = 9;
 
+	/// <summary> Maximum number of preset slots
+	public const int PresetCount = 9;
 	/// <summary> Saves active game data to a file. </summary>
 	public static void SaveGameData()
 	{
 		if (ActiveSaveSlotIndex == -1) return; // Invalid save slot
 
 		// Write save data to a file.
-		string saveNumber = ActiveSaveSlotIndex.ToString("00");
-		FileAccess file = FileAccess.Open(SaveDirectory + $"save{saveNumber}.dat", FileAccess.ModeFlags.Write);
+		string saveFile = ActiveSaveSlotIndex.ToString("00");
+		saveFile = SaveDirectory.PathJoin($"save{saveFile}.dat");
+		FileAccess file = FileAccess.Open(saveFile, FileAccess.ModeFlags.Write);
 
 		if (FileAccess.GetOpenError() == Error.Ok)
 		{
@@ -536,12 +720,25 @@ public partial class SaveManager : Node
 		{
 			GameSaveSlots[i] = GameData.CreateDefaultData();
 
-			string saveNumber = i.ToString("00");
-			FileAccess file = FileAccess.Open(SaveDirectory + $"save{saveNumber}.dat", FileAccess.ModeFlags.Read);
+			string saveFile = i.ToString("00");
+			saveFile = SaveDirectory.PathJoin($"save{saveFile}.dat");
+			FileAccess file = FileAccess.Open(saveFile, FileAccess.ModeFlags.Read);
 			if (FileAccess.GetOpenError() == Error.Ok)
 			{
 				GameSaveSlots[i].FromDictionary((Dictionary)Json.ParseString(file.GetAsText()));
 				file.Close();
+			}
+
+			if (GameSaveSlots[i].presetNames == null &&
+				GameSaveSlots[i].presetSkills == null &&
+				GameSaveSlots[i].presetSkillAugments == null)
+			{
+				for (int j = 0; j < PresetCount; j++)
+				{
+					GameSaveSlots[i].presetNames.Add(null);
+					GameSaveSlots[i].presetSkills.Add(null);
+					GameSaveSlots[i].presetSkillAugments.Add(null);
+				}
 			}
 		}
 	}
@@ -558,13 +755,13 @@ public partial class SaveManager : Node
 	// <summary> Deletes a save file at the given index
 	public static void DeleteSaveData(int index)
 	{
-		string saveNumber = index.ToString("00");
-		string savePath = SaveDirectory + $"save{saveNumber}.dat";
+		string saveFile = index.ToString("00");
+		saveFile = SaveDirectory.PathJoin($"save{saveFile}.dat");
 
-		if (!FileAccess.FileExists(savePath))
+		if (!FileAccess.FileExists(saveFile))
 			return;
-		OS.MoveToTrash(ProjectSettings.GlobalizePath(savePath));
-		GD.Print("Deleting save");
+
+		OS.MoveToTrash(ProjectSettings.GlobalizePath(saveFile));
 	}
 
 	public class GameData
@@ -578,6 +775,8 @@ public partial class SaveManager : Node
 		public Array<WorldEnum> worldsUnlocked;
 		/// <summary> List of stages unlocked. </summary>
 		public Array<string> stagesUnlocked;
+		/// <summary> List of cutscenes that can be skipped. </summary>
+		public Array<string> skippableCutscenes;
 
 		/// <summary> Player level, from 1 -> 99 </summary>
 		public int level;
@@ -588,6 +787,10 @@ public partial class SaveManager : Node
 		public int exp;
 		/// <summary> Total playtime, in seconds. </summary>
 		public float playTime;
+
+		public Array<string> presetNames;
+		public Array<Array<SkillKey>> presetSkills;
+		public Array<Dictionary<SkillKey, int>> presetSkillAugments;
 
 		public Array<SkillKey> equippedSkills;
 		public Dictionary<SkillKey, int> equippedAugments;
@@ -632,6 +835,14 @@ public partial class SaveManager : Node
 				return;
 
 			worldsUnlocked.Add(world);
+		}
+
+		public void UnlockWorldRing(WorldEnum world)
+		{
+			if (worldRingsCollected.Contains(world))
+				return;
+
+			worldRingsCollected.Add(world);
 		}
 
 		public void UnlockAllWorlds()
@@ -796,24 +1007,25 @@ public partial class SaveManager : Node
 		}
 		#endregion
 
+		public bool CanSkipCutscene(StringName cutsceneId) => skippableCutscenes.Contains(cutsceneId) || OS.IsDebugBuild();
+		public void AllowSkippingCutscene(StringName cutsceneId)
+		{
+			if (!skippableCutscenes.Contains(cutsceneId))
+				skippableCutscenes.Add(cutsceneId);
+		}
+
 		/// <summary> Creates a dictionary based on GameData. </summary>
 		public Dictionary ToDictionary()
 		{
-			Dictionary<string, int> augmentDictionary = [];
+			Array<Array<string>> presetDictionary = [];
+			presetDictionary.Resize(presetSkills.Count);
+			for (int i = 0; i < presetDictionary.Count; i++)
+				presetDictionary[i] = SaveSkills(presetSkills[i]);
 
-			for (int i = 0; i < equippedAugments.Keys.Count; i++)
-			{
-				SkillKey key = equippedAugments.Keys.ToArray()[i];
-				augmentDictionary.Add(key.ToString(), equippedAugments[key]);
-			}
-
-			Array<string> skillDictionary = [];
-
-			for (int i = 0; i < equippedSkills.Count; i++)
-			{
-				SkillKey key = equippedSkills[i];
-				skillDictionary.Add(key.ToString());
-			}
+			Array<Dictionary<string, int>> augmentDictionary = [];
+			augmentDictionary.Resize(presetSkillAugments.Count);
+			for (int i = 0; i < augmentDictionary.Count; i++)
+				augmentDictionary[i] = SaveAugments(presetSkillAugments[i]);
 
 			return new()
 			{
@@ -822,14 +1034,18 @@ public partial class SaveManager : Node
 				{ nameof(worldsUnlocked), worldsUnlocked },
 				{ nameof(worldRingsCollected), worldRingsCollected },
 				{ nameof(stagesUnlocked), stagesUnlocked },
+				{ nameof(skippableCutscenes), skippableCutscenes },
 				{ nameof(levelData), (Dictionary)levelData },
 
 				// Player stats
 				{ nameof(level), level },
 				{ nameof(exp), exp },
 				{ nameof(playTime), Mathf.RoundToInt(playTime) },
-				{ nameof(equippedSkills), skillDictionary },
-				{ nameof(equippedAugments), augmentDictionary },
+				{ nameof(equippedSkills), SaveSkills(equippedSkills) },
+				{ nameof(equippedAugments), SaveAugments(equippedAugments) },
+				{ nameof(presetNames), presetNames},
+				{ nameof(presetSkills), presetDictionary},
+				{ nameof(presetSkillAugments), augmentDictionary},
 			};
 		}
 
@@ -861,8 +1077,12 @@ public partial class SaveManager : Node
 				for (int i = 0; i < worlds.Count; i++)
 					worldRingsCollected.Add((WorldEnum)worlds[i]);
 			}
+
 			if (dictionary.TryGetValue(nameof(stagesUnlocked), out var) && var.VariantType == Variant.Type.Array)
 				stagesUnlocked = (Array<string>)var;
+
+			if (dictionary.TryGetValue(nameof(skippableCutscenes), out var) && var.VariantType == Variant.Type.Array)
+				skippableCutscenes = (Array<string>)var;
 
 			if (dictionary.TryGetValue(nameof(levelData), out var))
 				levelData = (Dictionary<StringName, Dictionary>)var;
@@ -874,29 +1094,33 @@ public partial class SaveManager : Node
 			if (dictionary.TryGetValue(nameof(playTime), out var))
 				playTime = (float)var;
 
+			// Load Skill Ring
 			if (dictionary.TryGetValue(nameof(equippedSkills), out var))
-			{
-				equippedSkills.Clear();
-
-				Array<string> skills = (Array<string>)var;
-				for (int i = 0; i < skills.Count; i++)
-				{
-					if (Enum.TryParse(skills[i], out SkillKey key))
-						equippedSkills.Add(key);
-				}
-			}
+				equippedSkills = LoadSkills((Array<string>)var);
 
 			if (dictionary.TryGetValue(nameof(equippedAugments), out var))
-			{
-				equippedAugments.Clear();
-				Dictionary<string, int> augments = (Dictionary<string, int>)var;
-				string[] augmentKeys = [.. augments.Keys];
+				equippedAugments = LoadAugments((Dictionary<string, int>)var);
 
-				for (int i = 0; i < augmentKeys.Length; i++)
-				{
-					if (Enum.TryParse(augmentKeys[i], out SkillKey key))
-						equippedAugments.Add(key, augments[augmentKeys[i]]);
-				}
+			// Load Presets
+			if (dictionary.TryGetValue(nameof(presetNames), out var))
+				presetNames = (Array<string>)var;
+
+			if (dictionary.TryGetValue(nameof(presetSkills), out var))
+			{
+				Array<Array<string>> presets = (Array<Array<string>>)var;
+				presetSkills.Clear();
+				presetSkills.Resize(presets.Count);
+				for (int i = 0; i < presetSkills.Count; i++)
+					presetSkills[i] = LoadSkills(presets[i]);
+			}
+
+			if (dictionary.TryGetValue(nameof(presetSkillAugments), out var))
+			{
+				Array<Dictionary<string, int>> presetAugments = (Array<Dictionary<string, int>>)var;
+				presetSkillAugments.Clear();
+				presetSkillAugments.Resize(presetAugments.Count);
+				for (int i = 0; i < presetSkillAugments.Count; i++)
+					presetSkillAugments[i] = LoadAugments(presetAugments[i]);
 			}
 
 			// Update runtime data based on save data
@@ -911,6 +1135,59 @@ public partial class SaveManager : Node
 						FireSoulCount++;
 				}
 			}
+		}
+
+		/// <summary> Converts an array of SkillKeys to an array of strings for index-agnostic saving. </summary>
+		private Array<string> SaveSkills(Array<SkillKey> skillArray)
+		{
+			Array<string> stringArray = [];
+
+			for (int i = 0; i < skillArray.Count; i++)
+			{
+				SkillKey key = skillArray[i];
+				stringArray.Add(key.ToString());
+			}
+
+			return stringArray;
+		}
+
+		private Dictionary<string, int> SaveAugments(Dictionary<SkillKey, int> augmentDictionary)
+		{
+			Dictionary<string, int> stringDictionary = [];
+
+			for (int i = 0; i < augmentDictionary.Keys.Count; i++)
+			{
+				SkillKey key = augmentDictionary.Keys.ToArray()[i];
+				stringDictionary.Add(key.ToString(), augmentDictionary[key]);
+			}
+
+			return stringDictionary;
+		}
+
+		private Array<SkillKey> LoadSkills(Array<string> stringArray)
+		{
+			Array<SkillKey> skills = [];
+
+			for (int i = 0; i < stringArray.Count; i++)
+			{
+				if (Enum.TryParse(stringArray[i], out SkillKey key))
+					skills.Add(key);
+			}
+
+			return skills;
+		}
+
+		private Dictionary<SkillKey, int> LoadAugments(Dictionary<string, int> stringDictionary)
+		{
+			string[] augmentKeys = [.. stringDictionary.Keys];
+			Dictionary<SkillKey, int> augmentDictionary = [];
+
+			for (int i = 0; i < augmentKeys.Length; i++)
+			{
+				if (Enum.TryParse(augmentKeys[i], out SkillKey key))
+					augmentDictionary.Add(key, stringDictionary[augmentKeys[i]]);
+			}
+			return augmentDictionary;
 		}
 
 		private void UpdateMedals(int rank, int oldRank = 0)
@@ -932,6 +1209,10 @@ public partial class SaveManager : Node
 				worldRingsCollected = [],
 				worldsUnlocked = [],
 				stagesUnlocked = [],
+				skippableCutscenes = [],
+				presetNames = [],
+				presetSkills = [],
+				presetSkillAugments = [],
 				equippedSkills = [],
 				equippedAugments = [],
 				level = 0,
@@ -942,6 +1223,13 @@ public partial class SaveManager : Node
 			data.UnlockStage("so_a1_main");
 			data.UnlockWorld(WorldEnum.LostPrologue);
 			data.UnlockWorld(WorldEnum.SandOasis); // Lock this in the final build
+
+			for (int i = 0; i < PresetCount; i++)
+			{
+				data.presetNames.Add(string.Empty);
+				data.presetSkills.Add([]);
+				data.presetSkillAugments.Add([]);
+			}
 
 			return data;
 		}

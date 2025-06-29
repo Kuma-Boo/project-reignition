@@ -18,7 +18,7 @@ public partial class DinoRex : Node3D
 	private readonly StringName TailAttackState = "tail_attack";
 	private readonly StringName UpperBiteState = "upper_bite";
 	private readonly StringName LeftState = "left";
-	private readonly StringName RightState = "left";
+	private readonly StringName RightState = "right";
 
 	/// <summary> Is the dino currently in the middle of an attack animation? </summary>
 	private bool isAttacking;
@@ -46,7 +46,7 @@ public partial class DinoRex : Node3D
 	public override void _Ready()
 	{
 		animationTree.Active = true;
-		StageSettings.instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.Respawned += Respawn;
 		Respawn();
 	}
 
@@ -105,7 +105,7 @@ public partial class DinoRex : Node3D
 		isStepAnimationComplete = false;
 		currentState = RexStates.Step;
 		targetRotation = playerRotation;
-		animationTree.Set(StepTransition, currentRotation > targetRotation ? RightState : LeftState);
+		animationTree.Set(StepTransition, ExtensionMethods.SignedDeltaAngleRad(currentRotation, targetRotation) > 0 ? RightState : LeftState);
 		animationTree.Set(StepTrigger, (uint)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
@@ -142,14 +142,35 @@ public partial class DinoRex : Node3D
 			targetRotation = playerRotation;
 	}
 
-	public void OnReturnToIdle(Area3D _) => targetState = RexStates.Idle;
-
-	private void PlayScreenShake()
+	public void OnReturnToIdle(Area3D a)
 	{
-		CharacterController.instance.Camera.StartCameraShake(new()
+		if (!a.IsInGroup("player detection"))
+			return;
+
+		targetState = RexStates.Idle;
+	}
+
+	private void PlayScreenShake(float magnitude)
+	{
+		StageSettings.Player.Camera.StartCameraShake(new()
 		{
-			magnitude = Vector3.One.RemoveDepth() * 2.0f,
+			magnitude = Vector3.One.RemoveDepth() * magnitude,
 		});
+	}
+
+	private bool isRequestingMotionBlur;
+	private void StartMotionBlur()
+	{
+		isRequestingMotionBlur = true;
+		StageSettings.Player.Camera.RequestMotionBlur();
+	}
+	private void StopMotionBlur()
+	{
+		if (!isRequestingMotionBlur)
+			return;
+
+		StageSettings.Player.Camera.UnrequestMotionBlur();
+		isRequestingMotionBlur = false;
 	}
 
 	private void StartAttack()
@@ -188,7 +209,7 @@ public partial class DinoRex : Node3D
 
 	private void CalculateUpperTargetRotation()
 	{
-		Vector3 targetPosition = CharacterController.instance.GlobalPosition + (CharacterController.instance.Forward() * 2f);
+		Vector3 targetPosition = StageSettings.Player.GlobalPosition + (StageSettings.Player.Forward() * 2f);
 		playerRotation = (targetPosition - GlobalPosition).Flatten().AngleTo(Vector2.Down);
 	}
 }

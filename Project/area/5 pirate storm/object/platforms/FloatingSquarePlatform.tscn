@@ -1,0 +1,46 @@
+[gd_scene load_steps=5 format=3 uid="uid://bfbu2av8envks"]
+
+[ext_resource type="PackedScene" uid="uid://cs2d478bhbyf5" path="res://area/5 pirate storm/object/model/platforms/FloatingSquarePlatform.gltf" id="1_274oy"]
+[ext_resource type="Script" uid="uid://bdlofqc6xiigo" path="res://object/trigger/modules/PlatformTrigger.cs" id="2_4gpxn"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4gpxn"]
+size = Vector3(8, 3, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mmydy"]
+size = Vector3(8, 1, 10)
+
+[node name="FloatingSquarePlatform" type="Node3D" node_paths=PackedStringArray("floorCalculationRoot", "parentCollider")]
+script = ExtResource("2_4gpxn")
+floorCalculationRoot = NodePath("FloatingSquarePlatform/Trigger")
+parentCollider = NodePath("FloatingSquarePlatform/Collision")
+"Falling Platform Settings/Enabled" = false
+"Floating Platform Settings/Enabled" = true
+"Floating Platform Settings/Height Range" = 1.0
+"Floating Platform Settings/Force Multiplier" = 1.0
+"Floating Platform Settings/Initial Force" = 2.0
+"Floating Platform Settings/Initial Height" = 0.0
+
+[node name="FloatingSquarePlatform" parent="." instance=ExtResource("1_274oy")]
+
+[node name="FloatingSquarePlatformMesh" parent="FloatingSquarePlatform" index="0"]
+layers = 2
+
+[node name="Collision" type="StaticBody3D" parent="FloatingSquarePlatform" groups=["floor", "splash jump", "wall", "wood"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FloatingSquarePlatform/Collision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
+shape = SubResource("BoxShape3D_4gpxn")
+
+[node name="Trigger" type="Area3D" parent="FloatingSquarePlatform"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FloatingSquarePlatform/Trigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_mmydy")
+
+[connection signal="area_entered" from="FloatingSquarePlatform/Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="FloatingSquarePlatform/Trigger" to="." method="OnExited"]
+
+[editable path="FloatingSquarePlatform"]

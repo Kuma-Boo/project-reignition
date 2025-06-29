@@ -2,194 +2,393 @@ using Godot;
 using Godot.Collections;
 using Project.Core;
 
-namespace Project.Gameplay.Triggers
+namespace Project.Gameplay.Triggers;
+
+/// <summary>
+/// Moves player with moving platforms.
+/// </summary>
+[Tool]
+public partial class PlatformTrigger : Node3D
 {
-	/// <summary>
-	/// Moves player with moving platforms.
-	/// </summary>
-	[Tool]
-	public partial class PlatformTrigger : Node3D
+	#region Editor
+	public override Array<Dictionary> _GetPropertyList()
 	{
-		#region Editor
-		public override Array<Dictionary> _GetPropertyList()
+		Array<Dictionary> properties = [ExtensionMethods.CreateProperty("Falling Platform Settings/Enabled", Variant.Type.Bool)];
+
+		if (isFallingBehaviourEnabled)
 		{
-			Array<Dictionary> properties = new Array<Dictionary>();
-
-			properties.Add(ExtensionMethods.CreateProperty("Falling Platform Settings/Disabled", Variant.Type.Bool));
-			if (!isFallingBehaviourDisabled)
-			{
-				properties.Add(ExtensionMethods.CreateProperty("Falling Platform Settings/Auto Shake", Variant.Type.Bool));
-				properties.Add(ExtensionMethods.CreateProperty("Falling Platform Settings/Shake Length", Variant.Type.Float, PropertyHint.Range, "0, 10"));
-			}
-
-			return properties;
+			properties.Add(ExtensionMethods.CreateProperty("Falling Platform Settings/Animator", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "AnimationPlayer"));
+			properties.Add(ExtensionMethods.CreateProperty("Falling Platform Settings/Auto Shake", Variant.Type.Bool));
+			properties.Add(ExtensionMethods.CreateProperty("Falling Platform Settings/Shake Length", Variant.Type.Float, PropertyHint.Range, "0, 10"));
+			properties.Add(ExtensionMethods.CreateProperty("Falling Platform Settings/Fall Speed", Variant.Type.Float, PropertyHint.Range, "0.1,1,0.1,or_greater"));
 		}
 
-		public override bool _Set(StringName property, Variant value)
+		properties.Add(ExtensionMethods.CreateProperty("Floating Platform Settings/Enabled", Variant.Type.Bool));
+		if (isFloatingBehaviorEnabled)
 		{
-			switch ((string)property)
-			{
-				case "Falling Platform Settings/Disabled":
-					isFallingBehaviourDisabled = (bool)value;
-					NotifyPropertyListChanged();
-					break;
-				case "Falling Platform Settings/Auto Shake":
-					autoShake = (bool)value;
-					break;
-				case "Falling Platform Settings/Shake Length":
-					shakeLength = (float)value;
-					break;
-
-				default:
-					return false;
-			}
-
-			return true;
+			properties.Add(ExtensionMethods.CreateProperty("Floating Platform Settings/Height Range", Variant.Type.Float, PropertyHint.Range, "0,5,0.1"));
+			properties.Add(ExtensionMethods.CreateProperty("Floating Platform Settings/Force Multiplier", Variant.Type.Float, PropertyHint.Range, "0,2,0.1"));
+			properties.Add(ExtensionMethods.CreateProperty("Floating Platform Settings/Initial Force", Variant.Type.Float));
+			properties.Add(ExtensionMethods.CreateProperty("Floating Platform Settings/Initial Height", Variant.Type.Float, PropertyHint.Range, "-1,1,0.1"));
 		}
 
-		public override Variant _Get(StringName property)
-		{
-			switch ((string)property)
-			{
-				case "Falling Platform Settings/Disabled":
-					return isFallingBehaviourDisabled;
-				case "Falling Platform Settings/Auto Shake":
-					return autoShake;
-				case "Falling Platform Settings/Shake Length":
-					return shakeLength;
-			}
+		return properties;
+	}
 
-			return base._Get(property);
+	public override bool _Set(StringName property, Variant value)
+	{
+		switch ((string)property)
+		{
+			case "Falling Platform Settings/Enabled":
+				isFallingBehaviourEnabled = (bool)value;
+				NotifyPropertyListChanged();
+				break;
+			case "Falling Platform Settings/Animator":
+				fallingPlatformAnimatorPath = (NodePath)value;
+				break;
+			case "Falling Platform Settings/Auto Shake":
+				autoShake = (bool)value;
+				break;
+			case "Falling Platform Settings/Shake Length":
+				shakeLength = (float)value;
+				break;
+			case "Falling Platform Settings/Fall Speed":
+				fallSpeedScale = (float)value;
+				break;
+
+			case "Floating Platform Settings/Enabled":
+				isFloatingBehaviorEnabled = (bool)value;
+				NotifyPropertyListChanged();
+				break;
+			case "Floating Platform Settings/Height Range":
+				floatingHeightRange = (float)value;
+				break;
+			case "Floating Platform Settings/Force Multiplier":
+				floatingForceMultiplier = (float)value;
+				break;
+			case "Floating Platform Settings/Return Strength":
+				buoyancyStrength = (float)value;
+				break;
+			case "Floating Platform Settings/Initial Force":
+				currentBuoyancyForce = (float)value;
+				break;
+			case "Floating Platform Settings/Initial Height":
+				floatingInitialHeightRatio = (float)value;
+				break;
+			default:
+				return false;
 		}
-		#endregion
 
-		[Signal]
-		public delegate void PlatformInteractedEventHandler();
+		return true;
+	}
 
-		/// <summary> Is falling behaviour disabled? </summary>
-		private bool isFallingBehaviourDisabled;
-		/// <summary> Should the platform automatically start to shake when the player steps on it? </summary>
-		private bool autoShake = true;
-		/// <summary> How long to shake before falling. </summary>
-		private float shakeLength;
-
-		// Runtime data
-		/// <summary> Timer to keep track of shaking status. </summary>
-		private float shakeTimer;
-		/// <summary> Is the platform about to fall? </summary>
-		private bool isPlatformShaking;
-
-		[ExportGroup("Components")]
-		[Export]
-		/// <summary> Assign this to enable moving the player with the platform. </summary>
-		private Node3D floorCalculationRoot;
-		[Export]
-		/// <summary> Reference to the "floor" collider. </summary>
-		private PhysicsBody3D parentCollider;
-		[Export]
-		/// <summary> Animator to handle falling platform behaviour. </summary>
-		private AnimationPlayer fallingPlatformAnimator;
-		private CharacterController Character => CharacterController.instance;
-
-		private bool isActive;
-		private bool isInteractingWithPlayer;
-
-
-		public override void _Ready()
+	public override Variant _Get(StringName property)
+	{
+		switch ((string)property)
 		{
-			if (Engine.IsEditorHint() || isFallingBehaviourDisabled) return;
+			case "Falling Platform Settings/Enabled":
+				return isFallingBehaviourEnabled;
+			case "Falling Platform Settings/Animator":
+				return fallingPlatformAnimatorPath;
+			case "Falling Platform Settings/Auto Shake":
+				return autoShake;
+			case "Falling Platform Settings/Shake Length":
+				return shakeLength;
+			case "Falling Platform Settings/Fall Speed":
+				return fallSpeedScale;
 
+			case "Floating Platform Settings/Enabled":
+				return isFloatingBehaviorEnabled;
+			case "Floating Platform Settings/Height Range":
+				return floatingHeightRange;
+			case "Floating Platform Settings/Force Multiplier":
+				return floatingForceMultiplier;
+			case "Floating Platform Settings/Return Strength":
+				return buoyancyStrength;
+			case "Floating Platform Settings/Initial Force":
+				return currentBuoyancyForce;
+			case "Floating Platform Settings/Initial Height":
+				return floatingInitialHeightRatio;
+		}
+
+		return base._Get(property);
+	}
+	#endregion
+
+	[Signal]
+	public delegate void PlatformInteractedEventHandler();
+
+	// Falling platform variables
+	/// <summary> Animator to handle falling platform behaviour. </summary>
+	private AnimationPlayer fallingPlatformAnimator;
+	private NodePath fallingPlatformAnimatorPath;
+	/// <summary> Will this platform fall when the player steps on it? </summary>
+	private bool isFallingBehaviourEnabled;
+	/// <summary> Should the platform automatically start to shake when the player steps on it? </summary>
+	private bool autoShake = true;
+	/// <summary> How long to shake before falling. </summary>
+	private float shakeLength;
+	/// <summary> How quickly to fall. </summary>
+	private float fallSpeedScale = 1f;
+	/// <summary> Keeps track of the platform's position from the previous frame. </summary>
+	private Vector3 previousPosition;
+	/// <summary> Timer to keep track of shaking status. </summary>
+	private float shakeTimer;
+	/// <summary> Is the platform about to fall? </summary>
+	private bool isPlatformShaking;
+	/// <summary> Is the platform currently falling? </summary>
+	private bool isPlatformFalling;
+
+	// Floating platform variables
+	/// <summary> Will this platform bob up and down when the player jumps on it? </summary>
+	private bool isFloatingBehaviorEnabled;
+	/// <summary> Determines the maximum (and minimum) height the platform can bob to. </summary>
+	private float floatingHeightRange = 1f;
+	/// <summary> Determines how much force it takes to move the platform. </summary>
+	private float floatingForceMultiplier = 1f;
+	/// <summary> Keeps track of how much vertical speed the player carries into the platform. </summary>
+	private float floatingEntranceImpact;
+	/// <summary> Determines how strongly the platform bounces back to neutral. </summary>
+	private float buoyancyStrength = 5f;
+	/// <summary>
+	/// Keeps track of the floating platform's current velocity.
+	/// Initialize to a non-zero value if you want the platform to start in a bobbing state.
+	/// </summary>
+	private float currentBuoyancyForce;
+	/// <summary> The platform's initial Y-Position. </summary>
+	private float floatingReferenceHeight;
+	/// <summary> The platform's starting Y-Position, used to offset different platforms from each other. </summary>
+	private float floatingInitialHeightRatio;
+	private readonly float BuoyancySmoothingRatio = 0.4f;
+	private readonly float BaseFloatingForceMultiplier = 0.5f;
+	private readonly float BasePlayerFloatingForce = 5f;
+
+	/// <summary> Bump this up to allow the player to go flying when jumping off. </summary>
+	[Export] private float playerJumpInfluenceMultiplier = 1f;
+	[Export(PropertyHint.Range, "0,1,.1,or_greater")] private float maxJumpMovementAmount;
+
+	[ExportSubgroup("Components")]
+	/// <summary> Assign this to enable moving the player with the platform. </summary>
+	[Export] private Node3D floorCalculationRoot;
+	/// <summary> Reference to the "floor" collider. </summary>
+	[Export] private PhysicsBody3D parentCollider;
+	private PlayerController Player => StageSettings.Player;
+
+	private bool isInteractingWithPlayer;
+	private float playerInfluence;
+	/// <summary> Tracks whether the player has actually landed on the platform yet. </summary>
+	private bool enableGroundSnapping;
+	private readonly float PlayerInfluenceReset = .5f;
+
+	public override void _Ready()
+	{
+		if (Engine.IsEditorHint())
+			return;
+
+		if (isFallingBehaviourEnabled)
+		{
+			fallingPlatformAnimator = GetNodeOrNull<AnimationPlayer>(fallingPlatformAnimatorPath);
 			if (fallingPlatformAnimator == null)
 				GD.PrintErr($"Falling platform animator is missing on {Name}!");
-
-			if (autoShake) // Falling behaviour is enabled, connect signal.
-				Connect(SignalName.PlatformInteracted, new Callable(this, MethodName.StartShaking));
 		}
 
-
-		public override void _PhysicsProcess(double _)
+		if (isFloatingBehaviorEnabled)
 		{
-			if (Engine.IsEditorHint()) return;
+			floatingReferenceHeight = GlobalPosition.Y;
+			GlobalPosition += Vector3.Up * floatingInitialHeightRatio * floatingHeightRange;
+		}
 
-			if (isPlatformShaking)
-				UpdateFallingPlatformBehaviour();
+		StageSettings.Instance.Respawned += Respawn;
+	}
 
-			if (!isInteractingWithPlayer) return;
+	public override void _PhysicsProcess(double _)
+	{
+		if (Engine.IsEditorHint()) return;
 
-			if (!isActive && Character.IsOnGround)
+		ProcessPlatform();
+	}
+
+	private void Respawn()
+	{
+		if (isFallingBehaviourEnabled)
+		{
+			shakeTimer = 0;
+			isPlatformShaking = false;
+			isPlatformFalling = false;
+			fallingPlatformAnimator.Play("RESET");
+		}
+
+		playerInfluence = 0;
+	}
+
+	private void ProcessPlatform()
+	{
+		ProcessFallingPlatform();
+		ProcessFloatingPlatform();
+
+		if (floorCalculationRoot != null)
+			CallDeferred(MethodName.SyncPlayerMovement);
+	}
+
+	private void ProcessFallingPlatform()
+	{
+		if (!isFallingBehaviourEnabled)
+			return;
+
+		if (isPlatformFalling || !isPlatformShaking)
+			return;
+
+		shakeTimer += PhysicsManager.physicsDelta;
+
+		if (shakeTimer > shakeLength)
+			StartFalling();
+	}
+
+	private void ProcessFloatingPlatform()
+	{
+		if (!isFloatingBehaviorEnabled || Mathf.IsZeroApprox(floatingHeightRange))
+			return;
+
+		float deltaForce = (floatingReferenceHeight - GlobalPosition.Y) / floatingHeightRange;
+		if (Mathf.Abs(deltaForce) > 1.0f - BuoyancySmoothingRatio) // Smooth out bottoms
+		{
+			float smoothingRatio = (1.0f - Mathf.Abs(deltaForce)) / BuoyancySmoothingRatio;
+			if (deltaForce > 0 && currentBuoyancyForce < 0) // Bounce back faster when hitting the bottom
 			{
-				isActive = true;
+				deltaForce += (1.0f - smoothingRatio) * 10f;
+				currentBuoyancyForce *= 0.8f;
+			}
+		}
+
+		if (GlobalPosition.Y > floatingReferenceHeight + floatingHeightRange) // Add gravity when the platform is too high up
+			currentBuoyancyForce -= Runtime.Gravity * PhysicsManager.physicsDelta;
+
+		currentBuoyancyForce += buoyancyStrength * deltaForce * PhysicsManager.physicsDelta;
+
+		// Move platform, but prevent it from going too low
+		GlobalPosition += Vector3.Up * currentBuoyancyForce * PhysicsManager.physicsDelta;
+	}
+
+	private void StartFloatImpact()
+	{
+		floatingEntranceImpact = Mathf.Max(floatingEntranceImpact, BasePlayerFloatingForce);
+		currentBuoyancyForce = -floatingEntranceImpact * floatingForceMultiplier * BaseFloatingForceMultiplier;
+	}
+
+	private void ProcessInteraction()
+	{
+		if (isFallingBehaviourEnabled && autoShake)
+			StartShaking();
+
+		if (isFloatingBehaviorEnabled)
+			StartFloatImpact();
+	}
+
+	/// <summary> Make the platform start shaking. This can also be called from a signal. </summary>
+	public void StartShaking()
+	{
+		if (isPlatformShaking) return; // Already shaking
+
+		if (Mathf.IsZeroApprox(shakeLength)) // Fall immediately
+		{
+			StartFalling();
+			return;
+		}
+
+		isPlatformShaking = true;
+		fallingPlatformAnimator.Play("shake");
+		fallingPlatformAnimator.SpeedScale = 1f;
+	}
+
+	/// <summary> Called when the platform begins to fall. </summary>
+	private void StartFalling()
+	{
+		isPlatformShaking = false; // Stop shaking
+		fallingPlatformAnimator.Play("fall", .2);
+		fallingPlatformAnimator.SpeedScale = fallSpeedScale;
+	}
+
+	/// <summary> Moves the player with the platform. </summary>
+	private void SyncPlayerMovement()
+	{
+		if (Player.IsTeleporting || Player.IsDefeated)
+		{
+			enableGroundSnapping = false;
+			return;
+		}
+
+		if ((!Player.IsOnGround && Player.Velocity.Y >= 0) || !isInteractingWithPlayer)
+		{
+			Vector3 delta = floorCalculationRoot.GlobalPosition - previousPosition;
+			if (delta.Y <= 0) // Not moving upwards -- reset influence instantly
+				playerInfluence = 0;
+
+			if (Mathf.IsZeroApprox(playerInfluence))
+			{
+				enableGroundSnapping = false;
+			}
+			else
+			{
+				float amount = delta.Y * playerInfluence * playerJumpInfluenceMultiplier;
+				if (!Mathf.IsZeroApprox(maxJumpMovementAmount))
+					amount = Mathf.Min(amount, maxJumpMovementAmount * PhysicsManager.physicsDelta);
+				Player.GlobalTranslate(Vector3.Up * amount);
+				playerInfluence = Mathf.MoveToward(playerInfluence, 0, PlayerInfluenceReset * PhysicsManager.physicsDelta);
+			}
+
+			previousPosition = floorCalculationRoot.GlobalPosition;
+			return;
+		}
+
+		if (IsPlayerOnPlatform())
+		{
+			playerInfluence = 1f; // Set player influence to 1 for when we leave
+			previousPosition = floorCalculationRoot.GlobalPosition;
+		}
+
+		if (enableGroundSnapping)
+			Player.GlobalTranslate(Vector3.Up * (floorCalculationRoot.GlobalPosition.Y - Player.GlobalPosition.Y));
+	}
+
+	/// <summary> Checks whether the player is currently standing on top of the platform. </summary>
+	private bool IsPlayerOnPlatform()
+	{
+		float checkLength = Mathf.Abs(Player.CenterPosition.Y - floorCalculationRoot.GlobalPosition.Y) + (Player.CollisionSize.Y * 2.0f);
+		checkLength += Mathf.Abs(Mathf.Min(Player.VerticalSpeed, 0f) * PhysicsManager.physicsDelta);
+		KinematicCollision3D collision = Player.MoveAndCollide(-Player.UpDirection * checkLength, true);
+
+		if (collision == null || (Node3D)collision.GetCollider() != parentCollider) // Player is not on the platform
+			return false;
+
+		if (!enableGroundSnapping) // Update ground snapping
+		{
+			if (Player.IsOnGround)
+			{
+				enableGroundSnapping = true;
+				ProcessInteraction();
 				EmitSignal(SignalName.PlatformInteracted);
 			}
-
-			if (!isActive) return;
-
-			if (floorCalculationRoot != null)
-				CallDeferred(MethodName.SyncPlayerMovement);
-		}
-
-
-		/// <summary> Make the platform start shaking. This can also be called from a signal. </summary>
-		public void StartShaking()
-		{
-			if (isPlatformShaking) return; // Already shaking
-
-			if (Mathf.IsZeroApprox(shakeLength)) // Fall immediately
+			else
 			{
-				StartFalling();
-				return;
-			}
-
-			isPlatformShaking = true;
-			fallingPlatformAnimator.Play("shake");
-		}
-
-
-		/// <summary> Called when the platform begins to fall. </summary>
-		private void StartFalling()
-		{
-			isPlatformShaking = false; // Stop shaking
-			fallingPlatformAnimator.Play("fall", .2);
-		}
-
-
-		private void UpdateFallingPlatformBehaviour()
-		{
-			shakeTimer += PhysicsManager.physicsDelta;
-
-			if (shakeTimer > shakeLength)
-			{
-				shakeTimer = 0;
-				StartFalling();
+				floatingEntranceImpact = Mathf.Max(-Player.VerticalSpeed, 0);
 			}
 		}
 
+		return Player.IsOnGround;
+	}
 
-		/// <summary> Moves the player with the platform. </summary>
-		private void SyncPlayerMovement()
-		{
-			if (!Character.IsOnGround) return; // Player isn't on the ground
+	public void OnEntered(Area3D a)
+	{
+		if (!a.IsInGroup("player detection")) return;
+		isInteractingWithPlayer = true;
+		enableGroundSnapping = false; // Prevent initial snapping
+		floatingEntranceImpact = Mathf.Max(-Player.VerticalSpeed, 0);
+		ProcessPlatform();
+	}
 
-			float checkLength = Mathf.Abs(Character.GlobalPosition.Y - floorCalculationRoot.GlobalPosition.Y) + (Character.CollisionSize.Y * 2.0f);
-			KinematicCollision3D collision = Character.MoveAndCollide(Vector3.Down * checkLength, true);
-			if (collision == null || (Node3D)collision.GetCollider() != parentCollider) // Player is not on the platform
-				return;
-
-			Character.GlobalTranslate(Vector3.Up * (floorCalculationRoot.GlobalPosition.Y - Character.GlobalPosition.Y));
-		}
-
-		public void OnEntered(Area3D a)
-		{
-			if (!a.IsInGroup("player detection")) return;
-			isInteractingWithPlayer = true;
-		}
-
-		public void OnExited(Area3D a)
-		{
-			if (!a.IsInGroup("player detection")) return;
-
-			isInteractingWithPlayer = false;
-			isActive = false;
-		}
+	public void OnExited(Area3D a)
+	{
+		if (!a.IsInGroup("player detection")) return;
+		isInteractingWithPlayer = false;
 	}
 }

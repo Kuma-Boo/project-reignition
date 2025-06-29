@@ -13,8 +13,9 @@ public partial class JumpCarpet : Launcher
 	[Export]
 	private AnimationPlayer animator;
 
-	public override void _Ready()
+	protected override void SetUp()
 	{
+		base.SetUp();
 		// Pre-calculate ratio increment
 		if (maxBounceCount != 0)
 			ratioIncrement = 1.0f / maxBounceCount;
@@ -25,9 +26,9 @@ public partial class JumpCarpet : Launcher
 		if (currentBounceCount == 0)
 			return;
 
-		// TODO Refactor CharacterController to have a LandedOnGround signal and use that instead?
+		// TODO Refactor PlayerController to have a LandedOnGround signal and use that instead?
 		// Reset Jump Carpet when the player lands on ground
-		if (Character.IsOnGround)
+		if (Player.IsOnGround)
 			Reset();
 	}
 
@@ -36,7 +37,7 @@ public partial class JumpCarpet : Launcher
 		animator.Play("launch");
 		animator.Seek(0.0);
 
-		launchRatio = ratioIncrement * currentBounceCount;
+		LaunchRatio = ratioIncrement * currentBounceCount;
 		base.Activate(a);
 
 		// Increment bounce counter
@@ -44,13 +45,13 @@ public partial class JumpCarpet : Launcher
 		if (currentBounceCount >= maxBounceCount)
 		{
 			currentBounceCount = maxBounceCount;
-			launchRatio = 1;
+			LaunchRatio = 1;
 		}
 	}
 
 	private void Reset()
 	{
-		launchRatio = 0;
+		LaunchRatio = 0;
 		currentBounceCount = 0;
 	}
 }

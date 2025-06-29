@@ -62,7 +62,7 @@ public partial class BGMPlayer : AudioStreamPlayer
 		if (!canLoop) return;
 		if (!Playing) return;
 
-		float currentPosition = GetPlaybackPosition();
+		float currentPosition = GetPlaybackPosition() + (float)AudioServer.GetTimeSinceLastMix();
 		if (currentPosition >= loopEndPosition)
 			Seek(currentPosition - LoopLength);
 

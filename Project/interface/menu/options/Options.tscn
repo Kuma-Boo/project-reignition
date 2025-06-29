@@ -1,11 +1,10 @@
-[gd_scene load_steps=56 format=3 uid="uid://bwehljjnagemy"]
+[gd_scene load_steps=78 format=3 uid="uid://bwehljjnagemy"]
 
-[ext_resource type="Script" path="res://interface/menu/options/script/Options.cs" id="1_yejdm"]
-[ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="2_x1aix"]
-[ext_resource type="PackedScene" uid="uid://c4kdj2x0c8h4m" path="res://object/player/Player.tscn" id="3_4o0co"]
+[ext_resource type="Script" uid="uid://yddwyfbcr2l2" path="res://interface/menu/options/script/Options.cs" id="1_yejdm"]
+[ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="2_x1aix"]
 [ext_resource type="Resource" uid="uid://dt1prgn1x2xgg" path="res://interface/menu/options/resource/OptionCamera.tres" id="3_jnp5r"]
 [ext_resource type="Resource" uid="uid://bmc5r7uecj7vi" path="res://resource/level data/Options.tres" id="4_3wn11"]
-[ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="4_g52h3"]
+[ext_resource type="Script" uid="uid://np5vcxq01ii8" path="res://object/trigger/modules/CheckpointTrigger.cs" id="4_g52h3"]
 [ext_resource type="PackedScene" uid="uid://boo3c0dnk36vn" path="res://object/player/resource/component/Camera.tscn" id="5_1klrf"]
 [ext_resource type="AudioStream" uid="uid://pl5vnbme4wmg" path="res://sound/sfx/system/special book select.wav" id="5_boind"]
 [ext_resource type="AudioStream" uid="uid://dgybrdt0i5sok" path="res://sound/sfx/system/special book open.wav" id="5_f4e4n"]
@@ -17,16 +16,24 @@
 [ext_resource type="AudioStream" uid="uid://6c8swxoc7r2i" path="res://sound/sfx/system/page flip.wav" id="7_0sy78"]
 [ext_resource type="PackedScene" uid="uid://45i65dldyv8w" path="res://interface/menu/options/environment/model/Page.gltf" id="7_37jow"]
 [ext_resource type="AudioStream" uid="uid://cl54rftw5aiyf" path="res://sound/sfx/system/menu cancel.wav" id="7_f15lq"]
-[ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="8_7asuc"]
+[ext_resource type="Script" uid="uid://cciy1oeuvbh3e" path="res://object/trigger/modules/JumpTrigger.cs" id="8_7asuc"]
+[ext_resource type="AudioStream" uid="uid://dc6pp0ugxo4e3" path="res://sound/sfx/system/menu pause.wav" id="8_37qjl"]
 [ext_resource type="Material" uid="uid://ph7gwhlyucdx" path="res://effect/particle/material/environment/Common Dust Add.tres" id="8_wksl8"]
 [ext_resource type="AudioStream" uid="uid://l2e1do1wwkg" path="res://sound/sfx/system/menu confirm.wav" id="8_xb0ie"]
 [ext_resource type="PackedScene" uid="uid://c1806dq45a0kr" path="res://interface/menu/options/ControlOption.tscn" id="14_itn8j"]
-[ext_resource type="AudioStream" uid="uid://b5d5wemyoi5ap" path="res://sound/ost/treasure disc/4 MISGIVING.mp3" id="18_fr2tm"]
-[ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="19_agawd"]
+[ext_resource type="PackedScene" uid="uid://bqck0hqdn3o8r" path="res://object/player/Player.tscn" id="16_f4s6v"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="18_wt5wy"]
+[ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="19_agawd"]
 [ext_resource type="LabelSettings" uid="uid://dnmqaq1ahkjk3" path="res://interface/font/HeaderLabelSettings.tres" id="21_egfsq"]
-[ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="22_cq4kf"]
 [ext_resource type="LabelSettings" uid="uid://coxpm433wf04c" path="res://interface/font/OptionLabelSettings.tres" id="23_616uf"]
+[ext_resource type="Texture2D" uid="uid://dx4vxnhtgd13t" path="res://interface/menu/common/common menu atlas.png" id="23_fpyww"]
 [ext_resource type="PackedScene" uid="uid://crwawg2ivy3xd" path="res://interface/menu/NavigationButton.tscn" id="27_30n1q"]
+[ext_resource type="Shader" uid="uid://dj2vtehay1fej" path="res://effect/shader/interface/InterfaceFlashAdd.gdshader" id="28_1goec"]
+[ext_resource type="Texture2D" uid="uid://hlj4agda0gde" path="res://interface/menu/common/button small default.png" id="28_t3g20"]
+[ext_resource type="LabelSettings" uid="uid://bjc55uea7otvo" path="res://interface/font/MenuButtonFont.tres" id="29_6eog4"]
+[ext_resource type="FontFile" uid="uid://bsoin3p4iygoo" path="res://interface/font/otf/Chiaro Std B.otf" id="29_fgdsa"]
+[ext_resource type="Texture2D" uid="uid://dnolag8em8r32" path="res://interface/menu/common/button small highlight.png" id="30_78xqx"]
+[ext_resource type="AudioStream" uid="uid://bklsywf8wmbyh" path="res://sound/ost/bonus disc/Options Menu.mp3" id="31_njtij"]
 
 [sub_resource type="Curve3D" id="Curve3D_eqptd"]
 _data = {
@@ -163,10 +170,596 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fowp2"]
 _data = {
-"RESET": SubResource("Animation_voryi"),
-"hide": SubResource("Animation_bfdgt"),
-"loop": SubResource("Animation_peicv"),
-"show": SubResource("Animation_jya3g")
+&"RESET": SubResource("Animation_voryi"),
+&"hide": SubResource("Animation_bfdgt"),
+&"loop": SubResource("Animation_peicv"),
+&"show": SubResource("Animation_jya3g")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qfhfq"]
+shader = ExtResource("28_1goec")
+shader_parameter/flash_amount = 0.0
+
+[sub_resource type="Animation" id="Animation_wu83y"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_1cvv4"]
+resource_name = "confirm"
+length = 0.500003
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:modulate")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.133333, 0.266667, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.392157), Color(1, 1, 1, 0), Color(1, 1, 1, 0.392157), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.266667, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1), Vector2(1.5, 1.5)]
+}
+
+[sub_resource type="Animation" id="Animation_se451"]
+resource_name = "loop"
+length = 4.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:modulate")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.392157), Color(1, 1, 1, 0), Color(1, 1, 1, 0.392157), Color(1, 1, 1, 0), Color(1, 1, 1, 0.392157), Color(1, 1, 1, 0), Color(1, 1, 1, 0.392157), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ykvc1"]
+_data = {
+&"RESET": SubResource("Animation_wu83y"),
+&"confirm": SubResource("Animation_1cvv4"),
+&"loop": SubResource("Animation_se451")
+}
+
+[sub_resource type="Animation" id="Animation_usxt6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Menu/Parent:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(960, 470)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Menu/Parent/Text/Cursor:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(100, 16)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Menu/Parent/Text/Options/Yes:texture")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("28_t3g20")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Menu/Parent/Text/Options/No:texture")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("30_78xqx")]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Menu/Parent/Text/Label:text")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["option_reset_settings_description"]
+}
+
+[sub_resource type="Animation" id="Animation_yred1"]
+resource_name = "confirm"
+length = 0.600003
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../SFX/Confirm")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.166667, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Menu/Parent/Text/Cursor/CursorAnimationPlayer")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["confirm", -1, 1.0, false],
+"method": &"play"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("..")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"DisableProcessing"
+}, {
+"args": [],
+"method": &"EnableProcessing"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_crj0a"]
+resource_name = "hide"
+length = 0.500003
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.166667, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../SFX/Cancel")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Menu/Parent/Text/Cursor/CursorAnimationPlayer")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["confirm", -1, 1.0, false],
+"method": &"play"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("..")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"DisableProcessing"
+}, {
+"args": [],
+"method": &"EnableProcessing"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_yxa58"]
+resource_name = "select-no"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Menu/Parent/Text/Cursor/CursorAnimationPlayer")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0, false],
+"method": &"seek"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../SFX/Select")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Menu/Parent/Text/Cursor:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(100, 16)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Menu/Parent/Text/Options/Yes:texture")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("28_t3g20")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Menu/Parent/Text/Options/No:texture")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("30_78xqx")]
+}
+
+[sub_resource type="Animation" id="Animation_1q86i"]
+resource_name = "select-yes"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Menu/Parent/Text/Cursor:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-400, 16)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Menu/Parent/Text/Cursor/CursorAnimationPlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0, false],
+"method": &"seek"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../SFX/Select")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Menu/Parent/Text/Options/Yes:texture")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("30_78xqx")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Menu/Parent/Text/Options/No:texture")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("28_t3g20")]
+}
+
+[sub_resource type="Animation" id="Animation_56tgp"]
+resource_name = "show"
+length = 0.3
+step = 0.0333333
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"DisableProcessing"
+}, {
+"args": [],
+"method": &"EnableProcessing"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../SFX/QuitMenu")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Menu/Parent:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(960, 634), Vector2(960, 470)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Menu/Parent/Text/Cursor:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(100, 16)]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Menu/Parent/Text/Cursor/CursorAnimationPlayer")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["loop", -1, 1.0, false],
+"method": &"play"
+}]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Menu/Parent/Text/Options/Yes:texture")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("28_t3g20")]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Menu/Parent/Text/Options/No:texture")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("30_78xqx")]
+}
+
+[sub_resource type="Animation" id="Animation_6eog4"]
+resource_name = "text-controls"
+length = 0.001
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Menu/Parent/Text/Label:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["option_reset_controls_description"]
+}
+
+[sub_resource type="Animation" id="Animation_t3g20"]
+resource_name = "text-settings"
+length = 0.001
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Menu/Parent/Text/Label:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["option_reset_settings_description"]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8ayj6"]
+_data = {
+&"RESET": SubResource("Animation_usxt6"),
+&"confirm": SubResource("Animation_yred1"),
+&"hide": SubResource("Animation_crj0a"),
+&"select-no": SubResource("Animation_yxa58"),
+&"select-yes": SubResource("Animation_1q86i"),
+&"show": SubResource("Animation_56tgp"),
+&"text-controls": SubResource("Animation_6eog4"),
+&"text-settings": SubResource("Animation_t3g20")
 }
 
 [sub_resource type="Animation" id="Animation_w5dih"]
@@ -246,19 +839,19 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("MenuBase/ContentClip/Content/Control/Common:visible")
+tracks/6/path = NodePath("MenuBase/ContentClip/Content/Control/PartyMapping:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options:visible")
+tracks/7/path = NodePath("MenuBase/ContentClip/Content/Control/Common:visible")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -270,43 +863,43 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("ControlBook/PlayerSpawn/Player:process_mode")
+tracks/8/path = NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options:visible")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [4]
+"values": [true]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("ControlBook/PlayerSpawn/Player:position")
+tracks/9/path = NodePath("MenuBase/Header:visible")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, -6)]
+"update": 1,
+"values": [true]
 }
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("ControlBook/PlayerSpawn/Player:visible")
+tracks/10/path = NodePath("MenuBase/Header:text")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": ["sys_options"]
 }
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("MenuBase/Header:visible")
+tracks/11/path = NodePath("MenuBase/HorizontalLine:visible")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -318,19 +911,19 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("MenuBase/Header:text")
+tracks/12/path = NodePath("MenuBase/Cursor:visible")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": ["sys_options"]
+"values": [true]
 }
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("MenuBase/HorizontalLine:visible")
+tracks/13/path = NodePath("MenuBase/ScrollBar:visible")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
@@ -342,19 +935,19 @@ tracks/13/keys = {
 tracks/14/type = "value"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("MenuBase/Cursor:visible")
+tracks/14/path = NodePath("MenuBase/NavigationButtons/Return:visible")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/15/type = "value"
 tracks/15/imported = false
 tracks/15/enabled = true
-tracks/15/path = NodePath("MenuBase/ScrollBar:visible")
+tracks/15/path = NodePath("MenuBase/NavigationButtons/Cancel:visible")
 tracks/15/interp = 1
 tracks/15/loop_wrap = true
 tracks/15/keys = {
@@ -366,38 +959,38 @@ tracks/15/keys = {
 tracks/16/type = "value"
 tracks/16/imported = false
 tracks/16/enabled = true
-tracks/16/path = NodePath("MenuBase/NavigationButtons/Return:visible")
+tracks/16/path = NodePath("MenuBase/NavigationButtons/Select:visible")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 tracks/17/type = "value"
 tracks/17/imported = false
 tracks/17/enabled = true
-tracks/17/path = NodePath("MenuBase/NavigationButtons/Cancel:visible")
+tracks/17/path = NodePath("World/PlayerSpawn/Player:position")
 tracks/17/interp = 1
 tracks/17/loop_wrap = true
 tracks/17/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"update": 0,
+"values": [Vector3(0, 0, -6)]
 }
 tracks/18/type = "value"
 tracks/18/imported = false
 tracks/18/enabled = true
-tracks/18/path = NodePath("MenuBase/NavigationButtons/Select:visible")
+tracks/18/path = NodePath("MenuBase/NavigationButtons/Clear:visible")
 tracks/18/interp = 1
 tracks/18/loop_wrap = true
 tracks/18/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_24v0k"]
@@ -494,7 +1087,7 @@ length = 0.001
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ControlBook/SFX/Cancel")
+tracks/0/path = NodePath("SFX/Cancel")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -512,7 +1105,7 @@ length = 0.001
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ControlBook/SFX/Confirm")
+tracks/0/path = NodePath("SFX/Confirm")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -602,19 +1195,19 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("MenuBase/ContentClip/Content/Control/Common:visible")
+tracks/6/path = NodePath("MenuBase/ContentClip/Content/Control/PartyMapping:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("MenuBase/Header:visible")
+tracks/7/path = NodePath("MenuBase/ContentClip/Content/Control/Common:visible")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -626,31 +1219,31 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("MenuBase/Header:text")
+tracks/8/path = NodePath("MenuBase/Header:visible")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": ["option_control"]
+"values": [true]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("MenuBase/Cursor:visible")
+tracks/9/path = NodePath("MenuBase/Header:text")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": ["option_control"]
 }
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("MenuBase/HorizontalLine:visible")
+tracks/10/path = NodePath("MenuBase/Cursor:visible")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -662,19 +1255,19 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("MenuBase/ScrollBar:visible")
+tracks/11/path = NodePath("MenuBase/HorizontalLine:visible")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("MenuBase/NavigationButtons/Return:visible")
+tracks/12/path = NodePath("MenuBase/ScrollBar:visible")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -686,22 +1279,58 @@ tracks/12/keys = {
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("MenuBase/NavigationButtons/Cancel:visible")
+tracks/13/path = NodePath("MenuBase/NavigationButtons/Return:visible")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/14/type = "value"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("MenuBase/NavigationButtons/Select:visible")
+tracks/14/path = NodePath("MenuBase/NavigationButtons/Cancel:visible")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("MenuBase/NavigationButtons/Select:visible")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("MenuBase/NavigationButtons/Clear:visible")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("MenuBase/ScrollBar:visible")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -714,7 +1343,7 @@ length = 0.001
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ControlBook/ControlBook/AnimationPlayer")
+tracks/0/path = NodePath("World/ControlBook/ControlBook/AnimationPlayer")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -728,7 +1357,7 @@ tracks/0/keys = {
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("ControlBook/SFX/Flip")
+tracks/1/path = NodePath("SFX/Flip")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -746,7 +1375,7 @@ length = 0.001
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ControlBook/ControlBook/AnimationPlayer")
+tracks/0/path = NodePath("World/ControlBook/ControlBook/AnimationPlayer")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -760,7 +1389,7 @@ tracks/0/keys = {
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("ControlBook/SFX/Flip")
+tracks/1/path = NodePath("SFX/Flip")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -899,6 +1528,18 @@ tracks/2/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("MenuBase/NavigationButtons/Clear:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_kujvr"]
 resource_name = "options"
@@ -999,6 +1640,72 @@ tracks/7/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("World/PlayerSpawn/Player")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Deactivate"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_killh"]
+resource_name = "partymapping"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MenuBase/ContentClip/Content/Control/Common:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MenuBase/ScrollBar:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("MenuBase/ContentClip/Content/Control/PartyMapping:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("MenuBase/NavigationButtons/Clear:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_k2y4w"]
 resource_name = "select"
@@ -1006,7 +1713,7 @@ length = 0.001
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ControlBook/SFX/Select")
+tracks/0/path = NodePath("SFX/Select")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -1020,52 +1727,41 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_47ygc"]
 resource_name = "test"
-length = 0.001
+length = 0.0333367
+step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ControlBook/PlayerSpawn/Player:process_mode")
+tracks/0/path = NodePath("World/PlayerSpawn/Player:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
+"update": 0,
+"values": [Vector3(0, 0, -6)]
 }
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("ControlBook/JumpStart/JumpStart")
+tracks/1/path = NodePath("World/JumpStart/JumpStart")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(0.0333333),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
 "method": &"Activate"
 }]
 }
-tracks/2/type = "value"
+tracks/2/type = "method"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("ControlBook/PlayerSpawn/Player:position")
+tracks/2/path = NodePath(".")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector3(0, 0, -6)]
-}
-tracks/3/type = "method"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath(".")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -1073,10 +1769,22 @@ tracks/3/keys = {
 "method": &"DisableProcessing"
 }]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("MenuBase/ContentClip/Content/Control:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("MenuBase/ContentClip/Content/Control:visible")
+tracks/4/path = NodePath("MenuBase/Header:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -1088,19 +1796,19 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("ControlBook/PlayerSpawn/Player:visible")
+tracks/5/path = NodePath("MenuBase/HorizontalLine:visible")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("MenuBase/Header:visible")
+tracks/6/path = NodePath("MenuBase/Cursor:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -1112,7 +1820,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("MenuBase/HorizontalLine:visible")
+tracks/7/path = NodePath("MenuBase/NavigationButtons/Select:visible")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -1124,19 +1832,19 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("MenuBase/Cursor:visible")
+tracks/8/path = NodePath("MenuBase/NavigationButtons/Return:visible")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("MenuBase/NavigationButtons/Select:visible")
+tracks/9/path = NodePath("MenuBase/NavigationButtons/Cancel:visible")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -1145,50 +1853,42 @@ tracks/9/keys = {
 "update": 1,
 "values": [false]
 }
-tracks/10/type = "value"
+tracks/10/type = "method"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("MenuBase/NavigationButtons/Return:visible")
+tracks/10/path = NodePath("World/PlayerSpawn/Player")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(0.0333333),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/11/type = "value"
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/path = NodePath("MenuBase/NavigationButtons/Cancel:visible")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_pjjbd"]
 resource_name = "test_end"
 length = 0.8
-tracks/0/type = "value"
+tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ControlBook/PlayerSpawn/Player:process_mode")
+tracks/0/path = NodePath("World/PlayerSpawn/Player")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.8),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [0, 4]
+"times": PackedFloat32Array(0.8),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Deactivate"
+}]
 }
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".")
+tracks/1/path = NodePath("World/JumpEnd/JumpEnd")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -1196,13 +1896,13 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
-"method": &"DisableProcessing"
+"method": &"Activate"
 }]
 }
 tracks/2/type = "method"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("ControlBook/JumpEnd/JumpEnd")
+tracks/2/path = NodePath(".")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -1210,20 +1910,8 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
-"method": &"Activate"
+"method": &"DisableProcessing"
 }]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("ControlBook/PlayerSpawn/Player:visible")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.8),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
 }
 
 [sub_resource type="Animation" id="Animation_q1gli"]
@@ -1328,23 +2016,24 @@ tracks/7/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_6r0td"]
 _data = {
-"RESET": SubResource("Animation_w5dih"),
-"audio": SubResource("Animation_24v0k"),
-"cancel": SubResource("Animation_krkl8"),
-"confirm": SubResource("Animation_64lmb"),
-"control": SubResource("Animation_4nv1k"),
-"flip-left": SubResource("Animation_k03le"),
-"flip-right": SubResource("Animation_fjvqe"),
-"language": SubResource("Animation_oqo83"),
-"mapping": SubResource("Animation_x1umr"),
-"options": SubResource("Animation_kujvr"),
-"select": SubResource("Animation_k2y4w"),
-"test": SubResource("Animation_47ygc"),
-"test_end": SubResource("Animation_pjjbd"),
-"video": SubResource("Animation_q1gli")
+&"RESET": SubResource("Animation_w5dih"),
+&"audio": SubResource("Animation_24v0k"),
+&"cancel": SubResource("Animation_krkl8"),
+&"confirm": SubResource("Animation_64lmb"),
+&"control": SubResource("Animation_4nv1k"),
+&"flip-left": SubResource("Animation_k03le"),
+&"flip-right": SubResource("Animation_fjvqe"),
+&"language": SubResource("Animation_oqo83"),
+&"mapping": SubResource("Animation_x1umr"),
+&"options": SubResource("Animation_kujvr"),
+&"partymapping": SubResource("Animation_killh"),
+&"select": SubResource("Animation_k2y4w"),
+&"test": SubResource("Animation_47ygc"),
+&"test_end": SubResource("Animation_pjjbd"),
+&"video": SubResource("Animation_q1gli")
 }
 
-[node name="Options" type="Control" node_paths=PackedStringArray("cursor", "cursorAnimator", "contentContainer", "lockNode", "scrollBar", "videoLabels", "audioLabels", "languageLabels", "controlLabels", "controlMappingOptions", "bgm", "animator")]
+[node name="Options" type="Control" node_paths=PackedStringArray("cursor", "cursorAnimator", "contentContainer", "resetAnimator", "lockNode", "scrollBar", "videoLabels", "audioLabels", "languageLabels", "controlLabels", "partyMappingLabels", "controlMappingOptions", "partyMappingOptions", "bgm", "animator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1355,146 +2044,151 @@ script = ExtResource("1_yejdm")
 cursor = NodePath("MenuBase/Cursor")
 cursorAnimator = NodePath("MenuBase/Cursor/AnimationPlayer")
 contentContainer = NodePath("MenuBase/ContentClip/Content")
-lockNode = NodePath("ControlBook/JumpStart/JumpStart")
+resetAnimator = NodePath("ResetMenu/AnimationPlayer")
+lockNode = NodePath("World/JumpStart/JumpStart")
 scrollBar = NodePath("MenuBase/ScrollBar/ScrollPosition")
-videoLabels = [NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/DisplayLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/WindowSizeLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/FullscreenLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/VsyncLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/RenderScaleLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ResizeModeLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/AntiAliasingLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/BloomLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ShadowLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/PostProcessingLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ReflectionLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/MotionBlurLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ScreenShakeLabel")]
-audioLabels = [NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/MainLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/MusicLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/SFXLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/VoiceLabel")]
-languageLabels = [NodePath("MenuBase/ContentClip/Content/Language/RSide/Options/UseSubtitleLabel"), NodePath("MenuBase/ContentClip/Content/Language/RSide/Options/TextLabel"), NodePath("MenuBase/ContentClip/Content/Language/RSide/Options/VoiceLabel")]
-controlLabels = [NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/ControllerLabel"), NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/DeadzoneLabel")]
-controlMappingOptions = [NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveUp"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveDown"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveLeft"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveRight"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Jump"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Action"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Brake"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/SpeedBreak"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/TimeBreak"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Pause")]
+videoLabels = [NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/DisplayLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/WindowSizeLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/FullscreenLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/FPSLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/VsyncLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/RenderScaleLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ResizeModeLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/AntiAliasingLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/BloomLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ShadowLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/PostProcessingLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ReflectionLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/MotionBlurLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ScreenShakeLabel")]
+audioLabels = [NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/MainLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/MusicLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/SFXLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/VoiceLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/RetailMenuMusicLabel")]
+languageLabels = [NodePath("MenuBase/ContentClip/Content/Language/RSide/Options/UseSubtitleLabel"), NodePath("MenuBase/ContentClip/Content/Language/RSide/Options/UseDialogLabel"), NodePath("MenuBase/ContentClip/Content/Language/RSide/Options/TextLabel"), NodePath("MenuBase/ContentClip/Content/Language/RSide/Options/VoiceLabel")]
+controlLabels = [NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/ControllerLabel"), NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/StyleLabel"), NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/DeadzoneLabel"), NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/BreakLabel"), NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/JumpLabel"), NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/ActionPromptLabel")]
+partyMappingLabels = [NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/RSide/Options/PlayerLabel"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/RSide/Options/DeviceLabel")]
+controlMappingOptions = [NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveUp"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveDown"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveLeft"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveRight"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Jump"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Action"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/SpeedBreak"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/TimeBreak"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Pause"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Attack"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Brake"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/LightDash"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/StepLeft"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/StepRight")]
+partyMappingOptions = [NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/Options/MoveUp"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/Options/MoveDown"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/Options/MoveLeft"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/Options/MoveRight"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/Options/Primary"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/Options/Secondary"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/Options/Pause")]
 bgm = NodePath("BGM")
 animator = NodePath("AnimationPlayer")
 isProcessing = true
 metadata/_edit_lock_ = true
 
-[node name="ControlBook" type="Node3D" parent="." node_paths=PackedStringArray("pathParent", "Environment")]
-script = ExtResource("2_x1aix")
-Data = ExtResource("4_3wn11")
-InitialCameraSettings = ExtResource("3_jnp5r")
-pathParent = NodePath("Path")
-Environment = NodePath("Visuals/WorldEnvironment")
+[node name="SFX" type="Node" parent="."]
 
-[node name="SFX" type="Node" parent="ControlBook"]
-
-[node name="Open" type="AudioStreamPlayer" parent="ControlBook/SFX"]
+[node name="Open" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("5_boind")
 bus = &"SFX"
 
-[node name="Flipping" type="AudioStreamPlayer" parent="ControlBook/SFX"]
+[node name="Flipping" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("5_f4e4n")
 bus = &"SFX"
 
-[node name="Select" type="AudioStreamPlayer" parent="ControlBook/SFX"]
+[node name="Select" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("6_j7003")
 bus = &"SFX"
 
-[node name="Cancel" type="AudioStreamPlayer" parent="ControlBook/SFX"]
+[node name="Cancel" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("7_f15lq")
 bus = &"SFX"
 
-[node name="Confirm" type="AudioStreamPlayer" parent="ControlBook/SFX"]
+[node name="Confirm" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("8_xb0ie")
 bus = &"SFX"
 
-[node name="Flip" type="AudioStreamPlayer" parent="ControlBook/SFX"]
+[node name="Flip" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("7_0sy78")
 bus = &"SFX"
 
-[node name="Collision" parent="ControlBook" instance=ExtResource("5_w565g")]
+[node name="QuitMenu" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("8_37qjl")
+bus = &"SFX"
+
+[node name="World" type="Node3D" parent="."]
+
+[node name="ControlBook" type="Node3D" parent="World" node_paths=PackedStringArray("pathParent", "Environment")]
+script = ExtResource("2_x1aix")
+Data = ExtResource("4_3wn11")
+pathParent = NodePath("Path")
+Environment = NodePath("Visuals/WorldEnvironment")
+
+[node name="Collision" parent="World/ControlBook" instance=ExtResource("5_w565g")]
 visible = false
 
-[node name="StaticBody3D" parent="ControlBook/Collision/Floor" index="0" groups=["floor"]]
+[node name="StaticBody3D" parent="World/ControlBook/Collision/Floor" index="0" groups=["floor"]]
 
-[node name="ControlBook" parent="ControlBook" instance=ExtResource("6_jppea")]
+[node name="ControlBook" parent="World/ControlBook" instance=ExtResource("6_jppea")]
 
-[node name="Skeleton3D" parent="ControlBook/ControlBook/BookRoot" index="0"]
-bones/0/rotation = Quaternion(-0.5, -0.5, -0.5, 0.5)
-bones/2/rotation = Quaternion(-0.707107, -1.48754e-08, -1.48754e-08, 0.707107)
+[node name="Skeleton3D" parent="World/ControlBook/ControlBook/BookRoot" index="0"]
 bones/3/rotation = Quaternion(0.707106, 1.72081e-08, 1.72081e-08, 0.707107)
 bones/4/rotation = Quaternion(3.23117e-08, 0.707106, 0.707107, 5.3385e-08)
-bones/5/rotation = Quaternion(-0.707107, -1.48754e-08, -1.48754e-08, 0.707107)
 bones/6/rotation = Quaternion(-0.707107, 1.45739e-08, -1.45739e-08, 0.707107)
 
-[node name="obj_book01_Mesh_0001" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="0"]
+[node name="obj_book01_Mesh_0001" parent="World/ControlBook/ControlBook/BookRoot/Skeleton3D" index="0"]
 layers = 2
 cast_shadow = 0
 
-[node name="obj_book01_Mesh_0003" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="1"]
+[node name="obj_book01_Mesh_0003" parent="World/ControlBook/ControlBook/BookRoot/Skeleton3D" index="1"]
 layers = 2
 cast_shadow = 0
 
-[node name="obj_book01_Mesh_0006" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="2"]
+[node name="obj_book01_Mesh_0006" parent="World/ControlBook/ControlBook/BookRoot/Skeleton3D" index="2"]
 layers = 2
 cast_shadow = 0
 
-[node name="obj_book01_Mesh_0008" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="3"]
+[node name="obj_book01_Mesh_0008" parent="World/ControlBook/ControlBook/BookRoot/Skeleton3D" index="3"]
 layers = 2
 cast_shadow = 0
 
-[node name="obj_book01_Mesh_0009" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="4"]
+[node name="obj_book01_Mesh_0009" parent="World/ControlBook/ControlBook/BookRoot/Skeleton3D" index="4"]
 layers = 2
 cast_shadow = 0
 
-[node name="obj_book01_Mesh_0010" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="5"]
+[node name="obj_book01_Mesh_0010" parent="World/ControlBook/ControlBook/BookRoot/Skeleton3D" index="5"]
 layers = 2
 cast_shadow = 0
 
-[node name="obj_book01_Mesh_0011" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="6"]
+[node name="obj_book01_Mesh_0011" parent="World/ControlBook/ControlBook/BookRoot/Skeleton3D" index="6"]
 layers = 2
 cast_shadow = 0
 
-[node name="obj_book01_Mesh_0012" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="7"]
+[node name="obj_book01_Mesh_0012" parent="World/ControlBook/ControlBook/BookRoot/Skeleton3D" index="7"]
 layers = 2
 cast_shadow = 0
 
-[node name="obj_book01_Mesh_0013" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="8"]
+[node name="obj_book01_Mesh_0013" parent="World/ControlBook/ControlBook/BookRoot/Skeleton3D" index="8"]
 layers = 2
 cast_shadow = 0
 
-[node name="obj_book01_Mesh_0014" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="9"]
+[node name="obj_book01_Mesh_0014" parent="World/ControlBook/ControlBook/BookRoot/Skeleton3D" index="9"]
 layers = 2
 cast_shadow = 0
 
-[node name="Page1" parent="ControlBook/ControlBook/BookRoot" index="1" instance=ExtResource("7_37jow")]
+[node name="Page1" parent="World/ControlBook/ControlBook/BookRoot" index="1" instance=ExtResource("7_37jow")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.175, 0)
 
-[node name="PageMesh" parent="ControlBook/ControlBook/BookRoot/Page1" index="0"]
+[node name="PageMesh" parent="World/ControlBook/ControlBook/BookRoot/Page1" index="0"]
 layers = 2
 cast_shadow = 0
 blend_shapes/Flip = 0.5
 blend_shapes/Stretch = 1.0
 
-[node name="Page2" parent="ControlBook/ControlBook/BookRoot" index="2" instance=ExtResource("7_37jow")]
+[node name="Page2" parent="World/ControlBook/ControlBook/BookRoot" index="2" instance=ExtResource("7_37jow")]
 transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 0.575, 0)
 
-[node name="PageMesh" parent="ControlBook/ControlBook/BookRoot/Page2" index="0"]
+[node name="PageMesh" parent="World/ControlBook/ControlBook/BookRoot/Page2" index="0"]
 layers = 2
 cast_shadow = 0
 blend_shapes/Flip = 0.5
 blend_shapes/Stretch = 1.0
 
-[node name="Page3" parent="ControlBook/ControlBook/BookRoot" index="3" instance=ExtResource("7_37jow")]
+[node name="Page3" parent="World/ControlBook/ControlBook/BookRoot" index="3" instance=ExtResource("7_37jow")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.298, 0)
 visible = false
 
-[node name="PageMesh" parent="ControlBook/ControlBook/BookRoot/Page3" index="0"]
+[node name="PageMesh" parent="World/ControlBook/ControlBook/BookRoot/Page3" index="0"]
 layers = 2
 cast_shadow = 0
 blend_shapes/Flip = 0.5
 blend_shapes/Stretch = 1.0
 
-[node name="AnimationPlayer" parent="ControlBook/ControlBook" index="1"]
+[node name="AnimationPlayer" parent="World/ControlBook/ControlBook" index="1"]
 autoplay = "open"
 
-[node name="Path" type="Node3D" parent="ControlBook"]
+[node name="Path" type="Node3D" parent="World/ControlBook"]
 
-[node name="MainPath" type="Path3D" parent="ControlBook/Path"]
+[node name="MainPath" type="Path3D" parent="World/ControlBook/Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.2, 2)
 curve = SubResource("Curve3D_eqptd")
 
-[node name="Visuals" type="Node3D" parent="ControlBook"]
+[node name="Visuals" type="Node3D" parent="World/ControlBook"]
 
-[node name="EnvironmentLight" type="DirectionalLight3D" parent="ControlBook/Visuals"]
+[node name="EnvironmentLight" type="DirectionalLight3D" parent="World/ControlBook/Visuals"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
 light_color = Color(0.6, 0.6, 1, 1)
@@ -1503,18 +2197,17 @@ light_cull_mask = 2
 shadow_enabled = true
 directional_shadow_max_distance = 50.0
 
-[node name="CharacterLight" type="DirectionalLight3D" parent="ControlBook/Visuals"]
+[node name="CharacterLight" type="DirectionalLight3D" parent="World/ControlBook/Visuals"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
 light_cull_mask = 64
 
-[node name="Fog" type="GPUParticles3D" parent="ControlBook/Visuals"]
+[node name="Fog" type="GPUParticles3D" parent="World/ControlBook/Visuals"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -4, 4)
 layers = 32
 emitting = false
 amount = 128
 lifetime = 2.0
-preprocess = 5.0
 fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(-4, 0, -4, 8, 8, 8)
@@ -1522,38 +2215,42 @@ local_coords = true
 process_material = SubResource("ParticleProcessMaterial_xe8d5")
 draw_pass_1 = SubResource("QuadMesh_md2q0")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="ControlBook/Visuals"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="World/ControlBook/Visuals"]
 environment = SubResource("Environment_xk4ou")
 
-[node name="PlayerSpawn" type="Node3D" parent="ControlBook"]
+[node name="PlayerSpawn" type="Node3D" parent="World"]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.9, 5, 0)
 script = ExtResource("4_g52h3")
 
-[node name="Player" parent="ControlBook/PlayerSpawn" node_paths=PackedStringArray("Camera") instance=ExtResource("3_4o0co")]
-process_mode = 4
+[node name="Player" parent="World/PlayerSpawn" node_paths=PackedStringArray("Camera") instance=ExtResource("16_f4s6v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-visible = false
 Camera = NodePath("../Camera")
 
-[node name="Camera" parent="ControlBook/PlayerSpawn" instance=ExtResource("5_1klrf")]
+[node name="Camera" parent="World/PlayerSpawn" instance=ExtResource("5_1klrf")]
 
-[node name="JumpStart" type="Node3D" parent="ControlBook"]
+[node name="JumpStart" type="Node3D" parent="World"]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.9, 5, 6)
 
-[node name="JumpStart" type="Node3D" parent="ControlBook/JumpStart"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19209e-07, -4.3, 6)
+[node name="JumpStart" type="Node3D" parent="World/JumpStart"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.30645, 6)
 script = ExtResource("8_7asuc")
 jumpHeight = 2.0
 autoAlign = true
 
-[node name="JumpEnd" type="Node3D" parent="ControlBook"]
+[node name="JumpEnd" type="Node3D" parent="World"]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.9, 0.2, 0)
 
-[node name="JumpEnd" type="Node3D" parent="ControlBook/JumpEnd"]
+[node name="JumpEnd" type="Node3D" parent="World/JumpEnd"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.54972e-06, 2, 18)
 script = ExtResource("8_7asuc")
 jumpHeight = 15.0
 autoAlign = true
+
+[node name="Camera" type="Node3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 3)
+script = ExtResource("18_wt5wy")
+settings = ExtResource("3_jnp5r")
+UpdateEveryFrame = true
 
 [node name="MenuBase" type="Control" parent="."]
 layout_mode = 1
@@ -1590,22 +2287,22 @@ patch_margin_right = 8
 
 [node name="Cursor" type="NinePatchRect" parent="MenuBase"]
 layout_mode = 0
-offset_left = 192.0
-offset_top = 300.0
-offset_right = 1344.0
-offset_bottom = 350.0
+offset_left = 170.0
+offset_top = 292.0
+offset_right = 1370.0
+offset_bottom = 356.0
 scale = Vector2(1, 1e-05)
-pivot_offset = Vector2(0, 25)
-texture = ExtResource("22_cq4kf")
-region_rect = Rect2(136, 96, 120, 16)
-patch_margin_left = 10
-patch_margin_top = 4
-patch_margin_right = 9
-patch_margin_bottom = 6
+pivot_offset = Vector2(0, 32)
+texture = ExtResource("23_fpyww")
+region_rect = Rect2(272, 190, 240, 32)
+patch_margin_left = 32
+patch_margin_top = 16
+patch_margin_right = 32
+patch_margin_bottom = 16
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MenuBase/Cursor"]
 libraries = {
-"": SubResource("AnimationLibrary_fowp2")
+&"": SubResource("AnimationLibrary_fowp2")
 }
 
 [node name="ContentClip" type="ColorRect" parent="MenuBase"]
@@ -1655,6 +2352,7 @@ grow_vertical = 2
 theme_override_constants/separation = 16
 
 [node name="VideoLabel" type="Label" parent="MenuBase/ContentClip/Content/Options/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_video"
 label_settings = ExtResource("23_616uf")
@@ -1662,6 +2360,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="AudioLabel" type="Label" parent="MenuBase/ContentClip/Content/Options/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_audio"
 label_settings = ExtResource("23_616uf")
@@ -1669,6 +2368,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="LanguageLabel" type="Label" parent="MenuBase/ContentClip/Content/Options/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_lang"
 label_settings = ExtResource("23_616uf")
@@ -1676,8 +2376,17 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="ControlLabel" type="Label" parent="MenuBase/ContentClip/Content/Options/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_control"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="ResetLabel" type="Label" parent="MenuBase/ContentClip/Content/Options/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "option_reset_settings"
 label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
@@ -1712,6 +2421,7 @@ grow_vertical = 2
 theme_override_constants/separation = 16
 
 [node name="DisplayLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_target_display"
 label_settings = ExtResource("23_616uf")
@@ -1719,6 +2429,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="WindowSizeLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_window_size"
 label_settings = ExtResource("23_616uf")
@@ -1726,13 +2437,23 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="FullscreenLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_fullscreen_mode"
 label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
 
+[node name="FPSLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "option_target_fps"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
 [node name="VsyncLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_vsync"
 label_settings = ExtResource("23_616uf")
@@ -1740,6 +2461,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="RenderScaleLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_render_scale"
 label_settings = ExtResource("23_616uf")
@@ -1747,6 +2469,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="ResizeModeLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_resize_mode"
 label_settings = ExtResource("23_616uf")
@@ -1754,6 +2477,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="AntiAliasingLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_antialiasing"
 label_settings = ExtResource("23_616uf")
@@ -1761,6 +2485,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="BloomLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_bloom"
 label_settings = ExtResource("23_616uf")
@@ -1768,6 +2493,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="ShadowLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_shadow"
 label_settings = ExtResource("23_616uf")
@@ -1775,6 +2501,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="PostProcessingLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_post_processing"
 label_settings = ExtResource("23_616uf")
@@ -1782,6 +2509,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="ReflectionLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_reflection"
 label_settings = ExtResource("23_616uf")
@@ -1789,6 +2517,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="MotionBlurLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_motion_blur"
 label_settings = ExtResource("23_616uf")
@@ -1796,6 +2525,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="ScreenShakeLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_screen_shake"
 label_settings = ExtResource("23_616uf")
@@ -1824,6 +2554,7 @@ grow_vertical = 2
 theme_override_constants/separation = 16
 
 [node name="DisplayLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "display 0"
 label_settings = ExtResource("23_616uf")
@@ -1832,6 +2563,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="WindowSizeLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "1920:1080"
 label_settings = ExtResource("23_616uf")
@@ -1840,6 +2572,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="FullscreenLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_normal_fullscreen"
 label_settings = ExtResource("23_616uf")
@@ -1847,7 +2580,17 @@ horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
+[node name="FPSLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "enabled"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
 [node name="VsyncLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "enabled"
 label_settings = ExtResource("23_616uf")
@@ -1856,6 +2599,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="RenderScaleLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "100%"
 label_settings = ExtResource("23_616uf")
@@ -1864,6 +2608,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="ResizeModeLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "bilnear"
 label_settings = ExtResource("23_616uf")
@@ -1872,6 +2617,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="AntiAliasingLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "FXAA"
 label_settings = ExtResource("23_616uf")
@@ -1880,6 +2626,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="BloomLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "high"
 label_settings = ExtResource("23_616uf")
@@ -1888,6 +2635,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="ShadowLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "high"
 label_settings = ExtResource("23_616uf")
@@ -1896,6 +2644,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="PostProcessingLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "medium"
 label_settings = ExtResource("23_616uf")
@@ -1904,6 +2653,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="ReflectionLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "high"
 label_settings = ExtResource("23_616uf")
@@ -1912,6 +2662,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="MotionBlurLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "enabled"
 label_settings = ExtResource("23_616uf")
@@ -1920,6 +2671,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="ScreenShakeLabel" type="Label" parent="MenuBase/ContentClip/Content/Video/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "100%"
 label_settings = ExtResource("23_616uf")
@@ -1957,6 +2709,7 @@ grow_vertical = 2
 theme_override_constants/separation = 16
 
 [node name="MainLabel" type="Label" parent="MenuBase/ContentClip/Content/Audio/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_main_vol"
 label_settings = ExtResource("23_616uf")
@@ -1964,6 +2717,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="BGMLabel" type="Label" parent="MenuBase/ContentClip/Content/Audio/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_bgm_vol"
 label_settings = ExtResource("23_616uf")
@@ -1971,6 +2725,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="SFXLabel" type="Label" parent="MenuBase/ContentClip/Content/Audio/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_sfx_vol"
 label_settings = ExtResource("23_616uf")
@@ -1978,8 +2733,17 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="VoiceLabel" type="Label" parent="MenuBase/ContentClip/Content/Audio/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_voice_vol"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="RetailMenuMusicLabel" type="Label" parent="MenuBase/ContentClip/Content/Audio/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "option_level_select_music"
 label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
@@ -2006,6 +2770,7 @@ grow_vertical = 2
 theme_override_constants/separation = 16
 
 [node name="MainLabel" type="Label" parent="MenuBase/ContentClip/Content/Audio/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "100%"
 label_settings = ExtResource("23_616uf")
@@ -2014,6 +2779,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="MusicLabel" type="Label" parent="MenuBase/ContentClip/Content/Audio/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "100%"
 label_settings = ExtResource("23_616uf")
@@ -2022,6 +2788,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="SFXLabel" type="Label" parent="MenuBase/ContentClip/Content/Audio/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "100%"
 label_settings = ExtResource("23_616uf")
@@ -2030,8 +2797,18 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="VoiceLabel" type="Label" parent="MenuBase/ContentClip/Content/Audio/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "100%"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="RetailMenuMusicLabel" type="Label" parent="MenuBase/ContentClip/Content/Audio/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Remixed"
 label_settings = ExtResource("23_616uf")
 horizontal_alignment = 2
 vertical_alignment = 1
@@ -2067,13 +2844,23 @@ grow_vertical = 2
 theme_override_constants/separation = 16
 
 [node name="UseSubtitleLabel" type="Label" parent="MenuBase/ContentClip/Content/Language/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_sub_toggle"
 label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
 
+[node name="UseDialogLabel" type="Label" parent="MenuBase/ContentClip/Content/Language/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "option_dialog_toggle"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
 [node name="TextLabel" type="Label" parent="MenuBase/ContentClip/Content/Language/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_text_lang"
 label_settings = ExtResource("23_616uf")
@@ -2081,6 +2868,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="VoiceLabel" type="Label" parent="MenuBase/ContentClip/Content/Language/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_voice_lang"
 label_settings = ExtResource("23_616uf")
@@ -2109,6 +2897,16 @@ grow_vertical = 2
 theme_override_constants/separation = 16
 
 [node name="UseSubtitleLabel" type="Label" parent="MenuBase/ContentClip/Content/Language/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "enabled"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="UseDialogLabel" type="Label" parent="MenuBase/ContentClip/Content/Language/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "enabled"
 label_settings = ExtResource("23_616uf")
@@ -2117,6 +2915,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="TextLabel" type="Label" parent="MenuBase/ContentClip/Content/Language/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "lang_local"
 label_settings = ExtResource("23_616uf")
@@ -2125,6 +2924,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="VoiceLabel" type="Label" parent="MenuBase/ContentClip/Content/Language/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "lang_en"
 label_settings = ExtResource("23_616uf")
@@ -2170,29 +2970,81 @@ grow_vertical = 2
 theme_override_constants/separation = 16
 
 [node name="ControllerLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_controller_ui"
 label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
 
+[node name="StyleLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "option_controller_style"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
 [node name="DeadzoneLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_deadzone"
 label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
 
+[node name="BreakLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "option_break_mode"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="JumpLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "option_jump_mode"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="ActionPromptLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "option_action_prompts"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
 [node name="MappingLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_mapping"
 label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
 
+[node name="PartyMappingLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "option_party_mapping"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
 [node name="TestLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "option_mapping_test"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="ResetLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "option_reset_controls"
 label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
@@ -2219,6 +3071,7 @@ grow_vertical = 2
 theme_override_constants/separation = 16
 
 [node name="ControllerLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "playstation"
 label_settings = ExtResource("23_616uf")
@@ -2226,7 +3079,17 @@ horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
+[node name="StyleLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "style 1"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
 [node name="DeadzoneLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "100%"
 label_settings = ExtResource("23_616uf")
@@ -2234,17 +3097,55 @@ horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="MappingLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/RSide/Options"]
+[node name="BreakLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
-text = ">>>"
+text = "hold"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="JumpLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Attack"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="ActionPromptLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Enabled"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="MappingLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "⇒"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="PartyMappingLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "⇒"
 label_settings = ExtResource("23_616uf")
 horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
 [node name="TestLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
-text = ">>>"
+text = "⇒"
 label_settings = ExtResource("23_616uf")
 horizontal_alignment = 2
 vertical_alignment = 1
@@ -2263,52 +3164,197 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 192.0
+offset_left = 200.0
 offset_right = -192.0
-offset_bottom = 84.0
+offset_bottom = 848.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = 16
 
 [node name="MoveUp" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
 layout_mode = 2
-InputId = &"move_up"
+inputId = &"move_up"
 
 [node name="MoveDown" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
 layout_mode = 2
-InputId = &"move_down"
+inputId = &"move_down"
 
 [node name="MoveLeft" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
 layout_mode = 2
-InputId = &"move_left"
+inputId = &"move_left"
 
 [node name="MoveRight" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
 layout_mode = 2
-InputId = &"move_right"
+inputId = &"move_right"
 
 [node name="Jump" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
 layout_mode = 2
-InputId = &"button_jump"
+inputId = &"button_jump"
 
 [node name="Action" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
 layout_mode = 2
-InputId = &"button_action"
-
-[node name="Brake" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
-layout_mode = 2
-InputId = &"button_brake"
+inputId = &"button_action"
 
 [node name="SpeedBreak" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
 layout_mode = 2
-InputId = &"button_speedbreak"
+inputId = &"button_speedbreak"
 
 [node name="TimeBreak" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
 layout_mode = 2
-InputId = &"button_timebreak"
+inputId = &"button_timebreak"
 
 [node name="Pause" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
 layout_mode = 2
-InputId = &"button_pause"
+inputId = &"button_pause"
+
+[node name="Attack" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
+layout_mode = 2
+inputId = &"button_attack"
+
+[node name="Brake" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
+layout_mode = 2
+inputId = &"button_brake"
+
+[node name="LightDash" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
+layout_mode = 2
+inputId = &"button_light_dash"
+
+[node name="StepLeft" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
+layout_mode = 2
+inputId = &"button_step_left"
+
+[node name="StepRight" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
+layout_mode = 2
+inputId = &"button_step_right"
+
+[node name="PartyMapping" type="Control" parent="MenuBase/ContentClip/Content/Control"]
+visible = false
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 1536.0
+grow_vertical = 2
+
+[node name="LSide" type="Control" parent="MenuBase/ContentClip/Content/Control/PartyMapping"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 200.0
+offset_right = 1000.0
+grow_vertical = 2
+
+[node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Control/PartyMapping/LSide"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 148.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="PlayerLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/PartyMapping/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Player"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="DeviceLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/PartyMapping/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Device"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
+[node name="RSide" type="Control" parent="MenuBase/ContentClip/Content/Control/PartyMapping"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -992.0
+offset_right = -192.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Control/PartyMapping/RSide"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 148.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="PlayerLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/PartyMapping/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Player 1"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="DeviceLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/PartyMapping/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Xbox Controller (Device 0)"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Control/PartyMapping"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 200.0
+offset_top = 128.0
+offset_right = -192.0
+offset_bottom = 212.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="MoveUp" parent="MenuBase/ContentClip/Content/Control/PartyMapping/Options" instance=ExtResource("14_itn8j")]
+layout_mode = 2
+inputId = &"move_up"
+IsPartyModeMapping = true
+
+[node name="MoveDown" parent="MenuBase/ContentClip/Content/Control/PartyMapping/Options" instance=ExtResource("14_itn8j")]
+layout_mode = 2
+inputId = &"move_down"
+IsPartyModeMapping = true
+
+[node name="MoveLeft" parent="MenuBase/ContentClip/Content/Control/PartyMapping/Options" instance=ExtResource("14_itn8j")]
+layout_mode = 2
+inputId = &"move_left"
+IsPartyModeMapping = true
+
+[node name="MoveRight" parent="MenuBase/ContentClip/Content/Control/PartyMapping/Options" instance=ExtResource("14_itn8j")]
+layout_mode = 2
+inputId = &"move_right"
+IsPartyModeMapping = true
+
+[node name="Primary" parent="MenuBase/ContentClip/Content/Control/PartyMapping/Options" instance=ExtResource("14_itn8j")]
+layout_mode = 2
+inputId = &"button_primary"
+IsPartyModeMapping = true
+
+[node name="Secondary" parent="MenuBase/ContentClip/Content/Control/PartyMapping/Options" instance=ExtResource("14_itn8j")]
+layout_mode = 2
+inputId = &"button_secondary"
+IsPartyModeMapping = true
+
+[node name="Pause" parent="MenuBase/ContentClip/Content/Control/PartyMapping/Options" instance=ExtResource("14_itn8j")]
+layout_mode = 2
+inputId = &"button_pause"
+IsPartyModeMapping = true
 
 [node name="ScrollBar" type="NinePatchRect" parent="MenuBase"]
 self_modulate = Color(0.6, 0, 0, 1)
@@ -2338,49 +3384,288 @@ pivot_offset = Vector2(16, 16)
 texture = ExtResource("6_7p8ra")
 
 [node name="NavigationButtons" type="HBoxContainer" parent="MenuBase"]
-layout_mode = 0
-offset_left = 352.0
-offset_top = 800.0
-offset_right = 1378.0
-offset_bottom = 864.0
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 292.0
+offset_bottom = 340.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/separation = 64
-alignment = 2
+alignment = 1
+
+[node name="Clear" parent="MenuBase/NavigationButtons" instance=ExtResource("27_30n1q")]
+visible = false
+layout_mode = 2
+ActionKey = &"sys_clear"
+inputKey = &"button_pause"
+fallbackKey = &"ui_clear"
 
 [node name="Select" parent="MenuBase/NavigationButtons" instance=ExtResource("27_30n1q")]
 layout_mode = 2
-actionKey = "sys_select"
-inputKey = "button_jump"
+ActionKey = &"sys_select"
+inputKey = &"button_jump"
+fallbackKey = &"ui_select"
 
 [node name="Cancel" parent="MenuBase/NavigationButtons" instance=ExtResource("27_30n1q")]
 layout_mode = 2
-actionKey = "sys_cancel"
-inputKey = "button_action"
+ActionKey = &"sys_cancel"
+inputKey = &"button_action"
+fallbackKey = &"ui_cancel"
 
 [node name="Return" parent="MenuBase/NavigationButtons" instance=ExtResource("27_30n1q")]
 visible = false
 layout_mode = 2
-actionKey = "sys_return"
-inputKey = "button_pause"
+ActionKey = &"sys_return"
+inputKey = &"button_pause"
+fallbackKey = &"ui_confirm"
+
+[node name="ResetMenu" type="Control" parent="."]
+modulate = Color(1, 1, 1, 0)
+z_index = 120
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="Fade" type="ColorRect" parent="ResetMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.588235)
+metadata/_edit_lock_ = true
+
+[node name="Menu" type="Control" parent="ResetMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Parent" type="Control" parent="ResetMenu/Menu"]
+anchors_preset = 0
+offset_left = 960.0
+offset_top = 470.0
+offset_right = 960.0
+offset_bottom = 470.0
+
+[node name="Window" type="Node2D" parent="ResetMenu/Menu/Parent"]
+
+[node name="TopBar" type="Node2D" parent="ResetMenu/Menu/Parent/Window"]
+position = Vector2(0, -192)
+
+[node name="TopLeft" type="Sprite2D" parent="ResetMenu/Menu/Parent/Window/TopBar"]
+position = Vector2(-560, 36)
+scale = Vector2(1, -1)
+texture = ExtResource("23_fpyww")
+centered = false
+region_enabled = true
+region_rect = Rect2(260, 60, 120, 60)
+
+[node name="Top" type="NinePatchRect" parent="ResetMenu/Menu/Parent/Window/TopBar"]
+custom_minimum_size = Vector2(432, 33)
+anchors_preset = -1
+anchor_left = 0.104
+anchor_top = 0.89
+anchor_right = 0.889
+anchor_bottom = 1.0
+offset_left = -440.0
+offset_top = 36.0
+offset_right = 416.0
+offset_bottom = 96.0
+scale = Vector2(1, -1)
+texture = ExtResource("23_fpyww")
+region_rect = Rect2(379, 60, 94, 60)
+axis_stretch_horizontal = 1
+
+[node name="TopRight" type="Sprite2D" parent="ResetMenu/Menu/Parent/Window/TopBar"]
+position = Vector2(416, 36)
+scale = Vector2(1, -1)
+texture = ExtResource("23_fpyww")
+centered = false
+region_enabled = true
+region_rect = Rect2(367, 0, 140, 60)
+
+[node name="Background" type="NinePatchRect" parent="ResetMenu/Menu/Parent/Window"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -488.0
+offset_top = -192.0
+offset_right = 488.0
+offset_bottom = 210.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(488, 192)
+texture = ExtResource("23_fpyww")
+region_rect = Rect2(128, 352, 96, 96)
+patch_margin_left = 32
+patch_margin_top = 32
+patch_margin_right = 32
+patch_margin_bottom = 32
+
+[node name="BottomBar" type="Node2D" parent="ResetMenu/Menu/Parent/Window"]
+position = Vector2(0, 208)
+
+[node name="BottomLeft" type="Sprite2D" parent="ResetMenu/Menu/Parent/Window/BottomBar"]
+position = Vector2(-560, -36)
+texture = ExtResource("23_fpyww")
+centered = false
+region_enabled = true
+region_rect = Rect2(260, 60, 120, 60)
+
+[node name="Bottom" type="NinePatchRect" parent="ResetMenu/Menu/Parent/Window/BottomBar"]
+custom_minimum_size = Vector2(432, 33)
+anchors_preset = -1
+anchor_left = 0.104
+anchor_top = 0.89
+anchor_right = 0.889
+anchor_bottom = 1.0
+offset_left = -440.0
+offset_top = -36.0
+offset_right = 416.0
+offset_bottom = 24.0
+texture = ExtResource("23_fpyww")
+region_rect = Rect2(379, 60, 94, 60)
+axis_stretch_horizontal = 1
+
+[node name="BottomRight" type="Sprite2D" parent="ResetMenu/Menu/Parent/Window/BottomBar"]
+position = Vector2(416, -36)
+texture = ExtResource("23_fpyww")
+centered = false
+region_enabled = true
+region_rect = Rect2(367, 0, 140, 60)
+
+[node name="Text" type="Control" parent="ResetMenu/Menu/Parent"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Options" type="HBoxContainer" parent="ResetMenu/Menu/Parent/Text"]
+layout_mode = 0
+offset_left = -480.0
+offset_top = 16.0
+offset_right = 480.0
+offset_bottom = 144.0
+theme_override_constants/separation = 200
+alignment = 1
+
+[node name="Yes" type="TextureRect" parent="ResetMenu/Menu/Parent/Text/Options"]
+custom_minimum_size = Vector2(300, 128)
+layout_mode = 2
+texture = ExtResource("28_t3g20")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="YesLabel" type="Label" parent="ResetMenu/Menu/Parent/Text/Options/Yes"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "sys_yes"
+label_settings = ExtResource("29_6eog4")
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="No" type="TextureRect" parent="ResetMenu/Menu/Parent/Text/Options"]
+custom_minimum_size = Vector2(300, 128)
+layout_mode = 2
+texture = ExtResource("30_78xqx")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NoLabel" type="Label" parent="ResetMenu/Menu/Parent/Text/Options/No"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "sys_no"
+label_settings = ExtResource("29_6eog4")
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Cursor" type="Control" parent="ResetMenu/Menu/Parent/Text"]
+custom_minimum_size = Vector2(150, 64)
+anchors_preset = 0
+offset_left = 100.0
+offset_top = 16.0
+offset_right = 400.0
+offset_bottom = 144.0
+pivot_offset = Vector2(150, 64)
+
+[node name="Sprite" type="TextureRect" parent="ResetMenu/Menu/Parent/Text/Cursor"]
+modulate = Color(1, 1, 1, 0)
+material = SubResource("ShaderMaterial_qfhfq")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(150, 64)
+texture = ExtResource("30_78xqx")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CursorAnimationPlayer" type="AnimationPlayer" parent="ResetMenu/Menu/Parent/Text/Cursor"]
+libraries = {
+&"": SubResource("AnimationLibrary_ykvc1")
+}
+
+[node name="Label" type="Label" parent="ResetMenu/Menu/Parent/Text"]
+layout_mode = 0
+offset_left = -480.0
+offset_top = -85.0
+offset_right = 488.0
+offset_bottom = -37.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("29_fgdsa")
+theme_override_font_sizes/font_size = 32
+text = "option_reset_settings_description"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ResetMenu"]
+libraries = {
+&"": SubResource("AnimationLibrary_8ayj6")
+}
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+callback_mode_process = 0
 libraries = {
-"": SubResource("AnimationLibrary_6r0td")
+&"": SubResource("AnimationLibrary_6r0td")
 }
 autoplay = "options"
 next/test_end = &"flip-right"
 
 [node name="BGM" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("18_fr2tm")
+stream = ExtResource("31_njtij")
 bus = &"BGM"
 script = ExtResource("19_agawd")
-loopStartPosition = 30.264
-loopEndPosition = 95.0
+loopStartPosition = 0.01
+loopEndPosition = 122.4
 
-[connection signal="JumpFinished" from="ControlBook/JumpStart/JumpStart" to="." method="EnableProcessing"]
-[connection signal="JumpFinished" from="ControlBook/JumpStart/JumpStart" to="." method="LockPlayer"]
+[connection signal="JumpFinished" from="World/JumpStart/JumpStart" to="." method="EnableProcessing"]
+[connection signal="JumpFinished" from="World/JumpStart/JumpStart" to="." method="LockPlayer"]
 
-[editable path="ControlBook/Collision"]
-[editable path="ControlBook/ControlBook"]
-[editable path="ControlBook/ControlBook/BookRoot/Page1"]
-[editable path="ControlBook/ControlBook/BookRoot/Page2"]
-[editable path="ControlBook/ControlBook/BookRoot/Page3"]
+[editable path="World/ControlBook/Collision"]
+[editable path="World/ControlBook/ControlBook"]
+[editable path="World/ControlBook/ControlBook/BookRoot/Page1"]
+[editable path="World/ControlBook/ControlBook/BookRoot/Page2"]
+[editable path="World/ControlBook/ControlBook/BookRoot/Page3"]

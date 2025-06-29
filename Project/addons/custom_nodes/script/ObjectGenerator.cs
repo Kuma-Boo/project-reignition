@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using Godot.Collections;
 using Project.Gameplay;
@@ -11,6 +12,9 @@ namespace Project.CustomNodes;
 /// </summary>
 public partial class ObjectGenerator : Node3D
 {
+	[ExportToolButton("Generate")]
+	private Callable Generate => Callable.From(GenerateChildren);
+
 	private PackedScene source;
 	private int currentChildCount;
 	private int amount;
@@ -48,15 +52,36 @@ public partial class ObjectGenerator : Node3D
 	public Curve hOffsetCurve;
 	public Curve vOffsetCurve;
 
+	/// <summary> Allows respawning ObjectGenerated nodes via signal/method call. </summary>
+	private readonly List<Node> respawnableNodes = [];
+
+	/// <summary> Called from a parent culling trigger that has "respawnOnActivation" enabled. </summary>
+	public void SetUpRespawning()
+	{
+		// Set up respawning
+		for (int i = 0; i < GetChildCount(); i++)
+		{
+			if (!GetChild(i).HasMethod(MethodName.Respawn))
+				continue;
+
+			respawnableNodes.Add(GetChild(i));
+		}
+	}
+
+	public void Respawn()
+	{
+		foreach (Node node in respawnableNodes)
+			node.CallDeferred(MethodName.Respawn);
+	}
+
 	public override Array<Dictionary> _GetPropertyList()
 	{
 		Array<Dictionary> properties =
 		[
-			ExtensionMethods.CreateProperty("Generate", Variant.Type.Bool),
-				ExtensionMethods.CreateProperty("Source", Variant.Type.Object, PropertyHint.ResourceType, "PackedScene"),
-				ExtensionMethods.CreateProperty("Amount", Variant.Type.Int, PropertyHint.Range, "0,64"),
-				ExtensionMethods.CreateProperty("Shape", Variant.Type.Int, PropertyHint.Enum, shape.EnumToString()),
-			];
+			ExtensionMethods.CreateProperty("Source", Variant.Type.Object, PropertyHint.ResourceType, "PackedScene"),
+			ExtensionMethods.CreateProperty("Amount", Variant.Type.Int, PropertyHint.Range, "0,64"),
+			ExtensionMethods.CreateProperty("Shape", Variant.Type.Int, PropertyHint.Enum, shape.EnumToString()),
+		];
 
 		if (shape == SpawnShape.Path)
 		{
@@ -85,7 +110,7 @@ public partial class ObjectGenerator : Node3D
 		}
 		else if (shape != SpawnShape.Launcher)
 		{
-			properties.Add(ExtensionMethods.CreateProperty("Spacing", Variant.Type.Float, PropertyHint.Range, "0,12,.1"));
+			properties.Add(ExtensionMethods.CreateProperty("Spacing", Variant.Type.Float, PropertyHint.Range, "0,30,.1"));
 			properties.Add(ExtensionMethods.CreateProperty("Horizontal Offset", Variant.Type.Object, PropertyHint.ResourceType, "Curve"));
 			properties.Add(ExtensionMethods.CreateProperty("Vertical Offset", Variant.Type.Object, PropertyHint.ResourceType, "Curve"));
 		}
@@ -97,9 +122,6 @@ public partial class ObjectGenerator : Node3D
 	{
 		switch ((string)property)
 		{
-			case "Generate":
-				GenerateChildren();
-				break;
 			case "Source":
 				source = (PackedScene)value;
 				break;
@@ -162,8 +184,6 @@ public partial class ObjectGenerator : Node3D
 	{
 		switch ((string)property)
 		{
-			case "Generate":
-				return false;
 			case "Source":
 				return source;
 			case "Amount":

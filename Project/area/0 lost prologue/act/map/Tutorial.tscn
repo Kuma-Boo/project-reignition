@@ -1,9 +1,10 @@
-[gd_scene load_steps=22 format=3 uid="uid://dk7gl1lklyav3"]
+[gd_scene load_steps=18 format=3 uid="uid://dk7gl1lklyav3"]
 
+[ext_resource type="Resource" uid="uid://brbt2g8nig68o" path="res://resource/level data/lost prologue/Act1Main.tres" id="2_43bdp"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="4_dbc02"]
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="4_ve30n"]
-[ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_opxss"]
+[ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_opxss"]
 [ext_resource type="PackedScene" uid="uid://bmgmok3n82tte" path="res://area/0 lost prologue/object/wonder/WonderBlock4.tscn" id="6_72i0e"]
 [ext_resource type="PackedScene" uid="uid://dpdmwi0k3jhd1" path="res://area/0 lost prologue/object/wonder/WonderBlock1.tscn" id="6_jeuvr"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_ri7um"]
@@ -12,45 +13,27 @@
 [ext_resource type="PackedScene" uid="uid://cyd7uu3t42s2r" path="res://area/0 lost prologue/object/wonder/WonderBar5.tscn" id="10_882bk"]
 [ext_resource type="PackedScene" uid="uid://dax0mun2bjm1v" path="res://area/0 lost prologue/act/Static.tscn" id="10_bbet4"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="11_br1wm"]
-[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="11_oypao"]
-[ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="12_uoyr1"]
-[ext_resource type="Script" path="res://resource/script/LockoutResource.cs" id="13_bghld"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_y6kil"]
 size = Vector3(10, 10, 1)
 
 [sub_resource type="Curve" id="Curve_u0dxx"]
-min_value = -1.5
-max_value = 1.5
+_limits = [-1.5, 1.5, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, -10.7567, 0, 0, Vector2(0.3, -1.5), 0.0, 0.0, 0, 0, Vector2(0.7, 1.5), 0.0, 0.0, 0, 0, Vector2(1, 5.96046e-08), -12.5721, 0.0, 0, 0]
 point_count = 4
 
 [sub_resource type="Curve" id="Curve_hnrs4"]
-max_value = 1.2
-_data = [Vector2(0, 0), 0.0, 3.75399, 0, 0, Vector2(0.5, 1.2), 0.0, 0.0, 0, 0, Vector2(1, 0.84), -2.49648, 0.0, 0, 0]
+_limits = [0.0, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 8.43778, 0, 0, Vector2(0.5, 2), 0.0, 0.0, 0, 0, Vector2(1, 1.2), -2.98086, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_h6sva"]
 size = Vector3(10, 15, 6)
 
-[sub_resource type="Resource" id="Resource_wcfhe"]
-script = ExtResource("13_bghld")
-"General/Lockout Length" = 0.0
-"General/Recenter Player" = false
-General/Invincible = false
-General/Priority = 0
-"Actions/Reset Actions" = null
-"Actions/Disable Actions" = false
-"Actions/Reset Flags" = 0
-"Controls/Override Speed" = false
-"Controls/Movement Type" = 0
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_8ktij"]
-size = Vector3(118, 34, 276)
-
 [node name="Stage" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("10_bbet4")]
+Data = ExtResource("2_43bdp")
 
 [node name="Tutorial" type="Node3D" parent="."]
 
@@ -69,9 +52,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("BoxShape3D_y6kil")
 
 [node name="Rings1L" type="Node3D" parent="Tutorial/BackSection"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.5, 1, 10)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.5, 0.6, 10)
 script = ExtResource("5_opxss")
-Generate = false
 Source = ExtResource("6_ri7um")
 Amount = 8
 Shape = 0
@@ -104,9 +86,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
 
 [node name="Rings1R" type="Node3D" parent="Tutorial/BackSection"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.5, 1, 10)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.5, 0.6, 10)
 script = ExtResource("5_opxss")
-Generate = false
 Source = ExtResource("6_ri7um")
 Amount = 8
 Shape = 0
@@ -139,9 +120,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
 
 [node name="Rings2" type="Node3D" parent="Tutorial/BackSection"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1, 24)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.6, 24)
 script = ExtResource("5_opxss")
-Generate = false
 Source = ExtResource("6_ri7um")
 Amount = 14
 Shape = 0
@@ -192,9 +172,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78001, 0, -18)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96046e-08, 0, -19.5)
 
 [node name="Rings3M" type="Node3D" parent="Tutorial/BackSection"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1, 52)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.6, 52)
 script = ExtResource("5_opxss")
-Generate = false
 Source = ExtResource("6_ri7um")
 Amount = 5
 Shape = 0
@@ -206,21 +185,20 @@ Spacing = 1.5
 [node name="Child01" parent="Tutorial/BackSection/Rings3M" instance=ExtResource("6_ri7um")]
 
 [node name="Child02" parent="Tutorial/BackSection/Rings3M" instance=ExtResource("6_ri7um")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.834624, -1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.52736, -1.5)
 
 [node name="Child03" parent="Tutorial/BackSection/Rings3M" instance=ExtResource("6_ri7um")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -3)
 
 [node name="Child04" parent="Tutorial/BackSection/Rings3M" instance=ExtResource("6_ri7um")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.17603, -4.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7863, -4.5)
 
 [node name="Child05" parent="Tutorial/BackSection/Rings3M" instance=ExtResource("6_ri7um")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.84, -6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -6)
 
 [node name="Rings3L" type="Node3D" parent="Tutorial/BackSection"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.5, 1, 72)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.5, 0.6, 72)
 script = ExtResource("5_opxss")
-Generate = false
 Source = ExtResource("6_ri7um")
 Amount = 5
 Shape = 0
@@ -232,21 +210,20 @@ Spacing = 1.5
 [node name="Child01" parent="Tutorial/BackSection/Rings3L" instance=ExtResource("6_ri7um")]
 
 [node name="Child02" parent="Tutorial/BackSection/Rings3L" instance=ExtResource("6_ri7um")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.23462, -1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.52736, -1.5)
 
 [node name="Child03" parent="Tutorial/BackSection/Rings3L" instance=ExtResource("6_ri7um")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -3)
 
 [node name="Child04" parent="Tutorial/BackSection/Rings3L" instance=ExtResource("6_ri7um")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.90213, -4.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7863, -4.5)
 
 [node name="Child05" parent="Tutorial/BackSection/Rings3L" instance=ExtResource("6_ri7um")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -6)
 
 [node name="Rings3R" type="Node3D" parent="Tutorial/BackSection"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.5, 1, 72)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.5, 0.6, 72)
 script = ExtResource("5_opxss")
-Generate = false
 Source = ExtResource("6_ri7um")
 Amount = 5
 Shape = 0
@@ -258,16 +235,16 @@ Spacing = 1.5
 [node name="Child01" parent="Tutorial/BackSection/Rings3R" instance=ExtResource("6_ri7um")]
 
 [node name="Child02" parent="Tutorial/BackSection/Rings3R" instance=ExtResource("6_ri7um")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.23462, -1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.52736, -1.5)
 
 [node name="Child03" parent="Tutorial/BackSection/Rings3R" instance=ExtResource("6_ri7um")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -3)
 
 [node name="Child04" parent="Tutorial/BackSection/Rings3R" instance=ExtResource("6_ri7um")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.90213, -4.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7863, -4.5)
 
 [node name="Child05" parent="Tutorial/BackSection/Rings3R" instance=ExtResource("6_ri7um")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -6)
 
 [node name="FireSoul1" parent="Tutorial/BackSection" instance=ExtResource("4_ve30n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 85)
@@ -290,9 +267,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -36)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -60)
 
 [node name="Rings1" type="Node3D" parent="Tutorial/StartSection"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -5)
 script = ExtResource("5_opxss")
-Generate = false
 Source = ExtResource("6_ri7um")
 Amount = 4
 Shape = 0
@@ -313,9 +289,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
 
 [node name="Rings2L" type="Node3D" parent="Tutorial/StartSection"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1, -25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.6, -25)
 script = ExtResource("5_opxss")
-Generate = false
 Source = ExtResource("6_ri7um")
 Amount = 3
 Shape = 0
@@ -333,9 +308,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
 
 [node name="Rings2R" type="Node3D" parent="Tutorial/StartSection"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, -25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.6, -25)
 script = ExtResource("5_opxss")
-Generate = false
 Source = ExtResource("6_ri7um")
 Amount = 3
 Shape = 0
@@ -360,27 +334,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 80, 0, -230)
 [node name="WonderBlock8A" parent="Tutorial/Node3D" instance=ExtResource("9_3tmbm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
 
-[node name="SpringM" parent="Tutorial/Node3D" node_paths=PackedStringArray("sfxPlayer") instance=ExtResource("11_br1wm")]
+[node name="SpringM" parent="Tutorial/Node3D" instance=ExtResource("11_br1wm")]
 transform = Transform3D(1, 0, 0, 0, 0.766044, -0.642788, 0, 0.642788, 0.766044, 0, 0.25, -26)
-middleHeight = 10.0
-finalHeight = 8.0
-distance = 20.0
-sfxPlayer = NodePath("../SpringL/SFX")
-voiceKey = &""
+MiddleHeight = 10.0
+FinalHeight = 8.0
+Distance = 20.0
+sfxPlayer = NodePath("")
 
 [node name="SpringL" parent="Tutorial/Node3D" instance=ExtResource("11_br1wm")]
 transform = Transform3D(1, 0, 0, 0, 0.766044, -0.642788, 0, 0.642788, 0.766044, -2, 0.25, -26)
-middleHeight = 10.0
-finalHeight = 8.0
-distance = 20.0
+MiddleHeight = 10.0
+FinalHeight = 8.0
+Distance = 20.0
 
-[node name="SpringR" parent="Tutorial/Node3D" node_paths=PackedStringArray("sfxPlayer") instance=ExtResource("11_br1wm")]
+[node name="SpringR" parent="Tutorial/Node3D" instance=ExtResource("11_br1wm")]
 transform = Transform3D(1, 0, 0, 0, 0.766044, -0.642788, 0, 0.642788, 0.766044, 2, 0.25, -26)
-middleHeight = 10.0
-finalHeight = 8.0
-distance = 20.0
-sfxPlayer = NodePath("../SpringL/SFX")
-voiceKey = &""
+MiddleHeight = 10.0
+FinalHeight = 8.0
+Distance = 20.0
+sfxPlayer = NodePath("")
 
 [node name="WonderBlock8B" parent="Tutorial/Node3D" instance=ExtResource("9_3tmbm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -29)
@@ -391,16 +363,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 110)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Tutorial/Goal"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 2)
 shape = SubResource("BoxShape3D_h6sva")
-
-[node name="TightropeLockout" parent="." instance=ExtResource("11_oypao")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.02, 0, -184.99)
-"Trigger Mode" = 2
-"Exit Mode" = 2
-
-[node name="TightropeLockout" type="Node3D" parent="TightropeLockout"]
-script = ExtResource("12_uoyr1")
-lockoutData = SubResource("Resource_wcfhe")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="TightropeLockout"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_8ktij")

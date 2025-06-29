@@ -1,10 +1,10 @@
 [gd_scene load_steps=12 format=3 uid="uid://c4ohuqlywe4f"]
 
-[ext_resource type="Script" path="res://interface/menu/Description.cs" id="1_d2ip1"]
-[ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="2_cdv3b"]
+[ext_resource type="Script" uid="uid://bbylksj5mchrs" path="res://interface/menu/Description.cs" id="1_d2ip1"]
 [ext_resource type="FontFile" uid="uid://bsoin3p4iygoo" path="res://interface/font/otf/Chiaro Std B.otf" id="3_mpnfa"]
-[ext_resource type="Shader" path="res://effect/shader/interface/InterfaceFlash.gdshader" id="4_mep1s"]
+[ext_resource type="Shader" uid="uid://bvyh6seeihpwy" path="res://effect/shader/interface/InterfaceFlash.gdshader" id="4_mep1s"]
 [ext_resource type="LabelSettings" uid="uid://dki35mj1oux2s" path="res://interface/font/DescriptionText.tres" id="4_rfhu0"]
+[ext_resource type="Texture2D" uid="uid://dx4vxnhtgd13t" path="res://interface/menu/common/common menu atlas.png" id="6_tv8qt"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ss5tr"]
 shader = ExtResource("4_mep1s")
@@ -269,10 +269,10 @@ tracks/8/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4yfpo"]
 _data = {
-"RESET": SubResource("Animation_e0sjp"),
-"hide": SubResource("Animation_qh8xd"),
-"init": SubResource("Animation_fr02q"),
-"show": SubResource("Animation_v8y77")
+&"RESET": SubResource("Animation_e0sjp"),
+&"hide": SubResource("Animation_qh8xd"),
+&"init": SubResource("Animation_fr02q"),
+&"show": SubResource("Animation_v8y77")
 }
 
 [node name="Description" type="Control" node_paths=PackedStringArray("descriptionLabel", "animator")]
@@ -309,8 +309,8 @@ offset_bottom = -32.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(568, 92)
-texture = ExtResource("2_cdv3b")
-region_rect = Rect2(64, 176, 48, 48)
+texture = ExtResource("6_tv8qt")
+region_rect = Rect2(128, 352, 96, 96)
 patch_margin_left = 32
 patch_margin_top = 32
 patch_margin_right = 32
@@ -325,9 +325,9 @@ offset_top = 8.0
 offset_right = 1064.0
 offset_bottom = 176.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 4
-theme_override_constants/line_spacing = 8
 theme_override_fonts/font = ExtResource("3_mpnfa")
 theme_override_font_sizes/font_size = 50
 text = "Description Text."
@@ -348,41 +348,41 @@ metadata/_edit_group_ = true
 [node name="Bottom" type="Sprite2D" parent="Border/Edges"]
 use_parent_material = true
 position = Vector2(80, 224)
-scale = Vector2(24.9, 2)
-texture = ExtResource("2_cdv3b")
+scale = Vector2(12.45, 1)
+texture = ExtResource("6_tv8qt")
 centered = false
-offset = Vector2(0, -10)
+offset = Vector2(0, -16)
 region_enabled = true
-region_rect = Rect2(75, 90, 40, 10)
+region_rect = Rect2(150, 180, 80, 20)
 
 [node name="Left" type="Sprite2D" parent="Border/Edges"]
 use_parent_material = true
-position = Vector2(16, 128)
-scale = Vector2(2, 4)
-texture = ExtResource("2_cdv3b")
-offset = Vector2(-1, 0)
+position = Vector2(16, 134)
+scale = Vector2(1, 2)
+texture = ExtResource("6_tv8qt")
+offset = Vector2(4, 0)
 region_enabled = true
-region_rect = Rect2(70, 50, 10, 10)
+region_rect = Rect2(140, 100, 20, 24)
 
 [node name="Right" type="Sprite2D" parent="Border/Edges"]
 use_parent_material = true
-position = Vector2(1136, 128)
-scale = Vector2(2, 4)
-texture = ExtResource("2_cdv3b")
-offset = Vector2(1, 0)
+position = Vector2(1136, 134)
+scale = Vector2(1, 2)
+texture = ExtResource("6_tv8qt")
+offset = Vector2(-4, 0)
 flip_h = true
 region_enabled = true
-region_rect = Rect2(70, 50, 10, 10)
+region_rect = Rect2(140, 100, 20, 24)
 
 [node name="Top" type="Sprite2D" parent="Border/Edges"]
 use_parent_material = true
 position = Vector2(80, 32)
-scale = Vector2(24.9, 2)
-texture = ExtResource("2_cdv3b")
+scale = Vector2(12.45, 1)
+texture = ExtResource("6_tv8qt")
 centered = false
-offset = Vector2(0, 2)
+offset = Vector2(0, 8)
 region_enabled = true
-region_rect = Rect2(75, 10, 40, 10)
+region_rect = Rect2(150, 20, 80, 20)
 
 [node name="Corners" type="Node2D" parent="Border"]
 use_parent_material = true
@@ -391,43 +391,39 @@ metadata/_edit_lock_ = true
 [node name="LeftTop" type="Sprite2D" parent="Border/Corners"]
 use_parent_material = true
 position = Vector2(96, 128)
-scale = Vector2(2, 2)
-texture = ExtResource("2_cdv3b")
-offset = Vector2(-28, -28)
+texture = ExtResource("6_tv8qt")
+offset = Vector2(-56, -56)
 region_enabled = true
-region_rect = Rect2(0, 0, 56, 56)
+region_rect = Rect2(0, 0, 112, 112)
 
 [node name="LeftBottom" type="Sprite2D" parent="Border/Corners"]
 use_parent_material = true
 position = Vector2(96, 136)
-scale = Vector2(2, 2)
-texture = ExtResource("2_cdv3b")
-offset = Vector2(-28, 28)
+texture = ExtResource("6_tv8qt")
+offset = Vector2(-56, 56)
 region_enabled = true
-region_rect = Rect2(0, 56, 56, 56)
+region_rect = Rect2(0, 112, 112, 112)
 
 [node name="RightTop" type="Sprite2D" parent="Border/Corners"]
 use_parent_material = true
 position = Vector2(1056, 128)
-scale = Vector2(2, 2)
-texture = ExtResource("2_cdv3b")
-offset = Vector2(28, -28)
+texture = ExtResource("6_tv8qt")
+offset = Vector2(56, -56)
 flip_h = true
 region_enabled = true
-region_rect = Rect2(0, 0, 56, 56)
+region_rect = Rect2(0, 0, 112, 112)
 
 [node name="RightBottom" type="Sprite2D" parent="Border/Corners"]
 use_parent_material = true
 position = Vector2(1056, 136)
-scale = Vector2(2, 2)
-texture = ExtResource("2_cdv3b")
-offset = Vector2(28, 28)
+texture = ExtResource("6_tv8qt")
+offset = Vector2(56, 56)
 flip_h = true
 region_enabled = true
-region_rect = Rect2(0, 56, 56, 56)
+region_rect = Rect2(0, 112, 112, 112)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_4yfpo")
+&"": SubResource("AnimationLibrary_4yfpo")
 }
 autoplay = "init"

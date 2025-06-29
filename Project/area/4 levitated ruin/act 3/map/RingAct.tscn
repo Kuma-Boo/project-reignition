@@ -1,0 +1,478 @@
+[gd_scene load_steps=16 format=3 uid="uid://do63gaf6kay0j"]
+
+[ext_resource type="PackedScene" uid="uid://pqaytcsp2twi" path="res://area/4 levitated ruin/act 3/Static.tscn" id="1_nhivd"]
+[ext_resource type="Resource" uid="uid://c8f2qr3dbrai0" path="res://resource/level data/levitated ruin/Act3Ring.tres" id="2_pn588"]
+[ext_resource type="PackedScene" uid="uid://bbgtmxw55soah" path="res://object/stage/destructable/Stone.tscn" id="4_es7sm"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="7_eq0v5"]
+[ext_resource type="Script" uid="uid://dpt5o0lh62p6t" path="res://object/stage/MovingObject.cs" id="8_y4kbr"]
+[ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="9_nrqwf"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="10_cagqa"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="11_1nt5s"]
+[ext_resource type="PackedScene" uid="uid://c1o8jxmiiryrj" path="res://object/stage/common/JumpCarpet.tscn" id="12_bbja8"]
+[ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="37_pntr2"]
+[ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="41_slvdi"]
+[ext_resource type="PackedScene" uid="uid://v2hbw6y70jr3" path="res://object/stage/pickups/RichPearl.tscn" id="48_ttwqm"]
+[ext_resource type="PackedScene" uid="uid://cggks1kly71mq" path="res://object/enemy/majin/data/levitated ruin/BlueMajin.tscn" id="56_wbd1p"]
+[ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="63_ommp0"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_isgee"]
+size = Vector3(10, 20, 2.5)
+
+[node name="World" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_nhivd")]
+Data = ExtResource("2_pn588")
+
+[node name="RingAct" type="Node3D" parent="."]
+
+[node name="SpawnPosition" type="Node3D" parent="RingAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -38.8, -1210)
+metadata/_edit_lock_ = true
+
+[node name="ReverseWall" type="StaticBody3D" parent="RingAct/SpawnPosition" groups=["wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RingAct/SpawnPosition/ReverseWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_isgee")
+
+[node name="EndWall" type="StaticBody3D" parent="RingAct/SpawnPosition" groups=["wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -145)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RingAct/SpawnPosition/EndWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_isgee")
+
+[node name="CharacterSpawn" parent="RingAct/SpawnPosition" instance=ExtResource("7_eq0v5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.115204, 0.0168877, 0.0136719)
+
+[node name="Objects" type="Node3D" parent="RingAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -40, -1150)
+
+[node name="StoneGroup1" type="Node3D" parent="RingAct/Objects"]
+transform = Transform3D(1, 0, 0, 0, 0.996195, -0.0871557, 0, 0.0871557, 0.996195, 0, 4.6, -80)
+
+[node name="StoneL" parent="RingAct/Objects/StoneGroup1" instance=ExtResource("4_es7sm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="StoneR" parent="RingAct/Objects/StoneGroup1" instance=ExtResource("4_es7sm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+
+[node name="MajinGroup1" type="Node3D" parent="RingAct/Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, -85)
+
+[node name="Rings1" type="Node3D" parent="RingAct/Objects/MajinGroup1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+script = ExtResource("9_nrqwf")
+Source = ExtResource("10_cagqa")
+Amount = 4
+Shape = 0
+Orientation = 1
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RingAct/Objects/MajinGroup1/Rings1" instance=ExtResource("10_cagqa")]
+
+[node name="Child02" parent="RingAct/Objects/MajinGroup1/Rings1" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+
+[node name="Child03" parent="RingAct/Objects/MajinGroup1/Rings1" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+
+[node name="Child04" parent="RingAct/Objects/MajinGroup1/Rings1" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.6, 0)
+
+[node name="RichRing" parent="RingAct/Objects/MajinGroup1" instance=ExtResource("63_ommp0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 0)
+
+[node name="MovingMajin" type="Node3D" parent="RingAct/Objects/MajinGroup1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+script = ExtResource("8_y4kbr")
+startPaused = true
+smoothPausing = true
+root = NodePath("BlueMajin")
+animator = NodePath("")
+Movement/Mode = 1
+"Movement/Cycle Length" = 5.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 6.0
+Movement/Angle = 0.0
+"Vertical Orientation" = true
+
+[node name="BlueMajin" parent="RingAct/Objects/MajinGroup1/MovingMajin" instance=ExtResource("56_wbd1p")]
+"Attack Settings/Attack Type" = 1
+rangeOverride = 20
+
+[node name="StoneGroup2" type="Node3D" parent="RingAct/Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -135)
+
+[node name="StoneL" parent="RingAct/Objects/StoneGroup2" instance=ExtResource("4_es7sm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="StoneM" parent="RingAct/Objects/StoneGroup2" instance=ExtResource("4_es7sm")]
+
+[node name="StoneR" parent="RingAct/Objects/StoneGroup2" instance=ExtResource("4_es7sm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+
+[node name="MajinGroup2" type="Node3D" parent="RingAct/Objects"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, -140)
+
+[node name="RingsR" type="Node3D" parent="RingAct/Objects/MajinGroup2"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 1, 2, 6, 0)
+script = ExtResource("9_nrqwf")
+Source = ExtResource("10_cagqa")
+Amount = 2
+Shape = 0
+Orientation = 1
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RingAct/Objects/MajinGroup2/RingsR" instance=ExtResource("10_cagqa")]
+
+[node name="Child02" parent="RingAct/Objects/MajinGroup2/RingsR" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+
+[node name="RingsM" type="Node3D" parent="RingAct/Objects/MajinGroup2"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+script = ExtResource("9_nrqwf")
+Source = ExtResource("10_cagqa")
+Amount = 2
+Shape = 0
+Orientation = 1
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RingAct/Objects/MajinGroup2/RingsM" instance=ExtResource("10_cagqa")]
+
+[node name="Child02" parent="RingAct/Objects/MajinGroup2/RingsM" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+
+[node name="RingsL" type="Node3D" parent="RingAct/Objects/MajinGroup2"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 1, -2, 6, 0)
+script = ExtResource("9_nrqwf")
+Source = ExtResource("10_cagqa")
+Amount = 2
+Shape = 0
+Orientation = 1
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RingAct/Objects/MajinGroup2/RingsL" instance=ExtResource("10_cagqa")]
+
+[node name="Child02" parent="RingAct/Objects/MajinGroup2/RingsL" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+
+[node name="RichPearlL" parent="RingAct/Objects/MajinGroup2" instance=ExtResource("48_ttwqm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.300003, 8.6, 0)
+
+[node name="RichPearlR" parent="RingAct/Objects/MajinGroup2" instance=ExtResource("48_ttwqm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.300003, 8.6, 0)
+
+[node name="RichRingL" parent="RingAct/Objects/MajinGroup2" instance=ExtResource("63_ommp0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 8.6, 0)
+
+[node name="RichRingR" parent="RingAct/Objects/MajinGroup2" instance=ExtResource("63_ommp0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 8.6, 0)
+
+[node name="MovingMajin" type="Node3D" parent="RingAct/Objects/MajinGroup2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 3, 0)
+script = ExtResource("8_y4kbr")
+startPaused = true
+smoothPausing = true
+root = NodePath("BlueMajin")
+animator = NodePath("")
+Movement/Mode = 1
+"Movement/Cycle Length" = 5.0
+"Movement/Starting Offset" = 0.25
+Movement/Distance = 8.0
+Movement/Angle = 90.0
+"Vertical Orientation" = false
+
+[node name="BlueMajin" parent="RingAct/Objects/MajinGroup2/MovingMajin" instance=ExtResource("56_wbd1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 0)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Attack Settings/Attack Type" = 1
+rangeOverride = 20
+
+[node name="StoneGroup3" type="Node3D" parent="RingAct/Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.9, -155)
+
+[node name="StoneL" parent="RingAct/Objects/StoneGroup3" instance=ExtResource("4_es7sm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="StoneM" parent="RingAct/Objects/StoneGroup3" instance=ExtResource("4_es7sm")]
+
+[node name="StoneR" parent="RingAct/Objects/StoneGroup3" instance=ExtResource("4_es7sm")]
+transform = Transform3D(0.999989, 0, 0.00464256, 0, 1, 0, -0.00464256, 0, 0.999989, 2, 0, 0)
+
+[node name="MajinGroup3" type="Node3D" parent="RingAct/Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -160)
+
+[node name="RingsL" type="Node3D" parent="RingAct/Objects/MajinGroup3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 6, 0)
+script = ExtResource("9_nrqwf")
+Source = ExtResource("10_cagqa")
+Amount = 3
+Shape = 0
+Orientation = 1
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RingAct/Objects/MajinGroup3/RingsL" instance=ExtResource("10_cagqa")]
+
+[node name="Child02" parent="RingAct/Objects/MajinGroup3/RingsL" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+
+[node name="Child03" parent="RingAct/Objects/MajinGroup3/RingsL" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+
+[node name="RichRing" parent="RingAct/Objects/MajinGroup3" instance=ExtResource("63_ommp0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.5, 0)
+
+[node name="RingsR" type="Node3D" parent="RingAct/Objects/MajinGroup3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 6, 0)
+script = ExtResource("9_nrqwf")
+Source = ExtResource("10_cagqa")
+Amount = 3
+Shape = 0
+Orientation = 1
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RingAct/Objects/MajinGroup3/RingsR" instance=ExtResource("10_cagqa")]
+
+[node name="Child02" parent="RingAct/Objects/MajinGroup3/RingsR" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+
+[node name="Child03" parent="RingAct/Objects/MajinGroup3/RingsR" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+
+[node name="MovingMajin" type="Node3D" parent="RingAct/Objects/MajinGroup3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 3, 0)
+script = ExtResource("8_y4kbr")
+startPaused = true
+smoothPausing = true
+root = NodePath("BlueMajin")
+animator = NodePath("")
+Movement/Mode = 1
+"Movement/Cycle Length" = 3.5
+"Movement/Starting Offset" = 0.25
+Movement/Distance = 8.0
+Movement/Angle = 90.0
+"Vertical Orientation" = false
+
+[node name="BlueMajin" parent="RingAct/Objects/MajinGroup3/MovingMajin" instance=ExtResource("56_wbd1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 0)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Attack Settings/Attack Type" = 1
+rangeOverride = 20
+
+[node name="Switch" parent="RingAct/Objects" instance=ExtResource("41_slvdi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.299, -165)
+
+[node name="Spring" parent="RingAct/Objects/Switch" instance=ExtResource("37_pntr2")]
+transform = Transform3D(-1, -2.26267e-08, -8.44439e-08, 0, 0.965926, -0.258819, 8.74228e-08, -0.258819, -0.965926, 0, 0.2, 0)
+startHidden = true
+FinalHeight = 6.5
+Distance = 3.0
+
+[node name="StoneGroup4" type="Node3D" parent="RingAct/Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.3, -168)
+
+[node name="StoneL" parent="RingAct/Objects/StoneGroup4" instance=ExtResource("4_es7sm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="StoneM" parent="RingAct/Objects/StoneGroup4" instance=ExtResource("4_es7sm")]
+
+[node name="StoneR" parent="RingAct/Objects/StoneGroup4" instance=ExtResource("4_es7sm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+
+[node name="JumpCarpet" parent="RingAct/Objects" instance=ExtResource("12_bbja8")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 14, -170)
+"Secondary Settings/Final Height" = 6.0
+FinalHeight = 3.0
+LauncherDirection = 2
+
+[node name="MajinGroup4" type="Node3D" parent="RingAct/Objects"]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 0, 9, -180)
+
+[node name="RichRingL" parent="RingAct/Objects/MajinGroup4" instance=ExtResource("63_ommp0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8, 8, 0)
+
+[node name="RingsLL" type="Node3D" parent="RingAct/Objects/MajinGroup4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8, 5, 0)
+script = ExtResource("9_nrqwf")
+Source = ExtResource("10_cagqa")
+Amount = 2
+Shape = 0
+Orientation = 1
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RingAct/Objects/MajinGroup4/RingsLL" instance=ExtResource("10_cagqa")]
+
+[node name="Child02" parent="RingAct/Objects/MajinGroup4/RingsLL" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+
+[node name="RingsL" type="Node3D" parent="RingAct/Objects/MajinGroup4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 5, 0)
+script = ExtResource("9_nrqwf")
+Source = ExtResource("10_cagqa")
+Amount = 2
+Shape = 0
+Orientation = 1
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RingAct/Objects/MajinGroup4/RingsL" instance=ExtResource("10_cagqa")]
+
+[node name="Child02" parent="RingAct/Objects/MajinGroup4/RingsL" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+
+[node name="RichRings" type="Node3D" parent="RingAct/Objects/MajinGroup4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+script = ExtResource("9_nrqwf")
+Source = ExtResource("63_ommp0")
+Amount = 3
+Shape = 0
+Orientation = 1
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RingAct/Objects/MajinGroup4/RichRings" instance=ExtResource("63_ommp0")]
+
+[node name="Child02" parent="RingAct/Objects/MajinGroup4/RichRings" instance=ExtResource("63_ommp0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="Child03" parent="RingAct/Objects/MajinGroup4/RichRings" instance=ExtResource("63_ommp0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="RingsR" type="Node3D" parent="RingAct/Objects/MajinGroup4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 5, 0)
+script = ExtResource("9_nrqwf")
+Source = ExtResource("10_cagqa")
+Amount = 2
+Shape = 0
+Orientation = 1
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RingAct/Objects/MajinGroup4/RingsR" instance=ExtResource("10_cagqa")]
+
+[node name="Child02" parent="RingAct/Objects/MajinGroup4/RingsR" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+
+[node name="RingsRR" type="Node3D" parent="RingAct/Objects/MajinGroup4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8, 5, 0)
+script = ExtResource("9_nrqwf")
+Source = ExtResource("10_cagqa")
+Amount = 2
+Shape = 0
+Orientation = 1
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RingAct/Objects/MajinGroup4/RingsRR" instance=ExtResource("10_cagqa")]
+
+[node name="Child02" parent="RingAct/Objects/MajinGroup4/RingsRR" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+
+[node name="RichRingR" parent="RingAct/Objects/MajinGroup4" instance=ExtResource("63_ommp0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8, 8, 0)
+
+[node name="MovingMajin" type="Node3D" parent="RingAct/Objects/MajinGroup4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2, 0)
+script = ExtResource("8_y4kbr")
+startPaused = true
+smoothPausing = true
+root = NodePath("BlueMajin")
+animator = NodePath("")
+Movement/Mode = 1
+"Movement/Cycle Length" = 5.0
+"Movement/Starting Offset" = 0.25
+Movement/Distance = 10.0
+Movement/Angle = 90.0
+"Vertical Orientation" = false
+
+[node name="BlueMajin" parent="RingAct/Objects/MajinGroup4/MovingMajin" instance=ExtResource("56_wbd1p")]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -5, 0, -0.00012207)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Attack Settings/Attack Type" = 1
+rangeOverride = 20
+
+[node name="StoneGroup5" type="Node3D" parent="RingAct/Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.7, -188)
+
+[node name="StoneL" parent="RingAct/Objects/StoneGroup5" instance=ExtResource("4_es7sm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="StoneM" parent="RingAct/Objects/StoneGroup5" instance=ExtResource("4_es7sm")]
+
+[node name="StoneR" parent="RingAct/Objects/StoneGroup5" instance=ExtResource("4_es7sm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+
+[node name="MajinGroup5" type="Node3D" parent="RingAct/Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, -190)
+
+[node name="RichRing" parent="RingAct/Objects/MajinGroup5" instance=ExtResource("63_ommp0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+
+[node name="BlueMajin5" parent="RingAct/Objects/MajinGroup5" instance=ExtResource("56_wbd1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+"Spawn Settings/Spawn Travel Time" = 0.8
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 20
+
+[node name="Goal" parent="RingAct/Objects" instance=ExtResource("11_1nt5s")]
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 18.366, -199.777)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RingAct/Objects/Goal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 3)
+shape = SubResource("BoxShape3D_isgee")
+
+[connection signal="Respawned" from="RingAct/Objects/MajinGroup1/MovingMajin/BlueMajin" to="RingAct/Objects/MajinGroup1/MovingMajin" method="Respawn"]
+[connection signal="SpinStarted" from="RingAct/Objects/MajinGroup1/MovingMajin/BlueMajin" to="RingAct/Objects/MajinGroup1/MovingMajin" method="Unpause"]
+[connection signal="Respawned" from="RingAct/Objects/MajinGroup2/MovingMajin/BlueMajin" to="RingAct/Objects/MajinGroup2/MovingMajin" method="Respawn"]
+[connection signal="SpinStarted" from="RingAct/Objects/MajinGroup2/MovingMajin/BlueMajin" to="RingAct/Objects/MajinGroup2/MovingMajin" method="Unpause"]
+[connection signal="Respawned" from="RingAct/Objects/MajinGroup3/MovingMajin/BlueMajin" to="RingAct/Objects/MajinGroup3/MovingMajin" method="Respawn"]
+[connection signal="SpinStarted" from="RingAct/Objects/MajinGroup3/MovingMajin/BlueMajin" to="RingAct/Objects/MajinGroup3/MovingMajin" method="Unpause"]
+[connection signal="Activated" from="RingAct/Objects/Switch" to="RingAct/Objects/Switch/Spring" method="ShowLauncher"]
+[connection signal="Respawned" from="RingAct/Objects/MajinGroup4/MovingMajin/BlueMajin" to="RingAct/Objects/MajinGroup4/MovingMajin" method="Respawn"]
+[connection signal="SpinStarted" from="RingAct/Objects/MajinGroup4/MovingMajin/BlueMajin" to="RingAct/Objects/MajinGroup4/MovingMajin" method="Unpause"]

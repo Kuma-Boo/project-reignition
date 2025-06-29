@@ -1,0 +1,234 @@
+[gd_scene load_steps=13 format=3 uid="uid://dopa8mdu5d47j"]
+
+[ext_resource type="Script" uid="uid://d4kukq76r26tq" path="res://area/4 levitated ruin/data/script/FlyingDestructableObject.cs" id="1_pi27e"]
+[ext_resource type="PackedScene" uid="uid://chnb73uwcyvur" path="res://area/4 levitated ruin/object/model/platform/RoundPillarFly.gltf" id="2_nxcas"]
+[ext_resource type="PackedScene" uid="uid://bucgr7e87smyl" path="res://area/4 levitated ruin/object/model/platform/RoundPillarPieces.gltf" id="3_56y5h"]
+[ext_resource type="AudioStream" uid="uid://t1glwhq3yrjl" path="res://sound/sfx/stage/levitated ruin/pillar launch.wav" id="4_ygarv"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="5_d4y0l"]
+[ext_resource type="AudioStream" uid="uid://bcu4rhb5h3j68" path="res://sound/sfx/stage/levitated ruin/pillar shatter.wav" id="6_l50lk"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_lmpj0"]
+height = 6.0
+radius = 0.6
+
+[sub_resource type="Animation" id="Animation_3al21"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/RoundPillarFly/RoundPillarFlyMesh/Trigger:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/RoundPillarFly/RoundPillarFlyMesh:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Root/RoundPillarFly/RoundPillarFlyMesh:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Root/RoundPillarFly/RoundPillarFlyMesh/StaticBody3D/CollisionShape3D:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Root/RoundPillarFly/RoundPillarFlyMesh/Trigger/CollisionShape3D:disabled")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_qc8vb"]
+resource_name = "deactivate"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/RoundPillarFly/RoundPillarFlyMesh:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/RoundPillarFly/RoundPillarFlyMesh/StaticBody3D/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Root/RoundPillarFly/RoundPillarFlyMesh/Trigger/CollisionShape3D:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_fgo1a"]
+resource_name = "fly"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/RoundPillarFly/RoundPillarFlyMesh:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(3.14159, 0, 0), Vector3(6.28319, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_yrfwa"]
+resource_name = "shatter"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/RoundPillarFly/RoundPillarFlyMesh/Trigger:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/RoundPillarFly/RoundPillarFlyMesh:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pmcqp"]
+_data = {
+&"RESET": SubResource("Animation_3al21"),
+&"deactivate": SubResource("Animation_qc8vb"),
+&"fly": SubResource("Animation_fgo1a"),
+&"shatter": SubResource("Animation_yrfwa")
+}
+
+[node name="GrindPillarFly" type="Node3D" node_paths=PackedStringArray("rotationRoot", "root", "pieceRoot", "animator")]
+script = ExtResource("1_pi27e")
+rotationRoot = NodePath("Root/RoundPillarFly/RoundPillarFlyMesh")
+pieceMass = 0.5
+damagePlayer = true
+shatterFlags = 16
+root = NodePath("Root")
+pieceRoot = NodePath("RoundPillarPieces")
+animator = NodePath("AnimationPlayer")
+
+[node name="Root" type="Node3D" parent="."]
+
+[node name="RoundPillarFly" parent="Root" instance=ExtResource("2_nxcas")]
+
+[node name="Trigger" type="Area3D" parent="Root/RoundPillarFly/RoundPillarFlyMesh" index="0"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/RoundPillarFly/RoundPillarFlyMesh/Trigger"]
+shape = SubResource("CylinderShape3D_lmpj0")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Root/RoundPillarFly/RoundPillarFlyMesh" index="1" groups=["wall"]]
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/RoundPillarFly/RoundPillarFlyMesh/StaticBody3D"]
+shape = SubResource("CylinderShape3D_lmpj0")
+
+[node name="RoundPillarWallCollisionMesh" parent="Root/RoundPillarFly" index="2"]
+visible = false
+
+[node name="StaticBody3D" parent="Root/RoundPillarFly/RoundPillarWallCollisionMesh" index="0" groups=["splash jump", "wall"]]
+
+[node name="RoundPillarPieces" parent="." instance=ExtResource("3_56y5h")]
+visible = false
+
+[node name="LaunchSFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_ygarv")
+max_db = 0.0
+max_distance = 200.0
+bus = &"GAME SFX"
+script = ExtResource("5_d4y0l")
+groupKey = &"pillar launch"
+
+[node name="ShatterSFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("6_l50lk")
+max_db = 0.0
+max_distance = 200.0
+bus = &"GAME SFX"
+script = ExtResource("5_d4y0l")
+groupKey = &"pillar shatter"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_pmcqp")
+}
+
+[connection signal="Shattered" from="." to="ShatterSFX" method="PlayInGroup"]
+[connection signal="StartedFlying" from="." to="LaunchSFX" method="PlayInGroup"]
+[connection signal="area_entered" from="Root/RoundPillarFly/RoundPillarFlyMesh/Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="Root/RoundPillarFly/RoundPillarFlyMesh/Trigger" to="." method="OnExited"]
+
+[editable path="Root/RoundPillarFly"]

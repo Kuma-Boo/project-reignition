@@ -20,11 +20,10 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	{
 		Array<Dictionary> properties =
 			[
-				ExtensionMethods.CreateCategory("Secondary Settings"),
 				ExtensionMethods.CreateProperty(SecondarySettingsEnabled, Variant.Type.Bool)
 			];
 
-		if (!enableSecondarySettings)
+		if (!EnableSecondarySettings)
 			return properties;
 
 		properties.Add(ExtensionMethods.CreateProperty(SecondarySettingsMiddleHeight, Variant.Type.Float));
@@ -40,15 +39,15 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		switch ((string)property)
 		{
 			case SecondarySettingsEnabled:
-				return enableSecondarySettings;
+				return EnableSecondarySettings;
 			case SecondarySettingsMiddleHeight:
-				return secondaryMiddleHeight;
+				return SecondaryMiddleHeight;
 			case SecondarySettingsFinalHeight:
-				return secondaryFinalHeight;
+				return SecondaryFinalHeight;
 			case SecondarySettingsDistance:
-				return secondaryDistance;
+				return SecondaryDistance;
 			case SecondarySettingsBlend:
-				return launchRatio;
+				return LaunchRatio;
 		}
 
 		return base._Get(property);
@@ -59,20 +58,20 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		switch ((string)property)
 		{
 			case SecondarySettingsEnabled:
-				enableSecondarySettings = (bool)value;
+				EnableSecondarySettings = (bool)value;
 				NotifyPropertyListChanged();
 				break;
 			case SecondarySettingsMiddleHeight:
-				secondaryMiddleHeight = (float)value;
+				SecondaryMiddleHeight = (float)value;
 				break;
 			case SecondarySettingsFinalHeight:
-				secondaryFinalHeight = (float)value;
+				SecondaryFinalHeight = (float)value;
 				break;
 			case SecondarySettingsDistance:
-				secondaryDistance = (float)value;
+				SecondaryDistance = (float)value;
 				break;
 			case SecondarySettingsBlend:
-				launchRatio = (float)value;
+				LaunchRatio = (float)value;
 				break;
 			default:
 				return false;
@@ -88,25 +87,31 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	public delegate void DeactivatedEventHandler(); // Called after character finishes processing this launcher.
 
 	/// <summary> Height at the beginning of the arc. </summary>
-	[ExportCategory("Launch Settings")]
-	[Export]
-	private float startingHeight;
+	[ExportSubgroup("Launch Settings")]
+	[Export] private float StartingHeight { get; set; }
 	/// <summary> Height at the highest point of the arc. </summary>
-	[Export]
-	private float middleHeight;
+	[Export] private float MiddleHeight { get; set; }
 	/// <summary> Height at the end of the arc. </summary>
-	[Export]
-	private float finalHeight;
+	[Export] private float FinalHeight { get; set; }
 	/// <summary> How far to travel. </summary>
-	[Export]
-	private float distance;
+	[Export] private float Distance { get; set; }
+
+	[Export] public bool oneshotEnemies = true;
 
 	/// <summary> Should the player be allowed to perform a Jump Dash after the launch is completed? </summary>
-	[Export]
-	public bool allowJumpDashing;
+	[Export] public bool AllowJumpDashing { get; set; }
 
 	[Export]
-	public LaunchDirection launchDirection;
+	public LauncherAnimations LaunchAnimationType { get; private set; }
+	public enum LauncherAnimations
+	{
+		Auto,
+		Jump,
+		Launch,
+	}
+
+	[Export]
+	public LaunchDirection LauncherDirection { get; private set; }
 	public enum LaunchDirection
 	{
 		Forward,
@@ -115,52 +120,79 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	}
 
 	/// <summary> Allows the launcher to blend between secondary launch settings. </summary>
-	protected bool enableSecondarySettings;
+	protected bool EnableSecondarySettings { get; private set; }
 	/// <summary> Controls the blend between launch settings. Mostly used for editor previewing. </summary>
-	protected float launchRatio;
-	protected float secondaryMiddleHeight;
-	protected float secondaryFinalHeight;
-	protected float secondaryDistance;
+	protected float LaunchRatio { get; set; }
+	protected float SecondaryMiddleHeight { get; private set; }
+	protected float SecondaryFinalHeight { get; private set; }
+	protected float SecondaryDistance { get; private set; }
 
 	/// <summary> Returns the blend value between the launch settings. Can be overridden by scripts that inherit Launcher.cs. </summary>
 	public virtual float GetLaunchRatio()
 	{
-		if (enableSecondarySettings)
-			return launchRatio;
+		if (EnableSecondarySettings)
+			return LaunchRatio;
 
 		return 0; // Use the primary launch settings
 	}
 
 	public virtual Vector3 GetLaunchDirection()
 	{
-		if (launchDirection == LaunchDirection.Forward)
-			return LaunchPoint.Forward();
-		else if (launchDirection == LaunchDirection.Flatten)
-			return LaunchPoint.Up().RemoveVertical().Normalized();
+		Vector3 forward = ignoreLaunchPointRotation ? this.Forward() : LaunchPoint.Forward();
+		Vector3 up = ignoreLaunchPointRotation ? this.Up() : LaunchPoint.Up();
 
-		return LaunchPoint.Up();
+		if (LauncherDirection == LaunchDirection.Forward)
+			return forward;
+
+		if (LauncherDirection == LaunchDirection.Flatten)
+		{
+			if (Mathf.Abs(forward.Dot(Vector3.Up)) > .9f)
+			{
+				int sign = forward.Y > -0.01f ? 1 : -1;
+				sign *= up.Y > -0.01f ? 1 : -1;
+				return -(up * sign).RemoveVertical().Normalized();
+			}
+
+			return forward.RemoveVertical().Normalized();
+		}
+
+		return up;
 	}
 
-	public Vector3 StartingPoint => LaunchPoint.GlobalPosition + (Vector3.Up * startingHeight);
+	/// <summary> Overload method so launch rings can recenter the player visually. </summary>
+	protected virtual Vector3 CalculateStartingPoint() => StartingPoint;
+	public Vector3 StartingPoint => LaunchPoint.GlobalPosition + (Vector3.Up * StartingHeight);
 
-	public LaunchSettings GetLaunchSettings()
+	public virtual LaunchSettings GetLaunchSettings()
 	{
-		float blendedDistance = Mathf.Lerp(distance, secondaryDistance, GetLaunchRatio());
-		float blendedMiddleHeight = Mathf.Lerp(middleHeight, secondaryMiddleHeight, GetLaunchRatio());
-		float blendedFinalHeight = Mathf.Lerp(finalHeight, secondaryFinalHeight, GetLaunchRatio());
+		float blendedDistance = Mathf.Lerp(Distance, SecondaryDistance, GetLaunchRatio());
+		float blendedMiddleHeight = Mathf.Lerp(MiddleHeight, SecondaryMiddleHeight, GetLaunchRatio());
+		float blendedFinalHeight = Mathf.Lerp(FinalHeight, SecondaryFinalHeight, GetLaunchRatio());
 
-		Vector3 startPosition = StartingPoint;
-		Vector3 endPosition = startPosition + (GetLaunchDirection() * blendedDistance) + (Vector3.Up * blendedFinalHeight);
+		Vector3 startPosition = CalculateStartingPoint();
+		Vector3 endPosition = StartingPoint + (GetLaunchDirection() * blendedDistance) + (Vector3.Up * blendedFinalHeight);
 
 		LaunchSettings settings = LaunchSettings.Create(startPosition, endPosition, blendedMiddleHeight);
+		settings.AllowJumpDash = AllowJumpDashing;
 		settings.UseAutoAlign = true;
+		settings.Launcher = this;
+		settings.OneshotEnemies = oneshotEnemies;
 
 		return settings;
 	}
 
+	public override void _Ready() => SetUp();
+	protected virtual void SetUp() => _sfxPlayer = GetNodeOrNull<AudioStreamPlayer3D>(sfxPlayer);
+
 	public virtual void Activate(Area3D a)
 	{
-		if (!a.IsInGroup("player detection")) return;
+		if (!a.IsInGroup("player detection"))
+			return;
+
+		if (Player.IsDefeated)
+			return;
+
+		IsPlayerCentered = false;
 		Activate();
 	}
 	public virtual void Activate()
@@ -169,10 +201,10 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		PlayLaunchSfx();
 
 		if (voiceKey?.IsEmpty == false)
-			Character.Effect.PlayVoice(voiceKey);
+			Player.Effect.PlayVoice(voiceKey);
 
-		IsCharacterCentered = recenterSpeed == 0;
-		Character.StartLauncher(GetLaunchSettings(), this);
+		IsPlayerCentered = recenterSpeed == 0;
+		Player.StartLauncher(GetLaunchSettings());
 
 		LaunchAnimation();
 	}
@@ -180,22 +212,38 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	/// <summary> Sets the player's launch animation based on launchsettings. Override as needed. </summary>
 	protected virtual void LaunchAnimation()
 	{
-		if (GetLaunchSettings().InitialVelocity.AngleTo(Vector3.Up) < Mathf.Pi * .1f)
-			Character.Animator.JumpAnimation();
+		Player.Effect.StopSpinFX();
+		Player.Effect.StopTrailFX();
+		Player.Animator.ResetState(.1f);
+
+		if (LaunchAnimationType == LauncherAnimations.Auto)
+		{
+			if (GetLaunchSettings().InitialVelocity.AngleTo(Vector3.Up) < Mathf.Pi * .1f)
+				Player.Animator.JumpAnimation();
+			else
+				Player.Animator.LaunchAnimation();
+		}
+		else if (LaunchAnimationType == LauncherAnimations.Jump)
+		{
+			Player.Animator.JumpAnimation();
+		}
 		else
-			Character.Animator.LaunchAnimation();
+		{
+			Player.Animator.LaunchAnimation();
+		}
 	}
 
 	[Export]
-	private int recenterSpeed; // How fast to recenter the character
+	private int recenterSpeed = 32; // How fast to recenter the character
 
-	public virtual bool IsCharacterCentered { get; private set; }
-	protected CharacterController Character => CharacterController.instance;
+	public virtual bool IsPlayerCentered { get; protected set; }
+	protected PlayerController Player => StageSettings.Player;
 
-	public Vector3 RecenterCharacter()
+	public Vector3 RecenterPlayer()
 	{
-		Vector3 pos = Character.GlobalPosition.MoveToward(StartingPoint, recenterSpeed * PhysicsManager.physicsDelta);
-		IsCharacterCentered = pos.IsEqualApprox(StartingPoint);
+		Vector3 targetPosition = CalculateStartingPoint();
+		Vector3 pos = Player.GlobalPosition.MoveToward(targetPosition, recenterSpeed * PhysicsManager.physicsDelta);
+		IsPlayerCentered = pos.IsEqualApprox(targetPosition);
 		return pos;
 	}
 
@@ -203,14 +251,17 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 
 	[Export]
 	/// <summary> Optional SFX player. </summary>
-	private AudioStreamPlayer3D sfxPlayer;
-	protected bool IsSfxActive => sfxPlayer.Playing;
-	protected virtual void PlayLaunchSfx() => sfxPlayer?.Play();
+	private NodePath sfxPlayer;
+	private AudioStreamPlayer3D _sfxPlayer;
+	protected bool IsSfxActive => _sfxPlayer.Playing;
+	protected virtual void PlayLaunchSfx() => _sfxPlayer?.Play();
 	[Export]
 	/// <summary> Option voice to play. </summary>
 	private StringName voiceKey;
 	/// <summary> Optional launch point override node. </summary>
 	[Export]
-	public Node3D launchPoint;
-	private Node3D LaunchPoint => launchPoint ?? this;
+	protected Node3D launchPoint;
+	public Node3D LaunchPoint => launchPoint ?? this;
+	[Export]
+	protected bool ignoreLaunchPointRotation;
 }

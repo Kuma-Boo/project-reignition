@@ -1,13 +1,13 @@
 [gd_scene load_steps=20 format=3 uid="uid://dnfwvf2akhf1v"]
 
-[ext_resource type="Script" path="res://object/stage/common/resource/script/TimedHazard.cs" id="1_srdx0"]
+[ext_resource type="Script" uid="uid://dbxkhv8cvi8sq" path="res://object/stage/common/resource/script/TimedHazard.cs" id="1_srdx0"]
 [ext_resource type="PackedScene" uid="uid://b1tirama0dt1b" path="res://area/1 sand oasis/object/model/FlameShooter.gltf" id="1_wwv3q"]
 [ext_resource type="Material" uid="uid://bbinn23j8d0we" path="res://area/1 sand oasis/data/material/Flame Shooter Base Process Material.tres" id="3_4n1tk"]
 [ext_resource type="Material" uid="uid://ckje67air1flv" path="res://area/1 sand oasis/data/particle/material/Flame Shooter Base Flame.tres" id="4_yfx5b"]
 [ext_resource type="Material" uid="uid://c640g0eqwoeu3" path="res://area/1 sand oasis/data/material/Flame Shooter Explosion Process Material.tres" id="5_el5o5"]
 [ext_resource type="AudioStream" uid="uid://bs3ovsaon27bd" path="res://sound/sfx/objects/flame shooter.wav" id="5_kt73t"]
-[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="6_76o3t"]
-[ext_resource type="Shader" path="res://effect/shader/particle/ParticleLocalBillboard.gdshader" id="6_lx0m3"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="6_76o3t"]
+[ext_resource type="Shader" uid="uid://c46nemvf0f8uh" path="res://effect/shader/particle/ParticleLocalBillboard.gdshader" id="6_lx0m3"]
 [ext_resource type="Texture2D" uid="uid://dvioww06e1hj3" path="res://effect/particle/texture/flame/flame explosion.png" id="7_csnr6"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_hqwbi"]
@@ -30,10 +30,10 @@ center_offset = Vector3(0, 2, 0)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gx563"]
 render_priority = 0
 shader = ExtResource("6_lx0m3")
+shader_parameter/albedo = ExtResource("7_csnr6")
 shader_parameter/particles_anim_loop = false
 shader_parameter/particles_anim_h_frames = 4
 shader_parameter/particles_anim_v_frames = 4
-shader_parameter/albedo = ExtResource("7_csnr6")
 
 [sub_resource type="QuadMesh" id="QuadMesh_gcb82"]
 material = SubResource("ShaderMaterial_gx563")
@@ -176,22 +176,22 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_i4sv0"]
 _data = {
-"RESET": SubResource("Animation_2aw77"),
-"active": SubResource("Animation_q4mhx"),
-"inactive": SubResource("Animation_1683u")
+&"RESET": SubResource("Animation_2aw77"),
+&"active": SubResource("Animation_q4mhx"),
+&"inactive": SubResource("Animation_1683u")
 }
 
 [node name="FlameShooter" type="Node3D"]
 script = ExtResource("1_srdx0")
+stateNames = Array[StringName]([&"inactive", &"active"])
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("AnimationPlayer")
+timer = NodePath("Timer")
 "Current State" = 0
 "Auto Advance" = true
 "Start Time" = 0.0
 "State Lengths/inactive" = 0.5
 "State Lengths/active" = 1.0
-stateNames = [&"inactive", &"active"]
-stateLengths = PackedFloat32Array(0.5, 1)
-animator = NodePath("AnimationPlayer")
-timer = NodePath("Timer")
 
 [node name="FlameShooter" parent="." instance=ExtResource("1_wwv3q")]
 
@@ -217,7 +217,6 @@ layers = 32
 cast_shadow = 0
 gi_mode = 0
 amount = 4
-preprocess = 2.0
 fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(-0.4, -0.5, -0.4, 0.8, 1.5, 0.8)
@@ -258,6 +257,7 @@ process_material = ExtResource("5_el5o5")
 draw_pass_1 = SubResource("QuadMesh_gcb82")
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="."]
+process_mode = 1
 stream = ExtResource("5_kt73t")
 max_db = 0.0
 max_distance = 50.0
@@ -267,7 +267,7 @@ groupKey = &"flame_shooter"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_i4sv0")
+&"": SubResource("AnimationLibrary_i4sv0")
 }
 
 [node name="Timer" type="Timer" parent="."]

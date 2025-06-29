@@ -1,11 +1,12 @@
 [gd_scene load_steps=19 format=3 uid="uid://dhb5ti1oiktuk"]
 
 [ext_resource type="PackedScene" uid="uid://c0lo56q5efgix" path="res://area/2 dino jungle/object/model/Cactus.gltf" id="1_ak5kj"]
-[ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_jgpvl"]
+[ext_resource type="Script" uid="uid://bj7jhdknn12cl" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_jgpvl"]
 [ext_resource type="AudioStream" uid="uid://cyf66w7fa7ojs" path="res://sound/sfx/stage/dinosaur jungle/shatter cactus.wav" id="3_4bbtf"]
 [ext_resource type="PackedScene" uid="uid://dedeevpox2rih" path="res://area/2 dino jungle/object/model/CactusPieces.gltf" id="3_865ei"]
 [ext_resource type="Material" uid="uid://bq1q3tp1cq76v" path="res://effect/particle/material/explosion/Explosion Smoke Add.tres" id="5_ffo6u"]
-[ext_resource type="Material" uid="uid://c44vqexptrgf5" path="res://effect/particle/material/environment/Cactus Splatter.tres" id="6_x5bkb"]
+[ext_resource type="Material" uid="uid://c44vqexptrgf5" path="res://effect/particle/material/object/Cactus Splatter Add.tres" id="6_x5bkb"]
+
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_717xn"]
 radius = 1.0
@@ -133,8 +134,8 @@ tracks/5/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_xs2lq"]
 _data = {
-"RESET": SubResource("Animation_qn240"),
-"shatter": SubResource("Animation_r5e3u")
+&"RESET": SubResource("Animation_qn240"),
+&"shatter": SubResource("Animation_r5e3u")
 }
 
 [sub_resource type="Curve" id="Curve_pgh5i"]
@@ -147,7 +148,7 @@ texture_mode = 1
 curve = SubResource("Curve_pgh5i")
 
 [sub_resource type="Curve" id="Curve_gy8ul"]
-max_value = 5.0
+_limits = [0.0, 5.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 112.941, 0, 0, Vector2(0.1, 5), 0.0, 0.0, 0, 0]
 point_count = 2
 
@@ -204,7 +205,7 @@ animator = NodePath("AnimationPlayer")
 shatterFlags = 18
 
 [node name="Root" type="StaticBody3D" parent="." groups=["wall"]]
-collision_layer = 8
+collision_layer = 72
 collision_mask = 0
 
 [node name="Cactus" parent="Root" instance=ExtResource("1_ak5kj")]
@@ -232,10 +233,10 @@ libraries = {
 
 [node name="Shatter" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("3_4bbtf")
-attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
+process_mode = 1
 
 [node name="Explosion" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)

@@ -1,13 +1,105 @@
-[gd_scene load_steps=3 format=3 uid="uid://dpdmwi0k3jhd1"]
+[gd_scene load_steps=6 format=3 uid="uid://dpdmwi0k3jhd1"]
 
 [ext_resource type="PackedScene" uid="uid://cors2o1hy2b2i" path="res://area/0 lost prologue/object/model/wonder/WonderBlock1.gltf" id="1_uc4a2"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_q7ekq"]
 
+[sub_resource type="BoxMesh" id="BoxMesh_sj7h4"]
+
+[sub_resource type="Shader" id="Shader_708rf"]
+code = "// NOTE: Shader automatically converted from Godot Engine 4.4.1.stable.mono's StandardMaterial3D.
+
+shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
+
+uniform vec4 albedo : source_color;
+uniform sampler2D texture_albedo : source_color, filter_linear_mipmap, repeat_enable;
+uniform float proximity_fade_distance : hint_range(0.0, 4096.0, 0.01);
+uniform ivec2 albedo_texture_size;
+uniform float point_size : hint_range(0.1, 128.0, 0.1);
+
+uniform float roughness : hint_range(0.0, 1.0);
+uniform sampler2D texture_metallic : hint_default_white, filter_linear_mipmap, repeat_enable;
+uniform vec4 metallic_texture_channel;
+uniform sampler2D texture_roughness : hint_roughness_r, filter_linear_mipmap, repeat_enable;
+
+uniform float specular : hint_range(0.0, 1.0, 0.01);
+uniform float metallic : hint_range(0.0, 1.0, 0.01);
+uniform sampler2D depth_texture : hint_depth_texture, repeat_disable, filter_nearest;
+
+uniform vec3 uv1_scale;
+uniform vec3 uv1_offset;
+uniform vec3 uv2_scale;
+uniform vec3 uv2_offset;
+
+void vertex() {
+	UV = UV * uv1_scale.xy + uv1_offset.xy;
+}
+
+void fragment() {
+	vec2 base_uv = UV;
+
+	vec4 albedo_tex = texture(texture_albedo, base_uv);
+	ALBEDO = albedo.rgb * albedo_tex.rgb;
+
+	float metallic_tex = dot(texture(texture_metallic, base_uv), metallic_texture_channel);
+	METALLIC = metallic_tex * metallic;
+	SPECULAR = specular;
+
+	vec4 roughness_texture_channel = vec4(1.0, 0.0, 0.0, 0.0);
+	float roughness_tex = dot(texture(texture_roughness, base_uv), roughness_texture_channel);
+	ROUGHNESS = roughness_tex * roughness;
+	ALPHA *= albedo.a * albedo_tex.a;
+
+	// Proximity Fade: Enabled
+	float proximity_depth_tex = textureLod(depth_texture, SCREEN_UV, 0.0).r;
+	vec4 proximity_view_pos = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, proximity_depth_tex, 1.0);
+	proximity_view_pos.xyz /= proximity_view_pos.w;
+	ALPHA *= clamp(1.0 - smoothstep(proximity_view_pos.z + proximity_fade_distance, proximity_view_pos.z, VERTEX.z), 0.0, 1.0);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lr523"]
+render_priority = 0
+shader = SubResource("Shader_708rf")
+shader_parameter/albedo = Color(1, 0, 0, 1)
+shader_parameter/proximity_fade_distance = 0.5
+shader_parameter/albedo_texture_size = Vector2i(0, 0)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = Vector4(1, 0, 0, 0)
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+
 [node name="WonderBlock1" type="StaticBody3D" groups=["floor", "wall"]]
 
 [node name="WonderBlock1" parent="." instance=ExtResource("1_uc4a2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="WonderBlock1BloomMesh" parent="WonderBlock1" index="1"]
+layers = 131072
+cast_shadow = 0
+extra_cull_margin = 50.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WonderBlock1/WonderBlock1BloomMesh" index="0"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_q7ekq")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0.6, -3)
+visible = false
+mesh = SubResource("BoxMesh_sj7h4")
+surface_material_override/0 = SubResource("ShaderMaterial_lr523")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0, -2.34904)
+visible = false
+mesh = SubResource("BoxMesh_sj7h4")
+
+[editable path="WonderBlock1"]

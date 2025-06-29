@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://bbgtmxw55soah"]
 
 [ext_resource type="PackedScene" uid="uid://jkk0r7rm1y7c" path="res://object/stage/destructable/resource/model/Stone.gltf" id="1_iujyt"]
-[ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_vjnw7"]
+[ext_resource type="Script" uid="uid://bj7jhdknn12cl" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_vjnw7"]
 [ext_resource type="PackedScene" uid="uid://bsuaordtbg3c3" path="res://object/stage/destructable/resource/model/StonePieces.gltf" id="2_4gael"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_l8c8x"]
@@ -87,17 +87,17 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_6jyev"]
 _data = {
-"RESET": SubResource("Animation_8jw6v"),
-"shatter": SubResource("Animation_o0bgm")
+&"RESET": SubResource("Animation_8jw6v"),
+&"shatter": SubResource("Animation_o0bgm")
 }
 
 [node name="Stone" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator")]
 script = ExtResource("1_vjnw7")
 pieceMass = 0.4
+shatterFlags = 16
 root = NodePath("Root")
 pieceRoot = NodePath("StonePieces")
 animator = NodePath("AnimationPlayer")
-shatterFlags = 16
 
 [node name="Root" type="StaticBody3D" parent="." groups=["floor", "grind wall", "splash jump", "wall"]]
 collision_layer = 8
@@ -110,7 +110,7 @@ shape = SubResource("BoxShape3D_l8c8x")
 
 [node name="Trigger" type="Area3D" parent="."]
 collision_layer = 0
-collision_mask = 2
+collision_mask = 10
 monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger"]
@@ -126,3 +126,4 @@ libraries = {
 
 [connection signal="area_entered" from="Trigger" to="." method="OnEntered"]
 [connection signal="area_exited" from="Trigger" to="." method="OnExited"]
+[connection signal="body_entered" from="Trigger" to="." method="OnBodyEntered"]

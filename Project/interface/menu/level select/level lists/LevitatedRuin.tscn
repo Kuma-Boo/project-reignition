@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cje3136x4i7df"]
+[gd_scene load_steps=16 format=3 uid="uid://cje3136x4i7df"]
 
 [ext_resource type="PackedScene" uid="uid://dy0oxfmu7ahxi" path="res://interface/menu/level select/LevelSelect.tscn" id="1_imwdw"]
 [ext_resource type="PackedScene" uid="uid://bxhhmqrkph0a" path="res://interface/menu/level select/LevelOption.tscn" id="2_c2i4j"]
@@ -14,15 +14,17 @@
 [ext_resource type="Resource" uid="uid://cmna4gjkxrscj" path="res://resource/level data/levitated ruin/Act3Time.tres" id="12_dew5e"]
 [ext_resource type="Resource" uid="uid://c8f2qr3dbrai0" path="res://resource/level data/levitated ruin/Act3Ring.tres" id="13_a5gop"]
 [ext_resource type="Resource" uid="uid://cqyx621t6bagx" path="res://resource/level data/levitated ruin/Act3Pearless.tres" id="14_dd1je"]
+[ext_resource type="AudioStream" uid="uid://cv583d4dn2o3c" path="res://sound/ost/jingle/Level Select - Levitated Ruin.mp3" id="15_wfdiw"]
 
 [node name="LevitatedRuin" instance=ExtResource("1_imwdw")]
+world = 4
 areaKey = "levitated_ruin"
 
-[node name="Bottom" parent="Window" index="3"]
-offset_left = 0.192001
-offset_top = 0.160034
-offset_right = -456.128
-offset_bottom = -39.0
+[node name="Text" parent="WorldText" index="0"]
+region_rect = Rect2(0, 700, 1024, 100)
+
+[node name="Glow" parent="WorldText/Text" index="0"]
+region_rect = Rect2(0, 700, 1024, 100)
 
 [node name="Main" parent="Clip/Options" index="0" instance=ExtResource("2_c2i4j")]
 layout_mode = 2
@@ -71,3 +73,6 @@ data = ExtResource("13_a5gop")
 [node name="Pearless" parent="Clip/Options" index="11" instance=ExtResource("2_c2i4j")]
 layout_mode = 2
 data = ExtResource("14_dd1je")
+
+[node name="BGM" parent="." index="8"]
+stream = ExtResource("15_wfdiw")

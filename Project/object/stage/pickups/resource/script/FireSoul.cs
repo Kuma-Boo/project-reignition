@@ -5,13 +5,14 @@ namespace Project.Gameplay.Objects;
 
 public partial class FireSoul : Pickup
 {
-	[Export(PropertyHint.Range, "1, 3")]
-	public int fireSoulIndex = 1; // Which fire soul is this?
+	/// <summary> Determines which save data index this fire soul references. </summary>
+	[Export(PropertyHint.Range, "1, 3")] public int fireSoulIndex = 1;
+	/// <summary> Enable this if you want to hide the firesoul behind a Time Break. </summary>
+	[Export] private bool isTimeBreakOnly;
 	private bool isCollected;
 	private bool isCollectedInCheckpoint;
 	private bool isCollectedInSaveFile;
-	[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")]
-	private NodePath animator;
+	[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")] private NodePath animator;
 	private AnimationPlayer Animator;
 
 	protected override void SetUp()
@@ -29,6 +30,14 @@ public partial class FireSoul : Pickup
 		}
 
 		UpdateLockon();
+		Respawn();
+
+		if (isTimeBreakOnly)
+		{
+			Player.Skills.TimeBreakStarted += ShowFireSoul;
+			Player.Skills.TimeBreakStopped += HideFireSoul;
+			HideFireSoul();
+		}
 	}
 
 	protected override void Collect()
@@ -38,8 +47,21 @@ public partial class FireSoul : Pickup
 
 		isCollected = true;
 		Animator.Play("collect");
-		HeadsUpDisplay.instance.CollectFireSoul();
-		StageSettings.instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint), (uint)ConnectFlags.OneShot);
+		HeadsUpDisplay.Instance.CollectFireSoul();
+		StageSettings.Instance.SetFireSoulCheckpointFlag(fireSoulIndex - 1, true);
+		StageSettings.Instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint), (uint)ConnectFlags.OneShot);
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.FireSoulLockon) &&
+			Player.IsHomingAttacking)
+		{
+			Player.StartBounce();
+		}
+
+		if (isTimeBreakOnly)
+		{
+			Player.Skills.TimeBreakStarted -= ShowFireSoul;
+			Player.Skills.TimeBreakStopped -= HideFireSoul;
+		}
 	}
 
 	public override void Respawn()
@@ -53,19 +75,36 @@ public partial class FireSoul : Pickup
 		UpdateLockon();
 		Animator.Play("loop");
 
-		if (StageSettings.instance.IsConnected(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint)))
-			StageSettings.instance.Disconnect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint));
+		StageSettings.Instance.SetFireSoulCheckpointFlag(fireSoulIndex - 1, false);
+		if (StageSettings.Instance.IsConnected(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint)))
+			StageSettings.Instance.Disconnect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint));
 
 		base.Respawn();
 	}
 
 	private void UpdateLockon()
 	{
-		if (Character.Skills.IsSkillEquipped(SkillKey.FireSoulLockon))
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.FireSoulLockon))
 		{
 			Animator.Play("enable-lockon");
 			Animator.Advance(0);
 		}
+	}
+
+	private void ShowFireSoul()
+	{
+		if (isCollected)
+			return;
+
+		Animator.Play("show");
+	}
+
+	private void HideFireSoul()
+	{
+		if (isCollected)
+			return;
+
+		Animator.Play("hide");
 	}
 
 	private void SaveCheckpoint() => isCollectedInCheckpoint = true;

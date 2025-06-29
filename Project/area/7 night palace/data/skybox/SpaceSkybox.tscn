@@ -1,7 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://d4ivgn14opv12"]
 
 [ext_resource type="PackedScene" uid="uid://cyhi8ees6bkes" path="res://area/7 night palace/data/skybox/model/SpaceSkybox.gltf" id="1_6t6ph"]
-[ext_resource type="Script" path="res://object/stage/common/resource/script/Skybox.cs" id="2_mntr6"]
+[ext_resource type="Script" uid="uid://ch4pb1qqwy5al" path="res://object/stage/common/resource/script/CameraFollower.cs" id="2_mntr6"]
+
 
 [sub_resource type="Animation" id="Animation_xaupl"]
 length = 0.001
@@ -38,15 +39,15 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_732d3"]
 _data = {
-"RESET": SubResource("Animation_xaupl"),
-"loop": SubResource("Animation_2l24u")
+&"RESET": SubResource("Animation_xaupl"),
+&"loop": SubResource("Animation_2l24u")
 }
 
 [node name="SpaceSkybox" instance=ExtResource("1_6t6ph")]
 script = ExtResource("2_mntr6")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="4"]
-autoplay = "loop"
 libraries = {
 "": SubResource("AnimationLibrary_732d3")
 }
+autoplay = "loop"

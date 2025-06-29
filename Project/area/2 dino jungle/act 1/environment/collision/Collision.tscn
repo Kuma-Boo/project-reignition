@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://d3ppk3bftcyht"]
 
 [ext_resource type="PackedScene" uid="uid://b3085r3lh6m4g" path="res://area/2 dino jungle/act 1/environment/collision/Collision.gltf" id="1_7uosp"]
-[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_77j5w"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="2_77j5w"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ovbg5"]
 size = Vector3(10, 20, 5)
@@ -34,25 +34,11 @@ script = ExtResource("2_77j5w")
 
 [node name="StaticBody3D" parent="FloorDinoRight" index="0" groups=["floor"]]
 
-[node name="LDinoPathWall" type="StaticBody3D" parent="FloorDinoRight" index="1"]
-transform = Transform3D(9.92095e-10, 0, -1, 0, 1, 0, 1, 0, 9.92095e-10, -465.996, -277, -1119.62)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="FloorDinoRight/LDinoPathWall" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_ovbg5")
-
 [node name="FloorDinoLeft" parent="." index="8"]
 script = ExtResource("2_77j5w")
 startEnabled = true
 
 [node name="StaticBody3D" parent="FloorDinoLeft" index="0" groups=["floor"]]
-
-[node name="RDinoPathWall" type="StaticBody3D" parent="FloorDinoLeft" index="1"]
-transform = Transform3D(1, 0, 4.47035e-08, 0, 1, 0, -4.47035e-08, 0, 1, -473.496, -277, -1127.12)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="FloorDinoLeft/RDinoPathWall" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_ovbg5")
 
 [node name="CaveOneWay" parent="." index="9"]
 script = ExtResource("2_77j5w")
@@ -87,3 +73,33 @@ startEnabled = true
 
 [node name="ArenaOneWay" parent="." index="18"]
 script = ExtResource("2_77j5w")
+
+[node name="StaticBody3D" parent="LevelWall" index="0" groups=["level wall", "wall"]]
+
+[node name="LSideWall" type="Node3D" parent="." index="20" groups=["wall"]]
+script = ExtResource("2_77j5w")
+
+[node name="LDinoPathWall" type="StaticBody3D" parent="LSideWall" index="0"]
+transform = Transform3D(9.92095e-10, 0, -1, 0, 1, 0, 1, 0, 9.92095e-10, -465.996, -277, -1119.62)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LSideWall/LDinoPathWall" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ovbg5")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="LSideWall/LDinoPathWall" index="1"]
+transform = Transform3D(0.866025, -3.2398e-08, -0.5, 6.94656e-09, 1, -5.27643e-08, 0.5, 4.2222e-08, 0.866025, -47.0106, 8, -57.3202)
+shape = SubResource("BoxShape3D_ovbg5")
+
+[node name="RSideWall" type="Node3D" parent="." index="21" groups=["wall"]]
+script = ExtResource("2_77j5w")
+
+[node name="RDinoPathWall" type="StaticBody3D" parent="RSideWall" index="0"]
+transform = Transform3D(1, 0, 4.47035e-08, 0, 1, 0, -4.47035e-08, 0, 1, -473.496, -277, -1127.12)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RSideWall/RDinoPathWall" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ovbg5")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="RSideWall/RDinoPathWall" index="1"]
+transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, 45.866, 18, -24.5)
+shape = SubResource("BoxShape3D_ovbg5")

@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://crkwyskdhsk6u"]
+
+[ext_resource type="PackedScene" uid="uid://8clysmnfngke" path="res://area/2 dino jungle/act 3/environment/collision/Collision.gltf" id="1_hy4ik"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="2_84grm"]
+
+[node name="Collision" instance=ExtResource("1_hy4ik")]
+
+[node name="StaticBody3D" parent="Floor" index="0" groups=["floor", "grass"]]
+
+[node name="BoatWallMainOneWay" parent="." index="1"]
+script = ExtResource("2_84grm")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="StaticBody3D" parent="BoatWallMainOneWay" index="0" groups=["wall"]]
+
+[node name="BoatWallReverseOneWay" parent="." index="2"]
+script = ExtResource("2_84grm")
+saveVisibilityOnCheckpoint = true
+
+[node name="StaticBody3D" parent="BoatWallReverseOneWay" index="0" groups=["wall"]]
+
+[node name="StaticBody3D" parent="Wall" index="0" groups=["wall"]]
+
+[node name="IslandOneWay" parent="." index="4"]
+script = ExtResource("2_84grm")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="StaticBody3D" parent="IslandOneWay" index="0" groups=["wall"]]
+
+[node name="StaticBody3D" parent="CornerWall" index="0" groups=["level wall", "wall"]]

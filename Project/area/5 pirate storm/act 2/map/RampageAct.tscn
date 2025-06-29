@@ -1,0 +1,2401 @@
+[gd_scene load_steps=32 format=3 uid="uid://biwhnkxwrwumg"]
+
+[ext_resource type="PackedScene" uid="uid://d1gknocio5io1" path="res://area/5 pirate storm/act 2/Static.tscn" id="1_87yog"]
+[ext_resource type="Resource" uid="uid://c1x1digh80vcc" path="res://resource/level data/pirate storm/Act2Rampage.tres" id="2_6il1n"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_emooq"]
+[ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="3_emooq"]
+[ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="4_4trei"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="5_8jhbx"]
+[ext_resource type="Script" uid="uid://bitgnn108jmaa" path="res://object/trigger/modules/DialogTrigger.cs" id="5_140hr"]
+[ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="6_8jhbx"]
+[ext_resource type="PackedScene" uid="uid://q2mhrprklf7q" path="res://area/5 pirate storm/object/Bomb.tscn" id="7_i005y"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="8_6uttv"]
+[ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="9_dic3o"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="10_yioli"]
+[ext_resource type="PackedScene" uid="uid://dwyolettq7wtm" path="res://area/5 pirate storm/object/platforms/SpoilsSmall.tscn" id="11_krd65"]
+[ext_resource type="PackedScene" uid="uid://e37k730a01ee" path="res://area/5 pirate storm/object/platforms/BridgeSquare.tscn" id="11_uiuws"]
+[ext_resource type="PackedScene" uid="uid://bec0iv5nhvchi" path="res://area/5 pirate storm/object/platforms/BridgeLarge.tscn" id="12_reyvh"]
+[ext_resource type="PackedScene" uid="uid://diybup7aqwl4a" path="res://object/enemy/majin/data/pirate storm/GreenMajin.tscn" id="14_reyvh"]
+[ext_resource type="PackedScene" uid="uid://dlsd43s025utu" path="res://object/enemy/majin/data/pirate storm/BlueMajin.tscn" id="15_kuvre"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="17_eqkj6"]
+[ext_resource type="PackedScene" uid="uid://c4qk3uy80ub6r" path="res://area/5 pirate storm/object/platforms/BridgeSquareFalling.tscn" id="17_o486y"]
+[ext_resource type="Resource" uid="uid://cxran3rkj8op0" path="res://area/5 pirate storm/act 2/camera/PlatformingCam.tres" id="18_140hr"]
+[ext_resource type="PackedScene" uid="uid://dgq2mwyi2qr0c" path="res://area/5 pirate storm/object/platforms/BridgeThin.tscn" id="18_ry7t2"]
+[ext_resource type="PackedScene" uid="uid://ddqtfsujegqep" path="res://object/stage/common/SpikeBallSpawner.tscn" id="19_ti4w3"]
+[ext_resource type="Script" uid="uid://dpt5o0lh62p6t" path="res://object/stage/MovingObject.cs" id="20_qxh3e"]
+[ext_resource type="PackedScene" uid="uid://b0n0wve76n3ds" path="res://area/5 pirate storm/object/Blade.tscn" id="21_oivdj"]
+[ext_resource type="PackedScene" uid="uid://dldp4m07ddqgq" path="res://area/5 pirate storm/object/platforms/SpoilsLarge.tscn" id="22_oivdj"]
+[ext_resource type="PackedScene" uid="uid://b8s2qjmlhu5tc" path="res://object/stage/common/ThornSpring.tscn" id="23_yyck4"]
+[ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="24_rj70a"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6uttv"]
+size = Vector3(20, 30, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cxpr6"]
+size = Vector3(20, 20, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_eqkj6"]
+size = Vector3(20, 12, 32)
+
+[sub_resource type="Curve" id="Curve_rj70a"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, -8.28907, 0, 0, Vector2(0.19656, -1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.80344, -1), 0.0, 0.0, 0, 0, Vector2(1, 1.49012e-08), 8.66659, 0.0, 0, 0]
+point_count = 5
+
+[node name="Stage" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_87yog")]
+Data = ExtResource("2_6il1n")
+
+[node name="RampageAct" type="Node3D" parent="."]
+
+[node name="SpawnPosition" type="Node3D" parent="RampageAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.6, 0)
+
+[node name="CharacterSpawn" parent="RampageAct/SpawnPosition" instance=ExtResource("2_emooq")]
+
+[node name="ObjectMap" type="Node3D" parent="RampageAct"]
+visible = false
+
+[node name="L-Opening" parent="RampageAct/ObjectMap" instance=ExtResource("8_6uttv")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 151.2, 8.6, 142.7)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/ObjectMap/L-Opening"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="U-Opening" parent="RampageAct/ObjectMap" instance=ExtResource("8_6uttv")]
+transform = Transform3D(1.31134e-07, 0, 1, 0, 1, 0, -1, 0, 1.31134e-07, 167.3, 9.6, -194.6)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/ObjectMap/U-Opening"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="U-Middle" parent="RampageAct/ObjectMap" instance=ExtResource("8_6uttv")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 342.182, 11.8, -87.8385)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/ObjectMap/U-Middle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="U-Ending" parent="RampageAct/ObjectMap" instance=ExtResource("8_6uttv")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0.299998, 8.6, 10.7)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/ObjectMap/U-Ending"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="L-Middle" parent="RampageAct/ObjectMap" instance=ExtResource("8_6uttv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 8.8, -108)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/ObjectMap/L-Middle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="L-Ending" parent="RampageAct/ObjectMap" instance=ExtResource("8_6uttv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 271.4, 12.6, -214.5)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/ObjectMap/L-Ending"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="R-Opening" parent="RampageAct/ObjectMap" instance=ExtResource("8_6uttv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 367.713, 11.5, -140.201)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/ObjectMap/R-Opening"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="R-Middle" parent="RampageAct/ObjectMap" instance=ExtResource("8_6uttv")]
+transform = Transform3D(0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, 0.422618, 195.713, 10.7, 131.799)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/ObjectMap/R-Middle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="R-Ending" parent="RampageAct/ObjectMap" instance=ExtResource("8_6uttv")]
+transform = Transform3D(-0.211956, 0, 0.977279, 0, 1, 0, -0.977279, 0, -0.211956, 244.193, 12.1, -211.353)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/ObjectMap/R-Ending"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="Dialog" type="Node3D" parent="RampageAct"]
+
+[node name="CannonballTrigger" parent="RampageAct/Dialog" instance=ExtResource("8_6uttv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 7.9, -35.8)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RampageAct/Dialog/CannonballTrigger"]
+script = ExtResource("5_140hr")
+randomize = true
+textKeys = Array[String](["pir_hint_cannonball_so", "pir_hint_cannonball_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Dialog/CannonballTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="EnemiesTrigger" parent="RampageAct/Dialog" instance=ExtResource("8_6uttv")]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 9.93, 10, -164.919)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RampageAct/Dialog/EnemiesTrigger"]
+script = ExtResource("5_140hr")
+textKeys = Array[String](["common_enemy8_so", "common_enemy8_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Dialog/EnemiesTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="EnemiesTrigger2" parent="RampageAct/Dialog" instance=ExtResource("8_6uttv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 265.3, 7.9, 12.2)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RampageAct/Dialog/EnemiesTrigger2"]
+script = ExtResource("5_140hr")
+textKeys = Array[String](["common_enemy5_so"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Dialog/EnemiesTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="VictoryTrigger" parent="RampageAct/Dialog" instance=ExtResource("8_6uttv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 265.3, 7.9, 45.2)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RampageAct/Dialog/VictoryTrigger"]
+script = ExtResource("5_140hr")
+textKeys = Array[String](["common_victory_so", "common_victory_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Dialog/VictoryTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="PitTrigger" parent="RampageAct/Dialog" instance=ExtResource("8_6uttv")]
+transform = Transform3D(0.819152, 0, -0.573576, 0, 1, 0, 0.573576, 0, 0.819152, 259.726, 7.9, 84.0191)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RampageAct/Dialog/PitTrigger"]
+script = ExtResource("5_140hr")
+randomize = true
+textKeys = Array[String](["common_heights_so", "common_heights_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Dialog/PitTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="Opening" type="Node3D" parent="RampageAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.6, 0)
+script = ExtResource("10_yioli")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+cacheRespawnMethods = true
+
+[node name="DashPanelGroup1" type="Node3D" parent="RampageAct/Opening"]
+transform = Transform3D(-0.999546, 0, -0.0301197, 0, 1, 0, 0.0301197, 0, -0.999546, -0.2, 0, -10)
+
+[node name="DashPanelL" parent="RampageAct/Opening/DashPanelGroup1" instance=ExtResource("3_emooq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+
+[node name="DashPanelR" parent="RampageAct/Opening/DashPanelGroup1" instance=ExtResource("3_emooq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="RingsL" type="Node3D" parent="RampageAct/Opening/DashPanelGroup1"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.6, 0.5, 4)
+script = ExtResource("4_4trei")
+Source = ExtResource("5_8jhbx")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Opening/DashPanelGroup1/RingsL" instance=ExtResource("5_8jhbx")]
+
+[node name="Child02" parent="RampageAct/Opening/DashPanelGroup1/RingsL" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="RampageAct/Opening/DashPanelGroup1/RingsL" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="RampageAct/Opening/DashPanelGroup1/RingsL" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="RampageAct/Opening/DashPanelGroup1/RingsL" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="RingsR" type="Node3D" parent="RampageAct/Opening/DashPanelGroup1"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.7, 0.5, 4)
+script = ExtResource("4_4trei")
+Source = ExtResource("5_8jhbx")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Opening/DashPanelGroup1/RingsR" instance=ExtResource("5_8jhbx")]
+
+[node name="Child02" parent="RampageAct/Opening/DashPanelGroup1/RingsR" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="RampageAct/Opening/DashPanelGroup1/RingsR" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="RampageAct/Opening/DashPanelGroup1/RingsR" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="RampageAct/Opening/DashPanelGroup1/RingsR" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="BombGroup1" type="Node3D" parent="RampageAct/Opening"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -0.7, -44)
+
+[node name="ActivationTrigger" parent="RampageAct/Opening/BombGroup1" instance=ExtResource("8_6uttv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 35)
+OneShot = true
+"Respawn Mode" = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Opening/BombGroup1/ActivationTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="Bomb1" parent="RampageAct/Opening/BombGroup1" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 2)
+"Launch Settings/Starting Offset" = Vector3(10, 40, -40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb2" parent="RampageAct/Opening/BombGroup1" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 3)
+"Launch Settings/Starting Offset" = Vector3(10, 40, -40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="PearlsL1" type="Node3D" parent="RampageAct/Opening"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.1, -0.2, -50)
+script = ExtResource("4_4trei")
+Source = ExtResource("6_8jhbx")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Opening/PearlsL1" instance=ExtResource("6_8jhbx")]
+
+[node name="Child02" parent="RampageAct/Opening/PearlsL1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="RampageAct/Opening/PearlsL1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="RampageAct/Opening/PearlsL1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="RampageAct/Opening/PearlsL1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="RampageAct/Opening/PearlsL1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child07" parent="RampageAct/Opening/PearlsL1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child08" parent="RampageAct/Opening/PearlsL1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child09" parent="RampageAct/Opening/PearlsL1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child10" parent="RampageAct/Opening/PearlsL1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="PearlsL2" type="Node3D" parent="RampageAct/Opening"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, -0.2, -50)
+script = ExtResource("4_4trei")
+Source = ExtResource("6_8jhbx")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Opening/PearlsL2" instance=ExtResource("6_8jhbx")]
+
+[node name="Child02" parent="RampageAct/Opening/PearlsL2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="RampageAct/Opening/PearlsL2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="RampageAct/Opening/PearlsL2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="RampageAct/Opening/PearlsL2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="RampageAct/Opening/PearlsL2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child07" parent="RampageAct/Opening/PearlsL2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child08" parent="RampageAct/Opening/PearlsL2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child09" parent="RampageAct/Opening/PearlsL2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child10" parent="RampageAct/Opening/PearlsL2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="PearlsR1" type="Node3D" parent="RampageAct/Opening"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, -0.2, -50)
+script = ExtResource("4_4trei")
+Source = ExtResource("6_8jhbx")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Opening/PearlsR1" instance=ExtResource("6_8jhbx")]
+
+[node name="Child02" parent="RampageAct/Opening/PearlsR1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="RampageAct/Opening/PearlsR1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="RampageAct/Opening/PearlsR1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="RampageAct/Opening/PearlsR1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="RampageAct/Opening/PearlsR1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child07" parent="RampageAct/Opening/PearlsR1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child08" parent="RampageAct/Opening/PearlsR1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child09" parent="RampageAct/Opening/PearlsR1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child10" parent="RampageAct/Opening/PearlsR1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="PearlsR2" type="Node3D" parent="RampageAct/Opening"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -0.2, -50)
+script = ExtResource("4_4trei")
+Source = ExtResource("6_8jhbx")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Opening/PearlsR2" instance=ExtResource("6_8jhbx")]
+
+[node name="Child02" parent="RampageAct/Opening/PearlsR2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="RampageAct/Opening/PearlsR2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="RampageAct/Opening/PearlsR2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="RampageAct/Opening/PearlsR2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="RampageAct/Opening/PearlsR2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child07" parent="RampageAct/Opening/PearlsR2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child08" parent="RampageAct/Opening/PearlsR2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child09" parent="RampageAct/Opening/PearlsR2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child10" parent="RampageAct/Opening/PearlsR2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="DashPanelGroup2" type="Node3D" parent="RampageAct/Opening"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -1.8, -0.7, -47)
+
+[node name="DashPanelL" parent="RampageAct/Opening/DashPanelGroup2" instance=ExtResource("3_emooq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
+
+[node name="DashPanelR" parent="RampageAct/Opening/DashPanelGroup2" instance=ExtResource("3_emooq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
+
+[node name="BombGroup2" type="Node3D" parent="RampageAct/Opening"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -0.9, -54)
+
+[node name="ActivationTrigger" parent="RampageAct/Opening/BombGroup2" instance=ExtResource("8_6uttv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, 0.4, 25)
+OneShot = true
+"Respawn Mode" = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Opening/BombGroup2/ActivationTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="Bomb1" parent="RampageAct/Opening/BombGroup2" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 0)
+launchDelay = 0.2
+"Launch Settings/Starting Offset" = Vector3(10, 40, -40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb2" parent="RampageAct/Opening/BombGroup2" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 1)
+launchDelay = 0.4
+"Launch Settings/Starting Offset" = Vector3(10, 40, -40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb3" parent="RampageAct/Opening/BombGroup2" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+"Launch Settings/Starting Offset" = Vector3(10, 40, -40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="BombGroup3" type="Node3D" parent="RampageAct/Opening"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, -0.6, -92)
+
+[node name="ActivationTrigger" parent="RampageAct/Opening/BombGroup3" instance=ExtResource("8_6uttv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0, 25)
+OneShot = true
+"Respawn Mode" = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Opening/BombGroup3/ActivationTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="Bomb1" parent="RampageAct/Opening/BombGroup3" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 0)
+launchDelay = 0.2
+"Launch Settings/Starting Offset" = Vector3(10, 40, -40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb2" parent="RampageAct/Opening/BombGroup3" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 1)
+"Launch Settings/Starting Offset" = Vector3(10, 40, -40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb3" parent="RampageAct/Opening/BombGroup3" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -5)
+launchDelay = 0.4
+"Launch Settings/Starting Offset" = Vector3(10, 40, -40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="DashPanelGroup3" type="Node3D" parent="RampageAct/Opening"]
+transform = Transform3D(-0.999544, 0, -0.0301895, 0, 1, 0, 0.0301895, 0, -0.999544, -2.75175, -0.3, -99.9984)
+
+[node name="DashPanelL" parent="RampageAct/Opening/DashPanelGroup3" instance=ExtResource("3_emooq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+
+[node name="DashPanelR" parent="RampageAct/Opening/DashPanelGroup3" instance=ExtResource("3_emooq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="BombGroup4" type="Node3D" parent="RampageAct/Opening"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, 1.1, -144.9)
+
+[node name="ActivationTrigger" parent="RampageAct/Opening/BombGroup4" instance=ExtResource("8_6uttv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.73687, -1.4, 49.4015)
+OneShot = true
+"Respawn Mode" = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Opening/BombGroup4/ActivationTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="Bomb1" parent="RampageAct/Opening/BombGroup4" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, -0.2, 20)
+"Launch Settings/Starting Offset" = Vector3(10, 40, -40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb2" parent="RampageAct/Opening/BombGroup4" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.2, 20)
+"Launch Settings/Starting Offset" = Vector3(0, 40, -40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb3" parent="RampageAct/Opening/BombGroup4" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 11.4)
+launchDelay = 0.2
+"Launch Settings/Starting Offset" = Vector3(10, 40, -40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb4" parent="RampageAct/Opening/BombGroup4" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.1, 10)
+launchDelay = 0.2
+"Launch Settings/Starting Offset" = Vector3(10, 40, -40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb5" parent="RampageAct/Opening/BombGroup4" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.1, 2)
+launchDelay = 0.4
+"Launch Settings/Starting Offset" = Vector3(10, 40, -40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb6" parent="RampageAct/Opening/BombGroup4" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.1, 3.4)
+launchDelay = 0.4
+"Launch Settings/Starting Offset" = Vector3(10, 40, -40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Switch" parent="RampageAct/Opening" instance=ExtResource("9_dic3o")]
+transform = Transform3D(0.944342, 0, -0.328966, 0, 1, 0, 0.328966, 0, 0.944342, 1.09397, 1.15, -144.966)
+activationLength = 1.0
+
+[node name="PearlsL" type="Node3D" parent="RampageAct/Opening"]
+transform = Transform3D(0.944342, 0, -0.328966, 0, 1, 0, 0.328966, 0, 0.944342, 1.84323, 1.75, -148.941)
+script = ExtResource("4_4trei")
+Source = ExtResource("6_8jhbx")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../Static/Path/Main")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Opening/PearlsL" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, -0.000259399)
+
+[node name="Child02" parent="RampageAct/Opening/PearlsL" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.0806122, -0.00543594, -4.02463)
+
+[node name="Child03" parent="RampageAct/Opening/PearlsL" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.322372, -0.0198221, -8.04129)
+
+[node name="Child04" parent="RampageAct/Opening/PearlsL" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.71463, -0.041872, -12.0441)
+
+[node name="Child05" parent="RampageAct/Opening/PearlsL" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 1.24321, -0.0700827, -16.0288)
+
+[node name="PearlsR" type="Node3D" parent="RampageAct/Opening"]
+transform = Transform3D(0.944342, 0, -0.328966, 0, 1, 0, 0.328966, 0, 0.944342, 2.97644, 1.75, -148.546)
+script = ExtResource("4_4trei")
+Source = ExtResource("6_8jhbx")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../Static/Path/Main")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Opening/PearlsR" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0.000198364)
+
+[node name="Child02" parent="RampageAct/Opening/PearlsR" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.0795708, -0.00543213, -3.97496)
+
+[node name="Child03" parent="RampageAct/Opening/PearlsR" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.318478, -0.0198154, -7.94492)
+
+[node name="Child04" parent="RampageAct/Opening/PearlsR" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.706486, -0.0418634, -11.9047)
+
+[node name="Child05" parent="RampageAct/Opening/PearlsR" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 1.22994, -0.0700722, -15.851)
+
+[node name="CullingGroup" type="Node3D" parent="RampageAct/Opening"]
+transform = Transform3D(0.944342, 0, -0.328966, 0, 1, 0, 0.328966, 0, 0.944342, 1.09397, 1.15, -144.966)
+script = ExtResource("10_yioli")
+isStageVisuals = true
+
+[node name="RingsL" type="Node3D" parent="RampageAct/Opening/CullingGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.600002, 0.6, -3.99998)
+script = ExtResource("4_4trei")
+Source = ExtResource("5_8jhbx")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../../Static/Path/Main")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Opening/CullingGroup/RingsL" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, -0.000259399)
+
+[node name="Child02" parent="RampageAct/Opening/CullingGroup/RingsL" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.0806046, -0.00543594, -4.02463)
+
+[node name="Child03" parent="RampageAct/Opening/CullingGroup/RingsL" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.322353, -0.0198212, -8.04129)
+
+[node name="Child04" parent="RampageAct/Opening/CullingGroup/RingsL" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.7146, -0.0418701, -12.0441)
+
+[node name="Child05" parent="RampageAct/Opening/CullingGroup/RingsL" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 1.24318, -0.0700808, -16.0288)
+
+[node name="RingsR" type="Node3D" parent="RampageAct/Opening/CullingGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.600002, 0.6, -3.99998)
+script = ExtResource("4_4trei")
+Source = ExtResource("5_8jhbx")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../../Static/Path/Main")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Opening/CullingGroup/RingsR" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -7.62939e-06, 0, 0.000198364)
+
+[node name="Child02" parent="RampageAct/Opening/CullingGroup/RingsR" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.079567, -0.00543213, -3.97495)
+
+[node name="Child03" parent="RampageAct/Opening/CullingGroup/RingsR" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.318474, -0.0198154, -7.94492)
+
+[node name="Child04" parent="RampageAct/Opening/CullingGroup/RingsR" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.706478, -0.0418625, -11.9047)
+
+[node name="Child05" parent="RampageAct/Opening/CullingGroup/RingsR" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 1.22994, -0.0700712, -15.851)
+
+[node name="BridgeGroup" type="Node3D" parent="RampageAct/Opening"]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 16.2402, 1.1, -176.016)
+
+[node name="SpoilsSmall1" parent="RampageAct/Opening/BridgeGroup" instance=ExtResource("11_krd65")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 2.5)
+
+[node name="SpoilsSmall2" parent="RampageAct/Opening/BridgeGroup" instance=ExtResource("11_krd65")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 2.5, -2)
+
+[node name="SpoilsSmall3" parent="RampageAct/Opening/BridgeGroup" instance=ExtResource("11_krd65")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3, 2.5, -2)
+
+[node name="BridgeLarge" parent="RampageAct/Opening/BridgeGroup" instance=ExtResource("12_reyvh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, -2.5, 2)
+
+[node name="BridgeSquare" parent="RampageAct/Opening/BridgeGroup" instance=ExtResource("11_uiuws")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -0.5)
+
+[node name="BridgeSquare2" parent="RampageAct/Opening/BridgeGroup" instance=ExtResource("11_uiuws")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 2.5, -5)
+
+[node name="GreenMajin1" parent="RampageAct/Opening/BridgeGroup" instance=ExtResource("14_reyvh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 2.5, 3)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 5, 30)
+"Spawn Settings/Spawn In Offset" = Vector3(5, 0, -5)
+"Spawn Settings/Spawn Out Offset" = Vector3(5, 5, -10)
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 0.5
+"Defeat Settings/Launch Direction" = Vector3(0, 2, 5)
+"Defeat Settings/Local Transform" = true
+rangeOverride = 30
+
+[node name="GreenMajin2" parent="RampageAct/Opening/BridgeGroup" instance=ExtResource("14_reyvh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 5, -0.5)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-20, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 0.5
+"Defeat Settings/Launch Direction" = Vector3(5, 0, 10)
+"Defeat Settings/Local Transform" = true
+rangeOverride = 30
+
+[node name="BlueMajin" parent="RampageAct/Opening/BridgeGroup" instance=ExtResource("15_kuvre")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 7.7, -5)
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 0.5
+"Defeat Settings/Launch Direction" = Vector3(-2, 0, 10)
+"Defeat Settings/Local Transform" = true
+rangeOverride = 30
+
+[node name="CameraTrigger" parent="RampageAct/Opening/BridgeGroup" instance=ExtResource("8_6uttv")]
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Cam" type="Node3D" parent="RampageAct/Opening/BridgeGroup/CameraTrigger"]
+script = ExtResource("17_eqkj6")
+settings = ExtResource("18_140hr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Opening/BridgeGroup/CameraTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_cxpr6")
+
+[node name="Middle" type="Node3D" parent="RampageAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, 6.5, -215)
+script = ExtResource("10_yioli")
+saveVisibilityOnCheckpoint = true
+cacheRespawnMethods = true
+
+[node name="RingsR2" type="Node3D" parent="RampageAct/Middle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.3, 2, 6)
+script = ExtResource("4_4trei")
+Source = ExtResource("5_8jhbx")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../Static/Path/Main")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Middle/RingsR2" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00179291, 0.000133514, 0.000762939)
+
+[node name="Child02" parent="RampageAct/Middle/RingsR2" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.59652, -0.269138, -1.37108)
+
+[node name="Child03" parent="RampageAct/Middle/RingsR2" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.29028, -0.523022, -2.47475)
+
+[node name="Child04" parent="RampageAct/Middle/RingsR2" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.0601, -0.752202, -3.31718)
+
+[node name="Child05" parent="RampageAct/Middle/RingsR2" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.8871, -0.948393, -3.91133)
+
+[node name="Child06" parent="RampageAct/Middle/RingsR2" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.7543, -1.10466, -4.27473)
+
+[node name="Child07" parent="RampageAct/Middle/RingsR2" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.6473, -1.21551, -4.42764)
+
+[node name="Child08" parent="RampageAct/Middle/RingsR2" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.5543, -1.27679, -4.39134)
+
+[node name="Child09" parent="RampageAct/Middle/RingsR2" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.4664, -1.2855, -4.18719)
+
+[node name="Child10" parent="RampageAct/Middle/RingsR2" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.3771, -1.23962, -3.83539)
+
+[node name="BombGroup5" type="Node3D" parent="RampageAct/Middle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.1, 0.2, 1.10001)
+
+[node name="ActivationTrigger" parent="RampageAct/Middle/BombGroup5" instance=ExtResource("8_6uttv")]
+transform = Transform3D(0.766044, 0, -0.642788, 0, 1, 0, 0.642788, 0, 0.766044, -60.7369, -1.4, 19.4015)
+OneShot = true
+"Respawn Mode" = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Middle/BombGroup5/ActivationTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="Bomb1" parent="RampageAct/Middle/BombGroup5" instance=ExtResource("7_i005y")]
+transform = Transform3D(0.0871558, 0, -0.996195, 0, 1, 0, 0.996195, 0, 0.0871558, -27, 0.4, -5)
+"Launch Settings/Starting Offset" = Vector3(-40, 20, -10)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb2" parent="RampageAct/Middle/BombGroup5" instance=ExtResource("7_i005y")]
+transform = Transform3D(0.0871557, 0, -0.996195, 0, 1, 0, 0.996195, 0, 0.0871557, -18.5, 0, -4.5)
+launchDelay = 0.4
+"Launch Settings/Starting Offset" = Vector3(-40, 20, -10)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb3" parent="RampageAct/Middle/BombGroup5" instance=ExtResource("7_i005y")]
+transform = Transform3D(-0.0871558, 0, -0.996195, 0, 1, 0, 0.996195, 0, -0.0871558, -10, 0, -3.6)
+launchDelay = 0.8
+"Launch Settings/Starting Offset" = Vector3(-40, 20, -10)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb4" parent="RampageAct/Middle/BombGroup5" instance=ExtResource("7_i005y")]
+transform = Transform3D(-0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, -0.173648, -2, 0, -2)
+launchDelay = 1.2
+"Launch Settings/Starting Offset" = Vector3(-40, 20, -10)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="RingsR3" type="Node3D" parent="RampageAct/Middle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.7, 1.3, 1)
+script = ExtResource("4_4trei")
+Source = ExtResource("5_8jhbx")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../Static/Path/Main")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Middle/RingsR3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000305176, -1.38283e-05, -7.62939e-05)
+
+[node name="Child02" parent="RampageAct/Middle/RingsR3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.92155, 0.181911, 1.07652)
+
+[node name="Child03" parent="RampageAct/Middle/RingsR3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.79616, 0.374602, 2.28157)
+
+[node name="Child04" parent="RampageAct/Middle/RingsR3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.6239, 0.575429, 3.59294)
+
+[node name="Child05" parent="RampageAct/Middle/RingsR3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.4088, 0.781414, 4.98503)
+
+[node name="Child06" parent="RampageAct/Middle/RingsR3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.1581, 0.989317, 6.42931)
+
+[node name="Child07" parent="RampageAct/Middle/RingsR3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.8816, 1.19569, 7.89522)
+
+[node name="Child08" parent="RampageAct/Middle/RingsR3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.591, 1.39695, 9.351)
+
+[node name="Child09" parent="RampageAct/Middle/RingsR3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.2985, 1.58945, 10.7643)
+
+[node name="Child10" parent="RampageAct/Middle/RingsR3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.0162, 1.76959, 12.1033)
+
+[node name="BombGroup6" type="Node3D" parent="RampageAct/Middle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 74.1, 2.9, 17.9)
+
+[node name="ActivationTrigger" parent="RampageAct/Middle/BombGroup6" instance=ExtResource("8_6uttv")]
+transform = Transform3D(-0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, -0.173648, -51.6278, -2.6, -16.6432)
+OneShot = true
+"Respawn Mode" = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Middle/BombGroup6/ActivationTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="Bomb1" parent="RampageAct/Middle/BombGroup6" instance=ExtResource("7_i005y")]
+transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, -33.364, -2, -8.53554)
+"Launch Settings/Starting Offset" = Vector3(20, 20, -60)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb2" parent="RampageAct/Middle/BombGroup6" instance=ExtResource("7_i005y")]
+transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, -21.3284, -1.3, -4.5)
+launchDelay = 0.4
+"Launch Settings/Starting Offset" = Vector3(20, 20, -60)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb3" parent="RampageAct/Middle/BombGroup6" instance=ExtResource("7_i005y")]
+transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, -10.0707, -0.7, -1.69081)
+launchDelay = 0.8
+"Launch Settings/Starting Offset" = Vector3(20, 20, -60)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb4" parent="RampageAct/Middle/BombGroup6" instance=ExtResource("7_i005y")]
+transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, 0, -0.3, 0)
+launchDelay = 1.2
+"Launch Settings/Starting Offset" = Vector3(20, 20, -60)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="DashPanelGroup4" type="Node3D" parent="RampageAct/Middle"]
+transform = Transform3D(0.130526, 0, 0.991445, 0, 1, 0, -0.991445, 0, 0.130526, 82.939, 3, 19.695)
+
+[node name="DashPanelL" parent="RampageAct/Middle/DashPanelGroup4" instance=ExtResource("3_emooq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+
+[node name="DashPanelR" parent="RampageAct/Middle/DashPanelGroup4" instance=ExtResource("3_emooq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="BombGroup7" type="Node3D" parent="RampageAct/Middle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 141.1, 2.1, 11.9)
+
+[node name="ActivationTrigger" parent="RampageAct/Middle/BombGroup7" instance=ExtResource("8_6uttv")]
+transform = Transform3D(-0.197589, 0, -0.980285, 0, 1, 0, 0.980285, 0, -0.197589, -61.8873, 0.7, 6.982)
+OneShot = true
+"Respawn Mode" = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Middle/BombGroup7/ActivationTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="Bomb1" parent="RampageAct/Middle/BombGroup7" instance=ExtResource("7_i005y")]
+transform = Transform3D(0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, -13.306, 1.7, -0.600811)
+"Launch Settings/Starting Offset" = Vector3(20, 40, -60)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb2" parent="RampageAct/Middle/BombGroup7" instance=ExtResource("7_i005y")]
+transform = Transform3D(0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, -5.03407, 1.9, 3.15718)
+launchDelay = 0.5
+"Launch Settings/Starting Offset" = Vector3(0, 40, -60)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="GateGroup" type="Node3D" parent="RampageAct/Middle"]
+transform = Transform3D(0.25038, 0, -0.968148, 0, 1, 0, 0.968148, 0, 0.25038, 145.085, 4.5, 10.8421)
+
+[node name="GreenMajin1" parent="RampageAct/Middle/GateGroup" instance=ExtResource("14_reyvh")]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 1.5, -0.5, 12)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-20, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 30
+
+[node name="GreenMajin2" parent="RampageAct/Middle/GateGroup" instance=ExtResource("14_reyvh")]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, -1.5, 0, 9)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(20, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 30
+
+[node name="BlueMajin" parent="RampageAct/Middle/GateGroup" instance=ExtResource("15_kuvre")]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 1, 5.808)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 20, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 30
+
+[node name="BridgeSquareFalling" parent="RampageAct/Middle/GateGroup" instance=ExtResource("17_o486y")]
+transform = Transform3D(2, 0, 0, 0, 1.25, 0, 0, 0, 0.5, 0, 0, 0)
+"Falling Platform Settings/Auto Shake" = false
+"Falling Platform Settings/Shake Length" = 0.2
+
+[node name="BridgeSquareL" parent="RampageAct/Middle/GateGroup" instance=ExtResource("11_uiuws")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -8, 0, 0)
+
+[node name="SpoilsSmall1" parent="RampageAct/Middle/GateGroup/BridgeSquareL" instance=ExtResource("11_krd65")]
+transform = Transform3D(2.4, 0, 0, 0, 1.5, 0, 0, 0, 2.4, 0, -6.75, 0)
+
+[node name="SpoilsSmall2" parent="RampageAct/Middle/GateGroup/BridgeSquareL" instance=ExtResource("11_krd65")]
+transform = Transform3D(2.4, 0, 0, 0, 1.5, 0, 0, 0, 2.4, 0, -4.5, 0)
+
+[node name="SpoilsSmall3" parent="RampageAct/Middle/GateGroup/BridgeSquareL" instance=ExtResource("11_krd65")]
+transform = Transform3D(2.4, 0, 0, 0, 1.5, 0, 0, 0, 2.4, 0, -2.25, 0)
+
+[node name="SpoilsSmall4" parent="RampageAct/Middle/GateGroup/BridgeSquareL" instance=ExtResource("11_krd65")]
+transform = Transform3D(2.4, 0, 0, 0, 1.5, 0, 0, 0, 2.4, 0, 0, 0)
+
+[node name="SpoilsSmall5" parent="RampageAct/Middle/GateGroup/BridgeSquareL" instance=ExtResource("11_krd65")]
+transform = Transform3D(2.4, 0, 0, 0, 1.5, 0, 0, 0, 2.4, 0, 2.25, 0)
+
+[node name="BridgeSquareR" parent="RampageAct/Middle/GateGroup" instance=ExtResource("11_uiuws")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 8, 0, 0)
+
+[node name="SpoilsSmall1" parent="RampageAct/Middle/GateGroup/BridgeSquareR" instance=ExtResource("11_krd65")]
+transform = Transform3D(2.4, 0, 0, 0, 1.5, 0, 0, 0, 2.4, 0, -6.75, 0)
+
+[node name="SpoilsSmall2" parent="RampageAct/Middle/GateGroup/BridgeSquareR" instance=ExtResource("11_krd65")]
+transform = Transform3D(2.4, 0, 0, 0, 1.5, 0, 0, 0, 2.4, 0, -4.5, 0)
+
+[node name="SpoilsSmall3" parent="RampageAct/Middle/GateGroup/BridgeSquareR" instance=ExtResource("11_krd65")]
+transform = Transform3D(2.4, 0, 0, 0, 1.5, 0, 0, 0, 2.4, 0, -2.25, 0)
+
+[node name="SpoilsSmall4" parent="RampageAct/Middle/GateGroup/BridgeSquareR" instance=ExtResource("11_krd65")]
+transform = Transform3D(2.4, 0, 0, 0, 1.5, 0, 0, 0, 2.4, 0, 0, 0)
+
+[node name="SpoilsSmall5" parent="RampageAct/Middle/GateGroup/BridgeSquareR" instance=ExtResource("11_krd65")]
+transform = Transform3D(2.4, 0, 0, 0, 1.5, 0, 0, 0, 2.4, 0, 2.25, 0)
+
+[node name="Switch" parent="RampageAct/Middle/GateGroup" instance=ExtResource("9_dic3o")]
+transform = Transform3D(1, 0, 0, 0, 0.999826, -0.018639, 0, 0.018639, 0.999826, 0, 0, 2.989)
+
+[node name="DashPanelGroup1" type="Node3D" parent="RampageAct/Middle"]
+transform = Transform3D(-0.25114, 0, 0.967951, 0, 1, 0, -0.967951, 0, -0.25114, 148.5, 4.55, 10)
+
+[node name="DashPanelL" parent="RampageAct/Middle/DashPanelGroup1" instance=ExtResource("3_emooq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+
+[node name="DashPanelM" parent="RampageAct/Middle/DashPanelGroup1" instance=ExtResource("3_emooq")]
+length = 0.2
+
+[node name="DashPanelR" parent="RampageAct/Middle/DashPanelGroup1" instance=ExtResource("3_emooq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="Rings1" type="Node3D" parent="RampageAct/Middle"]
+transform = Transform3D(0.25038, -0.0219647, -0.967898, 0, 0.999743, -0.0226873, 0.968148, 0.00568045, 0.250316, 152.562, 5.5, 8.91)
+script = ExtResource("4_4trei")
+Source = ExtResource("5_8jhbx")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Middle/Rings1" instance=ExtResource("5_8jhbx")]
+
+[node name="Child02" parent="RampageAct/Middle/Rings1" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="RampageAct/Middle/Rings1" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="RampageAct/Middle/Rings1" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="RampageAct/Middle/Rings1" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="BombGroup1" type="Node3D" parent="RampageAct/Middle"]
+transform = Transform3D(0.250093, 0, -0.968222, 0, 1, 0, 0.968222, 0, 0.250093, 162.025, 3.3, 6.48668)
+
+[node name="ActivationTrigger" parent="RampageAct/Middle/BombGroup1" instance=ExtResource("8_6uttv")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -1.00002, 0, 56)
+OneShot = true
+"Respawn Mode" = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Middle/BombGroup1/ActivationTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="Bomb1" parent="RampageAct/Middle/BombGroup1" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1.5, 8)
+"Launch Settings/Starting Offset" = Vector3(-10, 40, -40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb2" parent="RampageAct/Middle/BombGroup1" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, -5)
+launchDelay = 1.0
+"Launch Settings/Starting Offset" = Vector3(10, 40, -40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="BridgeThin1" parent="RampageAct/Middle" instance=ExtResource("18_ry7t2")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 193, 6, -4)
+
+[node name="SpikeBallSpawner1" parent="RampageAct/Middle" instance=ExtResource("19_ti4w3")]
+transform = Transform3D(-0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, -0.984808, 188.465, 41, 38.5318)
+maxSpawnAmount = 3
+lifetime = 10.0
+spawnInterval = 5.0
+initialVelocity = 5.0
+
+[node name="SpikeBallSpawner2" parent="RampageAct/Middle" instance=ExtResource("19_ti4w3")]
+transform = Transform3D(-1, 3.8097e-09, 8.19564e-08, 3.8097e-09, 1, -1.66336e-10, -8.19564e-08, -1.66334e-10, -1, 196.501, 41, 37.6513)
+maxSpawnAmount = 3
+lifetime = 10.0
+spawnInterval = 5.0
+initialVelocity = 5.0
+
+[node name="SpikeBallSpawner3" parent="RampageAct/Middle" instance=ExtResource("19_ti4w3")]
+transform = Transform3D(-0.996195, 1.84732e-08, 0.0871557, 1.8046e-08, 1, -5.68988e-09, -0.0871557, -4.09542e-09, -0.996195, 203.821, 41, 39.1879)
+maxSpawnAmount = 3
+lifetime = 10.0
+spawnInterval = 5.0
+initialVelocity = 5.0
+
+[node name="BridgeThin2" parent="RampageAct/Middle" instance=ExtResource("18_ry7t2")]
+transform = Transform3D(-4.47035e-08, 0, -1, 0, 1, 0, 1, 0, -4.47035e-08, 209.623, 6, -4.27937)
+
+[node name="DashPanelGroup2" type="Node3D" parent="RampageAct/Middle"]
+transform = Transform3D(0.267238, 0.0252249, 0.9633, 0, 0.999657, -0.0261769, -0.96363, 0.00699548, 0.267147, 227.825, 5.78623, 3.28917)
+
+[node name="DashPanelL" parent="RampageAct/Middle/DashPanelGroup2" instance=ExtResource("3_emooq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+
+[node name="DashPanelM" parent="RampageAct/Middle/DashPanelGroup2" instance=ExtResource("3_emooq")]
+
+[node name="DashPanelR" parent="RampageAct/Middle/DashPanelGroup2" instance=ExtResource("3_emooq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="BombGroup2" type="Node3D" parent="RampageAct/Middle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 275.442, 3.3, 25.7334)
+
+[node name="ActivationTrigger" parent="RampageAct/Middle/BombGroup2" instance=ExtResource("8_6uttv")]
+transform = Transform3D(-0.0871558, 0, -0.996195, 0, 1, 0, 0.996195, 0, -0.0871558, -62.8789, 2.8, -25.0754)
+OneShot = true
+"Respawn Mode" = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Middle/BombGroup2/ActivationTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="Bomb1" parent="RampageAct/Middle/BombGroup2" instance=ExtResource("7_i005y")]
+transform = Transform3D(-0.422618, 0.0789899, -0.902859, 3.72529e-09, 0.996195, 0.0871557, 0.906308, 0.0368336, -0.42101, -18.6, 0.8, -12.6)
+"Launch Settings/Starting Offset" = Vector3(-20, 20, -40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb2" parent="RampageAct/Middle/BombGroup2" instance=ExtResource("7_i005y")]
+transform = Transform3D(-0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, -11.9294, 0.3, -9.12227)
+launchDelay = 0.2
+"Launch Settings/Starting Offset" = Vector3(-20, 20, -40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb3" parent="RampageAct/Middle/BombGroup2" instance=ExtResource("7_i005y")]
+transform = Transform3D(-0.573576, 0, -0.819152, 0, 1, 0, 0.819152, 0, -0.573576, -5.91182, -0.3, -5.12594)
+launchDelay = 0.4
+"Launch Settings/Starting Offset" = Vector3(-20, 20, -40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb4" parent="RampageAct/Middle/BombGroup2" instance=ExtResource("7_i005y")]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 0, -0.8, 0)
+launchDelay = 0.6
+"Launch Settings/Starting Offset" = Vector3(-20, 20, -40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="RingsL" type="Node3D" parent="RampageAct/Middle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 279.652, 3.17839, 24.8473)
+script = ExtResource("4_4trei")
+Source = ExtResource("5_8jhbx")
+Amount = 6
+Shape = 2
+Path = NodePath("../../../Static/Path/Main")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Middle/RingsL" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00296021, 0.000329018, -0.00328064)
+
+[node name="Child02" parent="RampageAct/Middle/RingsL" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3461, -0.273994, 3.96484)
+
+[node name="Child03" parent="RampageAct/Middle/RingsL" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.46786, -0.354546, 8.08266)
+
+[node name="Child04" parent="RampageAct/Middle/RingsL" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.37497, -0.276069, 12.365)
+
+[node name="Child05" parent="RampageAct/Middle/RingsL" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.052, -0.0697556, 16.8051)
+
+[node name="Child06" parent="RampageAct/Middle/RingsL" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.4793, 0.235939, 21.3989)
+
+[node name="RingsR" type="Node3D" parent="RampageAct/Middle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 274.652, 3.17839, 29.8473)
+script = ExtResource("4_4trei")
+Source = ExtResource("5_8jhbx")
+Amount = 6
+Shape = 2
+Path = NodePath("../../../Static/Path/Main")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Middle/RingsR" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00274658, 0.000306129, -0.00309753)
+
+[node name="Child02" parent="RampageAct/Middle/RingsR" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0668, -0.257966, 3.66779)
+
+[node name="Child03" parent="RampageAct/Middle/RingsR" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.95041, -0.32494, 7.50359)
+
+[node name="Child04" parent="RampageAct/Middle/RingsR" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.6301, -0.235465, 11.4859)
+
+[node name="Child05" parent="RampageAct/Middle/RingsR" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.0881, -0.020462, 15.6019)
+
+[node name="Child06" parent="RampageAct/Middle/RingsR" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.3038, 0.291783, 19.8403)
+
+[node name="DashPanelGroup3" type="Node3D" parent="RampageAct/Middle"]
+transform = Transform3D(0.955793, -0.0256273, 0.292921, 0, 0.996195, 0.0871557, -0.29404, -0.0833028, 0.952156, 295.083, 3.67772, 59.2023)
+
+[node name="DashPanelL" parent="RampageAct/Middle/DashPanelGroup3" instance=ExtResource("3_emooq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+
+[node name="DashPanelM" parent="RampageAct/Middle/DashPanelGroup3" instance=ExtResource("3_emooq")]
+
+[node name="DashPanelR" parent="RampageAct/Middle/DashPanelGroup3" instance=ExtResource("3_emooq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="Ending" type="Node3D" parent="RampageAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 367, 0, -130)
+script = ExtResource("10_yioli")
+saveVisibilityOnCheckpoint = true
+cacheRespawnMethods = true
+
+[node name="PearlGroup" type="Node3D" parent="RampageAct/Ending"]
+transform = Transform3D(-0.8793, 0, 0.476269, 0, 1, 0, -0.476269, 0, -0.8793, -5.4, 12.078, 14.2)
+
+[node name="PearlsR1" type="Node3D" parent="RampageAct/Ending/PearlGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.12573, 0.00039196, 2.44962)
+script = ExtResource("4_4trei")
+Source = ExtResource("6_8jhbx")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Ending/PearlGroup/PearlsR1" instance=ExtResource("6_8jhbx")]
+
+[node name="Child02" parent="RampageAct/Ending/PearlGroup/PearlsR1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="RampageAct/Ending/PearlGroup/PearlsR1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="RampageAct/Ending/PearlGroup/PearlsR1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="RampageAct/Ending/PearlGroup/PearlsR1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="RampageAct/Ending/PearlGroup/PearlsR1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="RampageAct/Ending/PearlGroup/PearlsR1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="RampageAct/Ending/PearlGroup/PearlsR1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="PearlsL1" type="Node3D" parent="RampageAct/Ending/PearlGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225708, 0.00039196, 2.44962)
+script = ExtResource("4_4trei")
+Source = ExtResource("6_8jhbx")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Ending/PearlGroup/PearlsL1" instance=ExtResource("6_8jhbx")]
+
+[node name="Child02" parent="RampageAct/Ending/PearlGroup/PearlsL1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="RampageAct/Ending/PearlGroup/PearlsL1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="RampageAct/Ending/PearlGroup/PearlsL1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="RampageAct/Ending/PearlGroup/PearlsL1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="RampageAct/Ending/PearlGroup/PearlsL1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="RampageAct/Ending/PearlGroup/PearlsL1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="RampageAct/Ending/PearlGroup/PearlsL1" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="PearlsR2" type="Node3D" parent="RampageAct/Ending/PearlGroup"]
+transform = Transform3D(0.988643, 0, -0.150277, 0, 1, 0, 0.150277, 0, 0.988643, -1.1058, 0.00039196, -14.2796)
+script = ExtResource("4_4trei")
+Source = ExtResource("6_8jhbx")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Ending/PearlGroup/PearlsR2" instance=ExtResource("6_8jhbx")]
+
+[node name="Child02" parent="RampageAct/Ending/PearlGroup/PearlsR2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="RampageAct/Ending/PearlGroup/PearlsR2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="RampageAct/Ending/PearlGroup/PearlsR2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="RampageAct/Ending/PearlGroup/PearlsR2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="RampageAct/Ending/PearlGroup/PearlsR2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="RampageAct/Ending/PearlGroup/PearlsR2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="RampageAct/Ending/PearlGroup/PearlsR2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="PearlsL2" type="Node3D" parent="RampageAct/Ending/PearlGroup"]
+transform = Transform3D(0.988643, 0, -0.150277, 0, 1, 0, 0.150277, 0, 0.988643, -1.99548, 0.00039196, -14.4149)
+script = ExtResource("4_4trei")
+Source = ExtResource("6_8jhbx")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Ending/PearlGroup/PearlsL2" instance=ExtResource("6_8jhbx")]
+
+[node name="Child02" parent="RampageAct/Ending/PearlGroup/PearlsL2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="RampageAct/Ending/PearlGroup/PearlsL2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="RampageAct/Ending/PearlGroup/PearlsL2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="RampageAct/Ending/PearlGroup/PearlsL2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="RampageAct/Ending/PearlGroup/PearlsL2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="RampageAct/Ending/PearlGroup/PearlsL2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="RampageAct/Ending/PearlGroup/PearlsL2" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="PearlsR3" type="Node3D" parent="RampageAct/Ending/PearlGroup"]
+transform = Transform3D(0.954416, 0, -0.298474, 0, 1, 0, 0.298474, 0, 0.954416, 4.30203, 0.00039196, -28.7764)
+script = ExtResource("4_4trei")
+Source = ExtResource("6_8jhbx")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Ending/PearlGroup/PearlsR3" instance=ExtResource("6_8jhbx")]
+
+[node name="Child02" parent="RampageAct/Ending/PearlGroup/PearlsR3" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="RampageAct/Ending/PearlGroup/PearlsR3" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="RampageAct/Ending/PearlGroup/PearlsR3" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="RampageAct/Ending/PearlGroup/PearlsR3" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="RampageAct/Ending/PearlGroup/PearlsR3" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="RampageAct/Ending/PearlGroup/PearlsR3" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="RampageAct/Ending/PearlGroup/PearlsR3" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="PearlsL3" type="Node3D" parent="RampageAct/Ending/PearlGroup"]
+transform = Transform3D(0.954416, 0, -0.298474, 0, 1, 0, 0.298474, 0, 0.954416, 3.4429, 0.00039196, -29.0451)
+script = ExtResource("4_4trei")
+Source = ExtResource("6_8jhbx")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Ending/PearlGroup/PearlsL3" instance=ExtResource("6_8jhbx")]
+
+[node name="Child02" parent="RampageAct/Ending/PearlGroup/PearlsL3" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="RampageAct/Ending/PearlGroup/PearlsL3" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="RampageAct/Ending/PearlGroup/PearlsL3" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="RampageAct/Ending/PearlGroup/PearlsL3" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="RampageAct/Ending/PearlGroup/PearlsL3" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="RampageAct/Ending/PearlGroup/PearlsL3" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="RampageAct/Ending/PearlGroup/PearlsL3" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="BombGroup3" type="Node3D" parent="RampageAct/Ending"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.2, 11.6, 33.9)
+
+[node name="ActivationTrigger" parent="RampageAct/Ending/BombGroup3" instance=ExtResource("8_6uttv")]
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 15.9573, 2.8, -31.2277)
+OneShot = true
+"Respawn Mode" = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Ending/BombGroup3/ActivationTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="Bomb1" parent="RampageAct/Ending/BombGroup3" instance=ExtResource("7_i005y")]
+transform = Transform3D(-0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, 10, 0, -10)
+"Launch Settings/Starting Offset" = Vector3(-20, 20, 40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb2" parent="RampageAct/Ending/BombGroup3" instance=ExtResource("7_i005y")]
+transform = Transform3D(-0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, -0.819152, -2.59807, 0, -1.5)
+launchDelay = 0.2
+"Launch Settings/Starting Offset" = Vector3(-20, 20, 40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb3" parent="RampageAct/Ending/BombGroup3" instance=ExtResource("7_i005y")]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -8.33014, 0, 12.4808)
+launchDelay = 1.0
+"Launch Settings/Starting Offset" = Vector3(-20, 20, 40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb4" parent="RampageAct/Ending/BombGroup3" instance=ExtResource("7_i005y")]
+transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, -20.8923, -0.5, 20.5788)
+launchDelay = 1.2
+"Launch Settings/Starting Offset" = Vector3(-20, 20, 40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb5" parent="RampageAct/Ending/BombGroup3" instance=ExtResource("7_i005y")]
+transform = Transform3D(-0.173648, 0, 0.984808, 0, 1, 0, -0.984808, 0, -0.173648, -38.9075, -3.1, 18.4052)
+launchDelay = 1.2
+"Launch Settings/Starting Offset" = Vector3(0, 20, 40)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="RingsR2" type="Node3D" parent="RampageAct/Ending"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -57.3483, 9.17839, 55.2473)
+script = ExtResource("4_4trei")
+Source = ExtResource("5_8jhbx")
+Amount = 6
+Shape = 2
+Path = NodePath("../../../Static/Path/Main")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Ending/RingsR2" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000335693, -4.1008e-05, 8.39233e-05)
+
+[node name="Child02" parent="RampageAct/Ending/RingsR2" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.79877, -0.40569, 1.11763)
+
+[node name="Child03" parent="RampageAct/Ending/RingsR2" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.49091, -0.675639, 2.58654)
+
+[node name="Child04" parent="RampageAct/Ending/RingsR2" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.0025, -0.828948, 4.46961)
+
+[node name="Child05" parent="RampageAct/Ending/RingsR2" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.2682, -0.897728, 6.76705)
+
+[node name="Child06" parent="RampageAct/Ending/RingsR2" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.2582, -0.917685, 9.42225)
+
+[node name="BridgeGroup1" type="Node3D" parent="RampageAct/Ending"]
+transform = Transform3D(-0.898794, 0, 0.438371, 0, 1, 0, -0.438371, 0, -0.898794, -80.3714, 2.5, 72.5817)
+
+[node name="Blade1" type="Node3D" parent="RampageAct/Ending/BridgeGroup1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.99998, 6.3, 4)
+script = ExtResource("20_qxh3e")
+root = NodePath("Blade")
+animator = NodePath("")
+Movement/Mode = 1
+"Movement/Cycle Length" = 2.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 8.0
+Movement/Angle = -90.0
+"Vertical Orientation" = false
+
+[node name="Blade" parent="RampageAct/Ending/BridgeGroup1/Blade1" instance=ExtResource("21_oivdj")]
+
+[node name="Blade2" type="Node3D" parent="RampageAct/Ending/BridgeGroup1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.99998, 9.3, 4)
+script = ExtResource("20_qxh3e")
+root = NodePath("Blade")
+animator = NodePath("")
+Movement/Mode = 1
+"Movement/Cycle Length" = 2.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 8.0
+Movement/Angle = -90.0
+"Vertical Orientation" = false
+
+[node name="Blade" parent="RampageAct/Ending/BridgeGroup1/Blade2" instance=ExtResource("21_oivdj")]
+
+[node name="BridgeLarge1" parent="RampageAct/Ending/BridgeGroup1" instance=ExtResource("12_reyvh")]
+
+[node name="Blade3" type="Node3D" parent="RampageAct/Ending/BridgeGroup1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.05176e-05, 5, -7)
+script = ExtResource("20_qxh3e")
+root = NodePath("Blade")
+animator = NodePath("")
+Movement/Mode = 1
+"Movement/Cycle Length" = 1.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 4.0
+Movement/Angle = 0.0
+"Vertical Orientation" = true
+
+[node name="Blade" parent="RampageAct/Ending/BridgeGroup1/Blade3" instance=ExtResource("21_oivdj")]
+
+[node name="BridgeLarge2" parent="RampageAct/Ending/BridgeGroup1" instance=ExtResource("12_reyvh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="BridgeLarge3" parent="RampageAct/Ending/BridgeGroup1" instance=ExtResource("12_reyvh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -29)
+
+[node name="BridgeLarge4" parent="RampageAct/Ending/BridgeGroup1" instance=ExtResource("12_reyvh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -39)
+
+[node name="Blade4" type="Node3D" parent="RampageAct/Ending/BridgeGroup1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.49995, 5, -21.5)
+script = ExtResource("20_qxh3e")
+root = NodePath("Blade")
+animator = NodePath("")
+Movement/Mode = 1
+"Movement/Cycle Length" = 1.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 4.0
+Movement/Angle = 0.0
+"Vertical Orientation" = true
+
+[node name="Blade" parent="RampageAct/Ending/BridgeGroup1/Blade4" instance=ExtResource("21_oivdj")]
+
+[node name="Blade5" type="Node3D" parent="RampageAct/Ending/BridgeGroup1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.50005, 8, -21.5)
+script = ExtResource("20_qxh3e")
+root = NodePath("Blade")
+animator = NodePath("")
+Movement/Mode = 1
+"Movement/Cycle Length" = 1.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 4.0
+Movement/Angle = 0.0
+"Vertical Orientation" = true
+
+[node name="Blade" parent="RampageAct/Ending/BridgeGroup1/Blade5" instance=ExtResource("21_oivdj")]
+
+[node name="DashPanelGroup4" type="Node3D" parent="RampageAct/Ending"]
+transform = Transform3D(0.998854, 0.00440945, -0.0476462, -0.000240325, 0.996195, 0.0871554, 0.0478492, -0.0870441, 0.995054, -100.711, 8.42629, 122.049)
+
+[node name="DashPanelL" parent="RampageAct/Ending/DashPanelGroup4" instance=ExtResource("3_emooq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+
+[node name="DashPanelM" parent="RampageAct/Ending/DashPanelGroup4" instance=ExtResource("3_emooq")]
+
+[node name="DashPanelR" parent="RampageAct/Ending/DashPanelGroup4" instance=ExtResource("3_emooq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="BridgeGroup2" type="Node3D" parent="RampageAct/Ending"]
+transform = Transform3D(0.499739, 0, -0.0161589, 0, 1, 0, 0.0161589, 0, 0.499739, -101, 10.5, 130)
+
+[node name="BridgeSquare1" parent="RampageAct/Ending/BridgeGroup2" instance=ExtResource("11_uiuws")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.926, 0, 0)
+
+[node name="BridgeSquare2" parent="RampageAct/Ending/BridgeGroup2" instance=ExtResource("11_uiuws")]
+transform = Transform3D(0.999749, 0, -0.0223907, 0, 1, 0, 0.0223907, 0, 0.999749, 12.161, 0, 0)
+
+[node name="BridgeSquare3" parent="RampageAct/Ending/BridgeGroup2" instance=ExtResource("11_uiuws")]
+transform = Transform3D(0.999937, 0, -0.0111873, 0, 1, 0, 0.0111873, 0, 0.999937, -13.5201, 0, 22.911)
+
+[node name="BridgeSquare4" parent="RampageAct/Ending/BridgeGroup2" instance=ExtResource("11_uiuws")]
+transform = Transform3D(0.999953, 0, -0.00965152, 0, 1, 0, 0.00965152, 0, 0.999953, 11.7375, 0, 22.6325)
+
+[node name="BridgeGroup3" type="Node3D" parent="RampageAct/Ending"]
+transform = Transform3D(0.999176, 0, 0.0405852, 0, 1, 0, -0.0405852, 0, 0.999176, -101.911, 9.7, 160.999)
+
+[node name="SpoilsLarge" parent="RampageAct/Ending/BridgeGroup3" instance=ExtResource("22_oivdj")]
+transform = Transform3D(1, 0, 0, 0, 0.8, 0, 0, 0, 1, -1.5, 2.3, 3.6)
+
+[node name="SpoilsSmall1" parent="RampageAct/Ending/BridgeGroup3" instance=ExtResource("11_krd65")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 7.5, 9)
+
+[node name="SpoilsSmall2" parent="RampageAct/Ending/BridgeGroup3" instance=ExtResource("11_krd65")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 7.5, 9)
+
+[node name="BridgeLarge1" parent="RampageAct/Ending/BridgeGroup3" instance=ExtResource("12_reyvh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -2.7, 0)
+
+[node name="BridgeLarge2" parent="RampageAct/Ending/BridgeGroup3" instance=ExtResource("12_reyvh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.6, 2.5, 0, 2)
+
+[node name="BridgeSquare1" parent="RampageAct/Ending/BridgeGroup3" instance=ExtResource("11_uiuws")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 2.5, 7.5)
+
+[node name="BridgeSquare2" parent="RampageAct/Ending/BridgeGroup3" instance=ExtResource("11_uiuws")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 2.5, 7.5)
+
+[node name="BridgeSquare" parent="RampageAct/Ending/BridgeGroup3" instance=ExtResource("11_uiuws")]
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 3, 22)
+
+[node name="BridgeSquare2" parent="RampageAct/Ending/BridgeGroup3/BridgeSquare" instance=ExtResource("11_uiuws")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.5, 0)
+
+[node name="BridgeSquare3" parent="RampageAct/Ending/BridgeGroup3" instance=ExtResource("11_uiuws")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 2.25, 37)
+
+[node name="SpoilsLarge" parent="RampageAct/Ending/BridgeGroup3/BridgeSquare3" instance=ExtResource("22_oivdj")]
+transform = Transform3D(1.3, 0, 0, 0, 0.8, 0, 0, 0, 1.25, 0, -2, 0)
+
+[node name="GreenMajin1" parent="RampageAct/Ending/BridgeGroup3" instance=ExtResource("14_reyvh")]
+transform = Transform3D(-1, 0, 8.56817e-08, 0, 1, 0, -8.56817e-08, 0, -1, 2.5, 0, -6)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(20, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 30
+
+[node name="GreenMajin2" parent="RampageAct/Ending/BridgeGroup3" instance=ExtResource("14_reyvh")]
+transform = Transform3D(-1, 0, 8.56817e-08, 0, 1, 0, -8.56817e-08, 0, -1, -2.65814, 2.3, -1.10923)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 4, 20)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(-5, 0, -5)
+rangeOverride = 30
+
+[node name="BlueMajin1" parent="RampageAct/Ending/BridgeGroup3" instance=ExtResource("15_kuvre")]
+transform = Transform3D(-1, 0, 8.56817e-08, 0, 1, 0, -8.56817e-08, 0, -1, 2.5, 5, 1)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.2
+"Spawn Settings/Spawn Offset" = Vector3(20, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 30
+
+[node name="BlueMajin2" parent="RampageAct/Ending/BridgeGroup3" instance=ExtResource("15_kuvre")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -4.29153e-05, 8.3, 37)
+"Spawn Interval Settings/Enable Spawn Interval" = true
+"Spawn Interval Settings/Spawn Delay" = 2.0
+"Spawn Interval Settings/Separate Despawn Interval" = true
+"Spawn Interval Settings/Despawn Delay" = 1.5
+rangeOverride = 40
+
+[node name="CameraTrigger" parent="RampageAct/Ending/BridgeGroup3" instance=ExtResource("8_6uttv")]
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Cam" type="Node3D" parent="RampageAct/Ending/BridgeGroup3/CameraTrigger"]
+script = ExtResource("17_eqkj6")
+settings = ExtResource("18_140hr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Ending/BridgeGroup3/CameraTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_cxpr6")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="RampageAct/Ending/BridgeGroup3/CameraTrigger"]
+transform = Transform3D(1, 0, 7.45058e-09, 0, 1, 0, -7.45058e-09, 0, 1, -0.00012207, 12, 26)
+shape = SubResource("BoxShape3D_eqkj6")
+
+[node name="ThornSpring1" parent="RampageAct/Ending" instance=ExtResource("23_yyck4")]
+transform = Transform3D(0.66262, 0, -0.748956, 0, 1, 0, 0.748956, 0, 0.66262, -113, 9, 224)
+staticTime = 0.0
+rotateOnLaunch = true
+
+[node name="ThornSpring2" parent="RampageAct/Ending" instance=ExtResource("23_yyck4")]
+transform = Transform3D(0.66262, 0, -0.748956, 0, 1, 0, 0.748956, 0, 0.66262, -121.556, 9, 224.894)
+staticTime = 0.0
+rotateOnLaunch = true
+
+[node name="ThornSpring3" parent="RampageAct/Ending" instance=ExtResource("23_yyck4")]
+transform = Transform3D(0.66262, 0, -0.748956, 0, 1, 0, 0.748956, 0, 0.66262, -123.485, 9, 233.277)
+staticTime = 0.0
+rotateOnLaunch = true
+
+[node name="ThornSpring4" parent="RampageAct/Ending" instance=ExtResource("23_yyck4")]
+transform = Transform3D(0.66262, 0, -0.748956, 0, 1, 0, 0.748956, 0, 0.66262, -132.041, 9, 234.17)
+staticTime = 0.0
+rotateOnLaunch = true
+
+[node name="DashPanelGroup5" type="Node3D" parent="RampageAct/Ending"]
+transform = Transform3D(0.473104, 0, -0.881006, 0, 1, 0, 0.881006, 0, 0.473104, -154.942, 12.0362, 253.407)
+
+[node name="DashPanelL" parent="RampageAct/Ending/DashPanelGroup5" instance=ExtResource("3_emooq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+
+[node name="DashPanelM" parent="RampageAct/Ending/DashPanelGroup5" instance=ExtResource("3_emooq")]
+
+[node name="DashPanelR" parent="RampageAct/Ending/DashPanelGroup5" instance=ExtResource("3_emooq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="RingsL" type="Node3D" parent="RampageAct/Ending/DashPanelGroup5"]
+transform = Transform3D(-1, -4.57535e-09, 8.7303e-08, 0, 0.99863, 0.052336, -8.74228e-08, 0.052336, -0.99863, -0.6, 0.5, 3)
+script = ExtResource("4_4trei")
+Source = ExtResource("5_8jhbx")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Ending/DashPanelGroup5/RingsL" instance=ExtResource("5_8jhbx")]
+
+[node name="Child02" parent="RampageAct/Ending/DashPanelGroup5/RingsL" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="RampageAct/Ending/DashPanelGroup5/RingsL" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="RampageAct/Ending/DashPanelGroup5/RingsL" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="RampageAct/Ending/DashPanelGroup5/RingsL" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="RingsR" type="Node3D" parent="RampageAct/Ending/DashPanelGroup5"]
+transform = Transform3D(-1, -4.57535e-09, 8.7303e-08, 0, 0.99863, 0.052336, -8.74228e-08, 0.052336, -0.99863, 0.6, 0.5, 3)
+script = ExtResource("4_4trei")
+Source = ExtResource("5_8jhbx")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Ending/DashPanelGroup5/RingsR" instance=ExtResource("5_8jhbx")]
+
+[node name="Child02" parent="RampageAct/Ending/DashPanelGroup5/RingsR" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="RampageAct/Ending/DashPanelGroup5/RingsR" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="RampageAct/Ending/DashPanelGroup5/RingsR" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="RampageAct/Ending/DashPanelGroup5/RingsR" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="BombGroup4" type="Node3D" parent="RampageAct/Ending"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -210, 8.6, 272.5)
+
+[node name="ActivationTrigger" parent="RampageAct/Ending/BombGroup4" instance=ExtResource("8_6uttv")]
+transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, 54.9605, 3.3, -19.7949)
+OneShot = true
+"Respawn Mode" = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Ending/BombGroup4/ActivationTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="Bomb1" parent="RampageAct/Ending/BombGroup4" instance=ExtResource("7_i005y")]
+transform = Transform3D(-0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, -0.34202, 21.2254, 0.7, -5.21404)
+"Launch Settings/Starting Offset" = Vector3(-40, 20, 20)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb2" parent="RampageAct/Ending/BombGroup4" instance=ExtResource("7_i005y")]
+transform = Transform3D(-0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, -0.258819, 15.5059, 0.2, -3.42275)
+launchDelay = 0.2
+"Launch Settings/Starting Offset" = Vector3(-40, 20, 20)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb3" parent="RampageAct/Ending/BombGroup4" instance=ExtResource("7_i005y")]
+transform = Transform3D(-0.0871557, -3.8097e-09, 0.996195, -4.9774e-10, 1, 3.7807e-09, -0.996195, -1.66334e-10, -0.0871557, 8.76555, -3.7807e-09, -2.69553)
+launchDelay = 1.0
+"Launch Settings/Starting Offset" = Vector3(-40, 20, 20)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb4" parent="RampageAct/Ending/BombGroup4" instance=ExtResource("7_i005y")]
+transform = Transform3D(8.9407e-08, 0, 1, 0, 1, 0, -1, 0, 8.9407e-08, 1.45448, 0, -2.71539)
+launchDelay = 1.2
+"Launch Settings/Starting Offset" = Vector3(-40, 20, 20)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="BridgeGroup4" type="Node3D" parent="RampageAct/Ending"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -226.2, 8.6, 272.6)
+
+[node name="BridgeSquare1" parent="RampageAct/Ending/BridgeGroup4" instance=ExtResource("11_uiuws")]
+transform = Transform3D(1, 0, 0, 0, 1.5, 0, 0, 0, 1, -7, 0, 0)
+
+[node name="BridgeSquareFalling" parent="RampageAct/Ending/BridgeGroup4" instance=ExtResource("17_o486y")]
+transform = Transform3D(2, 0, 0, 0, 1.25, 0, 0, 0, 0.5, 0, 0, 0)
+"Falling Platform Settings/Auto Shake" = false
+"Falling Platform Settings/Shake Length" = 0.0
+"Falling Platform Settings/Fall Speed" = 0.3
+
+[node name="BridgeSquare2" parent="RampageAct/Ending/BridgeGroup4" instance=ExtResource("11_uiuws")]
+transform = Transform3D(1, 0, 0, 0, 1.5, 0, 0, 0, 1, 7, 0, 0)
+
+[node name="Switch" parent="RampageAct/Ending/BridgeGroup4" instance=ExtResource("9_dic3o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 3)
+
+[node name="MovingObject" type="Node3D" parent="RampageAct/Ending/BridgeGroup4"]
+transform = Transform3D(0.999679, 0, -0.0253395, 0, 1, 0, 0.0253395, 0, 0.999679, -4, 7, -5)
+script = ExtResource("20_qxh3e")
+root = NodePath("ItemBoxFlying")
+animator = NodePath("")
+Movement/Mode = 1
+"Movement/Cycle Length" = 3.5
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 8.0
+Movement/Angle = -90.0
+"Vertical Orientation" = false
+
+[node name="ItemBoxFlying" parent="RampageAct/Ending/BridgeGroup4/MovingObject" instance=ExtResource("24_rj70a")]
+transform = Transform3D(1, 0, 1.76951e-07, 0, 1, 0, -1.76951e-07, 0, 1, 0, 0, 0)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 50
+
+[node name="BlueMajin1" parent="RampageAct/Ending/BridgeGroup4" instance=ExtResource("15_kuvre")]
+transform = Transform3D(0.998267, 0, -0.0588534, 0, 1, 0, 0.0588534, 0, 0.998267, -1, 7, -15.3)
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 0.5
+"Defeat Settings/Launch Direction" = Vector3(0, 0, 10)
+"Defeat Settings/Local Transform" = true
+
+[node name="BlueMajin2" parent="RampageAct/Ending/BridgeGroup4" instance=ExtResource("15_kuvre")]
+transform = Transform3D(0.995741, 0, -0.0921968, 0, 1, 0, 0.0921968, 0, 0.995741, 1.81561, 8, -25.1085)
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 0.5
+"Defeat Settings/Launch Direction" = Vector3(0, 0, 10)
+"Defeat Settings/Local Transform" = true
+
+[node name="RingsL3" type="Node3D" parent="RampageAct/Ending"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -244.648, 9.17839, 274.847)
+script = ExtResource("4_4trei")
+Source = ExtResource("5_8jhbx")
+Amount = 8
+Shape = 2
+Path = NodePath("../../../Static/Path/Main")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Ending/RingsL3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00063324, 0, -4.57764e-05)
+
+[node name="Child02" parent="RampageAct/Ending/RingsL3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.05103, -1.43051e-05, -0.394882)
+
+[node name="Child03" parent="RampageAct/Ending/RingsL3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.1024, -2.86102e-05, -0.919128)
+
+[node name="Child04" parent="RampageAct/Ending/RingsL3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.1522, -4.00543e-05, -1.60017)
+
+[node name="Child05" parent="RampageAct/Ending/RingsL3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.197, -5.05447e-05, -2.47668)
+
+[node name="Child06" parent="RampageAct/Ending/RingsL3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.2287, -5.72205e-05, -3.60576)
+
+[node name="Child07" parent="RampageAct/Ending/RingsL3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.2321, -6.10352e-05, -5.07689)
+
+[node name="Child08" parent="RampageAct/Ending/RingsL3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.0727, -6.10352e-05, -6.90099)
+
+[node name="RingsR3" type="Node3D" parent="RampageAct/Ending"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -244.248, 9.17839, 269.247)
+script = ExtResource("4_4trei")
+Source = ExtResource("5_8jhbx")
+Amount = 8
+Shape = 2
+Path = NodePath("../../../Static/Path/Main")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Ending/RingsR3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000267029, 0, 1.52588e-05)
+
+[node name="Child02" parent="RampageAct/Ending/RingsR3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.92027, -1.43051e-05, -0.384003)
+
+[node name="Child03" parent="RampageAct/Ending/RingsR3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.81689, -2.86102e-05, -0.891388)
+
+[node name="Child04" parent="RampageAct/Ending/RingsR3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.6784, -4.00543e-05, -1.54601)
+
+[node name="Child05" parent="RampageAct/Ending/RingsR3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.4879, -5.05447e-05, -2.38033)
+
+[node name="Child06" parent="RampageAct/Ending/RingsR3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.2154, -5.72205e-05, -3.43922)
+
+[node name="Child07" parent="RampageAct/Ending/RingsR3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.8085, -6.10352e-05, -4.78671)
+
+[node name="Child08" parent="RampageAct/Ending/RingsR3" instance=ExtResource("5_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.327, -6.10352e-05, -6.48904)
+
+[node name="PearlsL" type="Node3D" parent="RampageAct/Ending"]
+transform = Transform3D(0.851114, 0, 0.524981, 0, 1, 0, -0.524981, 0, 0.851114, -333.813, 9.2, 228.068)
+script = ExtResource("4_4trei")
+Source = ExtResource("6_8jhbx")
+Amount = 15
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = SubResource("Curve_rj70a")
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Ending/PearlsL" instance=ExtResource("6_8jhbx")]
+
+[node name="Child02" parent="RampageAct/Ending/PearlsL" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.540138, 0, -3)
+
+[node name="Child03" parent="RampageAct/Ending/PearlsL" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.905243, 0, -6)
+
+[node name="Child04" parent="RampageAct/Ending/PearlsL" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.980323, 0, -9)
+
+[node name="Child05" parent="RampageAct/Ending/PearlsL" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.583502, 0, -12)
+
+[node name="Child06" parent="RampageAct/Ending/PearlsL" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0875231, 0, -15)
+
+[node name="Child07" parent="RampageAct/Ending/PearlsL" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.719706, 0, -18)
+
+[node name="Child08" parent="RampageAct/Ending/PearlsL" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -21)
+
+[node name="Child09" parent="RampageAct/Ending/PearlsL" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.719706, 0, -24)
+
+[node name="Child10" parent="RampageAct/Ending/PearlsL" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0875235, 0, -27)
+
+[node name="Child11" parent="RampageAct/Ending/PearlsL" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.583502, 0, -30)
+
+[node name="Child12" parent="RampageAct/Ending/PearlsL" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.980323, 0, -33)
+
+[node name="Child13" parent="RampageAct/Ending/PearlsL" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.909269, 0, -36)
+
+[node name="Child14" parent="RampageAct/Ending/PearlsL" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.551066, 0, -39)
+
+[node name="Child15" parent="RampageAct/Ending/PearlsL" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49012e-08, 0, -42)
+
+[node name="PearlsR" type="Node3D" parent="RampageAct/Ending"]
+transform = Transform3D(0.851114, 0, 0.524981, 0, 1, 0, -0.524981, 0, 0.851114, -333.1, 9.2, 227.511)
+script = ExtResource("4_4trei")
+Source = ExtResource("6_8jhbx")
+Amount = 15
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = SubResource("Curve_rj70a")
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Ending/PearlsR" instance=ExtResource("6_8jhbx")]
+
+[node name="Child02" parent="RampageAct/Ending/PearlsR" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.540138, 0, -3)
+
+[node name="Child03" parent="RampageAct/Ending/PearlsR" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.905243, 0, -6)
+
+[node name="Child04" parent="RampageAct/Ending/PearlsR" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.980323, 0, -9)
+
+[node name="Child05" parent="RampageAct/Ending/PearlsR" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.583502, 0, -12)
+
+[node name="Child06" parent="RampageAct/Ending/PearlsR" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0875231, 0, -15)
+
+[node name="Child07" parent="RampageAct/Ending/PearlsR" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.719706, 0, -18)
+
+[node name="Child08" parent="RampageAct/Ending/PearlsR" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -21)
+
+[node name="Child09" parent="RampageAct/Ending/PearlsR" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.719706, 0, -24)
+
+[node name="Child10" parent="RampageAct/Ending/PearlsR" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0875235, 0, -27)
+
+[node name="Child11" parent="RampageAct/Ending/PearlsR" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.583502, 0, -30)
+
+[node name="Child12" parent="RampageAct/Ending/PearlsR" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.980323, 0, -33)
+
+[node name="Child13" parent="RampageAct/Ending/PearlsR" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.909269, 0, -36)
+
+[node name="Child14" parent="RampageAct/Ending/PearlsR" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.551066, 0, -39)
+
+[node name="Child15" parent="RampageAct/Ending/PearlsR" instance=ExtResource("6_8jhbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49012e-08, 0, -42)
+
+[node name="BombGroup5" type="Node3D" parent="RampageAct/Ending"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -293, 8.6, 259)
+
+[node name="ActivationTrigger" parent="RampageAct/Ending/BombGroup5" instance=ExtResource("8_6uttv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 58, 0, 13.5)
+OneShot = true
+"Respawn Mode" = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Ending/BombGroup5/ActivationTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="Bomb1" parent="RampageAct/Ending/BombGroup5" instance=ExtResource("7_i005y")]
+transform = Transform3D(0.0600032, 0, 0.998198, 0, 1, 0, -0.998198, 0, 0.0600032, 45.8091, 0, 12.866)
+"Launch Settings/Starting Offset" = Vector3(-40, 20, 20)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb2" parent="RampageAct/Ending/BombGroup5" instance=ExtResource("7_i005y")]
+transform = Transform3D(0.173648, 0, 0.984808, 0, 1, 0, -0.984808, 0, 0.173648, 35.7633, -2.01166e-07, 11.7036)
+launchDelay = 0.2
+"Launch Settings/Starting Offset" = Vector3(-40, 20, 20)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb3" parent="RampageAct/Ending/BombGroup5" instance=ExtResource("7_i005y")]
+transform = Transform3D(0.173648, -3.8097e-09, 0.984808, 4.97738e-10, 1, 3.7807e-09, -0.984808, -1.66334e-10, 0.173648, 26.3418, 6.53204e-08, 10.1751)
+launchDelay = 1.0
+"Launch Settings/Starting Offset" = Vector3(-40, 20, 20)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb4" parent="RampageAct/Ending/BombGroup5" instance=ExtResource("7_i005y")]
+transform = Transform3D(0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, 0.34202, 16.6343, 0, 7.19893)
+launchDelay = 1.2
+"Launch Settings/Starting Offset" = Vector3(-40, 20, 20)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb5" parent="RampageAct/Ending/BombGroup5" instance=ExtResource("7_i005y")]
+transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, 8.36078, 0, 3.70722)
+launchDelay = 1.2
+"Launch Settings/Starting Offset" = Vector3(-40, 20, 20)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="BridgeGroup5" type="Node3D" parent="RampageAct/Ending"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -250, 5.745, 289)
+
+[node name="SpikeBallSpawner1" parent="RampageAct/Ending/BridgeGroup5" instance=ExtResource("19_ti4w3")]
+transform = Transform3D(-1, -2.26267e-08, 8.44439e-08, 0, 0.965926, 0.258819, -8.74228e-08, 0.258819, -0.965926, -23.5, 14, 19.7)
+maxSpawnAmount = 3
+lifetime = 5.0
+spawnInterval = 5.0
+initialVelocity = 20.0
+
+[node name="SpikeBallSpawner2" parent="RampageAct/Ending/BridgeGroup5" instance=ExtResource("19_ti4w3")]
+transform = Transform3D(-1, -4.37114e-08, 7.57103e-08, 0, 0.866025, 0.5, -8.74228e-08, 0.5, -0.866025, -14.5, 14, 27.7)
+maxSpawnAmount = 3
+lifetime = 5.0
+spawnInterval = 5.0
+initialVelocity = 20.0
+
+[node name="SpikeBallSpawner3" parent="RampageAct/Ending/BridgeGroup5" instance=ExtResource("19_ti4w3")]
+transform = Transform3D(-1, -4.37114e-08, 7.57103e-08, 0, 0.866025, 0.5, -8.74228e-08, 0.5, -0.866025, -5.5, 14, 33.7)
+maxSpawnAmount = 3
+lifetime = 5.0
+spawnInterval = 5.0
+initialVelocity = 20.0
+
+[node name="BridgeThin1" parent="RampageAct/Ending/BridgeGroup5" instance=ExtResource("18_ry7t2")]
+transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 1.5, 0, 1, -3)
+
+[node name="BridgeThin2" parent="RampageAct/Ending/BridgeGroup5" instance=ExtResource("18_ry7t2")]
+transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 1.5, 0, 1, 12)
+
+[node name="BridgeThin3" parent="RampageAct/Ending/BridgeGroup5" instance=ExtResource("18_ry7t2")]
+transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 1.5, -22.5, 0, -6)
+
+[node name="SpoilsSmall1" parent="RampageAct/Ending/BridgeGroup5" instance=ExtResource("11_krd65")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -11.099, 2.8, -13.1687)
+
+[node name="SpoilsSmall2" parent="RampageAct/Ending/BridgeGroup5" instance=ExtResource("11_krd65")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -12.501, 2.8, -14.4313)
+
+[node name="SpoilsLarge1" parent="RampageAct/Ending" instance=ExtResource("22_oivdj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -277, 8.445, 273)
+
+[node name="SpoilsLarge2" parent="RampageAct/Ending" instance=ExtResource("22_oivdj")]
+transform = Transform3D(0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, 0.258819, -282.178, 8.445, 258.388)
+
+[node name="SpoilsLarge3" parent="RampageAct/Ending" instance=ExtResource("22_oivdj")]
+transform = Transform3D(0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, 0.258819, -293.201, 8.445, 264.752)
+
+[node name="BridgeGroup6" type="Node3D" parent="RampageAct/Ending"]
+transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, -293.65, 8.6, 257.394)
+
+[node name="BlueMajin1" parent="RampageAct/Ending/BridgeGroup6" instance=ExtResource("15_kuvre")]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -1, 0, 14.977)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(10, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 30
+
+[node name="BlueMajin2" parent="RampageAct/Ending/BridgeGroup6" instance=ExtResource("15_kuvre")]
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 2.5, 0, 11.992)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-10, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 30
+
+[node name="BlueMajin3" parent="RampageAct/Ending/BridgeGroup6" instance=ExtResource("15_kuvre")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.162, 1, 6.027)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 20, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 30
+
+[node name="BridgeSquare1" parent="RampageAct/Ending/BridgeGroup6" instance=ExtResource("11_uiuws")]
+transform = Transform3D(1, 0, 0, 0, 1.5, 0, 0, 0, 1, -7, 0, 0)
+
+[node name="BridgeSquareFalling" parent="RampageAct/Ending/BridgeGroup6" instance=ExtResource("17_o486y")]
+transform = Transform3D(2, 0, 0, 0, 1.25, 0, 0, 0, 0.5, 0, 0, 0)
+"Falling Platform Settings/Auto Shake" = false
+"Falling Platform Settings/Shake Length" = 0.0
+"Falling Platform Settings/Fall Speed" = 0.3
+
+[node name="BridgeSquare2" parent="RampageAct/Ending/BridgeGroup6" instance=ExtResource("11_uiuws")]
+transform = Transform3D(1, 0, 0, 0, 1.5, 0, 0, 0, 1, 7, 0, 0)
+
+[node name="Switch" parent="RampageAct/Ending/BridgeGroup6" instance=ExtResource("9_dic3o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 3)
+
+[node name="MovingObject" type="Node3D" parent="RampageAct/Ending/BridgeGroup6"]
+transform = Transform3D(0.999679, 0, -0.0253395, 0, 1, 0, 0.0253395, 0, 0.999679, -4, 7, -5)
+script = ExtResource("20_qxh3e")
+root = NodePath("ItemBoxFlying")
+animator = NodePath("")
+Movement/Mode = 1
+"Movement/Cycle Length" = 3.5
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 8.0
+Movement/Angle = -90.0
+"Vertical Orientation" = false
+
+[node name="ItemBoxFlying" parent="RampageAct/Ending/BridgeGroup6/MovingObject" instance=ExtResource("24_rj70a")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 50
+
+[node name="BombGroup6" type="Node3D" parent="RampageAct/Ending"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -365, 9.3, 159)
+
+[node name="ActivationTrigger" parent="RampageAct/Ending/BombGroup6" instance=ExtResource("8_6uttv")]
+transform = Transform3D(0.617324, 0, 0.786709, 0, 1, 0, -0.786709, 0, 0.617324, 50.7183, -0.7, 85.3454)
+OneShot = true
+"Respawn Mode" = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Ending/BombGroup6/ActivationTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="Bomb1" parent="RampageAct/Ending/BombGroup6" instance=ExtResource("7_i005y")]
+transform = Transform3D(0.801024, 0, 0.598632, 0, 1, 0, -0.598632, 0, 0.801024, 28.3464, -0.7, 60.8)
+travelSpeedRatio = 1.2
+"Launch Settings/Starting Offset" = Vector3(100, 80, -100)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb2" parent="RampageAct/Ending/BombGroup6" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, -0.7, 56)
+travelSpeedRatio = 1.2
+"Launch Settings/Starting Offset" = Vector3(100, 80, -100)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb3" parent="RampageAct/Ending/BombGroup6" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, -0.700001, 43)
+travelSpeedRatio = 1.2
+"Launch Settings/Starting Offset" = Vector3(100, 80, -100)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb4" parent="RampageAct/Ending/BombGroup6" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -0.7, 37)
+travelSpeedRatio = 1.2
+"Launch Settings/Starting Offset" = Vector3(100, 80, -100)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb5" parent="RampageAct/Ending/BombGroup6" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, -0.7, 27)
+travelSpeedRatio = 1.2
+"Launch Settings/Starting Offset" = Vector3(100, 80, -100)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb6" parent="RampageAct/Ending/BombGroup6" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -0.7, 21)
+travelSpeedRatio = 1.2
+"Launch Settings/Starting Offset" = Vector3(100, 80, -100)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb7" parent="RampageAct/Ending/BombGroup6" instance=ExtResource("7_i005y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -0.7, 12)
+travelSpeedRatio = 1.2
+"Launch Settings/Starting Offset" = Vector3(100, 80, -100)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="BridgeGroup7" type="Node3D" parent="RampageAct/Ending"]
+transform = Transform3D(0.684496, 0, 0.729016, 0, 1, 0, -0.729016, 0, 0.684496, -327.314, 8.6, 233.389)
+
+[node name="BridgeSquare1" parent="RampageAct/Ending/BridgeGroup7" instance=ExtResource("11_uiuws")]
+transform = Transform3D(0.5, 0, 0, 0, 1.5, 0, 0, 0, 0.5, -6.05, 0, 0)
+
+[node name="BridgeSquare2" parent="RampageAct/Ending/BridgeGroup7" instance=ExtResource("11_uiuws")]
+transform = Transform3D(0.5, 0, 0, 0, 1.5, 0, 0, 0, 0.5, 6.45, 0, 0)
+
+[node name="BridgeSquare3" parent="RampageAct/Ending/BridgeGroup7" instance=ExtResource("11_uiuws")]
+transform = Transform3D(0.482963, 0, -0.12941, 0, 1.5, 0, 0.12941, 0, 0.482963, -2.55421, 0, -31.7226)
+
+[node name="BridgeSquare4" parent="RampageAct/Ending/BridgeGroup7" instance=ExtResource("11_uiuws")]
+transform = Transform3D(0.482963, 0, -0.12941, 0, 1.5, 0, 0.12941, 0, 0.482963, 9.51985, 0, -28.4874)
+
+[node name="BridgeSquare5" parent="RampageAct/Ending/BridgeGroup7" instance=ExtResource("11_uiuws")]
+transform = Transform3D(0.453154, -7.06722e-09, -0.211309, 3.40036e-09, 1.5, 1.71794e-09, 0.211309, -8.98213e-09, 0.453154, 4.73851, 0, -52.5495)
+
+[node name="BridgeSquare6" parent="RampageAct/Ending/BridgeGroup7" instance=ExtResource("11_uiuws")]
+transform = Transform3D(0.453154, -7.06722e-09, -0.211309, 3.40036e-09, 1.5, 1.71794e-09, 0.211309, -8.98213e-09, 0.453154, 16.0673, 0, -47.2667)
+
+[connection signal="Activated" from="RampageAct/ObjectMap/L-Opening" to="RampageAct/Opening" method="Activate"]
+[connection signal="Deactivated" from="RampageAct/ObjectMap/L-Opening" to="RampageAct/Opening" method="Deactivate"]
+[connection signal="Activated" from="RampageAct/ObjectMap/U-Opening" to="RampageAct/Opening" method="Deactivate"]
+[connection signal="Deactivated" from="RampageAct/ObjectMap/U-Opening" to="RampageAct/Opening" method="Activate"]
+[connection signal="Activated" from="RampageAct/ObjectMap/U-Middle" to="RampageAct/Middle" method="Deactivate"]
+[connection signal="Deactivated" from="RampageAct/ObjectMap/U-Middle" to="RampageAct/Middle" method="Activate"]
+[connection signal="Activated" from="RampageAct/ObjectMap/U-Ending" to="RampageAct/Ending" method="Deactivate"]
+[connection signal="Deactivated" from="RampageAct/ObjectMap/U-Ending" to="RampageAct/Ending" method="Activate"]
+[connection signal="Activated" from="RampageAct/ObjectMap/L-Middle" to="RampageAct/Middle" method="Activate"]
+[connection signal="Deactivated" from="RampageAct/ObjectMap/L-Middle" to="RampageAct/Middle" method="Deactivate"]
+[connection signal="Activated" from="RampageAct/ObjectMap/L-Ending" to="RampageAct/Ending" method="Activate"]
+[connection signal="Deactivated" from="RampageAct/ObjectMap/L-Ending" to="RampageAct/Ending" method="Deactivate"]
+[connection signal="Activated" from="RampageAct/ObjectMap/R-Opening" to="RampageAct/Opening" method="RespawnChildren"]
+[connection signal="Activated" from="RampageAct/ObjectMap/R-Middle" to="RampageAct/Middle" method="RespawnChildren"]
+[connection signal="Activated" from="RampageAct/ObjectMap/R-Ending" to="RampageAct/Ending" method="RespawnChildren"]
+[connection signal="Activated" from="RampageAct/Opening/BombGroup1/ActivationTrigger" to="RampageAct/Opening/BombGroup1/Bomb1" method="Launch"]
+[connection signal="Activated" from="RampageAct/Opening/BombGroup1/ActivationTrigger" to="RampageAct/Opening/BombGroup1/Bomb2" method="Launch"]
+[connection signal="Activated" from="RampageAct/Opening/BombGroup2/ActivationTrigger" to="RampageAct/Opening/BombGroup2/Bomb1" method="Launch"]
+[connection signal="Activated" from="RampageAct/Opening/BombGroup2/ActivationTrigger" to="RampageAct/Opening/BombGroup2/Bomb2" method="Launch"]
+[connection signal="Activated" from="RampageAct/Opening/BombGroup2/ActivationTrigger" to="RampageAct/Opening/BombGroup2/Bomb3" method="Launch"]
+[connection signal="Activated" from="RampageAct/Opening/BombGroup3/ActivationTrigger" to="RampageAct/Opening/BombGroup3/Bomb1" method="Launch"]
+[connection signal="Activated" from="RampageAct/Opening/BombGroup3/ActivationTrigger" to="RampageAct/Opening/BombGroup3/Bomb2" method="Launch"]
+[connection signal="Activated" from="RampageAct/Opening/BombGroup3/ActivationTrigger" to="RampageAct/Opening/BombGroup3/Bomb3" method="Launch"]
+[connection signal="Activated" from="RampageAct/Opening/BombGroup4/ActivationTrigger" to="RampageAct/Opening/BombGroup4/Bomb1" method="Launch"]
+[connection signal="Activated" from="RampageAct/Opening/BombGroup4/ActivationTrigger" to="RampageAct/Opening/BombGroup4/Bomb2" method="Launch"]
+[connection signal="Activated" from="RampageAct/Opening/BombGroup4/ActivationTrigger" to="RampageAct/Opening/BombGroup4/Bomb3" method="Launch"]
+[connection signal="Activated" from="RampageAct/Opening/BombGroup4/ActivationTrigger" to="RampageAct/Opening/BombGroup4/Bomb4" method="Launch"]
+[connection signal="Activated" from="RampageAct/Opening/BombGroup4/ActivationTrigger" to="RampageAct/Opening/BombGroup4/Bomb5" method="Launch"]
+[connection signal="Activated" from="RampageAct/Opening/BombGroup4/ActivationTrigger" to="RampageAct/Opening/BombGroup4/Bomb6" method="Launch"]
+[connection signal="Activated" from="RampageAct/Opening/Switch" to="RampageAct/Opening/CullingGroup" method="Activate"]
+[connection signal="Deactivated" from="RampageAct/Opening/Switch" to="RampageAct/Opening/CullingGroup" method="Deactivate"]
+[connection signal="Respawned" from="RampageAct/Opening/Switch" to="RampageAct/Opening/CullingGroup" method="Deactivate"]
+[connection signal="Activated" from="RampageAct/Middle/BombGroup5/ActivationTrigger" to="RampageAct/Middle/BombGroup5/Bomb1" method="Launch"]
+[connection signal="Activated" from="RampageAct/Middle/BombGroup5/ActivationTrigger" to="RampageAct/Middle/BombGroup5/Bomb2" method="Launch"]
+[connection signal="Activated" from="RampageAct/Middle/BombGroup5/ActivationTrigger" to="RampageAct/Middle/BombGroup5/Bomb3" method="Launch"]
+[connection signal="Activated" from="RampageAct/Middle/BombGroup5/ActivationTrigger" to="RampageAct/Middle/BombGroup5/Bomb4" method="Launch"]
+[connection signal="Activated" from="RampageAct/Middle/BombGroup6/ActivationTrigger" to="RampageAct/Middle/BombGroup6/Bomb1" method="Launch"]
+[connection signal="Activated" from="RampageAct/Middle/BombGroup6/ActivationTrigger" to="RampageAct/Middle/BombGroup6/Bomb2" method="Launch"]
+[connection signal="Activated" from="RampageAct/Middle/BombGroup6/ActivationTrigger" to="RampageAct/Middle/BombGroup6/Bomb3" method="Launch"]
+[connection signal="Activated" from="RampageAct/Middle/BombGroup6/ActivationTrigger" to="RampageAct/Middle/BombGroup6/Bomb4" method="Launch"]
+[connection signal="Activated" from="RampageAct/Middle/BombGroup7/ActivationTrigger" to="RampageAct/Middle/BombGroup7/Bomb1" method="Launch"]
+[connection signal="Activated" from="RampageAct/Middle/BombGroup7/ActivationTrigger" to="RampageAct/Middle/BombGroup7/Bomb2" method="Launch"]
+[connection signal="Activated" from="RampageAct/Middle/GateGroup/Switch" to="RampageAct/Middle/GateGroup/BridgeSquareFalling" method="StartShaking"]
+[connection signal="Respawned" from="RampageAct/Middle/GateGroup/Switch" to="RampageAct/Middle/GateGroup/BridgeSquareFalling" method="Respawn"]
+[connection signal="Activated" from="RampageAct/Middle/BombGroup1/ActivationTrigger" to="RampageAct/Middle/BombGroup1/Bomb1" method="Launch"]
+[connection signal="Activated" from="RampageAct/Middle/BombGroup1/ActivationTrigger" to="RampageAct/Middle/BombGroup1/Bomb2" method="Launch"]
+[connection signal="Activated" from="RampageAct/Middle/BombGroup2/ActivationTrigger" to="RampageAct/Middle/BombGroup2/Bomb1" method="Launch"]
+[connection signal="Activated" from="RampageAct/Middle/BombGroup2/ActivationTrigger" to="RampageAct/Middle/BombGroup2/Bomb2" method="Launch"]
+[connection signal="Activated" from="RampageAct/Middle/BombGroup2/ActivationTrigger" to="RampageAct/Middle/BombGroup2/Bomb3" method="Launch"]
+[connection signal="Activated" from="RampageAct/Middle/BombGroup2/ActivationTrigger" to="RampageAct/Middle/BombGroup2/Bomb4" method="Launch"]
+[connection signal="Activated" from="RampageAct/Ending/BombGroup3/ActivationTrigger" to="RampageAct/Ending/BombGroup3/Bomb1" method="Launch"]
+[connection signal="Activated" from="RampageAct/Ending/BombGroup3/ActivationTrigger" to="RampageAct/Ending/BombGroup3/Bomb2" method="Launch"]
+[connection signal="Activated" from="RampageAct/Ending/BombGroup3/ActivationTrigger" to="RampageAct/Ending/BombGroup3/Bomb3" method="Launch"]
+[connection signal="Activated" from="RampageAct/Ending/BombGroup3/ActivationTrigger" to="RampageAct/Ending/BombGroup3/Bomb4" method="Launch"]
+[connection signal="Activated" from="RampageAct/Ending/BombGroup3/ActivationTrigger" to="RampageAct/Ending/BombGroup3/Bomb5" method="Launch"]
+[connection signal="Activated" from="RampageAct/Ending/BombGroup4/ActivationTrigger" to="RampageAct/Ending/BombGroup4/Bomb1" method="Launch"]
+[connection signal="Activated" from="RampageAct/Ending/BombGroup4/ActivationTrigger" to="RampageAct/Ending/BombGroup4/Bomb2" method="Launch"]
+[connection signal="Activated" from="RampageAct/Ending/BombGroup4/ActivationTrigger" to="RampageAct/Ending/BombGroup4/Bomb3" method="Launch"]
+[connection signal="Activated" from="RampageAct/Ending/BombGroup4/ActivationTrigger" to="RampageAct/Ending/BombGroup4/Bomb4" method="Launch"]
+[connection signal="Activated" from="RampageAct/Ending/BridgeGroup4/Switch" to="RampageAct/Ending/BridgeGroup4/BridgeSquareFalling" method="StartShaking"]
+[connection signal="Respawned" from="RampageAct/Ending/BridgeGroup4/Switch" to="RampageAct/Ending/BridgeGroup4/BridgeSquareFalling" method="Respawn"]
+[connection signal="Respawned" from="RampageAct/Ending/BridgeGroup4/MovingObject" to="RampageAct/Ending/BridgeGroup4/MovingObject/ItemBoxFlying" method="Respawn"]
+[connection signal="Activated" from="RampageAct/Ending/BombGroup5/ActivationTrigger" to="RampageAct/Ending/BombGroup5/Bomb1" method="Launch"]
+[connection signal="Activated" from="RampageAct/Ending/BombGroup5/ActivationTrigger" to="RampageAct/Ending/BombGroup5/Bomb2" method="Launch"]
+[connection signal="Activated" from="RampageAct/Ending/BombGroup5/ActivationTrigger" to="RampageAct/Ending/BombGroup5/Bomb3" method="Launch"]
+[connection signal="Activated" from="RampageAct/Ending/BombGroup5/ActivationTrigger" to="RampageAct/Ending/BombGroup5/Bomb4" method="Launch"]
+[connection signal="Activated" from="RampageAct/Ending/BombGroup5/ActivationTrigger" to="RampageAct/Ending/BombGroup5/Bomb5" method="Launch"]
+[connection signal="Activated" from="RampageAct/Ending/BridgeGroup6/Switch" to="RampageAct/Ending/BridgeGroup6/BridgeSquareFalling" method="StartShaking"]
+[connection signal="Respawned" from="RampageAct/Ending/BridgeGroup6/Switch" to="RampageAct/Ending/BridgeGroup6/BridgeSquareFalling" method="Respawn"]
+[connection signal="Respawned" from="RampageAct/Ending/BridgeGroup6/MovingObject" to="RampageAct/Ending/BridgeGroup6/MovingObject/ItemBoxFlying" method="Respawn"]
+[connection signal="Activated" from="RampageAct/Ending/BombGroup6/ActivationTrigger" to="RampageAct/Ending/BombGroup6/Bomb1" method="Launch"]
+[connection signal="Activated" from="RampageAct/Ending/BombGroup6/ActivationTrigger" to="RampageAct/Ending/BombGroup6/Bomb2" method="Launch"]
+[connection signal="Activated" from="RampageAct/Ending/BombGroup6/ActivationTrigger" to="RampageAct/Ending/BombGroup6/Bomb3" method="Launch"]
+[connection signal="Activated" from="RampageAct/Ending/BombGroup6/ActivationTrigger" to="RampageAct/Ending/BombGroup6/Bomb4" method="Launch"]
+[connection signal="Activated" from="RampageAct/Ending/BombGroup6/ActivationTrigger" to="RampageAct/Ending/BombGroup6/Bomb5" method="Launch"]
+[connection signal="Activated" from="RampageAct/Ending/BombGroup6/ActivationTrigger" to="RampageAct/Ending/BombGroup6/Bomb6" method="Launch"]
+[connection signal="Activated" from="RampageAct/Ending/BombGroup6/ActivationTrigger" to="RampageAct/Ending/BombGroup6/Bomb7" method="Launch"]
+
+[editable path="Static"]
+[editable path="Static/Collision"]
+[editable path="Static/Visuals/PSSky"]

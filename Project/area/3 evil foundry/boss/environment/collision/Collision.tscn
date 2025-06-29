@@ -1,5 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://dy8hsmwkctvec"]
+[gd_scene load_steps=3 format=3 uid="uid://dy8hsmwkctvec"]
 
 [ext_resource type="PackedScene" uid="uid://duc3y0wsd8atw" path="res://area/3 evil foundry/boss/environment/collision/Collision.gltf" id="1_dovll"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="2_xpmr2"]
 
 [node name="Collision" instance=ExtResource("1_dovll")]
+
+[node name="StaticBody3D" parent="Floor" index="0" groups=["floor"]]
+
+[node name="Wall" parent="." index="1"]
+script = ExtResource("2_xpmr2")
+startEnabled = true
+
+[node name="StaticBody3D" parent="Wall" index="0" groups=["wall"]]

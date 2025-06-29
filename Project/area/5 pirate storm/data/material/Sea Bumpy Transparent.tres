@@ -1,0 +1,30 @@
+[gd_resource type="ShaderMaterial" load_steps=8 format=3 uid="uid://cg6ovplhm26c0"]
+
+[ext_resource type="Shader" uid="uid://bum37h5xmun10" path="res://area/5 pirate storm/data/shader/SeaBumpyTransparent.gdshader" id="1_cf7yq"]
+[ext_resource type="Texture2D" uid="uid://cd0r0vr8ufc7j" path="res://area/5 pirate storm/data/texture/sea base.png" id="2_id7km"]
+[ext_resource type="Texture2D" uid="uid://c4dfxpeveolj5" path="res://area/5 pirate storm/data/texture/sea.png" id="3_rc763"]
+[ext_resource type="Texture2D" uid="uid://d3sccf2qidr8q" path="res://area/5 pirate storm/data/texture/sea lightning base.png" id="4_rc763"]
+[ext_resource type="Texture2D" uid="uid://cb0n5hsadt7qm" path="res://area/5 pirate storm/data/texture/sea lightning.png" id="5_cvolm"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_yogtf"]
+noise_type = 3
+fractal_type = 0
+fractal_octaves = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_igcq1"]
+generate_mipmaps = false
+seamless = true
+noise = SubResource("FastNoiseLite_yogtf")
+
+[resource]
+resource_name = "Sea Transparent"
+render_priority = 0
+shader = ExtResource("1_cf7yq")
+shader_parameter/base = ExtResource("2_id7km")
+shader_parameter/detail = ExtResource("3_rc763")
+shader_parameter/height_texture = SubResource("NoiseTexture2D_igcq1")
+shader_parameter/height_strength = 2.0
+shader_parameter/height_scroll_speed = 0.4
+shader_parameter/lightning_base = ExtResource("4_rc763")
+shader_parameter/lightning_detail = ExtResource("5_cvolm")
+shader_parameter/lightning_intensity = 2.0

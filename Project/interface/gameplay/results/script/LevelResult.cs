@@ -7,75 +7,78 @@ namespace Project.Interface;
 
 public partial class LevelResult : Control
 {
-	[Signal]
-	public delegate void ContinuePressedEventHandler();
+	[Signal] public delegate void ContinuePressedEventHandler();
 
-	[Export]
-	private Label score;
-	[Export]
-	private Label time;
-	[Export]
-	private Label ring;
-	[Export]
-	private Label technical;
-	[Export]
-	private Label total;
-	[Export]
-	private BGMPlayer bgm;
-	[Export]
-	private AnimationPlayer animator;
-	[Export]
-	private AudioStreamPlayer resultsVoicePlayer;
-	[Export]
-	private SFXLibraryResource resultsVoiceLibrary;
+	[Export] private Label score;
+	[Export] private Label time;
+	[Export] private Label ring;
+	[Export] private Label technical;
+	[Export] private Label total;
+	[Export] private Control requirementRoot;
+	[Export] private Label requirementTime;
+	[Export] private Label requirementScore;
+	[Export] private BGMPlayer[] bgm;
+	private int bgmIndex;
+	[Export] private AnimationPlayer animator;
+	[Export] private AudioStreamPlayer resultsVoicePlayer;
+	[Export] private SFXLibraryResource resultsVoiceLibrary;
 
 	private bool isProcessing;
 	private bool isFadingBgm;
-	private StageSettings Stage => StageSettings.instance;
+	private StageSettings Stage => StageSettings.Instance;
 
-	public override void _Ready() => Stage?.Connect(nameof(StageSettings.LevelCompleted), new Callable(this, nameof(StartResults)), (uint)ConnectFlags.Deferred);
+	public override void _Ready()
+	{
+		Stage?.Connect(StageSettings.SignalName.LevelCompleted, new Callable(this, MethodName.StartResults), (uint)ConnectFlags.Deferred);
+		Stage?.Connect(StageSettings.SignalName.LevelDemoStarted, new Callable(this, MethodName.MuteGameplaySoundEffects));
+	}
 
 	public override void _PhysicsProcess(double _)
 	{
 		if (!isProcessing)
 		{
 			if (isFadingBgm)
-				isFadingBgm = SoundManager.FadeAudioPlayer(bgm, 2.0f);
+				isFadingBgm = SoundManager.FadeAudioPlayer(bgm[bgmIndex], 2.0f);
 			return;
 		}
 
 		if (animator.IsPlaying())
 		{
-			if (Input.IsActionJustPressed("button_jump")) // Skip animation
+			// Don't allow instantly skipping animation (since players may be spamming the jump button)
+			if (animator.CurrentAnimationPosition < 1f)
+				return;
+
+			if (Input.IsActionJustPressed("button_jump") || Input.IsActionJustPressed("ui_select") ||
+				Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("ui_cancel")) // Skip animation
+			{
+				StringName nextAnimation = animator.AnimationGetNext(animator.CurrentAnimation);
 				animator.Advance(animator.CurrentAnimationLength);
+
+				if (!string.IsNullOrEmpty(nextAnimation))
+				{
+					animator.Play(nextAnimation);
+					animator.Advance(animator.CurrentAnimationLength);
+					Stage.StartCompletionDemo();
+				}
+			}
 		}
-		else if (Input.IsActionJustPressed("button_jump") ||
-			Input.IsActionJustPressed("button_action"))
+		else if (Input.IsActionJustPressed("button_jump") || Input.IsActionJustPressed("ui_select") ||
+			Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("ui_cancel"))
 		{
 			isFadingBgm = true; // Start fading bgm
 			SetInputProcessing(false);
 
 			// Determine which scene to load without connecting it
-			if (Input.IsActionJustPressed("button_action")) // Retry stage
-			{
-				TransitionManager.QueueSceneChange(string.Empty);
-				TransitionManager.StartTransition(new()
-				{
-					inSpeed = .5f,
-					outSpeed = .5f,
-					color = Colors.Black,
-					disableAutoTransition = true
-				});
-			}
+			if (Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("ui_cancel")) // Retry stage
+				TransitionManager.instance.QueuedScene = string.Empty;
 			else// if (Level.storyEventIndex == 0) // Load main menu
-			{
-				TransitionManager.instance.QueuedScene = TransitionManager.MENU_SCENE_PATH;
-				EmitSignal(SignalName.ContinuePressed);
-			}
+				TransitionManager.instance.QueuedScene = TransitionManager.MenuScenePath;
 
 			// TODO Load story event
 			//TransitionManager.QueueSceneChange($"{TransitionManager.EVENT_SCENE_PATH}{Level.storyEventIndex}.tscn");
+
 			// Actual scene transition is handled by the experience results screen (which is connected via this signal)
+			EmitSignal(SignalName.ContinuePressed);
 		}
 	}
 
@@ -86,30 +89,60 @@ public partial class LevelResult : Control
 
 		ring.Text = Stage.RingBonus.ToString();
 		technical.Text = "×" + Stage.TechnicalBonus.ToString("0.0", CultureInfo.InvariantCulture);
-		total.Text = Stage.TotalScore.ToString();
+		total.Text = ExtensionMethods.FormatMenuNumber(Stage.TotalScore);
 
 		// Calculate rank AFTER tallying final score
 		int rank = Stage.CalculateRank();
-		if (rank <= 0) // Didn't obtain a medal
-			animator.Play("medal-none");
-		else if (rank == 1)
-			animator.Play("medal-bronze");
-		else if (rank == 2)
-			animator.Play("medal-silver");
+
+		// Show the Score Requirements when Rank Preview is equipped
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.RankPreview) && rank >= 0 && rank < 3)
+		{
+			// Show rank requirements
+			requirementRoot.Visible = true;
+			requirementTime.Text = Stage.GetRequiredTime(rank);
+			requirementScore.Visible = !Stage.Data.SkipScore;
+			if (requirementScore.Visible)
+				requirementScore.Text = ExtensionMethods.FormatMenuNumber(Stage.GetRequiredScore());
+		}
 		else
-			animator.Play("medal-gold");
+		{
+			// Hide rank requirements
+			requirementRoot.Visible = false;
+		}
 
-		bool stageCleared = Stage.LevelState == StageSettings.LevelStateEnum.Success;
-		SaveManager.GameData.LevelStatus clearStatus = stageCleared ? SaveManager.GameData.LevelStatus.Cleared : SaveManager.GameData.LevelStatus.Attempted;
+		switch (rank)
+		{
+			case 1:
+				animator.Play("medal-bronze");
+				break;
+			case 2:
+				animator.Play("medal-silver");
+				break;
+			case 3:
+				animator.Play("medal-gold");
+				break;
+			default:
+				// No medal
+				animator.Play("medal-none");
+				break;
+		}
 
-		bgm.Play();
+		bool isStageCleared = Stage.LevelState == StageSettings.LevelStateEnum.Success;
+
+		if (isStageCleared)
+			bgmIndex = rank == 3 ? 2 : 1;
+		else
+			bgmIndex = 0;
+		bgm[bgmIndex].Play();
+
 		animator.Advance(0.0);
-		animator.Play(stageCleared ? "success-start" : "fail-start");
+		animator.Play(isStageCleared ? "success-start" : "fail-start");
 
 		// Update unlock notifications
-		if (stageCleared)
+		if (isStageCleared)
 		{
-			if (Stage.Data.UnlockWorld != SaveManager.WorldEnum.LostPrologue && !SaveManager.ActiveGameData.IsWorldUnlocked(Stage.Data.UnlockWorld))
+			if (Stage.Data.UnlockWorld != SaveManager.WorldEnum.LostPrologue &&
+				!SaveManager.ActiveGameData.IsWorldUnlocked(Stage.Data.UnlockWorld))
 			{
 				SaveManager.ActiveGameData.UnlockWorld(Stage.Data.UnlockWorld);
 				NotificationMenu.AddNotification(NotificationMenu.NotificationType.World, $"unlock_{Stage.Data.UnlockWorld.ToString().ToSnakeCase()}");
@@ -117,11 +150,11 @@ public partial class LevelResult : Control
 
 			foreach (var stage in Stage.Data.UnlockStage)
 			{
-				if (!SaveManager.ActiveGameData.IsStageUnlocked(stage.LevelID))
-				{
-					SaveManager.ActiveGameData.UnlockStage(stage.LevelID);
-					NotificationMenu.AddNotification(NotificationMenu.NotificationType.Mission, "unlock_mission");
-				}
+				if (SaveManager.ActiveGameData.IsStageUnlocked(stage.LevelID))
+					continue;
+
+				SaveManager.ActiveGameData.UnlockStage(stage.LevelID);
+				NotificationMenu.AddNotification(NotificationMenu.NotificationType.Mission, "unlock_mission");
 			}
 
 			// Only write these when the stage is a success
@@ -129,21 +162,18 @@ public partial class LevelResult : Control
 			SaveManager.ActiveGameData.SetBestTime(Stage.Data.LevelID, Stage.CurrentTime);
 		}
 
-		// Write common save file
+		// Write common data to save file
 		SaveManager.ActiveGameData.SetRank(Stage.Data.LevelID, rank);
-		SaveManager.ActiveGameData.SetClearStatus(Stage.Data.LevelID, clearStatus);
+		SaveManager.ActiveGameData.SetClearStatus(Stage.Data.LevelID, isStageCleared ? SaveManager.GameData.LevelStatus.Cleared : SaveManager.GameData.LevelStatus.Attempted);
 	}
 
 	public void SetInputProcessing(bool value) => isProcessing = value;
 	/// <summary> Mutes the gameplay sfx audio channel. </summary>
-	public void MuteGameplaySoundEffects() => SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 0);
+	private void MuteGameplaySoundEffects() => SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 0);
 
 	public void PlayRankQuote()
 	{
-		int voiceIndex = 0;
-		if (Stage.LevelState != StageSettings.LevelStateEnum.Failed)
-			voiceIndex = SaveManager.ActiveGameData.GetRank(Stage.Data.LevelID) + 1;
-
+		int voiceIndex = StageSettings.Instance.CalculateRank() + 1;
 		resultsVoicePlayer.Stream = resultsVoiceLibrary.GetStream(voiceIndex, (int)SaveManager.Config.voiceLanguage);
 		resultsVoicePlayer.Play();
 	}

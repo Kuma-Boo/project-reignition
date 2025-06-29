@@ -7,11 +7,11 @@ namespace Project.Gameplay.Triggers
 	/// </summary>
 	public partial class CheckpointTrigger : TeleportTrigger
 	{
-		public Path3D PlayerPath { get; private set; }
-		public Path3D CameraPath { get; private set; }
-		public CameraSettingsResource CameraSettings;
+		[Export] public Path3D PlayerPath { get; private set; }
+		[Export] public Path3D CameraPath { get; private set; }
+		[Export] public CameraSettingsResource CameraSettings;
 
-		private StageSettings Stage => StageSettings.instance;
+		private StageSettings Stage => StageSettings.Instance;
 
 		public override void Activate()
 		{
@@ -20,10 +20,19 @@ namespace Project.Gameplay.Triggers
 				return;
 
 			Stage.SetCheckpoint(this);
+			SaveCheckpointData();
+		}
 
-			PlayerPath = CharacterController.instance.PathFollower.ActivePath; // Store current player path
-			CameraPath = CharacterController.instance.Camera.PathFollower.ActivePath; // Store current camera path
-			CameraSettings = CharacterController.instance.Camera.ActiveSettings;
+		public void SaveCheckpointData()
+		{
+			if (PlayerPath == null)
+				PlayerPath = StageSettings.Player.PathFollower.ActivePath; // Store current player path
+
+			if (CameraPath == null)
+				CameraPath = StageSettings.Player.Camera.PathFollower.ActivePath; // Store current camera path
+
+			if (CameraSettings == null)
+				CameraSettings = StageSettings.Player.Camera.ActiveSettings;
 		}
 	}
 }

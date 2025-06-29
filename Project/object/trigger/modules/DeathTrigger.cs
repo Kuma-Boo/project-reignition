@@ -15,15 +15,19 @@ namespace Project.Gameplay.Triggers
 			Water,
 		}
 
+		[Export] private float waterFxHeightOffset;
+
 		public override void Activate()
 		{
-			//TODO Play VFX
-			Character.Camera.IsDefeatFreezeActive = true;
-			Character.StartRespawn();
-			Character.Effect.PlayVoice("fall");
-
+			Player.Camera.IsDefeatFreezeActive = true;
 			if (triggerType == TriggerType.Water)
-				Character.Effect.PlayLandingWaterFX();
+				Player.Effect.PlayLandingWaterFX(waterFxHeightOffset);
+
+			if (!StageSettings.Instance.IsLevelIngame)
+				return;
+
+			Player.StartRespawn();
+			Player.Effect.PlayVoice("fall");
 		}
 	}
 }

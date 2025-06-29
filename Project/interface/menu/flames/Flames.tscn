@@ -1,7 +1,49 @@
-[gd_scene load_steps=6 format=3 uid="uid://dad2hh4ttgaox"]
+[gd_scene load_steps=12 format=3 uid="uid://dad2hh4ttgaox"]
 
-[ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="1_13igr"]
 [ext_resource type="SpriteFrames" uid="uid://mcf4xjlise6g" path="res://effect/particle/sprite frames/Flame Menu Footer.tres" id="1_cxnaw"]
+[ext_resource type="Material" uid="uid://d1ar7f674pt0i" path="res://effect/material/Canvas Item Screen.tres" id="1_n3mht"]
+[ext_resource type="Texture2D" uid="uid://d1r8banlvq3g5" path="res://interface/menu/flames/texture/spark.png" id="3_1vbak"]
+
+[sub_resource type="Curve" id="Curve_j8wxg"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.79741, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_u6o30"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_j8wxg")
+
+[sub_resource type="Gradient" id="Gradient_oslu0"]
+colors = PackedColorArray(1, 1, 1, 0.588235, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1vbak"]
+gradient = SubResource("Gradient_oslu0")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_h3bxy"]
+lifetime_randomness = 0.5
+particle_flag_align_y = true
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(960, 1, 1)
+direction = Vector3(0, -1, 0)
+spread = 30.0
+initial_velocity_min = 400.0
+initial_velocity_max = 500.0
+radial_velocity_min = -100.0
+radial_velocity_max = 100.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.2
+color_initial_ramp = SubResource("GradientTexture1D_1vbak")
+alpha_curve = SubResource("CurveTexture_u6o30")
+hue_variation_min = -2.23517e-08
+hue_variation_max = 0.2
+turbulence_noise_strength = 0.29
+turbulence_noise_scale = 0.0
+turbulence_influence_min = 0.379
+turbulence_influence_max = 0.379
+turbulence_initial_displacement_min = -100.0
+turbulence_initial_displacement_max = -100.0
 
 [sub_resource type="Animation" id="Animation_1slf5"]
 resource_name = "RESET"
@@ -18,6 +60,18 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sparks:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="5"]
@@ -36,32 +90,63 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(1, 0), Vector2(1, 1)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sparks:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4vh02"]
 _data = {
-"RESET": SubResource("Animation_1slf5"),
-"spawn": SubResource("5")
+&"RESET": SubResource("Animation_1slf5"),
+&"spawn": SubResource("5")
 }
 
 [node name="Flames" type="Control"]
-material = ExtResource("1_13igr")
+material = ExtResource("1_n3mht")
 layout_mode = 3
-anchors_preset = 0
-offset_left = 960.0
-offset_top = 1080.0
-offset_right = 960.0
-offset_bottom = 1080.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 scale = Vector2(1, 1e-05)
+pivot_offset = Vector2(0, 1080)
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="."]
+copy_mode = 2
+
+[node name="Sparks" type="GPUParticles2D" parent="."]
+use_parent_material = true
+position = Vector2(960, 1080)
+emitting = false
+amount = 128
+texture = ExtResource("3_1vbak")
+lifetime = 2.5
+speed_scale = 1.4
+fixed_fps = 0
+fract_delta = false
+visibility_rect = Rect2(-960, -1080, 1920, 1080)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_h3bxy")
 
 [node name="Flames" type="AnimatedSprite2D" parent="."]
 use_parent_material = true
-position = Vector2(3.05176e-05, -184)
-scale = Vector2(7.5, 6)
+position = Vector2(960, 540)
+scale = Vector2(1.875, 1.875)
 sprite_frames = ExtResource("1_cxnaw")
 autoplay = "default"
+frame_progress = 0.983192
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_4vh02")
+&"": SubResource("AnimationLibrary_4vh02")
 }
 autoplay = "spawn"

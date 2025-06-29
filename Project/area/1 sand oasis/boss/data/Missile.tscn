@@ -1,13 +1,14 @@
-[gd_scene load_steps=37 format=3 uid="uid://b8irusmhs8rjm"]
+[gd_scene load_steps=38 format=3 uid="uid://b8irusmhs8rjm"]
 
-[ext_resource type="Script" path="res://area/1 sand oasis/data/script/Missile.cs" id="1_1rlvb"]
+[ext_resource type="Script" uid="uid://01bsn0f21qa0" path="res://object/stage/common/resource/script/BombMissile.cs" id="1_1rlvb"]
 [ext_resource type="PackedScene" uid="uid://cmlev1vsg4lag" path="res://area/1 sand oasis/boss/data/model/Missile.gltf" id="1_q671j"]
 [ext_resource type="Material" uid="uid://bq1q3tp1cq76v" path="res://effect/particle/material/explosion/Explosion Smoke Add.tres" id="3_2rram"]
-[ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://area/1 sand oasis/data/particle/material/Sand Dust.tres" id="4_bjx7k"]
+[ext_resource type="Script" uid="uid://pnh70abopq8e" path="res://object/stage/common/resource/script/Hazard.cs" id="3_bfiyb"]
+[ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://effect/particle/material/environment/Sand Dust.tres" id="4_bjx7k"]
 [ext_resource type="Material" uid="uid://boyiki4rgce2h" path="res://effect/particle/material/environment/Common Dust Splatter.tres" id="5_q67im"]
-[ext_resource type="Material" uid="uid://72qi5wpg8kme" path="res://area/1 sand oasis/boss/effect/material/Sand Scorpion Splatter Add.tres" id="6_dbo2r"]
+[ext_resource type="Material" uid="uid://72qi5wpg8kme" path="res://effect/particle/material/environment/Boss Splatter Add.tres" id="6_dbo2r"]
 [ext_resource type="AudioStream" uid="uid://dab60io2y0f6d" path="res://sound/boss/sand scorpion/STG012_13.wav" id="7_h121c"]
-[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="8_nplt5"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="8_nplt5"]
 [ext_resource type="AudioStream" uid="uid://4s8882ghxtda" path="res://sound/boss/sand scorpion/STG012_14.wav" id="9_230w5"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ykuxf"]
@@ -22,8 +23,7 @@ gradient = SubResource("Gradient_3krm2")
 width = 128
 
 [sub_resource type="Curve" id="Curve_rqmhy"]
-min_value = 1.0
-max_value = 4.0
+_limits = [0.99, 4.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, -0.0416666, 0, 0, Vector2(1, 4), 1.0, 0.0, 0, 0]
 point_count = 2
 
@@ -52,7 +52,7 @@ gradient = SubResource("Gradient_yeklr")
 width = 128
 
 [sub_resource type="Curve" id="Curve_md06t"]
-max_value = 2.0
+_limits = [0.0, 2.0, 0.0, 1.0]
 _data = [Vector2(0, 0.4), 0.0, 3.0, 0, 0, Vector2(1, 2), 0.0, 0.0, 0, 0]
 point_count = 2
 
@@ -91,6 +91,7 @@ emission_ring_axis = Vector3(0, 1, 0)
 emission_ring_height = 0.0
 emission_ring_radius = 1.0
 emission_ring_inner_radius = 1.0
+emission_ring_cone_angle = 90.0
 angle_min = -45.0
 angle_max = 45.0
 direction = Vector3(0, 1, 0)
@@ -146,7 +147,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Missile:visible")
+tracks/0/path = NodePath("../Missile:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -158,7 +159,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Particles/Trail:emitting")
+tracks/1/path = NodePath("../Particles/Trail:emitting")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -182,7 +183,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Particles/Dust:visible")
+tracks/3/path = NodePath("../Particles/Dust:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -194,7 +195,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Particles/Sand:visible")
+tracks/4/path = NodePath("../Particles/Sand:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -206,7 +207,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Particles/Spark:visible")
+tracks/5/path = NodePath("../Particles/Spark:visible")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -217,12 +218,12 @@ tracks/5/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_3tuoq"]
-resource_name = "impact"
+resource_name = "explode"
 length = 0.4
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Particles/Spark")
+tracks/0/path = NodePath("../Particles/Spark")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -236,7 +237,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Missile:visible")
+tracks/1/path = NodePath("../Missile:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -248,7 +249,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Particles/Trail:emitting")
+tracks/2/path = NodePath("../Particles/Trail:emitting")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -260,7 +261,7 @@ tracks/2/keys = {
 tracks/3/type = "method"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Particles/Sand")
+tracks/3/path = NodePath("../Particles/Sand")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -274,7 +275,7 @@ tracks/3/keys = {
 tracks/4/type = "method"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Particles/Dust")
+tracks/4/path = NodePath("../Particles/Dust")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -300,7 +301,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Particles/Dust:visible")
+tracks/6/path = NodePath("../Particles/Dust:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -312,7 +313,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Particles/Sand:visible")
+tracks/7/path = NodePath("../Particles/Sand:visible")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -324,7 +325,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Particles/Spark:visible")
+tracks/8/path = NodePath("../Particles/Spark:visible")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -336,7 +337,7 @@ tracks/8/keys = {
 tracks/9/type = "method"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("SFX/Impact")
+tracks/9/path = NodePath("../SFX/Impact")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -349,11 +350,11 @@ tracks/9/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_ymqqu"]
-resource_name = "launch"
+resource_name = "fly"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Missile:visible")
+tracks/0/path = NodePath("../Missile:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -365,7 +366,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Particles/Trail:emitting")
+tracks/1/path = NodePath("../Particles/Trail:emitting")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -377,7 +378,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Particles/Dust:emitting")
+tracks/2/path = NodePath("../Particles/Dust:emitting")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -389,7 +390,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Particles/Sand:emitting")
+tracks/3/path = NodePath("../Particles/Sand:emitting")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -401,7 +402,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Particles/Spark:emitting")
+tracks/4/path = NodePath("../Particles/Spark:emitting")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -425,7 +426,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Particles/Spark:visible")
+tracks/6/path = NodePath("../Particles/Spark:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -437,7 +438,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Particles/Sand:visible")
+tracks/7/path = NodePath("../Particles/Sand:visible")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -449,7 +450,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Particles/Dust:visible")
+tracks/8/path = NodePath("../Particles/Dust:visible")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -461,7 +462,7 @@ tracks/8/keys = {
 tracks/9/type = "method"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("SFX/Launch")
+tracks/9/path = NodePath("../SFX/Launch")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -475,24 +476,32 @@ tracks/9/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rfc3l"]
 _data = {
-"RESET": SubResource("Animation_ad8ll"),
-"impact": SubResource("Animation_3tuoq"),
-"launch": SubResource("Animation_ymqqu")
+&"RESET": SubResource("Animation_ad8ll"),
+&"explode": SubResource("Animation_3tuoq"),
+&"fly": SubResource("Animation_ymqqu")
 }
 
-[node name="Missile" type="Area3D" node_paths=PackedStringArray("animator")]
+[node name="Missile" type="Node3D" node_paths=PackedStringArray("root", "animator")]
+script = ExtResource("1_1rlvb")
+disableRespawning = true
+root = NodePath(".")
+animator = NodePath("AnimationPlayer")
+"Launch Settings/Mode" = 2
+
+[node name="Missile" parent="." instance=ExtResource("1_q671j")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+
+[node name="Hitbox" type="Area3D" parent="."]
+physics_interpolation_mode = 2
 collision_layer = 0
 collision_mask = 2
 monitoring = false
 monitorable = false
-script = ExtResource("1_1rlvb")
-animator = NodePath("AnimationPlayer")
+script = ExtResource("3_bfiyb")
+ignoreSpeedbreakingCharacters = true
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
 shape = SubResource("SphereShape3D_ykuxf")
-
-[node name="Missile" parent="." instance=ExtResource("1_q671j")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 
 [node name="Particles" type="Node3D" parent="."]
 
@@ -557,16 +566,11 @@ transform_align = 3
 process_material = SubResource("ParticleProcessMaterial_k1cqg")
 draw_pass_1 = SubResource("PlaneMesh_0vxsp")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_rfc3l")
-}
-
 [node name="SFX" type="Node3D" parent="."]
 
 [node name="Launch" type="AudioStreamPlayer3D" parent="SFX"]
+process_mode = 1
 stream = ExtResource("7_h121c")
-attenuation_model = 3
 max_db = 0.0
 max_distance = 150.0
 bus = &"GAME SFX"
@@ -574,12 +578,20 @@ script = ExtResource("8_nplt5")
 groupKey = &"soboss_missile_launch"
 
 [node name="Impact" type="AudioStreamPlayer3D" parent="SFX"]
+process_mode = 1
 stream = ExtResource("9_230w5")
-attenuation_model = 3
 max_db = 0.0
 max_distance = 150.0
 bus = &"GAME SFX"
 script = ExtResource("8_nplt5")
 groupKey = &"soboss_missile_impact"
 
-[connection signal="area_entered" from="." to="." method="OnAreaEntered"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Hitbox")
+libraries = {
+&"": SubResource("AnimationLibrary_rfc3l")
+}
+
+[connection signal="DamagedPlayer" from="Hitbox" to="." method="Explode"]
+[connection signal="area_entered" from="Hitbox" to="Hitbox" method="OnEntered"]
+[connection signal="area_exited" from="Hitbox" to="Hitbox" method="OnExited"]

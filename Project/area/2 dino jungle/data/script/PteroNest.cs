@@ -2,20 +2,20 @@ using Godot;
 
 namespace Project.Gameplay.Objects;
 
-// / <summary> For that one act in Dinosaur Jungle. </summary>
-public partial class PteroNest : Node3D
+/// <summary> For that one act in Dinosaur Jungle. </summary>
+public partial class PteroNest : StaticBody3D
 {
 	[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")]
 	private NodePath animator;
 	private AnimationPlayer Animator { get; set; }
 	public PteroEgg AssignedEgg { get; set; }
-	private CharacterController Character => CharacterController.instance;
+	private PlayerController Player => StageSettings.Player;
 	private bool isInteractingWithPlayer;
 
 	public override void _Ready()
 	{
 		Animator = GetNodeOrNull<AnimationPlayer>(animator);
-		StageSettings.instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.Respawned += Respawn;
 	}
 
 	public void Respawn()
@@ -31,8 +31,8 @@ public partial class PteroNest : Node3D
 		if (!isInteractingWithPlayer)
 			return;
 
-		if (Character.Lockon.IsHomingAttacking) // Bounce the player
-			Character.Lockon.StartBounce();
+		if (Player.IsHomingAttacking) // Bounce the player
+			Player.StartBounce();
 
 		if (AssignedEgg.IsReturningToNest || AssignedEgg.IsReturnedToNest)
 			return;

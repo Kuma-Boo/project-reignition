@@ -12,33 +12,34 @@ public partial class JumpTrigger : StageTriggerModule
 	/// <summary> Called when jump is finished. </summary>
 	public delegate void JumpFinishedEventHandler();
 
-	[Export]
 	/// <summary> How high to jump. </summary>
-	public float jumpHeight;
-	[Export]
+	[Export] public float jumpHeight;
 	/// <summary> Auto align jump direction? </summary>
-	public bool autoAlign;
-	[Export]
+	[Export] public bool autoAlign;
 	/// <summary> Should height be relative to end? </summary>
-	public bool forceConsistentHeight;
+	[Export] public bool forceConsistentHeight;
 
 	public LaunchSettings GetLaunchSettings()
 	{
-		Vector3 startPosition = Character != null ? Character.GlobalPosition : GetParent<Node3D>().GlobalPosition;
+		Vector3 startPosition = Player != null ? Player.GlobalPosition : GetParent<Node3D>().GlobalPosition;
 		LaunchSettings settings = LaunchSettings.Create(startPosition, GlobalPosition, jumpHeight, forceConsistentHeight);
 		settings.IsJump = true;
 		settings.UseAutoAlign = autoAlign;
+		settings.AllowJumpDash = false;
 		return settings;
 	}
 
-	private void FinishJump() => EmitSignal(SignalName.JumpFinished);
+	private void FinishJump()
+	{
+		Player.LaunchFinished -= FinishJump;
+		EmitSignal(SignalName.JumpFinished);
+	}
 
 	public override void Activate()
 	{
-		Character.StartLauncher(GetLaunchSettings());
-		Character.CanJumpDash = false;
-
-		if (!Character.IsConnected(CharacterController.SignalName.LaunchFinished, new Callable(this, MethodName.FinishJump)))
-			Character.Connect(CharacterController.SignalName.LaunchFinished, new Callable(this, MethodName.FinishJump), (uint)ConnectFlags.OneShot);
+		Player.StartLauncher(GetLaunchSettings());
+		Player.Effect.StopSpinFX();
+		Player.Effect.StopTrailFX();
+		Player.LaunchFinished += FinishJump;
 	}
 }

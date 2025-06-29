@@ -10,6 +10,13 @@ namespace Project.Gameplay;
 [Tool]
 public partial class MovingObject : Node3D
 {
+	[Signal] public delegate void RespawnedEventHandler();
+	/// <summary> Emitted when the object starts to leave its initial position. </summary>
+	[Signal] public delegate void LeftInitialPositionEventHandler();
+	/// <summary> Emitted when the object starts to return to its initial position. </summary>
+	[Signal] public delegate void ReturnedToInitialPositionEventHandler();
+	[Signal] public delegate void DamagedPlayerEventHandler();
+
 	#region Editor
 	public override Array<Dictionary> _GetPropertyList()
 	{
@@ -20,12 +27,12 @@ public partial class MovingObject : Node3D
 
 		if (movementMode != MovementModes.Static)
 		{
-			properties.Add(ExtensionMethods.CreateProperty("Movement/Cycle Length", Variant.Type.Float, PropertyHint.Range, "-10,10,.1"));
+			properties.Add(ExtensionMethods.CreateProperty("Movement/Cycle Length", Variant.Type.Float, PropertyHint.Range, "-10,10,.1,or_greater"));
 			properties.Add(ExtensionMethods.CreateProperty("Movement/Starting Offset", Variant.Type.Float, PropertyHint.Range, "0,1,.01"));
 
 			if (movementMode == MovementModes.Linear)
 			{
-				properties.Add(ExtensionMethods.CreateProperty("Movement/Distance", Variant.Type.Float, PropertyHint.Range, "0,32,.1"));
+				properties.Add(ExtensionMethods.CreateProperty("Movement/Distance", Variant.Type.Float, PropertyHint.Range, "0,100,.1"));
 				properties.Add(ExtensionMethods.CreateProperty("Movement/Angle", Variant.Type.Float, PropertyHint.Range, "-180,180,5"));
 			}
 			else
@@ -148,13 +155,23 @@ public partial class MovingObject : Node3D
 	public float TimeScale = 1f;
 	/// <summary> Current travel time. </summary>
 	private float currentTime;
-	[Export]
-	private bool startPaused;
-	[Export]
-	private bool smoothPausing;
+	/// <summary> Previous sampling ratio (Linear only). </summary>
+	private float previousRatio;
+	/// <summary> Current travel direction (Linear only). </summary>
+	private int travelDirection;
+	/// <summary> Set this if you want a non-linear travel time. Only works on Linear movement modes. </summary>
+	[Export] private Curve timeCurve;
+	[Export] private bool startPaused;
+	[Export] private bool smoothPausing;
+	[Export] private float timebreakMultiplier = 1f;
+	private float TimebreakInfluence => StageSettings.Player.Skills.IsTimeBreakActive ? timebreakMultiplier : 1f;
 	/// <summary> Is movement paused? </summary>
 	private bool isPaused;
 	private const float PauseSmoothing = .1f;
+
+	/// <summary> Enable this to have objects move to their starting position. </summary>
+	[Export] private bool lockToStartingPosition;
+	public void SetStartingLock(bool value) => lockToStartingPosition = value;
 
 	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
 	private NodePath root;
@@ -164,8 +181,8 @@ public partial class MovingObject : Node3D
 	private NodePath animator;
 	/// <summary> Object to actually move. </summary>
 	private AnimationPlayer Animator;
-	[Export(PropertyHint.Range, "0,2,.1")]
-	private float animatorSpeedScale = 1.0f;
+	[Export(PropertyHint.Range, "-2,2,.1")]
+	private float animatorSpeedScale = 1f;
 
 	public override void _EnterTree()
 	{
@@ -182,23 +199,30 @@ public partial class MovingObject : Node3D
 		if (Animator != null)
 			Animator.SpeedScale = animatorSpeedScale;
 
-		StageSettings.instance.ConnectRespawnSignal(this);
-		Respawn();
+		StageSettings.Instance.Respawned += Respawn;
+		Initialize();
 	}
 
 	public override void _PhysicsProcess(double _)
 	{
 		if (Engine.IsEditorHint()) return;
-
 		if (IsMovementInvalid()) return; // No movement
+
 		if (isPaused && !smoothPausing) return;
 
-		if (smoothPausing)
-			TimeScale = Mathf.Lerp(TimeScale, isPaused ? 0 : 1, PauseSmoothing);
+		if (smoothPausing || StageSettings.Player.IsInvincible)
+			TimeScale = Mathf.Lerp(TimeScale, isPaused ? 0f : 1f, PauseSmoothing);
 
-		currentTime += PhysicsManager.physicsDelta * Mathf.Sign(cycleLength) * TimeScale;
-		if (Mathf.Abs(currentTime) > Mathf.Abs(cycleLength)) // Rollover
-			currentTime -= Mathf.Sign(cycleLength) * Mathf.Abs(cycleLength) * Mathf.Sign(cycleLength);
+		if (lockToStartingPosition)
+		{
+			currentTime = Mathf.MoveToward(currentTime, StartingOffset * Mathf.Abs(cycleLength), PhysicsManager.physicsDelta * TimeScale * TimebreakInfluence);
+		}
+		else
+		{
+			currentTime += PhysicsManager.physicsDelta * Mathf.Sign(cycleLength) * TimeScale * TimebreakInfluence;
+			if (Mathf.Abs(currentTime) > Mathf.Abs(cycleLength)) // Rollover
+				currentTime -= Mathf.Sign(cycleLength) * Mathf.Abs(cycleLength) * Mathf.Sign(cycleLength);
+		}
 
 		if (Root?.IsInsideTree() == true)
 			Root.GlobalPosition = InterpolatePosition(currentTime / Mathf.Abs(cycleLength));
@@ -218,13 +242,22 @@ public partial class MovingObject : Node3D
 	/// <summary> Resets currentTime to StartingOffset. </summary>
 	public void Respawn()
 	{
-		TimeScale = 1f;
+		Initialize();
+		EmitSignal(SignalName.Respawned);
+	}
+
+	private void Initialize()
+	{
+		TimeScale = (smoothPausing && startPaused) ? 0f : 1f;
 		isPaused = startPaused;
 		currentTime = StartingOffset * Mathf.Abs(cycleLength);
+		travelDirection = 0;
 
 		if (Root?.IsInsideTree() == true)
 			Root.GlobalPosition = InterpolatePosition(currentTime);
 	}
+
+	public void DamagePlayer() => EmitSignal(SignalName.DamagedPlayer);
 
 	public Vector3 InterpolatePosition(float ratio)
 	{
@@ -232,11 +265,39 @@ public partial class MovingObject : Node3D
 
 		if (movementMode == MovementModes.Linear)
 		{
-			float linearRatio = 1f - (2 * ratio); // Convert ratio to -1 <-> 1
-			ratio = Mathf.SmoothStep(0, 1, 1f - Mathf.Abs(linearRatio));
+			if (timeCurve == null)
+			{
+				// Default interpolation is smoothstep.
+				float linearRatio = 1f - (2 * ratio); // Convert ratio to -1 <-> 1
+				ratio = Mathf.SmoothStep(0, 1, 1f - Mathf.Abs(linearRatio));
+			}
+			else
+			{
+				// Sample the time curve
+				if (ratio < 0) // Make sure sampling works as expected for negative values (i.e. sample from the end of the curve)
+					ratio = 1 - ratio;
+				ratio = timeCurve.Sample(ratio);
+			}
 
 			targetPosition = Vector3.Forward.Rotated(Vector3.Up, Mathf.DegToRad(angle));
 			targetPosition *= distance * Mathf.Lerp(0, 1, ratio);
+
+			if (!Engine.IsEditorHint())
+			{
+				// Calculate direction changes and emit signals
+				int currentTravelDirection = Mathf.Sign(ratio - previousRatio);
+				if (travelDirection != currentTravelDirection)
+				{
+					if (currentTravelDirection == 1)
+						EmitSignal(SignalName.LeftInitialPosition);
+					else if (currentTravelDirection == -1)
+						EmitSignal(SignalName.ReturnedToInitialPosition);
+
+					travelDirection = currentTravelDirection;
+				}
+
+				previousRatio = ratio;
+			}
 		}
 		else if (movementMode == MovementModes.Circle)
 		{
@@ -249,6 +310,6 @@ public partial class MovingObject : Node3D
 		if (verticalOrientation)
 			targetPosition = targetPosition.Rotated(Vector3.Right, Mathf.Pi * .5f);
 
-		return GlobalPosition + (GlobalTransform.Basis * targetPosition);
+		return GlobalPosition + (GlobalTransform.Basis.Orthonormalized() * targetPosition);
 	}
 }

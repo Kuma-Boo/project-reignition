@@ -1,10 +1,10 @@
 [gd_scene load_steps=24 format=3 uid="uid://dy0oxfmu7ahxi"]
 
 [ext_resource type="Texture2D" uid="uid://c0j6hn525tqn5" path="res://interface/menu/level select/texture/world text/level en.png" id="1_fuqut"]
-[ext_resource type="Script" path="res://interface/menu/level select/script/LevelSelect.cs" id="1_p6dn7"]
+[ext_resource type="Script" uid="uid://c5txxmax7ey8k" path="res://interface/menu/level select/script/LevelSelect.cs" id="1_p6dn7"]
 [ext_resource type="Texture2D" uid="uid://bpdv8t52iadwx" path="res://interface/menu/level select/texture/world text/glow en.png" id="2_pxpor"]
-[ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="3_c1sgp"]
-[ext_resource type="Shader" path="res://effect/shader/interface/InterfaceFlashAdd.gdshader" id="3_ybchm"]
+[ext_resource type="Texture2D" uid="uid://dx4vxnhtgd13t" path="res://interface/menu/common/common menu atlas.png" id="3_c1sgp"]
+[ext_resource type="Material" uid="uid://d1ar7f674pt0i" path="res://effect/material/Canvas Item Screen.tres" id="3_nye5y"]
 [ext_resource type="AudioStream" uid="uid://l2e1do1wwkg" path="res://sound/sfx/system/menu confirm.wav" id="5_2qjo6"]
 [ext_resource type="AudioStream" uid="uid://cl54rftw5aiyf" path="res://sound/sfx/system/menu cancel.wav" id="5_6pmlb"]
 [ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="5_kmrew"]
@@ -12,10 +12,7 @@
 [ext_resource type="SpriteFrames" uid="uid://jc646omm5n2y" path="res://effect/particle/sprite frames/Flame Menu Short.tres" id="5_mfe06"]
 [ext_resource type="SpriteFrames" uid="uid://btjml6xghvlgt" path="res://effect/particle/sprite frames/Flame Menu Tall.tres" id="5_yw72e"]
 [ext_resource type="PackedScene" uid="uid://crwawg2ivy3xd" path="res://interface/menu/NavigationButton.tscn" id="8_38k76"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2vkkl"]
-shader = ExtResource("3_ybchm")
-shader_parameter/flash_amount = 1.0
+[ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="14_f6v0v"]
 
 [sub_resource type="Animation" id="Animation_8efxu"]
 length = 0.001
@@ -67,9 +64,9 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_oqwnn"]
 _data = {
-"RESET": SubResource("Animation_8efxu"),
-"loop": SubResource("Animation_e1b8a"),
-"select": SubResource("Animation_i84eb")
+&"RESET": SubResource("Animation_8efxu"),
+&"loop": SubResource("Animation_e1b8a"),
+&"select": SubResource("Animation_i84eb")
 }
 
 [sub_resource type="Animation" id="Animation_wl7wc"]
@@ -144,7 +141,7 @@ tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(120, 584)]
+"values": [Vector2(104, 584)]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
@@ -185,7 +182,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("ScrollBar:modulate")
+tracks/9/path = NodePath("Scrollbar:modulate")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -197,58 +194,46 @@ tracks/9/keys = {
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("Window/Bottom:size")
+tracks/10/path = NodePath(".:visible")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(448, 33)]
+"update": 1,
+"values": [false]
 }
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath(".:visible")
+tracks/11/path = NodePath("WorldText/Flames:scale")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Vector2(1, 1)]
 }
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("WorldText/Flames:scale")
+tracks/12/path = NodePath("WorldText/Flames:modulate")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1, 1)]
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("WorldText/Flames:modulate")
+tracks/13/path = NodePath("NavigationButtons:modulate")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/14/type = "value"
-tracks/14/imported = false
-tracks/14/enabled = true
-tracks/14/path = NodePath("NavigationButtons:modulate")
-tracks/14/interp = 1
-tracks/14/loop_wrap = true
-tracks/14/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -257,7 +242,7 @@ tracks/14/keys = {
 
 [sub_resource type="Animation" id="Animation_rxl6c"]
 resource_name = "cancel"
-length = 0.500003
+length = 0.333336
 step = 0.0333333
 tracks/0/type = "method"
 tracks/0/imported = false
@@ -280,7 +265,7 @@ tracks/1/path = NodePath(".:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.466667),
+"times": PackedFloat32Array(0, 0.333333),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -292,7 +277,7 @@ tracks/2/path = NodePath("Window:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.466667),
+"times": PackedFloat32Array(0, 0.133333, 0.333333),
 "transitions": PackedFloat32Array(0.5, 0.5, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -304,7 +289,7 @@ tracks/3/path = NodePath("Window/Background:scale")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0.2, 0.466667),
+"times": PackedFloat32Array(0.133333, 0.333333),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(1, 1e-05)]
@@ -316,7 +301,7 @@ tracks/4/path = NodePath("Window/TopLeft:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0.2, 0.466667),
+"times": PackedFloat32Array(0.133333, 0.333333),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector2(124.5, 64), Vector2(124.5, 320)]
@@ -328,7 +313,7 @@ tracks/5/path = NodePath("Window/TopRight:position")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0.2, 0.466667),
+"times": PackedFloat32Array(0.133333, 0.333333),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector2(1027.5, 64), Vector2(1027.5, 320)]
@@ -340,7 +325,7 @@ tracks/6/path = NodePath("Window/BottomLeft:position")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0.2, 0.466667),
+"times": PackedFloat32Array(0.133333, 0.333333),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector2(-16, 584), Vector2(-16, 312)]
@@ -352,7 +337,7 @@ tracks/7/path = NodePath("Window/BottomRight:position")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0.2, 0.466667),
+"times": PackedFloat32Array(0.133333, 0.333333),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector2(1024, 584), Vector2(1024, 312)]
@@ -364,10 +349,10 @@ tracks/8/path = NodePath("Window/Bottom:position")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0.2, 0.466667),
-"transitions": PackedFloat32Array(0.5, 1),
+"times": PackedFloat32Array(0, 0.133333, 0.333333),
+"transitions": PackedFloat32Array(1, 0.5, 1),
 "update": 0,
-"values": [Vector2(120, 584), Vector2(120, 312)]
+"values": [Vector2(104, 584), Vector2(104, 584), Vector2(104, 312)]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
@@ -376,7 +361,7 @@ tracks/9/path = NodePath("WorldText:modulate")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0, 0.2),
+"times": PackedFloat32Array(0, 0.133333),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -388,7 +373,7 @@ tracks/10/path = NodePath(".")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(0, 0.466667),
+"times": PackedFloat32Array(0, 0.333333),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
@@ -415,11 +400,11 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("ScrollBar:modulate")
+tracks/12/path = NodePath("Scrollbar:modulate")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
-"times": PackedFloat32Array(0, 0.2),
+"times": PackedFloat32Array(0, 0.133333),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -431,7 +416,7 @@ tracks/13/path = NodePath("Cursor:modulate")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
-"times": PackedFloat32Array(0, 0.2),
+"times": PackedFloat32Array(0, 0.166667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -443,7 +428,7 @@ tracks/14/path = NodePath("NavigationButtons:modulate")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
-"times": PackedFloat32Array(0, 0.2),
+"times": PackedFloat32Array(0, 0.166667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -451,6 +436,7 @@ tracks/14/keys = {
 
 [sub_resource type="Animation" id="Animation_2uwbx"]
 resource_name = "confirm"
+length = 0.500003
 step = 0.0333333
 tracks/0/type = "method"
 tracks/0/imported = false
@@ -487,7 +473,7 @@ tracks/2/path = NodePath(".")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.733333, 1),
+"times": PackedFloat32Array(0, 0.166667, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1),
 "values": [{
 "args": [],
@@ -507,7 +493,7 @@ tracks/3/path = NodePath(".:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 1),
+"times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -519,7 +505,7 @@ tracks/4/path = NodePath("Window:modulate")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.733333, 1),
+"times": PackedFloat32Array(0, 0.333333, 0.5),
 "transitions": PackedFloat32Array(0.5, 0.5, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -531,7 +517,7 @@ tracks/5/path = NodePath("Window/Background:scale")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.733333, 1),
+"times": PackedFloat32Array(0, 0.333333, 0.5),
 "transitions": PackedFloat32Array(1, 0.5, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(1, 1), Vector2(1, 1e-05)]
@@ -543,7 +529,7 @@ tracks/6/path = NodePath("Window/TopLeft:position")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.733333, 1),
+"times": PackedFloat32Array(0, 0.333333, 0.5),
 "transitions": PackedFloat32Array(1, 0.5, 1),
 "update": 0,
 "values": [Vector2(124.5, 64), Vector2(124.5, 64), Vector2(124.5, 320)]
@@ -555,7 +541,7 @@ tracks/7/path = NodePath("Window/TopRight:position")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.733333, 1),
+"times": PackedFloat32Array(0, 0.333333, 0.5),
 "transitions": PackedFloat32Array(1, 0.5, 1),
 "update": 0,
 "values": [Vector2(1027.5, 64), Vector2(1027.5, 64), Vector2(1027.5, 320)]
@@ -567,7 +553,7 @@ tracks/8/path = NodePath("Window/BottomLeft:position")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0, 0.733333, 1),
+"times": PackedFloat32Array(0, 0.333333, 0.5),
 "transitions": PackedFloat32Array(1, 0.5, 1),
 "update": 0,
 "values": [Vector2(-16, 584), Vector2(-16, 584), Vector2(-16, 312)]
@@ -579,7 +565,7 @@ tracks/9/path = NodePath("Window/BottomRight:position")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0, 0.733333, 1),
+"times": PackedFloat32Array(0, 0.333333, 0.5),
 "transitions": PackedFloat32Array(1, 0.5, 1),
 "update": 0,
 "values": [Vector2(1024, 584), Vector2(1024, 584), Vector2(1024, 312)]
@@ -591,10 +577,10 @@ tracks/10/path = NodePath("Window/Bottom:position")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(0, 0.733333, 1),
+"times": PackedFloat32Array(0, 0.333333, 0.5),
 "transitions": PackedFloat32Array(1, 0.5, 1),
 "update": 0,
-"values": [Vector2(120, 584), Vector2(120, 584), Vector2(120, 312)]
+"values": [Vector2(104, 584), Vector2(104, 584), Vector2(104, 312)]
 }
 tracks/11/type = "value"
 tracks/11/imported = false
@@ -603,7 +589,7 @@ tracks/11/path = NodePath("WorldText:modulate")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
-"times": PackedFloat32Array(0, 0.533333, 0.733333),
+"times": PackedFloat32Array(0, 0.166667, 0.333333),
 "transitions": PackedFloat32Array(0.5, 0.5, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -611,11 +597,11 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("ScrollBar:modulate")
+tracks/12/path = NodePath("Scrollbar:modulate")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
-"times": PackedFloat32Array(0, 0.533333, 0.733333),
+"times": PackedFloat32Array(0, 0.166667, 0.333333),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -627,7 +613,7 @@ tracks/13/path = NodePath("Cursor:modulate")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
-"times": PackedFloat32Array(0, 0.533333, 0.733333),
+"times": PackedFloat32Array(0, 0.166667, 0.333333),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -639,7 +625,7 @@ tracks/14/path = NodePath("NavigationButtons:modulate")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
-"times": PackedFloat32Array(0, 0.533333, 0.733333),
+"times": PackedFloat32Array(0, 0.166667, 0.333333),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -665,7 +651,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_8vhjs"]
 resource_name = "show"
-length = 0.933336
+length = 0.500003
 step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -674,7 +660,7 @@ tracks/0/path = NodePath("Window:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.266666),
+"times": PackedFloat32Array(0, 0.166667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -686,7 +672,7 @@ tracks/1/path = NodePath("Window/Background:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.266667),
+"times": PackedFloat32Array(0, 0.166667),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector2(1, 1e-05), Vector2(1, 1)]
@@ -698,7 +684,7 @@ tracks/2/path = NodePath("Window/TopLeft:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.266667),
+"times": PackedFloat32Array(0, 0.166667),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector2(124.5, 320), Vector2(124.5, 64)]
@@ -710,7 +696,7 @@ tracks/3/path = NodePath("Window/TopRight:position")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.266667),
+"times": PackedFloat32Array(0, 0.166667),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector2(1027.5, 320), Vector2(1027.5, 64)]
@@ -722,7 +708,7 @@ tracks/4/path = NodePath("Window/BottomLeft:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.266666),
+"times": PackedFloat32Array(0, 0.166667),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector2(-16, 312), Vector2(-16, 584)]
@@ -734,7 +720,7 @@ tracks/5/path = NodePath("Window/BottomRight:position")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.266666),
+"times": PackedFloat32Array(0, 0.166667),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector2(1024, 312), Vector2(1024, 584)]
@@ -746,10 +732,10 @@ tracks/6/path = NodePath("Window/Bottom:position")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.266666),
+"times": PackedFloat32Array(0, 0.166667),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
-"values": [Vector2(120, 312), Vector2(120, 584)]
+"values": [Vector2(104, 312), Vector2(104, 584)]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
@@ -758,7 +744,7 @@ tracks/7/path = NodePath("WorldText:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.3996, 0.7326),
+"times": PackedFloat32Array(0, 0.233333, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -770,7 +756,7 @@ tracks/8/path = NodePath(".")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0, 0.7326),
+"times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
@@ -787,7 +773,7 @@ tracks/9/path = NodePath("Cursor:modulate")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0, 0.3996, 0.7326),
+"times": PackedFloat32Array(0, 0.233333, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -795,11 +781,11 @@ tracks/9/keys = {
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("ScrollBar:modulate")
+tracks/10/path = NodePath("Scrollbar:modulate")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(0, 0.3996, 0.7326),
+"times": PackedFloat32Array(0, 0.233333, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -821,59 +807,47 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("Window/Bottom:size")
+tracks/12/path = NodePath(".:visible")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(448, 33)]
+"update": 1,
+"values": [true]
 }
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath(".:visible")
+tracks/13/path = NodePath("WorldText/Flames:scale")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/14/type = "value"
-tracks/14/imported = false
-tracks/14/enabled = true
-tracks/14/path = NodePath("WorldText/Flames:scale")
-tracks/14/interp = 1
-tracks/14/loop_wrap = true
-tracks/14/keys = {
-"times": PackedFloat32Array(0, 0.3996, 0.7326),
+"times": PackedFloat32Array(0, 0.233333, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(1, 1.5), Vector2(1, 1)]
 }
-tracks/15/type = "value"
-tracks/15/imported = false
-tracks/15/enabled = true
-tracks/15/path = NodePath("WorldText/Flames:modulate")
-tracks/15/interp = 1
-tracks/15/loop_wrap = true
-tracks/15/keys = {
-"times": PackedFloat32Array(0, 0.3996, 0.7326),
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("WorldText/Flames:modulate")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0, 0.233333, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 0.784314)]
 }
-tracks/16/type = "value"
-tracks/16/imported = false
-tracks/16/enabled = true
-tracks/16/path = NodePath("NavigationButtons:modulate")
-tracks/16/interp = 1
-tracks/16/loop_wrap = true
-tracks/16/keys = {
-"times": PackedFloat32Array(0, 0.666666),
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("NavigationButtons:modulate")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -881,14 +855,14 @@ tracks/16/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rf6sp"]
 _data = {
-"RESET": SubResource("Animation_wl7wc"),
-"cancel": SubResource("Animation_rxl6c"),
-"confirm": SubResource("Animation_2uwbx"),
-"select": SubResource("Animation_g04jy"),
-"show": SubResource("Animation_8vhjs")
+&"RESET": SubResource("Animation_wl7wc"),
+&"cancel": SubResource("Animation_rxl6c"),
+&"confirm": SubResource("Animation_2uwbx"),
+&"select": SubResource("Animation_g04jy"),
+&"show": SubResource("Animation_8vhjs")
 }
 
-[node name="LevelSelect" type="Control" node_paths=PackedStringArray("cursor", "options", "scrollbar", "animator")]
+[node name="LevelSelect" type="Control" node_paths=PackedStringArray("cursor", "options", "scrollbar", "bgm", "animator")]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -899,28 +873,32 @@ grow_vertical = 2
 script = ExtResource("1_p6dn7")
 cursor = NodePath("Cursor")
 options = NodePath("Clip/Options")
-scrollbar = NodePath("ScrollBar/ScrollPosition")
+scrollbar = NodePath("Scrollbar/ScrollPosition")
 submenus = []
+bgm = NodePath("BGM")
 animator = NodePath("AnimationPlayer")
 metadata/_edit_lock_ = true
 metadata/_edit_group_ = true
 
-[node name="WorldText" type="Sprite2D" parent="."]
+[node name="WorldText" type="Node2D" parent="."]
 position = Vector2(960, 120)
-scale = Vector2(1.12, 1.12)
+
+[node name="Text" type="Sprite2D" parent="WorldText"]
+position = Vector2(0, -1.43051e-06)
+scale = Vector2(0.675, 0.675)
 texture = ExtResource("1_fuqut")
 region_enabled = true
-region_rect = Rect2(0, 460, 512, 50)
+region_rect = Rect2(0, 920, 1024, 100)
 
-[node name="Glow" type="Sprite2D" parent="WorldText"]
-material = SubResource("ShaderMaterial_2vkkl")
+[node name="Glow" type="Sprite2D" parent="WorldText/Text"]
+material = ExtResource("3_nye5y")
 texture = ExtResource("2_pxpor")
 region_enabled = true
-region_rect = Rect2(0, 460, 512, 50)
+region_rect = Rect2(0, 920, 1024, 100)
 
 [node name="Flames" type="Node2D" parent="WorldText"]
 material = ExtResource("5_kmrew")
-position = Vector2(0, 20)
+position = Vector2(0, 22.4)
 
 [node name="FlameShort1" type="AnimatedSprite2D" parent="WorldText/Flames"]
 use_parent_material = true
@@ -1011,18 +989,16 @@ grow_vertical = 2
 
 [node name="TopLeft" type="Sprite2D" parent="Window"]
 position = Vector2(124.5, 64)
-scale = Vector2(2.26364, 2.2)
 texture = ExtResource("3_c1sgp")
 region_enabled = true
-region_rect = Rect2(140, 0, 110, 30)
+region_rect = Rect2(280, 0, 220, 60)
 
 [node name="TopRight" type="Sprite2D" parent="Window"]
 position = Vector2(1027.5, 64)
-scale = Vector2(2.26364, 2.2)
 texture = ExtResource("3_c1sgp")
 flip_h = true
 region_enabled = true
-region_rect = Rect2(140, 0, 110, 30)
+region_rect = Rect2(280, 0, 220, 60)
 
 [node name="Background" type="NinePatchRect" parent="Window"]
 self_modulate = Color(1, 1, 1, 0.588235)
@@ -1038,7 +1014,7 @@ grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(548, 268)
 texture = ExtResource("3_c1sgp")
-region_rect = Rect2(64, 176, 48, 48)
+region_rect = Rect2(128, 352, 96, 96)
 patch_margin_left = 32
 patch_margin_top = 32
 patch_margin_right = 32
@@ -1052,47 +1028,42 @@ anchor_left = 0.104
 anchor_top = 0.89
 anchor_right = 0.889
 anchor_bottom = 1.0
-offset_left = 0.192001
+offset_left = -15.808
 offset_top = 0.160034
-offset_right = -456.128
-offset_bottom = -39.0
-scale = Vector2(2.02, 2)
+offset_right = -0.128052
+offset_bottom = -12.0
 texture = ExtResource("3_c1sgp")
-region_rect = Rect2(189.5, 30, 50, 30)
+region_rect = Rect2(379, 60, 94, 60)
 axis_stretch_horizontal = 1
 
 [node name="BottomLeft" type="Sprite2D" parent="Window"]
 position = Vector2(-16, 584)
-scale = Vector2(2.26364, 2.2)
 texture = ExtResource("3_c1sgp")
 centered = false
 region_enabled = true
-region_rect = Rect2(130, 30, 60, 30)
+region_rect = Rect2(260, 60, 120, 60)
 
 [node name="BottomRight" type="Sprite2D" parent="Window"]
 position = Vector2(1024, 584)
-scale = Vector2(2.24697, 2.2)
 texture = ExtResource("3_c1sgp")
 centered = false
-flip_h = true
 region_enabled = true
-region_rect = Rect2(130, 30, 60, 30)
+region_rect = Rect2(370, 0, 140, 60)
 
 [node name="Cursor" type="NinePatchRect" parent="."]
-material = ExtResource("5_kmrew")
 layout_mode = 0
 offset_left = 424.0
 offset_top = 220.0
 offset_right = 1436.0
 offset_bottom = 244.0
 texture = ExtResource("3_c1sgp")
-region_rect = Rect2(136, 96, 120, 16)
+region_rect = Rect2(272, 192, 240, 32)
 patch_margin_left = 24
 patch_margin_right = 24
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Cursor"]
 libraries = {
-"": SubResource("AnimationLibrary_oqwnn")
+&"": SubResource("AnimationLibrary_oqwnn")
 }
 
 [node name="Clip" type="Control" parent="."]
@@ -1119,38 +1090,48 @@ theme_override_constants/separation = 32
 
 [node name="NavigationButtons" type="HBoxContainer" parent="."]
 modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-offset_left = 448.0
-offset_top = 760.0
-offset_right = 1474.0
-offset_bottom = 824.0
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 228.0
+offset_bottom = 276.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/separation = 64
-alignment = 2
+alignment = 1
 
 [node name="Select" parent="NavigationButtons" instance=ExtResource("8_38k76")]
 layout_mode = 2
-actionKey = "sys_select"
+ActionKey = "sys_select"
 inputKey = "button_jump"
+fallbackKey = "ui_select"
 
 [node name="Cancel" parent="NavigationButtons" instance=ExtResource("8_38k76")]
 layout_mode = 2
-actionKey = "sys_cancel"
+ActionKey = "sys_cancel"
 inputKey = "button_action"
+fallbackKey = "ui_cancel"
 
-[node name="ScrollBar" type="Sprite2D" parent="."]
-position = Vector2(1464, 416)
-rotation = 1.57079
-scale = Vector2(2.25002, 2.25002)
+[node name="Scrollbar" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_left = 1496.0
+offset_top = 168.0
+offset_right = 1993.0
+offset_bottom = 240.0
+rotation = 1.5708
 texture = ExtResource("3_c1sgp")
-region_enabled = true
-region_rect = Rect2(32, 224, 224, 32)
+region_rect = Rect2(64, 448, 448, 64)
+patch_margin_left = 56
+patch_margin_right = 56
 
-[node name="ScrollPosition" type="Sprite2D" parent="ScrollBar"]
-position = Vector2(-80, 0)
+[node name="ScrollPosition" type="Sprite2D" parent="Scrollbar"]
 rotation = -1.5708
 texture = ExtResource("3_c1sgp")
+offset = Vector2(-32, 64)
 region_enabled = true
-region_rect = Rect2(8, 224, 24, 24)
+region_rect = Rect2(0, 448, 62, 64)
 
 [node name="SFX" type="Node" parent="."]
 
@@ -1168,5 +1149,11 @@ bus = &"SFX"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_rf6sp")
+&"": SubResource("AnimationLibrary_rf6sp")
 }
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+bus = &"BGM"
+script = ExtResource("14_f6v0v")
+loopStartPosition = 0.57
+loopEndPosition = 24.525

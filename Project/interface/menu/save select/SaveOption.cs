@@ -7,14 +7,14 @@ namespace Project.Interface.Menus;
 public partial class SaveOption : Control
 {
 	[Export]
-	private Sprite2D newData;
+	private TextureRect newData;
 	[Export]
 	private Control existingData;
 
 	[Export]
 	private Rect2 worldRingObtainedRegion;
 	[Export]
-	private Rect2 worldRingMissionRegion;
+	private Rect2 worldRingMissingRegion;
 	[Export]
 	private Sprite2D worldIcon;
 	[Export]
@@ -60,17 +60,17 @@ public partial class SaveOption : Control
 			existingData.Visible = true;
 			worldIcon.RegionRect = worldIconRegions[(int)saveData.lastPlayedWorld];
 
-			levelLabel.Text = saveData.level.ToString("00");
+			levelLabel.Text = $" : {saveData.level:00}";
 
-			System.TimeSpan span = System.TimeSpan.FromSeconds(saveData.playTime);
-			timeLabel.Text = span.ToString("hh\\:mm\\:ss");
+			Vector3 time = ExtensionMethods.CalculateTimeVector(Mathf.FloorToInt(saveData.playTime));
+			timeLabel.Text = $"{time.X:00} : {time.Y:00} : {time.Z:00}";
 
 			for (int i = 0; i < _worldRings.Count; i++)
 			{
 				//Check if world ring is unlocked (+1 because lost prologue doesn't have one.)
 				bool isWorldRingObtained = saveData.IsWorldRingObtained((SaveManager.WorldEnum)i + 1);
 				_worldRings[i].GetChild<Sprite2D>(0).Visible = isWorldRingObtained; //Update visibility
-				_worldRings[i].RegionRect = isWorldRingObtained ? worldRingObtainedRegion : worldRingMissionRegion;
+				_worldRings[i].RegionRect = isWorldRingObtained ? worldRingObtainedRegion : worldRingMissingRegion;
 			}
 		}
 	}

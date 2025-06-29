@@ -7,8 +7,8 @@ namespace Project.Gameplay;
 public partial class BonusManager : VBoxContainer
 {
 	public static BonusManager instance;
-	private StageSettings Stage => StageSettings.instance;
-	private CharacterController Character => CharacterController.instance;
+	private StageSettings Stage => StageSettings.Instance;
+	private PlayerController Player => StageSettings.Player;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -26,6 +26,25 @@ public partial class BonusManager : VBoxContainer
 			UpdateEnemyChain();
 	}
 
+	private void UpdateQueuedScore()
+	{
+		QueuedScore = 0;
+
+		if (ringChain >= 10)
+		{
+			BonusData ringBonus = new(BonusType.Ring, ringChain);
+			QueuedScore += ringBonus.CalculateBonusPoints();
+		}
+
+		if (enemyChain >= 2)
+		{
+			BonusData enemyBonus = new(BonusType.Enemy, enemyChain);
+			QueuedScore += enemyBonus.CalculateBonusPoints();
+		}
+	}
+
+	/// <summary> Score amount of bonuses that are currently processing. </summary>
+	public int QueuedScore { get; private set; }
 	private int bonusesActive;
 	private readonly Queue<BonusData> bonusQueue = new();
 
@@ -43,17 +62,18 @@ public partial class BonusManager : VBoxContainer
 			bonus.Connect(Bonus.SignalName.BonusFinished, new(this, MethodName.BonusFinished));
 
 		MoveChild(bonus, 0); // Re-order to appear first
-		bonus.ShowBonus(bonusData); // Activate bonus
+		bonus.ShowBonus(bonusData, bonusData.CalculateBonusPoints()); // Activate bonus
 		bonusesActive++;
 
 		if (bonusData.Type == BonusType.EXP)
 		{
-			StageSettings.instance.CurrentEXP += bonusData.Amount;
+			StageSettings.Instance.CurrentEXP += bonusData.Amount;
 			return;
 		}
 
 		// Update score
-		StageSettings.instance.UpdateScore(bonusData.CalculateBonusPoints(), StageSettings.MathModeEnum.Add);
+		StageSettings.Instance.UpdateScore(bonusData.CalculateBonusPoints(), StageSettings.MathModeEnum.Add);
+		UpdateQueuedScore();
 	}
 
 	private void BonusFinished() => bonusesActive--;
@@ -69,6 +89,8 @@ public partial class BonusManager : VBoxContainer
 
 		if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Chain)
 			Stage.IncrementObjective();
+
+		UpdateQueuedScore();
 	}
 
 	/// <summary> Ends the current ring chain. </summary>
@@ -96,24 +118,42 @@ public partial class BonusManager : VBoxContainer
 	private int enemyChain;
 	private float enemyChainTimer;
 	/// <summary> "Grace time" to allow player to chain attacks from a speed-break. </summary>
-	private readonly float ENEMY_CHAIN_BUFFER = .5f;
+	private readonly float EnemyChainBuffer = .5f;
+	private readonly List<Node> activeEnemyComboExtenders = [];
+
 	/// <summary> Increases the enemy chain. </summary>
-	public void AddEnemyChain() => enemyChain++;
+	public void AddEnemyChain()
+	{
+		enemyChain++;
+		UpdateQueuedScore();
+	}
+
+	/// <summary> Erases the current enemy chain. </summary>
+	public void ResetEnemyChain()
+	{
+		enemyChain = 0;
+		enemyChainTimer = 0;
+	}
+
 	/// <summary> Checks whether the enemy chain should end. </summary>
 	public void UpdateEnemyChain()
 	{
-		if (Character.JustLandedOnGround || !Character.IsOnGround) return; // Chain is never counted when the player is in the air
-		if (Character.MovementState != CharacterController.MovementStates.Normal) return; // Chains only end during normal movement
-		if (Character.Skills.IsSpeedBreakActive)
+		if (!Player.IsOnGround) return; // Chain is never counted when the player is in the air
+		if (Player.AllowLandingGrind || Player.IsGrinding) return; // Ignore Grindrails
+		if (Player.ExternalController != null) return; // Chains only end during normal movement
+		if (Player.IsBouncing) return;
+
+		if (Player.Skills.IsSpeedBreakActive)
 		{
-			enemyChainTimer = ENEMY_CHAIN_BUFFER;
+			enemyChainTimer = EnemyChainBuffer;
 			return; // Chain continues during speedbreak
 		}
 
 		enemyChainTimer = Mathf.MoveToward(enemyChainTimer, 0, PhysicsManager.physicsDelta);
-		if (Mathf.IsZeroApprox(enemyChainTimer))
+		if (Mathf.IsZeroApprox(enemyChainTimer) && activeEnemyComboExtenders.Count == 0)
 			FinishEnemyChain();
 	}
+
 	/// <summary> Ends the current enemy chain. </summary>
 	public void FinishEnemyChain()
 	{
@@ -122,6 +162,16 @@ public partial class BonusManager : VBoxContainer
 
 		enemyChain = 0; // Reset enemy chain
 	}
+
+	public bool IsEnemyComboExtenderRegistered(Node n) => activeEnemyComboExtenders.Contains(n);
+	public void RegisterEnemyComboExtender(Node n)
+	{
+		if (activeEnemyComboExtenders.Contains(n))
+			return;
+
+		activeEnemyComboExtenders.Add(n);
+	}
+	public void UnregisterEnemyComboExtender(Node n) => activeEnemyComboExtenders.Remove(n);
 
 	/// <summary> Called when the level is completed. Forces all bonuses to be counted. </summary>
 	private void OnLevelCompleted()
@@ -173,7 +223,7 @@ public readonly struct BonusData(BonusType type, int amount = 0)
 				// 10 rings -> 100 pts
 				return 100;
 			case BonusType.Enemy:
-				return Mathf.Clamp(Amount, 2, 10) * 200; // +200 pts per enemy up to 10 (2000 pts)
+				return Mathf.Min(Amount - 1, 10) * 200; // +200 pts per extra enemy up to 11 (2000 pts)
 			case BonusType.Drift:
 				return 500;
 			case BonusType.Grindstep:

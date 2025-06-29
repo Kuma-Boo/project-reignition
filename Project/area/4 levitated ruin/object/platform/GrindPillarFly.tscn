@@ -1,0 +1,269 @@
+[gd_scene load_steps=13 format=3 uid="uid://x3scwb5r13dw"]
+
+[ext_resource type="Script" uid="uid://d4kukq76r26tq" path="res://area/4 levitated ruin/data/script/FlyingDestructableObject.cs" id="1_nmd6a"]
+[ext_resource type="PackedScene" uid="uid://vdrt1jk4o1vd" path="res://area/4 levitated ruin/object/model/platform/GrindPillar.gltf" id="2_me0lf"]
+[ext_resource type="AudioStream" uid="uid://t1glwhq3yrjl" path="res://sound/sfx/stage/levitated ruin/pillar launch.wav" id="4_f8eqs"]
+[ext_resource type="PackedScene" uid="uid://br8rcyxr4dehl" path="res://area/4 levitated ruin/object/model/platform/GrindPillarPieces.gltf" id="4_wggd5"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="5_dppsv"]
+[ext_resource type="AudioStream" uid="uid://bcu4rhb5h3j68" path="res://sound/sfx/stage/levitated ruin/pillar shatter.wav" id="6_5s8y3"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_7cx07"]
+data = PackedVector3Array(-0.5, -1.78814e-06, 0.500002, -0.5, 1.7794, -0.499998, -0.5, 1.7794, 0.500002, -0.5, -1.78814e-06, 0.500002, -0.5, -1.78814e-06, -0.499998, -0.5, 1.7794, -0.499998, -0.5, -1.78814e-06, -0.499998, 0.5, 1.7794, -0.499998, -0.5, 1.7794, -0.499998, -0.5, -1.78814e-06, -0.499998, 0.5, -1.78814e-06, -0.499998, 0.5, 1.7794, -0.499998, 0.5, -1.78814e-06, -0.499998, 0.5, 1.7794, 0.500002, 0.5, 1.7794, -0.499998, 0.5, -1.78814e-06, -0.499998, 0.5, -1.78814e-06, 0.500002, 0.5, 1.7794, 0.500002, 0.5, -1.78814e-06, 0.500002, -0.5, 1.7794, 0.500002, 0.5, 1.7794, 0.500002, 0.5, -1.78814e-06, 0.500002, -0.5, -1.78814e-06, 0.500002, -0.5, 1.7794, 0.500002, 0.5, -1.78814e-06, -0.499998, -0.5, -1.78814e-06, 0.500002, 0.5, -1.78814e-06, 0.500002, 0.5, -1.78814e-06, -0.499998, -0.5, -1.78814e-06, -0.499998, -0.5, -1.78814e-06, 0.500002, 0.5, 1.7794, 0.500002, 0, 2.80893, 1.72853e-06, 0.5, 1.7794, -0.499998, -0.5, 1.7794, -0.499998, 0, 2.80893, 1.72853e-06, -0.5, 1.7794, 0.500002, -0.5, 1.7794, 0.500002, 0, 2.80893, 1.72853e-06, 0.5, 1.7794, 0.500002, 0.5, 1.7794, -0.499998, 0, 2.80893, 1.72853e-06, -0.5, 1.7794, -0.499998)
+
+[sub_resource type="Animation" id="Animation_3al21"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/Rotation/GrindPillar:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/Rotation/GrindPillar/GrindPillarCollision/StaticBody3D/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Root/Rotation/Trigger:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Root/Rotation:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Root:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Root/Rotation/Trigger/CollisionShape3D:disabled")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Root/Rotation/GrindPillar/GrindPillarMesh:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_xoqmn"]
+resource_name = "deactivate"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/Rotation/Trigger/CollisionShape3D:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/Rotation/GrindPillar/GrindPillarCollision/StaticBody3D/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Root/Rotation/GrindPillar/GrindPillarMesh:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_fgo1a"]
+resource_name = "fly"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/Rotation:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(3.14159, 0, 0), Vector3(6.28319, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_yrfwa"]
+resource_name = "shatter"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/Rotation/GrindPillar/GrindPillarCollision/StaticBody3D/CollisionShape3D:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/Rotation/Trigger:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Root:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pmcqp"]
+_data = {
+&"RESET": SubResource("Animation_3al21"),
+&"deactivate": SubResource("Animation_xoqmn"),
+&"fly": SubResource("Animation_fgo1a"),
+&"shatter": SubResource("Animation_yrfwa")
+}
+
+[node name="GrindPillarFly" type="Node3D" node_paths=PackedStringArray("rotationRoot", "root", "pieceRoot", "animator")]
+script = ExtResource("1_nmd6a")
+rotationRoot = NodePath("Root/Rotation")
+pieceMass = 0.5
+damagePlayer = true
+shatterFlags = 16
+root = NodePath("Root")
+pieceRoot = NodePath("GrindPillarPieces")
+animator = NodePath("AnimationPlayer")
+
+[node name="Root" type="Node3D" parent="."]
+
+[node name="Rotation" type="Node3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+
+[node name="Trigger" type="Area3D" parent="Root/Rotation"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.3, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/Rotation/Trigger"]
+shape = SubResource("ConcavePolygonShape3D_7cx07")
+
+[node name="GrindPillar" parent="Root/Rotation" instance=ExtResource("2_me0lf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.3, 0)
+
+[node name="GrindPillarCollision" parent="Root/Rotation/GrindPillar" index="1"]
+visible = false
+
+[node name="StaticBody3D" parent="Root/Rotation/GrindPillar/GrindPillarCollision" index="0" groups=["wall"]]
+collision_layer = 8
+collision_mask = 0
+
+[node name="GrindPillarPieces" parent="." instance=ExtResource("4_wggd5")]
+visible = false
+
+[node name="LaunchSFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_f8eqs")
+max_db = 0.0
+max_distance = 200.0
+bus = &"GAME SFX"
+script = ExtResource("5_dppsv")
+groupKey = &"pillar launch"
+
+[node name="ShatterSFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("6_5s8y3")
+max_db = 0.0
+max_distance = 200.0
+bus = &"GAME SFX"
+script = ExtResource("5_dppsv")
+groupKey = &"pillar shatter"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_pmcqp")
+}
+
+[connection signal="Shattered" from="." to="ShatterSFX" method="PlayInGroup"]
+[connection signal="StartedFlying" from="." to="LaunchSFX" method="PlayInGroup"]
+[connection signal="area_entered" from="Root/Rotation/Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="Root/Rotation/Trigger" to="." method="OnExited"]
+
+[editable path="Root/Rotation/GrindPillar"]

@@ -1,0 +1,62 @@
+using Godot;
+using Project.Core;
+
+namespace Project.Gameplay;
+
+public partial class FallState : PlayerState
+{
+	[Export]
+	private PlayerState landState;
+	[Export]
+	private PlayerState stompState;
+	[Export]
+	private PlayerState jumpDashState;
+	[Export]
+	private PlayerState homingAttackState;
+
+	public override PlayerState ProcessPhysics()
+	{
+		ProcessMoveSpeed();
+		ProcessTurning();
+		ProcessGravity();
+		Player.ApplyMovement();
+		Player.IsMovingBackward = Player.Controller.IsHoldingDirection(Player.MovementAngle, Player.PathFollower.BackAngle);
+		Player.CheckGround();
+		Player.CheckWall();
+		Player.UpdateUpDirection();
+
+		if (Player.IsOnGround)
+			return landState;
+
+
+		if (Player.Controller.IsJumpBufferActive)
+		{
+			Player.Controller.ResetJumpBuffer();
+			if (SaveManager.Config.useStompJumpButtonMode)
+				return stompState;
+
+			if (Player.Lockon.Monitoring)
+				return Player.Lockon.IsTargetAttackable ? homingAttackState : jumpDashState;
+		}
+
+		if (Player.Lockon.Monitoring && Player.Controller.IsAttackBufferActive)
+		{
+			Player.Controller.ResetAttackBuffer();
+			return Player.Lockon.IsTargetAttackable ? homingAttackState : jumpDashState;
+		}
+
+		if (Player.Controller.IsActionBufferActive)
+		{
+			Player.Controller.ResetActionBuffer();
+			return stompState;
+		}
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LightSpeedDash) &&
+			Player.Controller.IsLightDashBufferActive)
+		{
+			Player.StartLightSpeedDash();
+		}
+
+		return null;
+	}
+}

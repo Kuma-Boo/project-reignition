@@ -1,30 +1,40 @@
-[gd_scene load_steps=10 format=3 uid="uid://crwawg2ivy3xd"]
+[gd_scene load_steps=16 format=3 uid="uid://crwawg2ivy3xd"]
 
-[ext_resource type="Texture2D" uid="uid://cqthy0ymdq1xi" path="res://resource/input sprites/navigation/button/button_plus.png" id="1_5m2jb"]
-[ext_resource type="Script" path="res://interface/menu/NavigationButton.cs" id="1_yihnq"]
-[ext_resource type="FontFile" uid="uid://cc17ag50dcrcr" path="res://interface/font/bitmap fonts/Bonus.fnt" id="2_31tg0"]
+[ext_resource type="Script" uid="uid://biokdt8fv2qe4" path="res://interface/menu/NavigationButton.cs" id="1_yihnq"]
 [ext_resource type="Resource" uid="uid://bevga5botlnhx" path="res://resource/preset/controller/NavPS5.tres" id="2_ouv7c"]
 [ext_resource type="Resource" uid="uid://n44uccys1s8f" path="res://resource/preset/controller/NavXboxOne.tres" id="3_gwcke"]
 [ext_resource type="Resource" uid="uid://5pqg0e4ib3fl" path="res://resource/preset/controller/NavKeyboard.tres" id="4_4my10"]
 [ext_resource type="Resource" uid="uid://jeqocbidodth" path="res://resource/preset/controller/NavNintendo.tres" id="4_q4xmu"]
 [ext_resource type="Resource" uid="uid://dagbchvrpwtj4" path="res://resource/preset/controller/NavSteam.tres" id="5_dsfov"]
+[ext_resource type="Resource" path="res://resource/preset/controller/NavNintendo_Style2.tres" id="7_o6xp1"]
+[ext_resource type="Resource" path="res://resource/preset/controller/NavPS5_Style2.tres" id="7_tdxoo"]
+[ext_resource type="Resource" path="res://resource/preset/controller/NavXboxOne_Style2.tres" id="8_huf5h"]
 [ext_resource type="LabelSettings" uid="uid://bqrydgixkulbv" path="res://interface/font/NavigationFont.tres" id="9_xl2bq"]
+[ext_resource type="Resource" path="res://resource/preset/controller/NavSteam_Style2.tres" id="10_2pnip"]
+[ext_resource type="Resource" uid="uid://d1pn2qk7bof1l" path="res://resource/preset/controller/NavKeyboard_Style2.tres" id="11_aq8a0"]
+[ext_resource type="LabelSettings" uid="uid://dkn5yc8rvyyfa" path="res://interface/font/KeyboardStyle1LabelSettings.tres" id="12_2pnip"]
+[ext_resource type="LabelSettings" uid="uid://bj13juoq808le" path="res://interface/font/KeyboardStyle2LabelSettings.tres" id="12_p36xj"]
+[ext_resource type="Texture2D" uid="uid://c45t6xskxgx4b" path="res://resource/input sprites/navigation/button/button_a_style2.png" id="14_aq8a0"]
 
 [node name="NavigationButton" type="HBoxContainer"]
-custom_minimum_size = Vector2(0, 64)
-offset_right = 232.0
-offset_bottom = 64.0
+z_index = 10
+z_as_relative = false
+custom_minimum_size = Vector2(0, 48)
+offset_right = 216.0
+offset_bottom = 48.0
 theme_override_constants/separation = 8
 alignment = 2
 script = ExtResource("1_yihnq")
 controllerResources = Array[Resource]([ExtResource("2_ouv7c"), ExtResource("3_gwcke"), ExtResource("4_q4xmu"), ExtResource("5_dsfov"), ExtResource("4_4my10")])
+controllerResourcesStyle2 = Array[Object]([ExtResource("7_tdxoo"), ExtResource("8_huf5h"), ExtResource("7_o6xp1"), ExtResource("10_2pnip"), ExtResource("11_aq8a0")])
 buttonLabel = NodePath("Sprite/Key")
 buttonTextureRect = NodePath("Sprite")
 actionLabel = NodePath("Action")
+keyboardLabelSettings = Array[LabelSettings]([ExtResource("12_2pnip"), ExtResource("12_p36xj")])
 
 [node name="Sprite" type="TextureRect" parent="."]
 layout_mode = 2
-texture = ExtResource("1_5m2jb")
+texture = ExtResource("14_aq8a0")
 expand_mode = 3
 
 [node name="Key" type="Label" parent="Sprite"]
@@ -35,10 +45,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(24, 24)
 size_flags_vertical = 1
-theme_override_fonts/font = ExtResource("2_31tg0")
-theme_override_font_sizes/font_size = 20
-text = "8"
+text = "ENTER"
+label_settings = ExtResource("12_p36xj")
 horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true

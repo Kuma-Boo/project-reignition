@@ -16,11 +16,7 @@ public partial class SFXLibraryResource : Resource
 	#region Editor
 	public override Array<Dictionary> _GetPropertyList()
 	{
-		Array<Dictionary> properties =
-		[
-			ExtensionMethods.CreateProperty("Settings/Channel Count", Variant.Type.Int, PropertyHint.Range, "1,9"),
-			ExtensionMethods.CreateProperty("Settings/Key Names", Variant.Type.Array, PropertyHint.TypeString, "21/0:StringName"),
-		];
+		Array<Dictionary> properties = [];
 		ValidateArrays();
 
 		channelEditingIndex = Mathf.Clamp(channelEditingIndex, 1, channelCount);
@@ -29,7 +25,8 @@ public partial class SFXLibraryResource : Resource
 		properties.Add(ExtensionMethods.CreateProperty("Editing/Organization/Target", Variant.Type.Int, PropertyHint.Enum, GetKeyList(keys)));
 		properties.Add(ExtensionMethods.CreateProperty("Editing/Organization/Mode", Variant.Type.Int, PropertyHint.Enum, reorderMode.EnumToString()));
 		properties.Add(ExtensionMethods.CreateProperty("Editing/Organization/Reorder", Variant.Type.Bool));
-		properties.Add(ExtensionMethods.CreateProperty("Editing/Key", Variant.Type.Int, PropertyHint.Enum, GetKeyList(keys)));
+		properties.Add(ExtensionMethods.CreateProperty("Editing/Key Name", Variant.Type.Int, PropertyHint.Enum, GetKeyList(keys)));
+		properties.Add(ExtensionMethods.CreateProperty("Editing/Key Index", Variant.Type.Int, PropertyHint.Range, $"0,{keys.Count - 1}"));
 		properties.Add(ExtensionMethods.CreateProperty("Editing/Channel", Variant.Type.Int, PropertyHint.Range, "1, 9"));
 
 		if (KeyCount != 0)
@@ -42,15 +39,13 @@ public partial class SFXLibraryResource : Resource
 	{
 		switch ((string)property)
 		{
-			case "Settings/Channel Count":
-				return channelCount;
-			case "Settings/Key Names":
-				return keys;
 			case "Editing/Organization/Target":
 				return reorderIndex;
 			case "Editing/Organization/Mode":
 				return (int)reorderMode;
-			case "Editing/Key":
+			case "Editing/Key Name":
+				return keyEditingIndex;
+			case "Editing/Key Index":
 				return keyEditingIndex;
 			case "Editing/Channel":
 				return channelEditingIndex;
@@ -65,16 +60,6 @@ public partial class SFXLibraryResource : Resource
 	{
 		switch ((string)property)
 		{
-			case "Settings/Channel Count":
-				channelCount = (int)value;
-				ValidateArrays();
-				NotifyPropertyListChanged();
-				break;
-			case "Settings/Key Names":
-				keys = (Array<StringName>)value;
-				ValidateArrays();
-				NotifyPropertyListChanged();
-				break;
 			case "Editing/Organization/Target":
 				reorderIndex = (int)value;
 				break;
@@ -86,7 +71,11 @@ public partial class SFXLibraryResource : Resource
 					ReorderKey();
 				NotifyPropertyListChanged();
 				break;
-			case "Editing/Key":
+			case "Editing/Key Name":
+				keyEditingIndex = (int)value;
+				NotifyPropertyListChanged();
+				break;
+			case "Editing/Key Index":
 				keyEditingIndex = (int)value;
 				NotifyPropertyListChanged();
 				break;
@@ -220,9 +209,11 @@ public partial class SFXLibraryResource : Resource
 		duplicateKeyChecker.Clear();
 	}
 	#endregion
+
+	[ExportToolButton("Refresh Resource")]
+	public Callable RefreshResourceGroup => Callable.From(NotifyPropertyListChanged);
 	[Export]
 	private SFXLibraryResource fallbackResource;
-	[ExportGroup("DON'T EDIT THESE DIRECTLY!")]
 	[Export]
 	private Array<StringName> keys;
 	public int KeyCount => keys.Count;
@@ -260,6 +251,9 @@ public partial class SFXLibraryResource : Resource
 	public AudioStream GetStream(StringName key, int channel = 0, int sfxIndex = -1)
 	{
 		int keyIndex = keys.GetStringNameIndex(key);
+
+		if (channel > channelCount - 1) // Fallback to English
+			channel = 0;
 
 		if (keyIndex == -1)
 		{

@@ -4,18 +4,19 @@ using Godot.Collections;
 namespace Project.Gameplay.Triggers
 {
 	/// <summary>
-	/// Extended Area3D node that can determine the direction the player enters.
+	/// A trigger that determines the direction the player enters.
+	/// Instance a StageTrigger.tscn to trigger signals based on collision shapes
+	/// Otherwise, attach this script to a Node3D to trigger events based on Switches.
 	/// Automatically sets up signals for children that inherit from StageTriggerModule.
 	/// </summary>
 	[Tool]
-	public partial class StageTrigger : Area3D
+	public partial class StageTrigger : Node3D
 	{
 		#region Editor
 		public override Array<Dictionary> _GetPropertyList()
 		{
-			Array<Dictionary> properties = new Array<Dictionary>();
+			Array<Dictionary> properties = [ExtensionMethods.CreateProperty("OneShot", Variant.Type.Bool)];
 
-			properties.Add(ExtensionMethods.CreateProperty("OneShot", Variant.Type.Bool));
 			if (isOneShot)
 				properties.Add(ExtensionMethods.CreateProperty("Respawn Mode", Variant.Type.Int, PropertyHint.Enum, respawnMode.EnumToString()));
 
@@ -80,30 +81,32 @@ namespace Project.Gameplay.Triggers
 		private bool isOneShot;
 		/// <summary> For keeping track of oneshot triggers. </summary>
 		private bool wasTriggered;
+		private bool isRespawnEnabled;
 		private RespawnModes respawnMode = RespawnModes.CheckpointBefore;
 		private enum RespawnModes
 		{
-			CheckpointBefore, //Only respawn if the current checkpoint is BEFORE the object (Default)
-			CheckpointAfter, //Only respawn if the current checkpoint AFTER the object
-			Always, //Always respawn
-			Disabled, //Never Respawn
+			CheckpointBefore, // Only respawn if the current checkpoint is BEFORE the object (Default)
+			CheckpointAfter, // Only respawn if the current checkpoint is AFTER the object
+			NoCheckpoint, // Only respawn if the player hasn't hit any checkpoints
+			Always, // Always respawn
+			Disabled, // Never Respawn
 		}
 
-		private TriggerModes triggerMode = TriggerModes.OnEnter; //How should this area be activated?
+		private TriggerModes triggerMode = TriggerModes.OnEnter; // How should this area be activated?
 		private enum TriggerModes
 		{
-			OnEnter, //Activate on enter
-			OnExit, //Activate on exit
-			OnStay, //Activate on enter, Deactivate on exit.
+			OnEnter, // Activate on enter
+			OnExit, // Activate on exit
+			OnStay, // Activate on enter, Deactivate on exit.
 		}
 
 		private ActivationMode enterMode = ActivationMode.MovingForward;
 		private ActivationMode exitMode = ActivationMode.MovingBackward;
 		private enum ActivationMode
 		{
-			BothWays, //Valid both ways
-			MovingForward, //Only valid when the player leaves the trigger moving forward
-			MovingBackward, //Only valid when the player leaves the trigger moving backward
+			BothWays, // Valid both ways
+			MovingForward, // Only valid when the player leaves the trigger moving forward
+			MovingBackward, // Only valid when the player leaves the trigger moving backward
 		}
 
 		[Signal]
@@ -112,41 +115,68 @@ namespace Project.Gameplay.Triggers
 		public delegate void DeactivatedEventHandler();
 		[Signal]
 		public delegate void RespawnedEventHandler();
-		private CharacterPathFollower PathFollower => CharacterController.instance.PathFollower;
+		private PlayerPathController PathFollower => StageSettings.Player.PathFollower;
+		private bool isInteractingWithPlayer;
 
 		public override void _Ready()
 		{
 			if (Engine.IsEditorHint()) return;
 
-			//Connect child modules
+			// Connect child modules
 			for (int i = 0; i < GetChildCount(); i++)
 			{
 				StageTriggerModule module = GetChildOrNull<StageTriggerModule>(i);
 				if (module == null) continue;
 
-				//Connect signals
-				Connect(SignalName.Activated, new Callable(module, StageTriggerModule.MethodName.Activate));
-				Connect(SignalName.Deactivated, new Callable(module, StageTriggerModule.MethodName.Deactivate));
-				Connect(SignalName.Respawned, new Callable(module, StageTriggerModule.MethodName.Respawn));
+				// Connect signals
+				Activated += module.Activate;
+				Deactivated += module.Deactivate;
+				Respawned += module.Respawn;
 			}
 
-			if (respawnMode != RespawnModes.Disabled) //Connect respawn signal
-				StageSettings.instance.ConnectRespawnSignal(this);
+			if (respawnMode != RespawnModes.Disabled) // Connect respawn signal
+			{
+				StageSettings.Instance.Respawned += Respawn;
+
+				if (respawnMode != RespawnModes.Always)
+					StageSettings.Instance.TriggeredCheckpoint += ProcessRespawnable;
+			}
+		}
+
+		private void ProcessRespawnable()
+		{
+			if (!wasTriggered)
+				return;
+
+			if (respawnMode == RespawnModes.NoCheckpoint)
+			{
+				// Disable on checkpoint
+				isRespawnEnabled = false;
+				return;
+			}
+
+			// Compare the currentCheckpoint progress compared to this StageTrigger
+			float eventPosition = PathFollower.GetProgress(GlobalPosition);
+			float checkpointPosition = PathFollower.GetProgress(StageSettings.Instance.CurrentCheckpoint.GlobalPosition);
+			bool isRespawningAhead = checkpointPosition > eventPosition;
+
+			if ((respawnMode == RespawnModes.CheckpointBefore && isRespawningAhead) ||
+			(respawnMode == RespawnModes.CheckpointAfter && !isRespawningAhead)) // Invalid Respawn
+			{
+				isRespawnEnabled = false;
+				return;
+			}
+
+			isRespawnEnabled = true;
 		}
 
 		public void Respawn()
 		{
-			if (respawnMode != RespawnModes.Always) //Validate respawn
-			{
-				//Compare the currentCheckpoint progress compared to this StageTrigger
-				float eventPosition = PathFollower.GetProgress(GlobalPosition);
-				float checkpointPosition = PathFollower.GetProgress(StageSettings.instance.CurrentCheckpoint.GlobalPosition);
-				bool isRespawningAhead = checkpointPosition > eventPosition;
+			if (isOneShot && respawnMode != RespawnModes.Always && !isRespawnEnabled) // Validate respawn
+				return;
 
-				if ((respawnMode == RespawnModes.CheckpointBefore && isRespawningAhead) ||
-				(respawnMode == RespawnModes.CheckpointAfter && !isRespawningAhead)) //Invalid Respawn
-					return;
-			}
+			if (isInteractingWithPlayer)
+				OnEntered();
 
 			wasTriggered = false;
 			EmitSignal(SignalName.Respawned);
@@ -154,9 +184,31 @@ namespace Project.Gameplay.Triggers
 
 		public void OnEntered(Area3D a)
 		{
-			if (!a.IsInGroup("player detection")) return;
+			if (!a.IsInGroup("player detection"))
+				return;
 
-			//Determine whether activation is successful
+			OnEntered();
+		}
+
+		public void OnExited(Area3D a)
+		{
+			if (!a.IsInGroup("player detection"))
+				return;
+
+			if (StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Failed ||
+				StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Success)
+			{
+				return;
+			}
+
+			OnExited();
+		}
+
+		private void OnEntered()
+		{
+			isInteractingWithPlayer = true;
+
+			// Determine whether activation is successful
 			if (triggerMode == TriggerModes.OnExit)
 				return;
 
@@ -170,11 +222,11 @@ namespace Project.Gameplay.Triggers
 			Activate();
 		}
 
-		public void OnExited(Area3D a)
+		private void OnExited()
 		{
-			if (!a.IsInGroup("player detection")) return;
+			isInteractingWithPlayer = false;
 
-			//Determine whether deactivation is successful
+			// Determine whether deactivation is successful
 			if (triggerMode == TriggerModes.OnEnter)
 				return;
 
@@ -196,14 +248,14 @@ namespace Project.Gameplay.Triggers
 			if (wasTriggered) return;
 
 			if (isOneShot)
+			{
 				wasTriggered = true;
+				isRespawnEnabled = true;
+			}
 
 			EmitSignal(SignalName.Activated);
 		}
 
 		private void Deactivate() => EmitSignal(SignalName.Deactivated);
-
-		public void EnableMonitoring() => Monitoring = true;
-		public void DisableMonitoring() => Monitoring = false;
 	}
 }

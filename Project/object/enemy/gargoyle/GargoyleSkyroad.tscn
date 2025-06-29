@@ -1,0 +1,540 @@
+[gd_scene load_steps=39 format=3 uid="uid://dtf23iudr7saa"]
+
+[ext_resource type="Script" uid="uid://c2mk6oc4phgi2" path="res://object/enemy/gargoyle/data/GargoyleSkyroad.cs" id="1_b2tip"]
+[ext_resource type="PackedScene" uid="uid://brhbgxve4dsf1" path="res://object/enemy/gargoyle/data/model/GargoyleSkyroad.gltf" id="2_bjje6"]
+[ext_resource type="Material" uid="uid://chrq2jlovey6c" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters.tres" id="3_1v1s6"]
+[ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="4_08iss"]
+[ext_resource type="Material" uid="uid://rhqpvcj8ph13" path="res://object/enemy/majin/data/particle/material/Majin Glow.tres" id="5_wlcxs"]
+[ext_resource type="Material" uid="uid://cnue030a3coou" path="res://object/enemy/majin/data/particle/material/Majin Dust.tres" id="6_wwfng"]
+[ext_resource type="AudioStream" uid="uid://bqt0gpwc55dfl" path="res://sound/sfx/enemy/majin/majin spawn.wav" id="7_4makg"]
+[ext_resource type="AudioStream" uid="uid://cttipl3ihmbr5" path="res://sound/sfx/enemy/majin/majin travel.wav" id="7_lb2pe"]
+[ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter Add.tres" id="7_yi8bl"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="8_lb2pe"]
+
+
+[sub_resource type="Curve" id="Curve_38m7k"]
+_data = [Vector2(0, 0.2), 0.0, 3.0, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.2), -5.66667, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_30nd5"]
+width = 64
+curve = SubResource("Curve_38m7k")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_q7h37"]
+lifetime_randomness = 0.4
+emission_shape = 2
+emission_sphere_radius = 5.0
+angle_min = -180.0
+angle_max = 180.0
+spread = 180.0
+angular_velocity_min = -360.0
+angular_velocity_max = 360.0
+radial_velocity_min = -15.0
+radial_velocity_max = -10.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -30.0
+radial_accel_max = 30.0
+tangential_accel_min = 30.0
+tangential_accel_max = 50.0
+scale_min = 0.8
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_30nd5")
+color = Color(0.87451, 0.745098, 1, 1)
+hue_variation_min = -0.01
+hue_variation_max = 0.05
+anim_offset_max = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_q2kyu"]
+material = ExtResource("3_1v1s6")
+
+[sub_resource type="Curve" id="Curve_kahy4"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_2ywup"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_kahy4")
+
+[sub_resource type="Curve" id="Curve_1yn53"]
+_data = [Vector2(0, 0.044317), 0.0, 2.64355, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ticie"]
+width = 64
+curve = SubResource("Curve_1yn53")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nihhe"]
+lifetime_randomness = 0.4
+angle_max = 360.0
+spread = 0.0
+angular_velocity_min = -360.0
+angular_velocity_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_ticie")
+alpha_curve = SubResource("CurveTexture_2ywup")
+
+[sub_resource type="QuadMesh" id="QuadMesh_c2pus"]
+material = ExtResource("5_wlcxs")
+
+[sub_resource type="Curve" id="Curve_x6lqw"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.19999, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.8, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="CurveTexture" id="CurveTexture_tsqd7"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_x6lqw")
+
+[sub_resource type="Gradient" id="Gradient_u7dc4"]
+offsets = PackedFloat32Array(0.588732, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.31802, 0.31802, 0.31802, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_utsl0"]
+gradient = SubResource("Gradient_u7dc4")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ll6hy"]
+lifetime_randomness = 0.4
+emission_shape = 2
+emission_sphere_radius = 2.0
+angle_max = 360.0
+spread = 180.0
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 5.0
+color_initial_ramp = SubResource("GradientTexture1D_utsl0")
+alpha_curve = SubResource("CurveTexture_tsqd7")
+
+[sub_resource type="QuadMesh" id="QuadMesh_35ra7"]
+material = ExtResource("6_wwfng")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_23v60"]
+lifetime_randomness = 0.4
+emission_shape = 2
+emission_sphere_radius = 2.0
+angle_max = 360.0
+spread = 180.0
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 10.0
+color = Color(1, 0.741176, 0, 1)
+alpha_curve = SubResource("CurveTexture_tsqd7")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_kkx8r"]
+lifetime_randomness = 0.4
+emission_shape = 2
+emission_sphere_radius = 2.0
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+angular_velocity_min = -360.0
+angular_velocity_max = 360.0
+scale_min = 2.0
+scale_max = 4.0
+scale_curve = SubResource("CurveTexture_ticie")
+color = Color(1, 0.741176, 0, 1)
+alpha_curve = SubResource("CurveTexture_2ywup")
+
+[sub_resource type="QuadMesh" id="QuadMesh_myhi4"]
+material = ExtResource("7_yi8bl")
+
+[sub_resource type="Animation" id="Animation_dv1ej"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GargoyleSkyroad:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GargoyleSkyroad/GargoyleSkyroadRoot:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GargoyleSkyroad/GargoyleSkyroadRoot/Skeleton3D/GargoyleSkyroadMesh:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_jmxln"]
+resource_name = "despawn"
+length = 3.0
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GargoyleSkyroad/GargoyleSkyroadRoot/DespawnParticle")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"RestartGroup"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(2.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Deactivate"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GargoyleSkyroad:rotation")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.872665, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("GargoyleSkyroad/GargoyleSkyroadRoot:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 10)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("GargoyleSkyroad/GargoyleSkyroadRoot/Skeleton3D/GargoyleSkyroadMesh:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("GargoyleSkyroad/GargoyleSkyroadRoot/DespawnParticle/DespawnSFX")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"PlayInGroup"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_6pne8"]
+resource_name = "spawn"
+length = 0.5
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GargoyleSkyroad/GargoyleSkyroadRoot/SpawnParticle")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"RestartGroup"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GargoyleSkyroad/GargoyleSkyroadRoot:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GargoyleSkyroad:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("GargoyleSkyroad/GargoyleSkyroadRoot/Skeleton3D/GargoyleSkyroadMesh:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("GargoyleSkyroad/GargoyleSkyroadRoot/SpawnParticle/SpawnSFX")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"PlayInGroup"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_v4rfn"]
+_data = {
+&"RESET": SubResource("Animation_dv1ej"),
+&"despawn": SubResource("Animation_jmxln"),
+&"spawn": SubResource("Animation_6pne8")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_y6855"]
+animation = &"flap"
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_ebl08"]
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_mrmwx"]
+sync = true
+xfade_time = 0.3
+input_0/name = "enabled"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "disabled"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vgspr"]
+animation = &"glide"
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_ve3gn"]
+graph_offset = Vector2(-581.727, 78.4545)
+nodes/flap-anim/node = SubResource("AnimationNodeAnimation_y6855")
+nodes/flap-anim/position = Vector2(-400, 140)
+nodes/flap_speed/node = SubResource("AnimationNodeTimeScale_ebl08")
+nodes/flap_speed/position = Vector2(-140, 120)
+nodes/flap_transition/node = SubResource("AnimationNodeTransition_mrmwx")
+nodes/flap_transition/position = Vector2(80, 140)
+nodes/glide-anim/node = SubResource("AnimationNodeAnimation_vgspr")
+nodes/glide-anim/position = Vector2(-160, 280)
+node_connections = [&"flap_speed", 0, &"flap-anim", &"flap_transition", 0, &"flap_speed", &"flap_transition", 1, &"glide-anim", &"output", 0, &"flap_transition"]
+
+[node name="GargoyleSkyroad" type="PathFollow3D" node_paths=PackedStringArray("paths", "root", "animator", "animationTree")]
+use_model_front = true
+loop = false
+script = ExtResource("1_b2tip")
+paths = []
+root = NodePath("GargoyleSkyroad")
+animator = NodePath("AnimationPlayer")
+animationTree = NodePath("AnimationTree")
+
+[node name="GargoyleSkyroad" parent="." instance=ExtResource("2_bjje6")]
+
+[node name="Skeleton3D" parent="GargoyleSkyroad/GargoyleSkyroadRoot" index="0"]
+bones/4/rotation = Quaternion(-0.0383763, -1.02244e-06, 2.90416e-07, 0.999263)
+bones/8/rotation = Quaternion(-1.09807e-21, 5.62898e-22, 6.44043e-08, 1)
+bones/15/scale = Vector3(0.999994, 0.999994, 1)
+bones/19/rotation = Quaternion(-0.707107, 0, 4.39029e-08, 0.707107)
+
+[node name="SpawnParticle" type="GPUParticles3D" parent="GargoyleSkyroad/GargoyleSkyroadRoot" index="1" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 16
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_q7h37")
+draw_pass_1 = SubResource("QuadMesh_q2kyu")
+script = ExtResource("4_08iss")
+subSystems = [NodePath("Flash"), NodePath("Dust")]
+
+[node name="Flash" type="GPUParticles3D" parent="GargoyleSkyroad/GargoyleSkyroadRoot/SpawnParticle"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 4
+lifetime = 0.4
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_nihhe")
+draw_pass_1 = SubResource("QuadMesh_c2pus")
+
+[node name="Dust" type="GPUParticles3D" parent="GargoyleSkyroad/GargoyleSkyroadRoot/SpawnParticle"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 16
+lifetime = 1.5
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_ll6hy")
+draw_pass_1 = SubResource("QuadMesh_35ra7")
+
+[node name="SpawnSFX" type="AudioStreamPlayer3D" parent="GargoyleSkyroad/GargoyleSkyroadRoot/SpawnParticle"]
+process_mode = 1
+stream = ExtResource("7_lb2pe")
+volume_db = -12.0
+unit_size = 20.0
+max_db = -12.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("8_lb2pe")
+groupKey = &"majin_travel"
+
+[node name="DespawnParticle" type="GPUParticles3D" parent="GargoyleSkyroad/GargoyleSkyroadRoot" index="2" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 16
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_q7h37")
+draw_pass_1 = SubResource("QuadMesh_q2kyu")
+script = ExtResource("4_08iss")
+subSystems = [NodePath("Flash"), NodePath("Dust"), NodePath("Splatter")]
+
+[node name="Flash" type="GPUParticles3D" parent="GargoyleSkyroad/GargoyleSkyroadRoot/DespawnParticle"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 4
+lifetime = 0.4
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_nihhe")
+draw_pass_1 = SubResource("QuadMesh_c2pus")
+
+[node name="Dust" type="GPUParticles3D" parent="GargoyleSkyroad/GargoyleSkyroadRoot/DespawnParticle"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 16
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_23v60")
+draw_pass_1 = SubResource("QuadMesh_35ra7")
+
+[node name="Splatter" type="GPUParticles3D" parent="GargoyleSkyroad/GargoyleSkyroadRoot/DespawnParticle"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 32
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_kkx8r")
+draw_pass_1 = SubResource("QuadMesh_myhi4")
+
+[node name="DespawnSFX" type="AudioStreamPlayer3D" parent="GargoyleSkyroad/GargoyleSkyroadRoot/DespawnParticle"]
+process_mode = 1
+stream = ExtResource("7_4makg")
+unit_size = 20.0
+max_db = -6.0
+max_distance = 200.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("8_lb2pe")
+groupKey = &"majin_spawn"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_v4rfn")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+active = false
+root_node = NodePath("../GargoyleSkyroad")
+tree_root = SubResource("AnimationNodeBlendTree_ve3gn")
+anim_player = NodePath("../GargoyleSkyroad/AnimationPlayer")
+parameters/flap_speed/scale = 1.0
+parameters/flap_transition/current_state = "flap"
+parameters/flap_transition/transition_request = ""
+parameters/flap_transition/current_index = 0
+
+[editable path="GargoyleSkyroad"]

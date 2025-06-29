@@ -1,0 +1,523 @@
+[gd_scene load_steps=41 format=3 uid="uid://bpym1aa2ews4w"]
+
+[ext_resource type="Script" uid="uid://01bsn0f21qa0" path="res://object/stage/common/resource/script/BombMissile.cs" id="1_xrux1"]
+[ext_resource type="PackedScene" uid="uid://bmrns4285t26c" path="res://area/5 pirate storm/object/model/Bomb.gltf" id="2_2bk61"]
+[ext_resource type="Material" uid="uid://g2ntypqb7whm" path="res://effect/particle/material/flame/Countdown Flame.tres" id="3_7djgu"]
+[ext_resource type="Material" uid="uid://7lvqh1a70ae4" path="res://effect/particle/material/explosion/Explosion Flame.tres" id="4_0wv2t"]
+[ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="7_klhg4"]
+[ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter Add.tres" id="8_ojqsn"]
+[ext_resource type="Material" uid="uid://ckyg4aygq0uan" path="res://effect/particle/material/environment/Water Dust.tres" id="9_87p7a"]
+[ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="10_d2l4x"]
+[ext_resource type="AudioStream" uid="uid://bs1o7w3vv6gf8" path="res://sound/sfx/stage/pirate storm/bomb impact.wav" id="11_d305b"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="12_f5w56"]
+[ext_resource type="AudioStream" uid="uid://cltb14hrxss2q" path="res://sound/sfx/stage/pirate storm/bomb fire.wav" id="13_23afk"]
+[ext_resource type="AudioStream" uid="uid://btpsmqmv2ninl" path="res://sound/sfx/stage/pirate storm/bomb travel.wav" id="14_40qbn"]
+
+
+[sub_resource type="Curve" id="Curve_a21m6"]
+_data = [Vector2(0, 0), 0.0, 23.0532, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.33814, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_a5ppq"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_a21m6")
+
+[sub_resource type="Gradient" id="Gradient_a5ppq"]
+colors = PackedColorArray(0.900648, 0, 0.34026, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_rxmuh"]
+gradient = SubResource("Gradient_a5ppq")
+width = 64
+
+[sub_resource type="Curve" id="Curve_22xyj"]
+_data = [Vector2(0, 0.2), 0.0, 1.76291, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_v0mmn"]
+width = 64
+curve = SubResource("Curve_22xyj")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_22xyj"]
+lifetime_randomness = 0.2
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 0, 1)
+spread = 5.0
+initial_velocity_min = 2.0
+initial_velocity_max = 4.0
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_v0mmn")
+color_ramp = SubResource("GradientTexture1D_rxmuh")
+alpha_curve = SubResource("CurveTexture_a5ppq")
+anim_speed_min = 1.0
+anim_speed_max = 2.0
+anim_offset_max = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_6fpuu"]
+material = ExtResource("3_7djgu")
+size = Vector2(1.5, 1)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_v0mmn"]
+lifetime_randomness = 0.2
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 0, 1)
+initial_velocity_min = 2.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 4.0
+alpha_curve = SubResource("CurveTexture_a5ppq")
+
+[sub_resource type="QuadMesh" id="QuadMesh_di570"]
+material = ExtResource("4_0wv2t")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6fpuu"]
+lifetime_randomness = 0.4
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 80.0
+initial_velocity_min = 5.0
+initial_velocity_max = 15.0
+scale_min = 0.5
+scale_max = 2.0
+alpha_curve = SubResource("CurveTexture_a5ppq")
+
+[sub_resource type="Curve" id="Curve_v0mmn"]
+_data = [Vector2(0, 0.2), 0.0, 1.35084, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_6fpuu"]
+curve = SubResource("Curve_v0mmn")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_di570"]
+lifetime_randomness = 0.4
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+scale_min = 2.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_6fpuu")
+color = Color(1, 0.906833, 0.57, 1)
+alpha_curve = SubResource("CurveTexture_a5ppq")
+
+[sub_resource type="QuadMesh" id="QuadMesh_wr0f1"]
+material = ExtResource("8_ojqsn")
+
+[sub_resource type="Curve" id="Curve_di570"]
+_data = [Vector2(0, 0.2), 0.0, 2.91187, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_wr0f1"]
+width = 64
+curve = SubResource("Curve_di570")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wr0f1"]
+angle_min = 1.07288e-05
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_wr0f1")
+
+[sub_resource type="QuadMesh" id="QuadMesh_nihrx"]
+material = ExtResource("9_87p7a")
+
+[sub_resource type="Gradient" id="Gradient_wr0f1"]
+offsets = PackedFloat32Array(0.231383, 0.816489, 1)
+colors = PackedColorArray(0.844102, 0.377927, 3.85046e-07, 1, 0.874059, 0.570473, 0.411765, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_so543"]
+gradient = SubResource("Gradient_wr0f1")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nihrx"]
+lifetime_randomness = 0.4
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 60.0
+initial_velocity_min = 10.0
+initial_velocity_max = 15.0
+scale_min = 2.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_6fpuu")
+color_ramp = SubResource("GradientTexture1D_so543")
+alpha_curve = SubResource("CurveTexture_a5ppq")
+
+[sub_resource type="QuadMesh" id="QuadMesh_u3ac2"]
+material = ExtResource("10_d2l4x")
+
+[sub_resource type="Animation" id="Animation_ij281"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Bomb:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Bomb:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Bomb/TravelFlames:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Bomb/TravelEmbers:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Bomb/FireSfx:playing")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_4asmq"]
+resource_name = "explode"
+length = 0.500003
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Bomb:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Bomb/TravelFlames:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Bomb/TravelEmbers:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ExplosionEmbers")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.0333333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"RestartGroup"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Bomb/ImpactSfx")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.0333333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"PlayInGroup"
+}]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Bomb/FireSfx:playing")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.0333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="Animation" id="Animation_a21m6"]
+resource_name = "fly"
+length = 0.16667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Bomb:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Bomb:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.01, 0.01, 0.01), Vector3(1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Bomb/TravelFlames:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.0333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Bomb/TravelEmbers:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.0333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Bomb/TravelSfx")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.133333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"PlayInGroup"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_wr0f1"]
+resource_name = "init"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Bomb:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_a21m6"]
+_data = {
+&"RESET": SubResource("Animation_ij281"),
+&"explode": SubResource("Animation_4asmq"),
+&"fly": SubResource("Animation_a21m6"),
+&"init": SubResource("Animation_wr0f1")
+}
+
+[node name="Bomb" type="Node3D" node_paths=PackedStringArray("root", "animator")]
+script = ExtResource("1_xrux1")
+alignModelForward = true
+root = NodePath("Bomb")
+animator = NodePath("AnimationPlayer")
+"Launch Settings/Mode" = 1
+"Launch Settings/Starting Offset" = Vector3(0, 30, 0)
+"Launch Settings/Middle Height" = 2.0
+
+[node name="Bomb" parent="." instance=ExtResource("2_2bk61")]
+
+[node name="TravelFlames" type="GPUParticles3D" parent="Bomb"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-3, -3, -2, 6, 6, 20)
+process_material = SubResource("ParticleProcessMaterial_22xyj")
+draw_pass_1 = SubResource("QuadMesh_6fpuu")
+
+[node name="TravelEmbers" type="GPUParticles3D" parent="Bomb"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 2
+lifetime = 0.3
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-3, -3, -2, 6, 6, 6)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_v0mmn")
+draw_pass_1 = SubResource("QuadMesh_di570")
+
+[node name="ImpactSfx" type="AudioStreamPlayer3D" parent="Bomb"]
+stream = ExtResource("11_d305b")
+unit_size = 20.0
+max_db = 0.0
+max_distance = 50.0
+max_polyphony = 2
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("12_f5w56")
+groupKey = &"bomb impact"
+audioLengthOverride = 0.5
+
+[node name="FireSfx" type="AudioStreamPlayer3D" parent="Bomb"]
+stream = ExtResource("13_23afk")
+unit_size = 20.0
+max_db = 0.0
+max_distance = 20.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="TravelSfx" type="AudioStreamPlayer3D" parent="Bomb"]
+stream = ExtResource("14_40qbn")
+unit_size = 50.0
+max_db = 0.0
+max_distance = 150.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("12_f5w56")
+groupKey = &"bomb travel"
+
+[node name="ExplosionEmbers" type="GPUParticles3D" parent="." node_paths=PackedStringArray("subSystems")]
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.7
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-5, -1, -5, 10, 6, 10)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_6fpuu")
+draw_pass_1 = SubResource("QuadMesh_di570")
+script = ExtResource("7_klhg4")
+subSystems = [NodePath("Splatter"), NodePath("Flash"), NodePath("Dust")]
+
+[node name="Splatter" type="GPUParticles3D" parent="ExplosionEmbers"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 4
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.7
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-5, -1, -5, 10, 6, 10)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_di570")
+draw_pass_1 = SubResource("QuadMesh_wr0f1")
+
+[node name="Flash" type="GPUParticles3D" parent="ExplosionEmbers"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 4
+lifetime = 0.05
+one_shot = true
+explosiveness = 0.7
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-5, -1, -5, 10, 6, 10)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_wr0f1")
+draw_pass_1 = SubResource("QuadMesh_nihrx")
+
+[node name="Dust" type="GPUParticles3D" parent="ExplosionEmbers"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.3
+one_shot = true
+explosiveness = 0.7
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-5, -1, -5, 10, 6, 10)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_nihrx")
+draw_pass_1 = SubResource("QuadMesh_u3ac2")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+deterministic = true
+libraries = {
+&"": SubResource("AnimationLibrary_a21m6")
+}
+
+[editable path="Bomb"]

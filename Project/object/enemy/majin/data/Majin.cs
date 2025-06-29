@@ -10,6 +10,8 @@ public partial class Majin : Enemy
 {
 	[Signal]
 	public delegate void SpinStartedEventHandler();
+	[Signal]
+	public delegate void WanderStartedEventHandler();
 
 	#region Editor
 	public override Array<Dictionary> _GetPropertyList()
@@ -36,9 +38,16 @@ public partial class Majin : Enemy
 				properties.Add(ExtensionMethods.CreateProperty("Spawn Interval Settings/Despawn Delay", Variant.Type.Float, PropertyHint.Range, "0.1,10,.1"));
 		}
 
-		properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Track Player", Variant.Type.Bool));
-		if (!trackPlayer)
-			properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Rotation Time", Variant.Type.Float));
+		if (attackType != AttackTypes.Spin && attackType != AttackTypes.Wander)
+		{
+			properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Track Player", Variant.Type.Bool));
+			if (!trackPlayer)
+				properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Rotation Time", Variant.Type.Float));
+		}
+		else
+		{
+			trackPlayer = false;
+		}
 
 		properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Attack Type", Variant.Type.Int, PropertyHint.Enum, attackType.EnumToString()));
 		if (IsRedMajin) // Show relevant fire-related settings
@@ -201,6 +210,9 @@ public partial class Majin : Enemy
 	[Export(PropertyHint.NodeType, "Node3D")]
 	private NodePath flameRoot;
 	private Node3D FlameRoot { get; set; }
+	[Export(PropertyHint.NodeType, "Node3D")]
+	private NodePath hitboxRoot;
+	private Node3D HitboxRoot { get; set; }
 	[Export(PropertyHint.NodeType, "BoneAttachment3D")]
 	private NodePath hitboxAttachment;
 	private BoneAttachment3D HitboxAttachment { get; set; }
@@ -210,6 +222,7 @@ public partial class Majin : Enemy
 	private AnimationNodeStateMachinePlayback spinState;
 	private AnimationNodeStateMachinePlayback fireState;
 
+	/// <summary> True when either the majin is spawning in, or despawning out from a spawn interval. </summary>
 	private bool isSpawning;
 	private float currentTravelRatio;
 	/// <summary> How long does spawn traveling take? Set to 0 to spawn instantly. </summary>
@@ -228,9 +241,9 @@ public partial class Majin : Enemy
 	private bool SeparateDespawninterval => !Mathf.IsZeroApprox(despawnIntervalDelay);
 	/// <summary> How long should spawning be delayed? </summary>
 	private float spawnIntervalDelay;
-	/// <summary> How long should spawning be delayed? </summary>
+	/// <summary> How long should despawning be delayed? </summary>
 	private float despawnIntervalDelay;
-	private bool finishedTraveling;
+	private bool isFinishedTraveling;
 	public bool SpawnTravelEnabled => !Mathf.IsZeroApprox(spawnTravelTime);
 	public Basis CalculationBasis => Engine.IsEditorHint() ? GlobalBasis : GetParent<Node3D>().GlobalBasis.Inverse() * calculationBasis;
 	private Basis calculationBasis;
@@ -253,8 +266,8 @@ public partial class Majin : Enemy
 		Vector3 launchVector = defeatLaunchDirection;
 		if (launchVector.IsEqualApprox(Vector3.Zero) && !Engine.IsEditorHint()) // Calculate launch direction
 		{
-			launchVector = (Character.Animator.Back() + (Character.Animator.Up() * .2f)).Normalized();
-			launchVector = launchVector.Normalized() * Mathf.Clamp(Character.MoveSpeed, 5, 20);
+			launchVector = (Player.Animator.Back() + (Player.Animator.Up() * .2f)).Normalized();
+			launchVector = launchVector.Normalized() * Mathf.Clamp(Player.MoveSpeed, 5, 20);
 		}
 		else if (isDefeatLocalTransform)
 		{
@@ -283,6 +296,7 @@ public partial class Majin : Enemy
 		Disabled, // Just idle
 		Spin, // Spin like a top
 		Fire, // Spit fire out
+		Wander, // Stay in a "moving forward" state. Use a pathfollower if you need a consistent movement pattern.
 	}
 
 	public bool IsRedMajin => attackType == AttackTypes.Fire;
@@ -324,6 +338,7 @@ public partial class Majin : Enemy
 		if (Engine.IsEditorHint()) return; // In Editor
 
 		FlameRoot = GetNodeOrNull<Node3D>(flameRoot);
+		HitboxRoot = GetNodeOrNull<Node3D>(hitboxRoot);
 		HitboxAttachment = GetNodeOrNull<BoneAttachment3D>(hitboxAttachment);
 		calculationBasis = GlobalBasis; // Cache GlobalBasis for calculations
 		base.SetUp();
@@ -338,6 +353,9 @@ public partial class Majin : Enemy
 		// Skeleton3D node is always 3 nodes away from the root node
 		HitboxAttachment.SetExternalSkeleton(HitboxAttachment.GetPathTo(Root.GetChild(0).GetChild(0).GetChild(0)));
 		HitboxAttachment.BoneIdx = 0;
+
+		if (attackType == AttackTypes.Wander)
+			wanderHomePosition = GlobalPosition;
 	}
 
 	public override void Respawn()
@@ -347,7 +365,7 @@ public partial class Majin : Enemy
 		timer = -1;
 
 		isSpawning = false;
-		finishedTraveling = false;
+		isFinishedTraveling = false;
 
 		AnimationPlayer.Play("RESET");
 		AnimationPlayer.Advance(0);
@@ -362,11 +380,14 @@ public partial class Majin : Enemy
 
 		// Reset idle movement
 		idleFactorVelocity = 0;
+		stateTransition.XfadeTime = 0f;
 		AnimationTree.Set(IdleFactorParameter, 0);
 		AnimationTree.Set(DefeatTransitionParameter, DisabledState);
+		AnimationTree.Set(StateRequestParameter, IdleState);
 
-		// Reset stagger
+		// Reset timers
 		staggerTimer = 0;
+		wanderTimer = 0;
 
 		// Reset flame attack
 		if (IsRedMajin)
@@ -401,7 +422,7 @@ public partial class Majin : Enemy
 		staggerTimer = StaggerLength;
 		DisableFlameAttack();
 
-		if (Character.AttackState == CharacterController.AttackStates.None)
+		if (Player.AttackState == PlayerController.AttackStates.None)
 		{
 			AnimationTree.Set(HitTransition, BoopState);
 		}
@@ -415,7 +436,8 @@ public partial class Majin : Enemy
 
 	protected override void Defeat()
 	{
-		base.Defeat();
+		if (isSpawning) // Prevent signals from killing majin during spawn intervals
+			return;
 
 		SetHitboxStatus(false, IsDefeatLaunchEnabled);
 
@@ -449,11 +471,17 @@ public partial class Majin : Enemy
 			if (IsSpeedbreakDefeat) // Skip defeat animation and explode instantly
 				AnimationPlayer.Advance(0.5);
 		}
+
+		base.Defeat();
 	}
 
 	protected override void UpdateEnemy()
 	{
 		if (Engine.IsEditorHint()) return; // In Editor
+
+		// Update hitbox transforms manually to avoid JoltPhysics scaling errors
+		HitboxRoot.GlobalPosition = HitboxAttachment.GlobalPosition;
+		HitboxRoot.GlobalRotation = HitboxAttachment.GlobalRotation;
 
 		if (SpawnIntervalEnabled)
 			UpdateSpawnInterval();
@@ -468,7 +496,7 @@ public partial class Majin : Enemy
 		if (IsDefeated)
 		{
 			if (IsSpeedbreakDefeat) // Cheat particle effects to stay onscreen
-				GlobalPosition += Character.GetPositionDelta();
+				GlobalPosition += Player.GetPositionDelta();
 
 			return; // Already defeated
 		}
@@ -483,8 +511,66 @@ public partial class Majin : Enemy
 			UpdateFlameAttack();
 
 		UpdateRotation();
-		ApplyRotation();
 		UpdateFidgets();
+
+		if (attackType == AttackTypes.Wander)
+			UpdateWandering();
+	}
+
+	private float wanderTimer;
+	/// <summary> The position the majin considers as "home." </summary>
+	private Vector3 wanderHomePosition;
+	/// <summary> The position where the majin is trying to move. </summary>
+	private Vector3 wanderPosition;
+	/// <summary> How far the majin can move from their home position. </summary>
+	private readonly float WanderRadius = 5f;
+	/// <summary> How fast the majin moves while wandering. </summary>
+	private readonly float WanderSpeed = 2f;
+	private readonly float WanderRotationSmoothing = 50f;
+	/// <summary> The minimum amount of time a majin should wander in a single direction. </summary>
+	private readonly float MinWanderLength = 3f;
+	/// <summary> The maximum amount of time a majin should wander in a single direction. </summary>
+	private readonly float MaxWanderLength = 5f;
+	private void UpdateWandering()
+	{
+		ProcessRotation(wanderPosition, WanderRotationSmoothing);
+
+		GlobalPosition += Root.Forward() * WanderSpeed * PhysicsManager.physicsDelta;
+
+		if (GlobalPosition.DistanceSquaredTo(wanderPosition) < 1f)
+		{
+			// Reached target position; calculate new wandering position
+			UpdateWanderingPosition();
+			return;
+		}
+
+		wanderTimer = Mathf.MoveToward(wanderTimer, 0, PhysicsManager.physicsDelta);
+		if (Mathf.IsZeroApprox(wanderTimer))
+		{
+			// Been travelling in a single direction for too long -- choose a new position
+			UpdateWanderingPosition();
+			return;
+		}
+
+		// Calculate a new wandering position if we hit a wall
+		Vector3 castDirection = wanderPosition - GlobalPosition;
+		RaycastHit hit = this.CastRay(GlobalPosition, castDirection, Runtime.Instance.environmentMask);
+		DebugManager.DrawRay(GlobalPosition, castDirection, Colors.Red);
+		if (hit && hit.collidedObject.IsInGroup("wall")) // Find a new target wandering position
+			UpdateWanderingPosition();
+
+		AnimationTree.Set(MoveBlend, Vector2.Zero);
+	}
+
+	/// <summary>
+	/// Chooses a random point within the wander radius around the majin's original position.
+	/// </summary>
+	private void UpdateWanderingPosition()
+	{
+		float wanderRotation = (Runtime.randomNumberGenerator.Randf() - 0.5f) * Mathf.Tau;
+		float wanderRadius = Runtime.randomNumberGenerator.Randf() * WanderRadius;
+		wanderTimer = Runtime.randomNumberGenerator.RandfRange(MinWanderLength, MaxWanderLength);
+		wanderPosition = wanderHomePosition + Vector3.Forward.Rotated(Vector3.Up, wanderRotation) * wanderRadius;
 	}
 
 	private void UpdateRotation()
@@ -492,28 +578,33 @@ public partial class Majin : Enemy
 		bool OutsideFlameAggression = IsRedMajin && !isFlameActive && !IsInFlameAggressionRange();
 		if (OutsideFlameAggression || !IsInRange)
 		{
-			currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, 0, ref rotationVelocity, TrackingSmoothing);
+			currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, 0, ref rotationVelocity, TrackingSmoothing * PhysicsManager.physicsDelta);
 			if (OutsideFlameAggression && !isFlameActive)
+			{
 				flameTimer = flameInactiveTime;
+				ProcessRotation(Player.GlobalPosition);
+
+			}
 			return;
 		}
 
-		if (trackPlayer) // Rotate to face player
+		if (trackPlayer && (attackType == AttackTypes.Disabled || attackType == AttackTypes.Fire)) // Rotate to face player
 		{
-			TrackPlayer();
+			ProcessRotation(Player.GlobalPosition);
 			return;
 		}
 
 		if (!Mathf.IsZeroApprox(rotationTime))
 		{
-			rotationVelocity = Mathf.Lerp(rotationVelocity, rotationAmount, TrackingSmoothing);
+			rotationVelocity = Mathf.Lerp(rotationVelocity, rotationAmount, TrackingSmoothing * PhysicsManager.physicsDelta);
 			currentRotation = ExtensionMethods.ModAngle(currentRotation + (PhysicsManager.physicsDelta * rotationVelocity));
+			ApplyRotation();
 		}
 	}
 
-	private void ApplyRotation()
+	protected override void ApplyRotation()
 	{
-		Root.Rotation = new Vector3(Root.Rotation.X, currentRotation, Root.Rotation.Z);
+		base.ApplyRotation();
 		FlameRoot.Rotation = Vector3.Up * currentRotation;
 	}
 
@@ -522,11 +613,17 @@ public partial class Majin : Enemy
 		if (Mathf.IsEqualApprox(timer, -1)) // Spawn intervals haven't started yet
 			return;
 
+		if (!Mathf.IsZeroApprox(staggerTimer)) // Enemy is being staggered
+			return;
+
+		if (IsRedMajin && ((IsActive && IsInFlameAggressionRange()) || isFlameActive)) // Don't allow spawn intervals during a flame attack
+			return;
+
 		timer = Mathf.MoveToward(timer, 0, PhysicsManager.physicsDelta);
 		if (!Mathf.IsZeroApprox(timer))
 			return;
 
-		if (Character.Lockon.IsHomingAttacking)
+		if (Player.IsHomingAttacking)
 			return;
 
 		timer = -1;
@@ -590,6 +687,9 @@ public partial class Majin : Enemy
 
 	private void UpdateFlameAttack()
 	{
+		if (!IsHitboxEnabled)
+			return;
+
 		if (!IsInRange || isFidgetActive) // Out of range or fidget is active
 		{
 			DisableFlameAttack();
@@ -621,7 +721,7 @@ public partial class Majin : Enemy
 		if (FlameAggressionRadius == 0)
 			return true;
 
-		float distance = (GlobalPosition - Character.GlobalPosition).Flatten().LengthSquared();
+		float distance = (GlobalPosition - Player.GlobalPosition).Flatten().LengthSquared();
 		// Because raising to the 2nd power is better than taking a square root...
 		return distance < Mathf.Pow(FlameAggressionRadius, 2);
 	}
@@ -639,11 +739,10 @@ public partial class Majin : Enemy
 		}
 		else // Stop flame attack
 		{
-			AnimationPlayer.Play("fire-end");
-			AnimationPlayer.Advance(0.0);
 			fireState.Travel("attack-fire-end");
-			stateTransition.XfadeTime = 0.4;
-			AnimationTree.Set(StateRequestParameter, IdleState);
+			AnimationPlayer.Play("fire-end");
+			stateTransition.XfadeTime = 0.2;
+			AnimationPlayer.Advance(0.0);
 		}
 
 		flameTimer = 0; // Reset timer
@@ -661,7 +760,7 @@ public partial class Majin : Enemy
 
 		AnimationTree.Set(StateRequestParameter, IdleState); // Idle
 
-		if (SpawnTravelEnabled && !finishedTraveling) // Travel
+		if (SpawnTravelEnabled && !isFinishedTraveling) // Travel
 		{
 			currentTravelRatio = 0;
 			Position = SpawnPosition;
@@ -680,6 +779,13 @@ public partial class Majin : Enemy
 			tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(.5f); // Delay by length of teleport animation
 		}
 
+		// Reset flame attack
+		if (IsRedMajin)
+		{
+			isFlameActive = false;
+			flameTimer = isInstantFlame ? flameInactiveTime : 0;
+		}
+
 		AnimationPlayer.Advance(0.0);
 		base.Spawn();
 	}
@@ -696,6 +802,7 @@ public partial class Majin : Enemy
 		tweener?.Kill();
 		tweener = CreateTween().SetProcessMode(Tween.TweenProcessMode.Physics);
 
+		isSpawning = true;
 		SetHitboxStatus(false);
 		AnimationPlayer.Play("despawn");
 		AnimationTree.Set(DespawnTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
@@ -730,7 +837,9 @@ public partial class Majin : Enemy
 		Position = CalculateTravelPosition(currentTravelRatio);
 		ApplyRotation();
 
-		// TODO Update animations
+		if (Mathf.IsEqualApprox(currentTravelRatio, 1f))
+			return;
+
 		Vector3 acceleration = CalculationBasis.Inverse() * CalculateTravelAcceleration(currentTravelRatio).Normalized();
 		Vector2 moveBlend = new(acceleration.X, Mathf.Clamp(velocity.Y, 0, 1));
 		if (Mathf.IsZeroApprox(acceleration.X))
@@ -749,10 +858,10 @@ public partial class Majin : Enemy
 	{
 		IsActive = true;
 		isSpawning = false;
-		finishedTraveling = true;
+		isFinishedTraveling = true;
 		SetHitboxStatus(true);
 
-		if (SpawnTravelEnabled)
+		if (SpawnTravelEnabled && attackType != AttackTypes.Wander)
 		{
 			moveTransition.XfadeTime = MovementTransitionLength;
 			AnimationTree.Set(MoveTransition, DisabledState); // Stopped moving
@@ -761,11 +870,17 @@ public partial class Majin : Enemy
 		if (attackType == AttackTypes.Spin)
 		{
 			spinState.Travel("attack-spin-start");
+			stateTransition.XfadeTime = 0.2f;
 			AnimationTree.Set(StateRequestParameter, SpinState);
 
 			tweener?.Kill();
 			tweener = CreateTween();
 			tweener.TweenCallback(new Callable(this, MethodName.OnSpinActivated)).SetDelay(0.3f); // Delay spin activation by windup animation length
+		}
+		else if (attackType == AttackTypes.Wander)
+		{
+			AnimationTree.Set(MoveTransition, EnabledState); // Keep moving
+			EmitSignal(SignalName.WanderStarted);
 		}
 
 		if (SpawnIntervalEnabled)
@@ -775,6 +890,7 @@ public partial class Majin : Enemy
 	private void FinishDespawning()
 	{
 		IsActive = false;
+		isSpawning = false;
 
 		if (SpawnIntervalEnabled)
 			timer = spawnIntervalDelay;
@@ -783,6 +899,9 @@ public partial class Majin : Enemy
 	/// <summary> Called after spin attack's windup animation. </summary>
 	public void OnSpinActivated()
 	{
+		if (IsDefeated)
+			return;
+
 		AnimationPlayer.Play("spin");
 		EmitSignal(SignalName.SpinStarted);
 	}

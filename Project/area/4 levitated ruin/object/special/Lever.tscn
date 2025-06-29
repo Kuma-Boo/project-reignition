@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3 uid="uid://cb2ts4tbs4fky"]
+
+[ext_resource type="Script" uid="uid://bhryo2yxllmw" path="res://area/4 levitated ruin/data/script/Lever.cs" id="1_akqet"]
+[ext_resource type="Script" uid="uid://coiui4qvdxbqe" path="res://object/trigger/modules/EventTrigger.cs" id="1_g1hdp"]
+[ext_resource type="PackedScene" uid="uid://d2eojdchpfmsr" path="res://area/4 levitated ruin/object/model/special/Lever.gltf" id="2_akqet"]
+[ext_resource type="AudioStream" uid="uid://db4q1qnouo8nf" path="res://sound/sfx/stage/levitated ruin/lever.wav" id="4_er2n2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_akqet"]
+size = Vector3(5, 10, 3)
+
+[node name="Lever" type="Node3D"]
+script = ExtResource("1_akqet")
+IsRightLever = true
+root = NodePath("Lever")
+
+[node name="Lever" parent="." node_paths=PackedStringArray("animator") instance=ExtResource("2_akqet")]
+script = ExtResource("1_g1hdp")
+animator = NodePath("AnimationPlayer")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="AnimationPlayer" parent="Lever" index="1"]
+callback_mode_process = 0
+
+[node name="LeverSFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_er2n2")
+max_db = 0.0
+max_distance = 200.0
+bus = &"GAME SFX"
+
+[node name="Trigger" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+shape = SubResource("BoxShape3D_akqet")
+
+[connection signal="area_entered" from="Trigger" to="." method="OnEntered"]
+
+[editable path="Lever"]

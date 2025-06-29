@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bft64s1qkqatm"]
+[gd_scene load_steps=18 format=3 uid="uid://bft64s1qkqatm"]
 
 [ext_resource type="PackedScene" uid="uid://dy0oxfmu7ahxi" path="res://interface/menu/level select/LevelSelect.tscn" id="1_a11na"]
 [ext_resource type="PackedScene" uid="uid://bxhhmqrkph0a" path="res://interface/menu/level select/LevelOption.tscn" id="2_4j2u3"]
@@ -16,15 +16,17 @@
 [ext_resource type="Resource" uid="uid://ke3qjrd3bomc" path="res://resource/level data/night palace/Act3Perfect.tres" id="14_fxqxj"]
 [ext_resource type="Resource" uid="uid://du86d7lfu3g3t" path="res://resource/level data/night palace/Boss.tres" id="15_bndln"]
 [ext_resource type="Resource" uid="uid://qgffmsew5qjr" path="res://resource/level data/night palace/Last.tres" id="16_ty41x"]
+[ext_resource type="AudioStream" uid="uid://c43jyndqxafsf" path="res://sound/ost/jingle/Level Select - Night Palace.mp3" id="17_ch3up"]
 
 [node name="NightPalace" instance=ExtResource("1_a11na")]
+world = 7
 areaKey = "night_palace"
 
-[node name="Bottom" parent="Window" index="3"]
-offset_left = 0.192001
-offset_top = 0.160034
-offset_right = -456.128
-offset_bottom = -39.0
+[node name="Text" parent="WorldText" index="0"]
+region_rect = Rect2(0, 360, 1024, 100)
+
+[node name="Glow" parent="WorldText/Text" index="0"]
+region_rect = Rect2(0, 360, 1024, 100)
 
 [node name="Main" parent="Clip/Options" index="0" instance=ExtResource("2_4j2u3")]
 layout_mode = 2
@@ -81,3 +83,6 @@ data = ExtResource("15_bndln")
 [node name="Last" parent="Clip/Options" index="13" instance=ExtResource("2_4j2u3")]
 layout_mode = 2
 data = ExtResource("16_ty41x")
+
+[node name="BGM" parent="." index="8"]
+stream = ExtResource("17_ch3up")

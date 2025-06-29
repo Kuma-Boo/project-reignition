@@ -1,0 +1,864 @@
+[gd_scene load_steps=104 format=3 uid="uid://cy240mxcsv0p7"]
+
+[ext_resource type="PackedScene" uid="uid://lb0gab47jte1" path="res://object/enemy/slime/data/model/SlimeMajin.gltf" id="1_gxrr7"]
+[ext_resource type="Script" uid="uid://dyeh4owv5g3eu" path="res://object/enemy/slime/data/SlimeMajin.cs" id="1_ukayf"]
+[ext_resource type="Script" uid="uid://cp6er04j2b86u" path="res://object/enemy/EnemyHurtbox.cs" id="3_d6ith"]
+[ext_resource type="Script" uid="uid://pnh70abopq8e" path="res://object/stage/common/resource/script/Hazard.cs" id="4_sovow"]
+[ext_resource type="Material" uid="uid://dt52srhlgp5k5" path="res://object/enemy/slime/data/model/material/Slime Shock Bolt.tres" id="5_wwh5e"]
+[ext_resource type="Material" uid="uid://k8th5v4uvnuk" path="res://object/enemy/slime/data/model/material/Slime Shock Spark.tres" id="5_x20rx"]
+[ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="6_28g6o"]
+[ext_resource type="AudioStream" uid="uid://du5ioeypwuj8s" path="res://sound/sfx/enemy/slime/shock charge.wav" id="7_ey22j"]
+[ext_resource type="Material" uid="uid://bhj21xbsvtun5" path="res://effect/particle/material/environment/Common Dust Splatter Add.tres" id="8_1xo7p"]
+[ext_resource type="Material" uid="uid://ph7gwhlyucdx" path="res://effect/particle/material/environment/Common Dust Add.tres" id="9_t57jp"]
+[ext_resource type="AudioStream" uid="uid://xa7gupdxme5e" path="res://sound/sfx/enemy/slime/shock active.wav" id="9_wt2ef"]
+[ext_resource type="Material" uid="uid://bwvsqjnpry0xm" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters Process Material.tres" id="10_pxeob"]
+[ext_resource type="Material" uid="uid://chrq2jlovey6c" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters.tres" id="11_yvjin"]
+[ext_resource type="AudioStream" uid="uid://cn361utea64if" path="res://sound/sfx/enemy/slime/spit charge.wav" id="12_1p5ta"]
+[ext_resource type="Material" uid="uid://b4vmiws2hdmhs" path="res://object/enemy/majin/data/particle/material/Majin Spawn Smoke Process Material.tres" id="12_ey22j"]
+[ext_resource type="AudioStream" uid="uid://76auhtyhkxlq" path="res://sound/sfx/enemy/slime/spit active.wav" id="13_ecygy"]
+[ext_resource type="Texture2D" uid="uid://cpjydx5buf0av" path="res://effect/particle/texture/teleport dust.png" id="13_wt2ef"]
+[ext_resource type="AudioStream" uid="uid://bqt0gpwc55dfl" path="res://sound/sfx/enemy/majin/majin spawn.wav" id="14_jobc0"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="15_ytn4a"]
+[ext_resource type="AudioStream" uid="uid://b7iib1slsinqx" path="res://sound/sfx/enemy/slime/spawn.wav" id="16_yvjin"]
+[ext_resource type="AudioStream" uid="uid://c235pa73crpxk" path="res://sound/sfx/enemy/slime/defeat.wav" id="19_dr7u3"]
+[ext_resource type="Material" uid="uid://boc260pumvtga" path="res://object/enemy/majin/data/particle/material/Majin Defeat Smoke Process Material.tres" id="19_uyqq0"]
+[ext_resource type="Material" uid="uid://m0d6jfnxdrwg" path="res://effect/particle/material/Teleport Dust.tres" id="20_ggpcx"]
+[ext_resource type="AudioStream" uid="uid://j55cc4bikw0s" path="res://sound/sfx/enemy/slime/defeat horn.wav" id="20_r76sd"]
+[ext_resource type="AudioStream" uid="uid://cr564up85ldbo" path="res://sound/sfx/enemy/slime/defeat clatter.wav" id="21_1p5ta"]
+[ext_resource type="AudioStream" uid="uid://5mlwb3tffqad" path="res://sound/sfx/enemy/slime/land.wav" id="21_ecygy"]
+[ext_resource type="Material" uid="uid://chovk7baskmwi" path="res://object/enemy/majin/data/particle/material/Majin Defeat Letters Process Material.tres" id="21_y2y56"]
+[ext_resource type="Material" uid="uid://c5pcrpavpyreh" path="res://object/enemy/majin/data/particle/material/Majin Defeat Process Material.tres" id="22_vrr8x"]
+[ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter Add.tres" id="23_6qyuk"]
+[ext_resource type="Material" uid="uid://ckyg4aygq0uan" path="res://effect/particle/material/environment/Water Dust.tres" id="26_y2y56"]
+[ext_resource type="Material" uid="uid://bdk8qnv7ytydw" path="res://effect/particle/material/environment/Common Dust Splatter Add No Billboard.tres" id="27_6qyuk"]
+[ext_resource type="Material" uid="uid://cctsu5ymh5eev" path="res://effect/particle/material/environment/Common Splatter.tres" id="27_vrr8x"]
+
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_d6ith"]
+radius = 0.6
+height = 1.8
+
+[sub_resource type="Curve" id="Curve_wwh5e"]
+_data = [Vector2(0, 0), 0.0, 10.5907, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -6.16019, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_28g6o"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_wwh5e")
+
+[sub_resource type="Gradient" id="Gradient_x20rx"]
+offsets = PackedFloat32Array(0.0478723, 0.704787)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0.716667, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1xo7p"]
+gradient = SubResource("Gradient_x20rx")
+width = 64
+
+[sub_resource type="Curve" id="Curve_t57jp"]
+_data = [Vector2(0, 0.5), 0.0, 1.60354, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_xewoi"]
+width = 64
+curve = SubResource("Curve_t57jp")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_xewoi"]
+lifetime_randomness = 0.2
+angle_min = 1.07288e-05
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 8.0
+scale_curve = SubResource("CurveTexture_xewoi")
+color_ramp = SubResource("GradientTexture1D_1xo7p")
+alpha_curve = SubResource("CurveTexture_28g6o")
+
+[sub_resource type="QuadMesh" id="QuadMesh_t57jp"]
+material = ExtResource("5_x20rx")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_x20rx"]
+lifetime_randomness = 0.5
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.5
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 0.9
+emission_ring_cone_angle = 90.0
+angle_min = 1.07288e-05
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_max = 3.0
+alpha_curve = SubResource("CurveTexture_28g6o")
+anim_speed_min = 3.0
+anim_speed_max = 5.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_28g6o"]
+material = ExtResource("5_wwh5e")
+
+[sub_resource type="Curve" id="Curve_xewoi"]
+_data = [Vector2(0, 0.4), 0.0, 0.923193, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_lt46f"]
+width = 64
+curve = SubResource("Curve_xewoi")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_iss1x"]
+lifetime_randomness = 0.3
+emission_shape = 3
+emission_box_extents = Vector3(1, 0.5, 0.5)
+angle_min = 1.07288e-05
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_lt46f")
+color = Color(0.5264, 0.94, 0.423, 1)
+alpha_curve = SubResource("CurveTexture_28g6o")
+
+[sub_resource type="QuadMesh" id="QuadMesh_bqhcx"]
+material = ExtResource("8_1xo7p")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_t57jp"]
+lifetime_randomness = 0.3
+emission_shape_offset = Vector3(0, -0.5, 0)
+emission_shape = 3
+emission_box_extents = Vector3(0, 0.5, 0.5)
+angle_min = 1.07288e-05
+angle_max = 360.0
+velocity_pivot = Vector3(0, 0, -1)
+direction = Vector3(0, 0, -1)
+initial_velocity_min = 2.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_lt46f")
+color = Color(0.5264, 0.94, 0.423, 0.392157)
+alpha_curve = SubResource("CurveTexture_28g6o")
+
+[sub_resource type="QuadMesh" id="QuadMesh_xewoi"]
+material = ExtResource("9_t57jp")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_dr7u3"]
+material = ExtResource("11_yvjin")
+size = Vector2(1, 1)
+orientation = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eiiup"]
+transparency = 1
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("13_wt2ef")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_r76sd"]
+material = SubResource("StandardMaterial3D_eiiup")
+
+[sub_resource type="QuadMesh" id="QuadMesh_bmhaq"]
+material = ExtResource("20_ggpcx")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_jypwu"]
+material = ExtResource("11_yvjin")
+size = Vector2(1, 1)
+orientation = 2
+
+[sub_resource type="QuadMesh" id="QuadMesh_lqfwx"]
+material = ExtResource("23_6qyuk")
+
+[sub_resource type="Curve" id="Curve_6qyuk"]
+_data = [Vector2(0, 0), 0.0, 28.2547, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_bmhaq"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_6qyuk")
+
+[sub_resource type="Curve" id="Curve_uwed5"]
+_data = [Vector2(0, 0), 0.0, 10.3588, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), -0.86792, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_y2y56"]
+width = 64
+curve = SubResource("Curve_uwed5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_y2y56"]
+lifetime_randomness = 0.4
+emission_shape_offset = Vector3(0, 0, -0.5)
+emission_shape = 3
+emission_box_extents = Vector3(1, 0, 0.5)
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, -1, -0.5)
+spread = 20.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_y2y56")
+alpha_curve = SubResource("CurveTexture_bmhaq")
+
+[sub_resource type="QuadMesh" id="QuadMesh_wj56b"]
+material = ExtResource("27_vrr8x")
+
+[sub_resource type="Curve" id="Curve_bmhaq"]
+_data = [Vector2(0, 0.122967), 0.0, 3.56295, 0, 0, Vector2(1, 0.4), -1.35509, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_jypwu"]
+_data = [Vector2(0, 0), 0.0, 11.568, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), -1.7594, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_lqfwx"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_uwed5"]
+width = 64
+curve_x = SubResource("Curve_bmhaq")
+curve_y = SubResource("Curve_jypwu")
+curve_z = SubResource("Curve_lqfwx")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_kvh2v"]
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 5.0
+scale_curve = SubResource("CurveXYZTexture_uwed5")
+alpha_curve = SubResource("CurveTexture_bmhaq")
+
+[sub_resource type="QuadMesh" id="QuadMesh_3cprv"]
+material = ExtResource("27_6qyuk")
+center_offset = Vector3(0, 0.5, 0)
+
+[sub_resource type="CurveTexture" id="CurveTexture_kvh2v"]
+width = 64
+curve = SubResource("Curve_uwed5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3cprv"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 2.0
+emission_ring_inner_radius = 1.0
+emission_ring_cone_angle = 90.0
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_kvh2v")
+alpha_curve = SubResource("CurveTexture_bmhaq")
+
+[sub_resource type="QuadMesh" id="QuadMesh_imaw7"]
+material = ExtResource("26_y2y56")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_u47u0"]
+lifetime_randomness = 0.4
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 2.0
+emission_ring_inner_radius = 1.5
+emission_ring_cone_angle = 90.0
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 5.0
+initial_velocity_min = 8.0
+initial_velocity_max = 12.0
+gravity = Vector3(0, -30, 0)
+damping_min = 10.0
+damping_max = 20.0
+scale_max = 2.5
+scale_curve = SubResource("CurveTexture_y2y56")
+alpha_curve = SubResource("CurveTexture_bmhaq")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_sovow"]
+radius = 1.5
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_d6ith"]
+height = 15.0
+radius = 50.0
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_28g6o"]
+animation = &"defeat"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gxrr7"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_1xo7p"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wt2ef"]
+animation = &"initialize"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_t57jp"]
+animation = &"move"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_xewoi"]
+fadein_time = 0.2
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ukayf"]
+animation = &"shock-end"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_d6ith"]
+animation = &"shock-start"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sovow"]
+animation = &"shock-warn"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wwh5e"]
+animation = &"shock"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_28g6o"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_x20rx"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_1xo7p"]
+xfade_time = 0.2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_t57jp"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xewoi"]
+xfade_time = 0.2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_lt46f"]
+states/shock/node = SubResource("AnimationNodeAnimation_wwh5e")
+states/shock/position = Vector2(621, 100)
+states/shock-end/node = SubResource("AnimationNodeAnimation_ukayf")
+states/shock-end/position = Vector2(762, 100)
+states/shock-start/node = SubResource("AnimationNodeAnimation_d6ith")
+states/shock-start/position = Vector2(492, 100)
+states/shock-warn/node = SubResource("AnimationNodeAnimation_sovow")
+states/shock-warn/position = Vector2(348, 100)
+transitions = ["Start", "shock-warn", SubResource("AnimationNodeStateMachineTransition_28g6o"), "shock-warn", "shock-start", SubResource("AnimationNodeStateMachineTransition_x20rx"), "shock-start", "shock", SubResource("AnimationNodeStateMachineTransition_1xo7p"), "shock", "shock-end", SubResource("AnimationNodeStateMachineTransition_t57jp"), "shock-end", "End", SubResource("AnimationNodeStateMachineTransition_xewoi")]
+graph_offset = Vector2(-270, 1)
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_iss1x"]
+fadein_time = 0.2
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bqhcx"]
+animation = &"spawn-end"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0ah1n"]
+animation = &"spawn-start"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pxeob"]
+animation = &"spawn"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yvjin"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ey22j"]
+xfade_time = 0.1
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_wt2ef"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_jobc0"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_ytn4a"]
+states/spawn/node = SubResource("AnimationNodeAnimation_pxeob")
+states/spawn/position = Vector2(479, 100)
+states/spawn-end/node = SubResource("AnimationNodeAnimation_bqhcx")
+states/spawn-end/position = Vector2(646, 100)
+states/spawn-start/node = SubResource("AnimationNodeAnimation_0ah1n")
+states/spawn-start/position = Vector2(349, 100)
+transitions = ["spawn-end", "End", SubResource("AnimationNodeStateMachineTransition_yvjin"), "spawn-start", "spawn", SubResource("AnimationNodeStateMachineTransition_ey22j"), "spawn", "spawn-end", SubResource("AnimationNodeStateMachineTransition_wt2ef"), "Start", "spawn-start", SubResource("AnimationNodeStateMachineTransition_jobc0")]
+graph_offset = Vector2(-249, -17)
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_dr7u3"]
+fadein_time = 0.2
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lt46f"]
+animation = &"spit"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_bqhcx"]
+fadein_time = 0.2
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_x20rx"]
+xfade_time = 0.1
+input_0/name = "init"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "active"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+input_2/name = "defeated"
+input_2/auto_advance = false
+input_2/break_loop_at_end = false
+input_2/reset = true
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_gxrr7"]
+graph_offset = Vector2(-715.22, -2.90588)
+nodes/defeat_anim/node = SubResource("AnimationNodeAnimation_28g6o")
+nodes/defeat_anim/position = Vector2(120, 480)
+nodes/idle_anim/node = SubResource("AnimationNodeAnimation_gxrr7")
+nodes/idle_anim/position = Vector2(-920, 180)
+nodes/idle_speed/node = SubResource("AnimationNodeTimeScale_1xo7p")
+nodes/idle_speed/position = Vector2(-700, 180)
+nodes/initialize_anim/node = SubResource("AnimationNodeAnimation_wt2ef")
+nodes/initialize_anim/position = Vector2(120, 20)
+nodes/move_anim/node = SubResource("AnimationNodeAnimation_t57jp")
+nodes/move_anim/position = Vector2(-920, 380)
+nodes/move_trigger/node = SubResource("AnimationNodeOneShot_xewoi")
+nodes/move_trigger/position = Vector2(-520, 180)
+nodes/output/position = Vector2(560, 160)
+nodes/shock_state/node = SubResource("AnimationNodeStateMachine_lt46f")
+nodes/shock_state/position = Vector2(-380, 480)
+nodes/shock_trigger/node = SubResource("AnimationNodeOneShot_iss1x")
+nodes/shock_trigger/position = Vector2(-60, 200)
+nodes/spawn_state/node = SubResource("AnimationNodeStateMachine_ytn4a")
+nodes/spawn_state/position = Vector2(-120, 480)
+nodes/spawn_trigger/node = SubResource("AnimationNodeOneShot_dr7u3")
+nodes/spawn_trigger/position = Vector2(120, 200)
+nodes/spit_anim/node = SubResource("AnimationNodeAnimation_lt46f")
+nodes/spit_anim/position = Vector2(-600, 480)
+nodes/spit_trigger/node = SubResource("AnimationNodeOneShot_bqhcx")
+nodes/spit_trigger/position = Vector2(-280, 200)
+nodes/state_transition/node = SubResource("AnimationNodeTransition_x20rx")
+nodes/state_transition/position = Vector2(340, 140)
+node_connections = [&"idle_speed", 0, &"idle_anim", &"move_trigger", 0, &"idle_speed", &"move_trigger", 1, &"move_anim", &"output", 0, &"state_transition", &"shock_trigger", 0, &"spit_trigger", &"shock_trigger", 1, &"shock_state", &"spawn_trigger", 0, &"shock_trigger", &"spawn_trigger", 1, &"spawn_state", &"spit_trigger", 0, &"move_trigger", &"spit_trigger", 1, &"spit_anim", &"state_transition", 0, &"initialize_anim", &"state_transition", 1, &"spawn_trigger", &"state_transition", 2, &"defeat_anim"]
+
+[node name="SlimeMajin" type="Node3D" node_paths=PackedStringArray("instantSpawnFX")]
+script = ExtResource("1_ukayf")
+spawnHeight = 5.0
+instantSpawnFX = NodePath("RootAttachment/SpawnLetter")
+startingOffset = 0.6
+shockHitbox = NodePath("Hitbox")
+pearlAmount = 15
+damagePlayer = true
+bounceScale = 1.2
+root = NodePath("SlimeMajin")
+hurtbox = NodePath("RootAttachment/Hitboxes/Hurtbox")
+collider = NodePath("RootAttachment/Hitboxes/EnvironmentCollider/CollisionShape3D")
+rangeCollider = NodePath("Range/CollisionShape3D")
+animationTree = NodePath("AnimationTree")
+animationPlayer = NodePath("")
+
+[node name="SlimeMajin" parent="." instance=ExtResource("1_gxrr7")]
+
+[node name="RootAttachment" type="BoneAttachment3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1.78814e-07, 1, 0, -1, 1.78814e-07, 1.77636e-16, 0, 0)
+bone_name = "root"
+bone_idx = 0
+use_external_skeleton = true
+external_skeleton = NodePath("../SlimeMajin/SlimeMajinRoot/Skeleton3D")
+
+[node name="Hitboxes" type="Node3D" parent="RootAttachment"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+
+[node name="Hurtbox" type="Area3D" parent="RootAttachment/Hitboxes" node_paths=PackedStringArray("enemy")]
+transform = Transform3D(1, 2.66947e-15, -3.55271e-15, -1.50942e-14, 1, 2.04636e-12, 1.42109e-14, -2.04636e-12, 1, 3.93404e-08, 0.900002, -2.92193e-06)
+collision_layer = 12
+collision_mask = 2
+script = ExtResource("3_d6ith")
+enemy = NodePath("../../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RootAttachment/Hitboxes/Hurtbox"]
+transform = Transform3D(1, -7.27012e-27, 0, -2.90806e-26, 1, 0, 0, 0, 1, 7.10543e-15, -0.3, -4.54747e-13)
+shape = SubResource("CapsuleShape3D_d6ith")
+
+[node name="EnvironmentCollider" type="StaticBody3D" parent="RootAttachment/Hitboxes" groups=["enemy", "wall"]]
+transform = Transform3D(1, 2.66947e-15, -3.55271e-15, -1.50942e-14, 1, 2.04636e-12, 1.42109e-14, -2.04636e-12, 1, 3.93404e-08, 0.900002, -2.92193e-06)
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RootAttachment/Hitboxes/EnvironmentCollider"]
+transform = Transform3D(1, -7.27012e-27, 0, -2.90806e-26, 1, 0, 0, 0, 1, 7.10543e-15, -0.3, -4.54747e-13)
+shape = SubResource("CapsuleShape3D_d6ith")
+disabled = true
+
+[node name="ShockFX" type="GPUParticles3D" parent="RootAttachment" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1, 0, 0, 0, 1.78814e-07, -1, 0, 1, 1.78814e-07, -1.77636e-16, 1.78814e-07, 1)
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.5
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_xewoi")
+draw_pass_1 = SubResource("QuadMesh_t57jp")
+script = ExtResource("6_28g6o")
+subSystems = [NodePath("BoltFX")]
+
+[node name="ShockWarnSFX" type="AudioStreamPlayer3D" parent="RootAttachment/ShockFX"]
+process_mode = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+stream = ExtResource("7_ey22j")
+unit_size = 20.0
+max_db = 0.0
+max_distance = 200.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("15_ytn4a")
+groupKey = &"slime_shock_warn"
+
+[node name="ShockSFX" type="AudioStreamPlayer3D" parent="RootAttachment/ShockFX"]
+process_mode = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+stream = ExtResource("9_wt2ef")
+unit_size = 20.0
+max_db = 0.0
+max_distance = 200.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("15_ytn4a")
+groupKey = &"slime_shock"
+
+[node name="BoltFX" type="GPUParticles3D" parent="RootAttachment/ShockFX"]
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.5
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_x20rx")
+draw_pass_1 = SubResource("QuadMesh_28g6o")
+
+[node name="SpitFX" type="GPUParticles3D" parent="RootAttachment" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1, 0, 0, 0, 1.78814e-07, -1, 0, 1, 1.78814e-07, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.4
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_iss1x")
+draw_pass_1 = SubResource("QuadMesh_bqhcx")
+script = ExtResource("6_28g6o")
+subSystems = [NodePath("SmokeFX")]
+
+[node name="SpitSFX" type="AudioStreamPlayer3D" parent="RootAttachment/SpitFX"]
+process_mode = 1
+stream = ExtResource("12_1p5ta")
+unit_size = 20.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="SpitActiveSFX" type="AudioStreamPlayer3D" parent="RootAttachment/SpitFX"]
+process_mode = 1
+stream = ExtResource("13_ecygy")
+unit_size = 20.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="SmokeFX" type="GPUParticles3D" parent="RootAttachment/SpitFX"]
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.8
+one_shot = true
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_t57jp")
+draw_pass_1 = SubResource("QuadMesh_xewoi")
+
+[node name="SpawnLetter" type="GPUParticles3D" parent="RootAttachment" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1, 0, 0, 0, 1.78814e-07, -1, 0, 1, 1.78814e-07, -1.77636e-16, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 32
+lifetime = 2.0
+one_shot = true
+speed_scale = 2.5
+explosiveness = 0.4
+randomness = 0.4
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
+process_material = ExtResource("10_pxeob")
+draw_pass_1 = SubResource("PlaneMesh_dr7u3")
+script = ExtResource("6_28g6o")
+subSystems = [NodePath("SpawnSmoke")]
+
+[node name="SpawnSmoke" type="GPUParticles3D" parent="RootAttachment/SpawnLetter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+lifetime = 0.8
+one_shot = true
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
+process_material = ExtResource("12_ey22j")
+draw_pass_1 = SubResource("QuadMesh_r76sd")
+
+[node name="SpawnSFX" type="AudioStreamPlayer3D" parent="RootAttachment/SpawnLetter"]
+process_mode = 1
+stream = ExtResource("14_jobc0")
+unit_size = 20.0
+max_db = 0.0
+max_distance = 200.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("15_ytn4a")
+groupKey = &"majin_spawn"
+
+[node name="DefeatFX" type="GPUParticles3D" parent="RootAttachment" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1, 0, 0, 0, 1.78814e-07, -1, 0, 1, 1.78814e-07, -1.77636e-16, 1.43051e-07, 0.8)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+emitting = false
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.6
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = ExtResource("19_uyqq0")
+draw_pass_1 = SubResource("QuadMesh_bmhaq")
+script = ExtResource("6_28g6o")
+subSystems = [NodePath("DefeatLetter"), NodePath("DefeatSplatter")]
+
+[node name="DefeatLetter" type="GPUParticles3D" parent="RootAttachment/DefeatFX"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.6
+randomness = 0.4
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = ExtResource("21_y2y56")
+draw_pass_1 = SubResource("PlaneMesh_jypwu")
+
+[node name="DefeatSplatter" type="GPUParticles3D" parent="RootAttachment/DefeatFX"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.4
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = ExtResource("22_vrr8x")
+draw_pass_1 = SubResource("QuadMesh_lqfwx")
+
+[node name="DefeatHornSFX" type="AudioStreamPlayer3D" parent="RootAttachment/DefeatFX"]
+process_mode = 1
+transform = Transform3D(1, 0, 0, 0, 1, 5.68434e-14, 0, -5.68434e-14, 1, -2.77933e-22, 0, 0)
+stream = ExtResource("20_r76sd")
+unit_size = 20.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="DefeatClatterSFX" type="AudioStreamPlayer3D" parent="RootAttachment/DefeatFX"]
+process_mode = 1
+transform = Transform3D(1, 0, 0, 0, 1, 5.68434e-14, 0, -5.68434e-14, 1, -2.77933e-22, 0, 0)
+stream = ExtResource("21_1p5ta")
+unit_size = 20.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="MoveFX" type="GPUParticles3D" parent="RootAttachment"]
+transform = Transform3D(1, 0, 0, 0, 1.78814e-07, -1, 0, 1, 1.78814e-07, -1.77636e-16, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+emitting = false
+lifetime = 0.4
+one_shot = true
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_y2y56")
+draw_pass_1 = SubResource("QuadMesh_wj56b")
+
+[node name="SpawnFX" type="GPUParticles3D" parent="RootAttachment"]
+transform = Transform3D(1, 0, 0, 0, 1.78814e-07, -1, 0, 1, 1.78814e-07, -1.77636e-16, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+emitting = false
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.9
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_kvh2v")
+draw_pass_1 = SubResource("QuadMesh_3cprv")
+
+[node name="SpawnSFX" type="AudioStreamPlayer3D" parent="RootAttachment/SpawnFX"]
+process_mode = 1
+transform = Transform3D(1, 0, 0, 0, 1, 4.26326e-14, 0, -4.26326e-14, 1, 0, 0, 0)
+stream = ExtResource("16_yvjin")
+unit_size = 20.0
+max_db = 0.0
+max_distance = 200.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("15_ytn4a")
+groupKey = &"slime_spawn"
+
+[node name="LandFX" type="GPUParticles3D" parent="RootAttachment" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1, 0, 0, 0, 1.78814e-07, -1, 0, 1, 1.78814e-07, -1.77636e-16, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.9
+randomness = 0.4
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_3cprv")
+draw_pass_1 = SubResource("QuadMesh_imaw7")
+script = ExtResource("6_28g6o")
+subSystems = [NodePath("Splatter")]
+
+[node name="Splatter" type="GPUParticles3D" parent="RootAttachment/LandFX"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+emitting = false
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.8
+randomness = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_u47u0")
+draw_pass_1 = SubResource("QuadMesh_wj56b")
+
+[node name="LandSFX" type="AudioStreamPlayer3D" parent="RootAttachment/LandFX"]
+process_mode = 1
+transform = Transform3D(1, 0, 0, 0, 1, 5.68434e-14, 0, -5.68434e-14, 1, -2.77933e-22, 0, 0)
+stream = ExtResource("21_ecygy")
+unit_size = 20.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("15_ytn4a")
+groupKey = &"slime_land"
+
+[node name="DefeatSFX" type="AudioStreamPlayer3D" parent="RootAttachment"]
+process_mode = 1
+transform = Transform3D(1, 0, 0, 0, 1.78814e-07, -1, 0, 1, 1.78814e-07, -1.77636e-16, 0, 0)
+stream = ExtResource("19_dr7u3")
+unit_size = 20.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="Hitbox" type="Area3D" parent="."]
+transform = Transform3D(1, 2.66947e-15, -3.55271e-15, -1.50942e-14, 1, -2.22523e-07, 1.42109e-14, 2.22523e-07, 1, 0, 1, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("4_sovow")
+isDisabled = true
+ignoreSpeedbreakingCharacters = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+transform = Transform3D(1, 1.55286e-22, 0, -2.25876e-22, 1, 0, 0, 0, 1, 7.10543e-15, 5.96046e-08, -6.67574e-08)
+shape = SubResource("SphereShape3D_sovow")
+
+[node name="Range" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Range"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("CylinderShape3D_d6ith")
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+active = false
+root_node = NodePath("../SlimeMajin")
+tree_root = SubResource("AnimationNodeBlendTree_gxrr7")
+anim_player = NodePath("../SlimeMajin/AnimationPlayer")
+parameters/idle_speed/scale = 0.9
+parameters/move_trigger/active = false
+parameters/move_trigger/internal_active = false
+parameters/move_trigger/request = 0
+parameters/shock_trigger/active = false
+parameters/shock_trigger/internal_active = false
+parameters/shock_trigger/request = 0
+parameters/spawn_trigger/active = false
+parameters/spawn_trigger/internal_active = false
+parameters/spawn_trigger/request = 0
+parameters/spit_trigger/active = false
+parameters/spit_trigger/internal_active = false
+parameters/spit_trigger/request = 0
+parameters/state_transition/current_state = "disabled"
+parameters/state_transition/transition_request = ""
+parameters/state_transition/current_index = 1
+
+[connection signal="ShockStarted" from="." to="RootAttachment/ShockFX/ShockWarnSFX" method="PlayInGroup"]
+[connection signal="area_entered" from="RootAttachment/Hitboxes/Hurtbox" to="." method="OnEntered"]
+[connection signal="area_exited" from="RootAttachment/Hitboxes/Hurtbox" to="." method="OnExited"]
+[connection signal="GroupRestarted" from="RootAttachment/SpawnLetter" to="RootAttachment/SpawnLetter/SpawnSFX" method="PlayInGroup"]
+[connection signal="area_entered" from="Hitbox" to="Hitbox" method="OnEntered"]
+[connection signal="area_exited" from="Hitbox" to="Hitbox" method="OnExited"]
+[connection signal="area_entered" from="Range" to="." method="OnRangeEntered"]
+[connection signal="area_exited" from="Range" to="." method="OnRangeExited"]
+
+[editable path="SlimeMajin"]

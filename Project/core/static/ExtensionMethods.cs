@@ -273,11 +273,21 @@ namespace Project
 
 		/// <summary> Formats a number to eight digits. The typical format displayed on menus. </summary>
 		public static string FormatMenuNumber(int score) => score.ToString("00000000");
-		/// <summary> Formats a number of seconds into the typical format displayed on menus. </summary>
+		/// <summary> Formats a number of seconds into the typical format displayed on menus. Doesn't support hours. </summary>
 		public static string FormatTime(float time)
 		{
 			System.TimeSpan span = System.TimeSpan.FromSeconds(time);
 			return span.ToString("mm':'ss'.'ff");
+		}
+
+		/// <summary> Converts seconds to a Vector3, with X, Y, and Z representing hours, minutes, and seconds respectively. </summary>
+		public static Vector3 CalculateTimeVector(int seconds)
+		{
+			int hours = seconds / 3600;
+			seconds -= hours * 3600;
+			int minutes = seconds / 60;
+			seconds -= minutes * 60;
+			return new Vector3(hours, minutes, seconds);
 		}
 	}
 }

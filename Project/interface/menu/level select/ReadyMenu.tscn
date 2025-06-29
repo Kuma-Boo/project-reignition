@@ -1,13 +1,12 @@
-[gd_scene load_steps=79 format=3 uid="uid://byf372uaewx1u"]
+[gd_scene load_steps=85 format=3 uid="uid://byf372uaewx1u"]
 
-[ext_resource type="Script" path="res://interface/menu/level select/script/ReadyMenu.cs" id="1_ldudh"]
+[ext_resource type="Script" uid="uid://ov6ixvow1c38" path="res://interface/menu/level select/script/ReadyMenu.cs" id="1_ldudh"]
 [ext_resource type="Texture2D" uid="uid://bgtxik1dsbu0u" path="res://interface/menu/level select/texture/ready text/ready en.png" id="2_eg5ps"]
 [ext_resource type="Texture2D" uid="uid://bjqi4q2ct4ip8" path="res://interface/menu/level select/texture/transition/tile000.png" id="3_75xjq"]
-[ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="4_bpbq1"]
 [ext_resource type="Texture2D" uid="uid://dqc305hbcit0e" path="res://interface/menu/level select/texture/transition/tile001.png" id="4_eno73"]
 [ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/texture/background.png" id="4_x0w6p"]
 [ext_resource type="Texture2D" uid="uid://2d31ymbbwmh0" path="res://interface/menu/level select/texture/transition/tile002.png" id="5_tu1d4"]
-[ext_resource type="Shader" path="res://effect/shader/interface/InterfaceFlashAdd.gdshader" id="6_03cqa"]
+[ext_resource type="Shader" uid="uid://dj2vtehay1fej" path="res://effect/shader/interface/InterfaceFlashAdd.gdshader" id="6_03cqa"]
 [ext_resource type="Texture2D" uid="uid://0fssctskuel7" path="res://interface/menu/level select/texture/transition/tile003.png" id="6_qxet6"]
 [ext_resource type="AudioStream" uid="uid://huxte6rhwx58" path="res://sound/sfx/system/menu selection.wav" id="7_5a0w1"]
 [ext_resource type="Texture2D" uid="uid://r6a7pbtg5wys" path="res://interface/menu/level select/texture/transition/tile004.png" id="7_eiosu"]
@@ -35,11 +34,17 @@
 [ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="27_6mgb2"]
 [ext_resource type="Texture2D" uid="uid://dcfhonoq0ix2l" path="res://effect/particle/texture/flame/flame menu short.png" id="27_c5fyk"]
 [ext_resource type="AudioStream" uid="uid://bdykixhqk0n1m" path="res://sound/sfx/system/menu level transition.wav" id="28_1bnlw"]
+[ext_resource type="Texture2D" uid="uid://dx4vxnhtgd13t" path="res://interface/menu/common/common menu atlas.png" id="29_8rqww"]
 [ext_resource type="PackedScene" uid="uid://dad2hh4ttgaox" path="res://interface/menu/flames/Flames.tscn" id="31_1njce"]
 [ext_resource type="SpriteFrames" uid="uid://jc646omm5n2y" path="res://effect/particle/sprite frames/Flame Menu Short.tres" id="31_4413p"]
 [ext_resource type="SpriteFrames" uid="uid://btjml6xghvlgt" path="res://effect/particle/sprite frames/Flame Menu Tall.tres" id="32_skf7y"]
+[ext_resource type="LabelSettings" uid="uid://bx53haw8tuhx" path="res://interface/font/SkillSelectFont.tres" id="33_hudfa"]
+[ext_resource type="Texture2D" uid="uid://hlj4agda0gde" path="res://interface/menu/common/button small default.png" id="33_lku3s"]
 [ext_resource type="LabelSettings" uid="uid://d2esxoalpgwjg" path="res://interface/font/MenuText.tres" id="33_te2os"]
+[ext_resource type="LabelSettings" uid="uid://bjc55uea7otvo" path="res://interface/font/MenuButtonFont.tres" id="34_qbjvy"]
 [ext_resource type="PackedScene" uid="uid://crwawg2ivy3xd" path="res://interface/menu/NavigationButton.tscn" id="35_edhiv"]
+[ext_resource type="Texture2D" uid="uid://dnolag8em8r32" path="res://interface/menu/common/button small highlight.png" id="35_mkvrh"]
+[ext_resource type="AudioStream" uid="uid://fjiifn0tycil" path="res://sound/sfx/system/skill ring save.wav" id="41_k7nhr"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ibf4p"]
 animations = [{
@@ -449,8 +454,8 @@ tracks/7/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4ix1o"]
 _data = {
-"RESET": SubResource("Animation_0gx1k"),
-"transition": SubResource("Animation_dodqd")
+&"RESET": SubResource("Animation_0gx1k"),
+&"transition": SubResource("Animation_dodqd")
 }
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ialef"]
@@ -486,8 +491,8 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_1cvv4"]
 resource_name = "confirm"
-length = 0.8
-step = 0.05
+length = 0.500003
+step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -495,7 +500,7 @@ tracks/0/path = NodePath("Sprite:modulate")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.3, 0.45, 0.7),
+"times": PackedFloat32Array(0, 0.0666667, 0.133333, 0.266667, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.392157), Color(1, 1, 1, 0), Color(1, 1, 1, 0.392157), Color(1, 1, 1, 0)]
@@ -507,7 +512,7 @@ tracks/1/path = NodePath("Sprite:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.45, 0.7),
+"times": PackedFloat32Array(0, 0.266667, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(1, 1), Vector2(1.5, 1.5)]
@@ -532,9 +537,9 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ykvc1"]
 _data = {
-"RESET": SubResource("Animation_wu83y"),
-"confirm": SubResource("Animation_1cvv4"),
-"loop": SubResource("Animation_se451")
+&"RESET": SubResource("Animation_wu83y"),
+&"confirm": SubResource("Animation_1cvv4"),
+&"loop": SubResource("Animation_se451")
 }
 
 [sub_resource type="Animation" id="Animation_fjqwi"]
@@ -603,79 +608,79 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Menu/Text/Yes:region_rect")
+tracks/5/path = NodePath("Menu/Text/Buttons/Cursor:position")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Rect2(0, 92, 128, 50)]
+"values": [Vector2(-400, -32)]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Menu/Text/No:region_rect")
+tracks/6/path = NodePath("Background:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Rect2(128, 92, 128, 50)]
+"update": 1,
+"values": [false]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Menu/Text/Cursor:position")
+tracks/7/path = NodePath("Menu:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(656, 680)]
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Menu/Text/Cursor/Sprite:region_rect")
+tracks/8/path = NodePath("Flames:modulate")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Rect2(0, 92, 128, 50)]
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("Background:visible")
+tracks/9/path = NodePath("Menu/Window/Background:scale")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Vector2(1, 1)]
 }
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("Menu:modulate")
+tracks/10/path = NodePath("Menu/Text/Base/Glow/Glow:scale")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [Vector2(1, 1)]
 }
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("Menu/Flames:modulate")
+tracks/11/path = NodePath("Menu/Text/Base/Glow/Glow:modulate")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -687,67 +692,55 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("Menu/Window/Background:scale")
+tracks/12/path = NodePath("Menu/Text/Base/Flames:modulate")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1, 1)]
+"values": [Color(1, 1, 1, 0.784314)]
 }
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("Menu/Text/Base/Glow/Glow:scale")
+tracks/13/path = NodePath("Menu/NavigationButtons:modulate")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1, 1)]
+"values": [Color(1, 1, 1, 0)]
 }
 tracks/14/type = "value"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("Menu/Text/Base/Glow/Glow:modulate")
+tracks/14/path = NodePath("Menu/Text/Buttons/Options/Yes:texture")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
+"update": 1,
+"values": [ExtResource("33_lku3s")]
 }
 tracks/15/type = "value"
 tracks/15/imported = false
 tracks/15/enabled = true
-tracks/15/path = NodePath("Menu/Text/Base/Flames:modulate")
+tracks/15/path = NodePath("Menu/Text/Buttons/Options/No:texture")
 tracks/15/interp = 1
 tracks/15/loop_wrap = true
 tracks/15/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0.784314)]
-}
-tracks/16/type = "value"
-tracks/16/imported = false
-tracks/16/enabled = true
-tracks/16/path = NodePath("NavigationButtons:modulate")
-tracks/16/interp = 1
-tracks/16/loop_wrap = true
-tracks/16/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
+"update": 1,
+"values": [ExtResource("35_mkvrh")]
 }
 
 [sub_resource type="Animation" id="Animation_ow2hg"]
 resource_name = "cancel"
-length = 1.5
+length = 0.833336
 step = 0.0333333
 tracks/0/type = "method"
 tracks/0/imported = false
@@ -756,7 +749,7 @@ tracks/0/path = NodePath(".")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.1),
+"times": PackedFloat32Array(0, 0.666667),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
@@ -773,7 +766,7 @@ tracks/1/path = NodePath(".")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.933333),
+"times": PackedFloat32Array(0.5),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -787,7 +780,7 @@ tracks/2/path = NodePath("Menu:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 1),
+"times": PackedFloat32Array(0, 0.566667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -799,7 +792,7 @@ tracks/3/path = NodePath("Fade:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.5, 0.9, 1.1, 1.5),
+"times": PackedFloat32Array(0, 0.333333, 0.466667, 0.666667, 0.833333),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -821,7 +814,7 @@ tracks/4/keys = {
 tracks/5/type = "method"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Menu/Text/Cursor/CursorAnimationPlayer")
+tracks/5/path = NodePath("Menu/Text/Buttons/Cursor/CursorAnimationPlayer")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -839,7 +832,7 @@ tracks/6/path = NodePath("Background:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 1),
+"times": PackedFloat32Array(0, 0.566667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -847,11 +840,11 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("NavigationButtons:modulate")
+tracks/7/path = NodePath("Menu/NavigationButtons:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.9, 1),
+"times": PackedFloat32Array(0, 0.466667, 0.566667),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -868,7 +861,7 @@ tracks/0/path = NodePath(".")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.5),
+"times": PackedFloat32Array(0, 1.38333),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
@@ -909,7 +902,7 @@ tracks/2/keys = {
 tracks/3/type = "method"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Menu/Text/Cursor/CursorAnimationPlayer")
+tracks/3/path = NodePath("Menu/Text/Buttons/Cursor/CursorAnimationPlayer")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -927,7 +920,7 @@ tracks/4/path = NodePath("Menu:modulate")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.8, 1),
+"times": PackedFloat32Array(0, 0.683333, 0.883333),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -935,11 +928,11 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Menu/Flames:modulate")
+tracks/5/path = NodePath("Flames:modulate")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.666667, 0.75),
+"times": PackedFloat32Array(0, 0.55, 0.633333),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -951,7 +944,7 @@ tracks/6/path = NodePath("Background/TransitionAnimationPlayer")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0.616667),
+"times": PackedFloat32Array(0.5),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": ["transition", -1, 1.0, false],
@@ -965,7 +958,7 @@ tracks/7/path = NodePath("SFX/Transition:volume_db")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.0334, 1.33334, 1.5),
+"times": PackedFloat32Array(0, 0.0334, 1.21667, 1.38333),
 "transitions": PackedFloat32Array(1, 1, 0.5, 1),
 "update": 0,
 "values": [-80.0, 0.0, 0.0, -80.0]
@@ -987,7 +980,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("NavigationButtons:modulate")
+tracks/9/path = NodePath("Menu/NavigationButtons:modulate")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -997,64 +990,72 @@ tracks/9/keys = {
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_sns38"]
+resource_name = "open-skill-menu"
+length = 0.16667
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/Skill")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"OpenSubmenu"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Menu:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_ablxt"]
 resource_name = "select-no"
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Menu/Text/Yes:region_rect")
+tracks/0/path = NodePath("Menu/Text/Buttons/Cursor:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Rect2(0, 141, 128, 50)]
+"values": [Vector2(100, -32)]
 }
-tracks/1/type = "value"
+tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Menu/Text/No:region_rect")
+tracks/1/path = NodePath("Menu/Text/Buttons/Cursor/CursorAnimationPlayer")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Rect2(128, 140, 128, 50)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Menu/Text/Cursor/Sprite:region_rect")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Rect2(128, 140, 128, 50)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Menu/Text/Cursor:position")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1256, 680)]
-}
-tracks/4/type = "method"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Menu/Text/Cursor/CursorAnimationPlayer")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -1062,19 +1063,43 @@ tracks/4/keys = {
 "method": &"seek"
 }]
 }
-tracks/5/type = "method"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("SFX/Select")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SFX/Select")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [0.0],
 "method": &"play"
 }]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Menu/Text/Buttons/Options/Yes:texture")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("33_lku3s")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Menu/Text/Buttons/Options/No:texture")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("35_mkvrh")]
 }
 
 [sub_resource type="Animation" id="Animation_l7odi"]
@@ -1083,58 +1108,22 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Menu/Text/Yes:region_rect")
+tracks/0/path = NodePath("Menu/Text/Buttons/Cursor:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Rect2(0, 92, 128, 50)]
+"values": [Vector2(-400, -32)]
 }
-tracks/1/type = "value"
+tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Menu/Text/No:region_rect")
+tracks/1/path = NodePath("Menu/Text/Buttons/Cursor/CursorAnimationPlayer")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Rect2(128, 92, 128, 50)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Menu/Text/Cursor/Sprite:region_rect")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Rect2(0, 92, 128, 50)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Menu/Text/Cursor:position")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(656, 680)]
-}
-tracks/4/type = "method"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Menu/Text/Cursor/CursorAnimationPlayer")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -1142,13 +1131,13 @@ tracks/4/keys = {
 "method": &"seek"
 }]
 }
-tracks/5/type = "method"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("SFX/Select")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SFX/Select")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -1156,10 +1145,34 @@ tracks/5/keys = {
 "method": &"play"
 }]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Menu/Text/Buttons/Options/Yes:texture")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("35_mkvrh")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Menu/Text/Buttons/Options/No:texture")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("33_lku3s")]
+}
 
 [sub_resource type="Animation" id="Animation_wy8hm"]
 resource_name = "show"
-length = 1.5
+length = 1.16667
 step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -1168,7 +1181,7 @@ tracks/0/path = NodePath("Menu:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
+"times": PackedFloat32Array(0, 0.266667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -1180,7 +1193,7 @@ tracks/1/path = NodePath("Fade:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4, 0.6, 1),
+"times": PackedFloat32Array(0, 0.166667, 0.366667, 0.666667),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -1192,7 +1205,7 @@ tracks/2/path = NodePath(".")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 1.5),
+"times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
@@ -1209,7 +1222,7 @@ tracks/3/path = NodePath("Menu/Text:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0.666667, 1),
+"times": PackedFloat32Array(0.433333, 0.666667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -1221,7 +1234,7 @@ tracks/4/path = NodePath("Menu/Text/Base/Flames:modulate")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.666667, 1),
+"times": PackedFloat32Array(0, 0.433333, 0.666667),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 0.784314)]
@@ -1233,7 +1246,7 @@ tracks/5/path = NodePath("Menu/Text/Base/Glow/Glow:scale")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.666667, 1.33333),
+"times": PackedFloat32Array(0, 0.433333, 1),
 "transitions": PackedFloat32Array(1, 0.5, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(1, 1), Vector2(1.2, 1.2)]
@@ -1245,7 +1258,7 @@ tracks/6/path = NodePath("Menu/Text/Base/Glow/Glow:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0.666667, 1, 1.33333),
+"times": PackedFloat32Array(0.433333, 0.666667, 1),
 "transitions": PackedFloat32Array(1, 0.5, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -1257,7 +1270,7 @@ tracks/7/path = NodePath("Menu/Window/BottomBar:position")
 tracks/7/interp = 2
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.666667, 1),
+"times": PackedFloat32Array(0, 0.433333, 0.666667),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector2(0, 42), Vector2(0, 42), Vector2(0, 192)]
@@ -1269,7 +1282,7 @@ tracks/8/path = NodePath("Menu/Window/Background:scale")
 tracks/8/interp = 2
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0, 0.666667, 1),
+"times": PackedFloat32Array(0, 0.433333, 0.666667),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector2(1, 0.2), Vector2(1, 0.2), Vector2(1, 1)]
@@ -1281,7 +1294,7 @@ tracks/9/path = NodePath("Menu/Window/TopBar:position")
 tracks/9/interp = 2
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0, 0.666667, 1),
+"times": PackedFloat32Array(0, 0.433333, 0.666667),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector2(0, -42), Vector2(0, -42), Vector2(0, -192)]
@@ -1289,59 +1302,23 @@ tracks/9/keys = {
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("Menu/Text/Yes:region_rect")
+tracks/10/path = NodePath("Menu/Text/Buttons/Cursor:position")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Rect2(0, 92, 128, 50)]
+"values": [Vector2(-400, -32)]
 }
-tracks/11/type = "value"
+tracks/11/type = "method"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("Menu/Text/No:region_rect")
+tracks/11/path = NodePath("Menu/Text/Buttons/Cursor/CursorAnimationPlayer")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Rect2(128, 92, 128, 50)]
-}
-tracks/12/type = "value"
-tracks/12/imported = false
-tracks/12/enabled = true
-tracks/12/path = NodePath("Menu/Text/Cursor/Sprite:region_rect")
-tracks/12/interp = 1
-tracks/12/loop_wrap = true
-tracks/12/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Rect2(0, 92, 128, 50)]
-}
-tracks/13/type = "value"
-tracks/13/imported = false
-tracks/13/enabled = true
-tracks/13/path = NodePath("Menu/Text/Cursor:position")
-tracks/13/interp = 1
-tracks/13/loop_wrap = true
-tracks/13/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(656, 680)]
-}
-tracks/14/type = "method"
-tracks/14/imported = false
-tracks/14/enabled = true
-tracks/14/path = NodePath("Menu/Text/Cursor/CursorAnimationPlayer")
-tracks/14/interp = 1
-tracks/14/loop_wrap = true
-tracks/14/keys = {
-"times": PackedFloat32Array(0, 1.5),
+"times": PackedFloat32Array(0, 0.7),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": ["RESET", -1, 1.0, false],
@@ -1351,40 +1328,40 @@ tracks/14/keys = {
 "method": &"play"
 }]
 }
-tracks/15/type = "value"
-tracks/15/imported = false
-tracks/15/enabled = true
-tracks/15/path = NodePath("Background:visible")
-tracks/15/interp = 1
-tracks/15/loop_wrap = true
-tracks/15/keys = {
-"times": PackedFloat32Array(0, 0.5),
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Background:visible")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 0.266667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
 }
-tracks/16/type = "method"
-tracks/16/imported = false
-tracks/16/enabled = true
-tracks/16/path = NodePath("Background/TransitionAnimationPlayer")
-tracks/16/interp = 1
-tracks/16/loop_wrap = true
-tracks/16/keys = {
-"times": PackedFloat32Array(0.5),
+tracks/13/type = "method"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Background/TransitionAnimationPlayer")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0.266667),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": ["RESET", -1, 1.0, false],
 "method": &"play"
 }]
 }
-tracks/17/type = "method"
-tracks/17/imported = false
-tracks/17/enabled = true
-tracks/17/path = NodePath(".")
-tracks/17/interp = 1
-tracks/17/loop_wrap = true
-tracks/17/keys = {
-"times": PackedFloat32Array(0, 0.5),
+tracks/14/type = "method"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath(".")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0, 0.266667),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
@@ -1394,14 +1371,14 @@ tracks/17/keys = {
 "method": &"ShowDescription"
 }]
 }
-tracks/18/type = "method"
-tracks/18/imported = false
-tracks/18/enabled = true
-tracks/18/path = NodePath("Menu/Flames/AnimationPlayer")
-tracks/18/interp = 1
-tracks/18/loop_wrap = true
-tracks/18/keys = {
-"times": PackedFloat32Array(0, 1),
+tracks/15/type = "method"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Flames/AnimationPlayer")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 0.666667),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": ["RESET", -1, 1.0, false],
@@ -1411,22 +1388,46 @@ tracks/18/keys = {
 "method": &"play"
 }]
 }
-tracks/19/type = "value"
-tracks/19/imported = false
-tracks/19/enabled = true
-tracks/19/path = NodePath("NavigationButtons:modulate")
-tracks/19/interp = 1
-tracks/19/loop_wrap = true
-tracks/19/keys = {
-"times": PackedFloat32Array(0, 0.666667, 1),
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Menu/NavigationButtons:modulate")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 0.433333, 0.666667),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("Menu/Text/Buttons/Options/Yes:texture")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("35_mkvrh")]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("Menu/Text/Buttons/Options/No:texture")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("33_lku3s")]
+}
 
 [sub_resource type="Animation" id="Animation_sgy3m"]
 resource_name = "show-from-skill"
-length = 0.001
+length = 0.16667
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -1441,16 +1442,29 @@ tracks/0/keys = {
 "method": &"ShowDescription"
 }]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Menu:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hjga2"]
 _data = {
-"RESET": SubResource("Animation_fjqwi"),
-"cancel": SubResource("Animation_ow2hg"),
-"confirm": SubResource("Animation_xs86i"),
-"select-no": SubResource("Animation_ablxt"),
-"select-yes": SubResource("Animation_l7odi"),
-"show": SubResource("Animation_wy8hm"),
-"show-from-skill": SubResource("Animation_sgy3m")
+&"RESET": SubResource("Animation_fjqwi"),
+&"cancel": SubResource("Animation_ow2hg"),
+&"confirm": SubResource("Animation_xs86i"),
+&"open-skill-menu": SubResource("Animation_sns38"),
+&"select-no": SubResource("Animation_ablxt"),
+&"select-yes": SubResource("Animation_l7odi"),
+&"show": SubResource("Animation_wy8hm"),
+&"show-from-skill": SubResource("Animation_sgy3m")
 }
 
 [node name="ReadyMenu" type="Control" node_paths=PackedStringArray("mapLabel", "missionLabel", "animator")]
@@ -1468,6 +1482,7 @@ metadata/_edit_lock_ = true
 
 [node name="Background" type="Node2D" parent="."]
 visible = false
+z_index = -1
 
 [node name="Black" type="ColorRect" parent="Background"]
 visible = false
@@ -1587,7 +1602,7 @@ autoplay = "default"
 
 [node name="TransitionAnimationPlayer" type="AnimationPlayer" parent="Background"]
 libraries = {
-"": SubResource("AnimationLibrary_4ix1o")
+&"": SubResource("AnimationLibrary_4ix1o")
 }
 
 [node name="Menu" type="Control" parent="."]
@@ -1606,12 +1621,12 @@ position = Vector2(960, 384)
 position = Vector2(0, -192)
 
 [node name="TopLeft" type="Sprite2D" parent="Menu/Window/TopBar"]
-position = Vector2(-568, 42)
-scale = Vector2(2.26364, -2.2)
-texture = ExtResource("4_bpbq1")
+position = Vector2(-560, 36)
+scale = Vector2(1, -1)
+texture = ExtResource("29_8rqww")
 centered = false
 region_enabled = true
-region_rect = Rect2(130, 30, 60, 30)
+region_rect = Rect2(260, 60, 120, 60)
 
 [node name="Top" type="NinePatchRect" parent="Menu/Window/TopBar"]
 custom_minimum_size = Vector2(432, 33)
@@ -1620,22 +1635,22 @@ anchor_left = 0.104
 anchor_top = 0.89
 anchor_right = 0.889
 anchor_bottom = 1.0
-offset_left = -432.0
-offset_top = 42.0
-offset_bottom = 75.0
-scale = Vector2(2, -2)
-texture = ExtResource("4_bpbq1")
-region_rect = Rect2(189.5, 30, 50, 30)
+offset_left = -440.0
+offset_top = 36.0
+offset_right = 416.0
+offset_bottom = 96.0
+scale = Vector2(1, -1)
+texture = ExtResource("29_8rqww")
+region_rect = Rect2(379, 60, 94, 60)
 axis_stretch_horizontal = 1
 
 [node name="TopRight" type="Sprite2D" parent="Menu/Window/TopBar"]
-position = Vector2(432, 42)
-scale = Vector2(2.24697, -2.2)
-texture = ExtResource("4_bpbq1")
+position = Vector2(416, 36)
+scale = Vector2(1, -1)
+texture = ExtResource("29_8rqww")
 centered = false
-flip_h = true
 region_enabled = true
-region_rect = Rect2(130, 30, 60, 30)
+region_rect = Rect2(367, 0, 140, 60)
 
 [node name="Background" type="NinePatchRect" parent="Menu/Window"]
 self_modulate = Color(1, 1, 1, 0.588235)
@@ -1645,27 +1660,27 @@ anchor_bottom = 1.0
 offset_left = -488.0
 offset_top = -192.0
 offset_right = 488.0
-offset_bottom = 192.0
+offset_bottom = 210.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(488, 192)
-texture = ExtResource("4_bpbq1")
-region_rect = Rect2(64, 176, 48, 48)
+texture = ExtResource("29_8rqww")
+region_rect = Rect2(128, 352, 96, 96)
 patch_margin_left = 32
 patch_margin_top = 32
 patch_margin_right = 32
 patch_margin_bottom = 32
+metadata/_edit_use_anchors_ = true
 
 [node name="BottomBar" type="Node2D" parent="Menu/Window"]
 position = Vector2(0, 208)
 
 [node name="BottomLeft" type="Sprite2D" parent="Menu/Window/BottomBar"]
-position = Vector2(-568, -40)
-scale = Vector2(2.26364, 2.2)
-texture = ExtResource("4_bpbq1")
+position = Vector2(-560, -36)
+texture = ExtResource("29_8rqww")
 centered = false
 region_enabled = true
-region_rect = Rect2(130, 30, 60, 30)
+region_rect = Rect2(260, 60, 120, 60)
 
 [node name="Bottom" type="NinePatchRect" parent="Menu/Window/BottomBar"]
 custom_minimum_size = Vector2(432, 33)
@@ -1674,24 +1689,23 @@ anchor_left = 0.104
 anchor_top = 0.89
 anchor_right = 0.889
 anchor_bottom = 1.0
-offset_left = -432.0
-offset_top = -40.0
-offset_bottom = -7.0
-scale = Vector2(2, 2)
-texture = ExtResource("4_bpbq1")
-region_rect = Rect2(189.5, 30, 50, 30)
+offset_left = -440.0
+offset_top = -36.0
+offset_right = 416.0
+offset_bottom = 24.0
+texture = ExtResource("29_8rqww")
+region_rect = Rect2(379, 60, 94, 60)
 axis_stretch_horizontal = 1
 
 [node name="BottomRight" type="Sprite2D" parent="Menu/Window/BottomBar"]
-position = Vector2(432, -40)
-scale = Vector2(2.24697, 2.2)
-texture = ExtResource("4_bpbq1")
+position = Vector2(416, -36)
+texture = ExtResource("29_8rqww")
 centered = false
-flip_h = true
 region_enabled = true
-region_rect = Rect2(130, 30, 60, 30)
+region_rect = Rect2(367, 0, 140, 60)
 
-[node name="Text" type="Node2D" parent="Menu"]
+[node name="Text" type="Control" parent="Menu"]
+anchors_preset = 0
 
 [node name="Base" type="Sprite2D" parent="Menu/Text"]
 position = Vector2(960, 120)
@@ -1799,28 +1813,105 @@ scale = Vector2(1.01071, 0.703457)
 sprite_frames = ExtResource("32_skf7y")
 autoplay = "default"
 
-[node name="Yes" type="Sprite2D" parent="Menu/Text"]
-position = Vector2(656, 680)
-scale = Vector2(2.25, 2.25)
-texture = ExtResource("2_eg5ps")
-region_enabled = true
-region_rect = Rect2(0, 92, 128, 50)
+[node name="Buttons" type="Control" parent="Menu/Text"]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 960.0
+offset_top = 640.0
+offset_right = 960.0
+offset_bottom = 640.0
 
-[node name="No" type="Sprite2D" parent="Menu/Text"]
-position = Vector2(1256, 680)
-scale = Vector2(2.25, 2.25)
-texture = ExtResource("2_eg5ps")
-region_enabled = true
-region_rect = Rect2(128, 92, 128, 50)
+[node name="Options" type="HBoxContainer" parent="Menu/Text/Buttons"]
+layout_mode = 0
+offset_left = -480.0
+offset_top = -32.0
+offset_right = 480.0
+offset_bottom = 96.0
+theme_override_constants/separation = 200
+alignment = 1
 
-[node name="MapText" type="Sprite2D" parent="Menu/Text"]
-position = Vector2(960, 272)
-scale = Vector2(2.5, 2.5)
-texture = ExtResource("2_eg5ps")
-region_enabled = true
-region_rect = Rect2(288, 104, 136, 24)
+[node name="Yes" type="TextureRect" parent="Menu/Text/Buttons/Options"]
+custom_minimum_size = Vector2(300, 128)
+layout_mode = 2
+texture = ExtResource("33_lku3s")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="YesLabel" type="Label" parent="Menu/Text/Buttons/Options/Yes"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "sys_yes"
+label_settings = ExtResource("34_qbjvy")
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="No" type="TextureRect" parent="Menu/Text/Buttons/Options"]
+custom_minimum_size = Vector2(300, 128)
+layout_mode = 2
+texture = ExtResource("35_mkvrh")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NoLabel" type="Label" parent="Menu/Text/Buttons/Options/No"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "sys_no"
+label_settings = ExtResource("34_qbjvy")
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Cursor" type="Control" parent="Menu/Text/Buttons"]
+anchors_preset = 0
+offset_left = -400.0
+offset_top = -32.0
+offset_right = -100.0
+offset_bottom = 96.0
+
+[node name="Sprite" type="TextureRect" parent="Menu/Text/Buttons/Cursor"]
+modulate = Color(1, 1, 1, 0)
+material = SubResource("ShaderMaterial_ialef")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(150, 64)
+texture = ExtResource("35_mkvrh")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CursorAnimationPlayer" type="AnimationPlayer" parent="Menu/Text/Buttons/Cursor"]
+libraries = {
+&"": SubResource("AnimationLibrary_ykvc1")
+}
+
+[node name="MapText" type="Label" parent="Menu/Text"]
+layout_mode = 0
+offset_left = 476.0
+offset_top = 236.0
+offset_right = 1444.0
+offset_bottom = 300.0
+scale = Vector2(0.75, 0.75)
+pivot_offset = Vector2(484, 32)
+text = "sys_map"
+label_settings = ExtResource("33_hudfa")
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
 
 [node name="MapLabel" type="Label" parent="Menu/Text"]
+layout_mode = 0
 offset_left = 480.0
 offset_top = 299.0
 offset_right = 1448.0
@@ -1830,14 +1921,22 @@ label_settings = ExtResource("33_te2os")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MissionText" type="Sprite2D" parent="Menu/Text"]
-position = Vector2(960, 420)
-scale = Vector2(2.5, 2.5)
-texture = ExtResource("2_eg5ps")
-region_enabled = true
-region_rect = Rect2(288, 136, 176, 24)
+[node name="MissionText" type="Label" parent="Menu/Text"]
+layout_mode = 0
+offset_left = 476.0
+offset_top = 384.0
+offset_right = 1444.0
+offset_bottom = 448.0
+scale = Vector2(0.75, 0.75)
+pivot_offset = Vector2(484, 32)
+text = "sys_mission"
+label_settings = ExtResource("33_hudfa")
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
 
 [node name="MissionLabel" type="Label" parent="Menu/Text"]
+layout_mode = 0
 offset_left = 480.0
 offset_top = 452.0
 offset_right = 1448.0
@@ -1847,23 +1946,41 @@ label_settings = ExtResource("33_te2os")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Cursor" type="Node2D" parent="Menu/Text"]
-position = Vector2(656, 680)
-scale = Vector2(2.25, 2.25)
-
-[node name="Sprite" type="Sprite2D" parent="Menu/Text/Cursor"]
+[node name="NavigationButtons" type="HBoxContainer" parent="Menu"]
 modulate = Color(1, 1, 1, 0)
-material = SubResource("ShaderMaterial_ialef")
-texture = ExtResource("2_eg5ps")
-region_enabled = true
-region_rect = Rect2(0, 92, 128, 50)
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 228.0
+offset_bottom = 276.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 64
+alignment = 1
 
-[node name="CursorAnimationPlayer" type="AnimationPlayer" parent="Menu/Text/Cursor"]
-libraries = {
-"": SubResource("AnimationLibrary_ykvc1")
-}
+[node name="Skill" parent="Menu/NavigationButtons" instance=ExtResource("35_edhiv")]
+layout_mode = 2
+ActionKey = "sys_skill"
+inputKey = "button_pause"
+fallbackKey = "ui_accept"
 
-[node name="Flames" parent="Menu" instance=ExtResource("31_1njce")]
+[node name="Select" parent="Menu/NavigationButtons" instance=ExtResource("35_edhiv")]
+layout_mode = 2
+ActionKey = "sys_select"
+inputKey = "button_jump"
+fallbackKey = "ui_select"
+
+[node name="Cancel" parent="Menu/NavigationButtons" instance=ExtResource("35_edhiv")]
+layout_mode = 2
+ActionKey = "sys_cancel"
+inputKey = "button_action"
+fallbackKey = "ui_cancel"
+
+[node name="Flames" parent="." instance=ExtResource("31_1njce")]
+z_index = -1
+layout_mode = 1
 
 [node name="Fade" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -1878,39 +1995,19 @@ grow_vertical = 2
 color = Color(0, 0, 0, 1)
 metadata/_edit_lock_ = true
 
-[node name="NavigationButtons" type="HBoxContainer" parent="."]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-offset_left = 448.0
-offset_top = 760.0
-offset_right = 1474.0
-offset_bottom = 824.0
-theme_override_constants/separation = 64
-alignment = 2
-
-[node name="Skill" parent="NavigationButtons" instance=ExtResource("35_edhiv")]
-layout_mode = 2
-actionKey = "sys_skill"
-inputKey = "button_pause"
-
-[node name="Select" parent="NavigationButtons" instance=ExtResource("35_edhiv")]
-layout_mode = 2
-actionKey = "sys_select"
-inputKey = "button_jump"
-
-[node name="Cancel" parent="NavigationButtons" instance=ExtResource("35_edhiv")]
-layout_mode = 2
-actionKey = "sys_cancel"
-inputKey = "button_action"
-
 [node name="SFX" type="Node" parent="."]
 
 [node name="Transition" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("28_1bnlw")
+volume_db = -80.0
 bus = &"SFX"
 
 [node name="Select" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("7_5a0w1")
+bus = &"SFX"
+
+[node name="Skill" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("41_k7nhr")
 bus = &"SFX"
 
 [node name="Cancel" type="AudioStreamPlayer" parent="SFX"]
@@ -1923,5 +2020,5 @@ bus = &"SFX"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_hjga2")
+&"": SubResource("AnimationLibrary_hjga2")
 }

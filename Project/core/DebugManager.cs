@@ -16,6 +16,7 @@ public partial class DebugManager : Node2D
 	private Control debugMenuRoot;
 
 	private bool isAdvancingFrame;
+	private bool isAttemptingPause;
 	private bool IsPaused => GetTree().Paused;
 
 	private enum Properties
@@ -57,6 +58,7 @@ public partial class DebugManager : Node2D
 		if (isAdvancingFrame)
 		{
 			GetTree().Paused = true;
+			isAttemptingPause = true;
 			isAdvancingFrame = false;
 		}
 
@@ -69,7 +71,20 @@ public partial class DebugManager : Node2D
 			Engine.TimeScale = 1f;
 
 		if (Input.IsActionJustPressed("debug_pause"))
-			GetTree().Paused = !IsPaused;
+		{
+			if (IsPaused)
+			{
+				GetTree().Paused = false;
+				isAttemptingPause = false;
+			}
+			else
+			{
+				DebugPause();
+			}
+		}
+
+		if (!IsPaused)
+			isAttemptingPause = false;
 
 		if (Input.IsActionJustPressed("debug_window_small"))
 		{
@@ -84,16 +99,13 @@ public partial class DebugManager : Node2D
 		}
 
 		if (Input.IsActionJustPressed("debug_step"))
-		{
-			GetTree().Paused = false;
-			isAdvancingFrame = true;
-		}
+			DebugPause();
 
 		if (Input.IsActionJustPressed("debug_restart"))
 		{
-			if (!Input.IsKeyPressed(Key.Shift) && IsInstanceValid(CharacterController.instance))
+			if (!Input.IsKeyPressed(Key.Shift) && IsInstanceValid(StageSettings.Player))
 			{
-				CharacterController.instance.StartRespawn(true);
+				StageSettings.Player.StartRespawn();
 			}
 			else
 			{
@@ -105,8 +117,18 @@ public partial class DebugManager : Node2D
 
 	public override void _Process(double _)
 	{
-		if (line3d.Count + line2d.Count != 0 && !IsPaused) // Queue Raycast Redraw
+		if (IsDebugRaysEnabled) // Queue Raycast Redraw
 			QueueRedraw();
+	}
+
+	private void DebugPause()
+	{
+		GetTree().Paused = false;
+		isAttemptingPause = true;
+		isAdvancingFrame = true;
+
+		line2d.Clear();
+		line3d.Clear();
 	}
 
 	#region Raycast Debug Code
@@ -122,65 +144,83 @@ public partial class DebugManager : Node2D
 		for (int i = line2d.Count - 1; i >= 0; i--)
 		{
 			DrawLine(line2d[i].start, line2d[i].end, line3d[i].color, 1.0f, true);
-			line2d.RemoveAt(i);
+			if (!isAttemptingPause)
+				line2d.RemoveAt(i);
 		}
 
 		Camera3D cam = GetViewport().GetCamera3D();
 		if (cam == null)
 		{
 			line3d.Clear();
-			return; //NO CAMERA
+			return; // NO CAMERA
 		}
 
 		for (int i = line3d.Count - 1; i >= 0; i--)
 		{
 			if (cam.IsPositionBehind(line3d[i].start) || cam.IsPositionBehind(line3d[i].end))
+			{
+				if (!isAttemptingPause)
+					line3d.RemoveAt(i);
+
 				continue;
+			}
 
 			Vector2 startPos = cam.UnprojectPosition(line3d[i].start);
 			Vector2 endPos = cam.UnprojectPosition(line3d[i].end);
 
 			DrawLine(startPos, endPos, line3d[i].color, 1.0f, true);
-			line3d.RemoveAt(i);
+
+			if (!isAttemptingPause)
+				line3d.RemoveAt(i);
 		}
 	}
 
-	public struct Line3D
+	public struct Line3D(Vector3 s, Vector3 e, Color c)
 	{
-		public Vector3 start;
-		public Vector3 end;
-		public Color color;
-
-		public Line3D(Vector3 s, Vector3 e, Color c)
-		{
-			start = s;
-			end = e;
-			color = c;
-		}
+		public Vector3 start = s;
+		public Vector3 end = e;
+		public Color color = c;
 	}
 
-	public struct Line2D
+	public struct Line2D(Vector2 s, Vector2 e, Color c)
 	{
-		public Vector2 start;
-		public Vector2 end;
-		public Color color;
-
-		public Line2D(Vector2 s, Vector2 e, Color c)
-		{
-			start = s;
-			end = e;
-			color = c;
-		}
+		public Vector2 start = s;
+		public Vector2 end = e;
+		public Color color = c;
 	}
 
-	private static readonly List<Line3D> line3d = new();
-	private static readonly List<Line2D> line2d = new();
+	private static readonly List<Line3D> line3d = [];
+	private static readonly List<Line2D> line2d = [];
 
-	public static void DrawLn(Vector3 s, Vector3 e, Color c) => line3d.Add(new Line3D(s, e, c));
-	public static void DrawRay(Vector3 s, Vector3 r, Color c) => line3d.Add(new Line3D(s, s + r, c));
+	public static void DrawLn(Vector3 s, Vector3 e, Color c)
+	{
+		if (!Instance.IsDebugRaysEnabled)
+			return;
 
-	public static void DrawLn(Vector2 s, Vector2 e, Color c) => line2d.Add(new Line2D(s, e, c));
-	public static void DrawRay(Vector2 s, Vector2 r, Color c) => line2d.Add(new Line2D(s, s + r, c));
+		line3d.Add(new Line3D(s, e, c));
+	}
+	public static void DrawRay(Vector3 s, Vector3 r, Color c)
+	{
+		if (!Instance.IsDebugRaysEnabled)
+			return;
+
+		line3d.Add(new Line3D(s, s + r, c));
+	}
+
+	public static void DrawLn(Vector2 s, Vector2 e, Color c)
+	{
+		if (!Instance.IsDebugRaysEnabled)
+			return;
+
+		line2d.Add(new Line2D(s, e, c));
+	}
+	public static void DrawRay(Vector2 s, Vector2 r, Color c)
+	{
+		if (!Instance.IsDebugRaysEnabled)
+			return;
+
+		line2d.Add(new Line2D(s, s + r, c));
+	}
 	#endregion
 
 	#region Debug Cheats
@@ -203,21 +243,34 @@ public partial class DebugManager : Node2D
 	public delegate void UnlockStagesToggledEventHandler();
 	private void ToggleUnlockStages(bool enabled)
 	{
-		UnlockAllStages = enabled;
+		UnlockAllStages = UseDemoSave || enabled;
 		EmitSignal(SignalName.UnlockStagesToggled);
 	}
 
 	public bool DrawDebugCam { get; private set; }
-	public void ToggleCamera(bool enabled) => DrawDebugCam = enabled;
+	[Signal]
+	public delegate void CameraVisibilityToggledEventHandler();
+	public void ToggleCamera(bool enabled)
+	{
+		DrawDebugCam = enabled;
+		EmitSignal(SignalName.CameraVisibilityToggled);
+	}
 
 	/// <summary> Use a custom save. </summary>
 	public bool UseDemoSave { get; private set; }
-
-	public bool IsShaderCompilationEnabled { get; private set; }
-	private void SetShaderCompilation(bool enabled) => IsShaderCompilationEnabled = enabled;
 	#endregion
 
 	#region Gameplay Cheats
+
+	/// <summary> Finishes the level with max score </summary>
+	private void FinishLevel()
+	{
+		StageSettings.Instance?.UpdateScore(50000, StageSettings.MathModeEnum.Replace);
+		StageSettings.Instance?.FinishLevel(true);
+		StageSettings.Instance?.StartCompletionDemo();
+		GD.Print("Finishing Level");
+	}
+
 	/// <summary> Infinite soul gauge. </summary>
 	public bool InfiniteSoulGauge { get; private set; }
 	private void ToggleInfiniteSoul(bool enabled) => InfiniteSoulGauge = enabled;
@@ -226,7 +279,7 @@ public partial class DebugManager : Node2D
 	private void ToggleInfiniteRings(bool enabled)
 	{
 		InfiniteRings = enabled;
-		StageSettings.instance?.UpdateRingCount(0, StageSettings.MathModeEnum.Replace, true);
+		StageSettings.Instance?.UpdateRingCount(0, StageSettings.MathModeEnum.Replace, true);
 	}
 	/// <summary> Skip countdowns for faster debugging. </summary>
 	public bool SkipCountdown { get; private set; }
@@ -296,34 +349,37 @@ public partial class DebugManager : Node2D
 	#endregion
 
 	#region Checkpoint Cheats
-	private CheckpointTrigger customCheckpoint;
+	[Signal] public delegate void TriggeredDebugCheckpointEventHandler();
+	public CheckpointTrigger DebugCheckpoint { get; private set; }
 
 	private void SaveCustomCheckpoint()
 	{
-		if (!IsInstanceValid(StageSettings.instance) || !IsInstanceValid(CharacterController.instance)) return;
+		if (!IsInstanceValid(StageSettings.Instance) || !IsInstanceValid(StageSettings.Player)) return;
 
-		if (customCheckpoint == null)
+		if (!IsInstanceValid(DebugCheckpoint))
 		{
-			customCheckpoint = new();
-			AddChild(customCheckpoint);
+			DebugCheckpoint = new();
+			StageSettings.Instance.AddChild(DebugCheckpoint);
 		}
 
-		customCheckpoint.GlobalPosition = CharacterController.instance.GlobalPosition;
-		StageSettings.instance.SetCheckpoint(customCheckpoint);
-		GD.Print("Checkpoint created.");
+		DebugCheckpoint.GlobalTransform = StageSettings.Player.GlobalTransform;
+		DebugCheckpoint.SaveCheckpointData();
+		GD.Print("Checkpoint created at ", StageSettings.Player.GlobalPosition);
+
+		EmitSignal(SignalName.TriggeredDebugCheckpoint);
 	}
 
 	private void LoadCustomCheckpoint()
 	{
-		if (!IsInstanceValid(StageSettings.instance) || !IsInstanceValid(CharacterController.instance)) return;
-		if (customCheckpoint == null)
+		if (!IsInstanceValid(StageSettings.Instance) || !IsInstanceValid(StageSettings.Player)) return;
+
+		if (!IsInstanceValid(DebugCheckpoint))
 		{
-			GD.PushWarning("No custom checkpoint.");
+			GD.Print("No custom checkpoint to load.");
 			return;
 		}
 
-		StageSettings.instance.SetCheckpoint(customCheckpoint);
-		CharacterController.instance.StartRespawn(true);
+		StageSettings.Player.StartRespawn(true);
 	}
 	#endregion
 
@@ -333,8 +389,17 @@ public partial class DebugManager : Node2D
 	{
 		DisableHUD = enabled;
 
-		if (!IsInstanceValid(HeadsUpDisplay.instance)) return;
-		HeadsUpDisplay.instance.Visible = !enabled;
+		if (!IsInstanceValid(HeadsUpDisplay.Instance)) return;
+		HeadsUpDisplay.Instance.Visible = !enabled;
+	}
+
+	public bool DisableReticle { get; private set; }
+	public void ToggleReticle(bool enabled)
+	{
+		DisableReticle = enabled;
+
+		if (!IsInstanceValid(StageSettings.Player)) return;
+		StageSettings.Player.Lockon.IsReticleVisible = !enabled;
 	}
 
 	/// <summary> Hide countdown for recording. </summary>
@@ -366,8 +431,8 @@ public partial class DebugManager : Node2D
 	private void UpdateCamData(string newData)
 	{
 		if (!newData.IsValidFloat()) return;
-		if (!IsInstanceValid(CharacterController.instance)) return;
-		CameraController cam = CharacterController.instance.Camera;
+		if (!IsInstanceValid(StageSettings.Player)) return;
+		PlayerCameraController cam = StageSettings.Player.Camera;
 
 		Vector3 pos = new(freeCamData[0].Text.ToFloat(), freeCamData[1].Text.ToFloat(), freeCamData[2].Text.ToFloat());
 		Vector3 rot = new(freeCamData[3].Text.ToFloat(), freeCamData[4].Text.ToFloat(), freeCamData[5].Text.ToFloat());

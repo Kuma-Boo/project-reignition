@@ -1,0 +1,38 @@
+shader_type spatial;
+render_mode blend_add, unshaded, specular_disabled, fog_disabled, cull_disabled;
+
+global uniform vec3 player_position;
+
+instance uniform float path_ratio : hint_range(0.0, 1.0) = 1.0;
+instance uniform float path_length = 1000.0;
+
+uniform float glow_intensity = 3.0;
+uniform sampler2D center_gradient : hint_default_white;
+
+const float distance_fade_min = 0.1;
+const float distance_fade_max = 1.0;
+const float start_smoothing = 15.0;
+const float end_smoothing = 15.0;
+const float player_radius = 5.0;
+
+void fragment()
+{
+	float distance_fade = clamp(smoothstep(distance_fade_min, distance_fade_max, length(VERTEX)), 0.0, 1.0);
+	float distant_transparency = clamp(smoothstep(100.0, 50.0, length(VERTEX)), 0.0, 1.0);
+	distant_transparency = mix(abs(mod(UV.y, 0.2) - 0.1), 1.0, distant_transparency);
+
+	float detail = texture(center_gradient, vec2(UV.y, 0)).r;
+	ALBEDO = COLOR.rgb * glow_intensity * distant_transparency * detail * COLOR.a;
+
+	// Prevent running on invisible skyroads
+	vec4 vert = INV_VIEW_MATRIX * vec4(VERTEX, 1.0);
+	float glow_factor = path_length - UV.x;
+	glow_factor = clamp(glow_factor / end_smoothing, 0.0, glow_intensity);
+	glow_factor *= (1.0 - distance(player_position, vert.xyz) / player_radius);
+	
+	float scroll_amount = (path_ratio * path_length) - UV.x;
+	scroll_amount = clamp(scroll_amount / end_smoothing, 0.0, glow_intensity);
+	float start_blend = clamp(UV.x / start_smoothing, 0.0, 1.0);
+	ALPHA *= scroll_amount * start_blend * distance_fade + max(glow_factor, 0.0);
+	ALPHA = clamp(ALPHA, 0.0, 1.0);
+}

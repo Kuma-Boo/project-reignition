@@ -1,18 +1,18 @@
 using Godot;
 using Project.Core;
+using Project.Gameplay;
 using System.Collections.Generic;
 
 namespace Project.CustomNodes
 {
 	public partial class Trail3D : Node3D
 	{
+		public PlayerController Player { get; set; }
 		[Export]
 		public bool IsEmitting { get; set; }
 		private MeshInstance3D trailMeshInstance;
 		private ImmediateMesh trailMesh;
 		private Vector3 previousPosition;
-		[Export]
-		public bool IsPlayerTrail;
 
 		[Export]
 		private float radius = .3f; // Radius of the trail
@@ -51,9 +51,12 @@ namespace Project.CustomNodes
 
 			GetTree().CurrentScene.CallDeferred(MethodName.AddChild, trailMeshInstance);
 			previousPosition = GlobalPosition;
+			VisibilityChanged += UpdateVisibility;
 		}
 
 		public override void _PhysicsProcess(double delta) => CallDeferred(MethodName.UpdateTrail, delta);
+
+		private void UpdateVisibility() => trailMeshInstance.Visible = IsVisibleInTree();
 
 		private void UpdateTrail(double delta)
 		{
@@ -81,10 +84,10 @@ namespace Project.CustomNodes
 
 			float angleIncrement = Mathf.Tau / resolution;
 
-			if (IsPlayerTrail)
+			if (Player != null)
 			{
 				for (int i = 0; i < points.Count; i++)
-					points[i].position += Gameplay.CharacterController.instance.Animator.Back() * Gameplay.CharacterController.instance.MoveSpeed * PhysicsManager.physicsDelta;
+					points[i].position += Player.Animator.Back() * Player.MoveSpeed * PhysicsManager.physicsDelta;
 			}
 
 			previousPosition = points[^1].position;

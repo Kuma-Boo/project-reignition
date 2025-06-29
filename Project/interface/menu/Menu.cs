@@ -17,6 +17,8 @@ public partial class Menu : Control
 		SaveSelect,
 		WorldSelect,
 		LevelSelect,
+		SkillMenuOpen,
+		PresetsOpen,
 
 		SpecialBook,
 
@@ -36,22 +38,22 @@ public partial class Menu : Control
 	public Menu parentMenu;
 	[Export]
 	public Array<NodePath> submenus;
-	public Array<Menu> _submenus = new(); // Also ensure the order of submenus is correct in the inspector hierarchy
+	public Array<Menu> _submenus = []; // Also ensure the order of submenus is correct in the inspector hierarchy
 
 	[Export]
-	protected AudioStreamPlayer bgm;
+	protected BGMPlayer bgm;
 	protected float bgmFadeTime;
 	[Export]
 	protected AnimationPlayer animator;
 
-	protected readonly StringName CONFIRM_ANIMATION = "confirm";
-	protected readonly StringName CANCEL_ANIMATION = "cancel";
-	protected readonly StringName SHOW_ANIMATION = "show";
-	protected readonly StringName HIDE_ANIMATION = "hide";
-	protected readonly StringName SCROLL_UP_ANIMATION = "scroll-up";
-	protected readonly StringName SCROLL_DOWN_ANIMATION = "scroll-down";
-	protected readonly StringName SCROLL_LEFT_ANIMATION = "scroll-up";
-	protected readonly StringName SCROLL_RIGHT_ANIMATION = "scroll-down";
+	protected readonly StringName ConfirmAnimation = "confirm";
+	protected readonly StringName CancelAnimation = "cancel";
+	protected readonly StringName ShowAnimation = "show";
+	protected readonly StringName HideAnimation = "hide";
+	protected readonly StringName ScrollUpAnimation = "scroll-up";
+	protected readonly StringName ScrollDownAnimation = "scroll-down";
+	protected readonly StringName ScrollLeftAnimation = "scroll-up";
+	protected readonly StringName ScrollRightAnimation = "scroll-down";
 
 	protected int HorizontalSelection { get; set; }
 	protected int VerticalSelection { get; set; }
@@ -78,7 +80,7 @@ public partial class Menu : Control
 
 	public override void _PhysicsProcess(double _)
 	{
-		ProcessBGMFade(); // Always process BGM fade
+		ProcessBgmFade(); // Always process background music fade
 
 		if (!isProcessing || TransitionManager.IsTransitionActive) return;
 		ProcessMenu();
@@ -91,16 +93,17 @@ public partial class Menu : Control
 	public virtual void ShowMenu()
 	{
 		// Attempt to play "show" animation
-		if (animator != null && animator.HasAnimation(SHOW_ANIMATION))
-			animator.Play(SHOW_ANIMATION);
+		if (animator?.HasAnimation(ShowAnimation) == true)
+			animator.Play(ShowAnimation);
 		else // Fallback
 			Visible = true;
 	}
+
 	public virtual void HideMenu()
 	{
 		// Attempt to play "hide" animation
-		if (animator != null && animator.HasAnimation(HIDE_ANIMATION))
-			animator.Play(HIDE_ANIMATION);
+		if (animator?.HasAnimation(HideAnimation) == true)
+			animator.Play(HideAnimation);
 		else // Fallback
 			Visible = false;
 	}
@@ -112,82 +115,74 @@ public partial class Menu : Control
 			GD.PrintErr($"No parent menu found for '{Name}'.");
 			return;
 		}
-
 		parentMenu.ShowMenu();
 	}
 	public virtual void OpenSubmenu() => GD.PrintErr($"Submenus unimplemented on '{Name}'.");
 
 	/// <summary> How long between each interval selection. </summary>
 	protected float cursorSelectionTimer;
-	protected const float SELECTION_INTERVAL = .2f;
-	protected const float SELECTION_SCROLLING_INTERVAL = .1f;
+	protected readonly float SelectionInterval = .2f;
+	protected readonly float SelectionScrollingInterval = .1f;
 	protected virtual void ProcessMenu()
 	{
-		if (Input.IsActionJustPressed("button_jump"))
+		if (Input.IsActionJustPressed("button_jump") || Input.IsActionJustPressed("ui_select") || Input.IsActionJustPressed("ui_select"))
 		{
 			Confirm();
+			return;
 		}
-		else if (Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("escape"))
+
+		if (Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("ui_cancel") || Input.IsActionJustPressed("ui_cancel"))
 		{
 			Cancel();
+			return;
 		}
-		else if (Input.GetVector("move_left", "move_right", "move_up", "move_down").Length() > SaveManager.Config.deadZone)
+
+		if (Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down").Length() > SaveManager.Config.deadZone)
 		{
 			if (Mathf.IsZeroApprox(cursorSelectionTimer))
 				UpdateSelection();
 			else
 				cursorSelectionTimer = Mathf.MoveToward(cursorSelectionTimer, 0, PhysicsManager.physicsDelta);
+
+			return;
 		}
-		else
-		{
-			cursorSelectionTimer = 0;
-			isSelectionScrolling = false;
-		}
+
+		cursorSelectionTimer = 0;
+		isSelectionScrolling = false;
 	}
 
-	/// <summary>
-	/// Called when selection was changed.
-	/// </summary>
+	/// <summary> Called when selection was changed. </summary>
 	protected virtual void UpdateSelection() { }
 
 	protected bool isSelectionScrolling;
-	/// <summary>
-	/// Call this to avoid selection changing too quickly.
-	/// </summary>
+	/// <summary> Call this to avoid selection changing too quickly. </summary>
 	protected void StartSelectionTimer()
 	{
-		if (!isSelectionScrolling)
+		if (isSelectionScrolling)
 		{
-			isSelectionScrolling = true;
-			cursorSelectionTimer = SELECTION_INTERVAL;
+			cursorSelectionTimer = SelectionScrollingInterval;
+			return;
 		}
-		else
-		{
-			cursorSelectionTimer = SELECTION_SCROLLING_INTERVAL;
-		}
+
+		isSelectionScrolling = true;
+		cursorSelectionTimer = SelectionInterval;
 	}
 
-	/// <summary>
-	/// Called when the Confirmbutton is pressed.
-	/// </summary>
+	/// <summary> Called when the Confirmbutton is pressed. </summary>
 	protected virtual void Confirm()
 	{
-		if (animator?.HasAnimation(CONFIRM_ANIMATION) == true)
-			animator.Play(CONFIRM_ANIMATION);
+		if (animator?.HasAnimation(ConfirmAnimation) == true)
+			animator.Play(ConfirmAnimation);
 	}
 
-	/// <summary>
-	/// Called when the Cancel button is pressed.
-	/// </summary>
+	/// <summary> Called when the Cancel button is pressed. </summary>
 	protected virtual void Cancel()
 	{
-		if (animator?.HasAnimation(CANCEL_ANIMATION) == true)
-			animator.Play(CANCEL_ANIMATION);
+		if (animator?.HasAnimation(CancelAnimation) == true)
+			animator.Play(CancelAnimation);
 	}
 
-	/// <summary>
-	/// Wraps a selection around max selection.
-	/// </summary>
+	/// <summary> Wraps a selection around max selection. </summary>
 	protected int WrapSelection(int currentSelection, int maxSelection)
 	{
 		currentSelection %= maxSelection;
@@ -199,23 +194,70 @@ public partial class Menu : Control
 		return currentSelection;
 	}
 
-	public void PlayBGM()
+	/// <summary> Wraps a selection around max and min selection </summary>
+	protected int WrapSelection(int currentSelection, int maxSelection, int minSelection)
 	{
-		if (bgm.Playing) return;
+		if (currentSelection < minSelection)
+			currentSelection = maxSelection;
+		else if (currentSelection > maxSelection)
+			currentSelection = minSelection;
 
-		bgmFadeTime = 0.0f; // Stops any active fading
-		bgm.VolumeDb = 0.0f; // Reset volume
+		return currentSelection;
+	}
+
+	private bool isFadingIn;
+	public float CurrentBgmTime
+	{
+		set => bgm.Seek(value);
+		get => bgm.GetPlaybackPosition() + (float)AudioServer.GetTimeSinceLastMix();
+	}
+
+	public void PlayBgm()
+	{
+		if (bgm == null || bgm.Playing) return;
+
+		bgmFadeTime = 0f; // Stops any active fading
+		bgm.VolumeDb = 0f; // Reset volume
 		bgm.Play();
 	}
 
 	/// <summary> Call this function to stop bgm instantly. </summary>
-	public void StopBGM() => bgm.Stop();
+	public void StopBgm() => bgm.Stop();
 
-	/// <summary> Call this function to start fading bgm out. </summary>
-	public void FadeBGM(float fadetime) => bgmFadeTime = fadetime;
-
-	protected void ProcessBGMFade()
+	// Overload for animation players
+	public void FadeBgm(float fadetime) => FadeBgm(fadetime, false);
+	/// <summary> Call this function to fade bgm in or out. </summary>
+	public void FadeBgm(float fadetime, bool fadeIn, float initialVolume = 0.0f)
 	{
+		if (fadeIn && Mathf.IsZeroApprox(fadetime))
+		{
+			GD.PushWarning("Trying to fade in bgm with 0 fade time! Playing the bgm instead.");
+			PlayBgm();
+			return;
+		}
+
+		isFadingIn = fadeIn;
+		bgmFadeTime = fadetime;
+
+		if (isFadingIn)
+		{
+			bgm.VolumeDb = Mathf.LinearToDb(initialVolume);
+			bgm.Play(); // Start playing
+		}
+	}
+
+	protected void ProcessBgmFade()
+	{
+		if (isFadingIn)
+		{
+			if (Mathf.IsZeroApprox(bgmFadeTime))
+				return;
+
+			bgmFadeTime = Mathf.MoveToward(bgmFadeTime, 0, PhysicsManager.physicsDelta);
+			bgm.VolumeDb = Mathf.MoveToward(bgm.VolumeDb, 0.0f, (80f / bgmFadeTime) * PhysicsManager.physicsDelta);
+			return;
+		}
+
 		if (bgm?.Playing != true || Mathf.IsZeroApprox(bgmFadeTime)) return;
 
 		if (!SoundManager.FadeAudioPlayer(bgm, bgmFadeTime))

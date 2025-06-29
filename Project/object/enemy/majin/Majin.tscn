@@ -1,7 +1,7 @@
 [gd_scene load_steps=53 format=3 uid="uid://rh85bh20fk6r"]
 
-[ext_resource type="Script" path="res://object/enemy/majin/data/Majin.cs" id="1"]
-[ext_resource type="Script" path="res://object/enemy/EnemyHurtbox.cs" id="2_onhwc"]
+[ext_resource type="Script" uid="uid://coe4ch77wt31y" path="res://object/enemy/majin/data/Majin.cs" id="1"]
+[ext_resource type="Script" uid="uid://cp6er04j2b86u" path="res://object/enemy/EnemyHurtbox.cs" id="2_onhwc"]
 [ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="3_6ikv1"]
 [ext_resource type="Material" uid="uid://bqu7wt3ng1x5a" path="res://object/enemy/majin/data/particle/material/Majin Ember Charge Process Material.tres" id="3_pspvd"]
 [ext_resource type="Material" uid="uid://chrq2jlovey6c" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters.tres" id="4_p44e7"]
@@ -10,14 +10,14 @@
 [ext_resource type="Material" uid="uid://efv6ms0uv2sg" path="res://object/enemy/majin/data/particle/material/Majin Flame.tres" id="6_t5qur"]
 [ext_resource type="Material" uid="uid://nwln85mverv7" path="res://object/enemy/majin/data/particle/material/Majin Flame Process Material.tres" id="7_2ja3p"]
 [ext_resource type="Material" uid="uid://rhqpvcj8ph13" path="res://object/enemy/majin/data/particle/material/Majin Glow.tres" id="7_6w2wy"]
-[ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="7_vd724"]
+[ext_resource type="Script" uid="uid://pnh70abopq8e" path="res://object/stage/common/resource/script/Hazard.cs" id="7_vd724"]
 [ext_resource type="AudioStream" uid="uid://bqt0gpwc55dfl" path="res://sound/sfx/enemy/majin/majin spawn.wav" id="8_4kwy5"]
 [ext_resource type="Material" uid="uid://m0d6jfnxdrwg" path="res://effect/particle/material/Teleport Dust.tres" id="8_a28yl"]
 [ext_resource type="Material" uid="uid://bwvsqjnpry0xm" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters Process Material.tres" id="8_awltq"]
-[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="9_4bnd7"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="9_4bnd7"]
 [ext_resource type="Texture2D" uid="uid://cpjydx5buf0av" path="res://effect/particle/texture/teleport dust.png" id="9_6teur"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://byf5qdjpi8ur4" path="res://object/enemy/majin/data/animation/MajinAnimationTreeRoot.tres" id="9_osrkc"]
-[ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter.tres" id="9_yw7li"]
+[ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter Add.tres" id="9_yw7li"]
 [ext_resource type="Material" uid="uid://b4vmiws2hdmhs" path="res://object/enemy/majin/data/particle/material/Majin Spawn Smoke Process Material.tres" id="10_xll44"]
 [ext_resource type="AudioStream" uid="uid://jpjrq8guepkq" path="res://sound/sfx/enemy/majin/majin stagger.wav" id="12_2cawu"]
 [ext_resource type="AudioStream" uid="uid://cvn3dgomxnoym" path="res://sound/sfx/enemy/majin/majin strike.wav" id="13_470oy"]
@@ -27,12 +27,13 @@
 [ext_resource type="Material" uid="uid://c5pcrpavpyreh" path="res://object/enemy/majin/data/particle/material/Majin Defeat Process Material.tres" id="16_ck7oa"]
 [ext_resource type="Material" uid="uid://do5esuoehqh56" path="res://object/enemy/majin/data/particle/material/Majin Flash Process Material.tres" id="24_rwypk"]
 
+
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mlr0h"]
 radius = 0.6
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_xbynq"]
 height = 0.5
-radius = 1.8
+radius = 1.6
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ilenc"]
 height = 30.0
@@ -64,7 +65,7 @@ material = ExtResource("4_p44e7")
 size = Vector2(1, 1)
 orientation = 2
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eiiup"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_518xl"]
 transparency = 1
 shading_mode = 0
 specular_mode = 2
@@ -77,7 +78,7 @@ particles_anim_v_frames = 1
 particles_anim_loop = false
 
 [sub_resource type="QuadMesh" id="QuadMesh_txkmg"]
-material = SubResource("StandardMaterial3D_eiiup")
+material = SubResource("StandardMaterial3D_518xl")
 
 [sub_resource type="QuadMesh" id="QuadMesh_p17fq"]
 material = ExtResource("8_a28yl")
@@ -178,7 +179,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("ChestAttachment/Hitbox/SpinCollisionShape3D:disabled")
+tracks/7/path = NodePath("HitboxRoot/Hitbox/SpinCollisionShape3D:disabled")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -246,6 +247,18 @@ tracks/12/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [0.5]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("FX/FireFX:visible")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_1j3bl"]
@@ -523,7 +536,6 @@ tracks/8/keys = {
 
 [sub_resource type="Animation" id="Animation_thps5"]
 resource_name = "fire-end"
-length = 0.001
 step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -584,6 +596,18 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("FX/FireFX:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
 }
 
 [sub_resource type="Animation" id="Animation_c8j0n"]
@@ -715,6 +739,18 @@ tracks/9/keys = {
 "method": &"PlayInGroup"
 }]
 }
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("FX/FireFX:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_hrty8"]
 resource_name = "launch-end"
@@ -825,7 +861,7 @@ step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ChestAttachment/Hitbox/SpinCollisionShape3D:disabled")
+tracks/0/path = NodePath("HitboxRoot/Hitbox/SpinCollisionShape3D:disabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -850,6 +886,20 @@ tracks/0/keys = {
 "values": [{
 "args": [0.0],
 "method": &"play"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FX/FireFX/FlameSFX")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"stop"
 }]
 }
 
@@ -951,68 +1001,71 @@ tracks/6/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_stb46"]
 _data = {
-"RESET": SubResource("Animation_ojgnd"),
-"defeat": SubResource("Animation_1j3bl"),
-"despawn": SubResource("Animation_o85fj"),
-"explode": SubResource("Animation_xx2t8"),
-"fire-end": SubResource("Animation_thps5"),
-"fire-start": SubResource("Animation_c8j0n"),
-"launch-end": SubResource("Animation_hrty8"),
-"spawn": SubResource("Animation_aucka"),
-"spin": SubResource("Animation_1nwld"),
-"stagger": SubResource("Animation_13cad"),
-"travel": SubResource("Animation_y1q6p")
+&"RESET": SubResource("Animation_ojgnd"),
+&"defeat": SubResource("Animation_1j3bl"),
+&"despawn": SubResource("Animation_o85fj"),
+&"explode": SubResource("Animation_xx2t8"),
+&"fire-end": SubResource("Animation_thps5"),
+&"fire-start": SubResource("Animation_c8j0n"),
+&"launch-end": SubResource("Animation_hrty8"),
+&"spawn": SubResource("Animation_aucka"),
+&"spin": SubResource("Animation_1nwld"),
+&"stagger": SubResource("Animation_13cad"),
+&"travel": SubResource("Animation_y1q6p")
 }
 
 [node name="Majin" type="Node3D"]
 script = ExtResource("1")
+flameRoot = NodePath("FX/FireFX")
+hitboxRoot = NodePath("HitboxRoot")
+hitboxAttachment = NodePath("HitboxAttachment")
 "Spawn Settings/Spawn Travel Time" = 0.0
 "Spawn Interval Settings/Enable Spawn Interval" = false
 "Rotation Settings/Track Player" = true
 "Attack Settings/Attack Type" = 0
 "Defeat Settings/Enable Enemy Launching" = false
-flameRoot = NodePath("FX/FireFX")
-hitboxAttachment = NodePath("ChestAttachment")
 pearlAmount = 15
 damagePlayer = true
 root = NodePath("Root")
-hurtbox = NodePath("ChestAttachment/Hitbox")
-collider = NodePath("ChestAttachment/EnvironmentCollider/CollisionShape3D")
+hurtbox = NodePath("HitboxRoot/Hitbox")
+collider = NodePath("HitboxRoot/EnvironmentCollider/CollisionShape3D")
 rangeCollider = NodePath("Range/CollisionShape3D")
 animationTree = NodePath("AnimationTree")
 animationPlayer = NodePath("AnimationPlayer")
 
 [node name="Root" type="Node3D" parent="."]
 
-[node name="ChestAttachment" type="BoneAttachment3D" parent="."]
-transform = Transform3D(1, -4.37115e-08, 4.37115e-08, 4.37115e-08, 1, 9.55347e-16, -4.37115e-08, 9.55346e-16, 1, -3.75753e-20, 1.085, 0)
-use_external_skeleton = true
-external_skeleton = NodePath("")
+[node name="HitboxRoot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.085, 0)
 
-[node name="Hitbox" type="Area3D" parent="ChestAttachment" node_paths=PackedStringArray("enemy")]
-transform = Transform3D(1, -4.17596e-23, 0, -4.17596e-23, 1, 0, 0, 0, 1, 0, 0.15, 0)
+[node name="Hitbox" type="Area3D" parent="HitboxRoot" node_paths=PackedStringArray("enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.75753e-20, 0.15, 0)
 collision_layer = 12
 collision_mask = 2
 script = ExtResource("2_onhwc")
 enemy = NodePath("../..")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ChestAttachment/Hitbox"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxRoot/Hitbox"]
 transform = Transform3D(1, -4.17596e-23, 0, -4.17596e-23, 1, 0, 0, 0, 1, 0, 0.1, 0)
 shape = SubResource("CapsuleShape3D_mlr0h")
 
-[node name="SpinCollisionShape3D" type="CollisionShape3D" parent="ChestAttachment/Hitbox"]
+[node name="SpinCollisionShape3D" type="CollisionShape3D" parent="HitboxRoot/Hitbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 shape = SubResource("CylinderShape3D_xbynq")
 disabled = true
 
-[node name="EnvironmentCollider" type="StaticBody3D" parent="ChestAttachment" groups=["enemy", "wall"]]
-transform = Transform3D(1, -4.17596e-23, 0, -4.17597e-23, 1, 0, 0, 0, 1, 0, 0.15, -1.05879e-22)
+[node name="EnvironmentCollider" type="StaticBody3D" parent="HitboxRoot" groups=["enemy", "wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.75753e-20, 0.15, -1.05879e-22)
 collision_layer = 8
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ChestAttachment/EnvironmentCollider"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxRoot/EnvironmentCollider"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 shape = SubResource("CapsuleShape3D_mlr0h")
+
+[node name="HitboxAttachment" type="BoneAttachment3D" parent="."]
+use_external_skeleton = true
+external_skeleton = NodePath("")
 
 [node name="Range" type="Area3D" parent="."]
 visible = false
@@ -1029,6 +1082,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="FireFX" type="Node3D" parent="FX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+visible = false
 
 [node name="EmberCharge" type="GPUParticles3D" parent="FX/FireFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
@@ -1101,12 +1155,13 @@ shape = SubResource("CylinderShape3D_ft0xj")
 disabled = true
 
 [node name="FlameSFX" type="AudioStreamPlayer3D" parent="FX/FireFX"]
+process_mode = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 stream = ExtResource("5_xr0sx")
-attenuation_model = 3
-max_db = 0.0
+max_db = -3.0
 max_distance = 100.0
 bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
 script = ExtResource("9_4bnd7")
 groupKey = &"majin_flame"
 
@@ -1145,12 +1200,13 @@ process_material = ExtResource("10_xll44")
 draw_pass_1 = SubResource("QuadMesh_txkmg")
 
 [node name="SpawnSFX" type="AudioStreamPlayer3D" parent="FX/SpawnFX"]
+process_mode = 1
 stream = ExtResource("8_4kwy5")
-attenuation_model = 3
-unit_size = 100.0
-max_db = 0.0
+unit_size = 20.0
+max_db = -6.0
 max_distance = 200.0
 bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
 script = ExtResource("9_4bnd7")
 groupKey = &"majin_spawn"
 
@@ -1205,25 +1261,32 @@ process_material = ExtResource("16_ck7oa")
 draw_pass_1 = SubResource("QuadMesh_bbrsu")
 
 [node name="StaggerSFX" type="AudioStreamPlayer3D" parent="FX"]
+process_mode = 1
 stream = ExtResource("12_2cawu")
-attenuation_model = 3
-max_db = 0.0
+unit_size = 20.0
+max_db = -6.0
 max_distance = 100.0
 bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
 
 [node name="StrikeSFX" type="AudioStreamPlayer3D" parent="FX"]
+process_mode = 1
 stream = ExtResource("13_470oy")
-attenuation_model = 3
-max_db = 0.0
+unit_size = 20.0
+max_db = -3.0
 max_distance = 100.0
 bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
 
 [node name="TravelSFX" type="AudioStreamPlayer3D" parent="FX"]
+process_mode = 1
 stream = ExtResource("14_41brs")
-attenuation_model = 3
-max_db = 0.0
+volume_db = -12.0
+unit_size = 20.0
+max_db = -12.0
 max_distance = 100.0
 bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
 script = ExtResource("9_4bnd7")
 groupKey = &"majin_travel"
 
@@ -1281,12 +1344,12 @@ parameters/state_transition/current_index = 0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_stb46")
+&"": SubResource("AnimationLibrary_stb46")
 }
 next/launch-end = &"explode"
 
-[connection signal="area_entered" from="ChestAttachment/Hitbox" to="." method="OnEntered"]
-[connection signal="area_exited" from="ChestAttachment/Hitbox" to="." method="OnExited"]
+[connection signal="area_entered" from="HitboxRoot/Hitbox" to="." method="OnEntered"]
+[connection signal="area_exited" from="HitboxRoot/Hitbox" to="." method="OnExited"]
 [connection signal="area_entered" from="Range" to="." method="OnRangeEntered"]
 [connection signal="area_exited" from="Range" to="." method="OnRangeExited"]
 [connection signal="area_entered" from="FX/FireFX/FlameHitbox" to="FX/FireFX/FlameHitbox" method="OnEntered"]

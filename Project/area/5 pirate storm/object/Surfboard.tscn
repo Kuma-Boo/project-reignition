@@ -1,0 +1,383 @@
+[gd_scene load_steps=37 format=3 uid="uid://dp0fmxla84ah7"]
+
+[ext_resource type="Script" uid="uid://dumjgm4y7xmk4" path="res://area/5 pirate storm/data/script/Surfboard.cs" id="1_onj6u"]
+[ext_resource type="Resource" uid="uid://cvf0fdgojrsfs" path="res://area/5 pirate storm/act 1/camera/SurfboardWaveCam.tres" id="2_2btht"]
+[ext_resource type="PackedScene" uid="uid://bn01a41jsnwin" path="res://area/5 pirate storm/object/model/Surfboard.gltf" id="2_hixtt"]
+[ext_resource type="AudioStream" uid="uid://bs05rfasoctkc" path="res://sound/sfx/stage/pirate storm/surf boost.wav" id="3_hixtt"]
+[ext_resource type="Shader" uid="uid://7784ufg8jtdc" path="res://area/5 pirate storm/data/shader/SurfBoost.gdshader" id="4_8vr4j"]
+[ext_resource type="AudioStream" uid="uid://d0blui25wjagt" path="res://sound/sfx/stage/pirate storm/ocean.wav" id="4_bp1qf"]
+[ext_resource type="Texture2D" uid="uid://jvwxk461tccq" path="res://area/5 pirate storm/data/texture/surf speed base.png" id="5_5ybsi"]
+[ext_resource type="AudioStream" uid="uid://bwn4emlqvkv7c" path="res://sound/sfx/stage/pirate storm/wave 1.wav" id="5_qn7v0"]
+[ext_resource type="Material" uid="uid://bhj21xbsvtun5" path="res://effect/particle/material/environment/Common Dust Splatter Add.tres" id="6_5ybsi"]
+[ext_resource type="AudioStream" uid="uid://crhutt3oee5se" path="res://sound/sfx/stage/pirate storm/wave 2.wav" id="6_abf3d"]
+[ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="7_2btht"]
+[ext_resource type="AudioStream" uid="uid://dhihq8pobcumn" path="res://sound/sfx/stage/pirate storm/wave 3.wav" id="7_drv7k"]
+[ext_resource type="Material" uid="uid://ckyg4aygq0uan" path="res://effect/particle/material/environment/Water Dust.tres" id="8_1jtkm"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_onj6u"]
+size = Vector3(1, 0.133, 1.4)
+
+[sub_resource type="Curve" id="Curve_2btht"]
+_data = [Vector2(0, 0), 0.0, 8.7182, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0378934, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_4wcbj"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_2btht")
+
+[sub_resource type="Gradient" id="Gradient_1jtkm"]
+colors = PackedColorArray(0, 0.479621, 0.961195, 1, 0.294288, 0.566626, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_57jcb"]
+gradient = SubResource("Gradient_1jtkm")
+width = 64
+
+[sub_resource type="Curve" id="Curve_dkmg3"]
+_data = [Vector2(0.00256411, 1), 0.0, -0.802057, 0, 1, Vector2(1, 0.2), -0.802057, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_hrlvd"]
+width = 64
+curve = SubResource("Curve_dkmg3")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_oo0j4"]
+lifetime_randomness = 0.4
+emission_shape_offset = Vector3(0, 0.5, -0.5)
+angle_min = 1.07288e-05
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 4.0
+scale_max = 4.0
+scale_curve = SubResource("CurveTexture_hrlvd")
+color_ramp = SubResource("GradientTexture1D_57jcb")
+alpha_curve = SubResource("CurveTexture_4wcbj")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wa4ul"]
+render_priority = 0
+shader = ExtResource("4_8vr4j")
+shader_parameter/albedo = ExtResource("5_5ybsi")
+
+[sub_resource type="QuadMesh" id="QuadMesh_msuho"]
+material = SubResource("ShaderMaterial_wa4ul")
+center_offset = Vector3(0, 0, 0.2)
+
+[sub_resource type="Curve" id="Curve_57jcb"]
+_data = [Vector2(0, 0), 0.0, 27.4773, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_dkmg3"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_57jcb")
+
+[sub_resource type="Curve" id="Curve_hrlvd"]
+_data = [Vector2(0, 0.5), 0.0, 1.72618, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_oo0j4"]
+width = 64
+curve = SubResource("Curve_hrlvd")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_msuho"]
+lifetime_randomness = 0.2
+emission_shape = 3
+emission_box_extents = Vector3(0.5, 0, 0)
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 0, 1)
+spread = 15.0
+initial_velocity_min = 5.0
+initial_velocity_max = 8.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_curve = SubResource("CurveTexture_oo0j4")
+alpha_curve = SubResource("CurveTexture_dkmg3")
+
+[sub_resource type="QuadMesh" id="QuadMesh_gy274"]
+material = ExtResource("6_5ybsi")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_x4odf"]
+lifetime_randomness = 0.2
+emission_shape = 3
+emission_box_extents = Vector3(0.5, 0, 0)
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 0.2, 1)
+spread = 5.0
+initial_velocity_min = 5.0
+initial_velocity_max = 8.0
+gravity = Vector3(0, 0, 0)
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_oo0j4")
+alpha_curve = SubResource("CurveTexture_dkmg3")
+
+[sub_resource type="QuadMesh" id="QuadMesh_2u6u5"]
+material = ExtResource("8_1jtkm")
+
+[sub_resource type="Animation" id="Animation_bkevs"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Water:playing")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Water:volume_db")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Surfboard:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_onj6u"]
+resource_name = "activate"
+length = 0.06667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Water:playing")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Water:volume_db")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WaterFX")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.0333333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"RestartGroup"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_hixtt"]
+resource_name = "deactivate"
+length = 0.66667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Water:volume_db")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, -80.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Water:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WaterFX")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.0333333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"StopGroup"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_2btht"]
+resource_name = "move"
+length = 0.66667
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Surfboard:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.333333, 0.666667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.1, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bp1qf"]
+_data = {
+&"RESET": SubResource("Animation_bkevs"),
+&"activate": SubResource("Animation_onj6u"),
+&"deactivate": SubResource("Animation_hixtt"),
+&"move": SubResource("Animation_2btht")
+}
+
+[node name="Surfboard" type="Node3D" node_paths=PackedStringArray("waveSFX", "root", "localRoot", "playerPosition", "animator")]
+script = ExtResource("1_onj6u")
+initialSpeed = 20.0
+initialTurnSpeed = 15.0
+waveSFX = [NodePath("Wave1"), NodePath("Wave2"), NodePath("Wave3")]
+waveCameraSettings = ExtResource("2_2btht")
+MaxSpeed = 60.0
+TurnSpeed = 40.0
+isVerticalMovementDisabled = true
+bounds = Vector2(5, 0)
+root = NodePath("Surfboard")
+localRoot = NodePath("Surfboard/SurfboardMesh")
+playerPosition = NodePath("Surfboard/SurfboardMesh/PlayerPosition")
+animator = NodePath("AnimationPlayer")
+
+[node name="Surfboard" parent="." instance=ExtResource("2_hixtt")]
+
+[node name="PlayerPosition" type="Node3D" parent="Surfboard/SurfboardMesh" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -0.2)
+
+[node name="Hurtbox" type="Area3D" parent="." groups=["surfboard"]]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.3)
+shape = SubResource("BoxShape3D_onj6u")
+
+[node name="BoostFX" type="GPUParticles3D" parent="."]
+transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.4
+one_shot = true
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-1.5, -1.5, -0.5, 3, 3, 1)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_oo0j4")
+draw_pass_1 = SubResource("QuadMesh_msuho")
+
+[node name="Boost" type="AudioStreamPlayer3D" parent="BoostFX"]
+stream = ExtResource("3_hixtt")
+unit_size = 30.0
+max_db = 0.0
+max_distance = 20.0
+max_polyphony = 2
+bus = &"GAME SFX"
+
+[node name="WaterFX" type="GPUParticles3D" parent="." node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 1.50996e-07, 0, -1)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.4
+randomness = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-1.5, -2, -1, 3, 4, 4)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_msuho")
+draw_pass_1 = SubResource("QuadMesh_gy274")
+script = ExtResource("7_2btht")
+subSystems = [NodePath("Dust")]
+
+[node name="Dust" type="GPUParticles3D" parent="WaterFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.3)
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.4
+randomness = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-1.5, -2, -1, 3, 4, 4)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_x4odf")
+draw_pass_1 = SubResource("QuadMesh_2u6u5")
+
+[node name="Water" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_bp1qf")
+unit_size = 30.0
+max_distance = 50.0
+bus = &"GAME SFX"
+
+[node name="Wave1" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("5_qn7v0")
+unit_size = 30.0
+max_distance = 50.0
+bus = &"GAME SFX"
+
+[node name="Wave2" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("6_abf3d")
+unit_size = 30.0
+max_distance = 50.0
+bus = &"GAME SFX"
+
+[node name="Wave3" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("7_drv7k")
+unit_size = 30.0
+max_distance = 50.0
+bus = &"GAME SFX"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+callback_mode_process = 0
+libraries = {
+&"": SubResource("AnimationLibrary_bp1qf")
+}
+next/activate = &"move"
+
+[connection signal="BoostStarted" from="." to="BoostFX" method="restart" binds= [false]]
+[connection signal="BoostStarted" from="." to="BoostFX/Boost" method="play" binds= [0.0]]
+[connection signal="area_entered" from="Hurtbox" to="." method="OnEntered"]
+[connection signal="body_entered" from="Hurtbox" to="." method="OnBodyEntered"]
+
+[editable path="Surfboard"]

@@ -1,15 +1,14 @@
 [gd_scene load_steps=10 format=3 uid="uid://cjupypih0myxo"]
 
 [ext_resource type="PackedScene" uid="uid://boo3c0dnk36vn" path="res://object/player/resource/component/Camera.tscn" id="1"]
-[ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="1_vtmk7"]
-[ext_resource type="PackedScene" uid="uid://c4kdj2x0c8h4m" path="res://object/player/Player.tscn" id="2"]
+[ext_resource type="Script" uid="uid://np5vcxq01ii8" path="res://object/trigger/modules/CheckpointTrigger.cs" id="1_vtmk7"]
+[ext_resource type="PackedScene" uid="uid://bqck0hqdn3o8r" path="res://object/player/Player.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://b33gqnpc4784k" path="res://interface/gameplay/countdown/Countdown.tscn" id="3_mandl"]
 [ext_resource type="PackedScene" uid="uid://chn7ckbhlrr2g" path="res://interface/gameplay/hud/HeadsUpDisplay.tscn" id="4_up51o"]
 [ext_resource type="PackedScene" uid="uid://x03eut8s4p3l" path="res://interface/gameplay/results/LevelResults.tscn" id="5_oeox1"]
 [ext_resource type="PackedScene" uid="uid://coshp5qmt1aq7" path="res://interface/gameplay/pause/PauseMenu.tscn" id="6_xh2b0"]
 [ext_resource type="PackedScene" uid="uid://cbt02mctaofmt" path="res://interface/gameplay/results/ExperienceResult.tscn" id="7_dwc5n"]
 [ext_resource type="PackedScene" uid="uid://ci04gau0040rg" path="res://interface/menu/notification/NotificationMenu.tscn" id="8_ajhxl"]
-
 
 [node name="CharacterSpawn" type="Node3D"]
 script = ExtResource("1_vtmk7")
@@ -23,17 +22,17 @@ Camera = NodePath("../Camera")
 
 [node name="HeadsUpDisplay" parent="." instance=ExtResource("4_up51o")]
 
+[node name="PauseMenu" parent="." instance=ExtResource("6_xh2b0")]
+
 [node name="LevelResults" parent="." instance=ExtResource("5_oeox1")]
 
 [node name="ExperienceResults" parent="." instance=ExtResource("7_dwc5n")]
 
 [node name="NotificationMenu" parent="." instance=ExtResource("8_ajhxl")]
 
-[node name="PauseMenu" parent="." instance=ExtResource("6_xh2b0")]
-
-[connection signal="CountdownFinished" from="Countdown" to="Player" method="OnCountdownFinished"]
 [connection signal="CountdownFinished" from="Countdown" to="HeadsUpDisplay" method="SetVisibility" binds= [true]]
 [connection signal="CountdownStarted" from="Countdown" to="Player" method="OnCountdownStarted"]
 [connection signal="CountdownStarted" from="Countdown" to="HeadsUpDisplay" method="SetVisibility" binds= [false]]
-[connection signal="ContinuePressed" from="LevelResults" to="ExperienceResults" method="OnResultsClosed"]
-[connection signal="Finished" from="ExperienceResults" to="NotificationMenu" method="OnExperienceClosed"]
+[connection signal="OnSceneChangeSelected" from="PauseMenu" to="ExperienceResults" method="StartExperienceResults"]
+[connection signal="ContinuePressed" from="LevelResults" to="ExperienceResults" method="StartExperienceResults"]
+[connection signal="Finished" from="ExperienceResults" to="NotificationMenu" method="StartNotifications"]

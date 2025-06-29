@@ -88,30 +88,32 @@ public struct RaycastHit
 	public float distance;
 	public int zIndex;
 
-	public bool Add(RaycastHit hit) //Attempts to add the values of 2 raycasts together. Returns TRUE if successful
+	/// <summary> Attempts to add hit2 to hit1. </summary>
+	public static RaycastHit Add(RaycastHit hit1, RaycastHit hit2)
 	{
-		if (!hit) //Invalid raycast
-			return false;
+		if (!hit2) // Invalid raycast
+			return hit1;
 
-		if (!this)
-			collidedObject = hit.collidedObject;
+		if (!hit1) // Overwrite hit1 with hit2.
+			return hit2;
 
-		normal += hit.normal;
-		point += hit.point;
-		direction += hit.direction;
-		distance += hit.distance;
-		return true;
+		hit1.normal += hit2.normal;
+		hit1.point += hit2.point;
+		hit1.direction += hit2.direction;
+		hit1.distance += hit2.distance;
+		return hit1;
 	}
 
-	public bool Divide(float amount) //Attempts to divide the values of a raycast. Returns TRUE if successful
+	/// <summary> Attempts to divide the values of a raycast. </summary>
+	public static RaycastHit Divide(RaycastHit hit, float amount)
 	{
-		if (Mathf.IsZeroApprox(amount) || !this)
-			return false;
+		if (Mathf.IsZeroApprox(amount) || !hit)
+			return hit;
 
-		normal /= amount;
-		point /= amount;
-		direction /= amount;
-		distance /= amount;
-		return true;
+		hit.normal /= amount;
+		hit.point /= amount;
+		hit.direction /= amount;
+		hit.distance /= amount;
+		return hit;
 	}
 }

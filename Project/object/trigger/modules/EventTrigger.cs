@@ -10,53 +10,65 @@ namespace Project.Gameplay.Triggers;
 [Tool]
 public partial class EventTrigger : StageTriggerModule
 {
-	[Signal]
-	public delegate void ActivatedEventHandler();
-	[Signal]
-	public delegate void DeactivatedEventHandler();
-	[Signal]
-	public delegate void RespawnedEventHandler();
-	[Signal]
-	public delegate void EventFinishedEventHandler();
+	[Signal] public delegate void ActivatedEventHandler();
+	[Signal] public delegate void DeactivatedEventHandler();
+	[Signal] public delegate void RespawnedEventHandler();
+	[Signal] public delegate void EventFinishedEventHandler();
+	[Signal] public delegate void EventSkippedEventHandler();
 
 	/// <summary> Automatically reset the event when player respawns? </summary>
 	private bool autoRespawn;
 	/// <summary> Only allow event to play once? </summary>
 	private bool isOneShot = true;
 	private bool isActivated;
+	private float animationBlending;
 
 	[ExportGroup("Components")]
-	[Export]
-	private AnimationPlayer animator;
+	[Export] private AnimationPlayer animator;
+	public float AnimationLength => (float)animator.CurrentAnimationLength;
+	private float AnimationTimeLeft
+	{
+		get
+		{
+			if (!Mathf.IsZeroApprox(overrideEventLength))
+				return overrideEventLength - (float)animator.CurrentAnimationPosition;
 
-	[Export]
-	private RespawnAnimation respawnAnimation;
+			return (float)(animator.CurrentAnimationLength - animator.CurrentAnimationPosition);
+		}
+	}
+
+	[Export] private RespawnAnimation respawnAnimation;
 	private enum RespawnAnimation
 	{
 		Reset,
 		Activate,
 		Deactivate,
 	}
-	[Export]
-	private bool respawnToEnd = true;
+	[Export] private bool respawnToEnd = true;
 
 	private readonly StringName ResetAnimation = "RESET";
 	private readonly StringName EventAnimation = "event";
 	private readonly StringName DeactivateEventAnimation = "event-deactivate";
 
+	[Export(PropertyHint.Range, "0.1,10,0.1,or_greater")] private float activationSpeedScale = 1f;
+	[Export(PropertyHint.Range, "0.1,10,0.1,or_greater")] private float deactivationSpeedScale = 1f;
+	/// <summary> Optional id used for skippable events. </summary>
+	[Export] public string EventID { get; private set; }
+	[Export(PropertyHint.Range, "0,10,0.1,or_greater")] public float overrideEventLength;
+
 	#region Editor
 	public override Array<Dictionary> _GetPropertyList()
 	{
-		Array<Dictionary> properties = new()
-			{
+		Array<Dictionary> properties =
+			[
 				ExtensionMethods.CreateProperty("Trigger Settings/Automatically Respawn", Variant.Type.Bool),
 				ExtensionMethods.CreateProperty("Trigger Settings/Is One Shot", Variant.Type.Bool),
+				ExtensionMethods.CreateProperty("Trigger Settings/Animation Blending", Variant.Type.Float),
 				ExtensionMethods.CreateProperty("Trigger Settings/Player Stand-in", Variant.Type.NodePath)
-			};
+			];
 
 		if (playerStandin?.IsEmpty == false) // Add player event settings
 		{
-			properties.Add(ExtensionMethods.CreateProperty("Player Event Settings/Animation", Variant.Type.StringName));
 			properties.Add(ExtensionMethods.CreateProperty("Player Event Settings/Animation Fadeout Time", Variant.Type.Float));
 			properties.Add(ExtensionMethods.CreateProperty("Player Event Settings/Position Smoothing", Variant.Type.Float, PropertyHint.Range, "0,1,.1"));
 
@@ -77,11 +89,11 @@ public partial class EventTrigger : StageTriggerModule
 				return autoRespawn;
 			case "Trigger Settings/Is One Shot":
 				return isOneShot;
+			case "Trigger Settings/Animation Blending":
+				return animationBlending;
 			case "Trigger Settings/Player Stand-in":
 				return playerStandin;
 
-			case "Player Event Settings/Animation":
-				return characterAnimation;
 			case "Player Event Settings/Animation Fadeout Time":
 				return characterFadeoutTime;
 			case "Player Event Settings/Position Smoothing":
@@ -110,14 +122,14 @@ public partial class EventTrigger : StageTriggerModule
 			case "Trigger Settings/Is One Shot":
 				isOneShot = (bool)value;
 				break;
+			case "Trigger Settings/Animation Blending":
+				animationBlending = (float)value;
+				break;
 			case "Trigger Settings/Player Stand-in":
 				playerStandin = (NodePath)value;
 				NotifyPropertyListChanged();
 				break;
 
-			case "Player Event Settings/Animation":
-				characterAnimation = (string)value;
-				break;
 			case "Player Event Settings/Animation Fadeout Time":
 				characterFadeoutTime = (float)value;
 				break;
@@ -152,9 +164,10 @@ public partial class EventTrigger : StageTriggerModule
 		if (Engine.IsEditorHint()) return;
 
 		if (autoRespawn)
-			StageSettings.instance.ConnectRespawnSignal(this);
-
+			StageSettings.Instance.Respawned += Respawn;
 		Respawn();
+
+		PlayerStandin = GetNodeOrNull<Node3D>(playerStandin);
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -162,10 +175,10 @@ public partial class EventTrigger : StageTriggerModule
 		if (Engine.IsEditorHint())
 			return;
 
-		if (playerStandin == null || Character.ExternalController != this)
+		if (playerStandin == null || Player.ExternalController != this)
 			return;
 
-		Character.UpdateExternalControl();
+		Player.CallDeferred(PlayerController.MethodName.UpdateExternalControl, true);
 	}
 
 	public override void Respawn()
@@ -191,6 +204,9 @@ public partial class EventTrigger : StageTriggerModule
 				break;
 		}
 
+		if (string.IsNullOrEmpty(animator.CurrentAnimation))
+			return;
+
 		animator.Seek(respawnToEnd ? animator.CurrentAnimationLength : 0, true, true);
 		if (!respawnToEnd)
 			animator.Stop(true);
@@ -200,7 +216,8 @@ public partial class EventTrigger : StageTriggerModule
 	{
 		if (isOneShot && isActivated) return;
 
-		PlayAnimation(EventAnimation);
+		Visible = true;
+		PlayAnimation(EventAnimation, activationSpeedScale);
 		EmitSignal(SignalName.Activated);
 	}
 
@@ -208,11 +225,14 @@ public partial class EventTrigger : StageTriggerModule
 	{
 		if (isOneShot && !isActivated) return;
 
-		PlayAnimation(DeactivateEventAnimation);
+		PlayAnimation(DeactivateEventAnimation, deactivationSpeedScale);
 		EmitSignal(SignalName.Deactivated);
 	}
 
-	private void PlayAnimation(StringName animation)
+	public void PauseEvent() => animator.Pause();
+	public void ResumeEvent() => animator.Play();
+
+	private void PlayAnimation(StringName animation, float speedScale = 1f)
 	{
 		isActivated = true; // Update activation flag
 
@@ -226,59 +246,53 @@ public partial class EventTrigger : StageTriggerModule
 		if (!blendAnimations)
 			animator.Seek(0, true); // Reset animation if necessary
 
-		animator.Play(animation, blendAnimations ? .1f : 0.0f);
+		animator.Play(animation, blendAnimations ? animationBlending : 0.0f, speedScale);
 		animator.Advance(0);
 
-		if (playerStandin?.IsEmpty != false) // Not a player event -- return early
+		if (playerStandin?.IsEmpty != false && string.IsNullOrEmpty(EventID)) // Not a player event -- return early
 			return;
 
-		BGMPlayer.SetStageMusicVolume(-80f); // Mute BGM
+		Player.StartEvent(this);
+	}
 
-		Character.StartExternal(this, GetNode<Node3D>(playerStandin), characterPositionSmoothing);
-		Character.Animator.ExternalAngle = 0; // Reset external angle
-		Character.Animator.SnapRotation(Character.Animator.ExternalAngle);
-		Character.Skills.DisableBreakSkills();
-		if (!characterAnimation.IsEmpty)
-			Character.Animator.PlayOneshotAnimation(characterAnimation);
+	public void SkipEvent()
+	{
+		Player.Camera.StartCrossfade();
+		StageSettings.Instance.AddTime(AnimationTimeLeft);
+
+		animator.Advance(AnimationTimeLeft);
+		EmitSignal(SignalName.EventSkipped);
 	}
 
 	#region Event Animation
 	private NodePath playerStandin;
+	public Node3D PlayerStandin { get; private set; }
 	/// <summary> Lockout to apply when character finishes event. </summary>
 	private LockoutResource characterExitLockout;
+	public LockoutResource CharacterExitLockout => characterExitLockout;
 	private float characterPositionSmoothing = .2f;
+	public float CharacterPositionSmoothing => characterPositionSmoothing;
 
 	/// <summary> How much to fadeout character's animation by. </summary>
 	private float characterFadeoutTime;
-	/// <summary> Which event animation to play on the character. </summary>
-	private StringName characterAnimation;
+	public float CharacterFadeoutTime => characterFadeoutTime;
 
 	/// <summary> Evaluate exit move speed as a ratio instead of a default value. </summary>
 	private bool normalizeExitMoveSpeed = true;
+	public bool NormalizeExitMoveSpeed => normalizeExitMoveSpeed;
 	private float characterExitMoveSpeed;
+	public float CharacterExitMoveSpeed => characterExitMoveSpeed;
 	private float characterExitVerticalSpeed;
+	public float CharacterExitVerticalSpeed => characterExitVerticalSpeed;
 
-	/// <summary> Resets the character's movement state. </summary>
-	public void FinishEvent()
+	private void ScreenShake(float magnitude)
 	{
-		BGMPlayer.SetStageMusicVolume(0f); // Unmute BGM
-
-		Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(Character.ExternalParent.Forward());
-		Character.Animator.SnapRotation(Character.MovementAngle);
-		Character.Animator.CancelOneshot(characterFadeoutTime);
-		Character.Animator.DisabledSpeedSmoothing = true;
-		Character.Animator.ResetState(0);
-		Character.ResetMovementState();
-
-		if (characterExitLockout != null)
-			Character.AddLockoutData(characterExitLockout);
-
-		Character.MoveSpeed = normalizeExitMoveSpeed ? Character.GroundSettings.Speed * characterExitMoveSpeed : characterExitMoveSpeed;
-		Character.VerticalSpeed = characterExitVerticalSpeed;
-
-		// Re-enable break skills
-		Character.Skills.IsSpeedBreakEnabled = Character.Skills.IsTimeBreakEnabled = true;
-		EmitSignal(SignalName.EventFinished);
+		Player.Camera.StartCameraShake(new()
+		{
+			magnitude = Vector3.One.RemoveDepth() * magnitude
+		});
 	}
+
+	public void FinishEvent() => EmitSignal(SignalName.EventFinished);
 	#endregion
 }

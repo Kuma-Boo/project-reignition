@@ -1,0 +1,21 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://ve75fqv3qek3"]
+
+[ext_resource type="Shader" uid="uid://c3bm50tda03vo" path="res://area/5 pirate storm/data/shader/RainProcessMaterial.gdshader" id="1_edq36"]
+
+[sub_resource type="Curve" id="Curve_vuloh"]
+_data = [Vector2(0, 0), 0.0, 24.63, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_mpyko"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_vuloh")
+
+[resource]
+shader = ExtResource("1_edq36")
+shader_parameter/direction = Vector3(0.2, -1, -0.2)
+shader_parameter/water_speed = 180.0
+shader_parameter/emission_offset = 40.0
+shader_parameter/emission_shape_offset = Vector3(0, 0, -15)
+shader_parameter/emission_box_extents = Vector3(15, 0, 30)
+shader_parameter/alpha_curve = SubResource("CurveTexture_mpyko")

@@ -8,10 +8,10 @@ namespace Project.Gameplay;
 /// </summary>
 public partial class HeadsUpDisplay : Control
 {
-	public static HeadsUpDisplay instance;
-	private StageSettings Stage => StageSettings.instance;
+	public static HeadsUpDisplay Instance;
+	private StageSettings Stage => StageSettings.Instance;
 
-	public override void _EnterTree() => instance = this;
+	public override void _EnterTree() => Instance = this;
 
 	public override void _Ready()
 	{
@@ -20,6 +20,7 @@ public partial class HeadsUpDisplay : Control
 		InitializeObjectives();
 		InitializeSoulGauge();
 		InitializeRace();
+		InitializePrompts();
 
 		if (Stage != null) // Decouple from level settings
 		{
@@ -65,7 +66,8 @@ public partial class HeadsUpDisplay : Control
 		// Initialize ring counter
 		if (Stage != null)
 		{
-			maxRingLabel.Visible = ringDividerSprite.Visible = Stage.Data.MissionType == LevelDataResource.MissionTypes.Ring; // Show/Hide max ring count
+			maxRingLabel.Visible = ringDividerSprite.Visible = Stage.Data.MissionType == LevelDataResource.MissionTypes.Ring &&
+				Stage.Data.MissionObjectiveCount != 0; // Show/Hide max ring count
 			if (maxRingLabel.Visible)
 				maxRingLabel.Text = Stage.Data.MissionObjectiveCount.ToString(RingLabelFormat);
 
@@ -76,9 +78,9 @@ public partial class HeadsUpDisplay : Control
 
 	private void UpdateRingCount(int amount, bool disableAnimations)
 	{
-		if (!disableAnimations && amount != 0) // Play animation
+		if (!disableAnimations) // Play animation
 		{
-			if (amount > 0)
+			if (amount >= 0)
 			{
 				ringAnimator.Set(RingGainParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			}
@@ -97,11 +99,13 @@ public partial class HeadsUpDisplay : Control
 	#region Time and Score
 	[ExportGroup("Time & Score")]
 	[Export]
-	private Node2D rankPreviewerRoot;
+	private Control rankPreviewerRoot;
 	[Export]
-	private Sprite2D mainRank;
+	private TextureRect mainRank;
 	[Export]
-	private Sprite2D transitionRank;
+	private TextureRect transitionRank;
+	[Export]
+	private Texture2D[] rankTextures;
 	[Export]
 	private AudioStreamPlayer rankUpSFX;
 	[Export]
@@ -114,16 +118,16 @@ public partial class HeadsUpDisplay : Control
 		if (!rankPreviewerRoot.Visible)
 			return;
 
-		CurrentRank = Stage.CalculateRank();
-		mainRank.RegionRect = new(mainRank.RegionRect.Position + (Vector2.Down * CurrentRank * 60), mainRank.RegionRect.Size);
+		CurrentRank = Mathf.Max(0, Stage.CalculateRank(true));
+		mainRank.Texture = rankTextures[CurrentRank];
 	}
 
-	private void UpdateRank()
+	private void UpdateRankPreviewer()
 	{
 		if (!rankPreviewerRoot.Visible)
 			return;
 
-		int rank = Stage.CalculateRank();
+		int rank = Stage.CalculateRank(true);
 		if (CurrentRank == rank || rankTween?.IsRunning() == true)
 			return;
 
@@ -136,45 +140,45 @@ public partial class HeadsUpDisplay : Control
 		CurrentRank = rank;
 	}
 
-	private void StartRankDownTween(int amount)
+	private void StartRankDownTween(int rankDirection)
 	{
 		rankDownSFX.Play();
-		transitionRank.RegionRect = mainRank.RegionRect;
+		transitionRank.Texture = mainRank.Texture;
+		transitionRank.Position = Vector2.Zero;
 		transitionRank.SelfModulate = Colors.White;
-		mainRank.RegionRect = new(mainRank.RegionRect.Position + (Vector2.Down * amount * 60), mainRank.RegionRect.Size);
+		mainRank.Texture = rankTextures[CurrentRank + rankDirection];
 		rankTween = CreateTween().SetParallel();
 		rankTween.TweenProperty(transitionRank, "self_modulate", Colors.Transparent, .5f);
 		rankTween.TweenProperty(transitionRank, "position", Vector2.Down * 128, .5f).SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.In);
 		rankTween.TweenCallback(new Callable(this, MethodName.CompleteRankDownTween)).SetDelay(.5f);
 	}
 
-	private void StartRankUpTween(int amount)
+	private void StartRankUpTween(int rankDirection)
 	{
 		rankUpSFX.Play();
-		transitionRank.RegionRect = new(mainRank.RegionRect.Position + (Vector2.Down * amount * 60), mainRank.RegionRect.Size);
-		transitionRank.Position += Vector2.Up * 256;
+		transitionRank.Texture = rankTextures[CurrentRank + rankDirection];
+		transitionRank.Position = Vector2.Up * 256;
 		rankTween = CreateTween().SetParallel();
 		rankTween.TweenProperty(transitionRank, "self_modulate", Colors.White, .5f);
 		rankTween.TweenProperty(transitionRank, "position", Vector2.Zero, .5f).SetTrans(Tween.TransitionType.Bounce);
 		rankTween.TweenCallback(new Callable(this, MethodName.CompleteRankUpTween)).SetDelay(.5f);
 	}
 
-
 	private void CompleteRankUpTween()
 	{
-		mainRank.RegionRect = transitionRank.RegionRect;
+		mainRank.Texture = transitionRank.Texture;
 		transitionRank.SelfModulate = Colors.Transparent;
 		rankTween.Kill();
 	}
 
-
 	private void CompleteRankDownTween() => rankTween.Kill();
-
 
 	[Export]
 	private Label time;
 	private void UpdateTime()
 	{
+		UpdateRankPreviewer(); // Update rank every frame
+
 		if (Stage.Data.MissionTimeLimit != 0) // Time limit; Draw time counting DOWN
 		{
 			float timeLeft = Mathf.Clamp(Stage.Data.MissionTimeLimit - Stage.CurrentTime, 0, Stage.Data.MissionTimeLimit);
@@ -183,7 +187,6 @@ public partial class HeadsUpDisplay : Control
 		}
 
 		time.Text = Stage.DisplayTime;
-		UpdateRank(); // Update rank every frame
 	}
 
 	[Export]
@@ -202,6 +205,8 @@ public partial class HeadsUpDisplay : Control
 	[Export]
 	private Label objectiveMaxValue;
 	[Export]
+	private AnimationPlayer[] objectiveAnimators;
+	[Export]
 	private AudioStreamPlayer objectiveSfx;
 	private void InitializeObjectives()
 	{
@@ -212,14 +217,27 @@ public partial class HeadsUpDisplay : Control
 			Stage.Data.MissionType == LevelDataResource.MissionTypes.Chain);
 		if (!objectiveRoot.Visible) return; // Don't do anything when objective counter isn't visible
 
-		// TODO Implement proper objective sprites
-		objectiveSprite.Visible = false;
+		if (Stage.Data.MissionObjectiveCount != 0)
+		{
+			if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Enemy)
+				PlayObjectiveAnimation("enemy");
+			else if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Chain)
+				PlayObjectiveAnimation("ring_chain");
+		}
+
 		objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
 		objectiveMaxValue.Text = Stage.Data.MissionObjectiveCount.ToString("00");
 
 		Stage.Connect(nameof(StageSettings.SignalName.ObjectiveChanged), new Callable(this, nameof(UpdateObjective)));
 		Stage.Connect(nameof(StageSettings.SignalName.ObjectiveReset), new Callable(this, nameof(ResetObjective)));
 	}
+
+	public void PlayObjectiveAnimation(StringName animation, int index = 0)
+	{
+		objectiveAnimators[index].Seek(0f);
+		objectiveAnimators[index].Play(animation);
+	}
+
 
 	private void UpdateObjective()
 	{
@@ -333,6 +351,50 @@ public partial class HeadsUpDisplay : Control
 		racePlayer.ZIndex = playerRatio >= uhuRatio ? 1 : 0;
 	}
 
+	#endregion
+
+	#region Prompts
+	[Signal]
+	public delegate void InputPromptsChangedEventHandler();
+
+	[ExportGroup("Prompts")]
+	[Export]
+	private Interface.NavigationButton[] buttons;
+	[Export]
+	private AnimationPlayer promptAnimator;
+	private void InitializePrompts()
+	{
+		for (int i = 0; i < buttons.Length; i++)
+			Connect(SignalName.InputPromptsChanged, new(buttons[i], Interface.NavigationButton.MethodName.Redraw));
+	}
+
+	private bool isPromptsVisible;
+	public void SetPrompt(StringName label, int index) => buttons[index].ActionKey = label;
+	public void ShowPrompts()
+	{
+		if (!SaveManager.Config.useActionPrompts)
+			return;
+
+		promptAnimator.Play(promptAnimator.CurrentAnimation == "show" ? "change" : "show");
+		isPromptsVisible = true;
+	}
+
+	public void HidePrompts()
+	{
+		if (!isPromptsVisible)
+			return;
+
+		isPromptsVisible = false;
+		promptAnimator.Play("hide");
+	}
+
+	private void RedrawPrompts()
+	{
+		for (int i = 0; i < buttons.Length; i++)
+			buttons[i].Visible = buttons[i].ActionKey?.IsEmpty == false;
+
+		EmitSignal(SignalName.InputPromptsChanged);
+	}
 	#endregion
 
 	public void OnLevelCompleted() => SetVisibility(false); // Ignore parameter

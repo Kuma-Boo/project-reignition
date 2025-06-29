@@ -1,6 +1,6 @@
 [gd_scene load_steps=22 format=3 uid="uid://dq0qb4pp6hxn5"]
 
-[ext_resource type="Script" path="res://sound/script/SoundManager.cs" id="1"]
+[ext_resource type="Script" uid="uid://dixdxh65q3jtl" path="res://sound/script/SoundManager.cs" id="1"]
 [ext_resource type="AudioStream" uid="uid://doa0ttronifl3" path="res://sound/sfx/objects/pearl01.wav" id="2_kteke"]
 [ext_resource type="AudioStream" uid="uid://k1w83sxq8efi" path="res://sound/sfx/objects/pearl02.wav" id="3_rc3xm"]
 [ext_resource type="AudioStream" uid="uid://dhv6gnwwebpgr" path="res://sound/sfx/objects/pearl rich 1.wav" id="4_10jp1"]
@@ -157,15 +157,20 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_jo3jq"]
 _data = {
-"RESET": SubResource("1"),
-"activate": SubResource("2"),
-"activate-text": SubResource("3"),
-"deactivate": SubResource("4"),
-"deactivate-text": SubResource("5")
+&"RESET": SubResource("1"),
+&"activate": SubResource("2"),
+&"activate-text": SubResource("3"),
+&"deactivate": SubResource("4"),
+&"deactivate-text": SubResource("5")
 }
 
-[node name="SoundManager" type="CanvasLayer" node_paths=PackedStringArray("subtitleLabel", "subtitleLetterbox", "subtitleAnimator", "dialogChannel", "delayTimer", "ringSFX", "richRingSFX", "pearlSFX", "richPearlSFX", "pearlTimer")]
-layer = 12
+[node name="SoundManager" type="Control" node_paths=PackedStringArray("subtitleLabel", "subtitleLetterbox", "subtitleAnimator", "dialogChannel", "delayTimer", "ringSFX", "richRingSFX", "pearlSFX", "richPearlSFX", "pearlTimer")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1")
 subtitleLabel = NodePath("SubtitleLetterbox/Subtitles")
 subtitleLetterbox = NodePath("SubtitleLetterbox")
@@ -180,6 +185,7 @@ pearlTimer = NodePath("PearlSFX/PearlSFXResetTimer")
 
 [node name="SubtitleLetterbox" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)
+layout_mode = 0
 offset_left = 128.0
 offset_top = 896.0
 offset_right = 1792.0
@@ -192,9 +198,9 @@ offset_right = 1664.0
 offset_bottom = 136.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 12
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/shadow_outline_size = 5
-theme_override_constants/line_spacing = 12
 theme_override_fonts/font = ExtResource("12_76i4n")
 theme_override_font_sizes/font_size = 48
 text = "Texst"
@@ -203,7 +209,7 @@ vertical_alignment = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="SubtitleLetterbox"]
 libraries = {
-"": SubResource("AnimationLibrary_jo3jq")
+&"": SubResource("AnimationLibrary_jo3jq")
 }
 
 [node name="DialogChannel" type="AudioStreamPlayer" parent="."]
@@ -213,20 +219,22 @@ bus = &"VOICE"
 one_shot = true
 
 [node name="RingSFX" type="AudioStreamPlayer" parent="."]
+process_mode = 1
 stream = ExtResource("13_ipbx2")
-volume_db = -6.0
+volume_db = -3.0
 max_polyphony = 8
 bus = &"GAME SFX"
 
 [node name="RichRingSFX" type="AudioStreamPlayer" parent="."]
+process_mode = 1
 stream = ExtResource("4_76siq")
-volume_db = 3.0
 max_polyphony = 8
 bus = &"GAME SFX"
 
 [node name="RichPearlSFX" type="AudioStreamPlayer" parent="."]
+process_mode = 1
 stream = ExtResource("4_10jp1")
-volume_db = -6.0
+volume_db = -9.0
 pitch_scale = 1.4
 max_polyphony = 2
 bus = &"GAME SFX"
@@ -234,43 +242,63 @@ bus = &"GAME SFX"
 [node name="PearlSFX" type="Node" parent="."]
 
 [node name="PearlSFX1" type="AudioStreamPlayer" parent="PearlSFX"]
+process_mode = 1
 stream = ExtResource("2_kteke")
+volume_db = -3.0
 bus = &"GAME SFX"
 
 [node name="PearlSFX2" type="AudioStreamPlayer" parent="PearlSFX"]
+process_mode = 1
 stream = ExtResource("3_rc3xm")
+volume_db = -3.0
 bus = &"GAME SFX"
 
 [node name="PearlSFX3" type="AudioStreamPlayer" parent="PearlSFX"]
+process_mode = 1
 stream = ExtResource("4_gnpys")
+volume_db = -3.0
 bus = &"GAME SFX"
 
 [node name="PearlSFX4" type="AudioStreamPlayer" parent="PearlSFX"]
+process_mode = 1
 stream = ExtResource("5_x8oys")
+volume_db = -3.0
 bus = &"GAME SFX"
 
 [node name="PearlSFX5" type="AudioStreamPlayer" parent="PearlSFX"]
+process_mode = 1
 stream = ExtResource("6_f3e8k")
+volume_db = -3.0
 bus = &"GAME SFX"
 
 [node name="PearlSFX6" type="AudioStreamPlayer" parent="PearlSFX"]
+process_mode = 1
 stream = ExtResource("7_0bdmb")
+volume_db = -3.0
 bus = &"GAME SFX"
 
 [node name="PearlSFX7" type="AudioStreamPlayer" parent="PearlSFX"]
+process_mode = 1
 stream = ExtResource("8_r5bqr")
+volume_db = -3.0
 bus = &"GAME SFX"
 
 [node name="PearlSFX8" type="AudioStreamPlayer" parent="PearlSFX"]
+process_mode = 1
 stream = ExtResource("8_2mghr")
+volume_db = -3.0
 bus = &"GAME SFX"
 
 [node name="PearlSFX9" type="AudioStreamPlayer" parent="PearlSFX"]
+process_mode = 1
 stream = ExtResource("10_15le3")
+volume_db = -3.0
 bus = &"GAME SFX"
 
 [node name="PearlSFX10" type="AudioStreamPlayer" parent="PearlSFX"]
+process_mode = 1
 stream = ExtResource("11_0wvqg")
+volume_db = -3.0
 max_polyphony = 4
 bus = &"GAME SFX"
 

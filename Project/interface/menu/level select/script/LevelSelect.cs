@@ -1,34 +1,30 @@
 using Godot;
+using Project.Core;
 using System.Collections.Generic;
 
 namespace Project.Interface.Menus;
 
 public partial class LevelSelect : Menu
 {
-	[Export]
-	private string areaKey;
-	[Export]
-	private Description description;
-	[Export]
-	private ReadyMenu readyMenu;
+	[Export] private SaveManager.WorldEnum world;
+	[Export] private string areaKey;
+	[Export] private Description description;
+	[Export] private ReadyMenu readyMenu;
 
-	[Export]
-	private Control cursor;
+	[Export] private Control cursor;
 	private int cursorPosition;
 	private Vector2 cursorWidthVelocity;
 
-	[Export]
-	private Control options;
+	[Export] private Control options;
 	private Vector2 optionVelocity;
-	[Export]
-	private Sprite2D scrollbar;
+	[Export] private Sprite2D scrollbar;
 
 	public bool ContainsNewStage { get; private set; }
 
 	private int scrollAmount;
 	private float scrollRatio;
 	private Vector2 scrollVelocity;
-	private const float SCROLL_SMOOTHING = .05f;
+	private const float ScrollSmoothing = .05f;
 	private readonly List<LevelOption> levelOptions = [];
 
 	public bool HasNewLevel()
@@ -47,6 +43,27 @@ public partial class LevelSelect : Menu
 		return false;
 	}
 
+	public bool IsWorldUnlocked()
+	{
+		if (DebugManager.Instance.UseDemoSave)
+		{
+			/// For the demo, assume the world is unlocked if a stage is available to play.
+			foreach (Node node in options.GetChildren())
+			{
+				if (node is LevelOption levelOption)
+				{
+					if (levelOption.IsUnlocked)
+						return true;
+				}
+			}
+
+			return false;
+		}
+
+		// For the full release--use the actual save data
+		return SaveManager.ActiveGameData.IsWorldUnlocked(world);
+	}
+
 	protected override void SetUp()
 	{
 		foreach (Node node in options.GetChildren())
@@ -61,7 +78,7 @@ public partial class LevelSelect : Menu
 	protected override void ProcessMenu()
 	{
 		base.ProcessMenu();
-		UpdateListPosition(SCROLL_SMOOTHING);
+		UpdateListPosition(ScrollSmoothing);
 	}
 
 	public override void ShowMenu()
@@ -75,13 +92,32 @@ public partial class LevelSelect : Menu
 
 		for (int i = 0; i < levelOptions.Count; i++)
 			levelOptions[i].ShowOption();
+
+		if (SaveManager.Config.useRetailMenuMusic) // Using retail menu music
+			return;
+
+		bool canPlayBgm = IsWorldUnlocked() && bgm?.Stream != null;
+		if (canPlayBgm && bgm?.Playing == false)
+		{
+			// Change to world specific level select music
+			parentMenu.FadeBgm(.5f);
+			FadeBgm(.5f, true, .5f); // Fade in bgm
+			CurrentBgmTime = parentMenu.CurrentBgmTime; // Sync bgm
+
+			readyMenu.SetBgmPlayer(bgm); // Update readymenu's bgm player
+		}
+		else if (!canPlayBgm)
+		{
+			// As a fallback, play the parent menu's bgm (won't do anything if parent bgm is already playing)
+			parentMenu.PlayBgm();
+		}
 	}
+
 	public override void HideMenu()
 	{
 		for (int i = 0; i < levelOptions.Count; i++)
 			levelOptions[i].HideOption();
 	}
-
 
 	protected override void Confirm()
 	{
@@ -91,6 +127,18 @@ public partial class LevelSelect : Menu
 		base.Confirm();
 	}
 
+	protected override void Cancel()
+	{
+		// Revert bgm music
+		if (bgm?.Playing == true)
+		{
+			FadeBgm(.5f); // Fade out bgm
+			parentMenu.FadeBgm(.5f, true, .5f); // Fade in parent bgm
+			parentMenu.CurrentBgmTime = CurrentBgmTime; // Sync bgm
+		}
+
+		base.Cancel();
+	}
 
 	/// <summary> Shows the "Are you ready?" screen. </summary>
 	public override void OpenSubmenu()
@@ -104,9 +152,9 @@ public partial class LevelSelect : Menu
 
 	protected override void UpdateSelection()
 	{
-		if (Mathf.IsZeroApprox(Input.GetAxis("move_up", "move_down"))) return;
+		if (Mathf.IsZeroApprox(Input.GetAxis("ui_up", "ui_down"))) return;
 
-		VerticalSelection = WrapSelection(VerticalSelection + Mathf.Sign(Input.GetAxis("move_up", "move_down")), levelOptions.Count);
+		VerticalSelection = WrapSelection(VerticalSelection + Mathf.Sign(Input.GetAxis("ui_up", "ui_down")), levelOptions.Count);
 		menuMemory[MemoryKeys.LevelSelect] = VerticalSelection;
 		animator.Play("select");
 		animator.Seek(0, true);
@@ -118,7 +166,7 @@ public partial class LevelSelect : Menu
 	private void UpdateDescription()
 	{
 		description.ShowDescription();
-		description.SetText(levelOptions[VerticalSelection].GetDescription());
+		description.Text = levelOptions[VerticalSelection].GetDescription();
 	}
 
 	private void RecalculateListPosition()
@@ -148,9 +196,10 @@ public partial class LevelSelect : Menu
 
 	private void UpdateListPosition(float smoothing)
 	{
-		cursor.Position = cursor.Position.SmoothDamp(new(cursor.Position.X, 220 + (96 * cursorPosition)), ref cursorWidthVelocity, smoothing);
+		float targetScrollPosition = 360 * scrollRatio;
+		scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * targetScrollPosition, ref scrollVelocity, smoothing);
 
+		cursor.Position = cursor.Position.SmoothDamp(new(cursor.Position.X, 220 + (96 * cursorPosition)), ref cursorWidthVelocity, smoothing);
 		options.Position = options.Position.SmoothDamp(Vector2.Up * ((96 * scrollAmount) - 32), ref optionVelocity, smoothing);
-		scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * ((160 * scrollRatio) - 80), ref scrollVelocity, smoothing);
 	}
 }

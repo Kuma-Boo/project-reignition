@@ -47,10 +47,8 @@ public partial class FlowerMajin : Enemy
 	}
 
 	/// <summary> Allow the player to force the flower majin out of it's passive state? </summary>
-	[Export]
-	private bool weakDefense;
-	[Export]
-	private PackedScene seed;
+	[Export] private bool weakDefense;
+	[Export] private PackedScene seed;
 	private int seedIndex;
 	private const int MaxSeedCount = 3;
 	/// <summary> Only three seeds are ever spawned at a time. </summary>
@@ -136,28 +134,28 @@ public partial class FlowerMajin : Enemy
 	{
 		if (!IsOpen)
 		{
-			if (Character.Lockon.IsHomingAttacking)
+			if (Player.IsHomingAttacking)
 			{
-				Character.Lockon.StartBounce(false);
+				Player.StartBounce(false);
 				UpdateLockon();
 
-				if (weakDefense)
+				if (weakDefense || Player.AttackState == PlayerController.AttackStates.Strong)
 					StartStaggerState();
 				else
 					EmitSignal(SignalName.Deflect);
 			}
 
-			if (Character.AttackState == CharacterController.AttackStates.None ||
-				(Character.AttackState == CharacterController.AttackStates.Weak && !weakDefense))
+			if (Player.AttackState == PlayerController.AttackStates.None ||
+				(Player.AttackState == PlayerController.AttackStates.Weak && !weakDefense))
 			{
 				return;
 			}
 		}
 
-		if (!IsStaggered && Character.AttackState == CharacterController.AttackStates.None)
+		if (!IsStaggered && Player.AttackState == PlayerController.AttackStates.None)
 		{
 			StartStaggerState();
-			Character.Lockon.StartBounce(false);
+			Player.StartBounce(false);
 			UpdateLockon();
 			return;
 		}
@@ -175,8 +173,9 @@ public partial class FlowerMajin : Enemy
 
 	protected override void Defeat()
 	{
-		AnimationTree.Set(DefeatTransition, EnabledConstant);
 		SetHitboxStatus(false);
+		AnimationTree.Set(DefeatTransition, EnabledConstant);
+
 		base.Defeat();
 	}
 
@@ -187,20 +186,11 @@ public partial class FlowerMajin : Enemy
 
 		if (IsInRange || currentState != State.Passive)
 		{
-			UpdateRotation();
+			if (IsOpen) // Rotate towards the player
+				ProcessRotation(Player.GlobalPosition);
+
 			UpdateState();
 		}
-	}
-
-	private void UpdateRotation()
-	{
-		if (!IsOpen) return;
-
-		// TODO Update movement
-
-		// Rotate towards the player
-		TrackPlayer();
-		Root.Rotation = new Vector3(Root.Rotation.X, currentRotation, Root.Rotation.Z); // Apply rotation
 	}
 
 	private void UpdateState()
@@ -275,7 +265,7 @@ public partial class FlowerMajin : Enemy
 		if (!seedPool[seedIndex].IsInsideTree()) // Add seeds to the scene tree
 			GetTree().Root.AddChild(seedPool[seedIndex]);
 
-		Vector3 targetOffset = Hurtbox.GlobalPosition - Character.CenterPosition;
+		Vector3 targetOffset = Hurtbox.GlobalPosition - Player.CenterPosition;
 		targetOffset -= Vector3.Up * .4f; // Aim slightly higher so seeds avoid hitting the ground
 		seedPool[seedIndex].LookAtFromPosition(Hurtbox.GlobalPosition, Hurtbox.GlobalPosition + targetOffset, Vector3.Up);
 		seedPool[seedIndex].Spawn();
@@ -295,7 +285,7 @@ public partial class FlowerMajin : Enemy
 
 	private void StartStaggerState()
 	{
-		if (Character.AttackState == CharacterController.AttackStates.None)
+		if (Player.AttackState == PlayerController.AttackStates.None)
 			AnimationTree.Set(HitTransition, BoopState);
 		else
 			AnimationTree.Set(HitTransition, StaggerState);

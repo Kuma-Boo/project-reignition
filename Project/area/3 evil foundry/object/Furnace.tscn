@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://det4s2txdn4ka"]
 
-[ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="1_3w3ry"]
+[ext_resource type="Script" uid="uid://pnh70abopq8e" path="res://object/stage/common/resource/script/Hazard.cs" id="1_3w3ry"]
 [ext_resource type="PackedScene" uid="uid://0lojqk5idu4m" path="res://area/3 evil foundry/object/model/Furnace.gltf" id="1_qorb6"]
 [ext_resource type="AudioStream" uid="uid://be4mr6810ig1k" path="res://sound/sfx/stage/evil foundry/furnace.wav" id="3_3ct6i"]
 
@@ -32,12 +32,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 shape = SubResource("CylinderShape3D_26sm0")
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="."]
+process_mode = 1
 stream = ExtResource("3_3ct6i")
-attenuation_model = 3
-max_db = 0.0
+max_db = -3.0
 autoplay = true
-max_distance = 30.0
+max_distance = 50.0
 bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
 
 [connection signal="area_entered" from="." to="." method="OnEntered"]
 [connection signal="area_exited" from="." to="." method="OnExited"]

@@ -38,6 +38,8 @@ public partial class Enemy : Node3D
 	/// <summary> Does this enemy damage the player when it is touched? </summary>
 	[Export]
 	protected bool damagePlayer;
+	[Export]
+	protected float bounceScale = 1f;
 
 	[ExportGroup("Components")]
 	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
@@ -57,7 +59,7 @@ public partial class Enemy : Node3D
 	protected CollisionShape3D RangeCollider { get; private set; }
 	[Export(PropertyHint.NodePathValidTypes, "AnimationTree")]
 	private NodePath animationTree;
-	/// <summary> Animation tree for enemy character. </summary>
+	/// <summary> Animation tree for enemy Player. </summary>
 	protected AnimationTree AnimationTree { get; private set; }
 	[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")]
 	private NodePath animationPlayer;
@@ -65,28 +67,36 @@ public partial class Enemy : Node3D
 	protected AnimationPlayer AnimationPlayer { get; private set; }
 
 	protected SpawnData SpawnData { get; private set; }
-	protected CharacterController Character => CharacterController.instance;
+	protected PlayerController Player => StageSettings.Player;
 
-	protected bool IsDefeated => currentHealth <= 0;
+	public bool IsDefeated => currentHealth <= 0;
 	protected bool IsSpeedbreakDefeat { get; private set; }
+	protected bool IsLightSpeedAttackValid { get; private set; }
 
 	public override void _Ready() => SetUp();
 	protected virtual void SetUp()
 	{
-		// Get components
+		GetComponents();
+
+		SpawnData = new(GetParent(), Transform);
+		StageSettings.Instance.Respawned += Respawn;
+		StageSettings.Instance.Unloaded += Unload;
+		StageSettings.Instance.RespawnedEnemies += RespawnRange;
+
+		InitializeRangeCollider();
+
+		CallDeferred(MethodName.Respawn);
+		CallDeferred(MethodName.RespawnRange);
+	}
+
+	protected void GetComponents()
+	{
 		Root = GetNodeOrNull<Node3D>(root);
 		Hurtbox = GetNodeOrNull<Area3D>(hurtbox);
 		Collider = GetNodeOrNull<CollisionShape3D>(collider);
 		RangeCollider = GetNodeOrNull<CollisionShape3D>(rangeCollider);
 		AnimationTree = GetNodeOrNull<AnimationTree>(animationTree);
 		AnimationPlayer = GetNodeOrNull<AnimationPlayer>(animationPlayer);
-
-		SpawnData = new(GetParent(), Transform);
-		StageSettings.instance.ConnectRespawnSignal(this);
-		StageSettings.instance.ConnectUnloadSignal(this);
-		Respawn();
-
-		InitializeRangeCollider();
 	}
 
 	private void InitializeRangeCollider()
@@ -128,7 +138,7 @@ public partial class Enemy : Node3D
 
 		if (IsInteracting)
 			UpdateInteraction();
-		else if (IsInteractionProcessed && Character.AttackState == CharacterController.AttackStates.None)
+		else if (IsInteractionProcessed && Player.AttackState == PlayerController.AttackStates.None)
 			ResetInteractionProcessed();
 	}
 
@@ -136,6 +146,8 @@ public partial class Enemy : Node3D
 	public virtual void Respawn()
 	{
 		IsActive = false; // Start disabled
+		IsInteracting = false; // Disable interactions
+		IsLightSpeedAttackValid = false;
 
 		SpawnData.Respawn(this);
 		currentHealth = maxHealth;
@@ -145,13 +157,16 @@ public partial class Enemy : Node3D
 		SetHitboxStatus(true);
 		ResetInteractionProcessed();
 
+		EmitSignal(SignalName.Respawned);
+	}
+
+	private void RespawnRange()
+	{
 		if (SpawnMode == SpawnModes.Always ||
-			(SpawnMode == SpawnModes.Range && IsInRange)) // No activation trigger. Activate immediately.
+			(SpawnMode == SpawnModes.Range && IsInRange))
 		{
 			EnterRange();
 		}
-
-		EmitSignal(SignalName.Respawned);
 	}
 
 	/// <summary> Overload function to allow using Godot's built-in Area3D.OnEntered(Area3D area) signal. </summary>
@@ -161,7 +176,8 @@ public partial class Enemy : Node3D
 	public virtual void Despawn()
 	{
 		if (!IsInsideTree()) return;
-		GetParent().CallDeferred("remove_child", this);
+		Visible = false;
+		ProcessMode = ProcessModeEnum.Disabled;
 		EmitSignal(SignalName.Despawned);
 	}
 
@@ -170,11 +186,8 @@ public partial class Enemy : Node3D
 
 	public virtual void UpdateLockon()
 	{
-		if (Character.Lockon.IsHomingAttacking)
-			Character.Lockon.CallDeferred(CharacterLockon.MethodName.StopHomingAttack);
-
 		if (!IsDefeated)
-			Character.Camera.SetDeferred("LockonTarget", Hurtbox);
+			Player.Camera.SetLockonTarget(Hurtbox);
 	}
 
 	public virtual void TakeDamage(int amount = -1)
@@ -185,7 +198,7 @@ public partial class Enemy : Node3D
 			currentHealth -= amount;
 
 		if (IsDefeated)
-			Defeat();
+			CallDeferred(MethodName.Defeat);
 	}
 
 	/// <summary>
@@ -194,14 +207,17 @@ public partial class Enemy : Node3D
 	protected virtual void Defeat()
 	{
 		currentHealth = 0;
-		Character.Camera.LockonTarget = null;
-		Character.Lockon.CallDeferred(CharacterLockon.MethodName.ResetLockonTarget);
+		Player.Camera.SetLockonTarget(null);
+		Player.Lockon.ResetLockonTarget();
+
+		CheckLightSpeedAttack();
+
 		BonusManager.instance.AddEnemyChain();
-		StageSettings.instance.UpdateScore(50 * maxHealth, StageSettings.MathModeEnum.Add); // Add points based on max health
+		StageSettings.Instance.UpdateScore(50 * maxHealth, StageSettings.MathModeEnum.Add); // Add points based on max health
 
 		// Automatically increment objective count
-		if (StageSettings.instance.Data.MissionType == LevelDataResource.MissionTypes.Enemy)
-			StageSettings.instance.CallDeferred(StageSettings.MethodName.IncrementObjective);
+		if (StageSettings.Instance.Data.MissionType == LevelDataResource.MissionTypes.Enemy)
+			StageSettings.Instance.CallDeferred(StageSettings.MethodName.IncrementObjective);
 
 		EmitSignal(SignalName.Defeated);
 	}
@@ -209,7 +225,7 @@ public partial class Enemy : Node3D
 	/// <summary>
 	/// Spawns pearls. Call this somewhere in Defeat(), or from an AnimationPlayer.
 	/// </summary>
-	protected virtual void SpawnPearls() => Runtime.Instance.SpawnPearls(pearlAmount, GlobalPosition, new Vector2(2, 1.5f), 1.5f);
+	protected virtual void SpawnPearls() => Runtime.Instance.SpawnPearls(pearlAmount, Hurtbox != null ? Hurtbox.GlobalPosition : GlobalPosition, new Vector2(2, 1.5f), 1.5f);
 
 	protected bool IsHitboxEnabled { get; private set; }
 	protected void SetHitboxStatus(bool isEnabled, bool hurtboxOnly = false)
@@ -240,43 +256,66 @@ public partial class Enemy : Node3D
 	protected bool IsInteracting { get; set; }
 	/// <summary> True when a particular interaction has already been processed. </summary>
 	protected bool IsInteractionProcessed { get; private set; }
+	/// <summary> How long it's been since the enemy last interacted with the player. </summary>
+	private float timeSinceLastInteraction;
+	/// <summary> How long an interaction can last before being "reset". </summary>
+	private readonly float MaxInteractionLength = .2f;
 	protected virtual void UpdateInteraction()
 	{
 		if (IsInteractionProcessed)
-			return;
-
-		if ((Character.Lockon.IsBounceLockoutActive &&
-			Character.ActionState == CharacterController.ActionStates.Normal) ||
-			!IsHitboxEnabled)
 		{
-			return;
+			timeSinceLastInteraction += PhysicsManager.physicsDelta;
+			if (timeSinceLastInteraction < MaxInteractionLength)
+				return;
+
+			ResetInteractionProcessed();
 		}
 
-		switch (Character.AttackState)
+		if (!IsHitboxEnabled)
+			return;
+
+		switch (Player.AttackState)
 		{
-			case CharacterController.AttackStates.OneShot:
-				IsSpeedbreakDefeat = Character.Skills.IsSpeedBreakActive;
+			case PlayerController.AttackStates.OneShot:
+				IsSpeedbreakDefeat = Player.Skills.IsSpeedBreakActive;
 				if (IsSpeedbreakDefeat) // Shake the camera
-					Character.Camera.StartMediumCameraShake();
+					Player.Camera.StartMediumCameraShake();
 
 				Defeat();
 				break;
-			case CharacterController.AttackStates.Weak:
+			case PlayerController.AttackStates.Weak:
 				TakeDamage(1);
 				break;
-			case CharacterController.AttackStates.Strong:
+			case PlayerController.AttackStates.Strong:
 				TakeDamage(2);
 				break;
 		}
 
-		if (Character.ActionState == CharacterController.ActionStates.JumpDash)
+		if (Player.IsSpinJump)
+		{
+			Player.StartSpinJumpBounce();
+		}
+		else if (Player.IsJumpDashOrHomingAttack)
 		{
 			UpdateLockon();
-			Character.Lockon.StartBounce(IsDefeated);
+			IsLightSpeedAttackValid = IsDefeated && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LightSpeedAttack) &&
+				(Input.IsActionPressed("button_attack") || (Input.IsActionPressed("button_jump") && !SaveManager.Config.useStompJumpButtonMode));
+
+			// If the player is trying to perform a light speed attack, only do the bounce AFTER checking the next target
+			if (!IsLightSpeedAttackValid)
+				Player.StartBounce(IsDefeated, bounceScale, Hurtbox);
 		}
-		else if (damagePlayer && Character.AttackState == CharacterController.AttackStates.None)
+		else if ((Player.IsBouncing && !Player.IsBounceInteruptable) ||
+			(Player.IsJumping && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ArmorJump)))
 		{
-			Character.StartKnockback();
+			// Bouncing off an enemy
+			UpdateLockon();
+			Player.StartBounce(IsDefeated, bounceScale, Hurtbox);
+		}
+		else if (damagePlayer && Player.AttackState == PlayerController.AttackStates.None &&
+			(!Player.IsBouncing || Player.IsBounceInteruptable))
+		{
+			Player.StartKnockback();
 		}
 
 		SetInteractionProcessed();
@@ -285,30 +324,47 @@ public partial class Enemy : Node3D
 	protected void SetInteractionProcessed()
 	{
 		IsInteractionProcessed = true;
-		// Connect a signal
-		if (!Character.IsConnected(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
-			Character.Connect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot + (uint)ConnectFlags.Deferred);
+		timeSinceLastInteraction = 0;
+		Player.AttackStateChanged += ResetInteractionProcessed;
 	}
+
 	protected void ResetInteractionProcessed()
 	{
 		IsInteractionProcessed = false;
+		timeSinceLastInteraction = 0;
+		Player.AttackStateChanged -= ResetInteractionProcessed;
+	}
 
-		if (Character.IsConnected(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
-			Character.Disconnect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed));
+	protected void CheckLightSpeedAttack()
+	{
+		if (!IsLightSpeedAttackValid)
+			return;
+
+		if (Player.AttemptLightSpeedAttack()) // Transition to Light Speed Attack
+			return;
+
+		// Otherwise, do the delayed bounce
+		Player.StartBounce(IsDefeated, bounceScale, Hurtbox);
 	}
 
 	/// <summary> Current local rotation of the enemy. </summary>
 	protected float currentRotation;
 	protected float rotationVelocity;
-	protected const float TrackingSmoothing = .2f;
+	protected const float TrackingSmoothing = 10f;
 	/// <summary>
 	/// Updates current rotation to track the player.
 	/// </summary>
-	protected void TrackPlayer()
+	protected void ProcessRotation(Vector3 targetPosition, float smoothing = TrackingSmoothing)
 	{
-		float targetRotation = ExtensionMethods.Flatten(GlobalPosition - Character.GlobalPosition).AngleTo(Vector2.Up);
+		float targetRotation = ExtensionMethods.Flatten(GlobalPosition - targetPosition).AngleTo(Vector2.Up);
 		targetRotation -= GlobalRotation.Y; // Rotation is in local space
-		currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, targetRotation, ref rotationVelocity, TrackingSmoothing);
+		ProcessRotation(targetRotation, smoothing);
+	}
+
+	protected void ProcessRotation(float targetRotation, float smoothing = TrackingSmoothing)
+	{
+		currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, targetRotation, ref rotationVelocity, smoothing * PhysicsManager.physicsDelta);
+		ApplyRotation();
 	}
 
 	protected virtual void StartUhuBounce() { }
@@ -323,6 +379,9 @@ public partial class Enemy : Node3D
 
 		if (!a.IsInGroup("player")) return;
 		IsInteracting = true;
+
+		if (Player.IsSpinJump && Player.VerticalSpeed <= 0)
+			ResetInteractionProcessed();
 	}
 
 	public void OnExited(Area3D a)
@@ -338,6 +397,8 @@ public partial class Enemy : Node3D
 		EnterRange();
 		IsInRange = true;
 	}
+
+	protected virtual void ApplyRotation() => Root.Rotation = Vector3.Up * currentRotation;
 
 	public void OnRangeExited(Area3D a)
 	{

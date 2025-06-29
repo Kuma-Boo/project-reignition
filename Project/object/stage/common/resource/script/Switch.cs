@@ -33,12 +33,13 @@ public partial class Switch : Area3D
 
 	public override void _Ready()
 	{
-		StageSettings.instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.Respawned += Respawn;
 		Respawn();
 	}
 
 	public void Respawn()
 	{
+		timer.Stop();
 		wasToggled = false;
 		isActive = startActive;
 		animator.Play(isActive ? "activate-loop" : "RESET");
@@ -48,10 +49,23 @@ public partial class Switch : Area3D
 
 	private void OnEntered(Area3D a)
 	{
-		if (!a.IsInGroup("player detection")) return;
+		if (!a.IsInGroup("player detection"))
+			return;
 
 		Activate();
+		timer.Paused = true;
 	}
+
+	private void OnExited(Area3D a)
+	{
+		if (!a.IsInGroup("player detection"))
+			return;
+
+		timer.Paused = false;
+		if (!Mathf.IsZeroApprox(activationLength)) // Reset timer
+			timer.WaitTime = activationLength;
+	}
+
 	private void Activate()
 	{
 		// Check if switch was already toggled.

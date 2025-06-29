@@ -7,14 +7,15 @@ namespace Project.Core;
 public partial class SoundManager : Node
 {
 	public static SoundManager instance;
-	public static int LanguageIndex => SaveManager.UseEnglishVoices ? 0 : 1;
+	public static int LanguageIndex => (int)SaveManager.Config.voiceLanguage;
 
 	public enum AudioBuses
 	{
 		Master,
 		Bgm,
-		Sfx,
 		Voice,
+		SfxAdjustment,
+		Sfx,
 		GameSfx,
 		BreakSfx,
 		Count
@@ -31,6 +32,11 @@ public partial class SoundManager : Node
 		TransitionManager.instance.Connect(TransitionManager.SignalName.SceneChanged, new(this, MethodName.CancelDialog));
 	}
 
+	public override void _PhysicsProcess(double _)
+	{
+		UpdateSfxGroups();
+	}
+
 	#region Audio Bus
 	/// <summary> Sets whether the break channel is muted or not (for muting environments) </summary>
 	public static bool IsBreakChannelMuted
@@ -45,12 +51,13 @@ public partial class SoundManager : Node
 			isMuted = true;
 
 		AudioServer.SetBusMute((int)bus, isMuted); // Mute or unmute
-		AudioServer.SetBusVolumeDb((int)bus, Mathf.LinearToDb(volumePercentage * .01f));
+		AudioServer.SetBusVolumeLinear((int)bus, volumePercentage * .01f);
 	}
 	#endregion
 
 	#region Dialog
-	public bool IsDialogActive { get; private set; }
+	public bool IsSubtitlesActive { get; private set; }
+	public bool IsDialogActive => IsSubtitlesActive && (isSonicSpeaking || isShahraSpeaking);
 	[Export]
 	private Label subtitleLabel;
 	[Export]
@@ -65,24 +72,43 @@ public partial class SoundManager : Node
 	private DialogTrigger currentDialog;
 	public void PlayDialog(DialogTrigger dialog)
 	{
-		if (dialog.DialogCount == 0 || DebugManager.Instance.DisableDialog) return; // No dialog
+		if (dialog.DialogCount == 0 || DebugManager.Instance.DisableDialog || SaveManager.Config.isDialogDisabled) return; // No dialog
 
-		IsDialogActive = true;
+		IsSubtitlesActive = true;
 		subtitleLabel.Text = string.Empty;
 
 		// Show background during cutscenes, disable during in-game dialog
 		subtitleLetterbox.SelfModulate = dialog.IsCutscene ? Colors.White : Colors.Transparent;
 
 		currentDialog = dialog;
-		currentDialogIndex = 0;
-		if (currentDialog.randomize)
-			currentDialogIndex = Runtime.randomNumberGenerator.RandiRange(0, currentDialog.DialogCount - 1);
+		currentDialogIndex = GetInitialDialogIndex();
 		UpdateDialog(true);
+	}
+
+	private int GetInitialDialogIndex()
+	{
+		if (!currentDialog.randomize)
+			return 0;
+
+		if (IsSonicSfxVoiceChannelActive)
+		{
+			// Prioritize others (i.e. Shahra) when Sonic is already speaking from a sound effect
+			for (int i = 0; i < currentDialog.DialogCount; i++)
+			{
+				if (currentDialog.textKeys[i].EndsWith(SonicVoiceSuffix))
+					continue;
+
+				return i;
+			}
+		}
+
+		// Pure random value, used when Sonic isn't already speaking or only Sonic's dialog is available
+		return Runtime.randomNumberGenerator.RandiRange(0, currentDialog.DialogCount - 1);
 	}
 
 	public void CancelDialog()
 	{
-		if (!IsDialogActive) return;
+		if (!IsSubtitlesActive) return;
 
 		delayTimer.Stop();
 		dialogChannel.Stop();
@@ -102,7 +128,8 @@ public partial class SoundManager : Node
 		currentDialogIndex++;
 		if (!currentDialog.randomize && currentDialogIndex < currentDialog.DialogCount) // Start next dialog line
 		{
-			subtitleAnimator.Play("deactivate-text");
+			if (!SaveManager.Config.isSubtitleDisabled)
+				subtitleAnimator.Play("deactivate-text");
 			CallDeferred(MethodName.UpdateDialog, true);
 		}
 		else
@@ -113,8 +140,9 @@ public partial class SoundManager : Node
 
 	private void DisableDialog()
 	{
-		IsDialogActive = false;
-		subtitleAnimator.Play("deactivate");
+		IsSubtitlesActive = false;
+		if (!SaveManager.Config.isSubtitleDisabled)
+			subtitleAnimator.Play("deactivate");
 
 		UpdateSonicDialog();
 		UpdateShahraDialog();
@@ -146,15 +174,13 @@ public partial class SoundManager : Node
 			return;
 		}
 
-		if (currentDialogIndex == 0)
-			subtitleAnimator.Play("activate");
-		else
-			subtitleAnimator.Play("activate-text");
+		if (!SaveManager.Config.isSubtitleDisabled)
+			subtitleAnimator.Play(currentDialogIndex == 0 ? "activate" : "activate-text");
 
 		string key = currentDialog.textKeys[currentDialogIndex];
 		AudioStream targetStream = null;
-		if (IsInstanceValid(Gameplay.StageSettings.instance))
-			targetStream = Gameplay.StageSettings.instance.dialogLibrary.GetStream(key, LanguageIndex);
+		if (IsInstanceValid(Gameplay.StageSettings.Instance))
+			targetStream = Gameplay.StageSettings.Instance.dialogLibrary.GetStream(key, LanguageIndex);
 
 		if (targetStream != null) // Using audio
 		{
@@ -190,16 +216,17 @@ public partial class SoundManager : Node
 		delayTimer.Start(currentDialog.displayLength[currentDialogIndex]);
 	}
 
+	public bool IsSonicSfxVoiceChannelActive { get; set; }
 	private bool isSonicSpeaking;
 	[Signal]
 	public delegate void SonicSpeechStartEventHandler();
 	[Signal]
 	public delegate void SonicSpeechEndEventHandler();
-	private const string SONIC_VOICE_SUFFIX = "so"; // Any dialog key that ends with this will be Sonic speaking
+	private const string SonicVoiceSuffix = "so"; // Any dialog key that ends with this will be Sonic speaking
 	private void UpdateSonicDialog() // Checks whether Sonic is the one speaking, and mutes his gameplay audio.
 	{
 		bool wasSonicSpeaking = isSonicSpeaking;
-		isSonicSpeaking = IsDialogActive && currentDialog.textKeys[currentDialogIndex].EndsWith(SONIC_VOICE_SUFFIX);
+		isSonicSpeaking = IsSubtitlesActive && currentDialog.textKeys[currentDialogIndex].EndsWith(SonicVoiceSuffix);
 		if (isSonicSpeaking && !wasSonicSpeaking)
 			EmitSignal(SignalName.SonicSpeechStart);
 		else if (!isSonicSpeaking && wasSonicSpeaking)
@@ -211,11 +238,11 @@ public partial class SoundManager : Node
 	public delegate void ShahraSpeechStartEventHandler();
 	[Signal]
 	public delegate void ShahraSpeechEndEventHandler();
-	private const string SHAHRA_VOICE_SUFFIX = "sh"; // Any dialog key that ends with this will be Shahra speaking
+	private const string ShahraVoiceSuffix = "sh"; // Any dialog key that ends with this will be Shahra speaking
 	private void UpdateShahraDialog() // Checks whether Shahra is the one speaking, and mutes his gameplay audio.
 	{
 		bool wasShahraSpeaking = isShahraSpeaking;
-		isShahraSpeaking = IsDialogActive && currentDialog.textKeys[currentDialogIndex].EndsWith(SHAHRA_VOICE_SUFFIX);
+		isShahraSpeaking = IsSubtitlesActive && currentDialog.textKeys[currentDialogIndex].EndsWith(ShahraVoiceSuffix);
 		if (isShahraSpeaking && !wasShahraSpeaking)
 			EmitSignal(SignalName.ShahraSpeechStart);
 		else if (!isShahraSpeaking && wasShahraSpeaking)
@@ -324,28 +351,58 @@ public partial class SoundManager : Node
 			pearlSFXList[i].Stop();
 	}
 
+	private float sfxGroupTimer;
 	private readonly Dictionary<StringName, int> sfxGroups = [];
-	public float AddGroupSFX(StringName key)
+	private readonly Dictionary<StringName, float> sfxGroupTimers = [];
+	/// <summary> Minimum amount of time that must pass before a sfx group can play again. </summary>
+	private readonly float groupSfxSpacing = 0.2f;
+
+	private void UpdateSfxGroups()
 	{
-		if (!sfxGroups.ContainsKey(key))
-			sfxGroups.Add(key, 0);
-		sfxGroups[key]++;
-		return CalculateGroupSFXVolumeDB(key);
+		if (sfxGroups.Count != 0)
+			sfxGroupTimer += PhysicsManager.physicsDelta;
 	}
 
-	public float RemoveGroupSFX(StringName key)
+	public bool CanPlaySfxInGroup(StringName key, int maxPolyphony)
+	{
+		if (!sfxGroups.ContainsKey(key))
+			return true;
+
+		if (Mathf.Abs(sfxGroupTimer - sfxGroupTimers[key]) > groupSfxSpacing)
+			return true;
+
+		return sfxGroups[key] < maxPolyphony;
+	}
+
+	public float AddGroupSfx(StringName key)
+	{
+		if (!sfxGroups.ContainsKey(key))
+		{
+			sfxGroups.Add(key, 0);
+			sfxGroupTimers.Add(key, sfxGroupTimer);
+		}
+
+		sfxGroups[key]++;
+		sfxGroupTimers[key] = sfxGroupTimer;
+		return CalculateGroupSfxVolumeDb(key);
+	}
+
+	public float RemoveGroupSfx(StringName key)
 	{
 		if (sfxGroups.TryGetValue(key, out int value))
 		{
 			sfxGroups[key] = --value;
 			if (value < 0)
+			{
 				sfxGroups.Remove(key);
+				sfxGroupTimers.Remove(key);
+			}
 		}
 
-		return CalculateGroupSFXVolumeDB(key);
+		return CalculateGroupSfxVolumeDb(key);
 	}
 
-	public float CalculateGroupSFXVolumeDB(StringName key)
+	public float CalculateGroupSfxVolumeDb(StringName key)
 	{
 		if (sfxGroups.TryGetValue(key, out int value)) // Calculate target db volume
 			return Mathf.LinearToDb(1.0f / value);

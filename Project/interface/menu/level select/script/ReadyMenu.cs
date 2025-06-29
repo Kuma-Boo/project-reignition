@@ -11,7 +11,6 @@ public partial class ReadyMenu : Menu
 	private Label missionLabel;
 	[Export]
 	private Description description;
-	private bool fromSkillMenu;
 	public void ShowDescription() => description.ShowDescription();
 	public void HideDescription() => description.HideDescription();
 
@@ -20,7 +19,7 @@ public partial class ReadyMenu : Menu
 
 	public override void ShowMenu()
 	{
-		if (fromSkillMenu)
+		if (menuMemory[MemoryKeys.SkillMenuOpen] == 1)
 		{
 			EnableProcessing();
 			animator.Play("show-from-skill");
@@ -30,17 +29,18 @@ public partial class ReadyMenu : Menu
 			base.ShowMenu();
 		}
 
-		fromSkillMenu = false;
+		menuMemory[MemoryKeys.SkillMenuOpen] = 0;
 		HorizontalSelection = 0; // Default to yes
 	}
 
 	protected override void ProcessMenu()
 	{
-		if (Input.IsActionJustPressed("button_pause"))
+		if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept"))
 		{
-			fromSkillMenu = true;
+			menuMemory[MemoryKeys.SkillMenuOpen] = 1;
 			HideDescription();
 			OpenSubmenu();
+			animator.Play("open-skill-menu");
 			return;
 		}
 
@@ -51,7 +51,7 @@ public partial class ReadyMenu : Menu
 	{
 		if (HorizontalSelection == 0) // Load level
 		{
-			StopBGM(); // Stop bgm
+			StopBgm(); // Stop bgm
 			menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.LevelSelect;
 			base.Confirm();
 		}
@@ -77,7 +77,7 @@ public partial class ReadyMenu : Menu
 
 	protected override void UpdateSelection()
 	{
-		int sign = Mathf.Sign(Input.GetAxis("move_left", "move_right"));
+		int sign = Mathf.Sign(Input.GetAxis("ui_left", "ui_right"));
 		if (sign == 0) return;
 
 		if (sign > 0 && HorizontalSelection == 0)
@@ -92,18 +92,23 @@ public partial class ReadyMenu : Menu
 		}
 	}
 
+	public void SetBgmPlayer(BGMPlayer audioStreamPlayer) => bgm = audioStreamPlayer;
+
 	/// <summary> Path to the level scene. </summary>
 	public string LevelPath { get; set; }
 	/// <summary> Loads the level. </summary>
 	public void LoadLevel()
 	{
 		TransitionManager.QueueSceneChange(LevelPath);
-		TransitionManager.StartTransition(new TransitionData()
+		TransitionManager.StartTransition(new()
 		{
 			inSpeed = 1f,
 			color = Colors.Black,
 			loadAsynchronously = true,
-			disableAutoTransition = true
+			disableAutoTransition = true,
+			showMissionDescription = true
 		});
+		TransitionManager.instance.SetMissionDescriptionText(missionLabel.Text, description.Text);
+		TransitionManager.instance.UpdateLoadingText("load_level");
 	}
 }

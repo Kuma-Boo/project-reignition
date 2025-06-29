@@ -4,14 +4,29 @@ using Project.Core;
 
 namespace Project.Interface;
 
-public partial class NavigationButton : Node
+public partial class NavigationButton : Control
 {
-	[Export]
-	private string actionKey;
-	[Export]
-	private string inputKey;
+	[Export] public StringName ActionKey { get; set; }
+	[Export] private StringName inputKey;
+	[Export] private StringName fallbackKey; // Mostly used for menu navigation
+
+	/// <summary> Set this to something if you only want to display a particular keyboard input. </summary>
+	[Export] private Key overrideKey = Key.None;
+
 	[Export(PropertyHint.ArrayType, "ControllerSpriteResource")]
 	private ControllerSpriteResource[] controllerResources;
+
+	[Export(PropertyHint.ArrayType, "ControllerSpriteResource")]
+	private ControllerSpriteResource[] controllerResourcesStyle2;
+
+	private ControllerSpriteResource GetActiveSpriteResource(int controllerIndex)
+	{
+		if (SaveManager.Config.controllerStyle == SaveManager.ControllerStyle.Style1)
+			return controllerResources[controllerIndex];
+
+		return controllerResourcesStyle2[controllerIndex];
+	}
+
 
 	[ExportCategory("Components")]
 	[Export(PropertyHint.NodePathValidTypes, "Label")]
@@ -24,29 +39,46 @@ public partial class NavigationButton : Node
 	private NodePath actionLabel;
 	private Label ActionLabel { get; set; }
 
+	[Export] private LabelSettings[] keyboardLabelSettings;
+
 	public override void _Ready()
 	{
 		ButtonLabel = GetNodeOrNull<Label>(buttonLabel);
 		ButtonTextureRect = GetNodeOrNull<TextureRect>(buttonTextureRect);
 		ActionLabel = GetNodeOrNull<Label>(actionLabel);
 
-		Runtime.Instance.Connect(Runtime.SignalName.ControllerChanged, new(this, MethodName.Redraw));
-		SaveManager.Instance.Connect(SaveManager.SignalName.ConfigApplied, new(this, MethodName.Redraw));
+		Runtime.Instance.ControllerChanged += Redraw;
+		SaveManager.Instance.ConfigApplied += Redraw;
 		Redraw();
 	}
 
 	public override void _ExitTree()
 	{
-		Runtime.Instance.Disconnect(Runtime.SignalName.ControllerChanged, new(this, MethodName.Redraw));
-		SaveManager.Instance.Disconnect(SaveManager.SignalName.ConfigApplied, new(this, MethodName.Redraw));
+		Runtime.Instance.ControllerChanged -= Redraw;
+		SaveManager.Instance.ConfigApplied -= Redraw;
 	}
 
 	private void Redraw(int _) => Redraw();
 	private void Redraw()
 	{
-		ActionLabel.Text = Tr(actionKey);
+		ActionLabel.Text = Tr(ActionKey);
 
-		Array<InputEvent> eventList = InputMap.ActionGetEvents(inputKey);
+		if (overrideKey != Key.None)
+		{
+			RedrawAsKeyboard(overrideKey);
+			return;
+		}
+
+		if (RedrawAs(inputKey))
+			return;
+
+		// Failed to draw -- try again with fallback
+		RedrawAs(fallbackKey);
+	}
+
+	private bool RedrawAs(StringName eventKey)
+	{
+		Array<InputEvent> eventList = InputMap.ActionGetEvents(eventKey);
 
 		InputEventKey key = null;
 		InputEventJoypadButton button = null;
@@ -64,28 +96,38 @@ public partial class NavigationButton : Node
 
 		if (Runtime.Instance.IsUsingController)
 		{
-			if (button == null && motion == null) return;
-			ButtonLabel.Visible = false;
+			if (button == null && motion == null)
+				return false;
 
+			ButtonLabel.Visible = false;
 			int controllerIndex = (int)Runtime.Instance.GetActiveControllerType() - 1;
 
 			if (button != null) // Prioritize using buttons over axis icons
 			{
-				ButtonTextureRect.Texture = controllerResources[controllerIndex].buttons[(int)button.ButtonIndex];
-				return;
+				ButtonTextureRect.Texture = GetActiveSpriteResource(controllerIndex).buttons[(int)button.ButtonIndex];
+				return true;
 			}
 
 			int axis = Runtime.Instance.ControllerAxisToIndex(motion);
-			ButtonTextureRect.Texture = controllerResources[controllerIndex].axis[axis];
-			return;
+			ButtonTextureRect.Texture = GetActiveSpriteResource(controllerIndex).axis[axis];
+			return true;
 		}
 
-		// Keyboard
-		if (key == null) return;
+		if (key == null)
+			return false;
 
+		RedrawAsKeyboard(key.Keycode);
+		return true;
+	}
+
+	private void RedrawAsKeyboard(Key keycode)
+	{
+		ButtonLabel.LabelSettings = keyboardLabelSettings[(int)SaveManager.Config.controllerStyle];
 		ButtonLabel.Visible = true;
-		ButtonLabel.Text = Runtime.Instance.GetKeyLabel(key.Keycode);
-		int keySpriteIndex = ButtonLabel.Text.Length <= 3 ? 0 : 1;
-		ButtonTextureRect.Texture = controllerResources[^1].buttons[keySpriteIndex]; // Last controller resource should be the keyboard sprites
+		ButtonLabel.Text = Runtime.Instance.GetKeyLabel(keycode);
+		bool isShortButton = ButtonLabel.Text.Length <= 1;
+		int keySpriteIndex = isShortButton ? 0 : 1;
+		ButtonLabel.Scale = isShortButton ? Vector2.One * 1.5f : Vector2.One;
+		ButtonTextureRect.Texture = GetActiveSpriteResource(controllerResources.Length - 1).buttons[keySpriteIndex]; // Last controller resource should be the keyboard sprites
 	}
 }

@@ -1,14 +1,15 @@
 [gd_scene load_steps=16 format=3 uid="uid://c1tblqj07pix8"]
 
 [ext_resource type="PackedScene" uid="uid://c36jr32mbyabe" path="res://area/1 sand oasis/act 1/environment/model/07Beach.gltf" id="1_vix83"]
-[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_ia5ps"]
-[ext_resource type="Material" uid="uid://b1t6e7krslb4o" path="res://area/1 sand oasis/data/particle/material/Sandfall Process Material.tres" id="3_ku1u8"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="2_ia5ps"]
+[ext_resource type="Material" uid="uid://b1t6e7krslb4o" path="res://effect/particle/material/environment/Sandfall Process Material.tres" id="3_ku1u8"]
 [ext_resource type="Material" uid="uid://cctsu5ymh5eev" path="res://effect/particle/material/environment/Common Splatter.tres" id="3_y3sbj"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_bpbt4"]
-[ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://area/1 sand oasis/data/particle/material/Sand Dust.tres" id="5_a5l47"]
-[ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="5_mhkj6"]
+[ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://effect/particle/material/environment/Sand Dust.tres" id="5_a5l47"]
+[ext_resource type="Script" uid="uid://coiui4qvdxbqe" path="res://object/trigger/modules/EventTrigger.cs" id="5_mhkj6"]
 [ext_resource type="AudioStream" uid="uid://du2kydx1f2bpe" path="res://sound/sfx/stage/sand oasis/area beach wave.ogg" id="7_b5jkw"]
-[ext_resource type="Material" uid="uid://dsmjgqhn6fdq5" path="res://area/1 sand oasis/data/particle/material/Sandfall Dust Process Material.tres" id="7_votfv"]
+[ext_resource type="Material" uid="uid://dsmjgqhn6fdq5" path="res://effect/particle/material/environment/Sandfall Dust Process Material.tres" id="7_votfv"]
+
 
 [sub_resource type="QuadMesh" id="QuadMesh_0xdqd"]
 material = ExtResource("3_y3sbj")
@@ -76,8 +77,8 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_mv8n0"]
 _data = {
-"RESET": SubResource("Animation_ney3h"),
-"event": SubResource("Animation_5w46k")
+&"RESET": SubResource("Animation_ney3h"),
+&"event": SubResource("Animation_5w46k")
 }
 
 [node name="07Beach" instance=ExtResource("1_vix83")]
@@ -110,7 +111,7 @@ layers = 2
 cast_shadow = 0
 
 [node name="stg010_o08_Mesh_0011" parent="." index="7"]
-layers = 10
+layers = 2
 cast_shadow = 0
 
 [node name="stg010_o09_Mesh_0001" parent="." index="8"]
@@ -201,7 +202,7 @@ layers = 2
 cast_shadow = 0
 
 [node name="stg010_w08_Mesh_0000" parent="." index="31"]
-layers = 2
+layers = 10
 cast_shadow = 0
 
 [node name="stg010_wave_Mesh_0000" parent="." index="32"]
@@ -269,7 +270,6 @@ layers = 32
 cast_shadow = 0
 amount = 32
 lifetime = 0.4
-preprocess = 1.0
 fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(-2, -4, -2, 4, 8, 4)
@@ -283,7 +283,6 @@ layers = 32
 cast_shadow = 0
 amount = 32
 lifetime = 0.4
-preprocess = 1.0
 fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(-2, -4, -2, 4, 8, 4)
@@ -300,7 +299,6 @@ layers = 32
 cast_shadow = 0
 amount = 32
 lifetime = 0.4
-preprocess = 1.0
 fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(-2, -4, -2, 4, 8, 4)
@@ -314,7 +312,6 @@ layers = 32
 cast_shadow = 0
 amount = 32
 lifetime = 0.4
-preprocess = 1.0
 fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(-2, -4, -2, 4, 8, 4)
@@ -331,7 +328,6 @@ layers = 32
 cast_shadow = 0
 amount = 32
 lifetime = 0.4
-preprocess = 1.0
 fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(-2, -4, -2, 4, 8, 4)
@@ -345,7 +341,6 @@ layers = 32
 cast_shadow = 0
 amount = 32
 lifetime = 0.4
-preprocess = 1.0
 fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(-2, -4, -2, 4, 8, 4)
@@ -359,10 +354,11 @@ transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 
 
 [node name="Event" type="Node3D" parent="SandfallParticles/CornerParticleGroup1" index="0" node_paths=PackedStringArray("animator")]
 script = ExtResource("5_mhkj6")
+animator = NodePath("../AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = false
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("../AnimationPlayer")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SandfallParticles/CornerParticleGroup1" index="1"]
 shape = SubResource("SphereShape3D_giegx")
@@ -397,7 +393,7 @@ draw_pass_1 = SubResource("QuadMesh_0xdqd")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="SandfallParticles/CornerParticleGroup1" index="4"]
 libraries = {
-"": SubResource("AnimationLibrary_mv8n0")
+&"": SubResource("AnimationLibrary_mv8n0")
 }
 
 [node name="CornerParticleGroup2" parent="SandfallParticles" index="4" instance=ExtResource("4_bpbt4")]
@@ -406,10 +402,11 @@ transform = Transform3D(-0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, -0.34202, 
 
 [node name="Event" type="Node3D" parent="SandfallParticles/CornerParticleGroup2" index="0" node_paths=PackedStringArray("animator")]
 script = ExtResource("5_mhkj6")
+animator = NodePath("../AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = false
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("../AnimationPlayer")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SandfallParticles/CornerParticleGroup2" index="1"]
 shape = SubResource("SphereShape3D_giegx")
@@ -444,7 +441,7 @@ draw_pass_1 = SubResource("QuadMesh_0xdqd")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="SandfallParticles/CornerParticleGroup2" index="4"]
 libraries = {
-"": SubResource("AnimationLibrary_mv8n0")
+&"": SubResource("AnimationLibrary_mv8n0")
 }
 
 [node name="CornerParticleGroup3" parent="SandfallParticles" index="5" instance=ExtResource("4_bpbt4")]
@@ -453,10 +450,11 @@ transform = Transform3D(-0.819152, 0, 0.573577, 0, 1, 0, -0.573577, 0, -0.819152
 
 [node name="Event" type="Node3D" parent="SandfallParticles/CornerParticleGroup3" index="0" node_paths=PackedStringArray("animator")]
 script = ExtResource("5_mhkj6")
+animator = NodePath("../AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = false
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("../AnimationPlayer")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SandfallParticles/CornerParticleGroup3" index="1"]
 shape = SubResource("SphereShape3D_giegx")
@@ -491,7 +489,7 @@ draw_pass_1 = SubResource("QuadMesh_0xdqd")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="SandfallParticles/CornerParticleGroup3" index="4"]
 libraries = {
-"": SubResource("AnimationLibrary_mv8n0")
+&"": SubResource("AnimationLibrary_mv8n0")
 }
 
 [node name="CornerParticleGroup4" parent="SandfallParticles" index="6" instance=ExtResource("4_bpbt4")]
@@ -500,10 +498,11 @@ transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 
 
 [node name="Event" type="Node3D" parent="SandfallParticles/CornerParticleGroup4" index="0" node_paths=PackedStringArray("animator")]
 script = ExtResource("5_mhkj6")
+animator = NodePath("../AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = false
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("../AnimationPlayer")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SandfallParticles/CornerParticleGroup4" index="1"]
 shape = SubResource("SphereShape3D_giegx")
@@ -538,7 +537,7 @@ draw_pass_1 = SubResource("QuadMesh_0xdqd")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="SandfallParticles/CornerParticleGroup4" index="4"]
 libraries = {
-"": SubResource("AnimationLibrary_mv8n0")
+&"": SubResource("AnimationLibrary_mv8n0")
 }
 
 [node name="CornerParticleGroup5" parent="SandfallParticles" index="7" instance=ExtResource("4_bpbt4")]
@@ -547,10 +546,11 @@ transform = Transform3D(0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, 0.34202, 7.
 
 [node name="Event" type="Node3D" parent="SandfallParticles/CornerParticleGroup5" index="0" node_paths=PackedStringArray("animator")]
 script = ExtResource("5_mhkj6")
+animator = NodePath("../AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = false
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("../AnimationPlayer")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SandfallParticles/CornerParticleGroup5" index="1"]
 shape = SubResource("SphereShape3D_giegx")
@@ -585,7 +585,7 @@ draw_pass_1 = SubResource("QuadMesh_0xdqd")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="SandfallParticles/CornerParticleGroup5" index="4"]
 libraries = {
-"": SubResource("AnimationLibrary_mv8n0")
+&"": SubResource("AnimationLibrary_mv8n0")
 }
 
 [node name="CornerParticleGroup6" parent="SandfallParticles" index="8" instance=ExtResource("4_bpbt4")]
@@ -594,10 +594,11 @@ transform = Transform3D(-0.819152, 0, 0.573577, 0, 1, 0, -0.573577, 0, -0.819152
 
 [node name="Event" type="Node3D" parent="SandfallParticles/CornerParticleGroup6" index="0" node_paths=PackedStringArray("animator")]
 script = ExtResource("5_mhkj6")
+animator = NodePath("../AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = false
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("../AnimationPlayer")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SandfallParticles/CornerParticleGroup6" index="1"]
 shape = SubResource("SphereShape3D_giegx")
@@ -632,7 +633,7 @@ draw_pass_1 = SubResource("QuadMesh_0xdqd")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="SandfallParticles/CornerParticleGroup6" index="4"]
 libraries = {
-"": SubResource("AnimationLibrary_mv8n0")
+&"": SubResource("AnimationLibrary_mv8n0")
 }
 
 [node name="BeachSFX" type="AudioStreamPlayer3D" parent="." index="48"]
@@ -644,22 +645,3 @@ autoplay = true
 max_distance = 150.0
 bus = &"BREAK"
 attenuation_filter_cutoff_hz = 20500.0
-
-[node name="EnvironmentProbe" type="ReflectionProbe" parent="." index="49"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -414.267, -16.8903, -609.791)
-layers = 2
-size = Vector3(640.173, 238.557, 653.244)
-cull_mask = 6
-ambient_mode = 2
-ambient_color = Color(0.4416, 0.45024, 0.96, 1)
-ambient_color_energy = 0.7
-
-[node name="ObjectProbe" type="ReflectionProbe" parent="." index="50"]
-transform = Transform3D(0.611996, 0, -0.790861, 0, 1, 0, 0.790861, 0, 0.611996, -521.933, -29.0908, -617.177)
-layers = 64
-size = Vector3(687.52, 214.156, 359.725)
-interior = true
-cull_mask = 64
-ambient_mode = 2
-ambient_color = Color(0.4416, 0.45024, 0.96, 1)
-ambient_color_energy = 0.2

@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://bqc2nbpbb4uhy"]
 
-[ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_cgond"]
+[ext_resource type="Script" uid="uid://bj7jhdknn12cl" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_cgond"]
 [ext_resource type="PackedScene" uid="uid://dxaspwoin7dr1" path="res://area/1 sand oasis/object/model/Jar.gltf" id="2_p3050"]
 [ext_resource type="PackedScene" uid="uid://cnhlb8lynqjln" path="res://area/1 sand oasis/object/model/JarPieces.gltf" id="3_h8t4o"]
 [ext_resource type="AudioStream" uid="uid://1rnhdwqarpwj" path="res://sound/sfx/stage/sand oasis/jar.wav" id="4_0p6u3"]
@@ -107,8 +107,8 @@ tracks/3/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_f43ij"]
 _data = {
-"RESET": SubResource("Animation_5j7n4"),
-"shatter": SubResource("Animation_wtc5q")
+&"RESET": SubResource("Animation_5j7n4"),
+&"shatter": SubResource("Animation_wtc5q")
 }
 
 [node name="Jar" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator")]
@@ -117,11 +117,11 @@ pieceMass = 0.6
 shakeScreenOnShatter = false
 stopPlayerOnShatter = true
 disableRespawn = true
+shatterFlags = 31
+bounceStrength = 1.0
 root = NodePath("Root")
 pieceRoot = NodePath("JarPieces")
 animator = NodePath("AnimationPlayer")
-shatterFlags = 31
-bouncePlayerOnJumpDash = true
 
 [node name="Root" type="StaticBody3D" parent="." groups=["wall"]]
 collision_layer = 8
@@ -146,6 +146,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0999999, 0)
 shape = SubResource("CapsuleShape3D_v3ose")
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="."]
+process_mode = 1
 stream = ExtResource("4_0p6u3")
 max_db = 0.0
 pitch_scale = 0.86
@@ -154,7 +155,7 @@ bus = &"GAME SFX"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_f43ij")
+&"": SubResource("AnimationLibrary_f43ij")
 }
 
 [connection signal="area_entered" from="Trigger" to="." method="OnEntered"]

@@ -1,25 +1,22 @@
-[gd_scene load_steps=36 format=3 uid="uid://bemb37fo0seak"]
+[gd_scene load_steps=35 format=3 uid="uid://bemb37fo0seak"]
 
-[ext_resource type="Script" path="res://object/player/resource/script/CharacterSkillManager.cs" id="1_rj66u"]
+[ext_resource type="Script" uid="uid://c3h7ogmmkpfhq" path="res://object/player/resource/script/PlayerSkillController.cs" id="1_ek230"]
 [ext_resource type="AudioStream" uid="uid://dgg82ed3pd114" path="res://sound/sfx/player/speed break end.wav" id="3_di5ls"]
 [ext_resource type="Material" uid="uid://bklx3tbpw7s8e" path="res://object/player/resource/model/material/SpeedbreakOverlay.tres" id="4_4fsut"]
-[ext_resource type="Shader" path="res://effect/shader/object/player/TimeBreak.gdshader" id="6_lb0wt"]
+[ext_resource type="Shader" uid="uid://cflm654b7g2t6" path="res://effect/shader/object/player/TimeBreak.gdshader" id="6_lb0wt"]
 [ext_resource type="Texture2D" uid="uid://47a1wqak6nce" path="res://object/player/resource/effect/texture/time break.png" id="7_0xj5j"]
-[ext_resource type="Shader" path="res://effect/shader/object/player/ScreenShock.gdshader" id="9_3ptpg"]
+[ext_resource type="Shader" uid="uid://br0wjb2j5d51n" path="res://effect/shader/object/player/ScreenShock.gdshader" id="9_3ptpg"]
 [ext_resource type="AudioStream" uid="uid://c0ht8bcbttefh" path="res://sound/sfx/player/speed break.wav" id="9_800f8"]
-[ext_resource type="Shader" path="res://effect/shader/object/player/SpeedBreak.gdshader" id="10_6bh0u"]
+[ext_resource type="Shader" uid="uid://c6px0rxirg8yn" path="res://effect/shader/object/player/SpeedBreak.gdshader" id="10_6bh0u"]
 [ext_resource type="AudioStream" uid="uid://byvon80bojscd" path="res://sound/sfx/player/heartbeat.wav" id="10_fl25x"]
 [ext_resource type="ArrayMesh" uid="uid://cnxw6wvbmkkar" path="res://object/player/resource/effect/model/SpeedbreakFX.res" id="10_wn37a"]
 [ext_resource type="ArrayMesh" uid="uid://cljse54cbo2oh" path="res://object/player/resource/effect/model/SpeedbreakTallFX.res" id="11_6mnos"]
-[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="11_h5y28"]
+[ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="11_h5y28"]
 [ext_resource type="AudioStream" uid="uid://ci25ma2gyy8iq" path="res://sound/sfx/player/time break pad.ogg" id="12_vkf5a"]
-
-[sub_resource type="Curve" id="Curve_jakcp"]
-_data = [Vector2(0, 0), 0.0, 2.18969, 0, 0, Vector2(0.202422, 0.501805), 2.0, 2.0, 0, 0, Vector2(0.738754, 0.935018), -1.06758, -1.09074, 0, 0, Vector2(1, 0), -6.0, 0.0, 0, 0]
-point_count = 4
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7rw8q"]
 shader = ExtResource("6_lb0wt")
+shader_parameter/lut = ExtResource("7_0xj5j")
 shader_parameter/iterations = 5
 shader_parameter/rotation_step = 0.02
 shader_parameter/rotation_speed = 0.4
@@ -28,7 +25,6 @@ shader_parameter/opacity = 0.0
 shader_parameter/brightness = 1.2
 shader_parameter/contrast = 0.8
 shader_parameter/saturation = 0.1
-shader_parameter/lut = ExtResource("7_0xj5j")
 
 [sub_resource type="Animation" id="Animation_f7t1y"]
 length = 0.001
@@ -79,9 +75,9 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_m0ixc"]
 _data = {
-"RESET": SubResource("Animation_f7t1y"),
-"start": SubResource("Animation_ljny0"),
-"stop": SubResource("Animation_hc4f1")
+&"RESET": SubResource("Animation_f7t1y"),
+&"start": SubResource("Animation_ljny0"),
+&"stop": SubResource("Animation_hc4f1")
 }
 
 [sub_resource type="Curve" id="Curve_bog00"]
@@ -151,10 +147,10 @@ fill_to = Vector2(1, 0.1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_er50h"]
 shader = ExtResource("9_3ptpg")
+shader_parameter/factor_texture = SubResource("GradientTexture2D_0q2jh")
 shader_parameter/wave_count = 20.0
 shader_parameter/speed = 30.0
 shader_parameter/height = 0.0
-shader_parameter/factor_texture = SubResource("GradientTexture2D_0q2jh")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fb7an"]
 shader = ExtResource("10_6bh0u")
@@ -426,49 +422,15 @@ tracks/5/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_5ilpv"]
 _data = {
-"RESET": SubResource("Animation_d5ix5"),
-"disable-blur": SubResource("Animation_s5n5e"),
-"enable-blur": SubResource("Animation_n18pi"),
-"start": SubResource("Animation_45gst"),
-"stop": SubResource("Animation_i45wl")
+&"RESET": SubResource("Animation_d5ix5"),
+&"disable-blur": SubResource("Animation_s5n5e"),
+&"enable-blur": SubResource("Animation_n18pi"),
+&"start": SubResource("Animation_45gst"),
+&"stop": SubResource("Animation_i45wl")
 }
 
 [node name="Skills" type="Node3D" node_paths=PackedStringArray("speedBreakAnimator", "speedBreakSFX", "timeBreakAnimator", "timeBreakSFX", "heartbeatSFX")]
-script = ExtResource("1_rj66u")
-baseGroundSpeed = 28
-baseGroundTraction = 8
-baseGroundFriction = 28
-baseGroundOverspeed = 14
-baseGroundTurnaround = 54
-baseAirSpeed = 14
-baseAirTraction = 18
-baseAirFriction = 24
-baseAirOverspeed = 54
-baseAirTurnaround = 54
-accelerationJumpSpeed = 36.0
-homingAttackSpeed = 50.0
-perfectHomingAttackSpeed = 100.0
-homingAttackAcceleration = 200.0
-InitialSlideSpeed = 12
-baseSlideTraction = 4
-baseSlideFriction = 8
-baseSlideOverspeed = 16
-baseSlideTurnaround = 32
-baseBackflipSpeed = 20
-baseBackflipTraction = 16
-baseBackflipFriction = 32
-baseBackflipOverspeed = -1
-baseBackflipTurnaround = 64
-baseBackstepSpeed = 8
-baseBackstepTraction = 12
-baseBackstepFriction = 48
-baseBackstepOverspeed = 24
-baseBackstepTurnaround = 48
-perfectShuffleSpeed = 32.0
-baseGrindSpeed = 20
-baseGrindFriction = 4
-baseGrindTurnaround = 6
-sidleMovementCurve = SubResource("Curve_jakcp")
+script = ExtResource("1_ek230")
 countdownBoostSpeed = 32.0
 landingDashSpeed = 32.0
 speedBreakAnimator = NodePath("SpeedBreak/AnimationPlayer")
@@ -482,14 +444,17 @@ speedbreakOverlayMaterial = ExtResource("4_4fsut")
 speedBreakSpeed = 64.0
 
 [node name="SpeedBreakSFX" type="AudioStreamPlayer" parent="."]
+process_mode = 1
 stream = ExtResource("3_di5ls")
 bus = &"GAME SFX"
 
 [node name="TimeBreakSFX" type="AudioStreamPlayer" parent="."]
+process_mode = 1
 stream = ExtResource("12_vkf5a")
 bus = &"GAME SFX"
 
 [node name="HeartbeatSFX" type="AudioStreamPlayer" parent="."]
+process_mode = 1
 stream = ExtResource("10_fl25x")
 bus = &"GAME SFX"
 
@@ -506,7 +471,7 @@ metadata/_edit_lock_ = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="TimeBreak"]
 libraries = {
-"": SubResource("AnimationLibrary_m0ixc")
+&"": SubResource("AnimationLibrary_m0ixc")
 }
 
 [node name="SpeedBreak" type="Node3D" parent="."]
@@ -586,5 +551,5 @@ metadata/_edit_lock_ = true
 [node name="AnimationPlayer" type="AnimationPlayer" parent="SpeedBreak"]
 root_node = NodePath("../..")
 libraries = {
-"": SubResource("AnimationLibrary_5ilpv")
+&"": SubResource("AnimationLibrary_5ilpv")
 }

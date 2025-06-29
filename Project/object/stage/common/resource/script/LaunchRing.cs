@@ -10,6 +10,11 @@ public partial class LaunchRing : Launcher
 	public delegate void EnteredEventHandler();
 	[Signal]
 	public delegate void ExitedEventHandler();
+	[Signal]
+	public delegate void DamageEventHandler();
+
+	/// <summary> How long the launch ring should take to wind up. </summary>
+	[Export(PropertyHint.Range, "0.1,1,.1,or_greater")] private float windupTime = 1f;
 
 	[ExportGroup("Editor")]
 	[Export]
@@ -17,20 +22,19 @@ public partial class LaunchRing : Launcher
 	private readonly Array<Node3D> _pieces = [];
 	private readonly int PieceCount = 16;
 	private readonly float RingSize = 2.2f;
-
 	/// <summary> Is this the spike variant? </summary>
-	[Export]
-	private bool isSpikeVariant;
-	[Export]
-	private AnimationPlayer animator;
-	private bool isActive;
+	[Export] private bool isSpikeVariant;
+	[Export] private AnimationPlayer animator;
 
-	public override float GetLaunchRatio() => isSpikeVariant ? 1f : Mathf.SmoothStep(0, 1, launchRatio);
+	public new float LaunchRatio => base.LaunchRatio;
+	public override float GetLaunchRatio() => isSpikeVariant ? 1f : Mathf.SmoothStep(0, 1, base.LaunchRatio);
 
-	public override void _Ready()
+	protected override void SetUp()
 	{
-		if (Engine.IsEditorHint()) return;
+		if (Engine.IsEditorHint())
+			return;
 
+		base.SetUp();
 		InitializePieces();
 	}
 
@@ -40,57 +44,10 @@ public partial class LaunchRing : Launcher
 			InitializePieces();
 
 		UpdatePieces();
-
-		if (Engine.IsEditorHint()) return;
-
-		if (isActive)
-		{
-			// Recenter player
-			Character.CenterPosition = RecenterCharacter();
-
-			if (IsCharacterCentered) // Close enough; Allow inputs
-			{
-				if (Input.IsActionJustPressed("button_jump")) // Disable launcher
-				{
-					DropPlayer(false);
-					Character.CanJumpDash = true;
-				}
-				else if (Input.IsActionJustPressed("button_action"))
-				{
-					LaunchPlayer();
-				}
-			}
-
-			Character.Animator.SetSpinSpeed(1.5f + launchRatio);
-		}
 	}
 
-	protected override void LaunchAnimation()
-	{
-		// Keep the same animation as charging (i.e. do nothing)
-		Character.Animator.SetSpinSpeed(5); // Speed up spin animation just because
-	}
-
-	private void DropPlayer(bool launched = false)
-	{
-		isActive = false;
-		Character.ResetMovementState();
-
-		if (!launched)
-		{
-			EmitSignal(SignalName.Exited);
-			Character.Animator.ResetState();
-			Character.Effect.StopSpinFX();
-			Character.CanJumpDash = false;
-		}
-	}
-
-	private void LaunchPlayer()
-	{
-		DropPlayer(true);
-		Character.Effect.StartTrailFX();
-		base.Activate();
-	}
+	protected override Vector3 CalculateStartingPoint() => StartingPoint + (Vector3.Down * .5f); // Offset because the spin animation isn't centered
+	protected override void LaunchAnimation() => Player.Animator.SetSpinSpeed(5); // Keep spinning, but do it faster
 
 	private void InitializePieces()
 	{
@@ -108,41 +65,32 @@ public partial class LaunchRing : Launcher
 			if (_pieces[i] == null) continue;
 
 			Vector3 movementVector = -Vector3.Up.Rotated(Vector3.Forward, interval * (i + .5f)); // Offset rotation slightly, since visual model is offset
-			_pieces[i].Position = movementVector * launchRatio * RingSize;
+			_pieces[i].Position = movementVector * base.LaunchRatio * RingSize;
 		}
 	}
 
 	private void OnEntered(Area3D a)
 	{
-		if (!a.IsInGroup("player detection")) return;
+		if (!a.IsInGroup("player detection"))
+			return;
 
-		animator.Play("charge");
-		Character.StartExternal(this);
-		Character.Animator.StartSpin();
-		Character.Effect.StartSpinFX();
-
-		isActive = true;
-		Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Forward().RemoveVertical().Normalized());
-		Character.Animator.ExternalAngle = Character.MovementAngle;
-
-		// Disable homing reticle
-		Character.Lockon.IsMonitoring = false;
-		Character.Lockon.StopHomingAttack();
+		animator.Play("charge", -1, 1f / windupTime);
+		IsPlayerCentered = false;
+		Player.StartLaunchRing(this);
 		EmitSignal(SignalName.Entered);
 	}
 
 	private void OnExited(Area3D a)
 	{
-		if (!a.IsInGroup("player detection")) return;
-		animator.Play("RESET", .2 * (1 + launchRatio));
+		if (!a.IsInGroup("player detection"))
+			return;
+
+		animator.Play("RESET", .2 * (1 + base.LaunchRatio));
+
+		if (!Player.IsLaunching)
+			EmitSignal(SignalName.Exited);
 	}
 
-	public void DamagePlayer()
-	{
-		DropPlayer();
-		Character.StartKnockback(new CharacterController.KnockbackSettings()
-		{
-			ignoreMovementState = true,
-		});
-	}
+	/// <summary> Called from an AnimationPlayer. </summary>
+	private void DamagePlayer() => EmitSignal(SignalName.Damage);
 }

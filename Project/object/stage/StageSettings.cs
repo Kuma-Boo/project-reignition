@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Godot;
 using Godot.Collections;
 using Project.Core;
@@ -11,14 +10,16 @@ namespace Project.Gameplay;
 /// </summary>
 public partial class StageSettings : Node3D
 {
-	public static StageSettings instance;
+	public static StageSettings Instance;
+	public static PlayerController Player { get; private set; }
+	public static void RegisterPlayer(PlayerController player) => Player = player;
 
-	public bool IsControlTest => Data.LevelID == OPTIONS_LEVEL_ID;
-	private readonly StringName OPTIONS_LEVEL_ID = "options";
+	public bool IsControlTest => Data.LevelID == OptionsLevelId;
+	private readonly StringName OptionsLevelId = "options";
 
 	public override void _EnterTree()
 	{
-		instance = this; // Always override previous instance
+		Instance = this; // Always override previous instance
 
 		for (int i = 0; i < pathParent.GetChildCount(); i++)
 		{
@@ -30,13 +31,20 @@ public partial class StageSettings : Node3D
 		CalculateTechnicalBonus();
 		UpdateScore(0, MathModeEnum.Replace);
 		UpdatePostProcessingStatus();
-		// Unmute the gameplay sfx audio channel
-		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 100);
+
+		// Update gameplay sfx audio channel
+		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, IsControlTest ? 100 : 0);
 
 		if (IsControlTest)
+		{
 			LevelState = LevelStateEnum.Ingame;
+		}
 		else
-			LevelState = LevelStateEnum.Loading;
+		{
+			LevelState = LevelStateEnum.Probes;
+			if (!TransitionManager.instance.IsReloadingScene)
+				TransitionManager.instance.UpdateLoadingText("load_probes");
+		}
 	}
 
 	public override void _Ready()
@@ -55,7 +63,12 @@ public partial class StageSettings : Node3D
 			});
 		}
 
-		InitializeShaders();
+		SetEnvironmentFxFactor(environmentFxFactor, 0);
+	}
+
+	public override void _ExitTree()
+	{
+		EmitSignal(SignalName.Unloaded);
 	}
 
 	public void UpdatePostProcessingStatus()
@@ -63,69 +76,41 @@ public partial class StageSettings : Node3D
 		bool postProcessingEnabled = SaveManager.Config.postProcessingQuality != SaveManager.QualitySetting.Disabled;
 		Environment.Environment.SsaoEnabled = postProcessingEnabled;
 		Environment.Environment.SsilEnabled = postProcessingEnabled;
+		Environment.Environment.GlowEnabled = SaveManager.Config.bloomMode != SaveManager.QualitySetting.Disabled;
 	}
 
 	#region Shader Compilation
-	/// <summary> Gets ALL the materials in this stage, then compiles them. </summary>
-	public void InitializeShaders()
-	{
-		if (OS.IsDebugBuild() && !DebugManager.Instance.IsShaderCompilationEnabled)
-			return;
-
-		foreach (Node node in GetChildren(GetTree().Root, []))
-		{
-			if (node is MeshInstance3D)
-			{
-				ShaderManager.Instance.QueueMesh((node as MeshInstance3D).Mesh);
-				continue;
-			}
-
-			if (node is GpuParticles3D)
-			{
-				GpuParticles3D particles = node as GpuParticles3D;
-				ShaderManager.Instance.QueueMaterial(particles.ProcessMaterial);
-				ShaderManager.Instance.QueueMesh(particles.DrawPass1);
-			}
-		}
-
-		ShaderManager.Instance.StartCompilation();
-	}
-
-	private List<Node> GetChildren(Node parent, List<Node> nodes)
-	{
-		nodes.Add(parent);
-		foreach (Node child in parent.GetChildren())
-			nodes = GetChildren(child, nodes);
-		return nodes;
-	}
-
 	[Signal]
 	public delegate void LevelStartedEventHandler();
-	private int probeFrameCounter;
-	private const int PROBE_FRAME_COUNT_LENGTH = 90;
+	private float probeTimer;
+	private const float ProbeWaitLength = 2f;
 	public override void _Process(double _)
 	{
 		/*
 		TODO 
 		Temporary workaround because reflection probes are slow.
-		Remove this when Godot adds a way to do quick "UPDATE_ONCE" reflection probes
+		Reduce frame count when Godot adds a way to do quick "UPDATE_ONCE" reflection probes
 		*/
 
-		if (LevelState == LevelStateEnum.Loading)
+		if (LevelState == LevelStateEnum.Probes)
 		{
-			probeFrameCounter++;
-
-			if (probeFrameCounter >= PROBE_FRAME_COUNT_LENGTH && !ShaderManager.Instance.IsCompilingShaders)
-			{
-				LevelState = LevelStateEnum.Ingame;
-				TransitionManager.FinishTransition();
-				EmitSignal(SignalName.LevelStarted);
-			}
+			probeTimer += PhysicsManager.normalDelta;
+			if (probeTimer >= ProbeWaitLength)
+				StartLevel();
 
 			return;
 		}
 
 		UpdateTime();
+		UpdateEnvironmentFXFactor();
+	}
+
+	private void StartLevel()
+	{
+		LevelState = LevelStateEnum.Ingame;
+		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 100); // Unmute gameplay sound effects
+		TransitionManager.FinishTransition();
+		EmitSignal(SignalName.LevelStarted);
 	}
 	#endregion
 
@@ -141,30 +126,34 @@ public partial class StageSettings : Node3D
 	/// <summary>
 	/// Calculates the rank [Fail = -1, None = 0, Bronze = 1, Silver = 2, Gold = 3]
 	/// </summary>
-	public int CalculateRank()
+	public int CalculateRank(bool preCountBonuses = false)
 	{
 		if (LevelState == LevelStateEnum.Failed)
 			return -1;
 
 		int rank = 0; // DEFAULT - No rank
+		float completionTime = Mathf.RoundToInt(CurrentTime * 100f) * 0.01f; // Round to nearest millisecond
 
 		if (Data.SkipScore)
 		{
-			if (CurrentTime <= Data.GoldTime)
+			if (completionTime <= Data.GoldTime)
 				rank = 3;
-			else if (CurrentTime <= Data.SilverTime)
+			else if (completionTime <= Data.SilverTime)
 				rank = 2;
-			else if (CurrentTime <= Data.BronzeTime)
+			else if (completionTime <= Data.BronzeTime)
 				rank = 1;
 		}
 		else
 		{
 			int score = TotalScore;
-			if (CurrentTime <= Data.GoldTime && score >= Data.Score) // Perfect run
+			if (preCountBonuses)
+				score += BonusManager.instance.QueuedScore;
+
+			if (completionTime <= Data.GoldTime && score >= Data.Score) // Perfect run
 				rank = 3;
-			else if (CurrentTime <= Data.SilverTime && score >= 3 * (Data.Score / 4)) // Silver score reqs are always 3/4 of gold
+			else if (completionTime <= Data.SilverTime && score >= 3 * (Data.Score / 4)) // Silver score reqs are always 3/4 of gold
 				rank = 2;
-			else if (CurrentTime <= Data.BronzeTime) // Bronze is easy to get
+			else if (completionTime <= Data.BronzeTime) // Bronze is easy to get
 				rank = 1;
 		}
 
@@ -174,6 +163,22 @@ public partial class StageSettings : Node3D
 		return rank;
 	}
 	#endregion
+
+	public string GetRequiredTime(int rank)
+	{
+		switch (rank)
+		{
+			case 0:
+				return ExtensionMethods.FormatTime(Data.BronzeTime);
+			case 1:
+				return ExtensionMethods.FormatTime(Data.SilverTime);
+			case 2:
+				return ExtensionMethods.FormatTime(Data.GoldTime);
+			default:
+				return "00:00.00";
+		}
+	}
+	public int GetRequiredScore() => Data.Score;
 
 	#region Level Data
 	public enum MathModeEnum // List of ways the score can be modified
@@ -286,6 +291,7 @@ public partial class StageSettings : Node3D
 	{
 		CurrentObjectiveCount++;
 		CurrentObjectiveCount = Mathf.Clamp(CurrentObjectiveCount, 0, Data.MissionObjectiveCount);
+		HeadsUpDisplay.Instance.PlayObjectiveAnimation("good");
 		EmitSignal(SignalName.ObjectiveChanged);
 
 		if (Data.MissionObjectiveCount == 0) // i.e. Sand Oasis's "Don't break the jars!" mission.
@@ -293,7 +299,7 @@ public partial class StageSettings : Node3D
 			FinishLevel(false);
 		}
 		else if (CurrentObjectiveCount >= Data.MissionObjectiveCount &&
-						Data.MissionType != LevelDataResource.MissionTypes.Chain)
+				Data.MissionType != LevelDataResource.MissionTypes.Chain)
 		{
 			FinishLevel(true);
 		}
@@ -302,6 +308,10 @@ public partial class StageSettings : Node3D
 	public void ResetObjective(int progress = 0)
 	{
 		CurrentObjectiveCount = progress;
+
+		if (progress == 0 && Player.IsDefeated)
+			HeadsUpDisplay.Instance.PlayObjectiveAnimation("bad");
+
 		EmitSignal(SignalName.ObjectiveReset);
 	}
 
@@ -315,15 +325,21 @@ public partial class StageSettings : Node3D
 		int previousAmount = CurrentRingCount;
 		CurrentRingCount = CalculateMath(CurrentRingCount, amount, mode);
 		RingBonus = CurrentRingCount * 10;
-		if (Data.MissionType == LevelDataResource.MissionTypes.Ring && CurrentRingCount >= Data.MissionObjectiveCount) // For ring based missions
+		if (Data.MissionType == LevelDataResource.MissionTypes.Ring &&
+			CurrentRingCount >= Data.MissionObjectiveCount &&
+			Data.MissionObjectiveCount != 0) // For ring based missions
 		{
 			CurrentRingCount = Data.MissionObjectiveCount; // Clamp
 			FinishLevel(true);
 		}
 
 		// Soul barrier
-		if (mode == MathModeEnum.Subtract && CharacterController.instance.Skills.IsSkillEquipped(SkillKey.RingLossConvert))
-			CharacterController.instance.Skills.ModifySoulGauge(amount * 2);
+		if (Player == null)
+		{
+			GD.PushError("PlayerController is missing!");
+			if (mode == MathModeEnum.Subtract && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.RingLossConvert))
+				Player.Skills.ModifySoulGauge((previousAmount - CurrentRingCount) * 2);
+		}
 
 		if (DebugManager.Instance.InfiniteRings) // Infinite ring cheat
 			CurrentRingCount = 999;
@@ -339,17 +355,29 @@ public partial class StageSettings : Node3D
 
 	public float CurrentTime { get; private set; } // How long has the player been on this level? (In Seconds)
 	public string DisplayTime { get; private set; } // Current time formatted in mm:ss.ff
-	private void UpdateTime()
+	private void UpdateTime(bool skipPhysicsTick = false)
 	{
 		if (!IsLevelIngame || !Interface.PauseMenu.AllowPausing) return;
 
-		CurrentTime += PhysicsManager.normalDelta; // Add current time
+		if (!skipPhysicsTick)
+			CurrentTime += PhysicsManager.normalDelta; // Add current time
 		DisplayTime = ExtensionMethods.FormatTime(CurrentTime);
 		if (Data.MissionTimeLimit != 0 && CurrentTime >= Data.MissionTimeLimit) // Time's up!
 			FinishLevel(false);
 
 		EmitSignal(SignalName.TimeChanged);
 	}
+
+	/// <summary> Artifically add time. Used when skipping cutscenes. </summary>
+	public void AddTime(float amount)
+	{
+		CurrentTime += amount;
+		UpdateTime(true);
+	}
+
+	public bool[] fireSoulCheckpoints = new bool[3];
+	public bool IsFireSoulCheckpointFlagSet(int index) => fireSoulCheckpoints[index];
+	public bool SetFireSoulCheckpointFlag(int index, bool value) => fireSoulCheckpoints[index] = value;
 	#endregion
 
 	#region Path Settings
@@ -394,59 +422,42 @@ public partial class StageSettings : Node3D
 	public Triggers.CheckpointTrigger CurrentCheckpoint { get; private set; }
 	private int CheckpointScore { get; set; }
 	private int CheckpointObjectiveCount { get; set; }
-	private int SavedScore { get; set; }
-	private int SavedObjectiveCount { get; set; }
+	private float CheckpointEnvironmentFxFactor { get; set; }
 	public void SetCheckpoint(Triggers.CheckpointTrigger checkpoint)
 	{
 		if (checkpoint == CurrentCheckpoint) return; // Already at this checkpoint
 
 		CurrentCheckpoint = checkpoint;
-		SavedScore = CurrentScore;
-		SavedObjectiveCount = CurrentObjectiveCount;
+		CheckpointScore = CurrentScore;
+		CheckpointObjectiveCount = CurrentObjectiveCount;
+		CheckpointEnvironmentFxFactor = targetEnvironmentFxFactor;
 		EmitSignal(SignalName.TriggeredCheckpoint);
 	}
 
 	public void RevertToCheckpointData()
 	{
-		ResetObjective(SavedObjectiveCount);
-		UpdateScore(SavedScore, MathModeEnum.Replace);
-	}
-
-	[Signal]
-	public delegate void UnloadedEventHandler();
-	private const string UNLOAD_FUNCTION = "Unload"; // Clean up any memory leaks in this function
-	public override void _ExitTree() => EmitSignal(SignalName.Unloaded);
-	public void ConnectUnloadSignal(Node node)
-	{
-		if (!node.HasMethod(UNLOAD_FUNCTION))
-		{
-			GD.PrintErr($"Node {node.Name} doesn't have a function '{UNLOAD_FUNCTION}!'");
-			return;
-		}
-
-		if (!IsConnected(SignalName.Unloaded, new Callable(node, UNLOAD_FUNCTION)))
-			Connect(SignalName.Unloaded, new Callable(node, UNLOAD_FUNCTION));
+		ResetObjective(CheckpointObjectiveCount);
+		UpdateScore(CheckpointScore, MathModeEnum.Replace);
+		SetEnvironmentFxFactor(CheckpointEnvironmentFxFactor, 0);
 	}
 
 	[Signal]
 	public delegate void RespawnedEventHandler();
-	public readonly static StringName RESPAWN_FUNCTION = "Respawn"; // Default name of respawn functions
-	public void ConnectRespawnSignal(Node node)
-	{
-		if (!node.HasMethod(RESPAWN_FUNCTION))
-		{
-			GD.PrintErr($"Node {node.Name} doesn't have a function '{RESPAWN_FUNCTION}!'");
-			return;
-		}
+	[Signal]
+	public delegate void RespawnedEnemiesEventHandler();
+	[Signal]
+	public delegate void UnloadedEventHandler();
 
-		if (!IsConnected(SignalName.Respawned, new Callable(node, RESPAWN_FUNCTION)))
-			Connect(SignalName.Respawned, new Callable(node, RESPAWN_FUNCTION), (uint)ConnectFlags.Deferred);
-	}
-
-	public void RespawnObjects()
+	public void StartRespawn()
 	{
 		SoundManager.instance.CancelDialog(); // Cancel any active dialog
+		GetTree().CreateTimer(PhysicsManager.physicsDelta, false, true).Timeout += RespawnEnemies;
+	}
+
+	private void RespawnEnemies()
+	{
 		EmitSignal(SignalName.Respawned);
+		EmitSignal(SignalName.RespawnedEnemies);
 	}
 	#endregion
 
@@ -454,16 +465,21 @@ public partial class StageSettings : Node3D
 	[Signal]
 	public delegate void LevelCompletedEventHandler(); // Called when the level is completed
 	[Signal]
+	public delegate void LevelFailedEventHandler(); // Called when the level is failed
+	[Signal]
+	public delegate void LevelSuccessEventHandler(); // Called when the level is successfully finished
+	[Signal]
 	public delegate void LevelDemoStartedEventHandler(); // Called when the level demo starts
 
 	public enum LevelStateEnum
 	{
-		Loading, // TODO Delete this when Godot fixes reflection probes
+		Probes,
 		Ingame,
 		Failed,
 		Success,
 	}
 	public LevelStateEnum LevelState { get; private set; }
+	public bool IsLevelLoading => LevelState == LevelStateEnum.Probes;
 	public bool IsLevelIngame => LevelState == LevelStateEnum.Ingame;
 	/// <summary> Flag for keeping track of Uhu's race status. </summary>
 	public bool IsRaceActive { get; set; }
@@ -473,9 +489,6 @@ public partial class StageSettings : Node3D
 		if (!IsLevelIngame)
 			return;
 
-		// Recalculate technical bonus
-		CalculateTechnicalBonus();
-
 		// Attempt to start the completion demo
 		GetTree().CreateTimer(wasSuccessful ? Data.CompletionDelay : FAIL_COMPLETION_DELAY).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.StartCompletionDemo));
 
@@ -484,15 +497,28 @@ public partial class StageSettings : Node3D
 		Interface.PauseMenu.AllowPausing = false;
 		LevelState = wasSuccessful ? LevelStateEnum.Success : LevelStateEnum.Failed;
 
+		// Recalculate technical bonus
+		CalculateTechnicalBonus();
+
 		EmitSignal(SignalName.LevelCompleted);
+		EmitSignal(wasSuccessful ? SignalName.LevelSuccess : SignalName.LevelFailed);
 	}
 
 	/// <summary> Camera demo that gets enabled after the level is cleared. </summary>
 	[Export]
 	private AnimationPlayer completionAnimator;
 	private int completionAnimationIndex;
-	private void StartCompletionDemo()
+	private bool isCompletionDemoActive;
+	public void StartCompletionDemo()
 	{
+		if (isCompletionDemoActive)
+			return;
+
+		Node3D objectParent = GetParent().GetChildOrNull<Node3D>(GetIndex() + 1);
+		if (objectParent != null) // Hide objects, which should always be the child after the static node
+			objectParent.Visible = false;
+
+		isCompletionDemoActive = true;
 		EmitSignal(SignalName.LevelDemoStarted);
 
 		if (completionAnimator == null) return;
@@ -506,14 +532,38 @@ public partial class StageSettings : Node3D
 		if (completionAnimationIndex > 3)
 			completionAnimationIndex = 1;
 		completionAnimator.Play($"demo{completionAnimationIndex}");
-		CharacterController.instance.Camera.StartCrossfade();
+		Player.Camera.StartCrossfade();
 	}
 
 	#endregion
 
 	/// <summary> Reference to active area's WorldEnvironment node. </summary>
-	[Export]
-	public WorldEnvironment Environment { get; private set; }
+	[Export] public WorldEnvironment Environment { get; private set; }
+	[Export(PropertyHint.Range, "0,1,.1")] private float environmentFxFactor;
+	private float targetEnvironmentFxFactor;
+	private float environmentFxVelocity;
+	private float environmentFxSmoothing;
+	private readonly StringName ShaderEnvironmentFXParameter = "environment_fx_intensity";
+	public void SetEnvironmentFxFactor(float value, float smoothing)
+	{
+		targetEnvironmentFxFactor = Mathf.Clamp(value, 0f, 1f);
+		environmentFxSmoothing = smoothing;
+	}
+
+	private void UpdateEnvironmentFXFactor()
+	{
+		if (Mathf.IsZeroApprox(environmentFxSmoothing))
+		{
+			environmentFxFactor = targetEnvironmentFxFactor;
+			environmentFxVelocity = 0;
+		}
+		else
+		{
+			environmentFxFactor = ExtensionMethods.SmoothDamp(environmentFxFactor, targetEnvironmentFxFactor, ref environmentFxVelocity, environmentFxSmoothing);
+		}
+
+		RenderingServer.GlobalShaderParameterSet(ShaderEnvironmentFXParameter, environmentFxFactor);
+	}
 }
 
 public struct SpawnData(Node parent, Transform3D transform)
@@ -523,7 +573,7 @@ public struct SpawnData(Node parent, Transform3D transform)
 	/// <summary> Local transform to spawn with. </summary>
 	public Transform3D spawnTransform = transform;
 
-	public readonly void Respawn(Node n)
+	public readonly void Respawn(Node3D n)
 	{
 		if (parentNode != null && n.GetParent() != parentNode)
 		{
@@ -533,6 +583,8 @@ public struct SpawnData(Node parent, Transform3D transform)
 			parentNode.AddChild(n);
 		}
 
+		n.Visible = true;
+		n.ProcessMode = Node.ProcessModeEnum.Inherit;
 		n.SetDeferred("transform", spawnTransform);
 	}
 }

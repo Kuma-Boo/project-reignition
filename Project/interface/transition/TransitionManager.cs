@@ -11,30 +11,31 @@ public partial class TransitionManager : Node
 {
 	public static TransitionManager instance;
 	/// <summary> Path to the main menu scene. </summary>
-	public const string MENU_SCENE_PATH = "res://interface/menu/Menu.tscn";
+	public const string MenuScenePath = "res://interface/menu/Menu.tscn";
 	/// <summary> Path to story events. </summary>
-	public const string EVENT_SCENE_PATH = "res://video/event/scene/Event";
+	public const string EventScenePath = "res://video/event/scene/Event";
+	public const string OptionsScenePath = "res://interface/menu/options/Options.tscn";
+	public const string SpecialBookScenePath = "res://interface/menu/special book/SpecialBook.tscn";
 
-	[Export]
-	private ColorRect fade;
-	[Export]
-	private AnimationPlayer animator;
-	[Export]
-	private AnimationPlayer loadingAnimator;
+	public bool IsReloadingScene { get; private set; }
 
-	//Converts realtime seconds to a ratio for the animation player's speed. ALL ANIMATIONS MUST BE 1 SECOND LONG.
-	public float ConvertToAnimatorSpeed(float seconds) => 1f / seconds;
+	[Export] private Label loadLabel;
+	[Export] private ColorRect fade;
+	[Export] private AnimationPlayer animator;
+	[Export] private AnimationPlayer loadingAnimator;
+	[Export] private Control missionDescriptionRoot;
+	[Export] private Label missionDescriptionLabel;
 
 	public override void _EnterTree() => instance = this;
 
 	#region Transition Types
-	//Simple cut transition. During loading, everything will freeze temporarily.
+	// Simple cut transition. During loading, everything will freeze temporarily.
 	private void StartCut() => EmitSignal(SignalName.TransitionProcess);
 	private void StartFade()
 	{
 		if (IsTransitionActive)
 		{
-			GD.Print("Transition is already active!");
+			GD.PushWarning("Transition is already active!");
 			return;
 		}
 
@@ -52,9 +53,11 @@ public partial class TransitionManager : Node
 		}
 		else
 		{
-			animator.SpeedScale = ConvertToAnimatorSpeed(CurrentTransitionData.inSpeed);
+			animator.SpeedScale = 1.0f / CurrentTransitionData.inSpeed;
 			animator.Connect(AnimationPlayer.SignalName.AnimationFinished, new(instance, MethodName.TransitionLoading), (uint)ConnectFlags.OneShot);
 		}
+
+		EmitSignal(SignalName.TransitionStarted);
 	}
 
 	private void FinishFade()
@@ -66,7 +69,7 @@ public partial class TransitionManager : Node
 		if (Mathf.IsZeroApprox(CurrentTransitionData.outSpeed)) // Cut
 			animator.Seek(animator.CurrentAnimationLength, true);
 		else
-			animator.SpeedScale = ConvertToAnimatorSpeed(CurrentTransitionData.outSpeed);
+			animator.SpeedScale = 1.0f / CurrentTransitionData.outSpeed;
 
 		animator.Connect(AnimationPlayer.SignalName.AnimationFinished, new(instance, MethodName.TransitionFinished), (uint)ConnectFlags.OneShot);
 	}
@@ -74,12 +77,14 @@ public partial class TransitionManager : Node
 
 	private TransitionData CurrentTransitionData { get; set; }
 	public static bool IsTransitionActive { get; set; }
-	[Signal]
-	public delegate void SceneChangedEventHandler(); //Called when the scene changes
-	[Signal]
-	public delegate void TransitionProcessEventHandler(); //Called in the middle of the transition (i.e. when the screen is completely black)
-	[Signal]
-	public delegate void TransitionFinishEventHandler(); //Called when the transition is finished
+	/// <summary> Called when the scene changes. </summary>
+	[Signal] public delegate void SceneChangedEventHandler();
+	/// <summary> Called whenever a transition is started. </summary>
+	[Signal] public delegate void TransitionStartedEventHandler();
+	/// <summary> Called in the middle of the transition (when the screen is completely black). </summary>
+	[Signal] public delegate void TransitionProcessEventHandler();
+	/// <summary> Called when the transition is finished. </summary>
+	[Signal] public delegate void TransitionFinishEventHandler();
 	private void TransitionLoading(string _) => EmitSignal(SignalName.TransitionProcess);
 	private void TransitionFinished(string _)
 	{
@@ -89,21 +94,27 @@ public partial class TransitionManager : Node
 
 	public static void StartTransition(TransitionData data)
 	{
-		instance.animator.Play("RESET"); //Reset animator, just in case
+		instance.animator.Play("RESET"); // Reset animator, just in case
 		instance.animator.Advance(0);
+		instance.UpdateLoadingText(null);
 
 		instance.CurrentTransitionData = data;
+		instance.missionDescriptionRoot.Visible = data.showMissionDescription;
 
 		if (data.inSpeed == 0 && data.outSpeed == 0)
 		{
-			instance.StartCut(); //Cut transition
+			instance.StartCut(); // Cut transition
 			return;
 		}
 
 		instance.StartFade();
 	}
 
-	public static void FinishTransition() => instance.FinishFade();
+	public static void FinishTransition()
+	{
+		instance.UpdateLoadingText(null);
+		instance.FinishFade();
+	}
 
 	/// <summary> The scene to load. Note that the scene only gets applied if queued using QueueSceneChange(). </summary>
 	public string QueuedScene { get; set; }
@@ -119,40 +130,70 @@ public partial class TransitionManager : Node
 
 	private async void ApplySceneChange()
 	{
-		SoundManager.instance.CancelDialog(); //Cancel any active dialog
-		if (string.IsNullOrEmpty(QueuedScene)) //Reload the current scene
+		SoundManager.instance.CancelDialog(); // Cancel any active dialog
+		IsReloadingScene = string.IsNullOrEmpty(QueuedScene);
+		if (IsReloadingScene) // Reload the current scene
+		{
 			GetTree().ReloadCurrentScene();
+		}
 		else
 		{
+			/* TODO Godot v4.5 Fix asynchronous loading
 			if (CurrentTransitionData.loadAsynchronously)
 			{
-				ResourceLoader.LoadThreadedRequest(QueuedScene, "");
+				GD.Print(ResourceLoader.LoadThreadedRequest(QueuedScene));
 				while (ResourceLoader.LoadThreadedGetStatus(QueuedScene) == ResourceLoader.ThreadLoadStatus.InProgress) // Still loading
+				{
+					GD.PrintT("Loading Scene...", );
 					await ToSignal(GetTree().CreateTimer(.1f), SceneTreeTimer.SignalName.Timeout); // Wait a bit
+				}
 
 				var scene = ResourceLoader.LoadThreadedGet(QueuedScene) as PackedScene;
 				GetTree().ChangeSceneToPacked(scene);
+				GD.Print("Scene Changed.");
 			}
-			else
-			{
-				GetTree().ChangeSceneToFile(QueuedScene);
-			}
+			*/
+
+			GetTree().ChangeSceneToFile(QueuedScene);
 		}
 
-		QueuedScene = string.Empty; //Clear queue
+		// Reset time scale and unpause whenever we change scenes
+		Engine.TimeScale = 1f;
+		GetTree().Paused = false;
+
+		QueuedScene = string.Empty; // Clear queue
 		EmitSignal(SignalName.SceneChanged);
 
 		if (!CurrentTransitionData.disableAutoTransition)
 			FinishFade();
 	}
+
+	public void UpdateLoadingText(StringName localizationKey, int currentProgress = 0, int maxProgress = 0)
+	{
+		if (localizationKey == null)
+		{
+			loadLabel.Text = string.Empty;
+			return;
+		}
+
+		loadLabel.Text = Tr(localizationKey);
+		if (maxProgress != 0)
+			loadLabel.Text += $" {currentProgress}/{maxProgress}";
+	}
+
+	public void SetMissionDescriptionText(StringName typeKey, StringName descriptionKey)
+	{
+		missionDescriptionLabel.Text = $"{Tr(typeKey)}: {Tr(descriptionKey)}";
+	}
 }
 
 public struct TransitionData
 {
-	//Keep both speeds at 0 to perform simple cut transitions
+	// Keep both speeds at 0 to perform simple cut transitions
 	public float inSpeed;
 	public float outSpeed;
 	public Color color;
 	public bool loadAsynchronously;
 	public bool disableAutoTransition;
+	public bool showMissionDescription;
 }

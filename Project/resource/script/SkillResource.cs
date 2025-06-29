@@ -19,7 +19,8 @@ public partial class SkillResource : Resource
 	{
 		Wind,
 		Fire,
-		Dark
+		Dark,
+		Config
 	}
 
 	/// <summary> The skill's category type. </summary>
@@ -34,6 +35,7 @@ public partial class SkillResource : Resource
 		Combat, // Called "damage" skills in the original game
 		Experience,
 		Crest, // Called "special" skills in the original game
+		Setting, // Skills that help adjust how the game plays
 	}
 	/// <summary> How many skill points does this skill cost to equip? </summary>
 	[Export]

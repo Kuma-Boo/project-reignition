@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://c1o8jxmiiryrj"]
 
-[ext_resource type="Script" path="res://object/stage/common/resource/script/JumpCarpet.cs" id="1_7j8ed"]
+[ext_resource type="Script" uid="uid://cwhogw8cf0vdp" path="res://object/stage/common/resource/script/JumpCarpet.cs" id="1_7j8ed"]
 [ext_resource type="PackedScene" uid="uid://7jb7tlxafgo8" path="res://object/stage/common/resource/model/JumpCarpet.gltf" id="2_vapfi"]
 [ext_resource type="AudioStream" uid="uid://4w7opf8u4m2r" path="res://sound/sfx/objects/jump carpet.wav" id="3_kgplj"]
 [ext_resource type="Material" uid="uid://dtyv06bt3q7mw" path="res://object/stage/common/resource/model/material/Flying Pot Shine Process Material.tres" id="4_kikgc"]
@@ -181,20 +181,20 @@ tracks/6/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ymtvi"]
 _data = {
-"RESET": SubResource("Animation_qc8ai"),
-"launch": SubResource("Animation_hkoeb")
+&"RESET": SubResource("Animation_qc8ai"),
+&"launch": SubResource("Animation_hkoeb")
 }
 
-[node name="JumpCarpet" type="Node3D" node_paths=PackedStringArray("animator", "sfxPlayer")]
+[node name="JumpCarpet" type="Node3D" node_paths=PackedStringArray("animator")]
 script = ExtResource("1_7j8ed")
+animator = NodePath("AnimationPlayer")
 "Secondary Settings/Enabled" = true
 "Secondary Settings/Middle Height" = 0.0
 "Secondary Settings/Final Height" = 10.0
 "Secondary Settings/Distance" = 0.0
 "Secondary Settings/Blend" = 1.0
-animator = NodePath("AnimationPlayer")
-finalHeight = 5.0
-allowJumpDashing = true
+FinalHeight = 5.0
+AllowJumpDashing = true
 sfxPlayer = NodePath("SFX")
 voiceKey = &""
 
@@ -218,9 +218,9 @@ instance_shader_parameters/bounce_displacement_strength = 0.4
 instance_shader_parameters/bounce_phase = 0.0
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="."]
+process_mode = 1
 stream = ExtResource("3_kgplj")
-attenuation_model = 3
-max_db = 0.0
+max_db = -3.0
 max_distance = 100.0
 bus = &"GAME SFX"
 attenuation_filter_cutoff_hz = 20500.0
@@ -240,7 +240,7 @@ draw_pass_1 = SubResource("PlaneMesh_47mcu")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_ymtvi")
+&"": SubResource("AnimationLibrary_ymtvi")
 }
 
 [connection signal="area_entered" from="ActivationTrigger" to="." method="Activate"]

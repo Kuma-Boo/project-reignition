@@ -8,56 +8,61 @@ namespace Project.Gameplay.Triggers;
 public partial class CameraTrigger : StageTriggerModule
 {
 	/// <summary> How long the transition is (in seconds). Use a transition time of 0 to perform an instant cut. </summary>
-	[Export(PropertyHint.Range, "0,2,0.1")]
-	public float transitionTime;
+	[Export(PropertyHint.Range, "0,5,0.1,or_greater")]
+	public float transitionTime = 0.5f;
 	/// <summary> Override to have a different blend time during deactivation. </summary>
 	[Export(PropertyHint.Range, "-1,2,0.1")]
-	public float deactivationTransitionTime = -1;
-	[Export]
-	public TransitionType transitionType;
-	public enum TransitionType
-	{
-		Blend, // Interpolate between states
-		Crossfade, // Crossfade states
-	}
+	public float deactivationTransitionTime = -1f;
 
-	/// <summary> Update static position/rotations every frame? </summary>
-	[Export]
-	public bool UpdateEveryFrame { get; private set; }
+	/// <summary> Set this to a non-zero value to use distance blending. </summary>
+	[Export(PropertyHint.Range, "0,50,1")]
+	public int distanceBlending;
+	public bool UseDistanceBlending => distanceBlending != 0;
 
-	[Export]
-	public bool enableInputBlending;
+	[Export] public CameraTransitionType transitionType;
+	[Export] public bool enableInputBlending;
 
 	/// <summary> Must be assigned to something. </summary>
-	[Export]
-	public CameraSettingsResource settings;
+	[Export] public CameraSettingsResource settings;
 	/// <summary> Reference to the camera data that was being used when this trigger was entered. </summary>
-	[Export]
-	private CameraSettingsResource previousSettings;
-	[Export]
-	private Camera3D referenceCamera;
+	[Export] public CameraSettingsResource previousSettings;
 
+	[ExportGroup("Transform Overrides")]
+	/// <summary> Update positions and rotations every frame? </summary>
+	[Export] public bool UpdateEveryFrame { get; private set; }
+	[Export(PropertyHint.NodePathValidTypes, "Node3D")] private NodePath followObject;
+	private Node3D _followObject;
+	private Camera3D _referenceCamera;
+	private bool IsOverridingCameraTransform => settings.copyPosition || settings.copyRotation || settings.copyRotation;
+
+	private bool cachedPreviousSettings;
 	private Vector3 previousStaticPosition;
 	private Basis previousStaticRotation;
-	private CameraController Camera => Character.Camera;
+	private PlayerCameraController Camera => Player.Camera;
+
+	public override void _Ready()
+	{
+		if (!IsOverridingCameraTransform)
+			return;
+
+		_followObject = followObject?.IsEmpty == false ? GetNode<Node3D>(followObject) : this;
+
+		if (_followObject is Camera3D)
+			_referenceCamera = _followObject as Camera3D;
+	}
 
 	public void UpdateStaticData(CameraBlendData data)
 	{
-		if (data.SettingsResource != settings) return;
+		if (data.SettingsResource != settings || !IsOverridingCameraTransform) return;
 
-		if (data.SettingsResource.useStaticPosition)
-		{
-			if (data.SettingsResource.copyPosition)
-				data.StaticPosition = GlobalPosition;
-			else
-				data.StaticPosition = data.SettingsResource.staticPosition;
-		}
+		if (data.SettingsResource.copyPosition)
+			data.Position = GlobalPosition;
 
 		if (data.SettingsResource.copyRotation)
 			data.RotationBasis = GlobalBasis;
 
-		if (data.SettingsResource.copyFov && referenceCamera != null)
-			data.Fov = referenceCamera.Fov;
+		if (data.SettingsResource.copyFov && _referenceCamera != null)
+			data.Fov = _referenceCamera.Fov;
 	}
 
 	public override void Activate()
@@ -68,24 +73,31 @@ public partial class CameraTrigger : StageTriggerModule
 			return;
 		}
 
-		if (previousSettings == null)
+		if (!cachedPreviousSettings)
 		{
-			previousSettings = Camera.ActiveSettings;
-			previousStaticPosition = Camera.ActiveBlendData.StaticPosition; // Cache static position
+			previousSettings ??= Camera.ActiveSettings;
+			previousStaticPosition = Camera.ActiveBlendData.Position; // Cache static position
 			previousStaticRotation = Camera.ActiveBlendData.RotationBasis; // Cache static rotation
+			cachedPreviousSettings = true;
 		}
 
-		if (Camera.ActiveSettings == settings &&
-			!(settings.copyPosition || settings.copyRotation))
+		if (UseDistanceBlending)
 		{
-			return;
+			// Ensure we add the previous camera settings so we have something to blend with
+			Camera.UpdateCameraSettings(new()
+			{
+				BlendTime = transitionTime,
+				SettingsResource = previousSettings,
+				TransitionType = transitionType,
+				Trigger = this
+			}, enableInputBlending);
 		}
 
 		Camera.UpdateCameraSettings(new()
 		{
 			BlendTime = transitionTime,
 			SettingsResource = settings,
-			IsCrossfadeEnabled = transitionType == TransitionType.Crossfade,
+			TransitionType = transitionType,
 			Trigger = this
 		}, enableInputBlending);
 
@@ -94,16 +106,34 @@ public partial class CameraTrigger : StageTriggerModule
 
 	public override void Deactivate()
 	{
-		if (previousSettings == null || settings == null) return;
-		if (Camera.ActiveSettings != settings) return; // Already overridden by a different trigger
-		if (Character.ActionState == CharacterController.ActionStates.Teleport) return;
+		if (previousSettings == null || settings == null)
+			return;
+
+		if (Camera.ActiveSettings != settings)
+			return; // Already overridden by a different trigger
+
+		if (Player.IsTeleporting)
+			return;
 
 		Camera.UpdateCameraSettings(new()
 		{
 			BlendTime = Mathf.IsEqualApprox(deactivationTransitionTime, -1) ? transitionTime : deactivationTransitionTime,
 			SettingsResource = previousSettings,
-			StaticPosition = previousStaticPosition, // Restore cached static position
+			Position = previousStaticPosition, // Restore cached static position
 			RotationBasis = previousStaticRotation // Restore cached static rotation
 		}, enableInputBlending);
+	}
+
+	public float CalculateInfluence()
+	{
+		if (Mathf.IsZeroApprox(distanceBlending))
+		{
+			GD.PushWarning("Warning: ActiveCameraSettings distance amount is 0.");
+			return 1f;
+		}
+
+		float playerProgress = Camera.PathFollower.Progress;
+		float triggerProgress = Camera.PathFollower.GetProgress(GlobalPosition);
+		return Mathf.SmoothStep(0f, 1f, Mathf.Clamp((playerProgress - triggerProgress) / distanceBlending, 0f, 1f));
 	}
 }

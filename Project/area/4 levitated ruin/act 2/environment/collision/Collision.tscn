@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://01m7uv7kdr5j"]
+
+[ext_resource type="PackedScene" uid="uid://bk3k4d1o4j12e" path="res://area/4 levitated ruin/act 2/environment/collision/Collision.gltf" id="1_8o420"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="2_fx01n"]
+
+[node name="Collision" instance=ExtResource("1_8o420")]
+
+[node name="StaticBody3D" parent="FloorPavement" index="0" groups=["floor", "pavement"]]
+
+[node name="StaticBody3D" parent="Wall" index="0" groups=["wall"]]
+
+[node name="StaticBody3D" parent="Ceiling" index="0" groups=["ceiling"]]
+
+[node name="OneWay" parent="." index="3"]
+script = ExtResource("2_fx01n")
+startEnabled = true
+
+[node name="StaticBody3D" parent="OneWay" index="0" groups=["wall"]]
+
+[node name="LaunchRingWall" parent="." index="4"]
+script = ExtResource("2_fx01n")
+
+[node name="StaticBody3D" parent="SpikeBallCollision" index="0"]
+collision_layer = 16

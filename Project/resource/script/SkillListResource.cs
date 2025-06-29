@@ -11,18 +11,8 @@ namespace Project.Gameplay;
 [Tool]
 public partial class SkillListResource : Resource
 {
-	public override Array<Dictionary> _GetPropertyList() => [ExtensionMethods.CreateProperty("Rebuild", Variant.Type.Bool)];
-
-	public override bool _Set(StringName property, Variant value)
-	{
-		if (property == "Rebuild")
-		{
-			RebuildSkillList();
-			NotifyPropertyListChanged();
-		}
-
-		return base._Set(property, value);
-	}
+	[ExportToolButton("Rebuild Skill List")]
+	public Callable RebuildButton => Callable.From(RebuildSkillList);
 
 	[Export]
 	private string skillResourcePath;

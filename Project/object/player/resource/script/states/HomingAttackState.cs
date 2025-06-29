@@ -1,0 +1,130 @@
+using Godot;
+using Project.Core;
+
+namespace Project.Gameplay;
+
+public partial class HomingAttackState : PlayerState
+{
+	[Export]
+	private PlayerState landState;
+	[Export]
+	private PlayerState stompState;
+	[Export]
+	private PlayerState jumpDashState;
+
+	[Export]
+	private float normalStrikeSpeed;
+	[Export]
+	private float perfectStrikeSpeed;
+	[Export]
+	private float homingAttackAcceleration;
+
+
+	public override void EnterState()
+	{
+		Player.VerticalSpeed = 0;
+		Player.IsMovingBackward = false;
+		Player.IsHomingAttacking = true;
+		Player.ChangeHitbox("spin");
+		Player.AttackState = PlayerController.AttackStates.Weak;
+
+		Player.IsPerfectHomingAttacking = Player.Lockon.IsMonitoringPerfectHomingAttack;
+		if (Player.IsPerfectHomingAttacking)
+		{
+			Player.Lockon.PlayPerfectStrike();
+			Player.AttackState = PlayerController.AttackStates.Strong;
+		}
+
+		Player.Effect.StartSpinFX();
+		Player.Effect.PlayActionSFX(Player.Effect.JumpDashSfx);
+		Player.Effect.StartTrailFX();
+		Player.Effect.StartSpinFX();
+		Player.Effect.PlayVoice("grunt");
+
+		Player.Animator.StartSpin(5.0f);
+		Player.ChangeHitbox("spin");
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestFire))
+			Player.Skills.ActivateFireCrest();
+	}
+
+	public override void ExitState()
+	{
+		if (!Player.IsLightSpeedAttacking)
+		{
+			Player.IsHomingAttacking = false;
+			Player.AttackState = PlayerController.AttackStates.None;
+			Player.ChangeHitbox("RESET");
+			Player.Effect.StopSpinFX();
+			Player.Effect.StopTrailFX();
+			Player.Animator.ResetState();
+		}
+
+		Player.Lockon.CallDeferred(PlayerLockonController.MethodName.ResetLockonTarget);
+
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestFire))
+			return;
+
+		if (Player.IsBouncing)
+		{
+			Player.Skills.CallDeferred(PlayerSkillController.MethodName.ActivateFireCrestBurst);
+		}
+		else
+		{
+			Player.Lockon.ResetLockonTarget();
+			Player.Skills.DeactivateFireCrest();
+		}
+	}
+
+	public override PlayerState ProcessPhysics()
+	{
+		if (!Player.Lockon.IsTargetAttackable) // Target disappeared. Transition to jumpdash
+		{
+			Player.MovementAngle = Player.PathFollower.ForwardAngle;
+			Player.ChangeHitbox("RESET");
+			return jumpDashState;
+		}
+
+		if (Player.IsPerfectHomingAttacking)
+			Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, perfectStrikeSpeed, homingAttackAcceleration * 2.0f * PhysicsManager.physicsDelta);
+		else
+			Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, normalStrikeSpeed, homingAttackAcceleration * PhysicsManager.physicsDelta);
+		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(Player.Lockon.HomingAttackDirection);
+		Player.ApplyMovement(Player.Lockon.HomingAttackDirection.Normalized());
+
+		bool isColliding = Player.GetSlideCollisionCount() != 0;
+		if (isColliding && ProcessObstructions())
+		{
+			Player.StartBounce();
+			return null;
+		}
+
+		Player.CheckGround();
+		Player.CheckWall();
+		Player.UpdateUpDirection(true);
+		Player.PathFollower.Resync();
+
+		if (Player.Controller.IsActionBufferActive ||
+			(Player.Controller.IsJumpBufferActive && SaveManager.Config.useStompJumpButtonMode))
+		{
+			Player.Controller.ResetJumpBuffer();
+			Player.Controller.ResetActionBuffer();
+			return stompState;
+		}
+
+		return null;
+	}
+
+	private bool ProcessObstructions()
+	{
+		// Check from the floor
+		Vector3 castOffset = Vector3.Up * Player.CollisionSize.Y * .5f;
+		Vector3 castPosition = Player.GlobalPosition + castOffset;
+		if (Player.VerticalSpeed < 0)
+			castPosition += Player.UpDirection * Player.VerticalSpeed * PhysicsManager.physicsDelta;
+		Vector3 castVector = Player.Lockon.Target.GlobalPosition - castPosition;
+		RaycastHit hit = Player.CastRay(castPosition, castVector, Runtime.Instance.lockonObstructionMask);
+		DebugManager.DrawRay(castPosition, castVector, Colors.Magenta);
+		return hit && hit.collidedObject.IsInGroup("wall") && !hit.collidedObject.IsInGroup("level wall");
+	}
+}

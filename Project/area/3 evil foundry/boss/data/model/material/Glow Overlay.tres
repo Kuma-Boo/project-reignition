@@ -1,0 +1,29 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://brh3j4dti4ne4"]
+
+[ext_resource type="Texture2D" uid="uid://dw84megea25rj" path="res://area/3 evil foundry/boss/data/model/texture/glow overlay.png" id="1_1ngl4"]
+
+[sub_resource type="Shader" id="Shader_boulh"]
+code = "shader_type spatial;
+render_mode blend_add, unshaded, fog_disabled;
+
+uniform sampler2D texture_albedo : source_color, repeat_disable;
+uniform float glow_offset;
+varying float amount;
+
+void vertex()
+{
+	amount = (dot(NORMAL, vec3(0, 1, 0)) + 1.0) * 0.5 + glow_offset;
+}
+
+void fragment()
+{
+	vec4 albedo_tex = texture(texture_albedo, vec2(0, amount));
+	ALBEDO = albedo_tex.rgb;
+}
+"
+
+[resource]
+render_priority = 0
+shader = SubResource("Shader_boulh")
+shader_parameter/texture_albedo = ExtResource("1_1ngl4")
+shader_parameter/glow_offset = 0.0

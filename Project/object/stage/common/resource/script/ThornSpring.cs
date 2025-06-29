@@ -8,7 +8,7 @@ public partial class ThornSpring : Launcher
 {
 	[ExportGroup("Behavior Settings")]
 	/// <summary> How long a rotation phase (full or half) takes in seconds. </summary>
-	[Export(PropertyHint.Range, "0,5,.1")]
+	[Export(PropertyHint.Range, "0.1,5,.1")]
 	private float rotationTime;
 	/// <summary> How long to wait between rotation phases. </summary>
 	[Export(PropertyHint.Range, "0,5,.1")]
@@ -57,8 +57,10 @@ public partial class ThornSpring : Launcher
 	/// <summary> Flag to pause timebreak rotation so the player doesn't get hurt. </summary>
 	private bool pauseTimebreakRotation;
 
-	public override void _Ready()
+	protected override void SetUp()
 	{
+		base.SetUp();
+
 		currentTime = startingTimeOffset;
 		if (pauseHalfway && startRotated)
 		{
@@ -71,7 +73,7 @@ public partial class ThornSpring : Launcher
 
 	public override void Activate(Area3D a)
 	{
-		if (Character.Lockon.IsHomingAttacking && Character.Lockon.Target == this) // Pause time break rotation temporarily
+		if (Player.IsHomingAttacking && Player.Lockon.Target == this) // Pause time break rotation temporarily
 			pauseTimebreakRotation = true;
 
 		base.Activate(a);
@@ -96,8 +98,8 @@ public partial class ThornSpring : Launcher
 	/// <summary> Updates a time break spring based on the player's break skills. </summary>
 	private void UpdateTimeBreakSpring()
 	{
-		if (!Character.Skills.IsTimeBreakActive &&
-			(!Character.Lockon.IsHomingAttacking || Character.Lockon.Target != this))
+		if (!Player.Skills.IsTimeBreakActive &&
+			(!Player.IsHomingAttacking || Player.Lockon.Target != this))
 		{
 			if (rotationState != RotationStates.Looping && !pauseTimebreakRotation) // Return to spinning quickly
 				StartTimeBreakRotation();
@@ -129,6 +131,9 @@ public partial class ThornSpring : Launcher
 		if (rotationState == RotationStates.Rotating)
 			return; // Don't update times when rotating
 
+		if (Mathf.IsZeroApprox(staticTime))
+			return;
+
 		currentTime = Mathf.MoveToward(currentTime, staticTime, PhysicsManager.physicsDelta);
 		if (!Mathf.IsEqualApprox(currentTime, staticTime))
 			return; // Still waiting
@@ -139,7 +144,7 @@ public partial class ThornSpring : Launcher
 			return;
 		}
 
-		if (Character.Lockon.IsHomingAttacking && Character.Lockon.Target == this)
+		if (Player.IsHomingAttacking && Player.Lockon.Target == this)
 			return; // Don't start rotating if the player is attacking this spring
 
 		// Start a new rotation

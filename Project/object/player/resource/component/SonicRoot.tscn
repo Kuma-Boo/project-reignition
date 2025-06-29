@@ -1,0 +1,601 @@
+[gd_scene load_steps=32 format=3 uid="uid://wfh54hnc028k"]
+
+[ext_resource type="PackedScene" uid="uid://b5jl3vv1j1fck" path="res://object/player/resource/model/Sonic.gltf" id="1_ea3e1"]
+[ext_resource type="Script" uid="uid://byfnkkp3hy8ca" path="res://object/player/resource/script/PlayerAnimator.cs" id="2_3qp24"]
+[ext_resource type="PackedScene" uid="uid://clet3u3mrcb8g" path="res://object/player/resource/effect/countdown/CountdownBoostParticle.tscn" id="3_hb6te"]
+[ext_resource type="PackedScene" uid="uid://c2bl1sk5cfyq3" path="res://object/player/resource/effect/countdown/CountdownFlameParticle.tscn" id="4_js45q"]
+[ext_resource type="AnimationLibrary" uid="uid://dhcxjlduawy8d" path="res://object/player/resource/model/animation/ActionLibrary.gltf" id="5_21j6r"]
+[ext_resource type="AnimationLibrary" uid="uid://dck4cudd7a66a" path="res://object/player/resource/model/animation/BalanceLibrary.gltf" id="5_a0jad"]
+[ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="6_kpqgu"]
+[ext_resource type="AnimationLibrary" uid="uid://ql8twqq248an" path="res://object/player/resource/model/animation/SidleLibrary.gltf" id="6_pf4ty"]
+[ext_resource type="AnimationLibrary" uid="uid://bo26mw8v8m0eh" path="res://object/player/resource/model/animation/EventLibrary.gltf" id="8_7bg0r"]
+[ext_resource type="Material" uid="uid://bklx3tbpw7s8e" path="res://object/player/resource/model/material/SpeedbreakOverlay.tres" id="8_ds2lb"]
+[ext_resource type="PackedScene" uid="uid://nvbpiay8inap" path="res://area/4 levitated ruin/object/model/special/SonicStone.gltf" id="8_r3bdb"]
+[ext_resource type="AnimationNodeBlendTree" uid="uid://biwe75w273iq7" path="res://object/player/resource/model/animation/animation tree/Root.tres" id="8_sfnih"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="10_iki8q"]
+[ext_resource type="AnimationLibrary" uid="uid://dpd4w3nuuvybs" path="res://object/player/resource/model/animation/GimmickLibrary.gltf" id="12_0ewgh"]
+[ext_resource type="AudioStream" uid="uid://c5did7u4f8gq2" path="res://sound/sfx/player/flame countdown 1.wav" id="12_3lyoq"]
+[ext_resource type="Resource" uid="uid://ukcne4um86a6" path="res://resource/preset/camera/common/CutsceneCam.tres" id="14_u1car"]
+[ext_resource type="Material" uid="uid://cyphajdqgwnj8" path="res://object/player/resource/model/material/BodyTransparent.tres" id="16_icvwi"]
+
+[sub_resource type="Curve" id="Curve_skwgn"]
+_limits = [0.0, 2.5, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 10.0, 0, 1, Vector2(0.1, 1), 10.0, 3.64959, 1, 0, Vector2(1, 2.5), 0.147263, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_2rxkn"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_j53km"]
+width = 64
+curve = SubResource("Curve_2rxkn")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ny081"]
+lifetime_randomness = 0.5
+direction = Vector3(0, 1, 0)
+spread = 80.0
+initial_velocity_min = 0.1
+initial_velocity_max = 0.5
+gravity = Vector3(0, -1, 0)
+damping_min = 0.1
+damping_max = 0.5
+scale_min = 0.1
+scale_curve = SubResource("CurveTexture_j53km")
+
+[sub_resource type="QuadMesh" id="QuadMesh_vcbic"]
+material = ExtResource("6_kpqgu")
+size = Vector2(0.1, 0.1)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6smkh"]
+
+[sub_resource type="Animation" id="Animation_tuy1q"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SonicRoot:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SonicRoot/GeneralSkeleton/ChestAttachment/FlameOffset/CountdownBoostParticle:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SonicRoot/GeneralSkeleton/ChestAttachment/FlameOffset/CountdownFlameParticle:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SonicRoot/GeneralSkeleton/ChestAttachment/FlameOffset/CountdownFlameParticle:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.1, 0.1, 0.1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CountdownRoot/CountdownPosition:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SonicStone:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SonicStone:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_3gene"]
+resource_name = "invincibility"
+length = 3.0
+step = 0.0416667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SonicRoot:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.14, 0.28, 0.42, 0.56, 0.7, 0.84, 0.98, 1.12, 1.26, 1.4, 1.54, 1.68, 1.82, 1.96, 2.1, 2.24, 2.38, 2.52, 2.66, 2.8, 2.94),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true]
+}
+
+[sub_resource type="Animation" id="Animation_s0wax"]
+resource_name = "petrify-shake"
+length = 0.5
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SonicStone:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.1, 0.2, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0.0872665), Vector3(0, 0, -0.0349066), Vector3(0, 0, 0.0523599), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_c4tcg"]
+resource_name = "petrify-start"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SonicRoot:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SonicStone:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_3mom7"]
+resource_name = "petrify-stop"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SonicStone:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SonicRoot:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_ju8e7"]
+resource_name = "teleport-end"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SonicRoot:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="Animation" id="Animation_jxy1t"]
+resource_name = "teleport-start"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SonicRoot:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_r0udk"]
+_data = {
+&"RESET": SubResource("Animation_tuy1q"),
+&"invincibility": SubResource("Animation_3gene"),
+&"petrify-shake": SubResource("Animation_s0wax"),
+&"petrify-start": SubResource("Animation_c4tcg"),
+&"petrify-stop": SubResource("Animation_3mom7"),
+&"teleport-end": SubResource("Animation_ju8e7"),
+&"teleport-start": SubResource("Animation_jxy1t")
+}
+
+[node name="Sonic" node_paths=PackedStringArray("animationTree", "eventAnimationPlayer", "bodyMesh") instance=ExtResource("1_ea3e1")]
+script = ExtResource("2_3qp24")
+animationTree = NodePath("AnimationTree")
+eventAnimationPlayer = NodePath("EventAnimationPlayer")
+bodyMesh = NodePath("SonicRoot/GeneralSkeleton/BodyMesh")
+blurOverrideMaterial = ExtResource("16_icvwi")
+movementAnimationSpeedCurve = SubResource("Curve_skwgn")
+
+[node name="GeneralSkeleton" parent="SonicRoot" index="0"]
+bones/0/rotation = Quaternion(6.71795e-08, -1.80861e-07, -3.0007e-07, 1)
+bones/1/rotation = Quaternion(0.999986, 2.99907e-07, -1.92129e-07, 0.00531361)
+bones/2/rotation = Quaternion(0.00897831, -5.98673e-12, 1.91381e-09, 0.99996)
+bones/3/rotation = Quaternion(0.704511, 6.86013e-09, -1.13137e-08, 0.709693)
+bones/4/rotation = Quaternion(0.996924, 1.07903e-15, 1.37244e-14, -0.0783794)
+bones/5/rotation = Quaternion(-7.96255e-09, -2.15482e-07, -9.6273e-08, 1)
+bones/6/position = Vector3(0.0377093, 0.0144092, -0.0468442)
+bones/6/rotation = Quaternion(0.923503, 0.0930435, 0.0930429, -0.360317)
+bones/7/position = Vector3(-0.0377095, 0.0144091, -0.0468441)
+bones/7/rotation = Quaternion(0.923503, -0.0930431, -0.0930439, -0.360317)
+bones/8/rotation = Quaternion(-0.507972, -0.493846, -0.492108, 0.505876)
+bones/9/rotation = Quaternion(0.00762178, 0.70522, -0.0119404, 0.708847)
+bones/10/rotation = Quaternion(0.00230445, -0.69927, 0.00217966, 0.714851)
+bones/11/position = Vector3(0.066236, 0.0606951, -0.0182575)
+bones/11/rotation = Quaternion(0.55867, 0.762376, -0.0946179, -0.312598)
+bones/12/rotation = Quaternion(0.00527087, 0.0365675, -0.0021433, 0.999315)
+bones/13/position = Vector3(0.0471311, 0.131563, 0.0147976)
+bones/13/rotation = Quaternion(0.0274164, 0.0283704, -0.0518214, 0.997877)
+bones/14/rotation = Quaternion(0.00294868, 0.00678223, -0.000281789, 0.999973)
+bones/15/rotation = Quaternion(0.014017, 0.00409222, 0.00361266, 0.999887)
+bones/16/position = Vector3(-0.0258128, 0.131441, 0.0203244)
+bones/16/rotation = Quaternion(0.00308571, 0.00362121, 0.0545011, 0.998502)
+bones/17/rotation = Quaternion(0.0167333, 0.0107753, 0.000105141, 0.999802)
+bones/18/rotation = Quaternion(0.0249171, 0.00388378, 0.000898511, 0.999682)
+bones/19/position = Vector3(0.0105133, 0.134816, 0.0251114)
+bones/19/rotation = Quaternion(0.0166958, 0.0143342, 0.000456244, 0.999758)
+bones/20/rotation = Quaternion(0.00122096, 0.00794685, 6.0618e-05, 0.999968)
+bones/21/rotation = Quaternion(0.00959978, -0.00273355, 0.000526762, 0.99995)
+bones/22/position = Vector3(-0.0580948, 0.1219, 0.00920518)
+bones/22/rotation = Quaternion(0.0130255, 0.00734399, 0.117758, 0.99293)
+bones/23/rotation = Quaternion(-0.00150023, 0.00739151, -0.000392204, 0.999972)
+bones/24/rotation = Quaternion(0.00834599, -0.0104869, 0.000889612, 0.99991)
+bones/25/rotation = Quaternion(-0.507969, 0.493849, 0.492113, 0.505871)
+bones/26/rotation = Quaternion(0.00761438, -0.70522, 0.0119288, 0.708847)
+bones/27/rotation = Quaternion(0.00230785, 0.69927, -0.00217436, 0.714851)
+bones/28/position = Vector3(-0.066236, 0.0606952, -0.0182575)
+bones/28/rotation = Quaternion(-0.55867, 0.762376, -0.094618, 0.312598)
+bones/29/rotation = Quaternion(0.00527072, -0.0365676, 0.00214333, 0.999315)
+bones/30/position = Vector3(-0.0471311, 0.131563, 0.0147977)
+bones/30/rotation = Quaternion(0.0274165, -0.0283704, 0.0518215, 0.997877)
+bones/31/rotation = Quaternion(0.00294867, -0.00678224, 0.000281738, 0.999973)
+bones/32/rotation = Quaternion(0.014017, -0.00409222, -0.00361268, 0.999887)
+bones/33/position = Vector3(0.0258128, 0.131441, 0.0203245)
+bones/33/rotation = Quaternion(0.0030857, -0.00362121, -0.0545012, 0.998502)
+bones/34/rotation = Quaternion(0.0167333, -0.0107753, -0.000105106, 0.999802)
+bones/35/rotation = Quaternion(0.0249171, -0.00388378, -0.00089851, 0.999682)
+bones/36/position = Vector3(-0.0105133, 0.134816, 0.0251114)
+bones/36/rotation = Quaternion(0.0166958, -0.0143343, -0.000456251, 0.999758)
+bones/37/rotation = Quaternion(0.00122097, -0.00794686, -6.06105e-05, 0.999968)
+bones/38/rotation = Quaternion(0.00959979, 0.00273354, -0.000526762, 0.99995)
+bones/39/position = Vector3(0.0580948, 0.1219, 0.00920523)
+bones/39/rotation = Quaternion(0.0130255, -0.007344, -0.117758, 0.99293)
+bones/40/rotation = Quaternion(-0.00150024, -0.00739151, 0.000392111, 0.999972)
+bones/41/rotation = Quaternion(0.00834599, 0.0104869, -0.000889616, 0.99991)
+bones/43/position = Vector3(7.25906e-08, 0.311998, -0.0195119)
+bones/43/rotation = Quaternion(-0.64383, -1.6904e-06, -1.6904e-06, 0.765168)
+bones/44/rotation = Quaternion(-0.19973, -2.76456e-07, 2.35476e-06, 0.979851)
+bones/44/scale = Vector3(1, 1, 1)
+bones/45/position = Vector3(2.65952e-07, 0.147835, -0.0914632)
+bones/45/rotation = Quaternion(-0.797272, -3.17443e-06, -3.17443e-06, 0.60362)
+bones/45/scale = Vector3(1, 1, 1)
+bones/46/rotation = Quaternion(-0.23467, -2.52169e-06, 8.92783e-06, 0.972075)
+bones/46/scale = Vector3(1, 1, 1)
+bones/47/position = Vector3(0.104188, 0.241294, -0.0471134)
+bones/47/rotation = Quaternion(-0.724152, -0.0852654, -0.0852654, 0.679016)
+bones/47/scale = Vector3(1, 1, 1)
+bones/48/rotation = Quaternion(-0.253688, 0.0999926, -0.0414427, 0.961211)
+bones/48/scale = Vector3(1, 1, 1)
+bones/49/position = Vector3(0.0910002, 0.10747, -0.074292)
+bones/49/rotation = Quaternion(0.860133, 0.123618, 0.123618, -0.479176)
+bones/50/rotation = Quaternion(-0.151181, 0.0372496, 0.0645466, 0.985693)
+bones/50/scale = Vector3(1, 1, 1)
+bones/51/position = Vector3(-0.0910005, 0.10747, -0.074292)
+bones/51/rotation = Quaternion(0.860133, -0.123618, -0.123618, -0.479176)
+bones/52/rotation = Quaternion(-0.151181, -0.0372496, -0.0645466, 0.985693)
+bones/52/scale = Vector3(1, 1, 1)
+bones/53/position = Vector3(-0.104188, 0.241294, -0.0471134)
+bones/53/rotation = Quaternion(-0.724152, 0.0852654, 0.0852654, 0.679016)
+bones/53/scale = Vector3(1, 1, 1)
+bones/54/rotation = Quaternion(-0.253687, -0.0999926, 0.0414427, 0.961211)
+bones/54/scale = Vector3(1, 1, 1)
+bones/55/position = Vector3(-1.2393e-08, 0.00256836, -0.03)
+bones/55/rotation = Quaternion(-0.782357, -1.22117e-07, 3.2839e-07, 0.62283)
+bones/56/rotation = Quaternion(0.999986, 2.97474e-07, -1.92112e-07, 0.0053232)
+bones/57/rotation = Quaternion(0.00899519, -2.34579e-12, -2.37187e-09, 0.99996)
+bones/58/rotation = Quaternion(0.704506, 8.15656e-09, -9.99239e-09, 0.709699)
+bones/59/rotation = Quaternion(0.996924, -1.09643e-15, -1.39458e-14, -0.0783794)
+
+[node name="BodyMesh" parent="SonicRoot/GeneralSkeleton" index="0"]
+layers = 64
+material_overlay = ExtResource("8_ds2lb")
+
+[node name="LEye" parent="SonicRoot/GeneralSkeleton" index="1"]
+layers = 64
+
+[node name="REye" parent="SonicRoot/GeneralSkeleton" index="2"]
+layers = 64
+
+[node name="RingMesh" parent="SonicRoot/GeneralSkeleton" index="3"]
+layers = 64
+
+[node name="ChestAttachment" type="BoneAttachment3D" parent="SonicRoot/GeneralSkeleton" index="4"]
+transform = Transform3D(1, 7.92686e-07, -7.92686e-07, -7.92686e-07, 1, -1.18433e-07, 7.92686e-07, 1.18434e-07, 1, 5.80681e-08, 0.554189, -9.35148e-09)
+bone_name = "chest"
+bone_idx = 5
+
+[node name="FlameOffset" type="Node3D" parent="SonicRoot/GeneralSkeleton/ChestAttachment" index="0"]
+transform = Transform3D(1, -9.31323e-09, 0, 3.72529e-09, 1, 0, 4.47035e-08, 2.23517e-08, 1, 0.02, -1.49012e-07, 0.1)
+
+[node name="CountdownBoostParticle" parent="SonicRoot/GeneralSkeleton/ChestAttachment/FlameOffset" index="0" instance=ExtResource("3_hb6te")]
+visible = false
+
+[node name="CountdownFlameParticle" parent="SonicRoot/GeneralSkeleton/ChestAttachment/FlameOffset" index="1" instance=ExtResource("4_js45q")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+visible = false
+
+[node name="Embers" type="GPUParticles3D" parent="SonicRoot/GeneralSkeleton/ChestAttachment/FlameOffset" index="2"]
+transform = Transform3D(1, -2.79123e-13, 2.84217e-13, -1.33353e-14, 1, 0, -2.84217e-13, -2.22045e-15, 1, -3.1665e-08, 0.040546, 0)
+visible = false
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+amount = 16
+lifetime = 0.8
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_ny081")
+draw_pass_1 = SubResource("QuadMesh_vcbic")
+
+[node name="RFoot" type="BoneAttachment3D" parent="SonicRoot/GeneralSkeleton" index="5"]
+transform = Transform3D(1, 2.13163e-14, 1.18058e-13, -7.56617e-14, 2.27708e-07, 0.999999, 1.03029e-13, -0.999998, 2.45403e-07, -0.0397276, 0.155469, 0.00205609)
+bone_name = "r_foot"
+bone_idx = 58
+
+[node name="SoleOffset" type="Node3D" parent="SonicRoot/GeneralSkeleton/RFoot" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.01, -0.085, -0.15)
+
+[node name="LFoot" type="BoneAttachment3D" parent="SonicRoot/GeneralSkeleton" index="6"]
+transform = Transform3D(1, -1.77636e-14, -4.5991e-14, 3.25157e-14, 1.93249e-07, 1, 1.35003e-13, -1, 1.97906e-07, 0.0397276, 0.155469, 0.00205609)
+bone_name = "l_foot"
+bone_idx = 3
+
+[node name="SoleOffset" type="Node3D" parent="SonicRoot/GeneralSkeleton/LFoot" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, -0.085, -0.15)
+
+[node name="SonicStone" parent="." index="1" instance=ExtResource("8_r3bdb")]
+visible = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="2"]
+libraries = {
+&"": SubResource("AnimationLibrary_6smkh"),
+&"ActionLibrary": ExtResource("5_21j6r"),
+&"BalanceLibrary": ExtResource("5_a0jad"),
+&"EventLibrary": ExtResource("8_7bg0r"),
+&"GimmickLibrary": ExtResource("12_0ewgh"),
+&"SidleLibrary": ExtResource("6_pf4ty")
+}
+
+[node name="EventAnimationPlayer" type="AnimationPlayer" parent="." index="3"]
+callback_mode_process = 0
+libraries = {
+&"": SubResource("AnimationLibrary_r0udk")
+}
+
+[node name="CountdownRoot" type="Node3D" parent="." index="4"]
+transform = Transform3D(0.916265, 0, 0.40057, 0, 1, 0, -0.40057, 0, 0.916265, 0, 0, 0)
+
+[node name="FlameBurstSFX" type="AudioStreamPlayer" parent="CountdownRoot" index="0"]
+process_mode = 1
+stream = ExtResource("12_3lyoq")
+bus = &"GAME SFX"
+
+[node name="CountdownPosition" type="Camera3D" parent="CountdownRoot" index="1"]
+transform = Transform3D(1, 0, 0, 0, 0.97447, -0.224518, 0, 0.224518, 0.97447, 0, 0, 0)
+cull_mask = 64
+fov = 90.0
+script = ExtResource("10_iki8q")
+transitionTime = 0.0
+settings = ExtResource("14_u1car")
+UpdateEveryFrame = true
+followObject = NodePath(".")
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="5"]
+active = false
+callback_mode_process = 0
+tree_root = ExtResource("8_sfnih")
+anim_player = NodePath("../AnimationPlayer")
+parameters/air_tree/TimeScale/scale = 1.2
+parameters/air_tree/autojump_trigger/active = false
+parameters/air_tree/autojump_trigger/internal_active = false
+parameters/air_tree/autojump_trigger/request = 0
+parameters/air_tree/backflip_trigger/active = false
+parameters/air_tree/backflip_trigger/internal_active = false
+parameters/air_tree/backflip_trigger/request = 0
+parameters/air_tree/bounce_transition/current_state = ""
+parameters/air_tree/bounce_transition/transition_request = ""
+parameters/air_tree/bounce_transition/current_index = -1
+parameters/air_tree/bounce_trigger/active = false
+parameters/air_tree/bounce_trigger/internal_active = false
+parameters/air_tree/bounce_trigger/request = 0
+parameters/air_tree/fall_speed/scale = 1.0
+parameters/air_tree/fall_trigger/active = false
+parameters/air_tree/fall_trigger/internal_active = false
+parameters/air_tree/fall_trigger/request = 0
+parameters/air_tree/jump_accel_trigger/active = false
+parameters/air_tree/jump_accel_trigger/internal_active = false
+parameters/air_tree/jump_accel_trigger/request = 0
+parameters/air_tree/light_dash_speed/scale = 1.0
+parameters/air_tree/light_dash_trigger/active = false
+parameters/air_tree/light_dash_trigger/internal_active = false
+parameters/air_tree/light_dash_trigger/request = 0
+parameters/air_tree/splash_jump_trigger/active = false
+parameters/air_tree/splash_jump_trigger/internal_active = false
+parameters/air_tree/splash_jump_trigger/request = 0
+parameters/air_tree/state_transition/current_state = "fall"
+parameters/air_tree/state_transition/transition_request = ""
+parameters/air_tree/state_transition/current_index = 0
+parameters/air_tree/stomp_trigger/active = false
+parameters/air_tree/stomp_trigger/internal_active = false
+parameters/air_tree/stomp_trigger/request = 0
+parameters/balance_tree/balance_speed/scale = 1.0
+parameters/balance_tree/balance_state/balance_left_blend/blend_position = 0
+parameters/balance_tree/balance_state/balance_right_blend/blend_position = 0.000741243
+parameters/balance_tree/crouch_add/add_amount = 0.0
+parameters/balance_tree/direction_transition/current_state = "right"
+parameters/balance_tree/direction_transition/transition_request = ""
+parameters/balance_tree/direction_transition/current_index = 0
+parameters/balance_tree/grindstep_speed/scale = 1.5
+parameters/balance_tree/grindstep_trigger/active = false
+parameters/balance_tree/grindstep_trigger/internal_active = false
+parameters/balance_tree/grindstep_trigger/request = 0
+parameters/balance_tree/stagger_trigger/active = false
+parameters/balance_tree/stagger_trigger/internal_active = false
+parameters/balance_tree/stagger_trigger/request = 0
+parameters/balance_tree/trick_transition/current_state = ""
+parameters/balance_tree/trick_transition/transition_request = ""
+parameters/balance_tree/trick_transition/current_index = -1
+parameters/balance_tree/trick_trigger/active = false
+parameters/balance_tree/trick_trigger/internal_active = false
+parameters/balance_tree/trick_trigger/request = 0
+parameters/balance_tree/wind_add/add_amount = 1.0
+parameters/balance_tree/wind_blend/blend_position = 0.0
+parameters/drift_tree/direction_transition/current_state = "left"
+parameters/drift_tree/direction_transition/transition_request = ""
+parameters/drift_tree/direction_transition/current_index = 0
+parameters/gimmick_tree/ivy_blend/blend_position = 0.0
+parameters/gimmick_tree/ivy_start_trigger/active = false
+parameters/gimmick_tree/ivy_start_trigger/internal_active = false
+parameters/gimmick_tree/ivy_start_trigger/request = 0
+parameters/gimmick_tree/ivy_swing_trigger/active = false
+parameters/gimmick_tree/ivy_swing_trigger/internal_active = false
+parameters/gimmick_tree/ivy_swing_trigger/request = 0
+parameters/gimmick_tree/petrify_stop_trigger/active = false
+parameters/gimmick_tree/petrify_stop_trigger/internal_active = false
+parameters/gimmick_tree/petrify_stop_trigger/request = 0
+parameters/gimmick_tree/state_transition/current_state = "ivy"
+parameters/gimmick_tree/state_transition/transition_request = ""
+parameters/gimmick_tree/state_transition/current_index = 0
+parameters/gimmick_tree/zipline_blend/blend_position = 0.0
+parameters/gimmick_tree/zipline_direction/current_state = ""
+parameters/gimmick_tree/zipline_direction/transition_request = ""
+parameters/gimmick_tree/zipline_direction/current_index = -1
+parameters/gimmick_tree/zipline_tap_speed/scale = 1.0
+parameters/gimmick_tree/zipline_tap_trigger/active = false
+parameters/gimmick_tree/zipline_tap_trigger/internal_active = false
+parameters/gimmick_tree/zipline_tap_trigger/request = 0
+parameters/ground_transition/current_state = "enabled"
+parameters/ground_transition/transition_request = ""
+parameters/ground_transition/current_index = 0
+parameters/ground_tree/backstep_seek/seek_request = -1.0
+parameters/ground_tree/brake_trigger/active = false
+parameters/ground_tree/brake_trigger/internal_active = false
+parameters/ground_tree/brake_trigger/request = 0
+parameters/ground_tree/crouch_transition/current_state = "disabled"
+parameters/ground_tree/crouch_transition/transition_request = ""
+parameters/ground_tree/crouch_transition/current_index = 0
+parameters/ground_tree/forward_blend/blend_position = 0.0
+parameters/ground_tree/forward_seek/seek_request = -1.0
+parameters/ground_tree/ground_seek/seek_request = -1.0
+parameters/ground_tree/ground_speed/scale = 1.0
+parameters/ground_tree/idle_blend/blend_amount = 0.0
+parameters/ground_tree/land_speed/scale = 1.5
+parameters/ground_tree/land_trigger/active = false
+parameters/ground_tree/land_trigger/internal_active = false
+parameters/ground_tree/land_trigger/request = 0
+parameters/ground_tree/quick_step_speed/scale = 1.0
+parameters/ground_tree/quick_step_transition/current_state = "left"
+parameters/ground_tree/quick_step_transition/transition_request = ""
+parameters/ground_tree/quick_step_transition/current_index = 0
+parameters/ground_tree/quick_step_trigger/active = false
+parameters/ground_tree/quick_step_trigger/internal_active = false
+parameters/ground_tree/quick_step_trigger/request = 0
+parameters/ground_tree/reverse_path_trigger/active = false
+parameters/ground_tree/reverse_path_trigger/internal_active = false
+parameters/ground_tree/reverse_path_trigger/request = 0
+parameters/ground_tree/speedbreak_speed/scale = 1.2
+parameters/ground_tree/speedbreak_trigger/active = false
+parameters/ground_tree/speedbreak_trigger/internal_active = false
+parameters/ground_tree/speedbreak_trigger/request = 0
+parameters/ground_tree/turn_add/add_amount = 1.0
+parameters/ground_tree/turn_blend/blend_position = Vector2(0, 0)
+parameters/hurt_trigger/active = false
+parameters/hurt_trigger/internal_active = false
+parameters/hurt_trigger/request = 0
+parameters/oneshot_tree/oneshot_seek/seek_request = -1.0
+parameters/oneshot_tree/oneshot_transition/current_state = "countdown"
+parameters/oneshot_tree/oneshot_transition/transition_request = ""
+parameters/oneshot_tree/oneshot_transition/current_index = 0
+parameters/oneshot_trigger/active = false
+parameters/oneshot_trigger/internal_active = false
+parameters/oneshot_trigger/request = 0
+parameters/sidle_tree/direction_transition/current_state = "right"
+parameters/sidle_tree/direction_transition/transition_request = ""
+parameters/sidle_tree/direction_transition/current_index = 0
+parameters/sidle_tree/sidle_seek/seek_request = -1.0
+parameters/sidle_tree/sidle_speed/scale = 0.0
+parameters/spin_speed/scale = 1.0
+parameters/state_transition/current_state = "normal"
+parameters/state_transition/transition_request = ""
+parameters/state_transition/current_index = 0

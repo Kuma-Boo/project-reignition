@@ -12,6 +12,8 @@ public partial class WorldSelect : Menu
 	[Export]
 	private VideoStreamPlayer secondaryVideoPlayer;
 	[Export]
+	private BGMPlayer retailBgm;
+	[Export]
 	private Array<StringName> videoStreamPaths = [];
 	private VideoStream[] videoStreams;
 	private VideoStreamPlayer ActiveVideoPlayer { get; set; }
@@ -40,6 +42,9 @@ public partial class WorldSelect : Menu
 	private readonly Array<Control> _levelNewSprites = [];
 	protected override void SetUp()
 	{
+		if (SaveManager.Config.useRetailMenuMusic)
+			bgm = retailBgm; // Swap audio track to retail version
+
 		for (int i = 0; i < levelTextSprites.Count; i++)
 			_levelTextSprites.Add(GetNode<Sprite2D>(levelTextSprites[i]));
 
@@ -89,7 +94,7 @@ public partial class WorldSelect : Menu
 		if (animator.AssignedAnimation == "init" || animator.AssignedAnimation == "cancel")
 			animator.Play("show-fade-video");
 		else
-			animator.Play(SHOW_ANIMATION);
+			animator.Play(ShowAnimation);
 
 		menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.WorldSelect;
 	}
@@ -116,6 +121,10 @@ public partial class WorldSelect : Menu
 		if (primaryVideoPlayer.IsVisibleInTree())
 		{
 			UpdateVideo();
+
+			if (ActiveVideoPlayer == null)
+				return;
+
 			if (ActiveVideoPlayer.Stream != null)
 			{
 				if (!ActiveVideoPlayer.IsPlaying())
@@ -133,7 +142,7 @@ public partial class WorldSelect : Menu
 
 	protected override void UpdateSelection()
 	{
-		int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
+		int inputSign = Mathf.Sign(Input.GetAxis("ui_up", "ui_down"));
 		if (inputSign != 0)
 		{
 			VerticalSelection = WrapSelection(VerticalSelection + inputSign, (int)SaveManager.WorldEnum.Max);
@@ -144,7 +153,7 @@ public partial class WorldSelect : Menu
 			int transitionIndex = WrapSelection(isScrollingUp ? VerticalSelection - 1 : VerticalSelection + 1, (int)SaveManager.WorldEnum.Max);
 			UpdateSpriteRegion(3, transitionIndex); // Update level text
 
-			animator.Play(isScrollingUp ? SCROLL_UP_ANIMATION : SCROLL_DOWN_ANIMATION);
+			animator.Play(isScrollingUp ? ScrollUpAnimation : ScrollDownAnimation);
 			animator.Seek(0.0, true);
 			DisableProcessing();
 		}
@@ -178,7 +187,7 @@ public partial class WorldSelect : Menu
 		// Don't change video?
 		if (ActiveVideoPlayer != null && ActiveVideoPlayer.Stream == videoStreams[VerticalSelection]) return;
 		if (!SaveManager.ActiveGameData.IsWorldUnlocked((SaveManager.WorldEnum)VerticalSelection)) return; // World is locked
-		if (!Mathf.IsZeroApprox(Input.GetAxis("move_up", "move_down"))) return; // Still scrolling
+		if (!Mathf.IsZeroApprox(Input.GetAxis("ui_up", "ui_down"))) return; // Still scrolling
 
 		if (ActiveVideoPlayer?.IsPlaying() == true)
 		{
@@ -215,6 +224,10 @@ public partial class WorldSelect : Menu
 		_levelTextSprites[spriteIndex].RegionRect = levelSpriteRegions[selectionIndex];
 
 		if (spriteIndex == 1) // Updating primary selection
-			description.SetText(levelDescriptionKeys[selectionIndex]);
+		{
+			description.ShowDescription();
+			description.Text = levelDescriptionKeys[selectionIndex];
+		}
+
 	}
 }

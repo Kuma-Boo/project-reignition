@@ -39,6 +39,9 @@ public class SkillRing
 		for (int i = 0; i < EquippedSkills.Count; i++)
 		{
 			SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(EquippedSkills[i]);
+			if (baseSkill == null) // Skill not found?
+				continue;
+
 			int augmentIndex = GetAugmentIndex(EquippedSkills[i]);
 			if (augmentIndex == 0)
 			{
@@ -163,6 +166,13 @@ public class SkillRing
 		return false;
 	}
 
+	/// <summary> Resets a skill's augment index to 0. </summary>
+	public void ResetAugmentIndex(SkillKey key)
+	{
+		if (EquippedAugments.ContainsKey(key))
+			EquippedAugments[key] = 0;
+	}
+
 	/// <summary> Checks whether a skill is unlocked on the active save file. </summary>
 	public bool IsSkillUnlocked(SkillKey key) => IsSkillUnlocked(Runtime.Instance.SkillList.GetSkill(key));
 
@@ -242,7 +252,6 @@ public enum SkillEquipStatusEnum
 	Success,
 	Expensive,
 	Conflict,
-	// Should never be called from the actual game
 	Equipped,
 	Missing,
 }
@@ -252,11 +261,13 @@ public enum SkillKey
 {
 	// Control skills
 	Autorun,
+	ChargeJump,
+	SlowTurn, // Decreases Sonic's turning sensitivity
+	QuickTurn, // Increases Sonic's turning sensitivity
+
 	SpeedUp, // Increases Sonic's top speed
 	TractionUp, // Increases Sonic's traction
 	TurnaroundUp, // Increases Sonic's friction
-	SlowTurn, // Decreases Sonic's turning sensitivity
-	QuickTurn, // Increases Sonic's turning sensitivity
 	GrindUp, // Increase Grinding speed
 	AllRounder, // Reduces acceleration loss caused by steep terrain
 
@@ -273,9 +284,10 @@ public enum SkillKey
 
 	// Jump skills
 	AccelJumpAttack, // Increases attack power of accel jump
+	SpinJump, // Have Sonic instantly enter a spinning state
+	ArmorJump, // Allow Sonic to bounce off enemies
 
 	// Backflip skills
-	// Backflip, // TODO Replace Secret Rings backstep with a backflip?
 	BackstepAttack, // Increases attack power of Backflip
 
 	// Landing skills
@@ -287,6 +299,7 @@ public enum SkillKey
 	PearlRespawn, // Allows cheating death with enough soul power
 	PearlDamage, // Reduces the amount of soul power lost when taking damage
 	RingLossConvert, // Increases soul power when taking damage
+	RingRange, // Makes collecting rings closer
 	RingPearlConvert, // Converts rings to pearls when collected
 
 	// Ring skills
@@ -305,7 +318,10 @@ public enum SkillKey
 
 	// New skills
 	RankPreview, // Shows the current rank on the heads-up display
+	QuickStep, // Quick Step, Unleashed style
 	PerfectHomingAttack, // Perfect homing attack, Colors Ultimate style
+	LightSpeedDash, // SA2 style
+	LightSpeedAttack, // SA2 style
 
 	// Crest skills
 	CrestWind,

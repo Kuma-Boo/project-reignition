@@ -1,0 +1,180 @@
+[gd_scene load_steps=24 format=3 uid="uid://dc3kqxiptkiyx"]
+
+[ext_resource type="Script" uid="uid://bpju7ece3pypu" path="res://object/stage/genie/Shahra.cs" id="1_yamyh"]
+[ext_resource type="Material" uid="uid://c0ul0kasu0kpi" path="res://effect/particle/material/environment/Circular Glow Add.tres" id="3_4wvwj"]
+[ext_resource type="Material" uid="uid://dw3ix42bqk6w1" path="res://object/stage/genie/material/Shahra.tres" id="5_igf81"]
+[ext_resource type="Material" uid="uid://bm6mblpuw33xo" path="res://object/stage/genie/material/Wind.tres" id="6_xxjr7"]
+
+[sub_resource type="Curve" id="Curve_cmx77"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, -1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0o2g1"]
+size = Vector2(1, 1)
+orientation = 2
+
+[sub_resource type="Gradient" id="Gradient_iydui"]
+offsets = PackedFloat32Array(0, 0.250965, 0.494208, 0.737452, 1)
+colors = PackedColorArray(0.81, 0, 0.7965, 1, 1, 0.317647, 1, 1, 1, 0.701961, 1, 1, 1, 0.71, 0.942, 1, 0.800374, 0.000539064, 0.80797, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_85pas"]
+gradient = SubResource("Gradient_iydui")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_25x36"]
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 5.0
+color_ramp = SubResource("GradientTexture1D_85pas")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_hnsb0"]
+material = ExtResource("3_4wvwj")
+size = Vector2(1, 1)
+orientation = 2
+
+[sub_resource type="Curve" id="Curve_wstab"]
+_limits = [0.0, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 2), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_xfh66"]
+width = 64
+curve = SubResource("Curve_wstab")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_m217g"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 0.0
+emission_ring_radius = 0.1
+emission_ring_inner_radius = 0.0
+emission_ring_cone_angle = 90.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_xfh66")
+color = Color(1, 0, 1, 0.588235)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_3meo5"]
+material = ExtResource("5_igf81")
+size = Vector2(1, 1)
+orientation = 2
+
+[sub_resource type="Curve" id="Curve_axarb"]
+_data = [Vector2(0, 0), 0.0, 12.4338, 0, 0, Vector2(0.201717, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_8gyhr"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_axarb")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rs22f"]
+lifetime_randomness = 0.5
+emission_shape = 2
+emission_sphere_radius = 0.5
+direction = Vector3(0, -1, 0)
+spread = 0.0
+initial_velocity_min = 1.0
+initial_velocity_max = 1.5
+gravity = Vector3(0, 0, 0)
+scale_min = 0.01
+scale_max = 0.05
+color = Color(1, 0.627451, 1, 1)
+alpha_curve = SubResource("CurveTexture_8gyhr")
+
+[sub_resource type="Gradient" id="Gradient_o2gr4"]
+offsets = PackedFloat32Array(0, 0.289575, 0.602317)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_wjb8e"]
+gradient = SubResource("Gradient_o2gr4")
+width = 64
+
+[sub_resource type="Curve" id="Curve_relyg"]
+_limits = [0.0, 4.0, 0.0, 1.0]
+_data = [Vector2(0, 0.4), 0.0, 0.0, 0, 0, Vector2(0.7, 2.8), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_gr8d4"]
+width = 64
+curve = SubResource("Curve_relyg")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_igdhi"]
+angle_min = -180.0
+angle_max = 180.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_gr8d4")
+color = Color(1, 0.952941, 0.0666667, 1)
+color_ramp = SubResource("GradientTexture1D_wjb8e")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_rxv6i"]
+material = ExtResource("6_xxjr7")
+size = Vector2(1, 1)
+orientation = 2
+
+[node name="Shahra" type="Node3D" node_paths=PackedStringArray("root")]
+script = ExtResource("1_yamyh")
+root = NodePath("Root")
+travelCurve = SubResource("Curve_cmx77")
+travelSpeed = Vector3(0.5, 1.2, 0.8)
+travelMagnitude = Vector3(1, 0.3, 0.5)
+
+[node name="Root" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
+material_override = ExtResource("5_igf81")
+cast_shadow = 0
+gi_mode = 0
+mesh = SubResource("PlaneMesh_0o2g1")
+skeleton = NodePath("../..")
+
+[node name="GlowParticle" type="GPUParticles3D" parent="Root"]
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+amount = 1
+lifetime = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_25x36")
+draw_pass_1 = SubResource("PlaneMesh_hnsb0")
+
+[node name="BaseParticle" type="GPUParticles3D" parent="Root"]
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+amount = 1
+lifetime = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_m217g")
+draw_pass_1 = SubResource("PlaneMesh_3meo5")
+
+[node name="DustParticle" type="GPUParticles3D" parent="Root"]
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+amount = 32
+lifetime = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
+process_material = SubResource("ParticleProcessMaterial_rs22f")
+draw_pass_1 = SubResource("PlaneMesh_3meo5")
+
+[node name="WindParticle" type="GPUParticles3D" parent="Root"]
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+amount = 2
+lifetime = 0.3
+explosiveness = 0.9
+randomness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_igdhi")
+draw_pass_1 = SubResource("PlaneMesh_rxv6i")

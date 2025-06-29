@@ -1,0 +1,110 @@
+[gd_scene load_steps=12 format=3 uid="uid://61g1iq7igxi"]
+
+[ext_resource type="Script" uid="uid://l7xcmkupm4aq" path="res://area/3 evil foundry/data/script/FanHazard.cs" id="1_0gep6"]
+[ext_resource type="PackedScene" uid="uid://de6ierdk3kuqf" path="res://area/3 evil foundry/object/model/Fan.gltf" id="2_vs3rs"]
+[ext_resource type="AudioStream" uid="uid://bxtjegxkdsnmu" path="res://sound/sfx/stage/evil foundry/fan spin.wav" id="3_7fcno"]
+[ext_resource type="Material" uid="uid://ph7gwhlyucdx" path="res://effect/particle/material/environment/Common Dust Add.tres" id="3_e5anb"]
+
+[sub_resource type="Curve" id="Curve_wholn"]
+_data = [Vector2(0, 0), 0.0, 32.8787, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_odv1d"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_wholn")
+
+[sub_resource type="Curve" id="Curve_ddkpu"]
+_data = [Vector2(0, 0.3), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_pfs25"]
+width = 64
+curve = SubResource("Curve_ddkpu")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wqho8"]
+angle_max = 360.0
+spread = 0.0
+initial_velocity_min = 3.0
+initial_velocity_max = 4.0
+gravity = Vector3(0, 0, 0)
+scale_min = 4.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_pfs25")
+color = Color(1, 0.54902, 0, 0.392157)
+alpha_curve = SubResource("CurveTexture_odv1d")
+
+[sub_resource type="QuadMesh" id="QuadMesh_kkmb5"]
+material = ExtResource("3_e5anb")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7aa55"]
+size = Vector3(1, 6, 0.5)
+
+[node name="Fan" type="Node3D" node_paths=PackedStringArray("root", "sfx")]
+script = ExtResource("1_0gep6")
+root = NodePath("Root")
+sfx = NodePath("SFX")
+
+[node name="Root" type="Node3D" parent="."]
+
+[node name="VFX" type="Node3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4)
+
+[node name="Smoke1" type="GPUParticles3D" parent="Root/VFX"]
+transform = Transform3D(-5.96046e-08, -1, 0, 1, -5.96046e-08, 0, 0, 0, 1, 0, 1.5, 0)
+layers = 32
+cast_shadow = 0
+amount = 16
+fixed_fps = 0
+fract_delta = false
+process_material = SubResource("ParticleProcessMaterial_wqho8")
+draw_pass_1 = SubResource("QuadMesh_kkmb5")
+
+[node name="Smoke2" type="GPUParticles3D" parent="Root/VFX"]
+transform = Transform3D(-0.866025, 0.5, 0, -0.5, -0.866025, 0, 0, 0, 1, -1.29904, -0.75, 0)
+layers = 32
+cast_shadow = 0
+amount = 16
+fixed_fps = 0
+fract_delta = false
+process_material = SubResource("ParticleProcessMaterial_wqho8")
+draw_pass_1 = SubResource("QuadMesh_kkmb5")
+
+[node name="Smoke3" type="GPUParticles3D" parent="Root/VFX"]
+transform = Transform3D(0.866026, 0.5, 0, -0.5, 0.866026, 0, 0, 0, 1, 1.29904, -0.75, 0)
+layers = 32
+cast_shadow = 0
+amount = 16
+fixed_fps = 0
+fract_delta = false
+process_material = SubResource("ParticleProcessMaterial_wqho8")
+draw_pass_1 = SubResource("QuadMesh_kkmb5")
+
+[node name="Fan" parent="Root" instance=ExtResource("2_vs3rs")]
+
+[node name="Trigger" type="Area3D" parent="Root"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Blade1" type="CollisionShape3D" parent="Root/Trigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+shape = SubResource("BoxShape3D_7aa55")
+
+[node name="Blade2" type="CollisionShape3D" parent="Root/Trigger"]
+transform = Transform3D(-0.5, -0.866025, 0, 0.866025, -0.5, 0, 0, 0, 1, -2.05, -1.2, 0)
+shape = SubResource("BoxShape3D_7aa55")
+
+[node name="Blade3" type="CollisionShape3D" parent="Root/Trigger"]
+transform = Transform3D(0.5, -0.866025, 0, 0.866025, 0.5, 0, 0, 0, 1, 2.05, -1.2, 0)
+shape = SubResource("BoxShape3D_7aa55")
+
+[node name="SFX" type="AudioStreamPlayer3D" parent="."]
+process_mode = 1
+stream = ExtResource("3_7fcno")
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+
+[connection signal="area_entered" from="Root/Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="Root/Trigger" to="." method="OnExited"]
