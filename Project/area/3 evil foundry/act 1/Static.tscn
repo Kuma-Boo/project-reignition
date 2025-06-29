@@ -1,4 +1,4 @@
-[gd_scene load_steps=77 format=3 uid="uid://wufpyrm8jour"]
+[gd_scene load_steps=80 format=3 uid="uid://wufpyrm8jour"]
 
 [ext_resource type="PackedScene" uid="uid://o4l6oimlm4qq" path="res://area/3 evil foundry/act 1/environment/collision/Collision.tscn" id="1_liyuu"]
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_q5jqm"]
@@ -48,6 +48,8 @@
 [ext_resource type="Resource" uid="uid://drgabk5njs1qx" path="res://area/3 evil foundry/act 1/camera/SpiralCam.tres" id="38_uh4ey"]
 [ext_resource type="Resource" uid="uid://nfpvaaas4rfq" path="res://area/3 evil foundry/act 1/camera/PitHallConnectionCam.tres" id="40_pn0hm"]
 [ext_resource type="Resource" uid="uid://baxr5jqxfm1du" path="res://area/3 evil foundry/act 1/camera/CrusherCam.tres" id="40_xc2mh"]
+[ext_resource type="Curve3D" uid="uid://c4tteixhv5geu" path="res://area/3 evil foundry/act 1/environment/path/LowHall1Path.tres" id="46_67kyt"]
+[ext_resource type="Curve3D" path="res://area/3 evil foundry/act 1/environment/path/LowHall2Path.tres" id="47_g50p3"]
 [ext_resource type="AudioStream" uid="uid://bijuu0465pf5k" path="res://sound/ost/adventure disc/6 The Palace that was Found.mp3" id="48_whcj3"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="49_jhw6u"]
 
@@ -71,6 +73,9 @@ size = Vector3(20, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wl37m"]
 size = Vector3(20, 20, 15)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g50p3"]
+size = Vector3(120, 20, 30)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ff177"]
 size = Vector3(20, 50, 5)
@@ -1440,6 +1445,38 @@ path = NodePath("../../../../Path/MiddlePath")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_h6yh5")
 
+[node name="LowHall1Path" parent="Triggers/Path" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -555, -50, -420)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Path" type="Node3D" parent="Triggers/Path/LowHall1Path" node_paths=PackedStringArray("path")]
+script = ExtResource("34_ugtny")
+path = NodePath("../../../../Path/LowHall1Path")
+cameraPathBlendTime = 0.5
+limitCameraDistanceToPath = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Path/LowHall1Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_g50p3")
+
+[node name="LowHall2Path" parent="Triggers/Path" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -480, -50, -360)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Path" type="Node3D" parent="Triggers/Path/LowHall2Path" node_paths=PackedStringArray("path")]
+script = ExtResource("34_ugtny")
+path = NodePath("../../../../Path/LowHall2Path")
+cameraPathBlendTime = 0.5
+limitCameraDistanceToPath = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Path/LowHall2Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_g50p3")
+
 [node name="EndingPath" parent="Triggers/Path" instance=ExtResource("33_1wgtf")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -46, 40, -190)
 "Enter Mode" = 0
@@ -2010,6 +2047,14 @@ curve = ExtResource("33_16aw5")
 [node name="MiddlePath" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -660, -29.666, -420)
 curve = ExtResource("35_xnhgv")
+
+[node name="LowHall1Path" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -611, -45, -420)
+curve = ExtResource("46_67kyt")
+
+[node name="LowHall2Path" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -536, -45, -360)
+curve = ExtResource("47_g50p3")
 
 [node name="ElevatorAutomationPath" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -97.123, -59.999, -190)
