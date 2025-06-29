@@ -10,7 +10,7 @@ public partial class SaveSelect : Menu
 	private Sprite2D scrollbar;
 	private Vector2 scrollbarVelocity;
 	private float scrollRatio;
-	private const int ScrollbarHeight = 276;
+	private const int ScrollbarHeight = 625;
 	private const float ScrollSmoothing = .05f;
 
 	[Export]

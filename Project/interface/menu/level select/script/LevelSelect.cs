@@ -196,7 +196,7 @@ public partial class LevelSelect : Menu
 
 	private void UpdateListPosition(float smoothing)
 	{
-		float targetScrollPosition = 360 * scrollRatio;
+		float targetScrollPosition = 360 * (VerticalSelection / (levelOptions.Count - 1f));
 		scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * targetScrollPosition, ref scrollVelocity, smoothing);
 
 		cursor.Position = cursor.Position.SmoothDamp(new(cursor.Position.X, 220 + (96 * cursorPosition)), ref cursorWidthVelocity, smoothing);

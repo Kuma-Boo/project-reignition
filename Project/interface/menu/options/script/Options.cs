@@ -116,7 +116,8 @@ public partial class Options : Menu
 
 	public override void _PhysicsProcess(double delta)
 	{
-		UpdateScrolling();
+		if (!disableCursorProcessing)
+			UpdateScrolling();
 
 		base._PhysicsProcess(delta);
 	}
