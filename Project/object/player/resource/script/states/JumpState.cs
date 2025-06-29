@@ -63,6 +63,7 @@ public partial class JumpState : PlayerState
 		Player.ForceAccelerationJump = false;
 
 		Player.IsOnGround = false;
+		Player.CanJumpDash = true;
 		if (Player.IsMovingBackward) // Kill speed when jumping backwards
 			Player.MoveSpeed = 0;
 		Player.VerticalSpeed = Runtime.CalculateJumpPower(Player.Stats.JumpHeight);
@@ -106,7 +107,25 @@ public partial class JumpState : PlayerState
 			return null;
 		Player.UpdateUpDirection();
 
-		if (!isAccelerationJump)
+		if (isAccelerationJump)
+		{
+			if (Player.IsOnWall && Player.WallRaycastHit.collidedObject.IsInGroup("splash jump"))
+			{
+				if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SplashJump))
+				{
+					// Perform a splash jump
+					Player.Lockon.ResetLockonTarget();
+					Player.Effect.PlaySplashJumpFX();
+					Player.Animator.SplashJumpAnimation();
+					Player.VerticalSpeed = Runtime.CalculateJumpPower(Player.Stats.JumpHeight * .5f);
+					return fallState;
+				}
+
+				// Kill speed when jump dashing into a wall to prevent splash jump from becoming obsolete
+				Player.VerticalSpeed = Mathf.Clamp(Player.VerticalSpeed, -Mathf.Inf, 0);
+			}
+		}
+		else
 		{
 			jumpTimer += PhysicsManager.physicsDelta;
 
