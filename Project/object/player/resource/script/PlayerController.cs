@@ -287,14 +287,15 @@ public partial class PlayerController : CharacterBody3D
 			return;
 		}
 
+		bool isCornerCollision = IsInWallCorner(castDirection, castLength);
 		float wallDelta = ExtensionMethods.DeltaAngleRad(ExtensionMethods.CalculateForwardAngle(WallRaycastHit.normal.RemoveVertical(), IsOnGround ? PathFollower.Up() : Vector3.Up), MovementAngle);
-		if (wallDelta >= Mathf.Pi * .8f) // Process head-on collision
+		if (wallDelta >= Mathf.Pi * .8f || isCornerCollision) // Process head-on collision
 		{
 			// Cancel speed break
 			if (Skills.IsSpeedBreakActive && !WallRaycastHit.collidedObject.IsInGroup("level wall"))
 			{
 				float pathDelta = ExtensionMethods.DeltaAngleRad(PathFollower.BackAngle, ExtensionMethods.CalculateForwardAngle(WallRaycastHit.normal));
-				if (pathDelta >= Mathf.Pi * .25f) // Snap to path direction
+				if (!isCornerCollision && pathDelta >= Mathf.Pi * .25f) // Snap to path direction
 				{
 					MovementAngle = PathFollower.ForwardAngle;
 					return;
@@ -322,6 +323,23 @@ public partial class PlayerController : CharacterBody3D
 		float speedClamp = Mathf.Clamp(1.0f - (wallDelta / Mathf.Pi * .4f), 0f, 1f); // Arbitrary formula that works well
 		if (Stats.GroundSettings.GetSpeedRatio(MoveSpeed) > speedClamp)
 			MoveSpeed *= speedClamp;
+	}
+
+	/// <summary> Checks whether the player is being wedged into a corner collision. </summary>
+	private bool IsInWallCorner(Vector3 castDirection, float castLength)
+	{
+		castDirection = castDirection.Rotated(this.Up(), Mathf.Pi * 0.25f); // Left side
+		RaycastHit hitDirection = this.CastRay(CollisionPosition, castDirection * castLength, CollisionMask, false, GetCollisionExceptions());
+		DebugManager.DrawRay(CollisionPosition, castDirection * castLength, hitDirection ? Colors.Red : Colors.White);
+
+		if (!ValidateWallCast(hitDirection)) // Left side is open
+			return false;
+
+		castDirection = castDirection.Rotated(this.Up(), Mathf.Pi * -0.5f); // Right side
+		hitDirection = this.CastRay(CollisionPosition, castDirection * castLength, CollisionMask, false, GetCollisionExceptions());
+		DebugManager.DrawRay(CollisionPosition, castDirection * castLength, hitDirection ? Colors.Red : Colors.White);
+
+		return ValidateWallCast(hitDirection);
 	}
 
 	/// <summary> Checks Sonic's side, then realigns to PathFollower if necessary. </summary>

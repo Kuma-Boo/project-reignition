@@ -30,6 +30,7 @@ public partial class EventPlayer : Node
 		if (!string.IsNullOrEmpty(subtitleData))
 			CreateSubtitles();
 
+		// TODO Add spanish audio
 		audioPlayer.Stream = SaveManager.UseEnglishVoices ? enAudio : jaAudio;
 		CallDeferred(nameof(StartCutscene));
 

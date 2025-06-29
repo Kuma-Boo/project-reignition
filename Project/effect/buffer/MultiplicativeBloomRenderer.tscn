@@ -1,0 +1,69 @@
+[gd_scene load_steps=4 format=3 uid="uid://c1qim6x2gc38r"]
+
+[ext_resource type="Script" uid="uid://bkfwy1d65ovun" path="res://effect/buffer/script/MultiplicativeBloomRenderer.cs" id="1_ainlh"]
+[ext_resource type="Material" uid="uid://n2dtgpdm7w7l" path="res://effect/buffer/material/Multiplicative Bloom Renderer Material.tres" id="2_632yc"]
+
+[sub_resource type="Environment" id="Environment_632yc"]
+background_mode = 1
+background_color = Color(1, 1, 1, 1)
+ambient_light_source = 1
+reflected_light_source = 1
+
+[node name="MultiplicativeBloomRenderer" type="CanvasLayer" node_paths=PackedStringArray("bloomCamera", "objectCamera", "bloomViewport", "objectViewport")]
+layer = -5
+script = ExtResource("1_ainlh")
+bloomCamera = NodePath("BloomViewport/Camera")
+objectCamera = NodePath("ObjectViewport/Camera")
+bloomViewport = NodePath("BloomViewport")
+objectViewport = NodePath("ObjectViewport")
+multiplicativeBloomMaterial = ExtResource("2_632yc")
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="."]
+z_index = -1
+copy_mode = 2
+rect = Rect2(0, 0, 1920, 1080)
+
+[node name="BloomRect" type="ColorRect" parent="BackBufferCopy"]
+material = ExtResource("2_632yc")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BloomViewport" type="SubViewport" parent="."]
+handle_input_locally = false
+anisotropic_filtering_level = 0
+gui_disable_input = true
+positional_shadow_atlas_size = 0
+positional_shadow_atlas_16_bits = false
+positional_shadow_atlas_quad_0 = 0
+positional_shadow_atlas_quad_1 = 0
+positional_shadow_atlas_quad_2 = 0
+positional_shadow_atlas_quad_3 = 0
+size = Vector2i(256, 256)
+render_target_update_mode = 4
+
+[node name="Camera" type="Camera3D" parent="BloomViewport"]
+cull_mask = 131072
+environment = SubResource("Environment_632yc")
+current = true
+
+[node name="ObjectViewport" type="SubViewport" parent="."]
+transparent_bg = true
+handle_input_locally = false
+screen_space_aa = 1
+anisotropic_filtering_level = 0
+gui_disable_input = true
+positional_shadow_atlas_size = 0
+positional_shadow_atlas_16_bits = false
+positional_shadow_atlas_quad_0 = 0
+positional_shadow_atlas_quad_1 = 0
+positional_shadow_atlas_quad_2 = 0
+positional_shadow_atlas_quad_3 = 0
+size = Vector2i(256, 256)
+render_target_update_mode = 4
+
+[node name="Camera" type="Camera3D" parent="ObjectViewport"]
+cull_mask = 65
+current = true
