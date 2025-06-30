@@ -833,12 +833,11 @@ public partial class PlayerCameraController : Node3D
 
 	public int motionBlurRequests;
 
-	private readonly float TimeBreakMotionBlurStrength = 2.0f;
-	private readonly float MotionBlurStrength = .5f;
+	private readonly float TimeBreakMotionBlurStrength = 4.0f;
+	private readonly float RotationMotionBlurStrength = 5.0f;
 	private readonly string OpacityParameter = "opacity";
 	private readonly string LinearVelocityParameter = "linear_velocity";
 	private readonly string AngularVelocityParameter = "angular_velocity";
-
 	private void UpdateMotionBlur()
 	{
 		if (motionBlurMaterial == null || !SaveManager.Config.useMotionBlur)
@@ -858,13 +857,10 @@ public partial class PlayerCameraController : Node3D
 	private Vector3 CalculateLinearVelocity()
 	{
 		Vector3 velocity = Camera.GlobalPosition - previousCameraPosition;
-		if (!Mathf.IsZeroApprox(Engine.TimeScale))
-			velocity /= (float)Engine.TimeScale;
-
 		if (Player.Skills.IsTimeBreakActive)
-			return velocity * TimeBreakMotionBlurStrength;
+			return velocity * PhysicsManager.physicsDelta * TimeBreakMotionBlurStrength;
 
-		return velocity * MotionBlurStrength;
+		return velocity * PhysicsManager.physicsDelta;
 	}
 
 	private Vector3 CalculateAngularVelocity()
@@ -873,7 +869,7 @@ public partial class PlayerCameraController : Node3D
 		Quaternion rotationDifference = rotation - previousCameraRotation;
 		Quaternion rotationConjugate = new(-rotation.X, -rotation.Y, -rotation.Z, rotation.W);
 		Quaternion angularRotation = rotationDifference * 2.0f * rotationConjugate;
-		return new Vector3(angularRotation.X, angularRotation.Y, angularRotation.Z) * MotionBlurStrength;
+		return new Vector3(angularRotation.X, angularRotation.Y, angularRotation.Z) * RotationMotionBlurStrength * PhysicsManager.physicsDelta;
 	}
 
 	public void RequestMotionBlur() => motionBlurRequests++;
@@ -1071,7 +1067,7 @@ public partial class PlayerCameraController : Node3D
 		DebugManager.Instance.RedrawCamData(FreeCamRoot.GlobalPosition, freeCamRotation);
 		if (isFreeCamLocked)
 			UpdateFreeCamData(freeCamPosition, freeCamRotation);
-		else
+		else if (isFreeCamActive)
 			UpdateMotionBlur();
 	}
 
