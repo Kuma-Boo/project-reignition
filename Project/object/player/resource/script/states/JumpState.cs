@@ -183,7 +183,7 @@ public partial class JumpState : PlayerState
 		if (jumpTimer <= AccelerationJumpLength ||
 			(isAccelerationJump && Player.GlobalPosition.Y >= accelerationJumpHeight))
 		{
-			Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, 1f);
+			Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, Player.ActiveLockoutData.tractionMultiplier);
 			return;
 		}
 
