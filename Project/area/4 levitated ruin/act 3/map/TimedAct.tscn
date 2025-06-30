@@ -5,7 +5,6 @@
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_r6yfb"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="4_82fyf"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_mjevr"]
-[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="5_rvlx3"]
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="6_l0dca"]
 [ext_resource type="PackedScene" uid="uid://cggks1kly71mq" path="res://object/enemy/majin/data/levitated ruin/BlueMajin.tscn" id="7_41hii"]
 [ext_resource type="PackedScene" uid="uid://b724x1op3kfpc" path="res://object/enemy/majin/data/levitated ruin/RedMajin.tscn" id="8_4mrmq"]
@@ -36,6 +35,9 @@ _data = {
 point_count = 2
 up_vector_enabled = false
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_8lt62"]
+size = Vector3(5, 20, 5)
+
 [node name="RampageAct" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("1_ysqq7")]
@@ -43,6 +45,10 @@ Data = ExtResource("2_p6ymy")
 
 [node name="Zipline" parent="Static/Paths/ZiplinePath" index="0"]
 transform = Transform3D(1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, 1, 0, 0.0871555, 0.996195)
+
+[node name="SkyRoad" parent="Static" index="6"]
+process_mode = 4
+visible = false
 
 [node name="GargoyleTrigger" parent="Static/SkyRoad/SkyRoad01" index="2"]
 monitoring = false
@@ -460,14 +466,11 @@ transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 
 "Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
 "Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
 
-[node name="MajinRespawnCullingTrigger" type="Node3D" parent="TimedAct/Tower"]
-transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 6.86937, 14, 5.8301)
-script = ExtResource("5_rvlx3")
-
-[node name="MajinRespawnTrigger" parent="TimedAct/Tower/MajinRespawnCullingTrigger" instance=ExtResource("4_mjevr")]
+[node name="MajinRespawnTrigger" parent="TimedAct/Tower" instance=ExtResource("4_mjevr")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 6.86938, 14, 5.83008)
 "Enter Mode" = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="TimedAct/Tower/MajinRespawnCullingTrigger/MajinRespawnTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TimedAct/Tower/MajinRespawnTrigger"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 shape = SubResource("BoxShape3D_lg2f2")
 
@@ -620,9 +623,20 @@ MiddleHeight = 9.0
 FinalHeight = 7.5
 Distance = 7.0
 
-[node name="Path" type="Node3D" parent="TimedAct/Tower/Switch5/Spring" node_paths=PackedStringArray("path")]
+[node name="PathTrigger" parent="TimedAct/Tower" instance=ExtResource("4_mjevr")]
+transform = Transform3D(0.930865, 0, 0.365364, 0, 1, 0, -0.365364, 0, 0.930865, -8.10916, 40, 0.774457)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="TimedAct/Tower/PathTrigger" node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("22_ut1ms")
-path = NodePath("../../../../../Static/Paths/TowerTopPath")
+path = NodePath("../../../../Static/Paths/TowerTopPath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TimedAct/Tower/PathTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.5, 0)
+shape = SubResource("BoxShape3D_8lt62")
 
 [node name="InvisibleWall" type="StaticBody3D" parent="TimedAct" groups=["wall"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 16, -1389)
@@ -646,18 +660,14 @@ shape = SubResource("BoxShape3D_lg2f2")
 [connection signal="Deactivated" from="TimedAct/Tower/Switch1/Spring" to="TimedAct/Tower/Switch1/Spring/Path" method="Activate"]
 [connection signal="Activated" from="TimedAct/Tower/Switch2" to="TimedAct/Tower/Switch2/Spring" method="ShowLauncher"]
 [connection signal="Deactivated" from="TimedAct/Tower/Switch2" to="TimedAct/Tower/Switch2/Spring" method="HideLauncher"]
-[connection signal="Defeated" from="TimedAct/Tower/BlueMajin1" to="TimedAct/Tower/MajinRespawnCullingTrigger" method="Activate"]
-[connection signal="Defeated" from="TimedAct/Tower/BlueMajin2" to="TimedAct/Tower/MajinRespawnCullingTrigger" method="Activate"]
-[connection signal="Activated" from="TimedAct/Tower/MajinRespawnCullingTrigger/MajinRespawnTrigger" to="TimedAct/Tower/BlueMajin1" method="Respawn" flags=3]
-[connection signal="Activated" from="TimedAct/Tower/MajinRespawnCullingTrigger/MajinRespawnTrigger" to="TimedAct/Tower/BlueMajin2" method="Respawn" flags=3]
-[connection signal="Activated" from="TimedAct/Tower/MajinRespawnCullingTrigger/MajinRespawnTrigger" to="TimedAct/Tower/MajinRespawnCullingTrigger" method="Deactivate"]
+[connection signal="Activated" from="TimedAct/Tower/MajinRespawnTrigger" to="TimedAct/Tower/BlueMajin1" method="AttemptRespawn"]
+[connection signal="Activated" from="TimedAct/Tower/MajinRespawnTrigger" to="TimedAct/Tower/BlueMajin2" method="AttemptRespawn"]
 [connection signal="Activated" from="TimedAct/Tower/Switch3" to="TimedAct/Tower/Switch3/Spring" method="ShowLauncher"]
 [connection signal="Deactivated" from="TimedAct/Tower/Switch3" to="TimedAct/Tower/Switch3/Spring" method="HideLauncher"]
 [connection signal="Activated" from="TimedAct/Tower/Switch4" to="TimedAct/Tower/Switch4/Spring" method="ShowLauncher"]
 [connection signal="Deactivated" from="TimedAct/Tower/Switch4" to="TimedAct/Tower/Switch4/Spring" method="HideLauncher"]
 [connection signal="Activated" from="TimedAct/Tower/Switch5" to="TimedAct/Tower/Switch5/Spring" method="ShowLauncher"]
 [connection signal="Deactivated" from="TimedAct/Tower/Switch5" to="TimedAct/Tower/Switch5/Spring" method="HideLauncher"]
-[connection signal="Deactivated" from="TimedAct/Tower/Switch5/Spring" to="TimedAct/Tower/Switch5/Spring/Path" method="Activate"]
 
 [editable path="Static"]
 [editable path="Static/Collision"]
