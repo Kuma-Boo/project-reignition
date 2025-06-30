@@ -34,7 +34,7 @@ public partial class PlayerController : CharacterBody3D
 		StageSettings.RegisterPlayer(this); // Update global reference
 		Stage.UpdateRingCount(Skills.StartingRingCount, StageSettings.MathModeEnum.Replace); // Start with the proper ring count
 		Stage.LevelCompleted += OnLevelCompleted;
-		Stage.LevelDemoStarted += OnLevelDemoStarted;
+		Stage.LevelDemoStarted += Deactivate;
 
 		Controller.Initialize(this);
 		Stats.Initialize();
@@ -554,12 +554,6 @@ public partial class PlayerController : CharacterBody3D
 			AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
 		else
 			AddLockoutData(Stage.Data.CompletionLockout);
-	}
-
-	private void OnLevelDemoStarted()
-	{
-		MoveSpeed = 0;
-		AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
 	}
 
 	private bool isRecentered; // Is the recenter complete?
