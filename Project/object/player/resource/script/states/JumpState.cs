@@ -220,25 +220,28 @@ public partial class JumpState : PlayerState
 
 	private void StartAccelerationJump()
 	{
+		if (!isAccelerationJumpQueued)
+		{
+			if (Player.DisableAccelerationJump)
+				return;
+
+			float inputAngle = Player.Controller.GetTargetMovementAngle();
+			if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
+				Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+			{
+				return;
+			}
+
+			if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
+				!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) &&
+				(!Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.ForwardAngle) ||
+				Player.Controller.GetInputStrength() < .5f))
+			{
+				return;
+			}
+		}
+
 		isAccelerationJumpQueued = false;
-		if (Player.DisableAccelerationJump)
-			return;
-
-		float inputAngle = Player.Controller.GetTargetMovementAngle();
-		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
-			Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
-		{
-			return;
-		}
-
-		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
-			!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) &&
-			(!Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.ForwardAngle) ||
-			Player.Controller.GetInputStrength() < .5f))
-		{
-			return;
-		}
-
 		isAccelerationJump = true;
 		Player.IsAccelerationJumping = true;
 		if (ExtensionMethods.DeltaAngleRad(Player.MovementAngle, Player.PathFollower.ForwardAngle) > Mathf.Pi * .5f)
