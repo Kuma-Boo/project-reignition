@@ -161,7 +161,7 @@ public partial class PathTraveller : Node3D
 		if (Mathf.Sign(CurrentTurnAmount.X) == direction)
 			castDistance += Mathf.Abs(CurrentTurnAmount.X * PhysicsManager.physicsDelta);
 
-		Vector3 castVector = Player.Left() * direction * castDistance;
+		Vector3 castVector = this.Left() * direction * castDistance;
 		RaycastHit wallCast = Player.CastRay(Player.GlobalPosition, castVector, Runtime.Instance.environmentMask);
 		DebugManager.DrawRay(Player.GlobalPosition, castVector, wallCast ? Colors.Green : Colors.White);
 		if (wallCast)
