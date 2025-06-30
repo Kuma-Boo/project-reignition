@@ -1466,6 +1466,18 @@ tracks/0/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TextEdit:mouse_default_cursor_shape")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
 
 [sub_resource type="Animation" id="Animation_edalj"]
 resource_name = "hide"
@@ -1510,6 +1522,18 @@ tracks/2/keys = {
 "args": [],
 "method": &"EnableProcessing"
 }]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("TextEdit:mouse_default_cursor_shape")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.0666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [1, 0]
 }
 
 [sub_resource type="Animation" id="Animation_4t5lb"]
@@ -1556,19 +1580,17 @@ tracks/2/keys = {
 "method": &"EnableProcessing"
 }]
 }
-tracks/3/type = "method"
+tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("TextEdit")
+tracks/3/path = NodePath("TextEdit:mouse_default_cursor_shape")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0.2),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"grab_focus"
-}]
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_2ttj6"]
@@ -1584,7 +1606,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Content:modulate")
+tracks/0/path = NodePath("NavigationButtons:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -1596,7 +1618,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("NavigationButtons:modulate")
+tracks/1/path = NodePath("Content:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -1612,7 +1634,7 @@ length = 0.30001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Content:modulate")
+tracks/0/path = NodePath("NavigationButtons:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -1624,7 +1646,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("NavigationButtons:modulate")
+tracks/1/path = NodePath("Content:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -1680,7 +1702,7 @@ length = 0.30001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Content:modulate")
+tracks/0/path = NodePath("NavigationButtons:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -1692,7 +1714,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("NavigationButtons:modulate")
+tracks/1/path = NodePath("Content:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -1742,6 +1764,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_o0ujo")
 presetOption = ExtResource("2_aav6m")
 presetContainer = NodePath("Content/Clip/VBoxContainer")
@@ -2105,15 +2128,22 @@ libraries = {
 
 [node name="NameEdit" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0)
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+z_index = 10
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Tint" type="ColorRect" parent="NameEdit"]
 modulate = Color(0.0666667, 0.0666667, 0.0666667, 0.796078)
-layout_mode = 0
-offset_right = 1916.0
-offset_bottom = 1078.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="TextEdit" type="LineEdit" parent="NameEdit"]
 layout_mode = 1
@@ -2121,20 +2151,21 @@ anchors_preset = -1
 anchor_right = 15.8
 anchor_bottom = 1.75
 offset_left = 640.0
-offset_top = 480.0
-offset_right = 649.0
-offset_bottom = 480.0
+offset_top = 448.0
+offset_right = -29056.0
+offset_bottom = -1378.0
 pivot_offset = Vector2(316, 0)
+focus_mode = 1
+mouse_default_cursor_shape = 0
 theme_override_fonts/font = ExtResource("8_qq2en")
 theme_override_font_sizes/font_size = 50
 text = "New Preset"
 max_length = 20
+keep_editing_on_text_submit = true
 context_menu_enabled = false
 clear_button_enabled = true
 middle_mouse_paste_enabled = false
-deselect_on_focus_loss_enabled = false
 drag_and_drop_selection_enabled = false
-select_all_on_focus = true
 caret_blink = true
 caret_mid_grapheme = true
 
@@ -2143,11 +2174,12 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 648.0
+offset_left = 640.0
 offset_top = 576.0
-offset_right = 1240.0
-offset_bottom = 600.0
+offset_right = -640.0
+offset_bottom = -456.0
 theme_override_constants/separation = 64
+alignment = 1
 
 [node name="Save" parent="NameEdit/NavigationButtons" instance=ExtResource("2_w3g84")]
 layout_mode = 2

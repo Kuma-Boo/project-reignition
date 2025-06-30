@@ -84,6 +84,7 @@ public partial class SkillPresetSelect : Menu
 
 			if (Input.IsKeyPressed(Key.Escape))
 			{
+				cancelSFX.Play();
 				StopRenaming();
 				return;
 			}
@@ -208,16 +209,6 @@ public partial class SkillPresetSelect : Menu
 		isSubMenuActive = true;
 	}
 
-	private void Rename()
-	{
-		presetList[VerticalSelection].PresetName = nameEditor.Text;
-
-		confirmSFX.Play();
-		SaveSkills(VerticalSelection, true);
-		isEditingName = false;
-		nameEditorAnimator.Play("hide");
-	}
-
 	protected override void Cancel()
 	{
 		if (isEditingName)
@@ -317,12 +308,22 @@ public partial class SkillPresetSelect : Menu
 		nameEditor.Text = SaveManager.ActiveGameData.presetNames[VerticalSelection];
 		nameEditor.CaretColumn = nameEditor.Text.Length;
 		nameEditor.SelectAll();
+		if (!nameEditor.HasFocus())
+			nameEditor.CallDeferred(Control.MethodName.GrabFocus);
 		nameEditorAnimator.Play("show");
+	}
+
+	private void Rename()
+	{
+		presetList[VerticalSelection].PresetName = nameEditor.Text;
+		confirmSFX.Play();
+		SaveSkills(VerticalSelection, true);
+		StopRenaming();
 	}
 
 	private void StopRenaming()
 	{
-		cancelSFX.Play();
+		nameEditor.CallDeferred(Control.MethodName.ReleaseFocus);
 		nameEditorAnimator.Play("hide");
 		isEditingName = false;
 	}
