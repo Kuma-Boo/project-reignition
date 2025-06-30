@@ -111,10 +111,17 @@ public partial class GrindState : PlayerState
 		UpdateCharge();
 
 		bool isGrindCompleted = Mathf.IsEqualApprox(ActiveGrindRail.PathFollower.ProgressRatio, 1);
-		if (Player.Controller.IsJumpBufferActive &&
-			(!Player.Animator.IsBalanceShuffleActive || isGrindCompleted))
+		if (!Player.Animator.IsBalanceShuffleActive || isGrindCompleted)
 		{
-			return ProcessJump();
+			if (Player.Controller.IsJumpBufferActive)
+				return ProcessJump();
+
+			if (Player.Controller.IsStepBufferActive)
+			{
+				// Start a grind step from the shoulder buttons. Buffer is reset during GrindStepState
+				Player.IsGrindstepping = true;
+				return grindstepState;
+			}
 		}
 
 		if (isGrindCompleted || movementDelta <= 0) // Disconnect from the rail

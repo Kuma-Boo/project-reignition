@@ -21,15 +21,29 @@ public partial class GrindStepState : PlayerState
 
 	public override void EnterState()
 	{
-		// Delta angle to rail's movement direction (NOTE - Due to Godot conventions, negative is right, positive is left)
-		float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Player.Controller.GetTargetInputAngle(), Player.MovementAngle);
+		int stepDirection;
+		float inputStrength = 1f;
+
+		if (Player.Controller.IsStepBufferActive)
+		{
+			// Direction is decided by step buttons
+			stepDirection = Player.Controller.StepDirection;
+			Player.Controller.ResetStepBuffer();
+		}
+		else
+		{
+			// Delta angle to rail's movement direction (NOTE - Due to Godot conventions, negative is right, positive is left)
+			stepDirection = Mathf.Sign(ExtensionMethods.SignedDeltaAngleRad(Player.Controller.GetTargetInputAngle(), Player.MovementAngle));
+			inputStrength = Player.Controller.GetInputStrength();
+		}
+
 		// Calculate how far player is trying to go
-		float horizontalTarget = GrindStepSpeed * Mathf.Sign(inputDeltaAngle);
-		horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, Player.Controller.GetInputStrength()); // Give some smoothing based on controller strength
+		float horizontalTarget = GrindStepSpeed * stepDirection;
+		horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, inputStrength); // Give some smoothing based on controller strength
+		Player.MovementAngle += Mathf.Pi * .25f * stepDirection;
 
 		// Keep some speed forward
 		turningVelocity = 0;
-		Player.MovementAngle += Mathf.Pi * .25f * Mathf.Sign(inputDeltaAngle);
 		Player.VerticalSpeed = Runtime.CalculateJumpPower(GrindStepHeight);
 		Player.MoveSpeed = new Vector2(horizontalTarget, Player.MoveSpeed).Length();
 		turnInstantly = true;
