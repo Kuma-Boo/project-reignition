@@ -178,9 +178,22 @@ public partial class JumpState : PlayerState
 		return null;
 	}
 
+	protected override void AccelerateLockout()
+	{
+		if (jumpTimer <= AccelerationJumpLength ||
+			(isAccelerationJump && Player.GlobalPosition.Y >= accelerationJumpHeight))
+		{
+			Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, 1f);
+			return;
+		}
+
+		base.AccelerateLockout();
+	}
+
 	protected override void Accelerate(float inputStrength)
 	{
-		if (jumpTimer <= AccelerationJumpLength || isAccelerationJump && Player.GlobalPosition.Y >= accelerationJumpHeight) // Clamp acceleration jumps so they don't get out of control
+		if (jumpTimer <= AccelerationJumpLength ||
+			(isAccelerationJump && Player.GlobalPosition.Y >= accelerationJumpHeight))
 		{
 			Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
 			return;
