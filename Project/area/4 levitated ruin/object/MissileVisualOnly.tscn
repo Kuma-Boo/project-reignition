@@ -12,7 +12,6 @@
 [ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="11_o256i"]
 [ext_resource type="AudioStream" uid="uid://krtje434volg" path="res://sound/sfx/stage/levitated ruin/missile explosion.wav" id="12_70bcd"]
 
-
 [sub_resource type="Curve" id="Curve_1x8is"]
 _data = [Vector2(0.00656455, 1), 0.0, -1.00661, 0, 1, Vector2(1, 0), -1.00661, 0.0, 1, 0]
 point_count = 2
@@ -457,13 +456,13 @@ draw_pass_1 = SubResource("QuadMesh_yndoj")
 
 [node name="LaunchSFX" type="AudioStreamPlayer3D" parent="." index="3"]
 stream = ExtResource("10_17phy")
-unit_size = 50.0
 max_db = -6.0
 max_distance = 500.0
+max_polyphony = 3
 bus = &"GAME SFX"
 attenuation_filter_cutoff_hz = 20500.0
 script = ExtResource("11_o256i")
-groupKey = &"simple missile launch"
+groupKey = &"simple missile visual launch"
 audioLengthOverride = 1.2
 
 [node name="ExplosionSFX" type="AudioStreamPlayer3D" parent="." index="4"]
@@ -471,10 +470,11 @@ stream = ExtResource("12_70bcd")
 unit_size = 20.0
 max_db = -6.0
 max_distance = 500.0
+max_polyphony = 3
 bus = &"GAME SFX"
 attenuation_filter_cutoff_hz = 20500.0
 script = ExtResource("11_o256i")
-groupKey = &"simple missile explosion"
+groupKey = &"simple missile visual explosion"
 audioLengthOverride = 0.8
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="5"]
@@ -483,6 +483,3 @@ libraries = {
 }
 autoplay = "fly"
 next/launch = &"fly"
-
-[connection signal="Activated" from="." to="LaunchSFX" method="play" binds= [0.0]]
-[connection signal="Exploded" from="." to="ExplosionSFX" method="play" binds= [0.0]]
