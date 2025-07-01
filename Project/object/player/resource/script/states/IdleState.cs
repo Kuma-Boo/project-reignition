@@ -72,6 +72,9 @@ public partial class IdleState : PlayerState
 			}
 		}
 
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) && !Player.Controller.IsBrakeHeld())
+			Player.IsMovingBackward = Player.Controller.IsHoldingDirection(Player.Controller.GetTargetInputAngle(), Player.PathFollower.BackAngle);
+
 		if (!Player.CheckGround())
 			return fallState;
 		Player.CheckWall(CalculateWallCastDirection());
@@ -103,8 +106,11 @@ public partial class IdleState : PlayerState
 
 	private Vector3 CalculateWallCastDirection()
 	{
-		if (Mathf.IsZeroApprox(Player.Controller.GetInputStrength()))
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) &&
+			Mathf.IsZeroApprox(Player.Controller.GetInputStrength()))
+		{
 			return Player.GetMovementDirection();
+		}
 
 		float targetAngle = Player.Controller.GetTargetMovementAngle();
 		float deltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetAngle, Player.PathFollower.ForwardAngle);

@@ -97,8 +97,11 @@ public partial class JumpState : PlayerState
 		ProcessMoveSpeed();
 		ProcessTurning();
 		ProcessGravity();
+
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
+			Player.IsMovingBackward = Player.Controller.IsHoldingDirection(Player.MovementAngle, Player.PathFollower.BackAngle);
+
 		Player.ApplyMovement();
-		Player.IsMovingBackward = Player.Controller.IsHoldingDirection(Player.MovementAngle, Player.PathFollower.BackAngle);
 		Player.CheckGround();
 		Player.CheckWall(Vector3.Zero, !Player.IsAccelerationJumping);
 		if (Player.CheckCeiling())
@@ -205,8 +208,12 @@ public partial class JumpState : PlayerState
 
 	protected override void ProcessTurning()
 	{
-		if (!Player.Controller.IsHoldingDirection(Player.Controller.GetTargetMovementAngle(), Player.PathFollower.ForwardAngle))
+		float targetAngle = Player.Controller.GetTargetInputAngle();
+		if (!Player.Controller.IsHoldingDirection(targetAngle, Player.PathFollower.ForwardAngle) &&
+			!Player.Controller.IsHoldingDirection(targetAngle, Player.PathFollower.BackAngle))
+		{
 			return;
+		}
 
 		base.ProcessTurning();
 
