@@ -26,7 +26,7 @@ public partial class RunState : PlayerState
 	/// <summary> Maximum amount the player can turn when running at full speed. </summary>
 	private readonly float MaxTurningAdjustment = Mathf.Pi * .25f;
 	/// <summary> How much speed to lose when turning sharply. </summary>
-	private readonly float TurningSpeedLoss = .02f;
+	private readonly float TurningSpeedLoss = .005f;
 	/// <summary> Minimum speed needed to finish the braking animation. </summary>
 	private readonly float BrakeDeadzone = 5f;
 
