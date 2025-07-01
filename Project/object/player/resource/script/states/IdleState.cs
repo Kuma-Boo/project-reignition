@@ -26,8 +26,8 @@ public partial class IdleState : PlayerState
 	public override PlayerState ProcessPhysics()
 	{
 		if (Player.IsLockoutActive &&
-				Player.ActiveLockoutData.overrideSpeed &&
-				Mathf.IsZeroApprox(Player.ActiveLockoutData.speedRatio))
+			Player.ActiveLockoutData.overrideSpeed &&
+			Mathf.IsZeroApprox(Player.ActiveLockoutData.speedRatio))
 		{
 			Player.Animator.IdleAnimation();
 			Player.ApplyMovement();
