@@ -78,19 +78,22 @@ public partial class WorldSelect : Menu
 
 		VerticalSelection = menuMemory[MemoryKeys.WorldSelect];
 
-		if (ActiveVideoPlayer != null &&
-			menuMemory[MemoryKeys.ActiveMenu] != (int)MemoryKeys.LevelSelect &&
-			menuMemory[MemoryKeys.ActiveMenu] != (int)MemoryKeys.WorldSelect)
+		foreach (VideoStreamPlayer player in videoPlayers)
 		{
-			ActiveVideoPlayer = videoPlayers[VerticalSelection];
+			player.Stop();
+			player.Modulate = Colors.Transparent;
 		}
 
+		ActiveVideoPlayer = videoPlayers[VerticalSelection];
 		if (animator.AssignedAnimation == "init" || animator.AssignedAnimation == "cancel")
 			animator.Play("show-fade-video");
 		else
 			animator.Play(ShowAnimation);
 
 		menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.WorldSelect;
+
+		ActiveVideoPlayer.Play();
+		ActiveVideoPlayer.Modulate = Colors.White;
 	}
 
 	public override void _Process(double _)
@@ -177,6 +180,7 @@ public partial class WorldSelect : Menu
 
 		ActiveVideoPlayer = videoPlayers[VerticalSelection];
 		ActiveVideoPlayer.Paused = false;
+		ActiveVideoPlayer.Play();
 	}
 
 	public void UpdateLevelText()
