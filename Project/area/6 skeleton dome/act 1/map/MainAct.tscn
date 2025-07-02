@@ -350,9 +350,9 @@ Data = ExtResource("2_3jkye")
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("2_4su1b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 240.819, -0.00012207, -899.617)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
+visible = false
 
 [node name="OverpassLoad" parent="MainAct/CullingMap" instance=ExtResource("3_jp0k2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 51.7296, -2.3, -265.527)
@@ -462,7 +462,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_pbtmc")
 
 [node name="Opening" type="Node3D" parent="MainAct"]
-visible = false
 script = ExtResource("3_4cg0m")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
@@ -588,8 +587,10 @@ transform = Transform3D(-0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, -0.642788
 
 [node name="Grindrail" parent="MainAct/Opening/Upper" instance=ExtResource("13_fnrre")]
 transform = Transform3D(-0.173648, 0, 0.984808, 0, 1, 0, -0.984808, 0, -0.173648, -0.76091, 1.5, 2.77695)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="ItemBox" parent="MainAct/Opening/Upper" instance=ExtResource("13_v0glh")]
 transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, 0.872284, 2.25, 1.34282)
@@ -752,13 +753,13 @@ saveVisibilityOnCheckpoint = true
 
 [node name="SpikeBall1" parent="MainAct/Overpass/Bridge" instance=ExtResource("6_21sva")]
 transform = Transform3D(0.879125, -0.474778, 0.0415377, 0, 0.0871558, 0.996195, -0.476591, -0.87578, 0.0766208, -10.1895, -3, -17.6726)
+animatorSpeedScale = 0.8
 Movement/Mode = 2
 "Movement/Cycle Length" = 4.0
 "Movement/Starting Offset" = 0.1
 "Movement/Horizontal Size" = 2.5
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 3.0
-animatorSpeedScale = 0.8
 
 [node name="SpikeGroup1" type="Node3D" parent="MainAct/Overpass/Bridge"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.3047, -0.159808, -24.3888)
@@ -796,31 +797,31 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -7.5)
 
 [node name="SpikeBall" parent="MainAct/Overpass/Bridge/SpikeGroup1" instance=ExtResource("6_21sva")]
 transform = Transform3D(-0.866025, 0.498097, 0.0435779, 7.6194e-09, -0.0871558, 0.996195, 0.5, 0.86273, 0.0754791, 0.156596, -1.23391, 0.949341)
+animatorSpeedScale = 0.8
 Movement/Mode = 2
 "Movement/Cycle Length" = 4.0
 "Movement/Starting Offset" = 0.9
 "Movement/Horizontal Size" = 2.0
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 3.5
-animatorSpeedScale = 0.8
 
 [node name="SpikeBall2" parent="MainAct/Overpass/Bridge" instance=ExtResource("6_21sva")]
 transform = Transform3D(1.29904, -0.75, 0, -3.27835e-08, -5.67828e-08, 1.5, -0.75, -1.29904, -6.55671e-08, -23.1497, -1.07872, -38.3431)
+animatorSpeedScale = 0.6
 Movement/Mode = 2
 "Movement/Cycle Length" = 6.0
 "Movement/Horizontal Size" = 2.0
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 2.0
-animatorSpeedScale = 0.6
 
 [node name="SpikeBall3" parent="MainAct/Overpass/Bridge" instance=ExtResource("6_21sva")]
 transform = Transform3D(1.29904, -0.75, 0, -3.27835e-08, -5.67828e-08, 1.5, -0.75, -1.29904, -6.55671e-08, -25.3997, -1.07872, -42.2403)
+animatorSpeedScale = 0.4
 Movement/Mode = 2
 "Movement/Cycle Length" = 10.0
 "Movement/Horizontal Size" = 2.0
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 2.0
-animatorSpeedScale = 0.4
 
 [node name="SpikeGroup2" type="Node3D" parent="MainAct/Overpass/Bridge"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.6047, 0.840192, -49.7888)
@@ -858,21 +859,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -7.5)
 
 [node name="SpikeBall" parent="MainAct/Overpass/Bridge/SpikeGroup2" instance=ExtResource("6_21sva")]
 transform = Transform3D(0.904879, -0.425669, 4.41942e-08, -4.10466e-09, 1.97175e-08, 1, -0.425669, -0.904879, -1.49012e-08, 0.155918, -1.32827, 0.413696)
+animatorSpeedScale = 0.6
 Movement/Mode = 2
 "Movement/Cycle Length" = 10.0
 "Movement/Horizontal Size" = 2.5
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 3.0
-animatorSpeedScale = 0.6
 
 [node name="SpikeBall4" parent="MainAct/Overpass/Bridge" instance=ExtResource("6_21sva")]
 transform = Transform3D(-0.973595, 0.228283, -4.46866e-08, -4.32601e-09, 1.15908e-08, 1, 0.228283, 0.973595, 1.33521e-08, -33.2301, -0.48808, -59.7491)
+animatorSpeedScale = 0.6
 Movement/Mode = 2
 "Movement/Cycle Length" = 6.0
 "Movement/Horizontal Size" = 1.5
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 4.0
-animatorSpeedScale = 0.6
 
 [node name="SpikeGroup3" type="Node3D" parent="MainAct/Overpass/Bridge"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.6047, 1.14019, -72.5888)
@@ -910,30 +911,30 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -7.5)
 
 [node name="SpikeBall" parent="MainAct/Overpass/Bridge/SpikeGroup3" instance=ExtResource("6_21sva")]
 transform = Transform3D(0.99844, -0.0558215, -2.44004e-09, 0, -4.37114e-08, 1, -0.0558215, -0.998441, -4.36432e-08, -0.169617, -1.62827, 1.03821)
+animatorSpeedScale = 0.6
 Movement/Mode = 2
 "Movement/Cycle Length" = 6.0
 "Movement/Horizontal Size" = 1.5
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 4.0
-animatorSpeedScale = 0.6
 
 [node name="SpikeBall5" parent="MainAct/Overpass/Bridge" instance=ExtResource("6_21sva")]
 transform = Transform3D(1.49766, -0.0837322, -3.66005e-09, 0, -6.55671e-08, 1.5, -0.0837322, -1.49766, -6.54648e-08, -34.7301, -0.48808, -75.1491)
+animatorSpeedScale = 0.4
 Movement/Mode = 2
 "Movement/Cycle Length" = 10.0
 "Movement/Horizontal Size" = 2.0
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 2.0
-animatorSpeedScale = 0.4
 
 [node name="SpikeBall6" parent="MainAct/Overpass/Bridge" instance=ExtResource("6_21sva")]
 transform = Transform3D(-1.49766, 0.0837321, 3.66005e-09, 0, -6.55671e-08, 1.5, 0.0837321, 1.49766, 6.54648e-08, -34.7301, -0.48808, -78.0491)
+animatorSpeedScale = 0.8
 Movement/Mode = 2
 "Movement/Cycle Length" = 4.0
 "Movement/Horizontal Size" = 2.0
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 2.0
-animatorSpeedScale = 0.8
 
 [node name="Hall" type="Node3D" parent="MainAct/Overpass"]
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -36.9, 1.35, -90)
@@ -1067,11 +1068,9 @@ spawnInterval = 1.5
 
 [node name="SpikeBallStatic1" parent="MainAct/Overpass/Hall" instance=ExtResource("8_psd5w")]
 transform = Transform3D(0.940406, -0.27327, 0.202389, 0.252224, 0.95971, 0.123851, -0.22808, -0.0654222, 0.971442, 43.3662, -4.60886, -119.598)
-collision_layer = 24
 
 [node name="SpikeBallStatic2" parent="MainAct/Overpass/Hall" instance=ExtResource("8_psd5w")]
 transform = Transform3D(0.984808, 8.3819e-09, 0.173648, 0.0301537, 0.984808, -0.17101, -0.17101, 0.173648, 0.969846, 42.6348, -4.7342, -121.406)
-collision_layer = 24
 
 [node name="Ring2" type="Node3D" parent="MainAct/Overpass/Hall"]
 transform = Transform3D(0.841924, 0.0446275, 0.53775, 0.00283342, 0.996195, -0.0871098, -0.539591, 0.0748634, 0.838594, 36.7798, -2.67414, -132.385)
@@ -1123,6 +1122,8 @@ transform = Transform3D(-0.5, 0, -0.866026, 0, 1, 0, 0.866026, 0, -0.5, 1.3048, 
 "Rotation Settings/Rotation Time" = 4.0
 "Attack Settings/Flame Active Time" = 5.5
 "Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 rangeOverride = 15
 
 [node name="BlueMajin2" parent="MainAct/Overpass/Hall/MajinGroup2" instance=ExtResource("8_tlcu6")]
@@ -1139,6 +1140,8 @@ transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, 
 "Rotation Settings/Rotation Time" = 5.0
 "Attack Settings/Flame Active Time" = 10.0
 "Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 rangeOverride = 15
 
 [node name="RedMajin3" parent="MainAct/Overpass/Hall/MajinGroup2" instance=ExtResource("22_l3dvj")]
@@ -1147,6 +1150,8 @@ transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, 
 "Rotation Settings/Rotation Time" = 2.0
 "Attack Settings/Flame Active Time" = 5.0
 "Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 rangeOverride = 20
 
 [node name="SpikeGroup" type="Node3D" parent="MainAct/Overpass/Hall"]
@@ -1154,21 +1159,21 @@ transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195
 
 [node name="SpikePanel1" parent="MainAct/Overpass/Hall/SpikeGroup" instance=ExtResource("23_6pbex")]
 transform = Transform3D(0.991445, 0.130526, -1.42109e-14, -0.130526, 0.991445, 0, 1.42109e-14, 0, 1, -0.489512, 0.19945, 14.3)
+stateLengths = PackedFloat32Array(0.5, 0, 0.5)
 "State Lengths/inactive" = 0.5
 "State Lengths/active" = 0.5
-stateLengths = [0.5, 0.0, 0.5]
 
 [node name="SpikePanel2" parent="MainAct/Overpass/Hall/SpikeGroup" instance=ExtResource("23_6pbex")]
 transform = Transform3D(1, 0, -7.81597e-14, 0, 1, 0, 7.81597e-14, 0, 1, 1, 0.1, 14.3)
+stateLengths = PackedFloat32Array(0.5, 0, 0.5)
 "State Lengths/inactive" = 0.5
 "State Lengths/active" = 0.5
-stateLengths = [0.5, 0.0, 0.5]
 
 [node name="SpikePanel3" parent="MainAct/Overpass/Hall/SpikeGroup" instance=ExtResource("23_6pbex")]
 transform = Transform3D(0.991445, -0.130526, -2.84217e-14, 0.130526, 0.991445, 0, 2.84217e-14, 0, 1, 2.48696, 0.199144, 14.3)
+stateLengths = PackedFloat32Array(0.5, 0, 0.5)
 "State Lengths/inactive" = 0.5
 "State Lengths/active" = 0.5
-stateLengths = [0.5, 0.0, 0.5]
 
 [node name="Stone1" parent="MainAct/Overpass/Hall/SpikeGroup" instance=ExtResource("23_11llw")]
 transform = Transform3D(1, 0, -1.42109e-13, 0, 1, 0, 1.42109e-13, 0, 1, -0.999993, -0.1, 12.5)
@@ -1229,6 +1234,8 @@ transform = Transform3D(1, 0, -1.06581e-13, 0, 1, 0, 1.06581e-13, 0, 1, 0.900012
 "Rotation Settings/Rotation Time" = 0.5
 "Attack Settings/Flame Active Time" = 2.0
 "Attack Settings/Flame Inactive Time" = 0.4
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 rangeOverride = 10
 
 [node name="Field" type="Node3D" parent="MainAct"]
@@ -1257,23 +1264,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.5)
 [node name="PlatformExterior4" parent="MainAct/Field/UpperPath/Platform1" instance=ExtResource("11_fjgqb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16.5)
 
-[node name="Spring01" parent="MainAct/Field/UpperPath" node_paths=PackedStringArray("sfxPlayer") instance=ExtResource("4_ia1t0")]
+[node name="Spring01" parent="MainAct/Field/UpperPath" instance=ExtResource("4_ia1t0")]
 transform = Transform3D(0.208328, 0.0182263, 0.977889, -0.0871557, 0.996195, -4.18539e-09, -0.974168, -0.0852287, 0.209124, 35.5, 2.1, 1)
 MiddleHeight = 5.0
 Distance = 5.0
-sfxPlayer = NodePath("../Grindrail1/Spring02/SFX")
-voiceKey = &""
+sfxPlayer = NodePath("")
 
 [node name="Grindrail1" parent="MainAct/Field/UpperPath" instance=ExtResource("13_fnrre")]
 transform = Transform3D(0.951057, 0.0483409, -0.305212, 0, 0.987688, 0.156434, 0.309017, -0.148778, 0.939348, 35.3, 1.7, 0)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Spring02" parent="MainAct/Field/UpperPath/Grindrail1" instance=ExtResource("4_ia1t0")]
 transform = Transform3D(0.997644, -0.0483408, 0.0486609, 0.0486508, 0.998802, -0.00520743, -0.0483509, 0.00756256, 0.998801, 1.52588e-05, 0.200005, -25.9997)
 FinalHeight = 5.0
 Distance = 2.5
-voiceKey = &""
 
 [node name="Platform2" type="Node3D" parent="MainAct/Field/UpperPath"]
 transform = Transform3D(0.174312, 0, 1.99239, 0, 2, 0, -1.99239, 0, 0.174312, 0.651377, -4, -31.0152)
@@ -1301,14 +1308,15 @@ rangeOverride = 25
 
 [node name="Grindrail2" parent="MainAct/Field/UpperPath" instance=ExtResource("13_fnrre")]
 transform = Transform3D(0.995397, -0.0126762, -0.0950038, 0, 0.991215, -0.132256, 0.0958458, 0.131647, 0.986652, 44.2, -2.3, -31)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Spring03" parent="MainAct/Field/UpperPath/Grindrail2" instance=ExtResource("4_ia1t0")]
 transform = Transform3D(0.999999, -2.32831e-09, -1.49012e-08, -1.86265e-09, 0.984808, 0.173648, -1.49012e-08, -0.173648, 0.984807, 0.0383148, 0.4263, -27.6206)
 FinalHeight = 6.0
 Distance = 1.0
-voiceKey = &""
 
 [node name="Platform3" type="Node3D" parent="MainAct/Field/UpperPath"]
 transform = Transform3D(0.347296, 0, 1.96962, 0, 2, 0, -1.96962, 0, 0.347296, 13.8473, 0, -67.9696)
@@ -1341,6 +1349,8 @@ transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 
 "Rotation Settings/Rotation Time" = 1.0
 "Attack Settings/Flame Active Time" = 2.0
 "Attack Settings/Flame Inactive Time" = 4.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 rangeOverride = 20
 
 [node name="JumpPanel" parent="MainAct/Field/UpperPath" instance=ExtResource("34_d0kwn")]
@@ -1410,6 +1420,8 @@ transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926
 "Rotation Settings/Rotation Time" = 1.0
 "Attack Settings/Flame Active Time" = 5.0
 "Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 rangeOverride = 20
 
 [node name="EnemyStone" parent="MainAct/Field/LowerPath/JumpPanelGroup" instance=ExtResource("25_4vuwu")]
@@ -1426,8 +1438,10 @@ transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 
 
 [node name="GrindrailL1" parent="MainAct/Field/LowerPath/GrindrailGroup" instance=ExtResource("36_3kt84")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -3.60803, 0, -18.0674)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Rings" type="Node3D" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -20)
@@ -1473,8 +1487,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.5)
 transform = Transform3D(1.89467, 0.379892, 0.515668, -0.19468, 1.87561, -0.666469, -0.61019, 0.581174, 1.81381, 0, 0, -60)
 
 [node name="GrindrailM1" parent="MainAct/Field/LowerPath/GrindrailGroup" instance=ExtResource("34_sbk4a")]
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Rings" type="Node3D" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -3)
@@ -1512,23 +1528,31 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
 
 [node name="GrindrailM2" parent="MainAct/Field/LowerPath/GrindrailGroup" instance=ExtResource("36_3kt84")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -1.52588e-05, 0, -20.0001)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="GrindrailM3" parent="MainAct/Field/LowerPath/GrindrailGroup" instance=ExtResource("13_fnrre")]
 transform = Transform3D(0.984807, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984807, -10.4189, 0, -79.0887)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="GrindrailM4" parent="MainAct/Field/LowerPath/GrindrailGroup" instance=ExtResource("13_fnrre")]
 transform = Transform3D(0.819152, 0, -0.573577, 0, 1, 0, 0.573577, 0, 0.819152, -5.20944, 0, -108.633)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="GrindrailR1" parent="MainAct/Field/LowerPath/GrindrailGroup" instance=ExtResource("13_fnrre")]
 transform = Transform3D(0.819152, 0, -0.573577, 0, 1, 0, 0.573577, 0, 0.819152, -2.62119, 0, -105.355)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Rings" type="Node3D" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR1"]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0.000183105, 1.1, -2.99988)
@@ -1581,8 +1605,10 @@ transform = Transform3D(0.809457, 0.432816, 0.3968, -0.150384, 0.806045, -0.5724
 
 [node name="GrindrailM5" parent="MainAct/Field/LowerPath/GrindrailGroup" instance=ExtResource("13_fnrre")]
 transform = Transform3D(0.5, 0, -0.866026, 0, 1, 0, 0.866026, 0, 0.5, 11.9979, 0, -133.208)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Rings" type="Node3D" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00012207, 1.1, -2.99997)
@@ -1626,16 +1652,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.5)
 
 [node name="GrindrailM6" parent="MainAct/Field/LowerPath/GrindrailGroup" instance=ExtResource("13_fnrre")]
 transform = Transform3D(0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, 0.173648, 37.9786, 0, -148.208)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="SpikeBallStatic" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailM6" instance=ExtResource("8_psd5w")]
 transform = Transform3D(2, 0, 0, 0, 1.96962, 0.347296, 0, -0.347296, 1.96962, 0, 0, -34)
 
 [node name="GrindrailR2" parent="MainAct/Field/LowerPath/GrindrailGroup" instance=ExtResource("13_fnrre")]
 transform = Transform3D(0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, 0.173648, 37.6884, 0, -144.095)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Rings" type="Node3D" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailR2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -10)
@@ -1679,8 +1709,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
 
 [node name="GrindrailL2" parent="MainAct/Field/LowerPath/GrindrailGroup" instance=ExtResource("36_3kt84")]
 transform = Transform3D(0.642788, 0, -0.766046, 0, 1, 0, 0.766046, 0, 0.642788, -17.3082, 0, -118.497)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Rings" type="Node3D" parent="MainAct/Field/LowerPath/GrindrailGroup/GrindrailL2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10352e-05, 1.1, -8)
@@ -1744,7 +1776,6 @@ enemyCount = 4
 
 [node name="Spring" parent="MainAct/Field/LowerPath/SpringGroup1" instance=ExtResource("4_ia1t0")]
 FinalHeight = 16.0
-voiceKey = &""
 
 [node name="PearlRing1" type="Node3D" parent="MainAct/Field/LowerPath/SpringGroup1/Spring"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -1926,6 +1957,8 @@ transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 
 "Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
 "Attack Settings/Flame Active Time" = 2.5
 "Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 rangeOverride = 30
 
 [node name="Spring01" parent="MainAct/Field/LowerPath/SpringGroup2" instance=ExtResource("4_ia1t0")]
@@ -1933,7 +1966,6 @@ transform = Transform3D(0.970296, 0.00211114, -0.241913, 0, 0.999962, 0.00872653
 MiddleHeight = 20.0
 FinalHeight = 18.0
 Distance = 4.0
-voiceKey = &""
 
 [node name="EnemyStone1" parent="MainAct/Field/LowerPath/SpringGroup2" instance=ExtResource("25_4vuwu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -1945,10 +1977,11 @@ enemyCount = 1
 
 [node name="SpringEvent" type="Node3D" parent="MainAct/Field/LowerPath/SpringGroup2" node_paths=PackedStringArray("animator")]
 script = ExtResource("40_dipor")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Spring02" parent="MainAct/Field/LowerPath/SpringGroup2/SpringEvent" instance=ExtResource("4_ia1t0")]
 process_mode = 4
@@ -1957,7 +1990,6 @@ visible = false
 MiddleHeight = 20.0
 FinalHeight = 10.0
 Distance = 6.0
-voiceKey = &""
 
 [node name="Ring1" parent="MainAct/Field/LowerPath/SpringGroup2/SpringEvent/Spring02" instance=ExtResource("6_i636b")]
 transform = Transform3D(-0.433659, -1.42446e-08, -0.901077, 0.0361617, 0.999194, -0.0174035, 0.900351, -0.0401318, -0.43331, 0, 11, 0.749969)
@@ -1976,7 +2008,7 @@ transform = Transform3D(-0.433659, -1.3195e-08, -0.901077, 0.0361617, 0.999193, 
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Field/LowerPath/SpringGroup2/SpringEvent"]
 libraries = {
-"": SubResource("AnimationLibrary_fhfve")
+&"": SubResource("AnimationLibrary_fhfve")
 }
 
 [node name="SpiralPath" type="Node3D" parent="MainAct/Field"]
@@ -2014,6 +2046,7 @@ transform = Transform3D(0.999893, -0.0146693, 0.000496656, 0.0144478, 0.989635, 
 transform = Transform3D(0.96418, 0, 1.14907, 0, 1.5, 0, -1.14907, 0, 0.96418, 8.69281, -2.50708, -72.0129)
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="CavernA" type="Node3D" parent="MainAct"]
@@ -2045,6 +2078,7 @@ transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 
 transform = Transform3D(1.08253, 0, 0.5, 0, 1, 0, -0.625, 0, 0.866025, -4.5, 0, -7.33)
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Rings1" type="Node3D" parent="MainAct/CavernA/Hall"]
@@ -2121,6 +2155,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.1, 0, -57.4)
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 0.689362, 0, -9.87842)
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Switch" parent="MainAct/CavernA/Hall/SwitchGroup2" instance=ExtResource("39_jvpkb")]
@@ -2133,6 +2168,7 @@ transform = Transform3D(0.384247, 0, -0.92323, 0, 1, 0, 0.92323, 0, 0.384247, 27
 transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0.129333, 0, -5.48291)
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Switch" parent="MainAct/CavernA/Hall/SwitchGroup3" instance=ExtResource("39_jvpkb")]
@@ -2150,6 +2186,7 @@ transform = Transform3D(-0.208356, 0, -0.978053, 0, 1, 0, 0.978053, 0, -0.208356
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.19995, 0, -5)
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Switch" parent="MainAct/CavernA/Hall/SwitchGroup4" instance=ExtResource("39_jvpkb")]
@@ -2167,6 +2204,7 @@ transform = Transform3D(-0.18021, 0, -0.983628, 0, 1, 0, 0.983628, 0, -0.18021, 
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -1, 0, -5)
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Switch" parent="MainAct/CavernA/Hall/SwitchGroup5" instance=ExtResource("39_jvpkb")]
@@ -2219,12 +2257,14 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -85.5,
 
 [node name="PlatformCavernFalling1" parent="MainAct/CavernA/MainPath/FallingPlatformGroup1" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 2.8, 0, 0, 0.500015)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernSmall1" parent="MainAct/CavernA/MainPath/FallingPlatformGroup1" instance=ExtResource("3_6m2nv")]
 transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, 0, 1.5, -4.10999)
 
 [node name="PlatformCavernFalling2" parent="MainAct/CavernA/MainPath/FallingPlatformGroup1" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 2.5, 0, 2.5, -8.5)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernLarge" parent="MainAct/CavernA/MainPath" instance=ExtResource("5_5f5sv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -72, 1, 0)
@@ -2265,15 +2305,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
 transform = Transform3D(-1.31134e-07, 0, -3, 0, 3, 0, 3, 0, -1.31134e-07, -72.5, 0, -24)
 
 [node name="PlatformCavernFalling1" parent="MainAct/CavernA/MainPath/FallingPlatformGroup2" instance=ExtResource("4_w5q3l")]
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling2" parent="MainAct/CavernA/MainPath/FallingPlatformGroup2" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.25, 0)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling3" parent="MainAct/CavernA/MainPath/FallingPlatformGroup2" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling4" parent="MainAct/CavernA/MainPath/FallingPlatformGroup2" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.5, 0)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="StaticPlatformGroup3" type="Node3D" parent="MainAct/CavernA/MainPath"]
 transform = Transform3D(-1.31134e-07, 0, -1, 0, 3, 0, 3, 0, -4.37114e-08, -68.3, 0, -30)
@@ -2303,9 +2347,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
 
 [node name="LaunchRingSpike1" parent="MainAct/CavernA/MainPath" instance=ExtResource("6_ii6j5")]
 transform = Transform3D(-4.37114e-08, -0.996195, 0.0871558, 0, 0.0871558, 0.996195, -1, 4.35451e-08, -3.8097e-09, -51.3, -7.6, -30)
-Settings/Distance = 4.5
-"Settings/Middle Height" = 15.0
-"Settings/End Height" = 9.8
 
 [node name="StaticPlatformGroup4" type="Node3D" parent="MainAct/CavernA/MainPath"]
 transform = Transform3D(-1.31134e-07, 0, -1, 0, 3, 0, 3, 0, -4.37114e-08, -47.8, 2, -30)
@@ -2379,9 +2420,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
 [node name="LaunchRingSpike2" parent="MainAct/CavernA/MainPath" instance=ExtResource("6_ii6j5")]
 transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, -21.8, -6.6, -11.7)
-Settings/Distance = 17.0
-"Settings/Middle Height" = 20.0
-"Settings/End Height" = 15.0
 
 [node name="StaticPlatformGroup7" type="Node3D" parent="MainAct/CavernA/MainPath"]
 transform = Transform3D(-3, 0, 1.50996e-07, 0, 3, 0, -4.52987e-07, 0, -1, -21.8, 2, -7)
@@ -2401,15 +2439,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 transform = Transform3D(-3, 0, 4.52987e-07, 0, 3, 0, -4.52987e-07, 0, -3, -21.8, 2, 5.5)
 
 [node name="PlatformCavernFalling1" parent="MainAct/CavernA/MainPath/FallingPlatformGroup3" instance=ExtResource("4_w5q3l")]
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling2" parent="MainAct/CavernA/MainPath/FallingPlatformGroup3" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(1, 0, -2.84217e-14, 0, 1, 0, 2.84217e-14, 0, 1, 0, -0.5, -2.79999)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling3" parent="MainAct/CavernA/MainPath/FallingPlatformGroup3" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(1, 0, -4.26326e-14, 0, 1, 0, 4.26326e-14, 0, 1, 0, 0, -5.5)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling4" parent="MainAct/CavernA/MainPath/FallingPlatformGroup3" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(1, 0, -4.26326e-14, 0, 1, 0, 4.26326e-14, 0, 1, 0, 2, -0.5)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernLarge3" parent="MainAct/CavernA/MainPath" instance=ExtResource("5_5f5sv")]
 transform = Transform3D(1.25, 0, 0, 0, 1, 0, 0, 0, 1.5, -21.75, 0, 32.5)
@@ -2445,7 +2487,6 @@ enemyCount = 2
 transform = Transform3D(-0.975246, 0.0189184, 0.220313, -7.45058e-09, 0.996333, -0.0855562, -0.221123, -0.0834382, -0.97167, 0, -0.8, 0)
 MiddleHeight = 8.0
 Distance = 3.0
-voiceKey = &""
 
 [node name="PlatformCavernLarge5" parent="MainAct/CavernA/MainPath" instance=ExtResource("5_5f5sv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.5, -1, 32.5)
@@ -2454,17 +2495,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.5, -1, 32.5)
 transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 44.5, -1, 28.2)
 
 [node name="PlatformCavernFalling1" parent="MainAct/CavernA/MainPath/FallingPlatformGroup4" instance=ExtResource("4_w5q3l")]
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling2" parent="MainAct/CavernA/MainPath/FallingPlatformGroup4" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.99997)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="FallingPlatformGroup5" type="Node3D" parent="MainAct/CavernA/MainPath"]
 transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 44.5, 0, 18.7)
 
 [node name="PlatformCavernFalling1" parent="MainAct/CavernA/MainPath/FallingPlatformGroup5" instance=ExtResource("4_w5q3l")]
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling2" parent="MainAct/CavernA/MainPath/FallingPlatformGroup5" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.99997)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernLarge6" parent="MainAct/CavernA/MainPath" instance=ExtResource("5_5f5sv")]
 transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 1, 46.25, 0, 9.5)
@@ -2474,48 +2519,63 @@ transform = Transform3D(1.64, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 51.5, 0, 10)
 
 [node name="PlatformCavernFalling1" parent="MainAct/CavernA/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling2" parent="MainAct/CavernA/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2, 0, 0)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling3" parent="MainAct/CavernA/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 4, 0, 0)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling4" parent="MainAct/CavernA/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 6, 0, 0)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling5" parent="MainAct/CavernA/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 8, 0, 0)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling6" parent="MainAct/CavernA/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 10, 0, 0)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling7" parent="MainAct/CavernA/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 12, 0, 0)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling8" parent="MainAct/CavernA/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 14, 0, 0)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling9" parent="MainAct/CavernA/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 16, 0, 0)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling10" parent="MainAct/CavernA/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 18, 0, 0)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling11" parent="MainAct/CavernA/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 20, 0, 0)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling12" parent="MainAct/CavernA/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 22, 0, 0)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling13" parent="MainAct/CavernA/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 24, 0, 0)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling14" parent="MainAct/CavernA/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 26, 0, 0)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="PlatformCavernFalling15" parent="MainAct/CavernA/MainPath/FallingPlatformGroup6" instance=ExtResource("4_w5q3l")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 28, 0, 0)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="AlternatePath" type="Node3D" parent="MainAct/CavernA"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -113, 0, 0)
@@ -2540,7 +2600,6 @@ railLength = 38
 [node name="Spring" parent="MainAct/CavernA/AlternatePath/InvisibleGrindrail1" instance=ExtResource("4_ia1t0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -37)
 FinalHeight = 15.0
-voiceKey = &""
 
 [node name="GreenMajin1" parent="MainAct/CavernA/AlternatePath" instance=ExtResource("5_danjg")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 67, 1, 0)
@@ -2572,9 +2631,7 @@ path = NodePath("../../../../../Static/Path/CavernPath")
 
 [node name="Spring" parent="MainAct/CavernA/AlternatePath/InvisibleGrindrail2" instance=ExtResource("4_ia1t0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -31)
-monitorable = false
 FinalHeight = 10.0
-voiceKey = &""
 
 [node name="CavernB" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 140, 40, -1060)
@@ -3538,6 +3595,7 @@ transform = Transform3D(0.819152, -0.0539783, 0.571031, 0, 0.995562, 0.0941083, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.80005, -1.73822, -20)
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Sickle1" parent="MainAct/CavernB/Hall" instance=ExtResource("43_lkrtx")]
@@ -3690,32 +3748,32 @@ transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 
 
 [node name="SpikeBall1" parent="MainAct/Interior/MainHall/SwitchGroup" instance=ExtResource("6_21sva")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+animatorSpeedScale = 0.4
 Movement/Mode = 2
 "Movement/Cycle Length" = 2.0
 "Movement/Horizontal Size" = 0.0
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 2.2
-animatorSpeedScale = 0.4
 
 [node name="SpikeBall2" parent="MainAct/Interior/MainHall/SwitchGroup" instance=ExtResource("6_21sva")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+animatorSpeedScale = 0.4
 Movement/Mode = 2
 "Movement/Cycle Length" = 2.0
 "Movement/Starting Offset" = 0.33
 "Movement/Horizontal Size" = 0.0
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 2.2
-animatorSpeedScale = 0.4
 
 [node name="SpikeBall3" parent="MainAct/Interior/MainHall/SwitchGroup" instance=ExtResource("6_21sva")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+animatorSpeedScale = 0.4
 Movement/Mode = 2
 "Movement/Cycle Length" = 2.0
 "Movement/Starting Offset" = 0.67
 "Movement/Horizontal Size" = 0.0
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 2.2
-animatorSpeedScale = 0.4
 
 [node name="Switch" parent="MainAct/Interior/MainHall/SwitchGroup" instance=ExtResource("39_jvpkb")]
 
@@ -3723,6 +3781,7 @@ animatorSpeedScale = 0.4
 transform = Transform3D(0.984809, 0, -0.173649, 0, 1, 0, 0.173649, 0, 0.984809, 1.07169, 0, -5.59216)
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="LowerHall" type="Node3D" parent="MainAct/Interior"]
@@ -3849,6 +3908,7 @@ enemyCount = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19995, 0, -12)
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Rings4" type="Node3D" parent="MainAct/Interior/LowerHall"]
@@ -3910,12 +3970,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.100111, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="GrindrailL" parent="MainAct/Interior/LowerHall" instance=ExtResource("36_3kt84")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 287.8, 0.299999, -82.1)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Rings" type="Node3D" parent="MainAct/Interior/LowerHall/GrindrailL"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -40)
@@ -3944,8 +4007,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
 [node name="GrindrailR" parent="MainAct/Interior/LowerHall" instance=ExtResource("36_3kt84")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 291.8, 0.299999, -82.1)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Rings" type="Node3D" parent="MainAct/Interior/LowerHall/GrindrailR"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -15)
@@ -4160,25 +4225,27 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000244141, 0, 0)
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 100
 
-[node name="HorizontalMovement" type="Node3D" parent="MainAct/Spiral/TopRow/PlatformGroup3/ItemBoxGroup" node_paths=PackedStringArray("Root")]
+[node name="HorizontalMovement" type="Node3D" parent="MainAct/Spiral/TopRow/PlatformGroup3/ItemBoxGroup"]
 script = ExtResource("46_xxog8")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 2.0
 "Movement/Starting Offset" = 0.0
 Movement/Distance = 3.0
 Movement/Angle = -90.0
 "Vertical Orientation" = false
-Root = NodePath("../VerticalMovement")
 
-[node name="VerticalMovement" type="Node3D" parent="MainAct/Spiral/TopRow/PlatformGroup3/ItemBoxGroup" node_paths=PackedStringArray("Root")]
+[node name="VerticalMovement" type="Node3D" parent="MainAct/Spiral/TopRow/PlatformGroup3/ItemBoxGroup"]
 script = ExtResource("46_xxog8")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 1.0
 "Movement/Starting Offset" = 0.4
 Movement/Distance = 1.0
 Movement/Angle = 0.0
 "Vertical Orientation" = true
-Root = NodePath("../ItemBoxFlying")
 
 [node name="PlatformGroup4" type="Node3D" parent="MainAct/Spiral/TopRow"]
 transform = Transform3D(-0.995253, 0, 0.0973224, 0, 1, 0, -0.0973224, 0, -0.995253, 141.436, -3, -22.1171)
@@ -4425,10 +4492,11 @@ shape = SubResource("BoxShape3D_m7se1")
 [node name="SpikeBallSpawners" type="Node3D" parent="MainAct/Spiral/Sidle" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 5.58794e-09, -2.98023e-08, -1.86265e-09, 0.999999, -3.35276e-08, 8.9407e-08, -1.19209e-07, 1, -6.10352e-05, -1.52588e-05, 0.00012207)
 script = ExtResource("40_dipor")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="SpikeBallSpawner1" parent="MainAct/Spiral/Sidle/SpikeBallSpawners" instance=ExtResource("3_7v3mk")]
 transform = Transform3D(0.999998, 5.7742e-08, -5.66244e-07, 3.72529e-08, 0.999994, 1.11759e-08, 8.9407e-08, 3.72529e-09, 0.999998, 4.07593, 8.98747, 22.9705)
@@ -4468,7 +4536,7 @@ spawnInterval = 3.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Spiral/Sidle/SpikeBallSpawners"]
 libraries = {
-"": SubResource("AnimationLibrary_pruoy")
+&"": SubResource("AnimationLibrary_pruoy")
 }
 
 [node name="MiddleRow" type="Node3D" parent="MainAct/Spiral"]
@@ -4519,7 +4587,6 @@ SpawnMode = 2
 [node name="Spring" parent="MainAct/Spiral/MiddleRow/SpringGroup" instance=ExtResource("4_ia1t0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.08136, -0.459303, 10.0188)
 FinalHeight = 8.0
-voiceKey = &""
 
 [node name="EnemyStone" parent="MainAct/Spiral/MiddleRow/SpringGroup" instance=ExtResource("25_4vuwu")]
 transform = Transform3D(1, 0, 0, 0, 0.998831, -0.0483442, 0, 0.0483442, 0.998831, 7.08136, 0.207632, 10.0144)
@@ -4542,13 +4609,9 @@ transform = Transform3D(0.998059, 0, -0.0622679, 0, 1, 0, 0.0622679, 0, 0.998059
 
 [node name="ThornSpring1" parent="MainAct/Spiral/MiddleRow" instance=ExtResource("51_6444i")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 80.4, -3.5, 55)
-rotationMode = 1
-voiceKey = &""
 
 [node name="ThornSpring2" parent="MainAct/Spiral/MiddleRow" instance=ExtResource("51_6444i")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 81.6503, -4.5, 62.0906)
-rotationMode = 1
-voiceKey = &""
 
 [node name="PlatformGroup2" type="Node3D" parent="MainAct/Spiral/MiddleRow"]
 transform = Transform3D(-0.989874, 0, 0.141955, 0, 1, 0, -0.141955, 0, -0.989874, 80.6027, -1.5, 78.5769)
@@ -4568,14 +4631,10 @@ transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195
 [node name="ThornSpring3" parent="MainAct/Spiral/MiddleRow" instance=ExtResource("51_6444i")]
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 77.6749, -4, 92.5256)
 staticTime = 3.0
-rotationMode = 2
-voiceKey = &""
 
 [node name="ThornSpring4" parent="MainAct/Spiral/MiddleRow" instance=ExtResource("51_6444i")]
 transform = Transform3D(0.906308, 0, -0.422619, 0, 1, 0, 0.422619, 0, 0.906308, 75.0311, -4.5, 99.2069)
 staticTime = 3.0
-rotationMode = 2
-voiceKey = &""
 
 [node name="PlatformGroup3" type="Node3D" parent="MainAct/Spiral/MiddleRow"]
 transform = Transform3D(-0.804977, 0, 0.593307, 0, 1, 0, -0.593307, 0, -0.804977, 66.4971, -3.5, 113.213)
@@ -4736,16 +4795,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.8, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="SpikeBall1" parent="MainAct/Spiral/Warp/SwitchGroup1" instance=ExtResource("6_21sva")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+animatorSpeedScale = 0.5
 Movement/Mode = 2
 "Movement/Cycle Length" = 0.6
 "Movement/Horizontal Size" = 0.0
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 2.0
-animatorSpeedScale = 0.5
 
 [node name="SpikeBall2" parent="MainAct/Spiral/Warp/SwitchGroup1" instance=ExtResource("6_21sva")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
@@ -4787,37 +4847,38 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 107.1,
 
 [node name="SpikeBall1" parent="MainAct/Spiral/Warp/SwitchGroup2" instance=ExtResource("6_21sva")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+animatorSpeedScale = 0.5
 Movement/Mode = 2
 "Movement/Cycle Length" = 2.0
 "Movement/Horizontal Size" = 0.0
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 2.0
-animatorSpeedScale = 0.5
 
 [node name="SpikeBall2" parent="MainAct/Spiral/Warp/SwitchGroup2" instance=ExtResource("6_21sva")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+animatorSpeedScale = 0.5
 Movement/Mode = 2
 "Movement/Cycle Length" = 2.0
 "Movement/Starting Offset" = 0.25
 "Movement/Horizontal Size" = 0.0
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 2.0
-animatorSpeedScale = 0.5
 
 [node name="SpikeBall3" parent="MainAct/Spiral/Warp/SwitchGroup2" instance=ExtResource("6_21sva")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+animatorSpeedScale = 0.5
 Movement/Mode = 2
 "Movement/Cycle Length" = 2.0
 "Movement/Starting Offset" = 0.5
 "Movement/Horizontal Size" = 0.0
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 2.0
-animatorSpeedScale = 0.5
 
 [node name="Gate" parent="MainAct/Spiral/Warp/SwitchGroup2" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.70001)
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="WarpRed" parent="MainAct/Spiral/Warp" node_paths=PackedStringArray("warpTarget") instance=ExtResource("52_e0f0q")]
@@ -4927,6 +4988,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="SwitchGroup2" type="Node3D" parent="MainAct/HallB"]
@@ -4934,42 +4996,42 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -53)
 
 [node name="SpikeBall1" parent="MainAct/HallB/SwitchGroup2" instance=ExtResource("6_21sva")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+animatorSpeedScale = 0.8
 Movement/Mode = 2
 "Movement/Cycle Length" = 2.0
 "Movement/Horizontal Size" = 0.0
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 2.0
-animatorSpeedScale = 0.8
 
 [node name="SpikeBall2" parent="MainAct/HallB/SwitchGroup2" instance=ExtResource("6_21sva")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+animatorSpeedScale = 0.8
 Movement/Mode = 2
 "Movement/Cycle Length" = 2.0
 "Movement/Starting Offset" = 0.25
 "Movement/Horizontal Size" = 0.0
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 2.0
-animatorSpeedScale = 0.8
 
 [node name="SpikeBall3" parent="MainAct/HallB/SwitchGroup2" instance=ExtResource("6_21sva")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+animatorSpeedScale = 0.8
 Movement/Mode = 2
 "Movement/Cycle Length" = 2.0
 "Movement/Starting Offset" = 0.5
 "Movement/Horizontal Size" = 0.0
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 2.0
-animatorSpeedScale = 0.8
 
 [node name="SpikeBall4" parent="MainAct/HallB/SwitchGroup2" instance=ExtResource("6_21sva")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+animatorSpeedScale = 0.8
 Movement/Mode = 2
 "Movement/Cycle Length" = 2.0
 "Movement/Starting Offset" = 0.75
 "Movement/Horizontal Size" = 0.0
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 2.0
-animatorSpeedScale = 0.8
 
 [node name="Switch" parent="MainAct/HallB/SwitchGroup2" instance=ExtResource("39_jvpkb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
@@ -4978,6 +5040,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="SwitchGroup3" type="Node3D" parent="MainAct/HallB"]
@@ -5004,6 +5067,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Rings" type="Node3D" parent="MainAct/HallB"]
@@ -5041,6 +5105,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="SwitchGroup5" type="Node3D" parent="MainAct/HallB"]
@@ -5081,6 +5146,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="WarpRed" parent="MainAct/HallB" node_paths=PackedStringArray("warpTarget") instance=ExtResource("52_e0f0q")]
@@ -5105,8 +5171,10 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 
 
 [node name="GrindrailL" parent="MainAct/HallC" instance=ExtResource("57_d8jri")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -3.5, 0.3, -33)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Rings1" type="Node3D" parent="MainAct/HallC/GrindrailL"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000610352, 1.1, -14)
@@ -5175,8 +5243,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.4)
 
 [node name="GrindrailR" parent="MainAct/HallC" instance=ExtResource("57_d8jri")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 3.5, 0.3, -33)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Rings1" type="Node3D" parent="MainAct/HallC/GrindrailR"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.10352e-05, 1.1, -14)
@@ -5205,8 +5275,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
 
 [node name="GrindrailM" parent="MainAct/HallC" instance=ExtResource("57_d8jri")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 0.3, -33)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Rings" type="Node3D" parent="MainAct/HallC/GrindrailM"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000305176, 1.1, -45)
@@ -5299,26 +5371,28 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -24.8)
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
-[node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox1" node_paths=PackedStringArray("Root")]
+[node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
 script = ExtResource("46_xxog8")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 4.0
 "Movement/Starting Offset" = 0.0
 Movement/Distance = 8.0
 Movement/Angle = 90.0
 "Vertical Orientation" = false
-Root = NodePath("../VerticalMovement")
 
-[node name="VerticalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox1" node_paths=PackedStringArray("Root")]
+[node name="VerticalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox1"]
 script = ExtResource("46_xxog8")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 1.0
 "Movement/Starting Offset" = 0.4
 Movement/Distance = 1.0
 Movement/Angle = 0.0
 "Vertical Orientation" = true
-Root = NodePath("../ItemBoxFlying")
 
 [node name="PickupParent" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.4, -19.6)
@@ -5368,26 +5442,28 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.40002)
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
-[node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox2" node_paths=PackedStringArray("Root")]
+[node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 0)
 script = ExtResource("46_xxog8")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 8.0
 "Movement/Starting Offset" = 0.25
 Movement/Distance = 5.0
 Movement/Angle = 90.0
 "Vertical Orientation" = false
-Root = NodePath("../VerticalMovement")
 
-[node name="VerticalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox2" node_paths=PackedStringArray("Root")]
+[node name="VerticalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox2"]
 script = ExtResource("46_xxog8")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 1.0
 "Movement/Starting Offset" = 0.4
 Movement/Distance = 1.0
 Movement/Angle = 0.0
 "Vertical Orientation" = true
-Root = NodePath("../ItemBoxFlying")
 
 [node name="PickupParent" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, -2.4, -12.8)
@@ -5437,26 +5513,28 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.9)
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
-[node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox3" node_paths=PackedStringArray("Root")]
+[node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
 script = ExtResource("46_xxog8")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 3.6
 "Movement/Starting Offset" = 0.5
 Movement/Distance = 8.0
 Movement/Angle = 90.0
 "Vertical Orientation" = false
-Root = NodePath("../VerticalMovement")
 
-[node name="VerticalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox3" node_paths=PackedStringArray("Root")]
+[node name="VerticalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox3"]
 script = ExtResource("46_xxog8")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 1.0
 "Movement/Starting Offset" = 0.4
 Movement/Distance = 1.0
 Movement/Angle = 0.0
 "Vertical Orientation" = true
-Root = NodePath("../ItemBoxFlying")
 
 [node name="PickupParent" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, -2.4, -7.8)
@@ -5506,25 +5584,27 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -34.3)
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
-[node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox4" node_paths=PackedStringArray("Root")]
+[node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox4"]
 script = ExtResource("46_xxog8")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 4.0
 "Movement/Starting Offset" = 0.75
 Movement/Distance = 5.0
 Movement/Angle = 90.0
 "Vertical Orientation" = false
-Root = NodePath("../VerticalMovement")
 
-[node name="VerticalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox4" node_paths=PackedStringArray("Root")]
+[node name="VerticalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox4"]
 script = ExtResource("46_xxog8")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 1.0
 "Movement/Starting Offset" = 0.4
 Movement/Distance = 1.0
 Movement/Angle = 0.0
 "Vertical Orientation" = true
-Root = NodePath("../ItemBoxFlying")
 
 [node name="PickupParent" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, -2.4, -29.8)
@@ -5579,26 +5659,28 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -69.4)
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
-[node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox1" node_paths=PackedStringArray("Root")]
+[node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0)
 script = ExtResource("46_xxog8")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 4.4
 "Movement/Starting Offset" = 0.0
 Movement/Distance = 5.0
 Movement/Angle = 90.0
 "Vertical Orientation" = false
-Root = NodePath("../VerticalMovement")
 
-[node name="VerticalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox1" node_paths=PackedStringArray("Root")]
+[node name="VerticalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox1"]
 script = ExtResource("46_xxog8")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 1.0
 "Movement/Starting Offset" = 0.4
 Movement/Distance = 1.0
 Movement/Angle = 0.0
 "Vertical Orientation" = true
-Root = NodePath("../ItemBoxFlying")
 
 [node name="PickupParent" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, -2.4, -29.8)
@@ -5648,26 +5730,28 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.70001)
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
-[node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox2" node_paths=PackedStringArray("Root")]
+[node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, 0)
 script = ExtResource("46_xxog8")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 5.6
 "Movement/Starting Offset" = 0.0
 Movement/Distance = 5.0
 Movement/Angle = 90.0
 "Vertical Orientation" = false
-Root = NodePath("../VerticalMovement")
 
-[node name="VerticalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox2" node_paths=PackedStringArray("Root")]
+[node name="VerticalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox2"]
 script = ExtResource("46_xxog8")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 1.0
 "Movement/Starting Offset" = 0.4
 Movement/Distance = 1.0
 Movement/Angle = 0.0
 "Vertical Orientation" = true
-Root = NodePath("../ItemBoxFlying")
 
 [node name="PickupParent" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, -2.4, -17.3)
@@ -5717,26 +5801,28 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.7)
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
-[node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox3" node_paths=PackedStringArray("Root")]
+[node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
 script = ExtResource("46_xxog8")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 3.0
 "Movement/Starting Offset" = 0.0
 Movement/Distance = 8.0
 Movement/Angle = 90.0
 "Vertical Orientation" = false
-Root = NodePath("../VerticalMovement")
 
-[node name="VerticalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox3" node_paths=PackedStringArray("Root")]
+[node name="VerticalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox3"]
 script = ExtResource("46_xxog8")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 1.0
 "Movement/Starting Offset" = 0.4
 Movement/Distance = 1.0
 Movement/Angle = 0.0
 "Vertical Orientation" = true
-Root = NodePath("../ItemBoxFlying")
 
 [node name="PickupParent" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, -2.4, -6.5)
@@ -5805,8 +5891,10 @@ transform = Transform3D(1, 0, 4.37114e-08, 0, 1, 0, -4.37114e-08, 0, 1, 0, 0, 8)
 
 [node name="GrindrailL" parent="MainAct/End/Arena" instance=ExtResource("59_hrnhp")]
 transform = Transform3D(-1, 0, 4.37114e-08, 0, 1, 0, -4.37114e-08, 0, -1, 1.5, 0.3, 21.5)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Rings" type="Node3D" parent="MainAct/End/Arena/GrindrailL"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -69.5)
@@ -5850,8 +5938,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -45)
 
 [node name="GrindrailR" parent="MainAct/End/Arena" instance=ExtResource("59_hrnhp")]
 transform = Transform3D(-1, 0, 4.37114e-08, 0, 1, 0, -4.37114e-08, 0, -1, -1.5, 0.3, 21.5)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Rings" type="Node3D" parent="MainAct/End/Arena/GrindrailR"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -3)
@@ -5948,6 +6038,8 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.0001
 "Rotation Settings/Rotation Time" = 12.0
 "Attack Settings/Flame Active Time" = 5.0
 "Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 
 [node name="Sickle2" parent="MainAct/End/Hall" instance=ExtResource("43_lkrtx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 8.8, 27)
@@ -5970,6 +6062,8 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.0004
 "Rotation Settings/Rotation Time" = 12.0
 "Attack Settings/Flame Active Time" = 5.0
 "Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 
 [node name="Sickle5" parent="MainAct/End/Hall" instance=ExtResource("43_lkrtx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.8, 78)
@@ -5993,8 +6087,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 225, 0, -100)
 
 [node name="Grindrail" parent="MainAct/End/Throne" instance=ExtResource("36_3kt84")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 10)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Rings" type="Node3D" parent="MainAct/End/Throne/Grindrail"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -15)
@@ -6043,6 +6139,8 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2.199
 "Rotation Settings/Rotation Time" = 12.0
 "Attack Settings/Flame Active Time" = 5.0
 "Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 
 [node name="SkeletonMajin2" parent="MainAct/End/Throne" instance=ExtResource("43_8j7sg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.20007, 7.2, -86)
@@ -6054,6 +6152,8 @@ transform = Transform3D(-0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, 1.40723,
 "Rotation Settings/Rotation Time" = 4.0
 "Attack Settings/Flame Active Time" = 4.5
 "Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 
 [node name="SkeletonMajin3" parent="MainAct/End/Throne" instance=ExtResource("43_8j7sg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 10, -101.5)
@@ -6077,6 +6177,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.3, -113)
 "Rotation Settings/Rotation Time" = 0.8
 "Attack Settings/Flame Active Time" = 8.0
 "Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 
 [node name="SkeletonMajin7" parent="MainAct/End/Throne" instance=ExtResource("43_8j7sg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.99988, 10, -114)
