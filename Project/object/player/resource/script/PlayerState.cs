@@ -41,13 +41,13 @@ public partial class PlayerState : Node
 			// Process Lockouts
 			if (Player.ActiveLockoutData.overrideSpeed)
 			{
-				Player.MoveSpeed = Player.ActiveLockoutData.ApplySpeed(Player.MoveSpeed, ActiveMovementSettings);
+				AccelerateLockout();
 				return;
 			}
 
 			if (Player.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe)
 			{
-				Player.MoveSpeed = ActiveMovementSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
+				Accelerate(inputStrength);
 				return;
 			}
 		}
@@ -98,7 +98,11 @@ public partial class PlayerState : Node
 		return isHoldingBack;
 	}
 
-	protected virtual void Deccelerate() => Player.MoveSpeed = ActiveMovementSettings.UpdateInterpolate(Player.MoveSpeed, 0);
+	protected virtual void Deccelerate() =>
+		Player.MoveSpeed = ActiveMovementSettings.UpdateInterpolate(Player.MoveSpeed, 0);
+
+	protected virtual void AccelerateLockout() =>
+		Player.MoveSpeed = Player.ActiveLockoutData.ApplySpeed(Player.MoveSpeed, ActiveMovementSettings);
 
 	protected virtual void Accelerate(float inputStrength)
 	{
@@ -114,6 +118,12 @@ public partial class PlayerState : Node
 	protected float turningVelocity;
 	protected virtual void ProcessTurning()
 	{
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
+		{
+			if (Mathf.IsZeroApprox(Player.MoveSpeed) && !Player.Controller.IsBrakeHeld())
+				Player.IsMovingBackward = Player.Controller.IsHoldingDirection(Player.Controller.GetTargetInputAngle(), Player.PathFollower.BackAngle);
+		}
+
 		float pathControlAmount = Player.Controller.CalculatePathControlAmount();
 		float targetMovementAngle = Player.Controller.GetTargetMovementAngle() + pathControlAmount;
 		if (DisableTurning(targetMovementAngle))
@@ -132,7 +142,7 @@ public partial class PlayerState : Node
 		if (Player.Skills.IsTimeBreakActive)
 		{
 			// Increase turning responsiveness when time break is active
-			turnSmoothing *= 0.1f;
+			turnSmoothing *= 0.5f;
 		}
 
 		Player.MovementAngle += pathControlAmount;

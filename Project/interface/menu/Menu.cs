@@ -41,7 +41,7 @@ public partial class Menu : Control
 	public Array<Menu> _submenus = []; // Also ensure the order of submenus is correct in the inspector hierarchy
 
 	[Export]
-	protected BGMPlayer bgm;
+	public BGMPlayer bgm;
 	protected float bgmFadeTime;
 	[Export]
 	protected AnimationPlayer animator;
@@ -125,13 +125,13 @@ public partial class Menu : Control
 	protected readonly float SelectionScrollingInterval = .1f;
 	protected virtual void ProcessMenu()
 	{
-		if (Input.IsActionJustPressed("button_jump") || Input.IsActionJustPressed("ui_select") || Input.IsActionJustPressed("ui_select"))
+		if (Input.IsActionJustPressed("button_jump") || Input.IsActionJustPressed("ui_select"))
 		{
 			Confirm();
 			return;
 		}
 
-		if (Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("ui_cancel") || Input.IsActionJustPressed("ui_cancel"))
+		if (Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("ui_cancel"))
 		{
 			Cancel();
 			return;
@@ -222,7 +222,7 @@ public partial class Menu : Control
 	}
 
 	/// <summary> Call this function to stop bgm instantly. </summary>
-	public void StopBgm() => bgm.Stop();
+	public void StopBgm() => bgm?.Stop();
 
 	// Overload for animation players
 	public void FadeBgm(float fadetime) => FadeBgm(fadetime, false);

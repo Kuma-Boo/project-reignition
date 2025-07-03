@@ -47,7 +47,7 @@ public partial class PlanarReflectionRenderer : Node3D
 
 	public override void _EnterTree()
 	{
-		reflectionViewport.Size = SaveManager.WindowSizes[SaveManager.Config.windowSize];
+		reflectionViewport.Size = GetTree().Root.Size;
 		switch (SaveManager.Config.reflectionQuality)
 		{
 			case SaveManager.QualitySetting.Disabled:

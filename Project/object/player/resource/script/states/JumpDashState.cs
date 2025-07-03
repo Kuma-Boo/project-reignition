@@ -33,6 +33,7 @@ public partial class JumpDashState : PlayerState
 		Player.MoveSpeed = jumpDashSpeed;
 		Player.VerticalSpeed = jumpDashPower;
 		Player.Lockon.IsMonitoring = false;
+		Player.CanJumpDash = false;
 
 		Player.Effect.PlayActionSFX(Player.Effect.JumpDashSfx);
 		Player.Effect.StartTrailFX();

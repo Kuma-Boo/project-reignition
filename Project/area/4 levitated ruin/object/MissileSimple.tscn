@@ -13,7 +13,6 @@
 [ext_resource type="AudioStream" uid="uid://bktx0sr73366c" path="res://sound/sfx/stage/levitated ruin/missile launch.wav" id="12_7pqml"]
 [ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="12_smdf2"]
 
-
 [sub_resource type="Curve" id="Curve_1x8is"]
 _data = [Vector2(0.00656455, 1), 0.0, -1.00661, 0, 1, Vector2(1, 0), -1.00661, 0.0, 1, 0]
 point_count = 2
@@ -545,9 +544,8 @@ draw_pass_1 = SubResource("QuadMesh_yndoj")
 
 [node name="LaunchSFX" type="AudioStreamPlayer3D" parent="." index="4"]
 stream = ExtResource("12_7pqml")
-unit_size = 50.0
 max_db = -6.0
-max_distance = 150.0
+max_distance = 100.0
 bus = &"GAME SFX"
 attenuation_filter_cutoff_hz = 20500.0
 script = ExtResource("12_smdf2")
@@ -556,7 +554,6 @@ audioLengthOverride = 1.2
 
 [node name="ExplosionSFX" type="AudioStreamPlayer3D" parent="." index="5"]
 stream = ExtResource("10_71aoi")
-unit_size = 20.0
 max_db = -6.0
 max_distance = 50.0
 bus = &"GAME SFX"
@@ -572,8 +569,6 @@ libraries = {
 autoplay = "fly"
 next/launch = &"fly"
 
-[connection signal="Activated" from="." to="LaunchSFX" method="play" binds= [0.0]]
-[connection signal="Exploded" from="." to="ExplosionSFX" method="play" binds= [0.0]]
 [connection signal="DamagedPlayer" from="Hitbox" to="." method="Explode"]
 [connection signal="KnockbackFailed" from="Hitbox" to="." method="Explode"]
 [connection signal="area_entered" from="Hitbox" to="Hitbox" method="OnEntered"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://sap50uvjitma"]
+[gd_scene load_steps=41 format=3 uid="uid://sap50uvjitma"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_y3xwh"]
 [ext_resource type="Resource" uid="uid://dmv3a7tioyyl6" path="res://area/3 evil foundry/data/DialogLibrary.tres" id="2_s1lnd"]
@@ -25,12 +25,17 @@
 [ext_resource type="PackedScene" uid="uid://colwov4oavxp" path="res://area/3 evil foundry/act 3/environment/11Spiral.tscn" id="14_oxee6"]
 [ext_resource type="Curve3D" uid="uid://bw5j3w382q34e" path="res://area/3 evil foundry/act 3/environment/path/StartingPath.tres" id="15_s46kt"]
 [ext_resource type="Curve3D" uid="uid://45wud7t2ygbd" path="res://area/3 evil foundry/act 3/environment/path/EndingPath.tres" id="16_qmjwd"]
+[ext_resource type="Curve3D" path="res://area/3 evil foundry/act 3/environment/path/LowHall1Path.tres" id="25_2wt11"]
+[ext_resource type="Curve3D" path="res://area/3 evil foundry/act 3/environment/path/LowHall2Path.tres" id="26_qxbgr"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="27_35wwr"]
 [ext_resource type="AudioStream" uid="uid://h7j3n4lf452s" path="res://sound/ost/bonus disc/Evil Foundry Act 3.mp3" id="27_g5tpq"]
 [ext_resource type="PackedScene" uid="uid://cs7ogaqrx3sn5" path="res://area/3 evil foundry/data/shader/ScreenWarp.tscn" id="28_c7cby"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_y4n3u"]
 size = Vector3(20, 20, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sn0cj"]
+size = Vector3(120, 20, 30)
 
 [sub_resource type="Animation" id="Animation_cwd0w"]
 length = 0.001
@@ -1016,6 +1021,38 @@ shape = SubResource("BoxShape3D_y4n3u")
 
 [node name="Path" type="Node3D" parent="Trigger"]
 
+[node name="LowHall1Path" parent="Trigger/Path" instance=ExtResource("4_ighux")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -555, -50, -420)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Path" type="Node3D" parent="Trigger/Path/LowHall1Path" node_paths=PackedStringArray("path")]
+script = ExtResource("12_7o568")
+path = NodePath("../../../../Path/LowHall1Path")
+cameraPathBlendTime = 0.5
+limitCameraDistanceToPath = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/LowHall1Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_sn0cj")
+
+[node name="LowHall2Path" parent="Trigger/Path" instance=ExtResource("4_ighux")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -480, -50, -360)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Path" type="Node3D" parent="Trigger/Path/LowHall2Path" node_paths=PackedStringArray("path")]
+script = ExtResource("12_7o568")
+path = NodePath("../../../../Path/LowHall2Path")
+cameraPathBlendTime = 0.5
+limitCameraDistanceToPath = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/LowHall2Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_sn0cj")
+
 [node name="EndingPath" parent="Trigger/Path" instance=ExtResource("4_ighux")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -613, -30, -420)
 
@@ -1261,6 +1298,14 @@ shape = SubResource("BoxShape3D_y4n3u")
 [node name="StartingPath" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, -30, -120)
 curve = ExtResource("15_s46kt")
+
+[node name="LowHall1Path" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -611, -45, -420)
+curve = ExtResource("25_2wt11")
+
+[node name="LowHall2Path" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -536, -45, -360)
+curve = ExtResource("26_qxbgr")
 
 [node name="EndingPath" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -660, -29.666, -420)

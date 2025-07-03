@@ -35,14 +35,18 @@ public partial class FallState : PlayerState
 			if (SaveManager.Config.useStompJumpButtonMode)
 				return stompState;
 
-			if (Player.Lockon.Monitoring)
-				return Player.Lockon.IsTargetAttackable ? homingAttackState : jumpDashState;
+			PlayerState attackState = GetAttackTargetState();
+			if (GetAttackTargetState() != null)
+				return attackState;
 		}
 
 		if (Player.Lockon.Monitoring && Player.Controller.IsAttackBufferActive)
 		{
 			Player.Controller.ResetAttackBuffer();
-			return Player.Lockon.IsTargetAttackable ? homingAttackState : jumpDashState;
+
+			PlayerState attackState = GetAttackTargetState();
+			if (GetAttackTargetState() != null)
+				return attackState;
 		}
 
 		if (Player.Controller.IsActionBufferActive)
@@ -56,6 +60,20 @@ public partial class FallState : PlayerState
 		{
 			Player.StartLightSpeedDash();
 		}
+
+		return null;
+	}
+
+	private PlayerState GetAttackTargetState()
+	{
+		if (!Player.Lockon.Monitoring)
+			return null;
+
+		if (Player.Lockon.IsTargetAttackable)
+			return homingAttackState;
+
+		if (Player.CanJumpDash)
+			return jumpDashState;
 
 		return null;
 	}

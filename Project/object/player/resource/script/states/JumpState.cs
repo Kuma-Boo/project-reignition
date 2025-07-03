@@ -24,7 +24,6 @@ public partial class JumpState : PlayerState
 	private float jumpTimer;
 
 	private bool isShortenedJump;
-	private bool isAccelerationJump;
 	private bool isAccelerationJumpQueued;
 	/// <summary> Cached acceleration jump height. Used to determine when the acceleration jump should start slowing down. </summary>
 	private float accelerationJumpHeight;
@@ -52,7 +51,6 @@ public partial class JumpState : PlayerState
 		turningVelocity = 0;
 		jumpTimer = 0;
 		isShortenedJump = false;
-		isAccelerationJump = false;
 		accelerationJumpHeight = Player.GlobalPosition.Y;
 		isAccelerationJumpQueued = Player.ForceAccelerationJump;
 
@@ -63,6 +61,7 @@ public partial class JumpState : PlayerState
 		Player.ForceAccelerationJump = false;
 
 		Player.IsOnGround = false;
+		Player.CanJumpDash = true;
 		if (Player.IsMovingBackward) // Kill speed when jumping backwards
 			Player.MoveSpeed = 0;
 		Player.VerticalSpeed = Runtime.CalculateJumpPower(Player.Stats.JumpHeight);
@@ -98,15 +97,36 @@ public partial class JumpState : PlayerState
 		ProcessMoveSpeed();
 		ProcessTurning();
 		ProcessGravity();
+
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
+			Player.IsMovingBackward = Player.Controller.IsHoldingDirection(Player.MovementAngle, Player.PathFollower.BackAngle);
+
 		Player.ApplyMovement();
-		Player.IsMovingBackward = Player.Controller.IsHoldingDirection(Player.MovementAngle, Player.PathFollower.BackAngle);
 		Player.CheckGround();
-		Player.CheckWall(Vector3.Zero, !isAccelerationJump);
+		Player.CheckWall(Vector3.Zero, !Player.IsAccelerationJumping);
 		if (Player.CheckCeiling())
 			return null;
 		Player.UpdateUpDirection();
 
-		if (!isAccelerationJump)
+		if (Player.IsAccelerationJumping)
+		{
+			if (Player.IsOnWall && Player.WallRaycastHit.collidedObject.IsInGroup("splash jump"))
+			{
+				if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SplashJump))
+				{
+					// Perform a splash jump
+					Player.Lockon.ResetLockonTarget();
+					Player.Effect.PlaySplashJumpFX();
+					Player.Animator.SplashJumpAnimation();
+					Player.VerticalSpeed = Runtime.CalculateJumpPower(Player.Stats.JumpHeight * .5f);
+					return fallState;
+				}
+
+				// Kill speed when jump dashing into a wall to prevent splash jump from becoming obsolete
+				Player.VerticalSpeed = Mathf.Clamp(Player.VerticalSpeed, -Mathf.Inf, 0);
+			}
+		}
+		else
 		{
 			jumpTimer += PhysicsManager.physicsDelta;
 
@@ -115,7 +135,7 @@ public partial class JumpState : PlayerState
 				if (isAccelerationJumpQueued)
 					StartAccelerationJump();
 
-				if (!isAccelerationJump && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SpinJump))
+				if (!Player.IsAccelerationJumping && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SpinJump))
 				{
 					Player.StartSpinJump(isShortenedJump);
 					return null;
@@ -126,7 +146,7 @@ public partial class JumpState : PlayerState
 		if (Player.IsOnGround)
 			return landState;
 
-		if (Player.VerticalSpeed <= 0 && !isAccelerationJump)
+		if (Player.VerticalSpeed <= 0 && !Player.IsAccelerationJumping)
 			return fallState;
 
 		if (Player.Controller.IsJumpBufferActive)
@@ -159,11 +179,27 @@ public partial class JumpState : PlayerState
 		return null;
 	}
 
+	protected override void AccelerateLockout()
+	{
+		if (jumpTimer <= AccelerationJumpLength ||
+			(Player.IsAccelerationJumping && Player.GlobalPosition.Y >= accelerationJumpHeight))
+		{
+			Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, Player.ActiveLockoutData.tractionMultiplier);
+			return;
+		}
+
+		base.AccelerateLockout();
+	}
+
 	protected override void Accelerate(float inputStrength)
 	{
-		if (jumpTimer <= AccelerationJumpLength || isAccelerationJump && Player.GlobalPosition.Y >= accelerationJumpHeight) // Clamp acceleration jumps so they don't get out of control
+		if (jumpTimer <= AccelerationJumpLength ||
+			(Player.IsAccelerationJumping && Player.GlobalPosition.Y >= accelerationJumpHeight))
 		{
-			Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
+			// Only accelerate when not holding backwards
+			if (!Player.Controller.IsHoldingDirection(Player.Controller.GetTargetInputAngle(), Player.PathFollower.BackAngle))
+				Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
+
 			return;
 		}
 
@@ -172,9 +208,16 @@ public partial class JumpState : PlayerState
 
 	protected override void ProcessTurning()
 	{
+		float targetAngle = Player.Controller.GetTargetInputAngle();
+		if (!Player.Controller.IsHoldingDirection(targetAngle, Player.PathFollower.ForwardAngle) &&
+			!Player.Controller.IsHoldingDirection(targetAngle, Player.PathFollower.BackAngle))
+		{
+			return;
+		}
+
 		base.ProcessTurning();
 
-		if (isAccelerationJump) // Clamp acceleration jumps so they don't get out of control
+		if (Player.IsAccelerationJumping) // Clamp acceleration jumps so they don't get out of control
 			Player.MovementAngle = ExtensionMethods.ClampAngleRange(Player.MovementAngle, Player.PathFollower.ForwardAngle, MaxAccelerationJumpTurnAmount);
 	}
 
@@ -189,11 +232,24 @@ public partial class JumpState : PlayerState
 	private void StartAccelerationJump()
 	{
 		isAccelerationJumpQueued = false;
+
 		if (Player.DisableAccelerationJump)
 			return;
 
-		float inputAngle = Player.Controller.GetTargetMovementAngle();
-		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
+		Player.IsAccelerationJumping = true;
+		Player.VerticalSpeed = accelerationJumpHeightVelocity; // Keep acceleration jump heights consistent
+		Player.Animator.JumpAccelAnimation();
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.AccelJumpAttack))
+		{
+			Player.Effect.PlayFireFX();
+			Player.AttackState = PlayerController.AttackStates.Weak;
+		}
+
+		// Prevent speed boost depending on what the player is trying to do
+		float inputStrength = Player.Controller.GetInputStrength();
+		float inputAngle = Player.Controller.GetTargetInputAngle();
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
 			Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
 		{
 			return;
@@ -202,25 +258,14 @@ public partial class JumpState : PlayerState
 		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
 			!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) &&
 			(!Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.ForwardAngle) ||
-			Player.Controller.GetInputStrength() < .5f))
+			inputStrength < .5f))
 		{
 			return;
 		}
 
-		isAccelerationJump = true;
-		Player.IsAccelerationJumping = true;
 		if (ExtensionMethods.DeltaAngleRad(Player.MovementAngle, Player.PathFollower.ForwardAngle) > Mathf.Pi * .5f)
 			Player.MovementAngle = Player.PathFollower.ForwardAngle;
 
-		// Keep acceleration jump heights consistent
 		Player.MoveSpeed = Mathf.Max(accelerationJumpSpeed, Player.MoveSpeed);
-		Player.VerticalSpeed = accelerationJumpHeightVelocity;
-		Player.Animator.JumpAccelAnimation();
-
-		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.AccelJumpAttack))
-		{
-			Player.Effect.PlayFireFX();
-			Player.AttackState = PlayerController.AttackStates.Weak;
-		}
 	}
 }

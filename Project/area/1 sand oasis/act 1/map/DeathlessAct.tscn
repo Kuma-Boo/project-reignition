@@ -2938,12 +2938,11 @@ enemyCount = 1
 
 [node name="Spring" parent="DeathlessAct/Hallway" instance=ExtResource("7_hkd0y")]
 transform = Transform3D(-0.984726, 0, 0.174112, 0, 1, 0, -0.174112, 0, -0.984726, -13.551, -44.5126, 12.561)
-Distance = 7.0
+Distance = 8.0
 LauncherDirection = 1
-voiceKey = &""
 
 [node name="FireSoul" parent="DeathlessAct/Hallway/Spring" instance=ExtResource("30_q71cr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 
 [node name="SpearGroup1" parent="DeathlessAct/Hallway" instance=ExtResource("12_bresa")]
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -17.0222, -45, 58.985)
@@ -2952,10 +2951,11 @@ OneShot = true
 
 [node name="Event" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup1" node_paths=PackedStringArray("animator")]
 script = ExtResource("13_h7bmr")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Spear1" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup1/Event"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 0, -12.5)
@@ -2966,19 +2966,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
 isDisabled = true
 
 [node name="TravelSFX1" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup1/Event/Spear1/Spear1"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("14_6nemi")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup1/Event/Spear1/Spear1"]
+process_mode = 1
 stream = ExtResource("15_jy5l8")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Rock1Particle1" parent="DeathlessAct/Hallway/SpearGroup1/Event/Spear1" instance=ExtResource("16_pnfnk")]
 visible = false
@@ -2995,19 +2995,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.28882e-05, 2.4, 6.10352e-05
 isDisabled = true
 
 [node name="TravelSFX2" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup1/Event/Spear2/Spear2"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("14_6nemi")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX2" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup1/Event/Spear2/Spear2"]
+process_mode = 1
 stream = ExtResource("15_jy5l8")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Rock1Particle2" parent="DeathlessAct/Hallway/SpearGroup1/Event/Spear2" instance=ExtResource("16_pnfnk")]
 visible = false
@@ -3024,19 +3024,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
 isDisabled = true
 
 [node name="TravelSFX3" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup1/Event/Spear3/Spear3"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("14_6nemi")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX3" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup1/Event/Spear3/Spear3"]
+process_mode = 1
 stream = ExtResource("15_jy5l8")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Rock1Particle3" parent="DeathlessAct/Hallway/SpearGroup1/Event/Spear3" instance=ExtResource("16_pnfnk")]
 visible = false
@@ -3046,7 +3046,7 @@ visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="DeathlessAct/Hallway/SpearGroup1/Event"]
 libraries = {
-"": SubResource("AnimationLibrary_ngs81")
+&"": SubResource("AnimationLibrary_ngs81")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/Hallway/SpearGroup1"]
@@ -3092,29 +3092,30 @@ OneShot = true
 [node name="Event" type="Node3D" parent="DeathlessAct/Hallway/WallSpearGroup" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 script = ExtResource("13_h7bmr")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Spear1" parent="DeathlessAct/Hallway/WallSpearGroup/Event" instance=ExtResource("13_6hfyg")]
 transform = Transform3D(0.866025, 1.69747e-15, 0.5, 0, 1, -3.39494e-15, -0.5, 2.9401e-15, 0.866025, 0, 2.4, 0)
 visible = false
 
 [node name="TravelSFX1" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/WallSpearGroup/Event/Spear1"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("14_6nemi")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/WallSpearGroup/Event/Spear1"]
+process_mode = 1
 stream = ExtResource("15_jy5l8")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Rock1Particle1" parent="DeathlessAct/Hallway/WallSpearGroup/Event" instance=ExtResource("16_pnfnk")]
 visibility_aabb = AABB(-4, 0, -12, 8, 8, 16)
@@ -3125,7 +3126,7 @@ visibility_aabb = AABB(-4, 0, -12, 8, 8, 16)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="DeathlessAct/Hallway/WallSpearGroup/Event"]
 libraries = {
-"": SubResource("AnimationLibrary_g1xip")
+&"": SubResource("AnimationLibrary_g1xip")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/Hallway/WallSpearGroup"]
@@ -3140,10 +3141,11 @@ OneShot = true
 [node name="Event" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup2" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
 script = ExtResource("13_h7bmr")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Spear1" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup2/Event"]
 transform = Transform3D(0.996195, 0, 0.0871558, 0, 1, 0, -0.0871558, 0, 0.996195, 2.467, 0, 4.465)
@@ -3153,19 +3155,19 @@ visible = false
 isDisabled = true
 
 [node name="TravelSFX1" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear1/Spear1"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("14_6nemi")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear1/Spear1"]
+process_mode = 1
 stream = ExtResource("15_jy5l8")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Rock1Particle1" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear1" instance=ExtResource("16_pnfnk")]
 visible = false
@@ -3182,19 +3184,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
 isDisabled = true
 
 [node name="TravelSFX2" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear2/Spear2"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("14_6nemi")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX2" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear2/Spear2"]
+process_mode = 1
 stream = ExtResource("15_jy5l8")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Rock1Particle2" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear2" instance=ExtResource("16_pnfnk")]
 visible = false
@@ -3211,19 +3213,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
 isDisabled = true
 
 [node name="TravelSFX3" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear3/Spear3"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("14_6nemi")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX3" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear3/Spear3"]
+process_mode = 1
 stream = ExtResource("15_jy5l8")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Rock1Particle3" parent="DeathlessAct/Hallway/SpearGroup2/Event/Spear3" instance=ExtResource("16_pnfnk")]
 visible = false
@@ -3233,7 +3235,7 @@ visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="DeathlessAct/Hallway/SpearGroup2/Event"]
 libraries = {
-"": SubResource("AnimationLibrary_4vqq1")
+&"": SubResource("AnimationLibrary_4vqq1")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/Hallway/SpearGroup2"]
@@ -3248,10 +3250,11 @@ OneShot = true
 [node name="Event" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup3" node_paths=PackedStringArray("animator")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 0, 0, 0)
 script = ExtResource("13_h7bmr")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Spear1" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup3/Event"]
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 2.257, 0, 2.179)
@@ -3262,19 +3265,19 @@ transform = Transform3D(1, 0, 4.65661e-08, 0, 1, 0, -4.65661e-08, 0, 1, 0, 2.4, 
 isDisabled = true
 
 [node name="TravelSFX1" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear1/Spear1"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("14_6nemi")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear1/Spear1"]
+process_mode = 1
 stream = ExtResource("15_jy5l8")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Rock1Particle1" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear1" instance=ExtResource("16_pnfnk")]
 visible = false
@@ -3291,19 +3294,19 @@ transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 
 isDisabled = true
 
 [node name="TravelSFX2" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear2/Spear2"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("14_6nemi")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX2" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear2/Spear2"]
+process_mode = 1
 stream = ExtResource("15_jy5l8")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Rock1Particle2" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear2" instance=ExtResource("16_pnfnk")]
 visible = false
@@ -3320,19 +3323,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
 isDisabled = true
 
 [node name="TravelSFX3" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear3/Spear3"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("14_6nemi")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX3" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear3/Spear3"]
+process_mode = 1
 stream = ExtResource("15_jy5l8")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="SandDustParticle3" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear3" instance=ExtResource("18_1718j")]
 transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)
@@ -3351,19 +3354,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
 isDisabled = true
 
 [node name="TravelSFX4" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear4/Spear4"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("14_6nemi")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX4" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear4/Spear4"]
+process_mode = 1
 stream = ExtResource("15_jy5l8")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="SandDustParticle4" parent="DeathlessAct/Hallway/SpearGroup3/Event/Spear4" instance=ExtResource("18_1718j")]
 transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)
@@ -3375,7 +3378,7 @@ visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="DeathlessAct/Hallway/SpearGroup3/Event"]
 libraries = {
-"": SubResource("AnimationLibrary_jkr7i")
+&"": SubResource("AnimationLibrary_jkr7i")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/Hallway/SpearGroup3"]
@@ -3390,26 +3393,27 @@ OneShot = true
 [node name="Event" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup4" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.28882e-05, 0, -3.05176e-05)
 script = ExtResource("13_h7bmr")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="TravelSFX" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup4/Event"]
+process_mode = 1
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -2.378, -0.799995, -1.60001)
 stream = ExtResource("14_6nemi")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX" type="AudioStreamPlayer3D" parent="DeathlessAct/Hallway/SpearGroup4/Event"]
+process_mode = 1
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -2.378, -0.799995, -1.60001)
 stream = ExtResource("15_jy5l8")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Spear1" type="Node3D" parent="DeathlessAct/Hallway/SpearGroup4/Event"]
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -2.74625, -1.9, -3.33997)
@@ -3461,7 +3465,7 @@ visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="DeathlessAct/Hallway/SpearGroup4/Event"]
 libraries = {
-"": SubResource("AnimationLibrary_jphx6")
+&"": SubResource("AnimationLibrary_jphx6")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/Hallway/SpearGroup4"]
@@ -3486,26 +3490,26 @@ transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 
 
 [node name="FlameShooter1" parent="DeathlessAct/Interior/FlameGroup1" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.764404, 0, -3.38519)
-"State Lengths/active" = 1.6
 stateLengths = PackedFloat32Array(0.5, 1.6)
+"State Lengths/active" = 1.6
 
 [node name="FlameShooter2" parent="DeathlessAct/Interior/FlameGroup1" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.90451, 0, -33.1978)
-"State Lengths/active" = 1.6
 stateLengths = PackedFloat32Array(0.5, 1.6)
+"State Lengths/active" = 1.6
 
 [node name="FlameShooter3" parent="DeathlessAct/Interior/FlameGroup1" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.92688, 0, -54.8362)
 
 [node name="FlameShooter4" parent="DeathlessAct/Interior/FlameGroup1" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(-4.37113e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.51, 0.7, -74.97)
-"State Lengths/active" = 2.5
 stateLengths = PackedFloat32Array(0.5, 2.5)
+"State Lengths/active" = 2.5
 
 [node name="FlameShooter5" parent="DeathlessAct/Interior/FlameGroup1" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(-4.37113e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.51004, 1.8, -74.9699)
-"State Lengths/active" = 2.5
 stateLengths = PackedFloat32Array(0.5, 2.5)
+"State Lengths/active" = 2.5
 
 [node name="Pearls1" type="Node3D" parent="DeathlessAct/Interior"]
 transform = Transform3D(-0.704981, 0, -0.709226, 0, 1, 0, 0.709226, 0, -0.704981, -3.489, -15.321, -12.45)
@@ -3666,45 +3670,45 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -26.09
 
 [node name="FlameShooter1" parent="DeathlessAct/Interior/FlameGroup2" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.61285, 0, -1.09691)
-"State Lengths/active" = 1.5
 stateLengths = PackedFloat32Array(0.5, 1.5)
+"State Lengths/active" = 1.5
 
 [node name="FlameShooter2" parent="DeathlessAct/Interior/FlameGroup2" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.512848, 0, -1.09691)
-"State Lengths/active" = 1.5
 stateLengths = PackedFloat32Array(0.5, 1.5)
+"State Lengths/active" = 1.5
 
 [node name="FlameShooter3" parent="DeathlessAct/Interior/FlameGroup2" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.387146, 0, -12.6978)
-"State Lengths/active" = 1.5
 stateLengths = PackedFloat32Array(0.5, 1.5)
+"State Lengths/active" = 1.5
 
 [node name="FlameShooter4" parent="DeathlessAct/Interior/FlameGroup2" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.48715, 0, -12.6978)
-"State Lengths/active" = 1.5
 stateLengths = PackedFloat32Array(0.5, 1.5)
+"State Lengths/active" = 1.5
 
 [node name="FlameShooter5" parent="DeathlessAct/Interior/FlameGroup2" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, -1, -4.37114e-08, -4.37114e-08, -4.37114e-08, 4.37114e-08, 1, -2.66339, 0.750015, -19.6006)
-"State Lengths/inactive" = 1.2
 stateLengths = PackedFloat32Array(1.2, 1)
+"State Lengths/inactive" = 1.2
 
 [node name="FlameShooter6" parent="DeathlessAct/Interior/FlameGroup2" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, -1, -4.37114e-08, -4.37114e-08, -4.37114e-08, 4.37114e-08, 1, -2.66339, 1.85002, -19.6006)
-"State Lengths/inactive" = 1.2
 stateLengths = PackedFloat32Array(1.2, 1)
+"State Lengths/inactive" = 1.2
 
 [node name="FlameShooter7" parent="DeathlessAct/Interior/FlameGroup2" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(-6.18172e-08, -0.707107, 0.707107, 1, -4.37114e-08, 4.37114e-08, -2.70212e-15, 0.707107, 0.707107, -2.08038, 5.24909, -31.8737)
+stateLengths = PackedFloat32Array(1, 3)
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 3.0
-stateLengths = PackedFloat32Array(1, 3)
 
 [node name="FlameShooter8" parent="DeathlessAct/Interior/FlameGroup2" instance=ExtResource("11_a6cyj")]
 transform = Transform3D(-6.18172e-08, -0.707107, 0.707107, 1, -4.37114e-08, 4.37114e-08, -2.70212e-15, 0.707107, 0.707107, -2.08051, 4.149, -31.8877)
+stateLengths = PackedFloat32Array(1, 3)
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 3.0
-stateLengths = PackedFloat32Array(1, 3)
 
 [node name="RichRing" parent="DeathlessAct/Interior" instance=ExtResource("6_krrlv")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -47.308, -15.3205, -14.2531)
@@ -3758,10 +3762,11 @@ collision_layer = 0
 [node name="Event" type="Node3D" parent="DeathlessAct/Interior/DoorCrumble" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.4001, 0, 3.05176e-05)
 script = ExtResource("13_h7bmr")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="FallingSandDustParticle1" parent="DeathlessAct/Interior/DoorCrumble/Event" instance=ExtResource("14_xyixh")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.999985, 0, 0)
@@ -3792,17 +3797,17 @@ transform = Transform3D(-0.998331, -0.0259043, 0.0516204, 0.0262542, -0.999637, 
 visible = false
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="DeathlessAct/Interior/DoorCrumble/Event"]
+process_mode = 1
 stream = ExtResource("17_c3fff")
 max_db = 0.0
 max_distance = 100.0
 max_polyphony = 4
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="DeathlessAct/Interior/DoorCrumble/Event"]
 root_node = NodePath("../..")
 libraries = {
-"": SubResource("AnimationLibrary_11hcs")
+&"": SubResource("AnimationLibrary_11hcs")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/Interior/DoorCrumble"]

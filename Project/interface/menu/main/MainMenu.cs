@@ -38,11 +38,19 @@ public partial class MainMenu : Menu
 
 	protected override void ProcessMenu()
 	{
-		if (!isQuitMenuActive && Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept"))
+		if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept"))
 		{
-			quitAnimator.Play("show");
-			isQuitMenuActive = true;
-			isQuitSelected = false;
+			if (isQuitMenuActive)
+			{
+				Confirm();
+			}
+			else
+			{
+				quitAnimator.Play("show");
+				isQuitMenuActive = true;
+				isQuitSelected = false;
+			}
+
 			return;
 		}
 

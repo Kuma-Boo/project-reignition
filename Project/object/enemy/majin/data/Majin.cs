@@ -358,6 +358,14 @@ public partial class Majin : Enemy
 			wanderHomePosition = GlobalPosition;
 	}
 
+	public void AttemptRespawn()
+	{
+		if (IsActive && !IsDefeated)
+			return;
+
+		CallDeferred(MethodName.Respawn);
+	}
+
 	public override void Respawn()
 	{
 		// Kill any active tweens
