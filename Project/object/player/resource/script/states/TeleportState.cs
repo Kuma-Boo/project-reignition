@@ -123,6 +123,8 @@ public partial class TeleportState : PlayerState
 		Player.GlobalPosition = Trigger.WarpPosition;
 		Player.ResetPhysicsInterpolation();
 
+		Trigger.ApplyTeleport(); // Apply any signals/path changes
+
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 		Player.SnapToGround();
 		Player.UpdateOrientation();
@@ -132,8 +134,6 @@ public partial class TeleportState : PlayerState
 		Player.Animator.ResetState(0);
 		Player.Animator.IdleAnimation();
 		Player.Animator.SnapRotation(Player.PathFollower.ForwardAngle);
-
-		Trigger.ApplyTeleport(); // Apply any signals/path changes
 
 		if (StopTeleportFX())
 			return;
