@@ -1,4 +1,4 @@
-[gd_scene load_steps=90 format=3 uid="uid://c6qp0p2qw34ud"]
+[gd_scene load_steps=85 format=3 uid="uid://c6qp0p2qw34ud"]
 
 [ext_resource type="PackedScene" uid="uid://d1rcieilh21gs" path="res://area/6 skeleton dome/act 1/Static.tscn" id="1_6irkq"]
 [ext_resource type="Resource" uid="uid://dirda3nyrainp" path="res://resource/level data/skeleton dome/Act1Main.tres" id="2_3jkye"]
@@ -34,13 +34,9 @@
 [ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="23_6pbex"]
 [ext_resource type="PackedScene" uid="uid://bbgtmxw55soah" path="res://object/stage/destructable/Stone.tscn" id="23_11llw"]
 [ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="25_4vuwu"]
-[ext_resource type="Script" uid="uid://dtvj1vg0nkhi6" path="res://object/trigger/modules/TeleportTrigger.cs" id="29_7pa2l"]
 [ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="29_lingp"]
-[ext_resource type="Resource" uid="uid://da4ffdhmq38kl" path="res://area/6 skeleton dome/act 1/camera/CavernBEntranceCam.tres" id="30_ki7ko"]
 [ext_resource type="Resource" uid="uid://dis8ey5inj26x" path="res://area/6 skeleton dome/act 1/camera/CavernPanelCam.tres" id="30_m7cvs"]
 [ext_resource type="Resource" uid="uid://kdsth38ah16g" path="res://area/6 skeleton dome/act 1/camera/HallCam.tres" id="31_im3ec"]
-[ext_resource type="Script" uid="uid://bd2g6rmrn77eo" path="res://object/trigger/modules/LockoutTrigger.cs" id="31_uxr80"]
-[ext_resource type="Resource" uid="uid://iutdqdo7diqe" path="res://resource/preset/lockout/run/AutorunRecenterLockout.tres" id="32_y1qr6"]
 [ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="34_d0kwn"]
 [ext_resource type="PackedScene" uid="uid://qxfca8v0ndfq" path="res://area/6 skeleton dome/object/grindrail/Grindrail02.tscn" id="34_sbk4a"]
 [ext_resource type="PackedScene" uid="uid://0jj0alw37l1s" path="res://area/6 skeleton dome/object/grindrail/Grindrail04.tscn" id="36_3kt84"]
@@ -83,9 +79,6 @@ size = Vector3(20, 52.5136, 2.5)
 _limits = [0.0, 3.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 9.6, 0, 0, Vector2(0.6, 3), 0.0, 0.0, 0, 0, Vector2(1, 1.5), -9.6, 0.0, 0, 0]
 point_count = 3
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_b4x1d"]
-size = Vector3(30, 30, 35)
 
 [sub_resource type="Animation" id="Animation_je4uv"]
 length = 0.001
@@ -343,6 +336,8 @@ size = Vector3(30, 20, 1)
 
 [node name="Static" parent="." instance=ExtResource("1_6irkq")]
 Data = ExtResource("2_3jkye")
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -1364,35 +1359,6 @@ transitionTime = 1.0
 deactivationTransitionTime = 0.5
 settings = ExtResource("30_m7cvs")
 previousSettings = ExtResource("31_im3ec")
-
-[node name="CavernBTeleport" type="Node3D" parent="MainAct/Field/UpperPath"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 107.5, 22.4, -148.75)
-
-[node name="CavernBEntranceAutomation" parent="MainAct/Field/UpperPath/CavernBTeleport" instance=ExtResource("3_jp0k2")]
-"Trigger Mode" = 2
-"Exit Mode" = 1
-
-[node name="Lockout" type="Node3D" parent="MainAct/Field/UpperPath/CavernBTeleport/CavernBEntranceAutomation"]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 0, 1, 13)
-script = ExtResource("31_uxr80")
-lockoutData = ExtResource("32_y1qr6")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Field/UpperPath/CavernBTeleport/CavernBEntranceAutomation"]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 0, 10, -11.5)
-shape = SubResource("BoxShape3D_b4x1d")
-
-[node name="Camera" type="Node3D" parent="MainAct/Field/UpperPath/CavernBTeleport"]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 0, 1, 13)
-script = ExtResource("29_lingp")
-transitionTime = 1.0
-settings = ExtResource("30_ki7ko")
-
-[node name="Teleport" type="Node3D" parent="MainAct/Field/UpperPath/CavernBTeleport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.4, 1.77289, -180.35)
-script = ExtResource("29_7pa2l")
-enableEndFX = false
-resetMovespeed = false
-crossfade = true
 
 [node name="LowerPath" type="Node3D" parent="MainAct/Field"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
@@ -2610,7 +2576,7 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 76, -1
 SpawnMode = 1
 
 [node name="GreenMajin3" parent="MainAct/CavernA/AlternatePath" instance=ExtResource("5_danjg")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 83, 4, 0)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 83, 3, 0)
 SpawnMode = 1
 
 [node name="GreenMajin4" parent="MainAct/CavernA/AlternatePath" instance=ExtResource("5_danjg")]
@@ -6207,6 +6173,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 24, -195)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 5)
 shape = SubResource("BoxShape3D_7ky5u")
 
+[connection signal="Teleport" from="Static/Trigger/Object/CavernBTeleport/Teleport" to="MainAct/Field" method="Deactivate"]
+[connection signal="Teleport" from="Static/Trigger/Object/CavernBTeleport/Teleport" to="MainAct/CavernB" method="Activate"]
 [connection signal="Activated" from="MainAct/CullingMap/OverpassLoad" to="MainAct/Overpass" method="Activate"]
 [connection signal="Deactivated" from="MainAct/CullingMap/OverpassLoad" to="MainAct/Overpass" method="Deactivate"]
 [connection signal="Activated" from="MainAct/CullingMap/OpeningUnload" to="MainAct/Opening" method="Deactivate"]
@@ -6240,17 +6208,10 @@ shape = SubResource("BoxShape3D_7ky5u")
 [connection signal="Shattered" from="MainAct/Overpass/Hall/BlockGroup/Stone5" to="MainAct/Overpass/Hall/BlockGroup/Stone7" method="Shatter"]
 [connection signal="Defeated" from="MainAct/Overpass/Hall/BlockGroup/RedMajin" to="MainAct/Overpass/Hall/BlockGroup/EnemyStone1" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Overpass/Hall/BlockGroup/RedMajin" to="MainAct/Overpass/Hall/BlockGroup/EnemyStone2" method="IncrementCounter"]
-[connection signal="Activated" from="MainAct/Field/UpperPath/JumpPanel" to="Static/Collision/CavernBEntranceWall" method="Deactivate"]
+[connection signal="Activated" from="MainAct/Field/UpperPath/JumpPanel" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Field/UpperPath/JumpPanel" to="MainAct/Field/UpperPath/JumpPanel/Camera" method="Activate"]
-[connection signal="Deactivated" from="MainAct/Field/UpperPath/JumpPanel" to="Static/Collision/CavernBEntranceWall" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Field/UpperPath/JumpPanel" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Field/UpperPath/JumpPanel" to="MainAct/Field/UpperPath/JumpPanel/Camera" method="Deactivate"]
-[connection signal="Activated" from="MainAct/Field/UpperPath/CavernBTeleport/CavernBEntranceAutomation" to="MainAct/Field/UpperPath/CavernBTeleport/Camera" method="Activate"]
-[connection signal="Deactivated" from="MainAct/Field/UpperPath/CavernBTeleport/CavernBEntranceAutomation" to="MainAct/Field/UpperPath/CavernBTeleport/Camera" method="Deactivate"]
-[connection signal="Deactivated" from="MainAct/Field/UpperPath/CavernBTeleport/CavernBEntranceAutomation" to="MainAct/Field/UpperPath/CavernBTeleport/Teleport" method="Activate"]
-[connection signal="Teleport" from="MainAct/Field/UpperPath/CavernBTeleport/Teleport" to="Static/Visuals/03Field" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/Field/UpperPath/CavernBTeleport/Teleport" to="Static/Visuals/05CavernB" method="Activate"]
-[connection signal="Teleport" from="MainAct/Field/UpperPath/CavernBTeleport/Teleport" to="MainAct/Field" method="Deactivate"]
-[connection signal="Teleport" from="MainAct/Field/UpperPath/CavernBTeleport/Teleport" to="MainAct/CavernB" method="Activate"]
 [connection signal="Defeated" from="MainAct/Field/LowerPath/JumpPanelGroup/RedMajin" to="MainAct/Field/LowerPath/JumpPanelGroup/EnemyStone" method="IncrementCounter"]
 [connection signal="Spawned" from="MainAct/Field/LowerPath/JumpPanelGroup/RedMajin" to="MainAct/Field/LowerPath/JumpPanelGroup/GreenMajin01" method="Spawn"]
 [connection signal="Spawned" from="MainAct/Field/LowerPath/JumpPanelGroup/RedMajin" to="MainAct/Field/LowerPath/JumpPanelGroup/GreenMajin02" method="Spawn"]
@@ -6346,3 +6307,6 @@ shape = SubResource("BoxShape3D_7ky5u")
 [connection signal="Teleport" from="MainAct/HallT/WarpRed" to="Static/Visuals/15Hall" method="Activate"]
 [connection signal="Teleport" from="MainAct/HallT/WarpRed" to="MainAct/HallT" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/HallT/WarpRed" to="MainAct/End" method="Activate"]
+
+[editable path="Static"]
+[editable path="Static/Collision"]
