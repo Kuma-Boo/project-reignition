@@ -228,7 +228,7 @@ public partial class Enemy : Node3D
 	protected virtual void SpawnPearls() => Runtime.Instance.SpawnPearls(pearlAmount, Hurtbox != null ? Hurtbox.GlobalPosition : GlobalPosition, new Vector2(2, 1.5f), 1.5f);
 
 	protected bool IsHitboxEnabled { get; private set; }
-	protected void SetHitboxStatus(bool isEnabled, bool hurtboxOnly = false)
+	protected void SetHitboxStatus(bool isEnabled, bool hurtboxOnly)
 	{
 		IsHitboxEnabled = isEnabled;
 
@@ -240,6 +240,8 @@ public partial class Enemy : Node3D
 		if (Hurtbox != null)
 			Hurtbox.Monitorable = Hurtbox.Monitoring = IsHitboxEnabled;
 	}
+
+	protected void SetHitboxStatus(bool isEnabled) => SetHitboxStatus(isEnabled, false);
 
 	/// <summary> Is the enemy currently active? </summary>
 	protected bool IsActive { get; set; }
