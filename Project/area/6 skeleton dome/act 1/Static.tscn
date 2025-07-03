@@ -377,6 +377,7 @@ transform = Transform3D(-1.39091e-08, 0, -1, 0, 1, 0, 1, 0, -1.39091e-08, 382.33
 [node name="Camera" type="Node3D" parent="Trigger/Camera/CavernExit"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 3)
 script = ExtResource("8_ka6po")
+distanceBlending = 10
 settings = ExtResource("20_0vw1s")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/CavernExit"]
@@ -687,6 +688,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 118.35, 40, -1038.15)
 [node name="Path" type="Node3D" parent="Trigger/Path/CavernB" node_paths=PackedStringArray("path")]
 script = ExtResource("7_pc1yy")
 path = NodePath("../../../../Path/LoopPath")
+limitCameraDistanceToPath = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/CavernB"]
 shape = SubResource("BoxShape3D_7hn3n")
@@ -710,6 +712,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 500, 0, -558)
 [node name="Path" type="Node3D" parent="Trigger/Path/HallA" node_paths=PackedStringArray("path")]
 script = ExtResource("7_pc1yy")
 path = NodePath("../../../../Path/HallAPath")
+limitCameraDistanceToPath = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/HallA"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -722,6 +725,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 700, 0, -558)
 [node name="Path" type="Node3D" parent="Trigger/Path/HallB" node_paths=PackedStringArray("path")]
 script = ExtResource("7_pc1yy")
 path = NodePath("../../../../Path/HallBPath")
+limitCameraDistanceToPath = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/HallB"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -734,6 +738,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 900, 0, -558)
 [node name="Path" type="Node3D" parent="Trigger/Path/HallC" node_paths=PackedStringArray("path")]
 script = ExtResource("7_pc1yy")
 path = NodePath("../../../../Path/HallCPath")
+limitCameraDistanceToPath = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/HallC"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -746,6 +751,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1100, 0, -558)
 [node name="Path" type="Node3D" parent="Trigger/Path/HallT" node_paths=PackedStringArray("path")]
 script = ExtResource("7_pc1yy")
 path = NodePath("../../../../Path/HallTreasurePath")
+limitCameraDistanceToPath = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/HallT"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -758,6 +764,7 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 934, 0
 [node name="Path" type="Node3D" parent="Trigger/Path/Throne" node_paths=PackedStringArray("path")]
 script = ExtResource("7_pc1yy")
 path = NodePath("../../../../Path/ThronePath")
+limitCameraDistanceToPath = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/Throne"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -1042,8 +1049,6 @@ environment = SubResource("Environment_w7cdv")
 [connection signal="Deactivated" from="Trigger/Object/Automation" to="Trigger/Object/Automation/Path" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/Automation" to="Trigger/Object/Automation/Camera" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/Automation" to="Trigger/Camera/CavernB" method="Activate"]
-[connection signal="Activated" from="Trigger/Object/JumpTrigger" to="Collision/OneWayWall" method="Deactivate"]
-[connection signal="JumpFinished" from="Trigger/Object/JumpTrigger/Jump" to="Collision/OneWayWall" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Path" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Camera" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Path" method="Deactivate"]
