@@ -12,6 +12,7 @@ public partial class LevelSelect : Menu
 	[Export] private ReadyMenu readyMenu;
 
 	[Export] private Control cursor;
+	private float initialCursorPosition;
 	private int cursorPosition;
 	private Vector2 cursorWidthVelocity;
 
@@ -72,6 +73,7 @@ public partial class LevelSelect : Menu
 				levelOptions.Add(levelOption);
 		}
 
+		initialCursorPosition = cursor.Position.Y;
 		base.SetUp();
 	}
 
@@ -199,7 +201,7 @@ public partial class LevelSelect : Menu
 		float targetScrollPosition = 360 * (VerticalSelection / (levelOptions.Count - 1f));
 		scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * targetScrollPosition, ref scrollVelocity, smoothing);
 
-		cursor.Position = cursor.Position.SmoothDamp(new(cursor.Position.X, 220 + (96 * cursorPosition)), ref cursorWidthVelocity, smoothing);
+		cursor.Position = cursor.Position.SmoothDamp(new(cursor.Position.X, initialCursorPosition + (96 * cursorPosition)), ref cursorWidthVelocity, smoothing);
 		options.Position = options.Position.SmoothDamp(Vector2.Up * ((96 * scrollAmount) - 32), ref optionVelocity, smoothing);
 	}
 }
