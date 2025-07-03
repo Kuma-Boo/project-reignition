@@ -1,4 +1,4 @@
-[gd_scene load_steps=80 format=3 uid="uid://d1rcieilh21gs"]
+[gd_scene load_steps=81 format=3 uid="uid://d1rcieilh21gs"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_0tght"]
 [ext_resource type="Curve3D" uid="uid://56gh0yeexer3" path="res://area/6 skeleton dome/act 1/environment/path/ExteriorPath.tres" id="1_h00gj"]
@@ -38,7 +38,6 @@
 [ext_resource type="PackedScene" uid="uid://cqyeefb5je7ev" path="res://area/6 skeleton dome/act 1/environment/11HallB.tscn" id="14_3ea0v"]
 [ext_resource type="Resource" uid="uid://bj30jk812uvqh" path="res://area/6 skeleton dome/act 1/camera/SidleCam.tres" id="14_ev1rt"]
 [ext_resource type="Resource" uid="uid://cmwa2wvr631bn" path="res://area/6 skeleton dome/act 1/camera/FieldBrawlCam.tres" id="14_jrk5s"]
-[ext_resource type="PackedScene" uid="uid://de7hiy11unhl3" path="res://area/6 skeleton dome/data/BGM.tscn" id="14_yuo0o"]
 [ext_resource type="PackedScene" uid="uid://bog5cnbrnexgs" path="res://area/6 skeleton dome/act 1/environment/12HallC.tscn" id="15_308cl"]
 [ext_resource type="PackedScene" uid="uid://cry4fy5icucbc" path="res://object/trigger/state trigger/SidleTrigger.tscn" id="16_0ldoj"]
 [ext_resource type="PackedScene" uid="uid://bp53tgvmd31jj" path="res://area/6 skeleton dome/act 1/environment/13HallTreasure.tscn" id="16_1seix"]
@@ -59,7 +58,8 @@
 [ext_resource type="Curve3D" uid="uid://lsst4vgfp82f" path="res://area/6 skeleton dome/act 1/environment/path/CavernBPath.tres" id="37_1a8ni"]
 [ext_resource type="Curve3D" uid="uid://d15ujjqg8bldi" path="res://area/6 skeleton dome/act 1/environment/path/AutomationPath.tres" id="40_ih587"]
 [ext_resource type="PackedScene" uid="uid://0q5cfpfqkhek" path="res://area/6 skeleton dome/data/skybox/Skybox.tscn" id="41_pilw5"]
-[ext_resource type="Environment" uid="uid://kx3kct81htga" path="res://area/6 skeleton dome/data/Environment.tres" id="50_cio3r"]
+[ext_resource type="AudioStream" uid="uid://t1ye7s5fb488" path="res://sound/ost/adventure disc/11 The White of Sky.mp3" id="59_rqena"]
+[ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="60_sg7yc"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mow5f"]
 size = Vector3(15, 20, 5)
@@ -116,6 +116,22 @@ size = Vector3(40, 20, 150)
 size = Vector3(40, 20, 5)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_doimh"]
+
+[sub_resource type="Environment" id="Environment_w7cdv"]
+background_mode = 1
+ambient_light_source = 2
+ambient_light_color = Color(0.501961, 0.501961, 0.501961, 1)
+tonemap_mode = 2
+tonemap_exposure = 1.2
+tonemap_white = 1.5
+glow_enabled = true
+glow_normalized = true
+glow_strength = 1.2
+glow_bloom = 0.01
+glow_blend_mode = 0
+glow_hdr_threshold = 2.0
+glow_hdr_scale = 1.0
+adjustment_enabled = true
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
 script = ExtResource("1_0tght")
@@ -916,6 +932,14 @@ startEnabled = true
 
 [node name="Lighting" type="Node3D" parent="."]
 
+[node name="DropShadows" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_cull_mask = 4293918726
+shadow_enabled = true
+shadow_caster_mask = 67
+directional_shadow_blend_splits = true
+
 [node name="Exterior" type="Node3D" parent="Lighting"]
 
 [node name="FieldTransitionShadow" type="MeshInstance3D" parent="Lighting/Exterior"]
@@ -937,7 +961,6 @@ mesh = SubResource("PlaneMesh_doimh")
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
 light_cull_mask = 4293918785
-directional_shadow_blend_splits = true
 
 [node name="Path" type="Node3D" parent="."]
 visible = false
@@ -998,17 +1021,16 @@ curve = ExtResource("8_5gt6c")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1100, 0, -485.371)
 curve = ExtResource("9_yis2j")
 
-[node name="BGM" parent="." instance=ExtResource("14_yuo0o")]
-
-[node name="DropShadows" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-layers = 1024
-light_cull_mask = 4293918726
-shadow_enabled = true
-directional_shadow_blend_splits = true
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("59_rqena")
+bus = &"BGM"
+script = ExtResource("60_sg7yc")
+loopStartPosition = 26.863
+loopEndPosition = 175.588
+isStageMusic = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource("50_cio3r")
+environment = SubResource("Environment_w7cdv")
 
 [connection signal="Activated" from="Trigger/Object/CavernBTeleport/CavernBEntranceAutomation" to="Trigger/Object/CavernBTeleport/Camera" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/CavernBTeleport/CavernBEntranceAutomation" to="Trigger/Object/CavernBTeleport/Camera" method="Deactivate"]
