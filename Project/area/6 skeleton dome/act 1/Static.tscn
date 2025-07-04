@@ -1,4 +1,4 @@
-[gd_scene load_steps=86 format=3 uid="uid://d1rcieilh21gs"]
+[gd_scene load_steps=93 format=3 uid="uid://d1rcieilh21gs"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_0tght"]
 [ext_resource type="Curve3D" uid="uid://56gh0yeexer3" path="res://area/6 skeleton dome/act 1/environment/path/ExteriorPath.tres" id="1_h00gj"]
@@ -59,6 +59,8 @@
 [ext_resource type="Curve3D" uid="uid://d15ujjqg8bldi" path="res://area/6 skeleton dome/act 1/environment/path/AutomationPath.tres" id="40_ih587"]
 [ext_resource type="PackedScene" uid="uid://0q5cfpfqkhek" path="res://area/6 skeleton dome/data/skybox/Skybox.tscn" id="41_pilw5"]
 [ext_resource type="AudioStream" uid="uid://t1ye7s5fb488" path="res://sound/ost/adventure disc/11 The White of Sky.mp3" id="59_rqena"]
+[ext_resource type="Material" uid="uid://h1yoonj5pp8g" path="res://area/6 skeleton dome/data/material/Snowflake.tres" id="59_sg7yc"]
+[ext_resource type="Script" uid="uid://ch4pb1qqwy5al" path="res://object/stage/common/resource/script/CameraFollower.cs" id="60_0ml3r"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="60_sg7yc"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mow5f"]
@@ -116,6 +118,35 @@ size = Vector3(40, 20, 150)
 size = Vector3(40, 20, 5)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_doimh"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sg7yc"]
+size = Vector3(20, 20, 5)
+
+[sub_resource type="Curve" id="Curve_rqena"]
+_data = [Vector2(0, 0), 0.0, 32.1085, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(0.9, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -32.1083, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_sg7yc"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_rqena")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0ml3r"]
+emission_shape_offset = Vector3(0, 10, -10)
+emission_shape_scale = Vector3(20, 5, 20)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, -1, 0)
+spread = 10.0
+initial_velocity_min = 5.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.2
+scale_max = 0.4
+alpha_curve = SubResource("CurveTexture_sg7yc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_sfbhi"]
+material = ExtResource("59_sg7yc")
 
 [sub_resource type="Animation" id="Animation_w7cdv"]
 resource_name = "RESET"
@@ -565,6 +596,7 @@ InitialCameraSettings = ExtResource("2_g7phu")
 pathParent = NodePath("Path")
 completionAnimator = NodePath("DemoCamera/AnimationPlayer")
 Environment = NodePath("WorldEnvironment")
+environmentFxFactor = 1.0
 
 [node name="Collision" parent="." instance=ExtResource("2_w0uof")]
 visible = false
@@ -1199,6 +1231,7 @@ shape = SubResource("BoxShape3D_7hn3n")
 [node name="Visuals" type="Node3D" parent="."]
 
 [node name="CullingMap" type="Node3D" parent="Visuals"]
+visible = false
 
 [node name="02Load" parent="Visuals/CullingMap" instance=ExtResource("3_gut3n")]
 transform = Transform3D(0.972174, 7.5904e-09, 0.23426, -7.53476e-09, 1, -1.13253e-09, -0.23426, -6.64075e-10, 0.972174, -25.2, 3, -162.3)
@@ -1416,7 +1449,27 @@ ambient_mode = 2
 ambient_color = Color(0.85, 0.9375, 1, 1)
 ambient_color_energy = 0.2
 
-[node name="CaveProbe" type="ReflectionProbe" parent="Lighting"]
+[node name="InteriorFX" parent="Lighting" instance=ExtResource("3_gut3n")]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 128, 0, -820)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lighting/InteriorFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_sg7yc")
+
+[node name="InteriorFX2" parent="Lighting" instance=ExtResource("3_gut3n")]
+transform = Transform3D(0.996194, 0, -0.0871559, 0, 1, 0, 0.0871559, 0, 0.996194, 79.5416, 37.5, -849.23)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lighting/InteriorFX2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_sg7yc")
+
+[node name="Interior" type="Node3D" parent="Lighting"]
+
+[node name="CaveProbe" type="ReflectionProbe" parent="Lighting/Interior"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 240.217, -26.7178, -969.603)
 layers = 1024
 size = Vector3(410.324, 254.436, 350.793)
@@ -1426,7 +1479,7 @@ reflection_mask = 4
 ambient_mode = 2
 ambient_color = Color(0.87, 1, 0.9545, 1)
 
-[node name="HallProbe" type="ReflectionProbe" parent="Lighting"]
+[node name="HallProbe" type="ReflectionProbe" parent="Lighting/Interior"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 571.256, 32, -982.159)
 layers = 1024
 size = Vector3(322.488, 78, 343.683)
@@ -1436,7 +1489,7 @@ ambient_mode = 2
 ambient_color = Color(0.81, 1, 0.7, 1)
 ambient_color_energy = 0.5
 
-[node name="SpiralProbe" type="ReflectionProbe" parent="Lighting"]
+[node name="SpiralProbe" type="ReflectionProbe" parent="Lighting/Interior"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 848.232, -23, -1260.57)
 layers = 1024
 size = Vector3(313.537, 160, 258.858)
@@ -1447,7 +1500,7 @@ ambient_mode = 2
 ambient_color = Color(0.66699, 0.581258, 0.359394, 1)
 ambient_color_energy = 1.5
 
-[node name="EndingProbe" type="ReflectionProbe" parent="Lighting"]
+[node name="EndingProbe" type="ReflectionProbe" parent="Lighting/Interior"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1130, 20, -1160)
 layers = 1024
 size = Vector3(100, 60, 320)
@@ -1458,7 +1511,7 @@ ambient_mode = 2
 ambient_color = Color(1, 0.843137, 0.694118, 1)
 ambient_color_energy = 0.5
 
-[node name="ArenaProbe" type="ReflectionProbe" parent="Lighting"]
+[node name="ArenaProbe" type="ReflectionProbe" parent="Lighting/Interior"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1000, 40, -1000)
 layers = 1024
 size = Vector3(300, 100, 300)
@@ -1469,7 +1522,7 @@ ambient_mode = 2
 ambient_color = Color(0.588235, 1, 0.862745, 1)
 ambient_color_energy = 0.5
 
-[node name="HallAProbe" type="ReflectionProbe" parent="Lighting"]
+[node name="HallAProbe" type="ReflectionProbe" parent="Lighting/Interior"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 500, 8, -558)
 layers = 1024
 size = Vector3(25, 20, 147)
@@ -1480,7 +1533,7 @@ ambient_mode = 2
 ambient_color = Color(1, 0.81, 0.81, 1)
 ambient_color_energy = 0.5
 
-[node name="HallBProbe" type="ReflectionProbe" parent="Lighting"]
+[node name="HallBProbe" type="ReflectionProbe" parent="Lighting/Interior"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 700, 8, -557)
 layers = 1024
 size = Vector3(26, 20, 147)
@@ -1491,7 +1544,7 @@ ambient_mode = 2
 ambient_color = Color(0.49, 0.847, 1, 1)
 ambient_color_energy = 0.5
 
-[node name="HallCProbe" type="ReflectionProbe" parent="Lighting"]
+[node name="HallCProbe" type="ReflectionProbe" parent="Lighting/Interior"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 900, 8, -558)
 layers = 1024
 size = Vector3(23, 20, 147)
@@ -1502,7 +1555,7 @@ ambient_mode = 2
 ambient_color = Color(1, 0.886333, 0.78, 1)
 ambient_color_energy = 0.5
 
-[node name="HallTreasureProbe" type="ReflectionProbe" parent="Lighting"]
+[node name="HallTreasureProbe" type="ReflectionProbe" parent="Lighting/Interior"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1100, 5, -558)
 layers = 1024
 size = Vector3(40, 20, 148)
@@ -1512,6 +1565,16 @@ reflection_mask = 4
 ambient_mode = 2
 ambient_color = Color(1, 0.9835, 0.67, 1)
 ambient_color_energy = 0.5
+
+[node name="EnvironmentLighting" type="DirectionalLight3D" parent="Lighting/Interior"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_color = Color(1, 0.86, 0.86, 1)
+light_energy = 0.8
+light_cull_mask = 4293918724
+shadow_enabled = true
+shadow_caster_mask = 65
+directional_shadow_blend_splits = true
 
 [node name="Path" type="Node3D" parent="."]
 visible = false
@@ -1571,6 +1634,21 @@ curve = ExtResource("8_5gt6c")
 [node name="HallTreasurePath" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1100, 0, -485.371)
 curve = ExtResource("9_yis2j")
+
+[node name="Snow" type="GPUParticles3D" parent="."]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 512
+lifetime = 3.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_0ml3r")
+draw_pass_1 = SubResource("QuadMesh_sfbhi")
+script = ExtResource("60_0ml3r")
+followYRotation = true
 
 [node name="DemoCamera" type="Node3D" parent="."]
 
@@ -1647,5 +1725,9 @@ environment = SubResource("Environment_w7cdv")
 [connection signal="Activated" from="Visuals/CullingMap/16Load-14Unload" to="Visuals/16Throne" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/16Load-14Unload" to="Visuals/14Arena" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/16Load-14Unload" to="Visuals/16Throne" method="Deactivate"]
+[connection signal="Activated" from="Lighting/InteriorFX" to="." method="SetEnvironmentFxFactor" binds= [0.0, 0.5]]
+[connection signal="Deactivated" from="Lighting/InteriorFX" to="." method="SetEnvironmentFxFactor" binds= [1.0, 0.5]]
+[connection signal="Activated" from="Lighting/InteriorFX2" to="." method="SetEnvironmentFxFactor" binds= [0.0, 0.5]]
+[connection signal="Deactivated" from="Lighting/InteriorFX2" to="." method="SetEnvironmentFxFactor" binds= [1.0, 0.5]]
 
 [editable path="Collision"]
