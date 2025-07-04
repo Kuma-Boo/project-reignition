@@ -95,10 +95,7 @@ public partial class LevelSelect : Menu
 		for (int i = 0; i < levelOptions.Count; i++)
 			levelOptions[i].ShowOption();
 
-		if (SaveManager.Config.useRetailMenuMusic) // Using retail menu music
-			return;
-
-		bool canPlayBgm = IsWorldUnlocked() && bgm?.Stream != null;
+		bool canPlayBgm = !SaveManager.Config.useRetailMenuMusic && IsWorldUnlocked() && bgm?.Stream != null;
 		if (canPlayBgm && bgm?.Playing == false)
 		{
 			// Change to world specific level select music
