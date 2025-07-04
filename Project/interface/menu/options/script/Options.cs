@@ -659,7 +659,6 @@ public partial class Options : Menu
         else if (VerticalSelection == 1)
         {
             SaveManager.Config.aspectRatio = WrapSelection(SaveManager.Config.aspectRatio + direction, 4);
-            GD.Print("Changed Aspect Ratio");
         }
         else if (VerticalSelection == 2)
         {
@@ -760,9 +759,29 @@ public partial class Options : Menu
 
     private int FindLargestWindowResolution()
     {
-        for (int i = SaveManager.WindowSizes.Length - 1; i >= 0; i--)
+        Vector2I[] windows;
+        switch (SaveManager.Config.aspectRatio)
         {
-            if (SaveManager.WindowSizes[i] >= DisplayServer.ScreenGetSize())
+            case 0:
+                windows = SaveManager.WindowSizes4x3;
+                break;
+            case 1:
+                windows = SaveManager.WindowSizes;
+                break;
+            case 2:
+                windows = SaveManager.WindowSizes16x10;
+                break;
+            case 3:
+                windows = SaveManager.WindowSizes21x9;
+                break;
+            default:
+                windows = SaveManager.WindowSizes;
+                break;
+
+        }
+        for (int i = /*SaveManager.WindowSizes.Length*/ windows.Length - 1; i >= 0; i--)
+        {
+            if (/*SaveManager.WindowSizes[i]*/ windows[i] >= DisplayServer.ScreenGetSize())
                 continue;
 
             return i;
