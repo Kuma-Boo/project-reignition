@@ -1,0 +1,68 @@
+[gd_scene load_steps=7 format=3 uid="uid://va54kd5oupyx"]
+
+[ext_resource type="PackedScene" uid="uid://d1rcieilh21gs" path="res://area/6 skeleton dome/act 1/Static.tscn" id="1_avxcn"]
+[ext_resource type="Resource" uid="uid://csdt2qavnn64t" path="res://resource/level data/skeleton dome/Act1Ringless.tres" id="2_63wmu"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_78uhr"]
+[ext_resource type="PackedScene" uid="uid://vqw834asl36p" path="res://area/6 skeleton dome/object/obstacle/Gate.tscn" id="4_63wmu"]
+[ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_677be"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_lrr8l"]
+
+[node name="World" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_avxcn")]
+Data = ExtResource("2_63wmu")
+
+[node name="01Opening" parent="Static/Visuals" index="1"]
+startEnabled = false
+
+[node name="08Exterior" parent="Static/Visuals" index="9"]
+startEnabled = true
+
+[node name="09Spiral" parent="Static/Visuals" index="10"]
+startEnabled = true
+
+[node name="RinglessAct" type="Node3D" parent="."]
+
+[node name="SpawnPosition" type="Node3D" parent="RinglessAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 780, 20, -1220)
+
+[node name="CharacterSpawn" parent="RinglessAct/SpawnPosition" instance=ExtResource("2_78uhr")]
+
+[node name="Spiral" type="Node3D" parent="RinglessAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 780, 20, -1220)
+
+[node name="Gate" parent="RinglessAct/Spiral" instance=ExtResource("4_63wmu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
+"Trigger Settings/Player Stand-in" = null
+
+[node name="Rings1" type="Node3D" parent="RinglessAct/Spiral"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -60)
+script = ExtResource("5_677be")
+Source = ExtResource("6_lrr8l")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RinglessAct/Spiral/Rings1" instance=ExtResource("6_lrr8l")]
+
+[node name="Child02" parent="RinglessAct/Spiral/Rings1" instance=ExtResource("6_lrr8l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="RinglessAct/Spiral/Rings1" instance=ExtResource("6_lrr8l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="RinglessAct/Spiral/Rings1" instance=ExtResource("6_lrr8l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="RinglessAct/Spiral/Rings1" instance=ExtResource("6_lrr8l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[editable path="Static"]
+[editable path="Static/Collision"]
