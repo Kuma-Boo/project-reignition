@@ -79,10 +79,13 @@ public partial class WorldSelect : Menu
 		VerticalSelection = menuMemory[MemoryKeys.WorldSelect];
 		menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.WorldSelect;
 
-		foreach (VideoStreamPlayer player in videoPlayers)
+		for (int i = 0; i < videoPlayers.Length; i++)
 		{
-			player.Paused = true;
-			player.Modulate = Colors.Transparent;
+			if (i == VerticalSelection)
+				continue;
+
+			videoPlayers[i].Paused = true;
+			videoPlayers[i].Modulate = Colors.Transparent;
 		}
 
 		if (animator.AssignedAnimation == "init" || animator.AssignedAnimation == "cancel")
