@@ -148,15 +148,8 @@ directional_shadow_mode = 0
 
 [node name="PlanarReflectionRenderer" parent="." index="27" instance=ExtResource("3_y6xva")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 340, -25, -889)
-renderMask = 5
+disableRenderering = true
 reflectionMaterials = [ExtResource("4_u0ur3")]
-editorPreview = true
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="." index="28"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 339, -25, -895)
-size = Vector3(279, 168, 190)
-interior = true
-cull_mask = 4
-ambient_mode = 2
-ambient_color = Color(1, 1, 1, 1)
-ambient_color_energy = 0.5
+[connection signal="Activated" from="." to="PlanarReflectionRenderer" method="EnableRendering"]
+[connection signal="Deactivated" from="." to="PlanarReflectionRenderer" method="DisableRendering"]

@@ -245,7 +245,7 @@ public partial class ItemBox : Pickup
 				{
 					Vector3 endPosition = EndPosition;
 					if (objectPool[i] != pickupParent)
-						endPosition = objectPool[i].Position;
+						endPosition = objectPool[i].GlobalPosition;
 					objectLaunchSettings[i] = LaunchSettings.Create(SpawnPosition, endPosition, travelHeight);
 				}
 

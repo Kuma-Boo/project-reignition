@@ -22,6 +22,8 @@ namespace Project.Gameplay.Hazards
 		private bool enableSparkParticles = true;
 
 		[ExportGroup("Editor")]
+		[ExportToolButton("Regenerate Sickle")]
+		public Callable GenerateSickleGroup => Callable.From(GenerateSickle);
 		[Export]
 		private NodePath root;
 		private Node3D rootNode;
@@ -38,8 +40,8 @@ namespace Project.Gameplay.Hazards
 		private int chainLength;
 
 		/// <summary> Length of each independant chain segment. </summary>
-		private const float ChainSegmentLength = 1.2f;
-		private const float ChainBaseOffset = 1.3f;
+		private readonly float ChainSegmentLength = 1.2f;
+		private readonly float ChainBaseOffset = 1.3f;
 
 		// Set up length when loading into the scene
 		public override void _Ready() => GenerateSickle();
@@ -53,10 +55,7 @@ namespace Project.Gameplay.Hazards
 		public override void _PhysicsProcess(double _)
 		{
 			if (Engine.IsEditorHint())
-			{
-				GenerateSickle();
 				return;
-			}
 
 			float targetRatio = isSwingingRight ? 1 : 0;
 			currentRatio = Mathf.MoveToward(currentRatio, targetRatio, (1.0f / cycleLength) * PhysicsManager.physicsDelta);

@@ -11,28 +11,27 @@ size = Vector3(5, 40, 10)
 [node name="Wall" parent="." index="0"]
 cast_shadow = 0
 
-[node name="StaticBody3D" parent="Wall" index="0" groups=["level wall", "wall"]]
+[node name="StaticBody3D" parent="Wall" index="0" groups=["wall"]]
 
 [node name="StaticBody3D" parent="Ceiling" index="0" groups=["ceiling"]]
 
-[node name="StaticBody3D" parent="MountainWall" index="0" groups=["wall"]]
-
-[node name="SpikeBallCollision" parent="." index="3"]
+[node name="SpikeBallCollision" parent="." index="2"]
 visible = false
 
 [node name="StaticBody3D" parent="SpikeBallCollision" index="0"]
 collision_layer = 16
 collision_mask = 0
 
-[node name="CavernPathWall" parent="." index="4"]
+[node name="StaticBody3D" parent="FloorPavement" index="0" groups=["floor", "pavement"]]
+
+[node name="StaticBody3D" parent="FloorStone" index="0" groups=["floor", "stone"]]
+
+[node name="OneWayWall" parent="." index="5"]
 script = ExtResource("2_q8yyq")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
 
-[node name="StaticBody3D" parent="CavernPathWall" index="0" groups=["wall"]]
-
-[node name="Floor" parent="." index="5"]
-cast_shadow = 0
-
-[node name="StaticBody3D" parent="Floor" index="0" groups=["floor"]]
+[node name="StaticBody3D" parent="OneWayWall" index="0" groups=["wall"]]
 
 [node name="CavePath" type="Area3D" parent="." index="6"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 309.2, -5, -899.8)
@@ -42,13 +41,3 @@ monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CavePath" index="0"]
 shape = SubResource("BoxShape3D_yb0vj")
-
-[node name="StaticBody3D" parent="FloorStone" index="0" groups=["floor", "stone"]]
-
-[node name="CavernBEntranceWall" parent="." index="8"]
-script = ExtResource("2_q8yyq")
-
-[node name="StaticBody3D" parent="CavernBEntranceWall" index="0" groups=["wall"]]
-
-[connection signal="area_entered" from="CavePath" to="CavernPathWall" method="Activate"]
-[connection signal="area_exited" from="CavePath" to="CavernPathWall" method="Deactivate"]
