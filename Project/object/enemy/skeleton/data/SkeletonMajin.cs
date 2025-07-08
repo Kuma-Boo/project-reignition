@@ -9,29 +9,39 @@ namespace Project.Gameplay.Objects;
 [Tool]
 public partial class SkeletonMajin : Enemy
 {
-	[Export]
 	/// <summary> Put the majin into a skeleton pile and respawn instead of being defeated. </summary>
-	private bool isImmortal;
+	[Export] private bool isImmortal;
+	/// <summary> Should this skeleton move towards the player when attacking? </summary>
+	[Export] private bool isMovementEnabled;
 	private bool isHurtboxInteraction;
 
 	/// <summary> Timer to keep track of state. </summary>
 	private float stateTimer;
 
-	[Export]
-	private Curve attackDelayCurve;
+	/// <summary> How long should the skeleton stay in an attacking state? </summary>
+	[Export] private float attackLength = 1f;
+	[Export] private Curve attackDelayCurve;
 	/// <summary> Is the enemy currently attacking? </summary>
 	private bool isAttacking;
 	public void SetAttackStatus(bool value) => isAttacking = value;
 
+	private float movementSpeed;
+	private Vector3 movementDirection;
+	private readonly float MaxMovementSpeed = 5f;
+	private readonly float MovementTrackingSmoothing = 20f;
+	private readonly float MovementTraction = 40f;
+	private readonly float MovementFriction = 120f;
+
 	/// <summary> Keeps track of whether the skeleton's range was already triggered. </summary>
 	private bool wasSpawned;
 	/// <summary> How long to stay shattered when isImmortal is true. </summary>
-	private const float ImmortalRespawnTime = 1.5f;
+	private readonly float ImmortalRespawnTime = 1.5f;
 
 	private AnimationNodeStateMachinePlayback AnimationState => AnimationTree.Get(AnimationPlayback).Obj as AnimationNodeStateMachinePlayback;
 	private readonly StringName AnimationPlayback = "parameters/playback";
 	private readonly StringName SpawnAnimation = "spawn";
-	private readonly StringName AttackAnimation = "attack";
+	private readonly StringName AttackStartAnimation = "attack-start";
+	private readonly StringName AttackStopAnimation = "attack-stop";
 	private readonly StringName ShatterResetAnimation = "shatter-reset";
 	private readonly StringName ResetAnimation = "RESET";
 	private readonly StringName DefeatAnimation = "defeat";
@@ -58,63 +68,104 @@ public partial class SkeletonMajin : Enemy
 		base.Respawn();
 
 		wasSpawned = false;
+		SetAttackStatus(false);
+		SetHitboxStatus(false);
 
 		if (SpawnMode != SpawnModes.Always)
 		{
 			Spawn();
+			return;
 		}
-		else
-		{
-			AnimationState.Start(ShatterResetAnimation);
-			AnimationPlayer.Play(ResetAnimation);
-		}
+
+		AnimationState.Start(ShatterResetAnimation);
 	}
 
 	protected override void EnterRange()
 	{
 		if (wasSpawned || SpawnMode == SpawnModes.Signal) return;
+
 		Spawn();
 	}
 
 	protected override void Spawn()
 	{
-		if (IsActive) return; //Already spawned
+		if (IsActive) return; // Already spawned
 
 		IsActive = true;
 		wasSpawned = true;
+		movementSpeed = 0;
 
-		currentHealth = maxHealth; //Reset health
+		currentHealth = maxHealth; // Reset health
+		stateTimer = attackDelayCurve.Sample(Runtime.randomNumberGenerator.Randf()); // Queue next attack
 
-		AnimationPlayer.Play(SpawnAnimation);
 		AnimationState.Travel(SpawnAnimation);
-
-		stateTimer = attackDelayCurve.Sample(Runtime.randomNumberGenerator.Randf()); //Queue next attack
 		base.Spawn();
 	}
 
 	protected override void UpdateEnemy()
 	{
+		if (Engine.IsEditorHint())
+			return;
+
 		if (IsActive)
 		{
-			ProcessRotation(Player.GlobalPosition);
+			if (isMovementEnabled)
+				ProcessMovement();
 
-			if (IsHitboxEnabled && !isAttacking) //Update attack
+			if (isAttacking)
 			{
-				stateTimer = Mathf.MoveToward(stateTimer, 0, PhysicsManager.physicsDelta);
-				if (Mathf.IsZeroApprox(stateTimer))
-				{
-					AnimationState.Travel(AttackAnimation);
-					AnimationPlayer.Play(AttackAnimation);
-					stateTimer = attackDelayCurve.Sample(Runtime.randomNumberGenerator.Randf()); //Queue next attack
-				}
+				if (IsStateFinished())
+					FinishAttack();
+
+				return;
 			}
+
+			ProcessRotation(Player.GlobalPosition);
+			if (IsHitboxEnabled && IsStateFinished()) // Check whether we can start attacking
+				StartAttack();
+
+			return;
 		}
-		else if (wasSpawned && isImmortal) //Revive
+
+		if (wasSpawned && isImmortal && IsStateFinished()) // Check for revival
+			Spawn();
+	}
+
+	private bool IsStateFinished()
+	{
+		stateTimer = Mathf.MoveToward(stateTimer, 0, PhysicsManager.physicsDelta);
+		return Mathf.IsZeroApprox(stateTimer);
+	}
+
+	private void StartAttack()
+	{
+		AnimationState.Travel(AttackStartAnimation);
+		stateTimer = attackLength;
+	}
+
+	private void FinishAttack()
+	{
+		AnimationState.Travel(AttackStopAnimation);
+		stateTimer = attackDelayCurve.Sample(Runtime.randomNumberGenerator.Randf()); // Queue next attack
+	}
+
+	private void ProcessMovement()
+	{
+		if (!isAttacking)
 		{
-			stateTimer = Mathf.MoveToward(stateTimer, 0, PhysicsManager.physicsDelta);
-			if (Mathf.IsZeroApprox(stateTimer))
-				Spawn();
+			if (!Mathf.IsZeroApprox(movementSpeed))
+				movementSpeed = Mathf.MoveToward(movementSpeed, 0f, MovementFriction * PhysicsManager.physicsDelta);
+
+			return;
 		}
+
+		// Move towards player
+		movementSpeed = Mathf.MoveToward(movementSpeed, MaxMovementSpeed, MovementTraction * PhysicsManager.physicsDelta);
+		ProcessRotation(Player.GlobalPosition, MovementTrackingSmoothing);
+
+		GlobalTranslate(Root.Forward() * movementSpeed * PhysicsManager.physicsDelta);
+		RaycastHit groundHit = this.CastRay(GlobalPosition + Vector3.Up, Vector3.Down * 2f, Runtime.Instance.environmentMask);
+		GlobalPosition = groundHit.point;
 	}
 
 	protected override void Defeat()
@@ -122,10 +173,10 @@ public partial class SkeletonMajin : Enemy
 		base.Defeat();
 
 		IsActive = false;
-		AnimationState.Travel(isImmortal ? DamageAnimation : DefeatAnimation);
-		AnimationPlayer.Play(isImmortal ? DamageAnimation : DefeatAnimation);
+		AnimationState.Start(isImmortal ? DamageAnimation : DefeatAnimation);
+		SetHitboxStatus(false);
 
-		Player.MovementAngle = Player.PathFollower.ForwardAngle; //More consistent direction
+		Player.MovementAngle = Player.PathFollower.ForwardAngle; // More consistent direction
 
 		if (isImmortal)
 			stateTimer = ImmortalRespawnTime;

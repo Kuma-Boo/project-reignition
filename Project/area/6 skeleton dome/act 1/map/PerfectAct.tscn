@@ -1,0 +1,1150 @@
+[gd_scene load_steps=23 format=3 uid="uid://bq5uml1fjfbrj"]
+
+[ext_resource type="PackedScene" uid="uid://d1rcieilh21gs" path="res://area/6 skeleton dome/act 1/Static.tscn" id="1_xmegp"]
+[ext_resource type="Resource" uid="uid://n2nveaw13hpx" path="res://resource/level data/skeleton dome/Act1Perfect.tres" id="2_cgovv"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_e7vn2"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_1tre8"]
+[ext_resource type="PackedScene" uid="uid://vqw834asl36p" path="res://area/6 skeleton dome/object/obstacle/Gate.tscn" id="3_e8nks"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="3_t6wdo"]
+[ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="4_j07a2"]
+[ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="5_srkln"]
+[ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="6_j07a2"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_srkln"]
+[ext_resource type="PackedScene" uid="uid://d21ummt57uq4a" path="res://area/6 skeleton dome/object/obstacle/Sickle.tscn" id="8_yc287"]
+[ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="9_h7kdu"]
+[ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="10_qs5u2"]
+[ext_resource type="PackedScene" uid="uid://di8tdo65qjkbe" path="res://object/enemy/majin/data/skeleton dome/BlueMajin.tscn" id="11_gbddu"]
+[ext_resource type="PackedScene" uid="uid://csaug6ajhbtce" path="res://object/enemy/majin/data/skeleton dome/RedMajin.tscn" id="12_t6wdo"]
+[ext_resource type="PackedScene" uid="uid://c7s3kkj8pq6ox" path="res://object/enemy/skeleton/SkeletonMajin.tscn" id="14_w1ypn"]
+[ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="15_ln4yg"]
+[ext_resource type="PackedScene" uid="uid://ctkxmjdylid4k" path="res://object/enemy/majin/data/skeleton dome/GreenMajin.tscn" id="16_blj5b"]
+[ext_resource type="PackedScene" uid="uid://ddqtfsujegqep" path="res://object/stage/common/SpikeBallSpawner.tscn" id="17_04gpm"]
+[ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="17_ln4yg"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="19_blj5b"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1tre8"]
+size = Vector3(20, 20, 5)
+
+[node name="World" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_xmegp")]
+Data = ExtResource("2_cgovv")
+environmentFxFactor = 0.0
+
+[node name="01Opening" parent="Static/Visuals" index="1"]
+startEnabled = false
+
+[node name="05CavernA" parent="Static/Visuals" index="5"]
+startEnabled = true
+
+[node name="06Hall" parent="Static/Visuals" index="7"]
+startEnabled = true
+
+[node name="PerfectAct" type="Node3D" parent="."]
+
+[node name="SpawnPosition" type="Node3D" parent="PerfectAct"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 438, 0, -890)
+metadata/_edit_lock_ = true
+
+[node name="CharacterSpawn" parent="PerfectAct/SpawnPosition" instance=ExtResource("2_e7vn2")]
+
+[node name="CullingMap" type="Node3D" parent="PerfectAct"]
+visible = false
+
+[node name="LowerHall-L" parent="PerfectAct/CullingMap" instance=ExtResource("3_1tre8")]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 531.386, 30, -1113.9)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/CullingMap/LowerHall-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_1tre8")
+
+[node name="Interior-U" parent="PerfectAct/CullingMap" instance=ExtResource("3_1tre8")]
+transform = Transform3D(2.98023e-08, 0, -1, 0, 1, 0, 1, 0, 2.98023e-08, 594.726, 20, -1129.85)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/CullingMap/Interior-U"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_1tre8")
+
+[node name="SpikeBalls-L" parent="PerfectAct/CullingMap" instance=ExtResource("3_1tre8")]
+transform = Transform3D(1, 0, 7.35137e-08, 0, 1, 0, -7.35137e-08, 0, 1, 710.026, 20, -1141.85)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/CullingMap/SpikeBalls-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_1tre8")
+
+[node name="Interior" type="Node3D" parent="PerfectAct"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 440, 0, -890)
+script = ExtResource("3_t6wdo")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="Gate1" parent="PerfectAct/Interior" instance=ExtResource("3_e8nks")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="PearlsL1" type="Node3D" parent="PerfectAct/Interior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.5, 6)
+script = ExtResource("4_j07a2")
+Source = ExtResource("5_srkln")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../Static/Path/InteriorPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PerfectAct/Interior/PearlsL1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.10352e-05, 7.80821e-06, 0.000579834)
+
+[node name="Child02" parent="PerfectAct/Interior/PearlsL1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.168762, 0.0237749, 1.47501)
+
+[node name="Child03" parent="PerfectAct/Interior/PearlsL1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.391968, 0.0557709, 2.9389)
+
+[node name="Child04" parent="PerfectAct/Interior/PearlsL1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.679626, 0.0975848, 4.38733)
+
+[node name="Child05" parent="PerfectAct/Interior/PearlsL1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.04333, 0.151069, 5.8136)
+
+[node name="Child06" parent="PerfectAct/Interior/PearlsL1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49603, 0.218334, 7.20789)
+
+[node name="Child07" parent="PerfectAct/Interior/PearlsL1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0517, 0.3017, 8.55692)
+
+[node name="Child08" parent="PerfectAct/Interior/PearlsL1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.72406, 0.403501, 9.84271)
+
+[node name="Child09" parent="PerfectAct/Interior/PearlsL1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5246, 0.525722, 11.043)
+
+[node name="Child10" parent="PerfectAct/Interior/PearlsL1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.45923, 0.669401, 12.1324)
+
+[node name="PearlsR1" type="Node3D" parent="PerfectAct/Interior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.5, 6)
+script = ExtResource("4_j07a2")
+Source = ExtResource("5_srkln")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../Static/Path/InteriorPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PerfectAct/Interior/PearlsR1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10352e-05, -1.0103e-05, -0.000762939)
+
+[node name="Child02" parent="PerfectAct/Interior/PearlsR1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16925, 0.0231779, 1.51434)
+
+[node name="Child03" parent="PerfectAct/Interior/PearlsR1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.39502, 0.0544808, 3.02689)
+
+[node name="Child04" parent="PerfectAct/Interior/PearlsR1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.688416, 0.0954696, 4.53351)
+
+[node name="Child05" parent="PerfectAct/Interior/PearlsR1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.06274, 0.147975, 6.02905)
+
+[node name="Child06" parent="PerfectAct/Interior/PearlsR1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.53345, 0.214089, 7.50546)
+
+[node name="Child07" parent="PerfectAct/Interior/PearlsR1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.11804, 0.296118, 8.95053)
+
+[node name="Child08" parent="PerfectAct/Interior/PearlsR1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.83484, 0.396408, 10.3462)
+
+[node name="Child09" parent="PerfectAct/Interior/PearlsR1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.69995, 0.516989, 11.6673)
+
+[node name="Child10" parent="PerfectAct/Interior/PearlsR1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.72253, 0.658995, 12.882)
+
+[node name="Rings1" type="Node3D" parent="PerfectAct/Interior"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 45, 5.6, 25)
+script = ExtResource("4_j07a2")
+Source = ExtResource("6_srkln")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PerfectAct/Interior/Rings1" instance=ExtResource("6_srkln")]
+
+[node name="Child02" parent="PerfectAct/Interior/Rings1" instance=ExtResource("6_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="PerfectAct/Interior/Rings1" instance=ExtResource("6_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="PerfectAct/Interior/Rings1" instance=ExtResource("6_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="PerfectAct/Interior/Rings1" instance=ExtResource("6_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="DashPanelGroup" type="Node3D" parent="PerfectAct/Interior"]
+transform = Transform3D(-4.37114e-08, -0.117589, 0.993062, 0, 0.993062, 0.117589, -1, 5.14e-09, -4.34081e-08, 25.0147, 4.34198, 25)
+
+[node name="DashPanelL" parent="PerfectAct/Interior/DashPanelGroup" instance=ExtResource("6_j07a2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+
+[node name="DashPanelM" parent="PerfectAct/Interior/DashPanelGroup" instance=ExtResource("6_j07a2")]
+
+[node name="DashPanelR" parent="PerfectAct/Interior/DashPanelGroup" instance=ExtResource("6_j07a2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="Sickle1" parent="PerfectAct/Interior" instance=ExtResource("8_yc287")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 48.1823, 11.5, 52.2465)
+cycleLength = 2.5
+chainLength = 3
+
+[node name="PearlsL2" type="Node3D" parent="PerfectAct/Interior"]
+transform = Transform3D(-0.173648, -0.254887, -0.951251, 0, 0.965926, -0.258819, 0.984808, -0.0449435, -0.167731, 74.3433, 7.57071, 56.9965)
+script = ExtResource("4_j07a2")
+Source = ExtResource("5_srkln")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PerfectAct/Interior/PearlsL2" instance=ExtResource("5_srkln")]
+
+[node name="Child02" parent="PerfectAct/Interior/PearlsL2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="PerfectAct/Interior/PearlsL2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="PerfectAct/Interior/PearlsL2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="PerfectAct/Interior/PearlsL2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="PerfectAct/Interior/PearlsL2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child07" parent="PerfectAct/Interior/PearlsL2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child08" parent="PerfectAct/Interior/PearlsL2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child09" parent="PerfectAct/Interior/PearlsL2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child10" parent="PerfectAct/Interior/PearlsL2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="PearlsR2" type="Node3D" parent="PerfectAct/Interior"]
+transform = Transform3D(-0.173648, -0.254887, -0.951251, 0, 0.965926, -0.258819, 0.984808, -0.0449435, -0.167731, 74.1154, 7.57071, 58.6808)
+script = ExtResource("4_j07a2")
+Source = ExtResource("5_srkln")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PerfectAct/Interior/PearlsR2" instance=ExtResource("5_srkln")]
+
+[node name="Child02" parent="PerfectAct/Interior/PearlsR2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="PerfectAct/Interior/PearlsR2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="PerfectAct/Interior/PearlsR2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="PerfectAct/Interior/PearlsR2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="PerfectAct/Interior/PearlsR2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child07" parent="PerfectAct/Interior/PearlsR2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child08" parent="PerfectAct/Interior/PearlsR2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child09" parent="PerfectAct/Interior/PearlsR2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child10" parent="PerfectAct/Interior/PearlsR2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Sickle2" parent="PerfectAct/Interior" instance=ExtResource("8_yc287")]
+transform = Transform3D(0.173648, 0, 0.984808, 0, 1, 0, -0.984808, 0, 0.173648, 87.485, 17, 58.5)
+rotationAmount = 10.0
+cycleLength = 3.0
+chainLength = 3
+
+[node name="SwitchGroup1" type="Node3D" parent="PerfectAct/Interior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 108.085, 14.8996, 72.2462)
+
+[node name="Switch" parent="PerfectAct/Interior/SwitchGroup1" instance=ExtResource("9_h7kdu")]
+transform = Transform3D(-0.707107, -0.0616284, -0.704416, 0, 0.996195, -0.0871557, 0.707107, -0.0616284, -0.704416, 0, 0, 0)
+
+[node name="Gate2" parent="PerfectAct/Interior/SwitchGroup1" instance=ExtResource("3_e8nks")]
+transform = Transform3D(-0.642788, 0, -0.766045, 0, 1, 0, 0.766045, 0, -0.642788, 9.22418, 1.10038, 8.65765)
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="SpikePanelGroup1" type="Node3D" parent="PerfectAct/Interior/SwitchGroup1"]
+transform = Transform3D(-0.453991, -0.154722, -0.87747, 0, 0.984808, -0.173648, 0.891007, -0.0788346, -0.447093, 16.3799, 2.36707, 14.082)
+
+[node name="SpikePanel1" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel2" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1" instance=ExtResource("10_qs5u2")]
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel3" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 0)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel4" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -1.5)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel5" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel6" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -1.5)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel7" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -3)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel8" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel9" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -3)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel10" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -4.5)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel11" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel12" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -4.5)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanelGroup2" type="Node3D" parent="PerfectAct/Interior/SwitchGroup1"]
+transform = Transform3D(-0.358368, -0.211597, -0.909285, 0, 0.973976, -0.226651, 0.933581, -0.0812246, -0.349042, 23.339, 3.85035, 17.5958)
+
+[node name="SpikePanel1" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel2" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2" instance=ExtResource("10_qs5u2")]
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel3" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 0)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel4" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -1.5)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel5" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel6" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -1.5)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel7" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -3)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel8" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel9" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -3)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel10" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -4.5)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel11" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="SpikePanel12" parent="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2" instance=ExtResource("10_qs5u2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -4.5)
+stateLengths = PackedFloat32Array(0.1, 0, 4)
+"Start Paused" = true
+"State Lengths/inactive" = 0.1
+"State Lengths/active" = 4.0
+
+[node name="BlueMajin1" parent="PerfectAct/Interior/SwitchGroup1" instance=ExtResource("11_gbddu")]
+transform = Transform3D(-0.573576, 0, -0.819152, 0, 1, 0, 0.819152, 0, -0.573576, 13.0574, 2, 11.9181)
+SpawnMode = 1
+
+[node name="BlueMajin2" parent="PerfectAct/Interior/SwitchGroup1" instance=ExtResource("11_gbddu")]
+transform = Transform3D(-0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, 18.5048, 3, 15.1221)
+SpawnMode = 1
+
+[node name="RedMajin" parent="PerfectAct/Interior/SwitchGroup1" instance=ExtResource("12_t6wdo")]
+transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618, 27.2687, 6, 19.1426)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 0.5
+"Attack Settings/Flame Active Time" = 5.0
+"Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 20
+"Attack Settings/Attack Instantly" = true
+SpawnMode = 1
+
+[node name="Sickle3" parent="PerfectAct/Interior" instance=ExtResource("8_yc287")]
+transform = Transform3D(-0.173648, 0, 0.984808, 0, 1, 0, -0.984808, 0, -0.173648, 184.5, 34.2, 97)
+rotationAmount = 15.0
+currentRatio = 0.0
+chainLength = 7
+
+[node name="Sickle4" parent="PerfectAct/Interior" instance=ExtResource("8_yc287")]
+transform = Transform3D(-0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, -0.34202, 190.699, 33.4, 91.8453)
+rotationAmount = 15.0
+cycleLength = 3.0
+currentRatio = 1.0
+chainLength = 5
+
+[node name="Sickle5" parent="PerfectAct/Interior" instance=ExtResource("8_yc287")]
+transform = Transform3D(-0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, -0.34202, 197.021, 40.4, 91.6725)
+rotationAmount = 15.0
+cycleLength = 6.0
+enableSparkParticles = false
+chainLength = 8
+
+[node name="PearlsR3" type="Node3D" parent="PerfectAct/Interior"]
+transform = Transform3D(0.173648, -0.296137, -0.939227, 0, 0.953717, -0.300706, 0.984808, 0.052217, 0.165611, 187.182, 24, 95.4968)
+script = ExtResource("4_j07a2")
+Source = ExtResource("5_srkln")
+Amount = 15
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PerfectAct/Interior/PearlsR3" instance=ExtResource("5_srkln")]
+
+[node name="Child02" parent="PerfectAct/Interior/PearlsR3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="PerfectAct/Interior/PearlsR3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="PerfectAct/Interior/PearlsR3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="PerfectAct/Interior/PearlsR3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="PerfectAct/Interior/PearlsR3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child07" parent="PerfectAct/Interior/PearlsR3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child08" parent="PerfectAct/Interior/PearlsR3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child09" parent="PerfectAct/Interior/PearlsR3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child10" parent="PerfectAct/Interior/PearlsR3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child11" parent="PerfectAct/Interior/PearlsR3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child12" parent="PerfectAct/Interior/PearlsR3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
+
+[node name="Child13" parent="PerfectAct/Interior/PearlsR3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child14" parent="PerfectAct/Interior/PearlsR3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13)
+
+[node name="Child15" parent="PerfectAct/Interior/PearlsR3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="PearlsL3" type="Node3D" parent="PerfectAct/Interior"]
+transform = Transform3D(0.173648, -0.296137, -0.939227, 0, 0.953717, -0.300706, 0.984808, 0.052217, 0.165611, 186.777, 24, 93.2248)
+script = ExtResource("4_j07a2")
+Source = ExtResource("5_srkln")
+Amount = 15
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PerfectAct/Interior/PearlsL3" instance=ExtResource("5_srkln")]
+
+[node name="Child02" parent="PerfectAct/Interior/PearlsL3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="PerfectAct/Interior/PearlsL3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="PerfectAct/Interior/PearlsL3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="PerfectAct/Interior/PearlsL3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="PerfectAct/Interior/PearlsL3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child07" parent="PerfectAct/Interior/PearlsL3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child08" parent="PerfectAct/Interior/PearlsL3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child09" parent="PerfectAct/Interior/PearlsL3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child10" parent="PerfectAct/Interior/PearlsL3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child11" parent="PerfectAct/Interior/PearlsL3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child12" parent="PerfectAct/Interior/PearlsL3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
+
+[node name="Child13" parent="PerfectAct/Interior/PearlsL3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child14" parent="PerfectAct/Interior/PearlsL3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13)
+
+[node name="Child15" parent="PerfectAct/Interior/PearlsL3" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="SwitchGroup2" type="Node3D" parent="PerfectAct/Interior"]
+transform = Transform3D(0.121869, 0, -0.992547, 0, 1, 0, 0.992546, 0, 0.121869, 203.324, 28.4658, 91.4666)
+
+[node name="RedMajin" parent="PerfectAct/Interior/SwitchGroup2" instance=ExtResource("12_t6wdo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Attack Settings/Flame Active Time" = 3.0
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 30
+"Attack Settings/Attack Instantly" = true
+
+[node name="Switch2" parent="PerfectAct/Interior/SwitchGroup2" instance=ExtResource("9_h7kdu")]
+transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0)
+
+[node name="GateL" parent="PerfectAct/Interior/SwitchGroup2" instance=ExtResource("3_e8nks")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1.1, -6.00006)
+activationSpeedScale = 0.5
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="GateM" parent="PerfectAct/Interior/SwitchGroup2" instance=ExtResource("3_e8nks")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -6)
+activationSpeedScale = 0.5
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="GateR" parent="PerfectAct/Interior/SwitchGroup2" instance=ExtResource("3_e8nks")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1.1, -6)
+activationSpeedScale = 0.5
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="Rings2" type="Node3D" parent="PerfectAct/Interior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.999999, 215.777, 30.6, 90.2248)
+script = ExtResource("4_j07a2")
+Source = ExtResource("6_srkln")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../Static/Path/InteriorPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="PerfectAct/Interior/Rings2" instance=ExtResource("6_srkln")]
+transform = Transform3D(1, 0, 3.55271e-15, 0, 1, 0, 3.55271e-15, 0, 1, 0, 0, 0)
+
+[node name="Child02" parent="PerfectAct/Interior/Rings2" instance=ExtResource("6_srkln")]
+transform = Transform3D(1, 0, 3.55271e-15, 0, 1, 0, 3.55271e-15, 0, 1, 3.00012, -0.00283813, 0.148926)
+
+[node name="Child03" parent="PerfectAct/Interior/Rings2" instance=ExtResource("6_srkln")]
+transform = Transform3D(1, 0, 3.55271e-15, 0, 1, 0, 3.55271e-15, 0, 1, 5.96912, -0.00932312, 0.607056)
+
+[node name="Child04" parent="PerfectAct/Interior/Rings2" instance=ExtResource("6_srkln")]
+transform = Transform3D(1, 0, 3.55271e-15, 0, 1, 0, 3.55271e-15, 0, 1, 8.85938, -0.0182343, 1.42572)
+
+[node name="Child05" parent="PerfectAct/Interior/Rings2" instance=ExtResource("6_srkln")]
+transform = Transform3D(1, 0, 3.55271e-15, 0, 1, 0, 3.55271e-15, 0, 1, 11.6407, -0.0274963, 2.55804)
+
+[node name="LowerHall" type="Node3D" parent="PerfectAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 490, 20, -1130)
+script = ExtResource("3_t6wdo")
+
+[node name="Rings1" type="Node3D" parent="PerfectAct/LowerHall"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 98, 0.7, 2)
+script = ExtResource("4_j07a2")
+Source = ExtResource("6_srkln")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PerfectAct/LowerHall/Rings1" instance=ExtResource("6_srkln")]
+
+[node name="Child02" parent="PerfectAct/LowerHall/Rings1" instance=ExtResource("6_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="PerfectAct/LowerHall/Rings1" instance=ExtResource("6_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="PerfectAct/LowerHall/Rings1" instance=ExtResource("6_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="PerfectAct/LowerHall/Rings1" instance=ExtResource("6_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Rings2" type="Node3D" parent="PerfectAct/LowerHall"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 115, 0.7, -1)
+script = ExtResource("4_j07a2")
+Source = ExtResource("6_srkln")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PerfectAct/LowerHall/Rings2" instance=ExtResource("6_srkln")]
+
+[node name="Child02" parent="PerfectAct/LowerHall/Rings2" instance=ExtResource("6_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="PerfectAct/LowerHall/Rings2" instance=ExtResource("6_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="PerfectAct/LowerHall/Rings2" instance=ExtResource("6_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="PerfectAct/LowerHall/Rings2" instance=ExtResource("6_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="SkeletonMajin1" parent="PerfectAct/LowerHall" instance=ExtResource("14_w1ypn")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 137, 0, 1.74846e-07)
+isMovementEnabled = true
+attackLength = 5.0
+SpawnMode = 2
+
+[node name="SkeletonMajin2" parent="PerfectAct/LowerHall" instance=ExtResource("14_w1ypn")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 165, 0, 1.22392e-06)
+isMovementEnabled = true
+attackLength = 5.0
+rangeOverride = 20
+
+[node name="SkeletonMajin3" parent="PerfectAct/LowerHall" instance=ExtResource("14_w1ypn")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 170, 0, -5.36442e-07)
+isMovementEnabled = true
+attackLength = 5.0
+SpawnMode = 2
+
+[node name="SkeletonMajin4" parent="PerfectAct/LowerHall" instance=ExtResource("14_w1ypn")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 175, 0, 0)
+isMovementEnabled = true
+attackLength = 5.0
+SpawnMode = 2
+
+[node name="SkeletonMajin5" parent="PerfectAct/LowerHall" instance=ExtResource("14_w1ypn")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 180, 0, -3.49691e-07)
+isMovementEnabled = true
+attackLength = 5.0
+rangeOverride = 20
+
+[node name="SkeletonMajin6" parent="PerfectAct/LowerHall" instance=ExtResource("14_w1ypn")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 185, 0, -1.31134e-07)
+isMovementEnabled = true
+attackLength = 5.0
+rangeOverride = 20
+
+[node name="Pearls1" type="Node3D" parent="PerfectAct/LowerHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 220.7, 0.5, 0)
+script = ExtResource("4_j07a2")
+Source = ExtResource("5_srkln")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PerfectAct/LowerHall/Pearls1" instance=ExtResource("5_srkln")]
+
+[node name="Child02" parent="PerfectAct/LowerHall/Pearls1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
+
+[node name="Child03" parent="PerfectAct/LowerHall/Pearls1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
+
+[node name="Child04" parent="PerfectAct/LowerHall/Pearls1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
+
+[node name="Child05" parent="PerfectAct/LowerHall/Pearls1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
+
+[node name="Child06" parent="PerfectAct/LowerHall/Pearls1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child07" parent="PerfectAct/LowerHall/Pearls1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="Child08" parent="PerfectAct/LowerHall/Pearls1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.4)
+
+[node name="Child09" parent="PerfectAct/LowerHall/Pearls1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.6)
+
+[node name="Child10" parent="PerfectAct/LowerHall/Pearls1" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
+
+[node name="Pearls2" type="Node3D" parent="PerfectAct/LowerHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 219.3, 0.5, 0)
+script = ExtResource("4_j07a2")
+Source = ExtResource("5_srkln")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PerfectAct/LowerHall/Pearls2" instance=ExtResource("5_srkln")]
+
+[node name="Child02" parent="PerfectAct/LowerHall/Pearls2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
+
+[node name="Child03" parent="PerfectAct/LowerHall/Pearls2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
+
+[node name="Child04" parent="PerfectAct/LowerHall/Pearls2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
+
+[node name="Child05" parent="PerfectAct/LowerHall/Pearls2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
+
+[node name="Child06" parent="PerfectAct/LowerHall/Pearls2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child07" parent="PerfectAct/LowerHall/Pearls2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="Child08" parent="PerfectAct/LowerHall/Pearls2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.4)
+
+[node name="Child09" parent="PerfectAct/LowerHall/Pearls2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.6)
+
+[node name="Child10" parent="PerfectAct/LowerHall/Pearls2" instance=ExtResource("5_srkln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
+
+[node name="RotatingSpikeGroup" type="Node3D" parent="PerfectAct/LowerHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 290, 0, 0)
+script = ExtResource("3_t6wdo")
+
+[node name="SpikeBall1" parent="PerfectAct/LowerHall/RotatingSpikeGroup" instance=ExtResource("15_ln4yg")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 4, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 30.0
+"Movement/Starting Offset" = 0.89
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 25.0
+Movement/Radius = 65.0
+
+[node name="SpikeBall2" parent="PerfectAct/LowerHall/RotatingSpikeGroup" instance=ExtResource("15_ln4yg")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 1, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 30.0
+"Movement/Starting Offset" = 0.84
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 25.0
+Movement/Radius = 66.0
+
+[node name="SpikeBall3" parent="PerfectAct/LowerHall/RotatingSpikeGroup" instance=ExtResource("15_ln4yg")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 4, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 30.0
+"Movement/Starting Offset" = 0.81
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 25.0
+Movement/Radius = 66.0
+
+[node name="SpikeBall4" parent="PerfectAct/LowerHall/RotatingSpikeGroup" instance=ExtResource("15_ln4yg")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 1, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 30.0
+"Movement/Starting Offset" = 0.74
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 25.0
+Movement/Radius = 66.0
+
+[node name="SpikeBall5" parent="PerfectAct/LowerHall/RotatingSpikeGroup" instance=ExtResource("15_ln4yg")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 1, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 30.0
+"Movement/Starting Offset" = 0.74
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 25.0
+Movement/Radius = 63.0
+
+[node name="SpikeBall6" parent="PerfectAct/LowerHall/RotatingSpikeGroup" instance=ExtResource("15_ln4yg")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 4, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 30.0
+"Movement/Starting Offset" = 0.7
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 25.0
+Movement/Radius = 63.0
+
+[node name="SpikeBall7" parent="PerfectAct/LowerHall/RotatingSpikeGroup" instance=ExtResource("15_ln4yg")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 1, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 30.0
+"Movement/Starting Offset" = 0.68
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 25.0
+Movement/Radius = 63.0
+
+[node name="SpikeBall8" parent="PerfectAct/LowerHall/RotatingSpikeGroup" instance=ExtResource("15_ln4yg")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 4, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 30.0
+"Movement/Starting Offset" = 0.64
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 25.0
+Movement/Radius = 63.0
+
+[node name="SpikeBall9" parent="PerfectAct/LowerHall/RotatingSpikeGroup" instance=ExtResource("15_ln4yg")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 1, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 30.0
+"Movement/Starting Offset" = 0.6
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 25.0
+Movement/Radius = 66.0
+
+[node name="SpikeBall10" parent="PerfectAct/LowerHall/RotatingSpikeGroup" instance=ExtResource("15_ln4yg")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 1, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 30.0
+"Movement/Starting Offset" = 0.6
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 25.0
+Movement/Radius = 63.0
+
+[node name="GreenMajin1" parent="PerfectAct/LowerHall" instance=ExtResource("16_blj5b")]
+transform = Transform3D(0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, 0.422618, 247.484, 1, -64.329)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-20, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+
+[node name="GreenMajin2" parent="PerfectAct/LowerHall" instance=ExtResource("16_blj5b")]
+transform = Transform3D(0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, 256.581, 1, -65.2943)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-20, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+
+[node name="GreenMajin3" parent="PerfectAct/LowerHall" instance=ExtResource("16_blj5b")]
+transform = Transform3D(0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, 0.173648, 262.825, 1, -69.038)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-20, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+
+[node name="GreenMajin4" parent="PerfectAct/LowerHall" instance=ExtResource("16_blj5b")]
+transform = Transform3D(0.0871557, 0, -0.996195, 0, 1, 0, 0.996195, 0, 0.0871557, 269.081, 0, -68.1102)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-20, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+
+[node name="GreenMajin5" parent="PerfectAct/LowerHall" instance=ExtResource("16_blj5b")]
+transform = Transform3D(0.0871557, 0, -0.996195, 0, 1, 0, 0.996195, 0, 0.0871557, 275.967, 0, -69.7164)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-20, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+
+[node name="SwitchGroup1" type="Node3D" parent="PerfectAct/LowerHall"]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 289.9, 0, -88.5)
+
+[node name="Switch" parent="PerfectAct/LowerHall/SwitchGroup1" instance=ExtResource("9_h7kdu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.100111, 0)
+
+[node name="Gate" parent="PerfectAct/LowerHall/SwitchGroup1" instance=ExtResource("3_e8nks")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+activationSpeedScale = 0.5
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="SwitchGroup2" type="Node3D" parent="PerfectAct/LowerHall"]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 289.9, 0, -113.5)
+
+[node name="Switch" parent="PerfectAct/LowerHall/SwitchGroup2" instance=ExtResource("9_h7kdu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.100111, 0)
+
+[node name="Gate" parent="PerfectAct/LowerHall/SwitchGroup2" instance=ExtResource("3_e8nks")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+activationSpeedScale = 0.5
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="SpikeBallSpawner1" parent="PerfectAct/LowerHall/SwitchGroup2" instance=ExtResource("17_04gpm")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.5, 8, 0)
+maxSpawnAmount = 2
+lifetime = 3.0
+spawnInterval = 7.0
+
+[node name="SpikeBallSpawner2" parent="PerfectAct/LowerHall/SwitchGroup2" instance=ExtResource("17_04gpm")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 8, 0)
+maxSpawnAmount = 2
+lifetime = 4.0
+spawnInterval = 4.0
+
+[node name="SpikeBallSpawner3" parent="PerfectAct/LowerHall/SwitchGroup2" instance=ExtResource("17_04gpm")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2.5, 8, 0)
+maxSpawnAmount = 2
+lifetime = 3.0
+spawnInterval = 6.0
+initialVelocity = 1.0
+
+[node name="SwitchGroup3" type="Node3D" parent="PerfectAct/LowerHall"]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 289.9, 0, -138.2)
+
+[node name="Switch" parent="PerfectAct/LowerHall/SwitchGroup3" instance=ExtResource("9_h7kdu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.100111, 0)
+
+[node name="RedMajin1" parent="PerfectAct/LowerHall/SwitchGroup3" instance=ExtResource("12_t6wdo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+rangeOverride = 15
+
+[node name="RedMajin2" parent="PerfectAct/LowerHall/SwitchGroup3" instance=ExtResource("12_t6wdo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0.5)
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+rangeOverride = 15
+
+[node name="EnemyStone" parent="PerfectAct/LowerHall/SwitchGroup3" instance=ExtResource("17_ln4yg")]
+transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 1.5, 0, 1, 0)
+enemyCount = 2
+
+[node name="Gate" parent="PerfectAct/LowerHall/SwitchGroup3" instance=ExtResource("3_e8nks")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+activationSpeedScale = 0.5
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="Goal" parent="PerfectAct/LowerHall" instance=ExtResource("19_blj5b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 289.9, 8, -145)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/LowerHall/Goal"]
+shape = SubResource("BoxShape3D_1tre8")
+
+[connection signal="Activated" from="PerfectAct/CullingMap/LowerHall-L" to="PerfectAct/LowerHall" method="Activate"]
+[connection signal="Deactivated" from="PerfectAct/CullingMap/LowerHall-L" to="PerfectAct/LowerHall" method="Deactivate"]
+[connection signal="Activated" from="PerfectAct/CullingMap/Interior-U" to="PerfectAct/Interior" method="Deactivate"]
+[connection signal="Activated" from="PerfectAct/CullingMap/SpikeBalls-L" to="PerfectAct/LowerHall/RotatingSpikeGroup" method="Activate"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/Gate2" method="Activate"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1/SpikePanel1" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1/SpikePanel2" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1/SpikePanel3" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1/SpikePanel4" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1/SpikePanel5" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1/SpikePanel6" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1/SpikePanel7" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1/SpikePanel8" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1/SpikePanel9" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1/SpikePanel10" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1/SpikePanel11" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup1/SpikePanel12" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2/SpikePanel1" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2/SpikePanel2" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2/SpikePanel3" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2/SpikePanel4" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2/SpikePanel5" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2/SpikePanel6" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2/SpikePanel7" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2/SpikePanel8" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2/SpikePanel9" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2/SpikePanel10" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2/SpikePanel11" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/SpikePanelGroup2/SpikePanel12" method="Unpause"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/BlueMajin1" method="Spawn"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/BlueMajin2" method="Spawn"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup1/Switch" to="PerfectAct/Interior/SwitchGroup1/RedMajin" method="Spawn"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup2/Switch2" to="PerfectAct/Interior/SwitchGroup2/GateL" method="Activate"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup2/Switch2" to="PerfectAct/Interior/SwitchGroup2/GateM" method="Activate"]
+[connection signal="Activated" from="PerfectAct/Interior/SwitchGroup2/Switch2" to="PerfectAct/Interior/SwitchGroup2/GateR" method="Activate"]
+[connection signal="Activated" from="PerfectAct/LowerHall/SwitchGroup1/Switch" to="PerfectAct/LowerHall/SwitchGroup1/Gate" method="Activate"]
+[connection signal="Activated" from="PerfectAct/LowerHall/SwitchGroup2/Switch" to="PerfectAct/LowerHall/SwitchGroup2/Gate" method="Activate"]
+[connection signal="Activated" from="PerfectAct/LowerHall/SwitchGroup3/Switch" to="PerfectAct/LowerHall/SwitchGroup3/Gate" method="Activate"]
+[connection signal="Defeated" from="PerfectAct/LowerHall/SwitchGroup3/RedMajin1" to="PerfectAct/LowerHall/SwitchGroup3/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="PerfectAct/LowerHall/SwitchGroup3/RedMajin2" to="PerfectAct/LowerHall/SwitchGroup3/EnemyStone" method="IncrementCounter"]
+
+[editable path="Static"]
+[editable path="Static/Collision"]

@@ -1576,7 +1576,6 @@ shadow_caster_mask = 65
 directional_shadow_blend_splits = true
 
 [node name="Path" type="Node3D" parent="."]
-visible = false
 
 [node name="ExteriorPath" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.91, 0, 67.139)
@@ -1682,6 +1681,8 @@ environment = SubResource("Environment_w7cdv")
 [connection signal="Deactivated" from="Trigger/Object/Automation" to="Trigger/Object/Automation/Path" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/Automation" to="Trigger/Object/Automation/Camera" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/Automation" to="Trigger/Camera/CavernB" method="Activate"]
+[connection signal="Activated" from="Trigger/Object/JumpTrigger" to="Collision/OneWayWall" method="Deactivate"]
+[connection signal="JumpFinished" from="Trigger/Object/JumpTrigger/Jump" to="Collision/OneWayWall" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Path" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Camera" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Path" method="Deactivate"]
