@@ -181,17 +181,25 @@ public partial class GrindState : PlayerState
 
 	public bool IsRailActivationValid(GrindRail grindRail)
 	{
-		if (!StageSettings.Instance.IsLevelIngame) // Not in-game
+        GD.Print("Checking Rail Activation");
+
+        if (!StageSettings.Instance.IsLevelIngame) // Not in-game
 			return false;
 
 		if (ActiveGrindRail == grindRail) // Already grinding on the target rail
+		{
+			GD.Print("Failed due to already grinding");
 			return false;
+		}
 
 		if (Player.IsTeleporting || Player.IsLightDashing)
 			return false;
 
 		if (Player.VerticalSpeed > 0f) // Player can't snap to grind rails when moving upwards
+		{
+			GD.Print("Failed due to vertical speed");
 			return false;
+		}
 
 		// Resync Grindrail's PathFollower
 		Vector3 delta = grindRail.Rail.GlobalTransform.Basis.Inverse() * (Player.GlobalPosition - grindRail.Rail.GlobalPosition);
@@ -199,11 +207,17 @@ public partial class GrindState : PlayerState
 
 		// Ignore rails when the player is too close to the end
 		if (grindRail.PathFollower.Progress >= grindRail.Rail.Curve.GetBakedLength() - RailFudgeFactor)
-			return false;
+		{
+            GD.Print("Failed due to fudge factor");
+            return false;
+		}
 
 		// Ignore grinds that would immediately put the player into a wall
 		if (CheckWall(Player.Stats.GrindSettings.Speed * PhysicsManager.physicsDelta, grindRail))
+		{
+			GD.Print("Failed due to wall");
 			return false;
+		}
 
 		delta = grindRail.PathFollower.GlobalTransform.Basis.Inverse() * (Player.GlobalPosition - grindRail.PathFollower.GlobalPosition);
 		delta.Y -= Player.VerticalSpeed * PhysicsManager.physicsDelta;
@@ -218,6 +232,7 @@ public partial class GrindState : PlayerState
 		if (Mathf.Abs(delta.X) > GrindrailSnapping &&
 			!(Player.IsGrindstepping && Mathf.Abs(delta.X) > GrindstepRailSnapping))
 		{
+			GD.Print("Failed due to horizontal validation");
 			return false;
 		}
 
