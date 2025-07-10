@@ -1,8 +1,9 @@
-[gd_scene load_steps=28 format=3 uid="uid://tevs37r4b65r"]
+[gd_scene load_steps=33 format=3 uid="uid://tevs37r4b65r"]
 
 [ext_resource type="PackedScene" uid="uid://d1rcieilh21gs" path="res://area/6 skeleton dome/act 1/Static.tscn" id="1_6j0u8"]
 [ext_resource type="Resource" uid="uid://cmhjf4j8grhv8" path="res://resource/level data/skeleton dome/Act1Race.tres" id="2_apsdt"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_68al8"]
+[ext_resource type="Curve3D" path="res://area/6 skeleton dome/act 1/environment/path/UhuPath.tres" id="3_jruq6"]
 [ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="4_68al8"]
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="4_i2fxc"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="5_1chmq"]
@@ -23,6 +24,107 @@
 [ext_resource type="PackedScene" uid="uid://bbgtmxw55soah" path="res://object/stage/destructable/Stone.tscn" id="22_mcl1m"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="23_i2fxc"]
 [ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="23_p2t1t"]
+[ext_resource type="PackedScene" uid="uid://dc1ik7p6xlh0a" path="res://object/stage/genie/Uhu.tscn" id="24_joqx7"]
+
+[sub_resource type="Animation" id="Animation_jruq6"]
+resource_name = "race"
+length = 93.0
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Uhu:progress")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 5.3, 11, 11.8, 12.2, 12.5, 12.9, 13.2, 13.6, 14.1, 15.5, 17.8, 18.6, 19, 19.3, 19.7, 20, 20.4, 20.9, 22.5, 23.5, 23.7, 24, 24.3, 24.8, 25.3, 25.8, 26.3, 26.4, 27, 27.7, 29, 30, 30.8, 31.2, 31.5, 31.9, 32.2, 32.6, 33.1, 34.1, 42.5, 43.2, 44.3, 46.6, 47.5, 50, 55.5, 56, 57, 57.2, 57.6, 57.7, 59.9, 60, 61.4, 67, 70, 71.5, 72.4, 72.5, 72.8, 73.3, 73.6, 74, 74.3, 74.7, 75.5, 76.6, 76.9, 77.3, 77.6946, 78, 78.4, 78.7, 79.2, 79.5, 79.8, 80.3, 80.7, 81, 81.4, 81.8, 82.3, 82.6, 82.9, 83.6, 84, 84.3, 84.7, 85.4, 86.3, 87.1, 87.8, 88.5, 89.4, 89.8, 90.3, 90.6, 90.9, 91.2, 91.5, 91.9, 92.3, 93),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [104.0, 140.0, 235.0, 237.0, 236.0, 237.0, 236.0, 237.0, 236.0, 242.0, 245.0, 262.0, 264.0, 263.0, 264.0, 263.0, 264.0, 263.0, 270.0, 275.0, 282.0, 282.0, 285.0, 284.0, 285.0, 298.0, 297.0, 309.5, 309.5, 309.0, 314.0, 340.0, 348.0, 352.0, 351.0, 352.0, 351.0, 352.0, 351.0, 355.0, 365.0, 490.0, 503.0, 510.0, 526.0, 523.0, 534.0, 587.0, 590.0, 598.0, 600.0, 610.0, 610.0, 610.0, 610.0, 635.0, 752.0, 770.0, 770.0, 770.0, 770.0, 776.0, 775.0, 780.0, 779.0, 780.0, 779.0, 785.0, 790.0, 793.0, 799.0, 798.0, 799.5, 798.5, 805.5, 805.0, 805.5, 804.0, 812.0, 811.0, 812.0, 811.0, 817.0, 816.0, 817.0, 816.0, 823.0, 822.0, 823.0, 822.0, 826.0, 834.0, 842.0, 842.0, 842.0, 835.0, 834.0, 834.0, 838.0, 837.0, 838.5, 838.0, 842.0, 848.0, 848.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Uhu:h_offset")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 3, 6.2, 7, 7.6, 9, 9.5, 10, 11, 11.8, 12.1, 12.5, 12.8, 13.2, 13.5, 15.5, 17.8, 18.6, 18.9, 19.3, 19.6, 20, 20.3, 22.5, 24, 25.3, 26.3, 27.7, 30, 30.8, 31.1, 31.5, 31.8, 32.2, 32.5, 34.1, 36, 36.5, 37.5, 38, 38.4, 42.5, 43.2, 45, 46.6, 47.5, 49, 50, 51.5, 51.7, 54.5, 55.3, 56, 56.7, 57, 57.6, 57.7, 59.9, 60, 65, 65.8, 67, 70, 71.5, 72.8, 76.6, 77.3, 77.6, 78, 78.3, 78.7, 79.2, 79.5, 79.8, 80.3, 80.6, 81, 81.3, 81.8, 82.3, 82.6, 82.9, 83.6, 83.9, 84.3, 84.6, 85.4, 86.3, 87.1, 88.5, 90, 90.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0, -0.5, -0.5, 0.5, 0.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, -1.5, -1.5, 0.0, -1.5, -1.5, -1.5, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, -2.5, -1.2, -1.5, -2.0, -2.0, -1.0, -1.0, 0.5, 0.5, 0.0, 0.0, -2.0, 2.0, 0.0, 0.0, 0.0, -1.0, -1.0, -2.0, -0.5, -2.0, 1.5, -1.5, -1.5, -1.5, 1.0, -1.0, -1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -2.0, -2.0, 0.0, 0.0, -0.5, 0.0, 0.5, 0.5, -1.0, -1.0, 0.0, 0.0, 0.0, 0.0, -0.5, -0.5, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, -1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, -0.5]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Uhu:v_offset")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 11, 11.4, 11.8, 12.1, 12.5, 12.8, 13.2, 13.5, 14.1, 15, 15.5, 17.8, 18.2, 18.6, 18.9, 19.3, 19.6, 20, 20.3, 20.9, 22, 22.5, 23.3, 23.7, 24, 24.6, 25.3, 25.9, 26.3, 27.2, 27.7, 29, 29.7, 30, 30.4, 30.8, 31.1, 31.5, 31.8, 32.2, 32.5, 33.1, 34.1, 43.2, 43.7, 44.3, 56, 56.3, 56.7, 57, 57.2, 57.6, 60, 71.5, 72, 72.5, 72.8, 73.3, 73.6, 74, 74.3, 75.5, 76.1, 76.6, 76.9, 77.3, 77.6, 78, 78.3, 78.7, 79.2, 79.5, 79.8, 80.3, 80.6, 81, 81.3, 81.8, 82.3, 82.6, 82.9, 83.6, 83.9, 84.3, 85.4, 86.3, 87.1, 87.8, 88.5, 89.6, 89.8, 90.3, 90.6, 90.9, 91.2, 91.5, 91.7, 92.3, 93),
+"transitions": PackedFloat32Array(1, 0.5, 2, 0.5, 2, 0.5, 2, 0.5, 2, 2, 1, 1, 0.5, 2, 0.5, 1.5, 0.5, 2, 0.5, 2, 2, 1, 1, 0.5, 1, 0.5, 1.5, 0.5, 1.5, 0.5, 1, 1, 2, 1, 1, 2, 0.5, 1.5, 0.5, 2, 0.5, 0.5, 2, 1, 0.5, 2, 1, 0.5, 2, 1, 0.5, 1, 1, 1, 0.5, 2, 1, 0.5, 1, 0.5, 1, 0.5, 2, 1, 0.5, 1, 0.5, 1.5, 0.5, 2, 0.5, 0.5, 0.5, 0.5, 0.5, 1.5, 0.5, 2, 0.5, 0.5, 0.5, 0.5, 0.5, 1.5, 0.5, 2, 1, 0.5, 2, 1, 1, 0.5, 1, 0.5, 1, 0.5, 2, 0.5, 2, 1),
+"update": 0,
+"values": [-0.8, -0.8, 3.0, 1.0, 3.0, 1.0, 3.0, 1.0, 3.0, 4.0, -0.8, -0.8, -0.8, 3.0, 1.0, 3.0, 1.0, 3.0, 1.0, 3.0, 4.0, -0.8, -0.8, -0.8, 4.0, 3.0, 6.0, 5.0, 8.0, 7.0, 10.0, 7.0, 9.0, -0.8, -0.8, 3.0, 1.0, 3.0, 1.0, 3.0, 1.0, 3.0, 4.0, -0.8, -0.8, 4.0, 0.0, -0.5, 1.0, -0.5, -0.5, 1.0, -0.5, -0.5, -0.5, 4.0, 2.0, 0.2, 4.0, 0.2, 4.0, 0.2, 6.0, -0.5, -0.5, 3.0, 0.0, 2.0, 0.0, 2.0, 1.0, 4.0, 1.0, 3.0, 1.0, 3.0, 1.0, 3.0, 1.0, 4.0, 1.0, 3.0, 1.0, 3.0, 0.5, 5.0, -0.5, -0.5, 4.0, -0.5, -0.5, -0.5, 3.0, 0.0, 3.0, 0.0, 3.0, 2.0, 2.5, 0.0]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Uhu")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(93),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"FinishRace"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_k6vjs"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Uhu:progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [104.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Uhu:h_offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Uhu:v_offset")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_36p0s"]
+_data = {
+&"RESET": SubResource("Animation_k6vjs"),
+&"race": SubResource("Animation_jruq6")
+}
 
 [sub_resource type="Curve" id="Curve_f2djj"]
 _limits = [-1.0, 0.0, 0.0, 1.0]
@@ -49,11 +151,26 @@ Data = ExtResource("2_apsdt")
 
 [node name="RaceAct" type="Node3D" parent="."]
 
+[node name="UhuPath" type="Path3D" parent="RaceAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.91, 0, 67.139)
+curve = ExtResource("3_jruq6")
+
+[node name="Uhu" parent="RaceAct/UhuPath" node_paths=PackedStringArray("animator") instance=ExtResource("24_joqx7")]
+transform = Transform3D(-0.989833, 0, 0.141035, 0, 0.99983, 0, -0.141035, 0, -0.989831, -62.0447, 0, -66.1814)
+progress = 104.0
+animator = NodePath("AnimationPlayer")
+maxProgress = 848.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="RaceAct/UhuPath/Uhu"]
+root_node = NodePath("../..")
+libraries = {
+&"": SubResource("AnimationLibrary_36p0s")
+}
+
 [node name="SpawnPosition" type="Node3D" parent="RaceAct"]
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="RaceAct/SpawnPosition" instance=ExtResource("3_68al8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -3, -323)
 
 [node name="Exterior" type="Node3D" parent="RaceAct"]
 script = ExtResource("4_i2fxc")
@@ -300,7 +417,7 @@ Movement/Mode = 2
 Movement/Radius = 1.5
 
 [node name="SpikeBallGroup2" type="Node3D" parent="RaceAct/Exterior/Lower"]
-transform = Transform3D(0.865937, 0.0340667, -0.498991, -0.00517649, 0.998235, 0.0591675, 0.500126, -0.0486523, 0.864585, 2.75101, 4.49182, -10.3195)
+transform = Transform3D(0.865937, 0.0340667, -0.498991, -0.00517649, 0.998235, 0.0591675, 0.500126, -0.0486523, 0.864585, 1.75101, 4.79182, -8.3195)
 
 [node name="SpikeBall1" parent="RaceAct/Exterior/Lower/SpikeBallGroup2" instance=ExtResource("10_7ud75")]
 transform = Transform3D(1, -9.31323e-10, -5.96046e-08, 9.31323e-10, 1, 1.86265e-09, -2.98023e-08, 1.86265e-09, 1, 0, 0, 0)
@@ -320,7 +437,7 @@ Movement/Mode = 2
 Movement/Radius = 1.5
 
 [node name="SpikeBallGroup3" type="Node3D" parent="RaceAct/Exterior/Lower"]
-transform = Transform3D(0.573923, 0.0340667, -0.818201, 0.0203138, 0.998235, 0.0558116, 0.818657, -0.0486523, 0.572217, 15.0662, 2.98165, -24.4599)
+transform = Transform3D(0.573923, 0.0340667, -0.818201, 0.0203138, 0.998235, 0.0558116, 0.818657, -0.0486523, 0.572217, 12.6815, 3.02642, -23.1556)
 
 [node name="SpikeBall1" parent="RaceAct/Exterior/Lower/SpikeBallGroup3" instance=ExtResource("10_7ud75")]
 transform = Transform3D(1, -9.31323e-10, -5.96046e-08, 9.31323e-10, 1, 1.86265e-09, -2.98023e-08, 1.86265e-09, 1, 0, 0, 0)
@@ -340,7 +457,7 @@ Movement/Mode = 2
 Movement/Radius = 1.5
 
 [node name="Ring2" type="Node3D" parent="RaceAct/Exterior/Lower"]
-transform = Transform3D(0.819152, 0, -0.573576, 0, 1, 0, 0.573576, 0, 0.819152, 4.87999, 3.75, -14.5692)
+transform = Transform3D(0.819152, 0, -0.573576, 0, 1, 0, 0.573576, 0, 0.819152, 3.65056, 3.95, -12.2415)
 script = ExtResource("4_68al8")
 Source = ExtResource("5_1chmq")
 Amount = 5
@@ -353,19 +470,19 @@ Spacing = 2.5
 "Vertical Offset" = null
 
 [node name="Child01" parent="RaceAct/Exterior/Lower/Ring2" instance=ExtResource("5_1chmq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.14577e-06, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.28882e-05, 1.21593e-05, 0.000213623)
 
 [node name="Child02" parent="RaceAct/Exterior/Lower/Ring2" instance=ExtResource("5_1chmq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0856247, -0.245704, -2.48546)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0876236, -0.1377, -2.50227)
 
 [node name="Child03" parent="RaceAct/Exterior/Lower/Ring2" instance=ExtResource("5_1chmq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0343933, -0.480407, -4.97168)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.246864, -0.279519, -5.00259)
 
 [node name="Child04" parent="RaceAct/Exterior/Lower/Ring2" instance=ExtResource("5_1chmq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19854, -0.697921, -7.44705)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.499535, -0.425179, -7.49738)
 
 [node name="Child05" parent="RaceAct/Exterior/Lower/Ring2" instance=ExtResource("5_1chmq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.676804, -0.888816, -9.88579)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.883842, -0.574289, -9.9798)
 
 [node name="Ribcage1" parent="RaceAct/Exterior/Lower" instance=ExtResource("6_1chmq")]
 transform = Transform3D(-0.517637, 0, -1.93185, 0, 2, 0, 1.93185, 0, -0.517637, -4.73917, 7.6, -8.12798)
@@ -995,10 +1112,10 @@ transform = Transform3D(-1.81535, 0.660733, 0.517639, 0.684041, 1.87938, -1.5408
 transform = Transform3D(-2.00001, -1.24345e-14, 1.78814e-07, 0, -2, -1.74846e-07, 1.78814e-07, -1.74846e-07, 2, 26.9289, 1.49002, -153.262)
 
 [node name="RibGroup1" type="Node3D" parent="RaceAct/Overpass/Hall"]
-transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 32.5846, -0.8, -184.786)
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 32.8434, -0.8, -185.752)
 
 [node name="Ribcage1" parent="RaceAct/Overpass/Hall/RibGroup1" instance=ExtResource("6_1chmq")]
-transform = Transform3D(1, 0, 4.44089e-16, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1, 0)
+transform = Transform3D(1, 0, 4.44089e-16, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1, 1)
 
 [node name="Ribcage2" parent="RaceAct/Overpass/Hall/RibGroup1" instance=ExtResource("6_1chmq")]
 transform = Transform3D(-0.866025, 0.5, 0, 2.18557e-08, 3.78552e-08, -1, -0.5, -0.866025, -4.37114e-08, 1.34641, 0.7, 0.2)

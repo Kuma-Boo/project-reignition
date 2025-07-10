@@ -444,7 +444,7 @@ public partial class Majin : Enemy
 
 	protected override void Defeat()
 	{
-		if (isSpawning) // Prevent signals from killing majin during spawn intervals
+		if (isSpawning && !IsSpeedbreakDefeat) // Prevent signals from killing majin during spawn intervals
 			return;
 
 		SetHitboxStatus(false, IsDefeatLaunchEnabled);
@@ -782,6 +782,7 @@ public partial class Majin : Enemy
 		}
 		else // Spawn instantly
 		{
+            CallDeferred(MethodName.SetHitboxStatus, true); // Enable hurtbox instantly to allow for insta-speedbreak points
 			AnimationPlayer.Play("spawn");
 			AnimationTree.Set(SpawnTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(.5f); // Delay by length of teleport animation
