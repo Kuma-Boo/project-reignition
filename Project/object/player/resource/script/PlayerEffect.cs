@@ -131,6 +131,10 @@ public partial class PlayerEffect : Node3D
 	public void StopSpinFX() => CreateTween().TweenProperty(spinFX, "transparency", 1.0f, .2f);
 
 	[Export]
+	public GpuParticles3D doubleJumpFx;
+	public void PlayDoubleJumpFX() => doubleJumpFx.Restart();
+
+	[Export]
 	private GpuParticles3D windParticle;
 	public void PlayWindFX()
 	{

@@ -1,4 +1,4 @@
-[gd_scene load_steps=235 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=241 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" uid="uid://b1jbgylbmqgrv" path="res://object/player/resource/script/PlayerEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -20,6 +20,7 @@
 [ext_resource type="Texture2D" uid="uid://cm6hder0accd6" path="res://object/player/resource/effect/texture/aegis feather.png" id="17_qxei6"]
 [ext_resource type="ArrayMesh" uid="uid://ce83fnfx4ei27" path="res://object/player/resource/effect/model/WindCycloneFX.res" id="18_0tfkp"]
 [ext_resource type="Material" uid="uid://cfj2lar13vb43" path="res://effect/particle/material/environment/Water Splash Ripple.tres" id="18_1h3ie"]
+[ext_resource type="Material" uid="uid://co2nrsq8snkkj" path="res://effect/particle/material/environment/Water Splash Ripple No Cull.tres" id="18_50bad"]
 [ext_resource type="Texture2D" uid="uid://dyumkeul6m5d" path="res://object/player/resource/effect/texture/aegis dust.png" id="18_yfxek"]
 [ext_resource type="ArrayMesh" uid="uid://bfcpv7samapqy" path="res://object/player/resource/effect/model/WindCycloneTallFX.res" id="19_3cabv"]
 [ext_resource type="Texture2D" uid="uid://dhjpuxq4ygh78" path="res://object/player/resource/effect/texture/soul slider feather.png" id="19_r8kdf"]
@@ -321,6 +322,45 @@ material = ExtResource("20_rtch5")
 size = Vector2(0.5, 5)
 center_offset = Vector3(0, 3, 0)
 
+[sub_resource type="Curve" id="Curve_k45g7"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_8do38"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_k45g7")
+
+[sub_resource type="Gradient" id="Gradient_qls6t"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_h4qlt"]
+gradient = SubResource("Gradient_qls6t")
+width = 64
+
+[sub_resource type="Curve" id="Curve_6y5m5"]
+_data = [Vector2(0, 0), 0.0, 1.625, 0, 0, Vector2(1, 1), 7.30582e-07, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ldqlj"]
+width = 64
+curve = SubResource("Curve_6y5m5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bj5hu"]
+lifetime_randomness = 0.2
+particle_flag_rotate_y = true
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_ldqlj")
+color_ramp = SubResource("GradientTexture1D_h4qlt")
+alpha_curve = SubResource("CurveTexture_8do38")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_t1nvy"]
+material = ExtResource("18_50bad")
+center_offset = Vector3(0, 0.01, 0)
+
 [sub_resource type="Gradient" id="Gradient_r3ows"]
 offsets = PackedFloat32Array(0, 0.255556, 0.552778, 1)
 colors = PackedColorArray(0, 0, 0, 1, 0.392157, 0.392157, 0.392157, 1, 0.392157, 0.392157, 0.392157, 1, 1, 1, 1, 1)
@@ -609,17 +649,6 @@ material = SubResource("StandardMaterial3D_vlsxb")
 
 [sub_resource type="QuadMesh" id="QuadMesh_0e8qo"]
 material = ExtResource("25_1c1xs")
-
-[sub_resource type="Gradient" id="Gradient_qls6t"]
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_h4qlt"]
-gradient = SubResource("Gradient_qls6t")
-width = 64
-
-[sub_resource type="Curve" id="Curve_6y5m5"]
-_data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
-point_count = 2
 
 [sub_resource type="CurveTexture" id="CurveTexture_jnxgk"]
 width = 64
@@ -1453,13 +1482,14 @@ anim_speed_min = 1.0
 anim_speed_max = 2.0
 anim_offset_max = 1.0
 
-[node name="Effect" type="Node3D" node_paths=PackedStringArray("trailFX", "spinFX", "teleportParticle", "dustParticle", "windParticle", "fireParticle", "stompParticle", "splashJumpParticle", "quickStepParticle", "lightDashParticle", "aegisSlideParticle", "volcanoSlideParticle", "soulSlideParticle", "darkSpiralParticle", "darkCrestParticle", "windCrestParticle", "fireCrestParticle", "chargeParticle", "fullChargeParticle", "grindrailSparkParticle", "grindrailBurstParticle", "perfectShuffleParticle", "grindrailSfx", "petrifyParticle", "footstepChannel", "landingChannel", "landingParticles", "stepEmitters", "waterStep", "voiceChannel")]
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("trailFX", "spinFX", "teleportParticle", "dustParticle", "doubleJumpFx", "windParticle", "fireParticle", "stompParticle", "splashJumpParticle", "quickStepParticle", "lightDashParticle", "aegisSlideParticle", "volcanoSlideParticle", "soulSlideParticle", "darkSpiralParticle", "darkCrestParticle", "windCrestParticle", "fireCrestParticle", "chargeParticle", "fullChargeParticle", "grindrailSparkParticle", "grindrailBurstParticle", "perfectShuffleParticle", "grindrailSfx", "petrifyParticle", "footstepChannel", "landingChannel", "landingParticles", "stepEmitters", "waterStep", "voiceChannel")]
 script = ExtResource("1_udd16")
 actionSFXLibrary = ExtResource("2_fxiha")
 trailFX = NodePath("VFX/ActionFX/TrailMesh")
 spinFX = NodePath("VFX/ActionFX/SpinMesh")
 teleportParticle = NodePath("VFX/ActionFX/TeleportFX")
 dustParticle = NodePath("VFX/ActionFX/Dust")
+doubleJumpFx = NodePath("VFX/ActionFX/DoubleJump")
 windParticle = NodePath("VFX/ActionFX/Wind")
 fireParticle = NodePath("VFX/ActionFX/Fire")
 stompParticle = NodePath("VFX/ActionFX/Stomp")
@@ -1674,6 +1704,21 @@ draw_order = 3
 transform_align = 2
 process_material = SubResource("ParticleProcessMaterial_c4e0w")
 draw_pass_1 = SubResource("QuadMesh_6vbwi")
+
+[node name="DoubleJump" type="GPUParticles3D" parent="VFX/ActionFX"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 4
+lifetime = 0.2
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_bj5hu")
+draw_pass_1 = SubResource("PlaneMesh_t1nvy")
 
 [node name="SplashJump" type="GPUParticles3D" parent="VFX/ActionFX" node_paths=PackedStringArray("subSystems")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1.45, -4.37114e-08)

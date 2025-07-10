@@ -691,6 +691,7 @@ public partial class PlayerController : CharacterBody3D
 
 	public void StartDoubleJump()
 	{
+		Effect.PlayDoubleJumpFX();
 		VerticalSpeed = Runtime.CalculateJumpPower(Stats.DoubleJumpHeight);
 		CanDoubleJump = false;
 		StartSpinJump(true);
