@@ -23,6 +23,7 @@ public partial class SpinJumpState : PlayerState
 		Player.AttackState = PlayerController.AttackStates.Weak;
 		Player.Animator.StartSpin(5f);
 		Player.Effect.StartSpinFX();
+		Player.Effect.StartSpinSquashFX();
 	}
 
 	public override void ExitState()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=241 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=244 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" uid="uid://b1jbgylbmqgrv" path="res://object/player/resource/script/PlayerEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -196,10 +196,48 @@ _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2
 point_count = 3
 
 [sub_resource type="SphereMesh" id="SphereMesh_0nuab"]
-radius = 0.4
-height = 0.8
+radius = 0.45
+height = 0.9
 radial_segments = 32
 rings = 16
+
+[sub_resource type="Animation" id="Animation_k45g7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_50bad"]
+resource_name = "squish"
+length = 0.5
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 0.5, 1, 2, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(0.9, 1.2, 1), Vector3(1.4, 0.8, 1), Vector3(0.9, 1.1, 1), Vector3(1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8do38"]
+_data = {
+&"RESET": SubResource("Animation_k45g7"),
+&"squish": SubResource("Animation_50bad")
+}
 
 [sub_resource type="Curve" id="Curve_3cj20"]
 _data = [Vector2(0.158392, 0.00608158), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(0.858156, 0.0173762), -3.83366, 0.0, 0, 0]
@@ -1482,13 +1520,14 @@ anim_speed_min = 1.0
 anim_speed_max = 2.0
 anim_offset_max = 1.0
 
-[node name="Effect" type="Node3D" node_paths=PackedStringArray("trailFX", "spinFX", "teleportParticle", "dustParticle", "doubleJumpFx", "windParticle", "fireParticle", "stompParticle", "splashJumpParticle", "quickStepParticle", "lightDashParticle", "aegisSlideParticle", "volcanoSlideParticle", "soulSlideParticle", "darkSpiralParticle", "darkCrestParticle", "windCrestParticle", "fireCrestParticle", "chargeParticle", "fullChargeParticle", "grindrailSparkParticle", "grindrailBurstParticle", "perfectShuffleParticle", "grindrailSfx", "petrifyParticle", "footstepChannel", "landingChannel", "landingParticles", "stepEmitters", "waterStep", "voiceChannel")]
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("trailFX", "spinFX", "teleportParticle", "dustParticle", "spinFXAnimator", "doubleJumpFx", "windParticle", "fireParticle", "stompParticle", "splashJumpParticle", "quickStepParticle", "lightDashParticle", "aegisSlideParticle", "volcanoSlideParticle", "soulSlideParticle", "darkSpiralParticle", "darkCrestParticle", "windCrestParticle", "fireCrestParticle", "chargeParticle", "fullChargeParticle", "grindrailSparkParticle", "grindrailBurstParticle", "perfectShuffleParticle", "grindrailSfx", "petrifyParticle", "footstepChannel", "landingChannel", "landingParticles", "stepEmitters", "waterStep", "voiceChannel")]
 script = ExtResource("1_udd16")
 actionSFXLibrary = ExtResource("2_fxiha")
 trailFX = NodePath("VFX/ActionFX/TrailMesh")
 spinFX = NodePath("VFX/ActionFX/SpinMesh")
 teleportParticle = NodePath("VFX/ActionFX/TeleportFX")
 dustParticle = NodePath("VFX/ActionFX/Dust")
+spinFXAnimator = NodePath("VFX/ActionFX/SpinMesh/AnimationPlayer")
 doubleJumpFx = NodePath("VFX/ActionFX/DoubleJump")
 windParticle = NodePath("VFX/ActionFX/Wind")
 fireParticle = NodePath("VFX/ActionFX/Fire")
@@ -1641,6 +1680,7 @@ draw_pass_1 = ExtResource("11_sq88t")
 [node name="TrailMesh" type="Node3D" parent="VFX/ActionFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("10_1mog6")
+radius = 0.5
 distanceDeadzone = 0.01
 lifetimeCurve = SubResource("Curve_r8a0k")
 positionCurve = SubResource("Curve_5i4ya")
@@ -1653,8 +1693,14 @@ layers = 32
 material_override = ExtResource("11_lk1sb")
 transparency = 1.0
 cast_shadow = 0
+lod_bias = 128.0
 mesh = SubResource("SphereMesh_0nuab")
 skeleton = NodePath("../..")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="VFX/ActionFX/SpinMesh"]
+libraries = {
+&"": SubResource("AnimationLibrary_8do38")
+}
 
 [node name="Stomp" type="GPUParticles3D" parent="VFX/ActionFX" node_paths=PackedStringArray("subSystems")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1, 0)
