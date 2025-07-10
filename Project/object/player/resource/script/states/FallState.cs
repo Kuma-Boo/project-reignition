@@ -14,6 +14,11 @@ public partial class FallState : PlayerState
 	[Export]
 	private PlayerState homingAttackState;
 
+	public override void EnterState()
+	{
+		Player.AllowLandingGrind = true;
+	}
+
 	public override PlayerState ProcessPhysics()
 	{
 		ProcessMoveSpeed();
