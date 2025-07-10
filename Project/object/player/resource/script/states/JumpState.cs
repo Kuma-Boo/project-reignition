@@ -208,13 +208,6 @@ public partial class JumpState : PlayerState
 
 	protected override void ProcessTurning()
 	{
-		float targetAngle = Player.Controller.GetTargetInputAngle();
-		if (!Player.Controller.IsHoldingDirection(targetAngle, Player.PathFollower.ForwardAngle) &&
-			!Player.Controller.IsHoldingDirection(targetAngle, Player.PathFollower.BackAngle))
-		{
-			return;
-		}
-
 		base.ProcessTurning();
 
 		if (Player.IsAccelerationJumping) // Clamp acceleration jumps so they don't get out of control
