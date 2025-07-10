@@ -111,14 +111,18 @@ public partial class SlideState : PlayerState
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
 		{
 			Player.Skills.ChargeJump();
-			if (!Input.IsActionPressed("button_jump"))
+
+			if (Player.Controller.IsBrakePressed())
 			{
 				Player.Effect.AbortActionSFX(Player.Effect.SlideSfx);
-				if (!Player.Controller.IsBrakeHeld())
-					return jumpState;
-
 				Player.Skills.ConsumeJumpCharge();
 				return runState;
+			}
+			else if (!Input.IsActionPressed("button_jump"))
+			{
+				Player.Effect.AbortActionSFX(Player.Effect.SlideSfx);
+				Player.Skills.ConsumeJumpCharge();
+				return jumpState;
 			}
 		}
 		else if (Player.Controller.IsJumpBufferActive)
