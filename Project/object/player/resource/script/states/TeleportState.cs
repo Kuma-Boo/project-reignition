@@ -125,6 +125,7 @@ public partial class TeleportState : PlayerState
 
 		Trigger.ApplyTeleport(); // Apply any signals/path changes
 
+		Player.CanDoubleJump = true;
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 		Player.SnapToGround();
 		Player.UpdateOrientation();

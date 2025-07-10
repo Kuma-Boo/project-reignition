@@ -37,6 +37,7 @@ public partial class GrindState : PlayerState
             BonusManager.instance.QueueBonus(new(BonusType.Grindstep));
 
         Player.AllowLandingGrind = false;
+        Player.CanDoubleJump = true;
         Player.IsGrindstepping = false;
         Player.IsGrinding = true;
 

@@ -286,6 +286,7 @@ public enum SkillKey
 	AccelJumpAttack, // Increases attack power of accel jump
 	SpinJump, // Have Sonic instantly enter a spinning state
 	ArmorJump, // Allow Sonic to bounce off enemies
+	DoubleJump, // Allow Sonic to do another small hop in the air
 
 	// Backflip skills
 	BackstepAttack, // Increases attack power of Backflip

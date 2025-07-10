@@ -47,6 +47,7 @@ public partial class BounceState : PlayerState
 
 		Player.IsOnGround = false;
 		Player.CanJumpDash = true;
+		Player.CanDoubleJump = true;
 		Player.Lockon.IsMonitoring = true;
 		Player.VerticalSpeed = Runtime.CalculateJumpPower(bounceHeight * BounceHeightScale);
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
@@ -91,6 +92,13 @@ public partial class BounceState : PlayerState
 		if (Player.Controller.IsJumpBufferActive)
 		{
 			Player.Controller.ResetJumpBuffer();
+
+			if (Player.CanDoubleJump && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.DoubleJump)) // Start a double jump
+			{
+				Player.StartDoubleJump();
+				return null;
+			}
+
 			if (SaveManager.Config.useStompJumpButtonMode)
 				return stompState;
 

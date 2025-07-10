@@ -5,16 +5,11 @@ namespace Project.Gameplay;
 
 public partial class JumpState : PlayerState
 {
-	[Export]
-	private PlayerState fallState;
-	[Export]
-	private PlayerState landState;
-	[Export]
-	private PlayerState stompState;
-	[Export]
-	private PlayerState jumpDashState;
-	[Export]
-	private PlayerState homingAttackState;
+	[Export] private PlayerState fallState;
+	[Export] private PlayerState landState;
+	[Export] private PlayerState stompState;
+	[Export] private PlayerState jumpDashState;
+	[Export] private PlayerState homingAttackState;
 
 	[Export]
 	private float accelerationJumpSpeed = 25f;
@@ -152,6 +147,13 @@ public partial class JumpState : PlayerState
 		if (Player.Controller.IsJumpBufferActive)
 		{
 			Player.Controller.ResetJumpBuffer();
+
+			if (Player.CanDoubleJump && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.DoubleJump)) // Start a double jump
+			{
+				Player.StartDoubleJump();
+				return null;
+			}
+
 			if (SaveManager.Config.useStompJumpButtonMode)
 				return stompState;
 
