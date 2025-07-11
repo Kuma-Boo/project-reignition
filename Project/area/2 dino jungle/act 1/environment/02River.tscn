@@ -1,11 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://iij01cwh2ttg"]
+[gd_scene load_steps=16 format=3 uid="uid://iij01cwh2ttg"]
 
 [ext_resource type="PackedScene" uid="uid://canu1eivc25eg" path="res://area/2 dino jungle/act 1/environment/model/02River.gltf" id="1_82et5"]
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="2_684l8"]
 [ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter Add.tres" id="3_shwo2"]
 [ext_resource type="Material" uid="uid://ckyg4aygq0uan" path="res://effect/particle/material/environment/Water Dust.tres" id="4_yyoqj"]
-
-
+[ext_resource type="AudioStream" uid="uid://cxfvwrvyf0hnu" path="res://sound/sfx/stage/dinosaur jungle/stg020_area_00.ogg" id="5_gnbm7"]
 
 [sub_resource type="Curve" id="Curve_i8bjx"]
 _data = [Vector2(0, 0), 0.0, 8.26422, 0, 0, Vector2(0.315451, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -244,24 +243,24 @@ local_coords = true
 process_material = SubResource("ParticleProcessMaterial_d0rop")
 draw_pass_1 = SubResource("QuadMesh_lvycm")
 
-[node name="EnvironmentProbe" type="ReflectionProbe" parent="." index="29"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -252.241, -111.638, -548.111)
-layers = 1024
-size = Vector3(377.27, 235.283, 216.842)
-interior = true
-cull_mask = 0
-reflection_mask = 2
-ambient_mode = 2
-ambient_color = Color(1, 0.980167, 0.83, 1)
-ambient_color_energy = 0.4
+[node name="SFX1" type="AudioStreamPlayer3D" parent="." index="29"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -179, -118, -530)
+stream = ExtResource("5_gnbm7")
+attenuation_model = 3
+unit_size = 20.0
+max_db = 0.0
+autoplay = true
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
 
-[node name="ObjectProbe" type="ReflectionProbe" parent="." index="30"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -252.241, -133.172, -565.952)
-layers = 1024
-size = Vector3(377.27, 192.214, 181.16)
-interior = true
-cull_mask = 0
-reflection_mask = 65
-ambient_mode = 2
-ambient_color = Color(0.811765, 1, 1, 1)
-ambient_color_energy = 0.1
+[node name="SFX2" type="AudioStreamPlayer3D" parent="." index="30"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -319, -178, -546)
+stream = ExtResource("5_gnbm7")
+attenuation_model = 3
+unit_size = 20.0
+max_db = 0.0
+autoplay = true
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
