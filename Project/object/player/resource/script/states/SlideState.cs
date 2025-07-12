@@ -173,9 +173,6 @@ public partial class SlideState : PlayerState
 			inputAmount = 0;
 		else if (Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.ForwardAngle))
 			inputAmount = -(1 - inputStrength) * .5f; // 0 to -0.5
-
-		inputAmount -= Player.SlopeRatio * Player.Stats.slopeInfluence;
-		inputAmount = Mathf.Clamp(inputAmount, 0, 1);
 		Player.MoveSpeed = Player.Stats.SlideSettings.UpdateSlide(Player.MoveSpeed, inputAmount);
 	}
 
