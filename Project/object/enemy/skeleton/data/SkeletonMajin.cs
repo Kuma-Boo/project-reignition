@@ -49,6 +49,9 @@ public partial class SkeletonMajin : Enemy
 
 	protected override void SetUp()
 	{
+		if (Engine.IsEditorHint())
+			return;
+
 		base.SetUp();
 		AnimationTree.Active = true;
 	}
