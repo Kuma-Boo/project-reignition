@@ -127,7 +127,7 @@ public partial class PlayerEffect : Node3D
 	public void StartTrailFX() => trailFX.IsEmitting = true;
 	public void StopTrailFX() => trailFX.IsEmitting = false;
 
-	public void StartSpinFX() => CreateTween().TweenProperty(spinFX, "transparency", 0.0f, .2f);
+	public void StartSpinFX() => CreateTween().TweenProperty(spinFX, "transparency", 0.0f, .1f);
 	public void StopSpinFX() => CreateTween().TweenProperty(spinFX, "transparency", 1.0f, .1f);
 
 	[Export] private AnimationPlayer spinFXAnimator;
