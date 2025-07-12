@@ -1,4 +1,4 @@
-[gd_scene load_steps=85 format=3 uid="uid://c6qp0p2qw34ud"]
+[gd_scene load_steps=87 format=3 uid="uid://c6qp0p2qw34ud"]
 
 [ext_resource type="PackedScene" uid="uid://d1rcieilh21gs" path="res://area/6 skeleton dome/act 1/Static.tscn" id="1_6irkq"]
 [ext_resource type="Resource" uid="uid://dirda3nyrainp" path="res://resource/level data/skeleton dome/Act1Main.tres" id="2_3jkye"]
@@ -49,8 +49,10 @@
 [ext_resource type="PackedScene" uid="uid://d21ummt57uq4a" path="res://area/6 skeleton dome/object/obstacle/Sickle.tscn" id="43_lkrtx"]
 [ext_resource type="PackedScene" uid="uid://nso0vvogx8g0" path="res://area/6 skeleton dome/object/platform/PlatformSpiralLarge.tscn" id="45_ww8id"]
 [ext_resource type="PackedScene" uid="uid://bgrpp6vriyi1w" path="res://area/6 skeleton dome/object/platform/PlatformSpiralSmall.tscn" id="46_74cmx"]
+[ext_resource type="Resource" uid="uid://c4m6toaou6j2t" path="res://area/6 skeleton dome/act 1/camera/CavernRailCam.tres" id="46_miv3h"]
 [ext_resource type="PackedScene" uid="uid://doc2lrkdh0ga3" path="res://object/trigger/state trigger/FootholdTrigger.tscn" id="46_mjfgh"]
 [ext_resource type="Script" uid="uid://dpt5o0lh62p6t" path="res://object/stage/MovingObject.cs" id="46_xxog8"]
+[ext_resource type="Resource" uid="uid://dtmrwxrj53t61" path="res://area/6 skeleton dome/act 1/camera/CavernCam.tres" id="47_g1hk3"]
 [ext_resource type="PackedScene" uid="uid://ehm8lwnod2pl" path="res://area/6 skeleton dome/object/foothold/FootholdLeft.tscn" id="47_pcsfl"]
 [ext_resource type="PackedScene" uid="uid://t44brdb5vw67" path="res://area/6 skeleton dome/object/foothold/FootholdRight.tscn" id="48_t8jfw"]
 [ext_resource type="PackedScene" uid="uid://cpiujtcf5l6df" path="res://area/6 skeleton dome/object/foothold/FootholdCenter.tscn" id="49_jbeg4"]
@@ -336,6 +338,11 @@ size = Vector3(30, 20, 1)
 
 [node name="Static" parent="." instance=ExtResource("1_6irkq")]
 Data = ExtResource("2_3jkye")
+
+[node name="09Spiral" parent="Static/Visuals" index="10"]
+startEnabled = false
+respawnOnActivation = false
+cacheRespawnMethods = false
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -990,6 +997,9 @@ spawnInterval = 1.5
 
 [node name="Ribcage1" parent="MainAct/Overpass/Hall" instance=ExtResource("10_jiv87")]
 transform = Transform3D(1.97209, -0.196699, 0.268653, 0.0949474, 1.87892, 0.678706, -0.319139, -0.65648, 1.86204, 25.2937, -4.33139, -86.1781)
+
+[node name="Area3D" parent="MainAct/Overpass/Hall/Ribcage1/Root" index="1"]
+monitorable = false
 
 [node name="Tail" parent="MainAct/Overpass/Hall/Ribcage1" instance=ExtResource("19_yspvn")]
 transform = Transform3D(-0.4, -3.11993e-08, 7.45058e-09, -1.49012e-08, 0.375877, 0.136808, -4.47035e-08, 0.136808, -0.375877, 3.05176e-05, 0.429726, 2.67252)
@@ -2006,10 +2016,6 @@ transform = Transform3D(0.999893, -0.0146693, 0.000496656, 0.0144478, 0.989635, 
 
 [node name="Gate" parent="MainAct/Field/SpiralPath" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(0.96418, 0, 1.14907, 0, 1.5, 0, -1.14907, 0, 0.96418, 8.69281, -2.50708, -72.0129)
-"Trigger Settings/Automatically Respawn" = true
-"Trigger Settings/Is One Shot" = true
-"Trigger Settings/Animation Blending" = 0.0
-"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="CavernA" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 330.9, 0, -900)
@@ -2037,10 +2043,6 @@ transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 
 
 [node name="Gate" parent="MainAct/CavernA/Hall/SwitchGroup1" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1.08253, 0, 0.5, 0, 1, 0, -0.625, 0, 0.866025, -4.5, 0, -7.33)
-"Trigger Settings/Automatically Respawn" = true
-"Trigger Settings/Is One Shot" = true
-"Trigger Settings/Animation Blending" = 0.0
-"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Rings1" type="Node3D" parent="MainAct/CavernA/Hall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0.8, -10)
@@ -2114,10 +2116,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.1, 0, -57.4)
 
 [node name="Gate" parent="MainAct/CavernA/Hall/SwitchGroup2" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 0.689362, 0, -9.87842)
-"Trigger Settings/Automatically Respawn" = true
-"Trigger Settings/Is One Shot" = true
-"Trigger Settings/Animation Blending" = 0.0
-"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Switch" parent="MainAct/CavernA/Hall/SwitchGroup2" instance=ExtResource("39_jvpkb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
@@ -2127,10 +2125,6 @@ transform = Transform3D(0.384247, 0, -0.92323, 0, 1, 0, 0.92323, 0, 0.384247, 27
 
 [node name="Gate" parent="MainAct/CavernA/Hall/SwitchGroup3" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0.129333, 0, -5.48291)
-"Trigger Settings/Automatically Respawn" = true
-"Trigger Settings/Is One Shot" = true
-"Trigger Settings/Animation Blending" = 0.0
-"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Switch" parent="MainAct/CavernA/Hall/SwitchGroup3" instance=ExtResource("39_jvpkb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
@@ -2145,10 +2139,6 @@ transform = Transform3D(-0.208356, 0, -0.978053, 0, 1, 0, 0.978053, 0, -0.208356
 
 [node name="Gate" parent="MainAct/CavernA/Hall/SwitchGroup4" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.19995, 0, -5)
-"Trigger Settings/Automatically Respawn" = true
-"Trigger Settings/Is One Shot" = true
-"Trigger Settings/Animation Blending" = 0.0
-"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Switch" parent="MainAct/CavernA/Hall/SwitchGroup4" instance=ExtResource("39_jvpkb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
@@ -2163,10 +2153,6 @@ transform = Transform3D(-0.18021, 0, -0.983628, 0, 1, 0, 0.983628, 0, -0.18021, 
 
 [node name="Gate" parent="MainAct/CavernA/Hall/SwitchGroup5" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -1, 0, -5)
-"Trigger Settings/Automatically Respawn" = true
-"Trigger Settings/Is One Shot" = true
-"Trigger Settings/Animation Blending" = 0.0
-"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Switch" parent="MainAct/CavernA/Hall/SwitchGroup5" instance=ExtResource("39_jvpkb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
@@ -2307,7 +2293,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
 
 [node name="LaunchRingSpike1" parent="MainAct/CavernA/MainPath" instance=ExtResource("6_ii6j5")]
-transform = Transform3D(-4.37114e-08, -0.996195, 0.0871558, 0, 0.0871558, 0.996195, -1, 4.35451e-08, -3.8097e-09, -51.3, -7.6, -30)
+transform = Transform3D(-4.37114e-08, -0.984808, 0.173648, 0, 0.173648, 0.984808, -1, 4.30473e-08, -7.59041e-09, -51.3, -7.6, -30)
+"Secondary Settings/Middle Height" = 16.0
+"Secondary Settings/Final Height" = 9.0
+"Secondary Settings/Distance" = 4.0
+LauncherDirection = 2
 
 [node name="StaticPlatformGroup4" type="Node3D" parent="MainAct/CavernA/MainPath"]
 transform = Transform3D(-1.31134e-07, 0, -1, 0, 3, 0, 3, 0, -4.37114e-08, -47.8, 2, -30)
@@ -2350,11 +2340,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
 [node name="FlyingPot" parent="MainAct/CavernA/MainPath" instance=ExtResource("6_86hu3")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -25.3, -5, -30)
-travelBounds = Vector2(2, 6)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -25.3, -4, -30)
+travelBounds = Vector2(2, 8)
 
 [node name="RichRing" parent="MainAct/CavernA/MainPath" instance=ExtResource("8_rlt0f")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -23.3, 6, -30)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -23.3, 8, -30)
 
 [node name="PlatformCavernLarge2" parent="MainAct/CavernA/MainPath" instance=ExtResource("5_5f5sv")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -21.8, 0, -30)
@@ -2560,6 +2550,7 @@ railLength = 38
 
 [node name="Spring" parent="MainAct/CavernA/AlternatePath/InvisibleGrindrail1" instance=ExtResource("4_ia1t0")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.2, -37)
+startHidden = true
 FinalHeight = 15.0
 
 [node name="GreenMajin1" parent="MainAct/CavernA/AlternatePath" instance=ExtResource("5_danjg")]
@@ -2585,6 +2576,11 @@ Movement/Mode = 0
 [node name="InvisibleGrindrail2" parent="MainAct/CavernA/AlternatePath" instance=ExtResource("3_8skno")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 91.25, -7, -3.5)
 railLength = 32
+
+[node name="Camera" type="Node3D" parent="MainAct/CavernA/AlternatePath/InvisibleGrindrail2"]
+script = ExtResource("29_lingp")
+settings = ExtResource("46_miv3h")
+previousSettings = ExtResource("47_g1hk3")
 
 [node name="Path" type="Node3D" parent="MainAct/CavernA/AlternatePath/InvisibleGrindrail2" node_paths=PackedStringArray("path")]
 script = ExtResource("40_5lq2h")
@@ -2632,7 +2628,7 @@ script = ExtResource("5_p0cpw")
 Source = ExtResource("20_wqeg3")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/LoopAutomationPath")
+Path = NodePath("../../../../Static/Path/LoopPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
@@ -2675,7 +2671,7 @@ script = ExtResource("5_p0cpw")
 Source = ExtResource("20_wqeg3")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/LoopAutomationPath")
+Path = NodePath("../../../../Static/Path/LoopPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
@@ -2718,7 +2714,7 @@ script = ExtResource("5_p0cpw")
 Source = ExtResource("20_wqeg3")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/LoopAutomationPath")
+Path = NodePath("../../../../Static/Path/LoopPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
@@ -2761,7 +2757,7 @@ script = ExtResource("5_p0cpw")
 Source = ExtResource("20_wqeg3")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/LoopAutomationPath")
+Path = NodePath("../../../../Static/Path/LoopPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
@@ -2804,7 +2800,7 @@ script = ExtResource("5_p0cpw")
 Source = ExtResource("20_wqeg3")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/LoopAutomationPath")
+Path = NodePath("../../../../Static/Path/LoopPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
@@ -2847,7 +2843,7 @@ script = ExtResource("5_p0cpw")
 Source = ExtResource("20_wqeg3")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/LoopAutomationPath")
+Path = NodePath("../../../../Static/Path/LoopPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
@@ -2890,7 +2886,7 @@ script = ExtResource("5_p0cpw")
 Source = ExtResource("20_wqeg3")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/LoopAutomationPath")
+Path = NodePath("../../../../Static/Path/LoopPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
@@ -2933,7 +2929,7 @@ script = ExtResource("5_p0cpw")
 Source = ExtResource("20_wqeg3")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/LoopAutomationPath")
+Path = NodePath("../../../../Static/Path/LoopPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
@@ -2976,7 +2972,7 @@ script = ExtResource("5_p0cpw")
 Source = ExtResource("20_wqeg3")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/LoopAutomationPath")
+Path = NodePath("../../../../Static/Path/LoopPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
@@ -3019,7 +3015,7 @@ script = ExtResource("5_p0cpw")
 Source = ExtResource("20_wqeg3")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/LoopAutomationPath")
+Path = NodePath("../../../../Static/Path/LoopPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
@@ -3062,7 +3058,7 @@ script = ExtResource("5_p0cpw")
 Source = ExtResource("20_wqeg3")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/LoopAutomationPath")
+Path = NodePath("../../../../Static/Path/LoopPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
@@ -3105,7 +3101,7 @@ script = ExtResource("5_p0cpw")
 Source = ExtResource("20_wqeg3")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/LoopAutomationPath")
+Path = NodePath("../../../../Static/Path/LoopPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
@@ -3148,7 +3144,7 @@ script = ExtResource("5_p0cpw")
 Source = ExtResource("20_wqeg3")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/LoopAutomationPath")
+Path = NodePath("../../../../Static/Path/LoopPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
@@ -3191,7 +3187,7 @@ script = ExtResource("5_p0cpw")
 Source = ExtResource("20_wqeg3")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/LoopAutomationPath")
+Path = NodePath("../../../../Static/Path/LoopPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
@@ -3234,7 +3230,7 @@ script = ExtResource("5_p0cpw")
 Source = ExtResource("20_wqeg3")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/LoopAutomationPath")
+Path = NodePath("../../../../Static/Path/LoopPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
@@ -3277,7 +3273,7 @@ script = ExtResource("5_p0cpw")
 Source = ExtResource("20_wqeg3")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/LoopAutomationPath")
+Path = NodePath("../../../../Static/Path/LoopPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
@@ -3320,7 +3316,7 @@ script = ExtResource("5_p0cpw")
 Source = ExtResource("20_wqeg3")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/LoopAutomationPath")
+Path = NodePath("../../../../Static/Path/LoopPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
@@ -3363,7 +3359,7 @@ script = ExtResource("5_p0cpw")
 Source = ExtResource("20_wqeg3")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/LoopAutomationPath")
+Path = NodePath("../../../../Static/Path/LoopPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
@@ -3406,7 +3402,7 @@ script = ExtResource("5_p0cpw")
 Source = ExtResource("20_wqeg3")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/LoopAutomationPath")
+Path = NodePath("../../../../Static/Path/LoopPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
@@ -3449,7 +3445,7 @@ script = ExtResource("5_p0cpw")
 Source = ExtResource("20_wqeg3")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../../Static/Path/LoopAutomationPath")
+Path = NodePath("../../../../Static/Path/LoopPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 1.2
@@ -3553,10 +3549,6 @@ transform = Transform3D(0.819152, -0.0539783, 0.571031, 0, 0.995562, 0.0941083, 
 
 [node name="Gate" parent="MainAct/CavernB/Hall/SwitchGroup" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.80005, -1.73822, -20)
-"Trigger Settings/Automatically Respawn" = true
-"Trigger Settings/Is One Shot" = true
-"Trigger Settings/Animation Blending" = 0.0
-"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Sickle1" parent="MainAct/CavernB/Hall" instance=ExtResource("43_lkrtx")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -36, 12.4, -30)
@@ -3738,10 +3730,6 @@ Movement/Radius = 2.2
 
 [node name="Gate" parent="MainAct/Interior/MainHall/SwitchGroup" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(0.984809, 0, -0.173649, 0, 1, 0, 0.173649, 0, 0.984809, 1.07169, 0, -5.59216)
-"Trigger Settings/Automatically Respawn" = true
-"Trigger Settings/Is One Shot" = true
-"Trigger Settings/Animation Blending" = 0.0
-"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="LowerHall" type="Node3D" parent="MainAct/Interior"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 20, -239.9)
@@ -3865,10 +3853,6 @@ enemyCount = 3
 
 [node name="Gate" parent="MainAct/Interior/LowerHall/SwitchGroup1" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19995, 0, -12)
-"Trigger Settings/Automatically Respawn" = true
-"Trigger Settings/Is One Shot" = true
-"Trigger Settings/Animation Blending" = 0.0
-"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Rings4" type="Node3D" parent="MainAct/Interior/LowerHall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 220, 1, 0)
@@ -3927,10 +3911,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.100111, 0)
 
 [node name="Gate" parent="MainAct/Interior/LowerHall/SwitchGroup2" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
-"Trigger Settings/Automatically Respawn" = true
-"Trigger Settings/Is One Shot" = true
-"Trigger Settings/Animation Blending" = 0.0
-"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="GrindrailL" parent="MainAct/Interior/LowerHall" instance=ExtResource("36_3kt84")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 287.8, 0.299999, -82.1)
@@ -4179,13 +4159,14 @@ chainLength = 4
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -0.0994873, 2, -1.5)
 
 [node name="ItemBoxFlying" parent="MainAct/Spiral/TopRow/PlatformGroup3/ItemBoxGroup" instance=ExtResource("15_hvsse")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000244141, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.896, 0)
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 100
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/Spiral/TopRow/PlatformGroup3/ItemBoxGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.896, 0)
 script = ExtResource("46_xxog8")
-root = NodePath("")
+root = NodePath("../ItemBoxFlying")
 animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 2.0
@@ -4196,7 +4177,7 @@ Movement/Angle = -90.0
 
 [node name="VerticalMovement" type="Node3D" parent="MainAct/Spiral/TopRow/PlatformGroup3/ItemBoxGroup"]
 script = ExtResource("46_xxog8")
-root = NodePath("")
+root = NodePath("../HorizontalMovement")
 animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 1.0
@@ -4751,10 +4732,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.8, 0)
 
 [node name="Gate" parent="MainAct/Spiral/Warp/SwitchGroup1" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
-"Trigger Settings/Automatically Respawn" = true
-"Trigger Settings/Is One Shot" = true
-"Trigger Settings/Animation Blending" = 0.0
-"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="SpikeBall1" parent="MainAct/Spiral/Warp/SwitchGroup1" instance=ExtResource("6_21sva")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -4834,10 +4811,6 @@ Movement/Radius = 2.0
 
 [node name="Gate" parent="MainAct/Spiral/Warp/SwitchGroup2" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.70001)
-"Trigger Settings/Automatically Respawn" = true
-"Trigger Settings/Is One Shot" = true
-"Trigger Settings/Animation Blending" = 0.0
-"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="WarpRed" parent="MainAct/Spiral/Warp" node_paths=PackedStringArray("warpTarget") instance=ExtResource("52_e0f0q")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 140, 0, 0)
@@ -4942,10 +4915,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 
 [node name="Gate" parent="MainAct/HallB/SwitchGroup1" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-"Trigger Settings/Automatically Respawn" = true
-"Trigger Settings/Is One Shot" = true
-"Trigger Settings/Animation Blending" = 0.0
-"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="SwitchGroup2" type="Node3D" parent="MainAct/HallB"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -53)
@@ -4994,10 +4963,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 
 [node name="Gate" parent="MainAct/HallB/SwitchGroup2" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-"Trigger Settings/Automatically Respawn" = true
-"Trigger Settings/Is One Shot" = true
-"Trigger Settings/Animation Blending" = 0.0
-"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="SwitchGroup3" type="Node3D" parent="MainAct/HallB"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -71)
@@ -5021,10 +4986,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 
 [node name="Gate" parent="MainAct/HallB/SwitchGroup3" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
-"Trigger Settings/Automatically Respawn" = true
-"Trigger Settings/Is One Shot" = true
-"Trigger Settings/Animation Blending" = 0.0
-"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Rings" type="Node3D" parent="MainAct/HallB"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -83)
@@ -5059,10 +5020,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 
 [node name="Gate" parent="MainAct/HallB/SwitchGroup4" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-"Trigger Settings/Automatically Respawn" = true
-"Trigger Settings/Is One Shot" = true
-"Trigger Settings/Animation Blending" = 0.0
-"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="SwitchGroup5" type="Node3D" parent="MainAct/HallB"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -106)
@@ -5100,10 +5057,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 
 [node name="Gate" parent="MainAct/HallB/SwitchGroup5" instance=ExtResource("39_rd1gs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
-"Trigger Settings/Automatically Respawn" = true
-"Trigger Settings/Is One Shot" = true
-"Trigger Settings/Animation Blending" = 0.0
-"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="WarpRed" parent="MainAct/HallB" node_paths=PackedStringArray("warpTarget") instance=ExtResource("52_e0f0q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, -138)
@@ -5322,14 +5275,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -24.8)
 [node name="ItemBox1" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1"]
 
 [node name="ItemBoxFlying" parent="MainAct/HallT/ItemBoxGroup1/ItemBox1" instance=ExtResource("15_hvsse")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.896, 0)
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.896, 0)
 script = ExtResource("46_xxog8")
-root = NodePath("")
+smoothPausing = true
+root = NodePath("../ItemBoxFlying")
 animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 4.0
@@ -5339,8 +5294,10 @@ Movement/Angle = 90.0
 "Vertical Orientation" = false
 
 [node name="VerticalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
 script = ExtResource("46_xxog8")
-root = NodePath("")
+smoothPausing = true
+root = NodePath("../HorizontalMovement")
 animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 1.0
@@ -5393,14 +5350,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.40002)
 
 [node name="ItemBoxFlying" parent="MainAct/HallT/ItemBoxGroup1/ItemBox2" instance=ExtResource("15_hvsse")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.896, 0)
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.896, 0)
 script = ExtResource("46_xxog8")
-root = NodePath("")
+smoothPausing = true
+root = NodePath("../ItemBoxFlying")
 animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 8.0
@@ -5411,7 +5370,8 @@ Movement/Angle = 90.0
 
 [node name="VerticalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox2"]
 script = ExtResource("46_xxog8")
-root = NodePath("")
+smoothPausing = true
+root = NodePath("../HorizontalMovement")
 animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 1.0
@@ -5464,14 +5424,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.9)
 
 [node name="ItemBoxFlying" parent="MainAct/HallT/ItemBoxGroup1/ItemBox3" instance=ExtResource("15_hvsse")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.896, 0)
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.896, 0)
 script = ExtResource("46_xxog8")
-root = NodePath("")
+smoothPausing = true
+root = NodePath("../ItemBoxFlying")
 animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 3.6
@@ -5481,8 +5443,10 @@ Movement/Angle = 90.0
 "Vertical Orientation" = false
 
 [node name="VerticalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
 script = ExtResource("46_xxog8")
-root = NodePath("")
+smoothPausing = true
+root = NodePath("../HorizontalMovement")
 animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 1.0
@@ -5535,13 +5499,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -34.3)
 
 [node name="ItemBoxFlying" parent="MainAct/HallT/ItemBoxGroup1/ItemBox4" instance=ExtResource("15_hvsse")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.896, 0)
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.896, 0)
 script = ExtResource("46_xxog8")
-root = NodePath("")
+smoothPausing = true
+root = NodePath("../ItemBoxFlying")
 animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 4.0
@@ -5552,7 +5519,8 @@ Movement/Angle = 90.0
 
 [node name="VerticalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox4"]
 script = ExtResource("46_xxog8")
-root = NodePath("")
+smoothPausing = true
+root = NodePath("../HorizontalMovement")
 animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 1.0
@@ -5610,14 +5578,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -69.4)
 [node name="ItemBox1" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2"]
 
 [node name="ItemBoxFlying" parent="MainAct/HallT/ItemBoxGroup2/ItemBox1" instance=ExtResource("15_hvsse")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.896, 0)
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.896, 0)
 script = ExtResource("46_xxog8")
-root = NodePath("")
+root = NodePath("../ItemBoxFlying")
 animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 4.4
@@ -5628,7 +5597,7 @@ Movement/Angle = 90.0
 
 [node name="VerticalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox1"]
 script = ExtResource("46_xxog8")
-root = NodePath("")
+root = NodePath("../HorizontalMovement")
 animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 1.0
@@ -5681,14 +5650,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.70001)
 
 [node name="ItemBoxFlying" parent="MainAct/HallT/ItemBoxGroup2/ItemBox2" instance=ExtResource("15_hvsse")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.896, 0)
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.896, 0)
 script = ExtResource("46_xxog8")
-root = NodePath("")
+root = NodePath("../ItemBoxFlying")
 animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 5.6
@@ -5698,8 +5668,9 @@ Movement/Angle = 90.0
 "Vertical Orientation" = false
 
 [node name="VerticalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
 script = ExtResource("46_xxog8")
-root = NodePath("")
+root = NodePath("../HorizontalMovement")
 animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 1.0
@@ -5752,14 +5723,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.7)
 
 [node name="ItemBoxFlying" parent="MainAct/HallT/ItemBoxGroup2/ItemBox3" instance=ExtResource("15_hvsse")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.896, 0)
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.896, 0)
 script = ExtResource("46_xxog8")
-root = NodePath("")
+root = NodePath("../ItemBoxFlying")
 animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 3.0
@@ -5769,8 +5741,9 @@ Movement/Angle = 90.0
 "Vertical Orientation" = false
 
 [node name="VerticalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
 script = ExtResource("46_xxog8")
-root = NodePath("")
+root = NodePath("../HorizontalMovement")
 animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 1.0
@@ -6163,6 +6136,8 @@ shape = SubResource("BoxShape3D_7ky5u")
 
 [connection signal="Teleport" from="Static/Trigger/Object/CavernBTeleport/Teleport" to="MainAct/Field" method="Deactivate"]
 [connection signal="Teleport" from="Static/Trigger/Object/CavernBTeleport/Teleport" to="MainAct/CavernB" method="Activate"]
+[connection signal="Activated" from="Static/Trigger/Object/JumpTrigger" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="JumpFinished" from="Static/Trigger/Object/JumpTrigger/Jump" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Activated" from="MainAct/CullingMap/OverpassLoad" to="MainAct/Overpass" method="Activate"]
 [connection signal="Deactivated" from="MainAct/CullingMap/OverpassLoad" to="MainAct/Overpass" method="Deactivate"]
 [connection signal="Activated" from="MainAct/CullingMap/OpeningUnload" to="MainAct/Opening" method="Deactivate"]
@@ -6220,11 +6195,15 @@ shape = SubResource("BoxShape3D_7ky5u")
 [connection signal="Defeated" from="MainAct/CavernA/MainPath/SkullGroup/GreenMajin1" to="MainAct/CavernA/MainPath/SkullGroup/GreenMajin2" method="Spawn"]
 [connection signal="Defeated" from="MainAct/CavernA/MainPath/SkullGroup/GreenMajin1" to="MainAct/CavernA/MainPath/SkullGroup/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/CavernA/MainPath/SkullGroup/GreenMajin2" to="MainAct/CavernA/MainPath/SkullGroup/EnemyStone" method="IncrementCounter"]
+[connection signal="GrindStarted" from="MainAct/CavernA/AlternatePath/InvisibleGrindrail1" to="MainAct/CavernA/AlternatePath/InvisibleGrindrail1/Spring" method="ShowLauncher"]
 [connection signal="Activated" from="MainAct/CavernA/AlternatePath/InvisibleGrindrail1/Spring" to="MainAct/CavernA/AlternatePath/GreenMajin1" method="Spawn"]
 [connection signal="Defeated" from="MainAct/CavernA/AlternatePath/GreenMajin1" to="MainAct/CavernA/AlternatePath/GreenMajin2" method="Spawn"]
 [connection signal="Defeated" from="MainAct/CavernA/AlternatePath/GreenMajin1" to="MainAct/CavernA/AlternatePath/GreenMajin3" method="Spawn"]
 [connection signal="Defeated" from="MainAct/CavernA/AlternatePath/GreenMajin3" to="MainAct/CavernA/AlternatePath/GreenMajin4" method="Spawn"]
+[connection signal="GrindStarted" from="MainAct/CavernA/AlternatePath/InvisibleGrindrail2" to="MainAct/CavernA/AlternatePath/InvisibleGrindrail2/Camera" method="Activate"]
 [connection signal="GrindStarted" from="MainAct/CavernA/AlternatePath/InvisibleGrindrail2" to="MainAct/CavernA/AlternatePath/InvisibleGrindrail2/Path" method="Activate"]
+[connection signal="Activated" from="MainAct/CavernA/AlternatePath/InvisibleGrindrail2/Spring" to="MainAct/CavernA/AlternatePath/InvisibleGrindrail2/Camera" method="Activate"]
+[connection signal="Deactivated" from="MainAct/CavernA/AlternatePath/InvisibleGrindrail2/Spring" to="MainAct/CavernA/AlternatePath/InvisibleGrindrail2/Camera" method="Deactivate"]
 [connection signal="Activated" from="MainAct/CavernB/Hall/SwitchGroup/Switch" to="MainAct/CavernB/Hall/SwitchGroup/Gate" method="Activate"]
 [connection signal="Activated" from="MainAct/Interior/MainHall/SwitchGroup/Switch" to="MainAct/Interior/MainHall/SwitchGroup/Gate" method="Activate"]
 [connection signal="Defeated" from="MainAct/Interior/LowerHall/SwitchGroup1/SkeletonMajin1" to="MainAct/Interior/LowerHall/SwitchGroup1/EnemyStone" method="IncrementCounter"]
@@ -6234,6 +6213,10 @@ shape = SubResource("BoxShape3D_7ky5u")
 [connection signal="Activated" from="MainAct/Interior/LowerHall/SwitchGroup2/Switch" to="MainAct/Interior/LowerHall/SwitchGroup2/Gate" method="Activate"]
 [connection signal="Spawned" from="MainAct/Spiral/TopRow/PlatformGroup1/GreenMajin1" to="MainAct/Spiral/TopRow/PlatformGroup1/GreenMajin2" method="Spawn"]
 [connection signal="Spawned" from="MainAct/Spiral/TopRow/PlatformGroup1/GreenMajin1" to="MainAct/Spiral/TopRow/PlatformGroup1/GreenMajin3" method="Spawn"]
+[connection signal="Collected" from="MainAct/Spiral/TopRow/PlatformGroup3/ItemBoxGroup/ItemBoxFlying" to="MainAct/Spiral/TopRow/PlatformGroup3/ItemBoxGroup/HorizontalMovement" method="Pause"]
+[connection signal="Collected" from="MainAct/Spiral/TopRow/PlatformGroup3/ItemBoxGroup/ItemBoxFlying" to="MainAct/Spiral/TopRow/PlatformGroup3/ItemBoxGroup/VerticalMovement" method="Pause"]
+[connection signal="Respawned" from="MainAct/Spiral/TopRow/PlatformGroup3/ItemBoxGroup/ItemBoxFlying" to="MainAct/Spiral/TopRow/PlatformGroup3/ItemBoxGroup/HorizontalMovement" method="Unpause"]
+[connection signal="Respawned" from="MainAct/Spiral/TopRow/PlatformGroup3/ItemBoxGroup/ItemBoxFlying" to="MainAct/Spiral/TopRow/PlatformGroup3/ItemBoxGroup/VerticalMovement" method="Unpause"]
 [connection signal="Activated" from="MainAct/Spiral/Sidle/SpikeBallTrigger" to="MainAct/Spiral/Sidle/SpikeBallSpawners" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Spiral/Sidle/SpikeBallTrigger" to="MainAct/Spiral/Sidle/SpikeBallSpawners" method="Respawn"]
 [connection signal="Defeated" from="MainAct/Spiral/MiddleRow/SpringGroup/SkeletonMajin1" to="MainAct/Spiral/MiddleRow/SpringGroup/EnemyStone" method="IncrementCounter"]
@@ -6287,6 +6270,34 @@ shape = SubResource("BoxShape3D_7ky5u")
 [connection signal="Teleport" from="MainAct/HallC/WarpWhiteR" to="Static/Visuals/12HallC" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/HallC/WarpWhiteR" to="MainAct/HallA" method="Activate"]
 [connection signal="Teleport" from="MainAct/HallC/WarpWhiteR" to="MainAct/HallC" method="Deactivate"]
+[connection signal="Collected" from="MainAct/HallT/ItemBoxGroup1/ItemBox1/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup1/ItemBox1/HorizontalMovement" method="Pause"]
+[connection signal="Collected" from="MainAct/HallT/ItemBoxGroup1/ItemBox1/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup1/ItemBox1/VerticalMovement" method="Pause"]
+[connection signal="Respawned" from="MainAct/HallT/ItemBoxGroup1/ItemBox1/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup1/ItemBox1/HorizontalMovement" method="Unpause"]
+[connection signal="Respawned" from="MainAct/HallT/ItemBoxGroup1/ItemBox1/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup1/ItemBox1/VerticalMovement" method="Unpause"]
+[connection signal="Collected" from="MainAct/HallT/ItemBoxGroup1/ItemBox2/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup1/ItemBox2/HorizontalMovement" method="Pause"]
+[connection signal="Collected" from="MainAct/HallT/ItemBoxGroup1/ItemBox2/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup1/ItemBox2/VerticalMovement" method="Pause"]
+[connection signal="Respawned" from="MainAct/HallT/ItemBoxGroup1/ItemBox2/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup1/ItemBox2/HorizontalMovement" method="Unpause"]
+[connection signal="Respawned" from="MainAct/HallT/ItemBoxGroup1/ItemBox2/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup1/ItemBox2/VerticalMovement" method="Unpause"]
+[connection signal="Collected" from="MainAct/HallT/ItemBoxGroup1/ItemBox3/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup1/ItemBox3/HorizontalMovement" method="Pause"]
+[connection signal="Collected" from="MainAct/HallT/ItemBoxGroup1/ItemBox3/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup1/ItemBox3/VerticalMovement" method="Pause"]
+[connection signal="Respawned" from="MainAct/HallT/ItemBoxGroup1/ItemBox3/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup1/ItemBox3/HorizontalMovement" method="Unpause"]
+[connection signal="Respawned" from="MainAct/HallT/ItemBoxGroup1/ItemBox3/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup1/ItemBox3/VerticalMovement" method="Unpause"]
+[connection signal="Collected" from="MainAct/HallT/ItemBoxGroup1/ItemBox4/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup1/ItemBox4/HorizontalMovement" method="Pause"]
+[connection signal="Collected" from="MainAct/HallT/ItemBoxGroup1/ItemBox4/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup1/ItemBox4/VerticalMovement" method="Pause"]
+[connection signal="Respawned" from="MainAct/HallT/ItemBoxGroup1/ItemBox4/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup1/ItemBox4/HorizontalMovement" method="Unpause"]
+[connection signal="Respawned" from="MainAct/HallT/ItemBoxGroup1/ItemBox4/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup1/ItemBox4/VerticalMovement" method="Unpause"]
+[connection signal="Collected" from="MainAct/HallT/ItemBoxGroup2/ItemBox1/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup2/ItemBox1/HorizontalMovement" method="Pause"]
+[connection signal="Collected" from="MainAct/HallT/ItemBoxGroup2/ItemBox1/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup2/ItemBox1/VerticalMovement" method="Pause"]
+[connection signal="Respawned" from="MainAct/HallT/ItemBoxGroup2/ItemBox1/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup2/ItemBox1/HorizontalMovement" method="Unpause"]
+[connection signal="Respawned" from="MainAct/HallT/ItemBoxGroup2/ItemBox1/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup2/ItemBox1/VerticalMovement" method="Unpause"]
+[connection signal="Collected" from="MainAct/HallT/ItemBoxGroup2/ItemBox2/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup2/ItemBox2/HorizontalMovement" method="Pause"]
+[connection signal="Collected" from="MainAct/HallT/ItemBoxGroup2/ItemBox2/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup2/ItemBox2/VerticalMovement" method="Pause"]
+[connection signal="Respawned" from="MainAct/HallT/ItemBoxGroup2/ItemBox2/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup2/ItemBox2/HorizontalMovement" method="Unpause"]
+[connection signal="Respawned" from="MainAct/HallT/ItemBoxGroup2/ItemBox2/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup2/ItemBox2/VerticalMovement" method="Unpause"]
+[connection signal="Collected" from="MainAct/HallT/ItemBoxGroup2/ItemBox3/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup2/ItemBox3/HorizontalMovement" method="Pause"]
+[connection signal="Collected" from="MainAct/HallT/ItemBoxGroup2/ItemBox3/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup2/ItemBox3/VerticalMovement" method="Pause"]
+[connection signal="Respawned" from="MainAct/HallT/ItemBoxGroup2/ItemBox3/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup2/ItemBox3/HorizontalMovement" method="Unpause"]
+[connection signal="Respawned" from="MainAct/HallT/ItemBoxGroup2/ItemBox3/ItemBoxFlying" to="MainAct/HallT/ItemBoxGroup2/ItemBox3/VerticalMovement" method="Unpause"]
 [connection signal="Teleport" from="MainAct/HallT/WarpRed" to="Static/Trigger/Path/Throne" method="Activate"]
 [connection signal="Teleport" from="MainAct/HallT/WarpRed" to="Static/Visuals/13HallTreasure" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/HallT/WarpRed" to="Static/Visuals/14Arena" method="Activate"]
@@ -6296,3 +6307,5 @@ shape = SubResource("BoxShape3D_7ky5u")
 
 [editable path="Static"]
 [editable path="Static/Collision"]
+[editable path="MainAct/Overpass/Hall/Ribcage1"]
+[editable path="MainAct/Overpass/Hall/Ribcage1/Root/Ribcage"]

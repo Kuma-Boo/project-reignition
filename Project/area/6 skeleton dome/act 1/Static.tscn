@@ -1,4 +1,4 @@
-[gd_scene load_steps=96 format=3 uid="uid://d1rcieilh21gs"]
+[gd_scene load_steps=97 format=3 uid="uid://d1rcieilh21gs"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_0tght"]
 [ext_resource type="Curve3D" uid="uid://m68asxsb3okb" path="res://area/6 skeleton dome/act 1/environment/path/ExteriorPath.tres" id="1_h00gj"]
@@ -50,6 +50,7 @@
 [ext_resource type="Resource" uid="uid://bgxolisnfy2al" path="res://area/6 skeleton dome/act 1/camera/SpiralCam.tres" id="19_lv64g"]
 [ext_resource type="Resource" uid="uid://d1rqdeaedesj1" path="res://area/6 skeleton dome/act 1/camera/CavernExitCam.tres" id="20_0vw1s"]
 [ext_resource type="Resource" uid="uid://rkvm567r2i5q" path="res://area/6 skeleton dome/act 1/camera/SpiralEndCam.tres" id="20_l0r8l"]
+[ext_resource type="Resource" uid="uid://ctbdbfwhc4a75" path="res://area/6 skeleton dome/act 1/camera/CavernStartCam.tres" id="22_0ml3r"]
 [ext_resource type="Curve3D" uid="uid://bnap2vstvanc3" path="res://area/6 skeleton dome/act 1/environment/path/CavernPath.tres" id="22_6cr1p"]
 [ext_resource type="Curve3D" uid="uid://s12iwxjs3hkf" path="res://area/6 skeleton dome/act 1/environment/path/ExteriorSidePath.tres" id="23_8emqc"]
 [ext_resource type="Curve3D" uid="uid://df74bepf0633f" path="res://area/6 skeleton dome/act 1/environment/path/InteriorPath.tres" id="23_gd5mj"]
@@ -848,8 +849,21 @@ script = ExtResource("8_ka6po")
 deactivationTransitionTime = 0.5
 settings = ExtResource("17_c3wha")
 
-[node name="Cavern" parent="Trigger/Camera" instance=ExtResource("3_gut3n")]
+[node name="CavernStart" parent="Trigger/Camera" instance=ExtResource("3_gut3n")]
 transform = Transform3D(-1.39091e-08, 0, -1, 0, 1, 0, 1, 0, -1.39091e-08, 217.337, 0.0472553, -899.981)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/CavernStart"]
+script = ExtResource("8_ka6po")
+settings = ExtResource("22_0ml3r")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/CavernStart"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0)
+shape = SubResource("BoxShape3D_nlr3n")
+
+[node name="Cavern" parent="Trigger/Camera" instance=ExtResource("3_gut3n")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 258.937, 0.0472553, -905.581)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
@@ -862,14 +876,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0)
 shape = SubResource("BoxShape3D_nlr3n")
 
 [node name="CavernExit" parent="Trigger/Camera" instance=ExtResource("3_gut3n")]
-transform = Transform3D(-1.39091e-08, 0, -1, 0, 1, 0, 1, 0, -1.39091e-08, 382.337, 0.0472553, -889.981)
+transform = Transform3D(-1.39091e-08, 0, -1, 0, 1, 0, 1, 0, -1.39091e-08, 385, 0.047, -889.981)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/CavernExit"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 5)
 script = ExtResource("8_ka6po")
-distanceBlending = 10
 settings = ExtResource("20_0vw1s")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/CavernExit"]
@@ -971,6 +984,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0)
 shape = SubResource("BoxShape3D_1fxnk")
 
 [node name="Checkpoint" type="Node3D" parent="Trigger"]
+visible = false
 
 [node name="Checkpoint1" parent="Trigger/Checkpoint" instance=ExtResource("3_gut3n")]
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -36.6989, 1.6, -409.274)
@@ -1125,6 +1139,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
 [node name="Path" type="Node3D" parent="Trigger"]
+visible = false
 
 [node name="ExteriorSide" parent="Trigger/Path" instance=ExtResource("3_gut3n")]
 transform = Transform3D(0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, 0.422618, 36.6411, 40, -823.355)
