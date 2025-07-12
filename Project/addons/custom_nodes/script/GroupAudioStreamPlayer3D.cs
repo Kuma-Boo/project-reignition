@@ -1,6 +1,8 @@
 using Godot;
 using Project.Core;
 
+namespace Project.CustomNodes;
+
 public partial class GroupAudioStreamPlayer3D : AudioStreamPlayer3D
 {
 	[Export] public StringName groupKey;
