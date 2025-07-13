@@ -666,7 +666,7 @@ public partial class PlayerAnimator : Node3D
 		else if (Player.IsMovingBackward) // Backstepping
 			targetRotation = Player.PathFollower.ForwardAngle + (groundTurnRatio * Mathf.Pi * .15f);
 		else if (Player.IsLockoutActive && Player.ActiveLockoutData.recenterPlayer)
-			targetRotation = Player.PathFollower.ForwardAngle + Player.PathFollower.DeltaAngle * Player.Camera.ActiveSettings.pathControlInfluence;
+			targetRotation = Player.PathFollower.ForwardAngle + Player.PathTurnInfluence;
 		else if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) && Mathf.IsZeroApprox(Player.MoveSpeed))
 			targetRotation = VisualAngle;
 
