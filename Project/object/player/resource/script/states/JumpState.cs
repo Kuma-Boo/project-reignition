@@ -132,7 +132,7 @@ public partial class JumpState : PlayerState
 
 				if (!Player.IsAccelerationJumping && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SpinJump))
 				{
-					Player.StartSpinJump(isShortenedJump);
+					Player.StartSpinJump(!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) && isShortenedJump);
 					return null;
 				}
 			}
