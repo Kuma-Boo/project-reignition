@@ -121,7 +121,6 @@ public partial class SlideState : PlayerState
 			else if (!Input.IsActionPressed("button_jump"))
 			{
 				Player.Effect.AbortActionSFX(Player.Effect.SlideSfx);
-				Player.Skills.ConsumeJumpCharge();
 				return jumpState;
 			}
 		}
