@@ -225,6 +225,8 @@ public partial class PlayerStatsController : Node
 	public float JumpHeight { get; private set; }
 	[Export]
 	public float DoubleJumpHeight { get; private set; }
+	[Export]
+	public float DoubleJumpSpeed { get; private set; }
 
 	[ExportGroup("Grind Settings")]
 	[Export]

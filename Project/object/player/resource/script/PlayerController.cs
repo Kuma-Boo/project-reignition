@@ -693,6 +693,16 @@ public partial class PlayerController : CharacterBody3D
 	{
 		Effect.PlayDoubleJumpFX();
 		VerticalSpeed = Runtime.CalculateJumpPower(Stats.DoubleJumpHeight);
+
+		float targetMoveSpeed = Stats.DoubleJumpSpeed * Controller.GetInputStrength();
+		if (!Mathf.IsZeroApprox(targetMoveSpeed))
+			MovementAngle = Controller.GetTargetMovementAngle();
+		if (Mathf.IsZeroApprox(targetMoveSpeed) || MoveSpeed < targetMoveSpeed ||
+			!Controller.IsHoldingDirection(MovementAngle, PathFollower.ForwardAngle))
+		{
+			MoveSpeed = targetMoveSpeed;
+		}
+
 		CanDoubleJump = false;
 		StartSpinJump(true);
 	}
