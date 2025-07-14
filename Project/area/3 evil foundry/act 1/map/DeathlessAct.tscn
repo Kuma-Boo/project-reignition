@@ -424,6 +424,9 @@ startEnabled = true
 [node name="14Spiral" parent="Static/Visuals" index="10"]
 startEnabled = true
 
+[node name="DemoCamera" parent="Static" index="6"]
+transform = Transform3D(-3.61999e-06, 0, -1, 0, 1, 0, 1, 0, -3.61999e-06, -491, -30, -360)
+
 [node name="DeathlessAct" type="Node3D" parent="."]
 metadata/_edit_lock_ = true
 
@@ -552,8 +555,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
 [node name="RichRing" parent="DeathlessAct/Opening" instance=ExtResource("6_upu1a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.9064, 0.24963, -0.905304)
 
-[node name="GasTank" parent="DeathlessAct/Opening" instance=ExtResource("21_kry2n")]
+[node name="GasTank" parent="DeathlessAct/Opening" node_paths=PackedStringArray("endTarget") instance=ExtResource("21_kry2n")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0.5, 0)
+endTarget = NodePath("../GolemPath/PathFollower/GolemMajin")
 
 [node name="GolemPath" type="Path3D" parent="DeathlessAct/Opening"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 35.7907, -0.5, 1.03372)
@@ -568,7 +572,6 @@ tilt_enabled = false
 [node name="GolemMajin" parent="DeathlessAct/Opening/GolemPath/PathFollower" node_paths=PackedStringArray("gasTank") instance=ExtResource("7_nfp1y")]
 transform = Transform3D(1, 0, -7.10543e-15, 0, 1, 0, 7.10543e-15, 0, 1, 0, 0, -7.62939e-06)
 gasTank = NodePath("../../../GasTank")
-automaticallyThrowTank = false
 rangeOverride = 30
 
 [node name="Traps" type="Node3D" parent="DeathlessAct/Opening"]
@@ -775,24 +778,28 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 0, 0)
 [node name="SpikePanel" parent="DeathlessAct/MineEntrance/SpikeStrip" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.27)
 stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/active" = 0.5
 
 [node name="SpikePanel2" parent="DeathlessAct/MineEntrance/SpikeStrip" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.77)
 stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/active" = 0.5
 
 [node name="SpikePanel3" parent="DeathlessAct/MineEntrance/SpikeStrip" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.73)
 stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/active" = 0.5
 
 [node name="SpikePanel4" parent="DeathlessAct/MineEntrance/SpikeStrip" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.23)
 stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/active" = 0.5
 
@@ -802,6 +809,7 @@ transform = Transform3D(0.936017, -0.0795424, -0.34285, 0.0766146, 0.996816, -0.
 [node name="SpikePanel" parent="DeathlessAct/MineEntrance/SpikeStrip2" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.27)
 stateLengths = PackedFloat32Array(0.5, 0.3, 1)
+"Start Paused" = false
 "State Lengths/inactive" = 0.5
 "State Lengths/warning" = 0.3
 "State Lengths/active" = 1.0
@@ -809,6 +817,7 @@ stateLengths = PackedFloat32Array(0.5, 0.3, 1)
 [node name="SpikePanel2" parent="DeathlessAct/MineEntrance/SpikeStrip2" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.77)
 stateLengths = PackedFloat32Array(0.5, 0.3, 1)
+"Start Paused" = false
 "State Lengths/inactive" = 0.5
 "State Lengths/warning" = 0.3
 "State Lengths/active" = 1.0
@@ -816,6 +825,7 @@ stateLengths = PackedFloat32Array(0.5, 0.3, 1)
 [node name="SpikePanel3" parent="DeathlessAct/MineEntrance/SpikeStrip2" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.73)
 stateLengths = PackedFloat32Array(0.5, 0.3, 1)
+"Start Paused" = false
 "State Lengths/inactive" = 0.5
 "State Lengths/warning" = 0.3
 "State Lengths/active" = 1.0
@@ -823,6 +833,7 @@ stateLengths = PackedFloat32Array(0.5, 0.3, 1)
 [node name="SpikePanel4" parent="DeathlessAct/MineEntrance/SpikeStrip2" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.23)
 stateLengths = PackedFloat32Array(0.5, 0.3, 1)
+"Start Paused" = false
 "State Lengths/inactive" = 0.5
 "State Lengths/warning" = 0.3
 "State Lengths/active" = 1.0
@@ -898,6 +909,7 @@ metadata/_edit_group_ = true
 [node name="SpikePanel" parent="DeathlessAct/MineEntrance/SpikeStrip3" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.27)
 stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/active" = 0.5
 metadata/_edit_lock_ = true
@@ -905,6 +917,7 @@ metadata/_edit_lock_ = true
 [node name="SpikePanel2" parent="DeathlessAct/MineEntrance/SpikeStrip3" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.77)
 stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/active" = 0.5
 metadata/_edit_lock_ = true
@@ -912,6 +925,7 @@ metadata/_edit_lock_ = true
 [node name="SpikePanel3" parent="DeathlessAct/MineEntrance/SpikeStrip3" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.73)
 stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/active" = 0.5
 metadata/_edit_lock_ = true
@@ -919,6 +933,7 @@ metadata/_edit_lock_ = true
 [node name="SpikePanel4" parent="DeathlessAct/MineEntrance/SpikeStrip3" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.23)
 stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/active" = 0.5
 metadata/_edit_lock_ = true
@@ -977,6 +992,7 @@ metadata/_edit_group_ = true
 [node name="SpikePanel" parent="DeathlessAct/MineEntrance/SpikeStrip4" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.27)
 stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/active" = 0.5
 metadata/_edit_lock_ = true
@@ -984,6 +1000,7 @@ metadata/_edit_lock_ = true
 [node name="SpikePanel2" parent="DeathlessAct/MineEntrance/SpikeStrip4" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.77)
 stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/active" = 0.5
 metadata/_edit_lock_ = true
@@ -991,6 +1008,7 @@ metadata/_edit_lock_ = true
 [node name="SpikePanel3" parent="DeathlessAct/MineEntrance/SpikeStrip4" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.73)
 stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/active" = 0.5
 metadata/_edit_lock_ = true
@@ -998,6 +1016,7 @@ metadata/_edit_lock_ = true
 [node name="SpikePanel4" parent="DeathlessAct/MineEntrance/SpikeStrip4" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.23)
 stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/active" = 0.5
 metadata/_edit_lock_ = true
@@ -1238,8 +1257,6 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 81.293
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_s1mwa")
 
-[connection signal="Activated" from="Static/Triggers/Object/AutomationTrigger" to="Static/Collision/WallOneWay" method="Deactivate"]
-[connection signal="Deactivated" from="Static/Triggers/Object/AutomationTrigger" to="Static/Collision/WallOneWay" method="Activate"]
 [connection signal="Activated" from="DeathlessAct/CullingMap/MineEntrance-L" to="DeathlessAct/MineEntrance" method="Activate"]
 [connection signal="Deactivated" from="DeathlessAct/CullingMap/MineEntrance-L" to="DeathlessAct/MineEntrance" method="Deactivate"]
 [connection signal="Activated" from="DeathlessAct/CullingMap/Opening-U" to="DeathlessAct/Opening" method="Deactivate"]
