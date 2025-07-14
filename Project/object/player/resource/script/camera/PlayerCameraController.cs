@@ -354,7 +354,9 @@ public partial class PlayerCameraController : Node3D
 		UpdateTransitionTimer();
 		UpdateLockonTarget();
 		UpdateCameraBlends();
-		RenderingServer.GlobalShaderParameterSet(ShaderPlayerScreenPosition, ConvertToScreenSpace(Player.CenterPosition) / Runtime.ScreenSize);
+
+		if (IsOnScreen(Player.GlobalPosition) && !IsBehindCamera(Player.GlobalPosition))
+			RenderingServer.GlobalShaderParameterSet(ShaderPlayerScreenPosition, ConvertToScreenSpace(Player.CenterPosition) / Runtime.ScreenSize);
 
 		if (SnapFlag) // Reset flag after camera was updated
 			SnapFlag = false;

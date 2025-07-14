@@ -1,0 +1,168 @@
+[gd_scene load_steps=18 format=3 uid="uid://c5ajp56pbyegl"]
+
+[ext_resource type="PackedScene" uid="uid://h5au062rx8gk" path="res://area/6 skeleton dome/act 2/environment/collision/Collision.tscn" id="1_1kj50"]
+[ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_51dmr"]
+[ext_resource type="PackedScene" uid="uid://cvsftn6ggx3o" path="res://area/6 skeleton dome/act 2/environment/01Opening.tscn" id="2_eo8d4"]
+[ext_resource type="Resource" uid="uid://0xsw4iln1bbe" path="res://area/6 skeleton dome/act 2/camera/ThroneCam.tres" id="2_l51ta"]
+[ext_resource type="PackedScene" uid="uid://cy0ibidd2x8jl" path="res://area/6 skeleton dome/act 2/environment/02Arena.tscn" id="3_51dmr"]
+[ext_resource type="Curve3D" uid="uid://blaxf7g3s46yb" path="res://area/6 skeleton dome/act 2/environment/path/ArenaPath.tres" id="4_eo8d4"]
+[ext_resource type="Curve3D" path="res://area/6 skeleton dome/act 2/environment/path/ThronePath.tres" id="5_51dmr"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="8_2rmnc"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="9_a5p21"]
+[ext_resource type="Resource" uid="uid://dp07uop3x8vjr" path="res://area/6 skeleton dome/act 2/camera/ArenaCam.tres" id="10_a5p21"]
+[ext_resource type="Resource" uid="uid://14rifwt1vwve" path="res://area/6 skeleton dome/act 2/camera/ArenaEntranceCam.tres" id="10_m755k"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="11_3sixc"]
+[ext_resource type="Script" uid="uid://bssd28yqn1cxg" path="res://object/trigger/modules/PathTrigger.cs" id="11_wvn78"]
+[ext_resource type="Resource" uid="uid://wo8gnu7agnfs" path="res://area/6 skeleton dome/act 2/camera/ArenaEntranceTransitionCam.tres" id="12_jg7jf"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2rmnc"]
+size = Vector3(20, 20, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_m755k"]
+size = Vector3(50, 60, 5)
+
+[sub_resource type="Environment" id="Environment_fiacw"]
+background_mode = 1
+ambient_light_source = 2
+ambient_light_color = Color(0.277528, 0.277528, 0.277528, 1)
+tonemap_mode = 2
+tonemap_exposure = 1.2
+tonemap_white = 2.0
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 1.0
+glow_strength = 0.9
+glow_bloom = 0.1
+glow_blend_mode = 1
+glow_hdr_threshold = 2.0
+adjustment_enabled = true
+
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
+script = ExtResource("1_51dmr")
+InitialCameraSettings = ExtResource("2_l51ta")
+pathParent = NodePath("Path")
+Environment = NodePath("WorldEnvironment")
+
+[node name="Collision" parent="." instance=ExtResource("1_1kj50")]
+visible = false
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="01Opening" parent="Visuals" instance=ExtResource("2_eo8d4")]
+
+[node name="02Arena" parent="Visuals" instance=ExtResource("3_51dmr")]
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="Interior" type="Node3D" parent="Lighting"]
+
+[node name="ThroneProbe" type="ReflectionProbe" parent="Lighting/Interior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1130, 20, -1160)
+layers = 1024
+size = Vector3(100, 60, 320)
+interior = true
+cull_mask = 4
+reflection_mask = 4
+ambient_mode = 2
+ambient_color = Color(1, 0.843137, 0.694118, 1)
+ambient_color_energy = 0.3
+
+[node name="ArenaProbe" type="ReflectionProbe" parent="Lighting/Interior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1000, 40, -1000)
+layers = 1024
+size = Vector3(300, 100, 300)
+interior = true
+cull_mask = 2
+reflection_mask = 2
+ambient_mode = 2
+ambient_color = Color(0.588235, 1, 0.862745, 1)
+ambient_color_energy = 0.5
+
+[node name="EnvironmentLighting" type="DirectionalLight3D" parent="Lighting/Interior"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_color = Color(0.901131, 0.705213, 0.613799, 1)
+light_energy = 1.1
+light_cull_mask = 4293918726
+shadow_enabled = true
+shadow_caster_mask = 65
+directional_shadow_blend_splits = true
+
+[node name="Path" type="Node3D" parent="."]
+
+[node name="Arena" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1065, 0, -1000)
+curve = ExtResource("4_eo8d4")
+
+[node name="Throne" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1150, 13, -1300)
+curve = ExtResource("5_51dmr")
+
+[node name="Trigger" type="Node3D" parent="."]
+
+[node name="EntranceCamera" parent="Trigger" instance=ExtResource("8_2rmnc")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 1093.98, 0, -1013.98)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/EntranceCamera"]
+script = ExtResource("9_a5p21")
+transitionTime = 0.2
+distanceBlending = 5
+settings = ExtResource("10_m755k")
+previousSettings = ExtResource("2_l51ta")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/EntranceCamera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_2rmnc")
+
+[node name="ArenaEntranceTriggers" type="Node3D" parent="Trigger"]
+script = ExtResource("11_3sixc")
+startEnabled = true
+
+[node name="ArenaCamera" parent="Trigger/ArenaEntranceTriggers" instance=ExtResource("8_2rmnc")]
+transform = Transform3D(0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, 0.422618, 1075.31, 0, -996.998)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/ArenaEntranceTriggers/ArenaCamera"]
+script = ExtResource("9_a5p21")
+distanceBlending = 20
+settings = ExtResource("12_jg7jf")
+previousSettings = ExtResource("10_m755k")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/ArenaEntranceTriggers/ArenaCamera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_2rmnc")
+
+[node name="ArenaPath" parent="Trigger/ArenaEntranceTriggers" instance=ExtResource("8_2rmnc")]
+transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, 1033.04, 0, -944.043)
+"Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="Trigger/ArenaEntranceTriggers/ArenaPath" node_paths=PackedStringArray("path")]
+script = ExtResource("11_wvn78")
+path = NodePath("../../../../Path/Arena")
+cameraPathBlendTime = 0.5
+
+[node name="Camera" type="Node3D" parent="Trigger/ArenaEntranceTriggers/ArenaPath"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("9_a5p21")
+settings = ExtResource("10_a5p21")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/ArenaEntranceTriggers/ArenaPath"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
+shape = SubResource("BoxShape3D_m755k")
+
+[node name="DemoCamera" type="Node3D" parent="."]
+
+[node name="Camera" type="Camera3D" parent="DemoCamera"]
+cull_mask = 1086
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_fiacw")
+
+[connection signal="Activated" from="Trigger/ArenaEntranceTriggers/ArenaPath" to="Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="Trigger/ArenaEntranceTriggers/ArenaPath" to="Collision/EntranceOneWayWall" method="Deactivate"]
+[connection signal="Activated" from="Trigger/ArenaEntranceTriggers/ArenaPath" to="Trigger/ArenaEntranceTriggers" method="Deactivate"]
+
+[editable path="Collision"]
