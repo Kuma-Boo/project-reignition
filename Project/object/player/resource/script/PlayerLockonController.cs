@@ -30,6 +30,8 @@ public partial class PlayerLockonController : Area3D
 	}
 	/// <summary> Targets whose squared distance is within this range will prioritize height instead of distance. </summary>
 	private readonly float DistanceFudgeAmount = 1f;
+	/// <summary> How far ahead the player must be to ignore the active lockon target. </summary>
+	private readonly float DistanceIgnoreAmount = 0.2f;
 	private readonly string LevelWallGroup = "level wall";
 	/// <summary> List of all possible targets. </summary>
 	private readonly List<Node3D> potentialTargets = [];
@@ -241,12 +243,12 @@ public partial class PlayerLockonController : Area3D
 			return false;
 
 		float inputStrength = Player.Controller.GetInputStrength();
-		if (Mathf.IsZeroApprox(inputStrength))
+		if (inputStrength < .8f) // Player isn't decisive enough
 			return false;
 
 		float targetProgress = Player.PathFollower.GetProgress(target.GlobalPosition);
 		bool holdingForward = Player.Controller.IsHoldingDirection(Player.Controller.GetTargetInputAngle(), Player.PathFollower.ForwardAngle);
-		return (Player.PathFollower.Progress > targetProgress + DistanceFudgeAmount) && holdingForward;
+		return (Player.PathFollower.Progress > targetProgress + DistanceIgnoreAmount) && holdingForward;
 	}
 
 	private bool HitObstacle(Node3D target)
