@@ -29,9 +29,11 @@ public partial class PlayerLockonController : Area3D
 		HitObstacle,
 	}
 	/// <summary> Targets whose squared distance is within this range will prioritize height instead of distance. </summary>
-	private readonly float DistanceFudgeAmount = 1f;
+	private readonly float PriorityDistance = 1f;
+	/// <summary> How close a target needs to be to auto-lockon after bouncing. </summary>
+	private readonly float AutotargetDistanceAmount = 16f;
 	/// <summary> How far ahead the player must be to ignore the active lockon target. </summary>
-	private readonly float DistanceIgnoreAmount = 0.2f;
+	private readonly float IgnoreTargetDistance = 0.2f;
 	private readonly string LevelWallGroup = "level wall";
 	/// <summary> List of all possible targets. </summary>
 	private readonly List<Node3D> potentialTargets = [];
@@ -120,11 +122,11 @@ public partial class PlayerLockonController : Area3D
 			{
 				bool prioritizeActiveTarget = activeState == TargetState.Valid || potentialState == TargetState.LowPriority;
 				// Ignore low-priority targets that are further from the current target
-				if (potentialDistance > closestDistance + DistanceFudgeAmount && prioritizeActiveTarget)
+				if (potentialDistance > closestDistance + PriorityDistance && prioritizeActiveTarget)
 					continue;
 
-				// Ignore lower targets when within fudge range
-				if (Mathf.Abs(closestDistance - potentialDistance) < DistanceFudgeAmount &&
+				// Ignore lower targets when within priority distance
+				if (Mathf.Abs(closestDistance - potentialDistance) < PriorityDistance &&
 					(potentialTargets[i].GlobalPosition.Y <= activeTarget.GlobalPosition.Y ||
 					potentialState == TargetState.LowPriority) &&
 					activeState == TargetState.Valid)
@@ -206,7 +208,7 @@ public partial class PlayerLockonController : Area3D
 			{
 				// Only allow camera to lockon to extremely close objects
 				float targetDistance = target.GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
-				if (targetDistance <= DistanceFudgeAmount)
+				if (targetDistance <= AutotargetDistanceAmount)
 					Player.Camera.SetLockonTarget(target);
 			}
 		}
@@ -248,7 +250,7 @@ public partial class PlayerLockonController : Area3D
 
 		float targetProgress = Player.PathFollower.GetProgress(target.GlobalPosition);
 		bool holdingForward = Player.Controller.IsHoldingDirection(Player.Controller.GetTargetInputAngle(), Player.PathFollower.ForwardAngle);
-		return (Player.PathFollower.Progress > targetProgress + DistanceIgnoreAmount) && holdingForward;
+		return (Player.PathFollower.Progress > targetProgress + IgnoreTargetDistance) && holdingForward;
 	}
 
 	private bool HitObstacle(Node3D target)
