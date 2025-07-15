@@ -77,47 +77,41 @@ public partial class WorldSelect : Menu
 		}
 
 		VerticalSelection = menuMemory[MemoryKeys.WorldSelect];
+		menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.WorldSelect;
 
-		foreach (VideoStreamPlayer player in videoPlayers)
+		for (int i = 0; i < videoPlayers.Length; i++)
 		{
-			player.Stop();
-			player.Modulate = Colors.Transparent;
+			if (i == VerticalSelection)
+				continue;
+
+			videoPlayers[i].Paused = true;
+			videoPlayers[i].Modulate = Colors.Transparent;
 		}
 
-		ActiveVideoPlayer = videoPlayers[VerticalSelection];
 		if (animator.AssignedAnimation == "init" || animator.AssignedAnimation == "cancel")
 			animator.Play("show-fade-video");
 		else
 			animator.Play(ShowAnimation);
 
-		menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.WorldSelect;
-
-		ActiveVideoPlayer.Play();
-		ActiveVideoPlayer.Modulate = Colors.White;
+		PreviousVideoPlayer = null;
+		UpdateActiveVideoPlayer();
 	}
 
 	public override void _Process(double _)
 	{
-		if (ActiveVideoPlayer.IsVisibleInTree())
-		{
-			UpdateVideo();
+		if (!ActiveVideoPlayer.IsVisibleInTree())
+			return;
 
-			if (ActiveVideoPlayer == null)
-				return;
+		UpdateVideo();
 
-			if (ActiveVideoPlayer.Stream != null)
-			{
-				if (!ActiveVideoPlayer.IsPlaying())
-					ActiveVideoPlayer.CallDeferred(VideoStreamPlayer.MethodName.Play);
-				else
-					videoFadeFactor = Mathf.MoveToward(videoFadeFactor, 1, VideoCrossfadeSpeed * PhysicsManager.normalDelta);
-			}
+		if (ActiveVideoPlayer.IsPlaying())
+			videoFadeFactor = Mathf.MoveToward(videoFadeFactor, 1, VideoCrossfadeSpeed * PhysicsManager.normalDelta);
+		else
+			ActiveVideoPlayer.CallDeferred(VideoStreamPlayer.MethodName.Play);
 
-			ActiveVideoPlayer.Modulate = Colors.Transparent.Lerp(Colors.White, videoFadeFactor);
-
-			if (PreviousVideoPlayer != null)
-				PreviousVideoPlayer.Modulate = crossfadeColor.Lerp(Colors.Transparent, videoFadeFactor);
-		}
+		ActiveVideoPlayer.Modulate = Colors.Transparent.Lerp(Colors.White, videoFadeFactor);
+		if (PreviousVideoPlayer != null)
+			PreviousVideoPlayer.Modulate = crossfadeColor.Lerp(Colors.Transparent, videoFadeFactor);
 	}
 
 	protected override void UpdateSelection()
@@ -150,7 +144,9 @@ public partial class WorldSelect : Menu
 	public override void OpenParentMenu()
 	{
 		base.OpenParentMenu();
-		ActiveVideoPlayer.Stop();
+
+		foreach (VideoStreamPlayer player in videoPlayers)
+			player.Stop();
 
 		SaveManager.SaveGameData();
 		SaveManager.ActiveSaveSlotIndex = -1;
@@ -165,7 +161,7 @@ public partial class WorldSelect : Menu
 	private void UpdateVideo()
 	{
 		// Don't change video?
-		if (ActiveVideoPlayer != null && ActiveVideoPlayer == videoPlayers[VerticalSelection]) return;
+		if (ActiveVideoPlayer == videoPlayers[VerticalSelection]) return;
 		if (!SaveManager.ActiveGameData.IsWorldUnlocked((SaveManager.WorldEnum)VerticalSelection)) return; // World is locked
 		if (!Mathf.IsZeroApprox(Input.GetAxis("ui_up", "ui_down"))) return; // Still scrolling
 
@@ -173,14 +169,19 @@ public partial class WorldSelect : Menu
 		{
 			videoFadeFactor = 0;
 			crossfadeColor = ActiveVideoPlayer.Modulate;
-
 			PreviousVideoPlayer = ActiveVideoPlayer;
 			PreviousVideoPlayer.Paused = true;
 		}
 
+		UpdateActiveVideoPlayer();
+	}
+
+	private void UpdateActiveVideoPlayer()
+	{
 		ActiveVideoPlayer = videoPlayers[VerticalSelection];
 		ActiveVideoPlayer.Paused = false;
-		ActiveVideoPlayer.Play();
+		if (!ActiveVideoPlayer.IsPlaying())
+			ActiveVideoPlayer.Play();
 	}
 
 	public void UpdateLevelText()

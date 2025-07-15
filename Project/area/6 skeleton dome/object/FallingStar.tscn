@@ -1,0 +1,87 @@
+[gd_scene load_steps=13 format=3 uid="uid://bqhcoks73ujwv"]
+
+[ext_resource type="Script" uid="uid://2snd2fxcrc3s" path="res://area/6 skeleton dome/data/script/FallingStar.cs" id="1_hadv5"]
+[ext_resource type="Material" uid="uid://2uyghhoj7ydh" path="res://object/player/resource/effect/material/Aegis Dust.tres" id="1_mkiai"]
+[ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="2_ahw6t"]
+[ext_resource type="Material" uid="uid://bvpcekopblbht" path="res://object/player/resource/effect/material/Crest Wind Spark.tres" id="4_m4bdr"]
+
+[sub_resource type="Curve" id="Curve_hadv5"]
+_data = [Vector2(0, 0), 0.0, 24.8463, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_m4bdr"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_hadv5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hadv5"]
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 1.0
+initial_velocity_max = 1.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 2.0
+color = Color(1, 1, 1, 0.588235)
+alpha_curve = SubResource("CurveTexture_m4bdr")
+
+[sub_resource type="QuadMesh" id="QuadMesh_m4bdr"]
+material = ExtResource("1_mkiai")
+
+[sub_resource type="Curve" id="Curve_3mis8"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), -1.53052, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_3r1tp"]
+width = 64
+curve = SubResource("Curve_3mis8")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_kv2rj"]
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 1.0
+initial_velocity_max = 1.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.2
+scale_max = 0.4
+scale_curve = SubResource("CurveTexture_3r1tp")
+
+[sub_resource type="QuadMesh" id="QuadMesh_pdbca"]
+material = ExtResource("4_m4bdr")
+
+[node name="FallingStar" type="Node3D" node_paths=PackedStringArray("particles")]
+script = ExtResource("1_hadv5")
+lifetime = 8.0
+travelDistance = 100.0
+delay = null
+particles = NodePath("Base")
+
+[node name="Base" type="GPUParticles3D" parent="." node_paths=PackedStringArray("subSystems")]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 50.0
+emitting = false
+amount = 32
+lifetime = 0.6
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_hadv5")
+draw_pass_1 = SubResource("QuadMesh_m4bdr")
+script = ExtResource("2_ahw6t")
+subSystems = [NodePath("Spark")]
+
+[node name="Spark" type="GPUParticles3D" parent="Base"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 50.0
+emitting = false
+amount = 4
+lifetime = 0.4
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_kv2rj")
+draw_pass_1 = SubResource("QuadMesh_pdbca")

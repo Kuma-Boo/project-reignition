@@ -369,6 +369,7 @@ public partial class PlayerCameraController : Node3D
 		};
 
 		float distance = 0;
+		float xformAngle = 0;
 		float staticBlendRatio = 0; // Blend value of whether to use static camera positions or not
 		float lockonPitchReferenceAngle = 0;
 		Vector2 viewportOffset = Vector2.Zero;
@@ -406,10 +407,10 @@ public partial class PlayerCameraController : Node3D
 				viewportOffset = viewportOffset.Lerp(CameraBlendList[i].SettingsResource.viewportOffset, CameraBlendList[i].SmoothedInfluence);
 			}
 
+			xformAngle = Mathf.Lerp(xformAngle, data.blendData.yawAngle, CameraBlendList[i].SmoothedInfluence);
 			lockonPitchReferenceAngle = Mathf.Lerp(lockonPitchReferenceAngle, CameraBlendList[i].pitchAngle, CameraBlendList[i].SmoothedInfluence);
 
 			data.offsetBasis = data.offsetBasis.Slerp(iData.offsetBasis, CameraBlendList[i].SmoothedInfluence);
-
 			data.precalculatedPosition = data.precalculatedPosition.Lerp(iData.precalculatedPosition, CameraBlendList[i].SmoothedInfluence);
 
 			data.yawTracking = Mathf.LerpAngle(data.yawTracking, iData.yawTracking, CameraBlendList[i].SmoothedInfluence);
@@ -429,11 +430,11 @@ public partial class PlayerCameraController : Node3D
 		Transform3D cameraTransform = new(data.offsetBasis, position.Lerp(data.precalculatedPosition, staticBlendRatio));
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Up, data.yawTracking);
 
-		// Calculate xform angle before applying pitch tracking
-		UpdateInputXForm(ExtensionMethods.ModAngle(cameraTransform.Basis.GetEuler().Y));
-
 		// Apply pitch tracking
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, data.pitchTracking);
+
+		// Calculate xform angle before applying pitch tracking
+		UpdateInputXForm(xformAngle);
 
 		// Apply secondary yaw tracking
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Up, data.secondaryYawTracking);

@@ -905,7 +905,7 @@ public partial class Options : Menu
 		else if (VerticalSelection == 2)
 		{
 			float deadZone = SaveManager.Config.deadZone;
-			deadZone = Mathf.Clamp(deadZone + (.1f * direction), 0f, .9f);
+			deadZone = Mathf.Clamp(deadZone + (.1f * direction), .1f, .9f);
 			SaveManager.Config.deadZone = deadZone;
 			SaveManager.ApplyInputMap();
 			return true;

@@ -14,6 +14,11 @@ public partial class FallState : PlayerState
 	[Export]
 	private PlayerState homingAttackState;
 
+	public override void EnterState()
+	{
+		Player.AllowLandingGrind = true;
+	}
+
 	public override PlayerState ProcessPhysics()
 	{
 		ProcessMoveSpeed();
@@ -32,6 +37,13 @@ public partial class FallState : PlayerState
 		if (Player.Controller.IsJumpBufferActive)
 		{
 			Player.Controller.ResetJumpBuffer();
+
+			if (Player.CanDoubleJump && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.DoubleJump)) // Start a double jump
+			{
+				Player.StartDoubleJump();
+				return null;
+			}
+
 			if (SaveManager.Config.useStompJumpButtonMode)
 				return stompState;
 

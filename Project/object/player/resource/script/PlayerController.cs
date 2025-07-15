@@ -48,6 +48,7 @@ public partial class PlayerController : CharacterBody3D
 		// Initialize state machine last to ensure components are ready		
 		StateMachine.Initialize(this);
 
+		CanDoubleJump = true;
 		ChangeHitbox("RESET");
 		ResetCheckpointOrientation();
 		SnapToGround();
@@ -610,6 +611,7 @@ public partial class PlayerController : CharacterBody3D
 
 	#region State
 	public bool CanJumpDash { get; set; }
+	public bool CanDoubleJump { get; set; }
 	public bool IsJumpDashing { get; set; }
 	public bool IsHomingAttacking { get; set; }
 	public bool IsPerfectHomingAttacking { get; set; }
@@ -685,6 +687,24 @@ public partial class PlayerController : CharacterBody3D
 	{
 		spinJumpState.IsShortenedJump = isShortenedJump;
 		StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, spinJumpState);
+	}
+
+	public void StartDoubleJump()
+	{
+		Effect.PlayDoubleJumpFX();
+		VerticalSpeed = Runtime.CalculateJumpPower(Stats.DoubleJumpHeight);
+
+		float targetMoveSpeed = Stats.DoubleJumpSpeed * Controller.GetInputStrength();
+		if (!Mathf.IsZeroApprox(targetMoveSpeed))
+			MovementAngle = Controller.GetTargetMovementAngle();
+		if (Mathf.IsZeroApprox(targetMoveSpeed) || MoveSpeed < targetMoveSpeed ||
+			!Controller.IsHoldingDirection(MovementAngle, PathFollower.ForwardAngle))
+		{
+			MoveSpeed = targetMoveSpeed;
+		}
+
+		CanDoubleJump = false;
+		StartSpinJump(true);
 	}
 
 	private readonly float SpinJumpBounceAmount = 3.0f;

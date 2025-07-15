@@ -1,0 +1,1275 @@
+[gd_scene load_steps=33 format=3 uid="uid://tevs37r4b65r"]
+
+[ext_resource type="PackedScene" uid="uid://d1rcieilh21gs" path="res://area/6 skeleton dome/act 1/Static.tscn" id="1_6j0u8"]
+[ext_resource type="Resource" uid="uid://cmhjf4j8grhv8" path="res://resource/level data/skeleton dome/Act1Race.tres" id="2_apsdt"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_68al8"]
+[ext_resource type="Curve3D" path="res://area/6 skeleton dome/act 1/environment/path/UhuPath.tres" id="3_jruq6"]
+[ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="4_68al8"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="4_i2fxc"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="5_1chmq"]
+[ext_resource type="PackedScene" uid="uid://dmuj7wvvp56uk" path="res://area/6 skeleton dome/object/destructable/Ribcage.tscn" id="6_1chmq"]
+[ext_resource type="PackedScene" uid="uid://di8tdo65qjkbe" path="res://object/enemy/majin/data/skeleton dome/BlueMajin.tscn" id="6_f2djj"]
+[ext_resource type="PackedScene" uid="uid://csaug6ajhbtce" path="res://object/enemy/majin/data/skeleton dome/RedMajin.tscn" id="8_fm31u"]
+[ext_resource type="PackedScene" uid="uid://bc0sffoidghvq" path="res://area/6 skeleton dome/object/destructable/Head.tscn" id="9_f5yof"]
+[ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="10_7ud75"]
+[ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="11_7ud75"]
+[ext_resource type="PackedScene" uid="uid://dee1migehwfmq" path="res://area/6 skeleton dome/object/platform/PlatformExterior.tscn" id="12_5v300"]
+[ext_resource type="PackedScene" uid="uid://cl7a6swbawl4b" path="res://area/6 skeleton dome/object/platform/PlatformExteriorEnd.tscn" id="13_ss5ph"]
+[ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="15_in40k"]
+[ext_resource type="PackedScene" uid="uid://2h6xrqn3jp6l" path="res://object/stage/destructable/Cage.tscn" id="16_jruq6"]
+[ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="17_k6vjs"]
+[ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="18_k6vjs"]
+[ext_resource type="PackedScene" uid="uid://3kra1mtg86nd" path="res://area/6 skeleton dome/object/destructable/Leg.tscn" id="20_ru2ky"]
+[ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="21_t37y6"]
+[ext_resource type="PackedScene" uid="uid://bbgtmxw55soah" path="res://object/stage/destructable/Stone.tscn" id="22_mcl1m"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="23_i2fxc"]
+[ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="23_p2t1t"]
+[ext_resource type="PackedScene" uid="uid://dc1ik7p6xlh0a" path="res://object/stage/genie/Uhu.tscn" id="24_joqx7"]
+
+[sub_resource type="Animation" id="Animation_k6vjs"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Uhu:progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [104.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Uhu:h_offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Uhu:v_offset")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_jruq6"]
+resource_name = "race"
+length = 93.0
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Uhu:progress")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 5.3, 11, 11.8, 12.2, 12.5, 12.9, 13.2, 13.6, 14.1, 15.5, 17.8, 18.6, 19, 19.3, 19.7, 20, 20.4, 20.9, 22.5, 23.5, 23.7, 24, 24.3, 24.8, 25.3, 25.8, 26.3, 26.4, 27, 27.7, 29, 30, 30.8, 31.2, 31.5, 31.9, 32.2, 32.6, 33.1, 34.1, 42.5, 43.2, 44.3, 46.6, 47.5, 50, 55.5, 56, 57, 57.2, 57.6, 57.7, 59.9, 60, 61.4, 67, 70, 71.5, 72.4, 72.5, 72.8, 73.3, 73.6, 74, 74.3, 74.7, 75.5, 76.6, 76.9, 77.3, 77.6946, 78, 78.4, 78.7, 79.2, 79.5, 79.8, 80.3, 80.7, 81, 81.4, 81.8, 82.3, 82.6, 82.9, 83.6, 84, 84.3, 84.7, 85.4, 86.3, 87.1, 87.8, 88.5, 89.4, 89.8, 90.3, 90.6, 90.9, 91.2, 91.5, 91.9, 92.3, 93),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [104.0, 140.0, 235.0, 237.0, 236.0, 237.0, 236.0, 237.0, 236.0, 242.0, 245.0, 262.0, 264.0, 263.0, 264.0, 263.0, 264.0, 263.0, 270.0, 275.0, 282.0, 282.0, 285.0, 284.0, 285.0, 298.0, 297.0, 309.5, 309.5, 309.0, 314.0, 340.0, 348.0, 352.0, 351.0, 352.0, 351.0, 352.0, 351.0, 355.0, 365.0, 490.0, 503.0, 510.0, 526.0, 523.0, 534.0, 587.0, 590.0, 598.0, 600.0, 610.0, 610.0, 610.0, 610.0, 635.0, 752.0, 770.0, 770.0, 770.0, 770.0, 776.0, 775.0, 780.0, 779.0, 780.0, 779.0, 785.0, 790.0, 793.0, 799.0, 798.0, 799.5, 798.5, 805.5, 805.0, 805.5, 804.0, 812.0, 811.0, 812.0, 811.0, 817.0, 816.0, 817.0, 816.0, 823.0, 822.0, 823.0, 822.0, 826.0, 834.0, 842.0, 842.0, 842.0, 835.0, 834.0, 834.0, 838.0, 837.0, 838.5, 838.0, 842.0, 848.0, 848.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Uhu:h_offset")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 3, 6.2, 7, 7.6, 9, 9.5, 10, 11, 11.8, 12.1, 12.5, 12.8, 13.2, 13.5, 15.5, 17.8, 18.6, 18.9, 19.3, 19.6, 20, 20.3, 22.5, 24, 25.3, 26.3, 27.7, 30, 30.8, 31.1, 31.5, 31.8, 32.2, 32.5, 34.1, 36, 36.5, 37.5, 38, 38.4, 42.5, 43.2, 45, 46.6, 47.5, 49, 50, 51.5, 51.7, 54.5, 55.3, 56, 56.7, 57, 57.6, 57.7, 59.9, 60, 65, 65.8, 67, 70, 71.5, 72.8, 76.6, 77.3, 77.6, 78, 78.3, 78.7, 79.2, 79.5, 79.8, 80.3, 80.6, 81, 81.3, 81.8, 82.3, 82.6, 82.9, 83.6, 83.9, 84.3, 84.6, 85.4, 86.3, 87.1, 88.5, 90, 90.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0, -0.5, -0.5, 0.5, 0.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, -1.5, -1.5, 0.0, -1.5, -1.5, -1.5, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, -2.5, -1.2, -1.5, -2.0, -2.0, -1.0, -1.0, 0.5, 0.5, 0.0, 0.0, -2.0, 2.0, 0.0, 0.0, 0.0, -1.0, -1.0, -2.0, -0.5, -2.0, 1.5, -1.5, -1.5, -1.5, 1.0, -1.0, -1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, -2.0, -2.0, 0.0, 0.0, -0.5, 0.0, 0.5, 0.5, -1.0, -1.0, 0.0, 0.0, 0.0, 0.0, -0.5, -0.5, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, -1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, -0.5]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Uhu:v_offset")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 11, 11.4, 11.8, 12.1, 12.5, 12.8, 13.2, 13.5, 14.1, 15, 15.5, 17.8, 18.2, 18.6, 18.9, 19.3, 19.6, 20, 20.3, 20.9, 22, 22.5, 23.3, 23.7, 24, 24.6, 25.3, 25.9, 26.3, 27.2, 27.7, 29, 29.7, 30, 30.4, 30.8, 31.1, 31.5, 31.8, 32.2, 32.5, 33.1, 34.1, 43.2, 43.7, 44.3, 56, 56.3, 56.7, 57, 57.2, 57.6, 60, 71.5, 72, 72.5, 72.8, 73.3, 73.6, 74, 74.3, 75.5, 76.1, 76.6, 76.9, 77.3, 77.6, 78, 78.3, 78.7, 79.2, 79.5, 79.8, 80.3, 80.6, 81, 81.3, 81.8, 82.3, 82.6, 82.9, 83.6, 83.9, 84.3, 85.4, 86.3, 87.1, 87.8, 88.5, 89.6, 89.8, 90.3, 90.6, 90.9, 91.2, 91.5, 91.7, 92.3, 93),
+"transitions": PackedFloat32Array(1, 0.5, 2, 0.5, 2, 0.5, 2, 0.5, 2, 2, 1, 1, 0.5, 2, 0.5, 1.5, 0.5, 2, 0.5, 2, 2, 1, 1, 0.5, 1, 0.5, 1.5, 0.5, 1.5, 0.5, 1, 1, 2, 1, 1, 2, 0.5, 1.5, 0.5, 2, 0.5, 0.5, 2, 1, 0.5, 2, 1, 0.5, 2, 1, 0.5, 1, 1, 1, 0.5, 2, 1, 0.5, 1, 0.5, 1, 0.5, 2, 1, 0.5, 1, 0.5, 1.5, 0.5, 2, 0.5, 0.5, 0.5, 0.5, 0.5, 1.5, 0.5, 2, 0.5, 0.5, 0.5, 0.5, 0.5, 1.5, 0.5, 2, 1, 0.5, 2, 1, 1, 0.5, 1, 0.5, 1, 0.5, 2, 0.5, 2, 1),
+"update": 0,
+"values": [-0.8, -0.8, 3.0, 1.0, 3.0, 1.0, 3.0, 1.0, 3.0, 4.0, -0.8, -0.8, -0.8, 3.0, 1.0, 3.0, 1.0, 3.0, 1.0, 3.0, 4.0, -0.8, -0.8, -0.8, 4.0, 3.0, 6.0, 5.0, 8.0, 7.0, 10.0, 7.0, 9.0, -0.8, -0.8, 3.0, 1.0, 3.0, 1.0, 3.0, 1.0, 3.0, 4.0, -0.8, -0.8, 4.0, 0.0, -0.5, 1.0, -0.5, -0.5, 1.0, -0.5, -0.5, -0.5, 4.0, 2.0, 0.2, 4.0, 0.2, 4.0, 0.2, 6.0, -0.5, -0.5, 3.0, 0.0, 2.0, 0.0, 2.0, 1.0, 4.0, 1.0, 3.0, 1.0, 3.0, 1.0, 3.0, 1.0, 4.0, 1.0, 3.0, 1.0, 3.0, 0.5, 5.0, -0.5, -0.5, 4.0, -0.5, -0.5, -0.5, 3.0, 0.0, 3.0, 0.0, 3.0, 2.0, 2.5, 0.0]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Uhu")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(93),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"FinishRace"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_36p0s"]
+_data = {
+&"RESET": SubResource("Animation_k6vjs"),
+&"race": SubResource("Animation_jruq6")
+}
+
+[sub_resource type="Curve" id="Curve_f2djj"]
+_limits = [-1.0, 0.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, -1.0, 0, 1, Vector2(1, -1), -1.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_fsrto"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 0.181839, 0, 0, Vector2(1, -0.6), -1.9829, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_7ud75"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1.49012e-08), 0.0, 0.37011, 0, 0, Vector2(0.5, 0.0994672), -0.0737921, -0.0737921, 0, 0, Vector2(1, -0.189165), -1.0709, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_joqx7"]
+size = Vector3(15, 20, 5)
+
+[node name="World" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_6j0u8")]
+Data = ExtResource("2_apsdt")
+
+[node name="RaceAct" type="Node3D" parent="."]
+
+[node name="UhuPath" type="Path3D" parent="RaceAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.91, 0, 67.139)
+curve = ExtResource("3_jruq6")
+
+[node name="Uhu" parent="RaceAct/UhuPath" node_paths=PackedStringArray("animator") instance=ExtResource("24_joqx7")]
+transform = Transform3D(-0.989833, 0, 0.141035, 0, 0.99983, 0, -0.141035, 0, -0.989831, -62.0447, 0, -66.1814)
+progress = 104.0
+animator = NodePath("AnimationPlayer")
+maxProgress = 848.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="RaceAct/UhuPath/Uhu"]
+root_node = NodePath("../..")
+libraries = {
+&"": SubResource("AnimationLibrary_36p0s")
+}
+
+[node name="SpawnPosition" type="Node3D" parent="RaceAct"]
+metadata/_edit_lock_ = true
+
+[node name="CharacterSpawn" parent="RaceAct/SpawnPosition" instance=ExtResource("3_68al8")]
+
+[node name="Exterior" type="Node3D" parent="RaceAct"]
+script = ExtResource("4_i2fxc")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="Start" type="Node3D" parent="RaceAct/Exterior"]
+
+[node name="Rings1" type="Node3D" parent="RaceAct/Exterior/Start"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.963538, -1.46842, -50.7024)
+script = ExtResource("4_68al8")
+Source = ExtResource("5_1chmq")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../../Static/Path/ExteriorPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RaceAct/Exterior/Start/Rings1" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.26498e-06, -7.39098e-06, -8.39233e-05)
+
+[node name="Child02" parent="RaceAct/Exterior/Start/Rings1" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0196511, -0.187108, -1.99207)
+
+[node name="Child03" parent="RaceAct/Exterior/Start/Rings1" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.107221, -0.383509, -3.98125)
+
+[node name="Child04" parent="RaceAct/Exterior/Start/Rings1" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.255811, -0.588217, -5.96596)
+
+[node name="Child05" parent="RaceAct/Exterior/Start/Rings1" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.452333, -0.79951, -7.94559)
+
+[node name="Rings2" type="Node3D" parent="RaceAct/Exterior/Start"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.26354, -3.66842, -71.7024)
+script = ExtResource("4_68al8")
+Source = ExtResource("5_1chmq")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../../Static/Path/ExteriorPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = SubResource("Curve_f2djj")
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RaceAct/Exterior/Start/Rings2" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.3617e-05, -1.7643e-05, -0.000236511)
+
+[node name="Child02" parent="RaceAct/Exterior/Start/Rings2" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.113212, -0.140722, -2.04046)
+
+[node name="Child03" parent="RaceAct/Exterior/Start/Rings2" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.371608, -0.260711, -4.08265)
+
+[node name="Child04" parent="RaceAct/Exterior/Start/Rings2" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.760288, -0.361473, -6.1144)
+
+[node name="Child05" parent="RaceAct/Exterior/Start/Rings2" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.26963, -0.452536, -8.1361)
+
+[node name="BlueMajin1" parent="RaceAct/Exterior/Start" instance=ExtResource("6_f2djj")]
+transform = Transform3D(0.996195, 0, 0.0871558, 0, 1, 0, -0.0871558, 0, 0.996195, -16.1068, -0.3, -120.104)
+
+[node name="BlueMajin2" parent="RaceAct/Exterior/Start" instance=ExtResource("6_f2djj")]
+transform = Transform3D(0.996195, 0, 0.0871558, 0, 1, 0, -0.0871558, 0, 0.996195, -17.9622, 0.3, -122.954)
+rangeOverride = 10
+
+[node name="RibcageGroup1" type="Node3D" parent="RaceAct/Exterior/Start"]
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -17.0996, 1.5, -125.991)
+
+[node name="Ribcage1" parent="RaceAct/Exterior/Start/RibcageGroup1" instance=ExtResource("6_1chmq")]
+transform = Transform3D(1, 0, -4.44089e-16, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+
+[node name="Ribcage2" parent="RaceAct/Exterior/Start/RibcageGroup1" instance=ExtResource("6_1chmq")]
+transform = Transform3D(1, 0, -4.44089e-16, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 1.6, 0.4, -0.299985)
+
+[node name="Ribcage3" parent="RaceAct/Exterior/Start/RibcageGroup1" instance=ExtResource("6_1chmq")]
+transform = Transform3D(1, 0, -4.44089e-16, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -1.6, 0.3, -0.399977)
+
+[node name="Rings3" type="Node3D" parent="RaceAct/Exterior/Start"]
+transform = Transform3D(0.977438, 0.0151344, 0.210682, 0.00334724, 0.996195, -0.0870914, -0.211198, 0.0858316, 0.973668, -18.6094, 2.49325, -135.616)
+script = ExtResource("4_68al8")
+Source = ExtResource("5_1chmq")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RaceAct/Exterior/Start/Rings3" instance=ExtResource("5_1chmq")]
+
+[node name="Child02" parent="RaceAct/Exterior/Start/Rings3" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="RaceAct/Exterior/Start/Rings3" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="RaceAct/Exterior/Start/Rings3" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="RaceAct/Exterior/Start/Rings3" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="RedMajin1" parent="RaceAct/Exterior/Start" instance=ExtResource("8_fm31u")]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -22, 3, -150)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 6.0
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 20
+"Attack Settings/Attack Instantly" = true
+rangeOverride = 30
+
+[node name="RibcageGroup2" type="Node3D" parent="RaceAct/Exterior/Start"]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -22.641, 3.7, -152.562)
+
+[node name="Ribcage1" parent="RaceAct/Exterior/Start/RibcageGroup2" instance=ExtResource("6_1chmq")]
+transform = Transform3D(1, 0, -4.44089e-16, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+
+[node name="Ribcage2" parent="RaceAct/Exterior/Start/RibcageGroup2" instance=ExtResource("6_1chmq")]
+transform = Transform3D(0.939693, 0.34202, 0, 1.49502e-08, -4.10753e-08, -1, -0.34202, 0.939693, -4.37114e-08, 1.48046, 0.4, -0.0436422)
+
+[node name="Ribcage3" parent="RaceAct/Exterior/Start/RibcageGroup2" instance=ExtResource("6_1chmq")]
+transform = Transform3D(0.965926, 0.258819, 0, 1.13133e-08, -4.2222e-08, -1, -0.258819, 0.965926, -4.37114e-08, -1.30329, 0.3, -0.0653706)
+
+[node name="Ribcage1" parent="RaceAct/Exterior/Start" instance=ExtResource("6_1chmq")]
+transform = Transform3D(-8.74228e-08, 0, 2, 0, 2, 0, -2, 0, -8.74228e-08, -21, 7, -173)
+
+[node name="Head" parent="RaceAct/Exterior/Start/Ribcage1" instance=ExtResource("9_f5yof")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Ribcage2" parent="RaceAct/Exterior/Start" instance=ExtResource("6_1chmq")]
+transform = Transform3D(1.14715, 0, 1.6383, 0, 2, 0, -1.6383, 0, 1.14715, -18.1912, 9.6, -182.459)
+
+[node name="Head" parent="RaceAct/Exterior/Start/Ribcage2" instance=ExtResource("9_f5yof")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.52588e-05, 0, -2.49998)
+
+[node name="Rings4" type="Node3D" parent="RaceAct/Exterior/Start"]
+transform = Transform3D(0.819152, 0, -0.573576, 0, 1, 0, 0.573577, 0, 0.819152, -16.6504, 5.32576, -193.301)
+script = ExtResource("4_68al8")
+Source = ExtResource("5_1chmq")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = SubResource("Curve_fsrto")
+"Vertical Offset" = SubResource("Curve_7ud75")
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RaceAct/Exterior/Start/Rings4" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.49012e-08, 0)
+
+[node name="Child02" parent="RaceAct/Exterior/Start/Rings4" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0247698, 0.0774775, -2.5)
+
+[node name="Child03" parent="RaceAct/Exterior/Start/Rings4" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.029407, 0.0994672, -5)
+
+[node name="Child04" parent="RaceAct/Exterior/Start/Rings4" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.21888, 0.0174705, -7.5)
+
+[node name="Child05" parent="RaceAct/Exterior/Start/Rings4" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, -0.189165, -10)
+
+[node name="RibcageGroup3" type="Node3D" parent="RaceAct/Exterior/Start"]
+transform = Transform3D(0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, 0.422618, 9.54086, 2.7, -226.542)
+
+[node name="Ribcage1" parent="RaceAct/Exterior/Start/RibcageGroup3" instance=ExtResource("6_1chmq")]
+transform = Transform3D(1, 0, -4.44089e-16, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+
+[node name="Ribcage2" parent="RaceAct/Exterior/Start/RibcageGroup3" instance=ExtResource("6_1chmq")]
+transform = Transform3D(0.939693, 0.34202, 0, 1.49502e-08, -4.10753e-08, -1, -0.34202, 0.939693, -4.37114e-08, 1.48046, 0.4, -0.0436422)
+
+[node name="Ribcage3" parent="RaceAct/Exterior/Start/RibcageGroup3" instance=ExtResource("6_1chmq")]
+transform = Transform3D(0.965926, 0.258819, 0, 1.13133e-08, -4.2222e-08, -1, -0.258819, 0.965926, -4.37114e-08, -1.30329, 0.3, -0.0653706)
+
+[node name="Upper" type="Node3D" parent="RaceAct/Exterior"]
+transform = Transform3D(-0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, -0.642788, -12.7147, 10.4, -193.296)
+
+[node name="ItemBox1" parent="RaceAct/Exterior/Upper" instance=ExtResource("11_7ud75")]
+transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, 0.872284, 2.25, 1.34282)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 50
+
+[node name="Platform1" type="Node3D" parent="RaceAct/Exterior/Upper"]
+
+[node name="PlatformExterior" parent="RaceAct/Exterior/Upper/Platform1" instance=ExtResource("12_5v300")]
+transform = Transform3D(2, 0, -5.96046e-08, 0, 2, 0, 5.96046e-08, 0, 2, 0, 0, 0)
+
+[node name="PlatformExteriorEnd" parent="RaceAct/Exterior/Upper/Platform1/PlatformExterior" instance=ExtResource("13_ss5ph")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.395)
+
+[node name="InvisibleGrindrail1" parent="RaceAct/Exterior/Upper" instance=ExtResource("15_in40k")]
+transform = Transform3D(-0.173648, 0, 0.984807, 0, 1, 0, -0.984807, 0, -0.173648, -0.760895, 1.5, 2.77693)
+railLength = 30
+
+[node name="ItemBox2" parent="RaceAct/Exterior/Upper" instance=ExtResource("11_7ud75")]
+transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, -31.317, 2.35, 8.25781)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 50
+
+[node name="Platform2" type="Node3D" parent="RaceAct/Exterior/Upper"]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -31.6061, 0, 7.93054)
+
+[node name="PlatformExterior" parent="RaceAct/Exterior/Upper/Platform2" instance=ExtResource("12_5v300")]
+transform = Transform3D(2, 0, -5.96046e-08, 0, 2, 0, 5.96046e-08, 0, 2, 0, 0, 0)
+
+[node name="PlatformExteriorEnd" parent="RaceAct/Exterior/Upper/Platform2/PlatformExterior" instance=ExtResource("13_ss5ph")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.395)
+
+[node name="InvisibleGrindrail2" parent="RaceAct/Exterior/Upper" instance=ExtResource("15_in40k")]
+transform = Transform3D(0.5, -0.224144, 0.836516, 0, 0.965926, 0.258819, -0.866025, -0.129409, 0.482963, -30.5314, 0.258819, 9.65617)
+railLength = 32
+
+[node name="Lower" type="Node3D" parent="RaceAct/Exterior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, -200)
+
+[node name="SpikeBallGroup1" type="Node3D" parent="RaceAct/Exterior/Lower"]
+transform = Transform3D(0.819152, -0.0159652, -0.573354, 0, 0.999613, -0.0278344, 0.573576, 0.0228006, 0.818835, -9.39037, 5.57217, 10.5071)
+
+[node name="SpikeBall1" parent="RaceAct/Exterior/Lower/SpikeBallGroup1" instance=ExtResource("10_7ud75")]
+transform = Transform3D(1, -9.31323e-10, -5.96046e-08, 9.31323e-10, 1, 1.86265e-09, -2.98023e-08, 1.86265e-09, 1, 0, 0, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = -2.5
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 1.5
+
+[node name="SpikeBall2" parent="RaceAct/Exterior/Lower/SpikeBallGroup1" instance=ExtResource("10_7ud75")]
+transform = Transform3D(1, -9.31323e-10, -5.96046e-08, 9.31323e-10, 1, 1.86265e-09, -2.98023e-08, 1.86265e-09, 1, 0, 0, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = -2.5
+"Movement/Starting Offset" = 0.5
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 1.5
+
+[node name="SpikeBallGroup2" type="Node3D" parent="RaceAct/Exterior/Lower"]
+transform = Transform3D(0.865937, 0.0340667, -0.498991, -0.00517649, 0.998235, 0.0591675, 0.500126, -0.0486523, 0.864585, 1.75101, 4.79182, -8.3195)
+
+[node name="SpikeBall1" parent="RaceAct/Exterior/Lower/SpikeBallGroup2" instance=ExtResource("10_7ud75")]
+transform = Transform3D(1, -9.31323e-10, -5.96046e-08, 9.31323e-10, 1, 1.86265e-09, -2.98023e-08, 1.86265e-09, 1, 0, 0, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = -2.5
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 1.5
+
+[node name="SpikeBall2" parent="RaceAct/Exterior/Lower/SpikeBallGroup2" instance=ExtResource("10_7ud75")]
+transform = Transform3D(1, -9.31323e-10, -5.96046e-08, 9.31323e-10, 1, 1.86265e-09, -2.98023e-08, 1.86265e-09, 1, 0, 0, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = -2.5
+"Movement/Starting Offset" = 0.5
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 1.5
+
+[node name="SpikeBallGroup3" type="Node3D" parent="RaceAct/Exterior/Lower"]
+transform = Transform3D(0.573923, 0.0340667, -0.818201, 0.0203138, 0.998235, 0.0558116, 0.818657, -0.0486523, 0.572217, 12.6815, 3.02642, -23.1556)
+
+[node name="SpikeBall1" parent="RaceAct/Exterior/Lower/SpikeBallGroup3" instance=ExtResource("10_7ud75")]
+transform = Transform3D(1, -9.31323e-10, -5.96046e-08, 9.31323e-10, 1, 1.86265e-09, -2.98023e-08, 1.86265e-09, 1, 0, 0, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = -2.5
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 1.5
+
+[node name="SpikeBall2" parent="RaceAct/Exterior/Lower/SpikeBallGroup3" instance=ExtResource("10_7ud75")]
+transform = Transform3D(1, -9.31323e-10, -5.96046e-08, 9.31323e-10, 1, 1.86265e-09, -2.98023e-08, 1.86265e-09, 1, 0, 0, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = -2.5
+"Movement/Starting Offset" = 0.5
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 1.5
+
+[node name="Ring2" type="Node3D" parent="RaceAct/Exterior/Lower"]
+transform = Transform3D(0.819152, 0, -0.573576, 0, 1, 0, 0.573576, 0, 0.819152, 3.65056, 3.95, -12.2415)
+script = ExtResource("4_68al8")
+Source = ExtResource("5_1chmq")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../../Static/Path/ExteriorPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RaceAct/Exterior/Lower/Ring2" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.28882e-05, 1.21593e-05, 0.000213623)
+
+[node name="Child02" parent="RaceAct/Exterior/Lower/Ring2" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0876236, -0.1377, -2.50227)
+
+[node name="Child03" parent="RaceAct/Exterior/Lower/Ring2" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.246864, -0.279519, -5.00259)
+
+[node name="Child04" parent="RaceAct/Exterior/Lower/Ring2" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.499535, -0.425179, -7.49738)
+
+[node name="Child05" parent="RaceAct/Exterior/Lower/Ring2" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.883842, -0.574289, -9.9798)
+
+[node name="Ribcage1" parent="RaceAct/Exterior/Lower" instance=ExtResource("6_1chmq")]
+transform = Transform3D(-0.517637, 0, -1.93185, 0, 2, 0, 1.93185, 0, -0.517637, -4.73917, 7.6, -8.12798)
+
+[node name="Head" parent="RaceAct/Exterior/Lower/Ribcage1" instance=ExtResource("9_f5yof")]
+transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, 0, 0, -2.5)
+
+[node name="Ribcage2" parent="RaceAct/Exterior/Lower" instance=ExtResource("6_1chmq")]
+transform = Transform3D(1.2578, 0, 1.55497, 0, 2, 0, -1.55497, 0, 1.2578, 11.5856, 7.4, -14.5286)
+
+[node name="Head" parent="RaceAct/Exterior/Lower/Ribcage2" instance=ExtResource("9_f5yof")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.28882e-05, 0, -2.50004)
+
+[node name="SpikeBall1" parent="RaceAct/Exterior/Lower" instance=ExtResource("10_7ud75")]
+transform = Transform3D(-0.573576, -0.0713938, -0.816035, 0, 0.996195, -0.0871557, 0.819152, -0.0499905, -0.571394, 55.2048, 1.6, -46.7607)
+"Movement/Cycle Length" = 6.0
+Movement/Distance = 5.0
+
+[node name="SpikeBall2" parent="RaceAct/Exterior/Lower" instance=ExtResource("10_7ud75")]
+transform = Transform3D(-0.0301537, -0.0845277, -0.995965, 0.17101, 0.98129, -0.0884597, 0.984808, -0.172987, -0.0151345, 58, 0.531715, -58)
+"Movement/Cycle Length" = 6.0
+Movement/Distance = 5.0
+
+[node name="Ring" type="Node3D" parent="RaceAct/Exterior/Lower"]
+transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, 23.8019, -3.8, -108.773)
+script = ExtResource("4_68al8")
+Source = ExtResource("5_1chmq")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../../Static/Path/ExteriorPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RaceAct/Exterior/Lower/Ring" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.05176e-05, -7.15256e-07, 4.57764e-05)
+
+[node name="Child02" parent="RaceAct/Exterior/Lower/Ring" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.100281, 0.0520294, -2.9893)
+
+[node name="Child03" parent="RaceAct/Exterior/Lower/Ring" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.212982, 0.138237, -5.97484)
+
+[node name="Child04" parent="RaceAct/Exterior/Lower/Ring" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.407898, 0.263131, -8.95193)
+
+[node name="Child05" parent="RaceAct/Exterior/Lower/Ring" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.747681, 0.429691, -11.9111)
+
+[node name="Overpass" type="Node3D" parent="RaceAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -318)
+script = ExtResource("4_i2fxc")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="Bridge" type="Node3D" parent="RaceAct/Overpass"]
+
+[node name="ItemBox1" parent="RaceAct/Overpass/Bridge" instance=ExtResource("11_7ud75")]
+transform = Transform3D(0.821999, 0.1382, 0.552465, -0.0491217, 0.983698, -0.172987, -0.567366, 0.115057, 0.815388, -4.53919, -2.31157, -7.55536)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 10
+
+[node name="SpikeBall1" parent="RaceAct/Overpass/Bridge" instance=ExtResource("10_7ud75")]
+transform = Transform3D(0.879125, -0.474778, 0.0415377, 0, 0.0871558, 0.996195, -0.476591, -0.87578, 0.0766208, -6.53371, -3.6711, -10.9291)
+animatorSpeedScale = 0.8
+Movement/Mode = 2
+"Movement/Cycle Length" = 4.0
+"Movement/Starting Offset" = 0.1
+"Movement/Horizontal Size" = 2.5
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 3.0
+
+[node name="SpikeBall7" parent="RaceAct/Overpass/Bridge" instance=ExtResource("10_7ud75")]
+transform = Transform3D(0.879125, -0.469351, 0.0827592, 3.72529e-09, 0.173648, 0.984808, -0.476591, -0.86577, 0.152658, -10.0945, -3.01743, -17.4974)
+animatorSpeedScale = 0.8
+Movement/Mode = 2
+"Movement/Cycle Length" = 4.0
+"Movement/Starting Offset" = 0.1
+"Movement/Horizontal Size" = 2.5
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 3.0
+
+[node name="SpikeBall8" parent="RaceAct/Overpass/Bridge" instance=ExtResource("10_7ud75")]
+transform = Transform3D(-0.866025, 0.498097, 0.0435779, 7.6194e-09, -0.0871558, 0.996195, 0.5, 0.86273, 0.0754791, -13.1481, -1.39372, -23.4395)
+animatorSpeedScale = 0.8
+Movement/Mode = 2
+"Movement/Cycle Length" = 4.0
+"Movement/Starting Offset" = 0.9
+"Movement/Horizontal Size" = 2.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 3.5
+
+[node name="Head1" parent="RaceAct/Overpass/Bridge" instance=ExtResource("9_f5yof")]
+transform = Transform3D(0.994061, -0.0831606, 0.0701917, 0.105422, 0.895907, -0.431551, -0.0269968, 0.436388, 0.899354, -16.3047, 0.385072, -26.8888)
+
+[node name="SpikeBall9" parent="RaceAct/Overpass/Bridge" instance=ExtResource("10_7ud75")]
+transform = Transform3D(0.783325, -0.620224, 0.0415377, 0.0151344, 0.0858317, 0.996195, -0.621428, -0.779716, 0.0766208, -17.8359, -1.00887, -30.1241)
+animatorSpeedScale = 0.8
+Movement/Mode = 2
+"Movement/Cycle Length" = 4.0
+"Movement/Starting Offset" = 0.1
+"Movement/Horizontal Size" = 2.5
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 3.0
+
+[node name="Head2" parent="RaceAct/Overpass/Bridge" instance=ExtResource("9_f5yof")]
+transform = Transform3D(-0.874381, 0.290213, 0.388889, 0.261062, 0.956913, -0.127135, -0.40903, -0.00964025, -0.91247, -20.4047, 0.585072, -35.2888)
+
+[node name="ItemBox2" parent="RaceAct/Overpass/Bridge" instance=ExtResource("11_7ud75")]
+transform = Transform3D(0.87462, 0.0226348, 0.484281, 0, 0.998909, -0.046688, -0.48481, 0.0408343, 0.873666, -28.0392, 1.23254, -46.5554)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 10
+
+[node name="SpikeBall2" parent="RaceAct/Overpass/Bridge" instance=ExtResource("10_7ud75")]
+transform = Transform3D(0.866026, -0.499999, -2.18557e-08, 0, -4.37114e-08, 1, -0.499999, -0.866026, -3.78552e-08, -23.1497, -1.07872, -38.3431)
+animatorSpeedScale = 0.6
+Movement/Mode = 2
+"Movement/Cycle Length" = 6.0
+"Movement/Horizontal Size" = 2.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="SpikeBall3" parent="RaceAct/Overpass/Bridge" instance=ExtResource("10_7ud75")]
+transform = Transform3D(0.866026, -0.499999, -2.18557e-08, 0, -4.37114e-08, 1, -0.499999, -0.866026, -3.78552e-08, -25.3997, -1.07872, -42.2403)
+animatorSpeedScale = 0.4
+Movement/Mode = 2
+"Movement/Cycle Length" = 10.0
+"Movement/Horizontal Size" = 2.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="Head3" parent="RaceAct/Overpass/Bridge" instance=ExtResource("9_f5yof")]
+transform = Transform3D(-0.884149, 0.245058, 0.397778, 0.202785, 0.968307, -0.145808, -0.420904, -0.0482524, -0.905821, -34.4455, 1.46289, -60.7973)
+
+[node name="SpikeBall10" parent="RaceAct/Overpass/Bridge" instance=ExtResource("10_7ud75")]
+transform = Transform3D(0.904879, -0.425669, 4.41942e-08, -4.10466e-09, 1.97175e-08, 1, -0.425669, -0.904879, -1.49012e-08, -29.4488, -0.488078, -49.3751)
+animatorSpeedScale = 0.6
+Movement/Mode = 2
+"Movement/Cycle Length" = 10.0
+"Movement/Horizontal Size" = 2.5
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 3.0
+
+[node name="SpikeBall4" parent="RaceAct/Overpass/Bridge" instance=ExtResource("10_7ud75")]
+transform = Transform3D(-0.973595, 0.228283, -4.46866e-08, -4.32601e-09, 1.15908e-08, 1, 0.228283, 0.973595, 1.33521e-08, -33.2301, -0.48808, -59.7491)
+animatorSpeedScale = 0.6
+Movement/Mode = 2
+"Movement/Cycle Length" = 6.0
+"Movement/Horizontal Size" = 1.5
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 4.0
+
+[node name="ItemBox3" parent="RaceAct/Overpass/Bridge" instance=ExtResource("11_7ud75")]
+transform = Transform3D(0.945538, 0.00325679, 0.325495, 0.0120838, 0.99891, -0.0450972, -0.325287, 0.0465743, 0.944468, -35.8026, 1.91141, -75.2083)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 10
+
+[node name="Head4" parent="RaceAct/Overpass/Bridge" instance=ExtResource("9_f5yof")]
+transform = Transform3D(-0.244541, 0.0847418, -0.965929, -0.450695, 0.87209, 0.19061, 0.85853, 0.481952, -0.175069, -34.3047, 2.04019, -81.5888)
+
+[node name="SpikeBall11" parent="RaceAct/Overpass/Bridge" instance=ExtResource("10_7ud75")]
+transform = Transform3D(0.99844, -0.0558215, -2.44004e-09, 0, -4.37114e-08, 1, -0.0558215, -0.998441, -4.36432e-08, -34.7743, -0.48808, -71.5506)
+animatorSpeedScale = 0.6
+Movement/Mode = 2
+"Movement/Cycle Length" = 6.0
+"Movement/Horizontal Size" = 1.5
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 4.0
+
+[node name="SpikeBall5" parent="RaceAct/Overpass/Bridge" instance=ExtResource("10_7ud75")]
+transform = Transform3D(0.998441, -0.0558215, -2.44004e-09, 0, -4.37114e-08, 1, -0.0558215, -0.998441, -4.36432e-08, -34.7301, -0.48808, -75.1491)
+animatorSpeedScale = 0.4
+Movement/Mode = 2
+"Movement/Cycle Length" = 10.0
+"Movement/Horizontal Size" = 2.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="SpikeBall6" parent="RaceAct/Overpass/Bridge" instance=ExtResource("10_7ud75")]
+transform = Transform3D(-0.998441, 0.0558214, 2.44003e-09, 0, -4.37114e-08, 1, 0.0558214, 0.998441, 4.36432e-08, -34.7301, -0.48808, -78.0491)
+animatorSpeedScale = 0.8
+Movement/Mode = 2
+"Movement/Cycle Length" = 4.0
+"Movement/Horizontal Size" = 2.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="Hall" type="Node3D" parent="RaceAct/Overpass"]
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -36.9, 1.35, -90)
+
+[node name="CageGroup" type="Node3D" parent="RaceAct/Overpass/Hall"]
+transform = Transform3D(0.999982, 0.00594006, 0.000201918, -0.00594006, 0.997675, 0.0678952, 0.000201888, -0.0678953, 0.997693, 1.05628, -0.280873, -16.9886)
+
+[node name="Ring1" parent="RaceAct/Overpass/Hall/CageGroup" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 4.44089e-16, 0, -4.44089e-16, 1, 0, 0, 0, 1, -1.99999, 3, 0)
+
+[node name="Ring2" parent="RaceAct/Overpass/Hall/CageGroup" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 4.44089e-16, 0, -4.44089e-16, 1, 0, 0, 0, 1, 7.62939e-06, 3, 0)
+
+[node name="Ring3" parent="RaceAct/Overpass/Hall/CageGroup" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 4.44089e-16, 0, -4.44089e-16, 1, 0, 0, 0, 1, 2.00001, 3, 0)
+
+[node name="SpikeBall1" parent="RaceAct/Overpass/Hall/CageGroup" instance=ExtResource("10_7ud75")]
+transform = Transform3D(0.5, 1.11022e-16, 0, -1.11022e-16, 0.5, 0, 0, 0, 0.5, -2, 1, 0)
+
+[node name="SpikeBall2" parent="RaceAct/Overpass/Hall/CageGroup" instance=ExtResource("10_7ud75")]
+transform = Transform3D(0.5, 1.11022e-16, 0, -1.11022e-16, 0.5, 0, 0, 0, 0.5, 2, 1, 0)
+
+[node name="Cage1" parent="RaceAct/Overpass/Hall/CageGroup" instance=ExtResource("16_jruq6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1, 0)
+snapMode = 2
+
+[node name="Cage2" parent="RaceAct/Overpass/Hall/CageGroup" instance=ExtResource("16_jruq6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+snapMode = 2
+
+[node name="Cage3" parent="RaceAct/Overpass/Hall/CageGroup" instance=ExtResource("16_jruq6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, 0)
+snapMode = 2
+
+[node name="Cage4" parent="RaceAct/Overpass/Hall/CageGroup" instance=ExtResource("16_jruq6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 3, 0)
+
+[node name="Cage5" parent="RaceAct/Overpass/Hall/CageGroup" instance=ExtResource("16_jruq6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="Cage6" parent="RaceAct/Overpass/Hall/CageGroup" instance=ExtResource("16_jruq6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 3, 0)
+
+[node name="DashPanel" parent="RaceAct/Overpass/Hall/CageGroup" instance=ExtResource("17_k6vjs")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -6.11959e-08, 0, -0.7)
+
+[node name="Ring1" type="Node3D" parent="RaceAct/Overpass/Hall"]
+transform = Transform3D(0.999874, 0.000830277, -0.0158426, 0, 0.99863, 0.052336, 0.0158644, -0.0523294, 0.998504, -0.00690079, 0, -21.8755)
+script = ExtResource("4_68al8")
+Source = ExtResource("5_1chmq")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RaceAct/Overpass/Hall/Ring1" instance=ExtResource("5_1chmq")]
+
+[node name="Child02" parent="RaceAct/Overpass/Hall/Ring1" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="RaceAct/Overpass/Hall/Ring1" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="RaceAct/Overpass/Hall/Ring1" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="RaceAct/Overpass/Hall/Ring1" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="RaceAct/Overpass/Hall/Ring1" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="RaceAct/Overpass/Hall/Ring1" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="RaceAct/Overpass/Hall/Ring1" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="Child09" parent="RaceAct/Overpass/Hall/Ring1" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child10" parent="RaceAct/Overpass/Hall/Ring1" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="Ring2" type="Node3D" parent="RaceAct/Overpass/Hall"]
+transform = Transform3D(0.999874, 0.000830277, -0.0158426, 0, 0.99863, 0.052336, 0.0158644, -0.0523294, 0.998504, 2.09284, 0, -21.8422)
+script = ExtResource("4_68al8")
+Source = ExtResource("5_1chmq")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RaceAct/Overpass/Hall/Ring2" instance=ExtResource("5_1chmq")]
+
+[node name="Child02" parent="RaceAct/Overpass/Hall/Ring2" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="RaceAct/Overpass/Hall/Ring2" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="RaceAct/Overpass/Hall/Ring2" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="RaceAct/Overpass/Hall/Ring2" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="RaceAct/Overpass/Hall/Ring2" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="RaceAct/Overpass/Hall/Ring2" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="RaceAct/Overpass/Hall/Ring2" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="Child09" parent="RaceAct/Overpass/Hall/Ring2" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child10" parent="RaceAct/Overpass/Hall/Ring2" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="Ring3" type="Node3D" parent="RaceAct/Overpass/Hall"]
+transform = Transform3D(0.642788, 0.0400917, -0.764995, 0, 0.99863, 0.052336, 0.766044, -0.0336409, 0.641907, 4.10775, -1.57008, -53.9598)
+script = ExtResource("4_68al8")
+Source = ExtResource("5_1chmq")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RaceAct/Overpass/Hall/Ring3" instance=ExtResource("5_1chmq")]
+
+[node name="Child02" parent="RaceAct/Overpass/Hall/Ring3" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="RaceAct/Overpass/Hall/Ring3" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="RaceAct/Overpass/Hall/Ring3" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="RaceAct/Overpass/Hall/Ring3" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="RaceAct/Overpass/Hall/Ring3" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Ring4" type="Node3D" parent="RaceAct/Overpass/Hall"]
+transform = Transform3D(0.642788, 0.0400917, -0.764995, 0, 0.99863, 0.052336, 0.766044, -0.0336409, 0.641907, 5.39332, -1.57008, -52.4277)
+script = ExtResource("4_68al8")
+Source = ExtResource("5_1chmq")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RaceAct/Overpass/Hall/Ring4" instance=ExtResource("5_1chmq")]
+
+[node name="Child02" parent="RaceAct/Overpass/Hall/Ring4" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="RaceAct/Overpass/Hall/Ring4" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="RaceAct/Overpass/Hall/Ring4" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="RaceAct/Overpass/Hall/Ring4" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="RaceAct/Overpass/Hall/Ring4" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Ring5" type="Node3D" parent="RaceAct/Overpass/Hall"]
+transform = Transform3D(0.999942, -0.000562665, 0.0107364, -2.52906e-09, 0.99863, 0.052336, -0.010751, -0.052333, 0.998572, 26.9719, -3.47008, -75.3342)
+script = ExtResource("4_68al8")
+Source = ExtResource("5_1chmq")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RaceAct/Overpass/Hall/Ring5" instance=ExtResource("5_1chmq")]
+
+[node name="Child02" parent="RaceAct/Overpass/Hall/Ring5" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="RaceAct/Overpass/Hall/Ring5" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="RaceAct/Overpass/Hall/Ring5" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="RaceAct/Overpass/Hall/Ring5" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="RaceAct/Overpass/Hall/Ring5" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Ring6" type="Node3D" parent="RaceAct/Overpass/Hall"]
+transform = Transform3D(0.999943, -0.000562664, 0.0107364, -2.52906e-09, 0.99863, 0.052336, -0.0107509, -0.052333, 0.998572, 24.9795, -3.57008, -75.5085)
+script = ExtResource("4_68al8")
+Source = ExtResource("5_1chmq")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RaceAct/Overpass/Hall/Ring6" instance=ExtResource("5_1chmq")]
+
+[node name="Child02" parent="RaceAct/Overpass/Hall/Ring6" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="RaceAct/Overpass/Hall/Ring6" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="RaceAct/Overpass/Hall/Ring6" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="RaceAct/Overpass/Hall/Ring6" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="RaceAct/Overpass/Hall/Ring6" instance=ExtResource("5_1chmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Pearl1" type="Node3D" parent="RaceAct/Overpass/Hall"]
+transform = Transform3D(0.573577, 0, -0.819152, 0, 1, 0, 0.819152, 0, 0.573577, 29.8853, -5.3, -108.164)
+script = ExtResource("4_68al8")
+Source = ExtResource("18_k6vjs")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RaceAct/Overpass/Hall/Pearl1" instance=ExtResource("18_k6vjs")]
+
+[node name="Child02" parent="RaceAct/Overpass/Hall/Pearl1" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="RaceAct/Overpass/Hall/Pearl1" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="RaceAct/Overpass/Hall/Pearl1" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="RaceAct/Overpass/Hall/Pearl1" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="RaceAct/Overpass/Hall/Pearl1" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child07" parent="RaceAct/Overpass/Hall/Pearl1" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child08" parent="RaceAct/Overpass/Hall/Pearl1" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child09" parent="RaceAct/Overpass/Hall/Pearl1" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child10" parent="RaceAct/Overpass/Hall/Pearl1" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Pearl2" type="Node3D" parent="RaceAct/Overpass/Hall"]
+transform = Transform3D(0.573577, 0, -0.819152, 0, 1, 0, 0.819152, 0, 0.573577, 29.0249, -5.3, -109.393)
+script = ExtResource("4_68al8")
+Source = ExtResource("18_k6vjs")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RaceAct/Overpass/Hall/Pearl2" instance=ExtResource("18_k6vjs")]
+
+[node name="Child02" parent="RaceAct/Overpass/Hall/Pearl2" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="RaceAct/Overpass/Hall/Pearl2" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="RaceAct/Overpass/Hall/Pearl2" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="RaceAct/Overpass/Hall/Pearl2" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="RaceAct/Overpass/Hall/Pearl2" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child07" parent="RaceAct/Overpass/Hall/Pearl2" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child08" parent="RaceAct/Overpass/Hall/Pearl2" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child09" parent="RaceAct/Overpass/Hall/Pearl2" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child10" parent="RaceAct/Overpass/Hall/Pearl2" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="SpikeBall1" parent="RaceAct/Overpass/Hall" instance=ExtResource("10_7ud75")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.2089, -4.55277, -115.898)
+
+[node name="Pearl3" type="Node3D" parent="RaceAct/Overpass/Hall"]
+transform = Transform3D(0.866026, 0.0522642, 0.497261, 3.72529e-09, 0.994522, -0.104529, -0.5, 0.0905243, 0.861282, 39.1972, -3.69617, -129.331)
+script = ExtResource("4_68al8")
+Source = ExtResource("18_k6vjs")
+Amount = 13
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RaceAct/Overpass/Hall/Pearl3" instance=ExtResource("18_k6vjs")]
+
+[node name="Child02" parent="RaceAct/Overpass/Hall/Pearl3" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="RaceAct/Overpass/Hall/Pearl3" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="RaceAct/Overpass/Hall/Pearl3" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="RaceAct/Overpass/Hall/Pearl3" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="RaceAct/Overpass/Hall/Pearl3" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child07" parent="RaceAct/Overpass/Hall/Pearl3" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child08" parent="RaceAct/Overpass/Hall/Pearl3" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child09" parent="RaceAct/Overpass/Hall/Pearl3" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child10" parent="RaceAct/Overpass/Hall/Pearl3" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child11" parent="RaceAct/Overpass/Hall/Pearl3" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child12" parent="RaceAct/Overpass/Hall/Pearl3" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
+
+[node name="Child13" parent="RaceAct/Overpass/Hall/Pearl3" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Pearl4" type="Node3D" parent="RaceAct/Overpass/Hall"]
+transform = Transform3D(0.866026, 0.0522642, 0.497261, 3.72529e-09, 0.994522, -0.104529, -0.5, 0.0905243, 0.861282, 37.8982, -3.69617, -128.581)
+script = ExtResource("4_68al8")
+Source = ExtResource("18_k6vjs")
+Amount = 13
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RaceAct/Overpass/Hall/Pearl4" instance=ExtResource("18_k6vjs")]
+
+[node name="Child02" parent="RaceAct/Overpass/Hall/Pearl4" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="RaceAct/Overpass/Hall/Pearl4" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="RaceAct/Overpass/Hall/Pearl4" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="RaceAct/Overpass/Hall/Pearl4" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="RaceAct/Overpass/Hall/Pearl4" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child07" parent="RaceAct/Overpass/Hall/Pearl4" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child08" parent="RaceAct/Overpass/Hall/Pearl4" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child09" parent="RaceAct/Overpass/Hall/Pearl4" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child10" parent="RaceAct/Overpass/Hall/Pearl4" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child11" parent="RaceAct/Overpass/Hall/Pearl4" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child12" parent="RaceAct/Overpass/Hall/Pearl4" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
+
+[node name="Child13" parent="RaceAct/Overpass/Hall/Pearl4" instance=ExtResource("18_k6vjs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="SpikeBall2" parent="RaceAct/Overpass/Hall" instance=ExtResource("10_7ud75")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, -2, -141)
+
+[node name="Leg1" parent="RaceAct/Overpass/Hall" instance=ExtResource("20_ru2ky")]
+transform = Transform3D(-1.99239, -0.174311, -1.78814e-07, -0.174311, 1.99239, 0, 8.9407e-08, 9.31323e-09, -2, 28.329, 0.0954581, -143.389)
+
+[node name="Leg2" parent="RaceAct/Overpass/Hall" instance=ExtResource("20_ru2ky")]
+transform = Transform3D(-0.996195, -0.0871558, 1.73205, -0.174311, 1.99239, -3.10862e-15, -1.72546, -0.150958, -1, 29.4883, 0.196219, -147.479)
+
+[node name="Leg3" parent="RaceAct/Overpass/Hall" instance=ExtResource("20_ru2ky")]
+transform = Transform3D(-1.81535, 0.660733, 0.517639, 0.684041, 1.87938, -1.54089e-08, -0.486423, 0.177043, -1.93185, 26.3595, 0.445276, -148.953)
+
+[node name="Leg4" parent="RaceAct/Overpass/Hall" instance=ExtResource("20_ru2ky")]
+transform = Transform3D(-2.00001, -1.24345e-14, 1.78814e-07, 0, -2, -1.74846e-07, 1.78814e-07, -1.74846e-07, 2, 26.9289, 1.49002, -153.262)
+
+[node name="RibGroup1" type="Node3D" parent="RaceAct/Overpass/Hall"]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 32.8434, -0.8, -185.752)
+
+[node name="Ribcage1" parent="RaceAct/Overpass/Hall/RibGroup1" instance=ExtResource("6_1chmq")]
+transform = Transform3D(1, 0, 4.44089e-16, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1, 1)
+
+[node name="Ribcage2" parent="RaceAct/Overpass/Hall/RibGroup1" instance=ExtResource("6_1chmq")]
+transform = Transform3D(-0.866025, 0.5, 0, 2.18557e-08, 3.78552e-08, -1, -0.5, -0.866025, -4.37114e-08, 1.34641, 0.7, 0.2)
+
+[node name="RibGroup2" type="Node3D" parent="RaceAct/Overpass/Hall"]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 36.6564, -0.9, -196.118)
+
+[node name="Ribcage1" parent="RaceAct/Overpass/Hall/RibGroup2" instance=ExtResource("6_1chmq")]
+transform = Transform3D(1, 0, 4.44089e-16, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1, 0)
+
+[node name="Ribcage2" parent="RaceAct/Overpass/Hall/RibGroup2" instance=ExtResource("6_1chmq")]
+transform = Transform3D(0.707107, -0.707107, -1.13133e-08, 2.18557e-08, 3.78552e-08, -1, 0.707107, 0.707107, 4.2222e-08, -1.35296, 0.6, -0.136658)
+
+[node name="RibGroup3" type="Node3D" parent="RaceAct/Overpass/Hall"]
+transform = Transform3D(0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, 0.422618, 44.2224, -1.2, -202.282)
+
+[node name="Ribcage1" parent="RaceAct/Overpass/Hall/RibGroup3" instance=ExtResource("6_1chmq")]
+transform = Transform3D(1, 0, 4.44089e-16, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1, 0)
+
+[node name="Ribcage2" parent="RaceAct/Overpass/Hall/RibGroup3" instance=ExtResource("6_1chmq")]
+transform = Transform3D(0.984808, -0.173648, 1.49502e-08, 2.18557e-08, 3.78552e-08, -1, 0.173648, 0.984808, 4.10753e-08, -1.48035, 0.6, -0.114838)
+
+[node name="MajinGroup2" type="Node3D" parent="RaceAct/Overpass/Hall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, -160)
+
+[node name="BlueMajin1" parent="RaceAct/Overpass/Hall/MajinGroup2" instance=ExtResource("6_f2djj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.698545, -0.5, -2.24744)
+rangeOverride = 15
+
+[node name="RedMajin1" parent="RaceAct/Overpass/Hall/MajinGroup2" instance=ExtResource("8_fm31u")]
+transform = Transform3D(-0.5, 0, -0.866026, 0, 1, 0, 0.866026, 0, -0.5, 1.3048, -0.1, -5.89752)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 4.0
+"Attack Settings/Flame Active Time" = 5.5
+"Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+rangeOverride = 15
+
+[node name="RedMajin2" parent="RaceAct/Overpass/Hall/MajinGroup2" instance=ExtResource("8_fm31u")]
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, 8.8392, -0.5, -30.9059)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 5.0
+"Attack Settings/Flame Active Time" = 10.0
+"Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+rangeOverride = 15
+
+[node name="RedMajin3" parent="RaceAct/Overpass/Hall/MajinGroup2" instance=ExtResource("8_fm31u")]
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, 13.0284, -0.5, -40.6614)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 2.0
+"Attack Settings/Flame Active Time" = 5.0
+"Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+rangeOverride = 20
+
+[node name="SpikeGroup" type="Node3D" parent="RaceAct/Overpass/Hall"]
+transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195, 48.4, -1.4, -223.001)
+
+[node name="SpikePanel1" parent="RaceAct/Overpass/Hall/SpikeGroup" instance=ExtResource("21_t37y6")]
+transform = Transform3D(0.991445, 0.130526, -1.42109e-14, -0.130526, 0.991445, 0, 1.42109e-14, 0, 1, -0.489512, 0.19945, 14.3)
+stateLengths = PackedFloat32Array(0.5, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.5
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel2" parent="RaceAct/Overpass/Hall/SpikeGroup" instance=ExtResource("21_t37y6")]
+transform = Transform3D(1, 0, -7.81597e-14, 0, 1, 0, 7.81597e-14, 0, 1, 1, 0.1, 14.3)
+stateLengths = PackedFloat32Array(0.5, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.5
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel3" parent="RaceAct/Overpass/Hall/SpikeGroup" instance=ExtResource("21_t37y6")]
+transform = Transform3D(0.991445, -0.130526, -2.84217e-14, 0.130526, 0.991445, 0, 2.84217e-14, 0, 1, 2.48696, 0.199144, 14.3)
+stateLengths = PackedFloat32Array(0.5, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.5
+"State Lengths/active" = 0.5
+
+[node name="Stone1" parent="RaceAct/Overpass/Hall/SpikeGroup" instance=ExtResource("22_mcl1m")]
+transform = Transform3D(1, 0, -1.42109e-13, 0, 1, 0, 1.42109e-13, 0, 1, -0.999993, -0.1, 12.5)
+
+[node name="Stone2" parent="RaceAct/Overpass/Hall/SpikeGroup" instance=ExtResource("22_mcl1m")]
+transform = Transform3D(1, 0, -1.56319e-13, 0, 1, 0, 1.56319e-13, 0, 1, 1, -0.3, 12.5)
+
+[node name="Stone3" parent="RaceAct/Overpass/Hall/SpikeGroup" instance=ExtResource("22_mcl1m")]
+transform = Transform3D(1, 0, -1.63425e-13, 0, 1, 0, 1.63425e-13, 0, 1, 3.00002, 0, 12.5)
+
+[node name="BlockGroup" type="Node3D" parent="RaceAct/Overpass/Hall"]
+transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195, 48.4, -1.4, -223.001)
+
+[node name="Stone1" parent="RaceAct/Overpass/Hall/BlockGroup" instance=ExtResource("22_mcl1m")]
+transform = Transform3D(1, 0, -2.27374e-13, 0, 1, 0, 2.27374e-13, 0, 1, -2, 1, 0)
+
+[node name="Stone2" parent="RaceAct/Overpass/Hall/BlockGroup" instance=ExtResource("22_mcl1m")]
+transform = Transform3D(-4.37112e-08, 0, 1, 0, 1, 0, -1, 0, -4.37112e-08, 0, 1, 0)
+
+[node name="Stone3" parent="RaceAct/Overpass/Hall/BlockGroup" instance=ExtResource("22_mcl1m")]
+transform = Transform3D(-1.42109e-14, 1, 4.37114e-08, 0, -4.37114e-08, 1, 1, 1.42109e-14, 2.11758e-22, 2, 1, 0)
+
+[node name="EnemyStone1" parent="RaceAct/Overpass/Hall/BlockGroup" instance=ExtResource("23_p2t1t")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 1.42109e-14, 0, 1, -2, 3, 0)
+enemyCount = 1
+
+[node name="EnemyStone2" parent="RaceAct/Overpass/Hall/BlockGroup" instance=ExtResource("23_p2t1t")]
+transform = Transform3D(1, 0, -2.84217e-14, 0, 1, 0, 2.84217e-14, 0, 1, -2, 5, 0)
+enemyCount = 1
+
+[node name="EnemyStone3" parent="RaceAct/Overpass/Hall/BlockGroup" instance=ExtResource("23_p2t1t")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 1.42109e-14, 0, 1, 0, 3, 0)
+enemyCount = 1
+
+[node name="EnemyStone4" parent="RaceAct/Overpass/Hall/BlockGroup" instance=ExtResource("23_p2t1t")]
+transform = Transform3D(1, 0, -2.84217e-14, 0, 1, 0, 2.84217e-14, 0, 1, 0, 5, 0)
+enemyCount = 1
+
+[node name="EnemyStone5" parent="RaceAct/Overpass/Hall/BlockGroup" instance=ExtResource("23_p2t1t")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 1.42109e-14, 0, 1, 2, 3, 0)
+enemyCount = 1
+
+[node name="EnemyStone6" parent="RaceAct/Overpass/Hall/BlockGroup" instance=ExtResource("23_p2t1t")]
+transform = Transform3D(1, 0, -2.84217e-14, 0, 1, 0, 2.84217e-14, 0, 1, 2, 5, 0)
+enemyCount = 1
+
+[node name="RedMajin" parent="RaceAct/Overpass/Hall/BlockGroup" instance=ExtResource("8_fm31u")]
+transform = Transform3D(1, 0, -1.06581e-13, 0, 1, 0, 1.06581e-13, 0, 1, 0.900012, 0.4, 6)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 0.5
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 0.4
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+rangeOverride = 10
+
+[node name="Goal" parent="RaceAct/Overpass" instance=ExtResource("23_i2fxc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 10, -323)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RaceAct/Overpass/Goal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
+shape = SubResource("BoxShape3D_joqx7")
+
+[connection signal="Shattered" from="RaceAct/Overpass/Hall/CageGroup/Cage1" to="RaceAct/Overpass/Hall/CageGroup/Cage4" method="Shatter"]
+[connection signal="Shattered" from="RaceAct/Overpass/Hall/CageGroup/Cage2" to="RaceAct/Overpass/Hall/CageGroup/Cage5" method="Shatter"]
+[connection signal="Shattered" from="RaceAct/Overpass/Hall/CageGroup/Cage3" to="RaceAct/Overpass/Hall/CageGroup/Cage6" method="Shatter"]
+[connection signal="Defeated" from="RaceAct/Overpass/Hall/BlockGroup/RedMajin" to="RaceAct/Overpass/Hall/BlockGroup/EnemyStone1" method="IncrementCounter"]
+[connection signal="Defeated" from="RaceAct/Overpass/Hall/BlockGroup/RedMajin" to="RaceAct/Overpass/Hall/BlockGroup/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="RaceAct/Overpass/Hall/BlockGroup/RedMajin" to="RaceAct/Overpass/Hall/BlockGroup/EnemyStone3" method="IncrementCounter"]
+[connection signal="Defeated" from="RaceAct/Overpass/Hall/BlockGroup/RedMajin" to="RaceAct/Overpass/Hall/BlockGroup/EnemyStone4" method="IncrementCounter"]
+[connection signal="Defeated" from="RaceAct/Overpass/Hall/BlockGroup/RedMajin" to="RaceAct/Overpass/Hall/BlockGroup/EnemyStone5" method="IncrementCounter"]
+[connection signal="Defeated" from="RaceAct/Overpass/Hall/BlockGroup/RedMajin" to="RaceAct/Overpass/Hall/BlockGroup/EnemyStone6" method="IncrementCounter"]
+
+[editable path="Static"]
+[editable path="Static/Collision"]

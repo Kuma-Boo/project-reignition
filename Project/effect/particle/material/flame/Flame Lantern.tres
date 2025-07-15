@@ -1,19 +1,16 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dito0mk420nbo"]
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://dito0mk420nbo"]
 
 [ext_resource type="Texture2D" uid="uid://d2vipoyhei6vj" path="res://effect/particle/texture/flame/flame lantern.png" id="1_606c3"]
+[ext_resource type="Shader" uid="uid://u4em5nb1sgl0" path="res://effect/shader/particle/LanternFlame.gdshader" id="1_qagpy"]
 
 [resource]
-transparency = 1
-blend_mode = 1
-shading_mode = 0
-specular_mode = 2
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("1_606c3")
-billboard_mode = 3
-billboard_keep_scale = true
-particles_anim_h_frames = 8
-particles_anim_v_frames = 8
-particles_anim_loop = true
-distance_fade_mode = 1
-distance_fade_min_distance = 0.5
-distance_fade_max_distance = 2.0
+render_priority = 0
+shader = ExtResource("1_qagpy")
+shader_parameter/albedo = ExtResource("1_606c3")
+shader_parameter/distance_fade_min = 0.5
+shader_parameter/distance_fade_max = 2.0
+shader_parameter/emission_intensity = 1.0
+shader_parameter/uv_offset = Vector2(0, 0.05)
+shader_parameter/particles_anim_h_frames = 8
+shader_parameter/particles_anim_v_frames = 8
+shader_parameter/particles_anim_loop = true

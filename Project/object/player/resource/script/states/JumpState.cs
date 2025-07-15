@@ -5,16 +5,11 @@ namespace Project.Gameplay;
 
 public partial class JumpState : PlayerState
 {
-	[Export]
-	private PlayerState fallState;
-	[Export]
-	private PlayerState landState;
-	[Export]
-	private PlayerState stompState;
-	[Export]
-	private PlayerState jumpDashState;
-	[Export]
-	private PlayerState homingAttackState;
+	[Export] private PlayerState fallState;
+	[Export] private PlayerState landState;
+	[Export] private PlayerState stompState;
+	[Export] private PlayerState jumpDashState;
+	[Export] private PlayerState homingAttackState;
 
 	[Export]
 	private float accelerationJumpSpeed = 25f;
@@ -137,7 +132,7 @@ public partial class JumpState : PlayerState
 
 				if (!Player.IsAccelerationJumping && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SpinJump))
 				{
-					Player.StartSpinJump(isShortenedJump);
+					Player.StartSpinJump(!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) && isShortenedJump);
 					return null;
 				}
 			}
@@ -152,6 +147,13 @@ public partial class JumpState : PlayerState
 		if (Player.Controller.IsJumpBufferActive)
 		{
 			Player.Controller.ResetJumpBuffer();
+
+			if (Player.CanDoubleJump && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.DoubleJump)) // Start a double jump
+			{
+				Player.StartDoubleJump();
+				return null;
+			}
+
 			if (SaveManager.Config.useStompJumpButtonMode)
 				return stompState;
 
@@ -208,13 +210,6 @@ public partial class JumpState : PlayerState
 
 	protected override void ProcessTurning()
 	{
-		float targetAngle = Player.Controller.GetTargetInputAngle();
-		if (!Player.Controller.IsHoldingDirection(targetAngle, Player.PathFollower.ForwardAngle) &&
-			!Player.Controller.IsHoldingDirection(targetAngle, Player.PathFollower.BackAngle))
-		{
-			return;
-		}
-
 		base.ProcessTurning();
 
 		if (Player.IsAccelerationJumping) // Clamp acceleration jumps so they don't get out of control

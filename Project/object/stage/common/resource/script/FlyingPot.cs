@@ -103,15 +103,19 @@ public partial class FlyingPot : Node3D
 
 	private void StartJump()
 	{
+		if (isPlayerJumpingIntoPot)
+			return;
+
 		isPlayerJumpingIntoPot = true;
 		environmentCollider.Disabled = true;
 
 		float jumpHeight = GlobalPosition.Y + 1 - Player.GlobalPosition.Y;
-		jumpHeight = Mathf.Clamp(jumpHeight * 2, 0, 2);
+		jumpHeight = Mathf.Clamp(jumpHeight * 2f, 0.5f, 2f);
 		LaunchSettings settings = LaunchSettings.Create(Player.GlobalPosition, root.GlobalPosition, jumpHeight, false);
-		settings.IsJump = true;
 		settings.AllowJumpDash = false;
 		Player.StartLauncher(settings);
+		Player.Animator.AutoJumpAnimation();
+		Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
 
 		lockonArea.SetDeferred("monitorable", false);
 
@@ -208,6 +212,9 @@ public partial class FlyingPot : Node3D
 	public void OnExited(Area3D a)
 	{
 		if (!a.IsInGroup("player detection"))
+			return;
+
+		if (isPlayerJumpingIntoPot)
 			return;
 
 		interactingWithPlayer = false;
