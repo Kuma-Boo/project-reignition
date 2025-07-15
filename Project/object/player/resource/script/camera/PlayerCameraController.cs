@@ -392,8 +392,12 @@ public partial class PlayerCameraController : Node3D
 
 				float blendedDistance = Mathf.Lerp(iData.blendData.distance, secondaryData.blendData.distance, secondaryInfluence);
 				distance = Mathf.Lerp(distance, blendedDistance, CameraBlendList[i].SmoothedInfluence);
+
 				float blendedFov = Mathf.Lerp(iData.blendData.Fov, secondaryData.blendData.Fov, secondaryInfluence);
 				fov = Mathf.Lerp(fov, blendedFov, CameraBlendList[i].SmoothedInfluence);
+
+				float blendedXformAngle = Mathf.LerpAngle(iData.blendData.yawAngle, secondaryData.blendData.yawAngle, secondaryInfluence);
+				xformAngle = Mathf.Lerp(xformAngle, blendedXformAngle, CameraBlendList[i].SmoothedInfluence);
 
 				Vector2 blendedViewportOffset = iData.blendData.SettingsResource.viewportOffset;
 				blendedViewportOffset = blendedViewportOffset.Lerp(secondaryData.blendData.SettingsResource.viewportOffset, secondaryInfluence);
@@ -401,13 +405,13 @@ public partial class PlayerCameraController : Node3D
 			}
 			else
 			{
+				xformAngle = Mathf.Lerp(xformAngle, data.blendData.yawAngle, CameraBlendList[i].SmoothedInfluence);
 				distance = Mathf.Lerp(distance, iData.blendData.distance, CameraBlendList[i].SmoothedInfluence);
 				fov = Mathf.Lerp(fov, iData.blendData.Fov, CameraBlendList[i].SmoothedInfluence);
 
 				viewportOffset = viewportOffset.Lerp(CameraBlendList[i].SettingsResource.viewportOffset, CameraBlendList[i].SmoothedInfluence);
 			}
 
-			xformAngle = Mathf.Lerp(xformAngle, data.blendData.yawAngle, CameraBlendList[i].SmoothedInfluence);
 			lockonPitchReferenceAngle = Mathf.Lerp(lockonPitchReferenceAngle, CameraBlendList[i].pitchAngle, CameraBlendList[i].SmoothedInfluence);
 
 			data.offsetBasis = data.offsetBasis.Slerp(iData.offsetBasis, CameraBlendList[i].SmoothedInfluence);
