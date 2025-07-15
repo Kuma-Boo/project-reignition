@@ -85,6 +85,7 @@ public partial class LaunchState : PlayerState
 
 		Player.AttackState = PlayerController.AttackStates.None;
 
+		Player.CanJumpDash = Settings.AllowJumpDash;
 		if (!Player.Lockon.IsMonitoring)
 			Player.Lockon.IsMonitoring = !Player.IsOnGround && Settings.AllowJumpDash;
 
