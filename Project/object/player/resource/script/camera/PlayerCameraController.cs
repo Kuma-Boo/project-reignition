@@ -398,7 +398,7 @@ public partial class PlayerCameraController : Node3D
 				float blendedFov = Mathf.Lerp(iData.blendData.Fov, secondaryData.blendData.Fov, secondaryInfluence);
 				fov = Mathf.Lerp(fov, blendedFov, CameraBlendList[i].SmoothedInfluence);
 
-				float blendedXformAngle = Mathf.LerpAngle(iData.blendData.yawAngle, secondaryData.blendData.yawAngle, secondaryInfluence);
+				float blendedXformAngle = Mathf.Lerp(iData.blendData.yawAngle, secondaryData.blendData.yawAngle, secondaryInfluence);
 				xformAngle = Mathf.Lerp(xformAngle, blendedXformAngle, CameraBlendList[i].SmoothedInfluence);
 
 				Vector2 blendedViewportOffset = iData.blendData.SettingsResource.viewportOffset;
@@ -407,7 +407,7 @@ public partial class PlayerCameraController : Node3D
 			}
 			else
 			{
-				xformAngle = Mathf.Lerp(xformAngle, data.blendData.yawAngle, CameraBlendList[i].SmoothedInfluence);
+				xformAngle = Mathf.Lerp(xformAngle, iData.blendData.yawAngle, CameraBlendList[i].SmoothedInfluence);
 				distance = Mathf.Lerp(distance, iData.blendData.distance, CameraBlendList[i].SmoothedInfluence);
 				fov = Mathf.Lerp(fov, iData.blendData.Fov, CameraBlendList[i].SmoothedInfluence);
 
@@ -499,7 +499,7 @@ public partial class PlayerCameraController : Node3D
 	}
 
 	/// <summary> Blends xform angles for smoother inputs between camera cuts. </summary>
-	private void UpdateInputXForm(float yawAngle)
+	private void UpdateInputXForm(float newXFormAngle)
 	{
 		// Snap xform blend when no input is held
 		if (Mathf.IsZeroApprox(Player.Controller.GetInputStrength()) ||
@@ -511,7 +511,7 @@ public partial class PlayerCameraController : Node3D
 		}
 
 		xformBlend = Mathf.MoveToward(xformBlend, 1, XformSmoothing * PhysicsManager.physicsDelta);
-		Player.Controller.XformAngle = Mathf.LerpAngle(cachedXFormAngle, yawAngle, xformBlend);
+		Player.Controller.XformAngle = Mathf.LerpAngle(cachedXFormAngle, newXFormAngle, xformBlend);
 	}
 
 	public void SnapXform() => xformBlend = 1;

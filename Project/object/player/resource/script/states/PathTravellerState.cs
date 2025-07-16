@@ -60,8 +60,10 @@ public partial class PathTravellerState : PlayerState
 
 	private void OnDamage()
 	{
-		isRespawning = true;
+		if (isRespawning || Traveller == null)
+			return;
 
+		isRespawning = true;
 		Traveller.Deactivate();
 		Traveller.Despawn();
 
