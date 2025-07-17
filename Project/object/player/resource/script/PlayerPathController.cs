@@ -103,7 +103,7 @@ namespace Project.Gameplay
 
 			HeightAxis = ForwardAxis.Rotated(SideAxis, Mathf.Pi * .5f).Normalized();
 
-			if (Controller.IsMovingBackward || Mathf.IsZeroApprox(Controller.MoveSpeed))
+			if (Controller.IsMovingBackward || Mathf.IsZeroApprox(Controller.MoveSpeed) || Controller.IsDrifting)
 				LocalHorizontalVelocity = 0;
 			else
 				LocalHorizontalVelocity = Controller.MoveSpeed * ExtensionMethods.DotAngle(Controller.MovementAngle, ForwardAngle + Mathf.Pi * .5f);

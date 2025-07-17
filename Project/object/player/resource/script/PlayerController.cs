@@ -34,7 +34,7 @@ public partial class PlayerController : CharacterBody3D
 		StageSettings.RegisterPlayer(this); // Update global reference
 		Stage.UpdateRingCount(Skills.StartingRingCount, StageSettings.MathModeEnum.Replace); // Start with the proper ring count
 		Stage.LevelCompleted += OnLevelCompleted;
-		Stage.LevelDemoStarted += OnLevelDemoStarted;
+		Stage.LevelDemoStarted += Deactivate;
 
 		Controller.Initialize(this);
 		Stats.Initialize();
@@ -48,6 +48,7 @@ public partial class PlayerController : CharacterBody3D
 		// Initialize state machine last to ensure components are ready		
 		StateMachine.Initialize(this);
 
+		CanDoubleJump = true;
 		ChangeHitbox("RESET");
 		ResetCheckpointOrientation();
 		SnapToGround();
@@ -556,12 +557,6 @@ public partial class PlayerController : CharacterBody3D
 			AddLockoutData(Stage.Data.CompletionLockout);
 	}
 
-	private void OnLevelDemoStarted()
-	{
-		MoveSpeed = 0;
-		AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
-	}
-
 	private bool isRecentered; // Is the recenter complete?
 	private const float MinRecenterPower = .1f;
 	private const float MaxRecenterPower = .2f;
@@ -616,6 +611,7 @@ public partial class PlayerController : CharacterBody3D
 
 	#region State
 	public bool CanJumpDash { get; set; }
+	public bool CanDoubleJump { get; set; }
 	public bool IsJumpDashing { get; set; }
 	public bool IsHomingAttacking { get; set; }
 	public bool IsPerfectHomingAttacking { get; set; }
@@ -691,6 +687,24 @@ public partial class PlayerController : CharacterBody3D
 	{
 		spinJumpState.IsShortenedJump = isShortenedJump;
 		StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, spinJumpState);
+	}
+
+	public void StartDoubleJump()
+	{
+		Effect.PlayDoubleJumpFX();
+		VerticalSpeed = Runtime.CalculateJumpPower(Stats.DoubleJumpHeight);
+
+		float targetMoveSpeed = Stats.DoubleJumpSpeed * Controller.GetInputStrength();
+		if (!Mathf.IsZeroApprox(targetMoveSpeed))
+			MovementAngle = Controller.GetTargetMovementAngle();
+		if (Mathf.IsZeroApprox(targetMoveSpeed) || MoveSpeed < targetMoveSpeed ||
+			!Controller.IsHoldingDirection(MovementAngle, PathFollower.ForwardAngle))
+		{
+			MoveSpeed = targetMoveSpeed;
+		}
+
+		CanDoubleJump = false;
+		StartSpinJump(true);
 	}
 
 	private readonly float SpinJumpBounceAmount = 3.0f;
@@ -978,13 +992,18 @@ public partial class PlayerController : CharacterBody3D
 		return Mathf.Max(ringLoss, 0);
 	}
 
-	public bool IsInvincible => invincibilityTimer != 0 || DisableDamage || IsTeleporting;
+	public bool IsInvincible => !Mathf.IsZeroApprox(invincibilityTimer) || DisableDamage || IsTeleporting;
 	private float invincibilityTimer;
 	private const float InvincibilityLength = 3f;
-	public void StartInvincibility(float timeScale = 1f)
+	public void StartInvincibility(float length = InvincibilityLength, bool enableFlickering = true)
 	{
-		invincibilityTimer = InvincibilityLength / timeScale;
-		Animator.StartInvincibility(timeScale);
+		if (Mathf.IsZeroApprox(length))
+			return;
+
+		invincibilityTimer = length;
+
+		if (enableFlickering)
+			Animator.StartInvincibility(length / InvincibilityLength);
 	}
 
 	private void UpdateInvincibility()

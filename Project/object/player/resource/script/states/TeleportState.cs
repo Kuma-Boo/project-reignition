@@ -9,8 +9,8 @@ public partial class TeleportState : PlayerState
 	private TeleportTrigger Trigger { get; set; }
 	public void UpdateTrigger(TeleportTrigger trigger) => Trigger = trigger;
 
-	[Export]
-	private PlayerState idleState;
+	[Export] private PlayerState idleState;
+	[Export] private PlayerState runState;
 
 	private States currentState;
 	private enum States
@@ -80,7 +80,7 @@ public partial class TeleportState : PlayerState
 				ProcessStopFX();
 				return null;
 			default:
-				return idleState;
+				return Mathf.IsZeroApprox(Player.MoveSpeed) ? idleState : runState;
 		}
 	}
 
@@ -123,6 +123,9 @@ public partial class TeleportState : PlayerState
 		Player.GlobalPosition = Trigger.WarpPosition;
 		Player.ResetPhysicsInterpolation();
 
+		Trigger.ApplyTeleport(); // Apply any signals/path changes
+
+		Player.CanDoubleJump = true;
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 		Player.SnapToGround();
 		Player.UpdateOrientation();
@@ -132,8 +135,6 @@ public partial class TeleportState : PlayerState
 		Player.Animator.ResetState(0);
 		Player.Animator.IdleAnimation();
 		Player.Animator.SnapRotation(Player.PathFollower.ForwardAngle);
-
-		Trigger.ApplyTeleport(); // Apply any signals/path changes
 
 		if (StopTeleportFX())
 			return;

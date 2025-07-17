@@ -616,7 +616,7 @@ tracks/34/keys = {
 tracks/35/type = "value"
 tracks/35/imported = false
 tracks/35/enabled = true
-tracks/35/path = NodePath("Data/Prompts:modulate")
+tracks/35/path = NodePath("Data/NavigationButtons:modulate")
 tracks/35/interp = 1
 tracks/35/loop_wrap = true
 tracks/35/keys = {
@@ -921,7 +921,7 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("Data/Prompts:modulate")
+tracks/11/path = NodePath("Data/NavigationButtons:modulate")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -1596,7 +1596,7 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("Data/Prompts:modulate")
+tracks/12/path = NodePath("Data/NavigationButtons:modulate")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -2481,7 +2481,7 @@ offset_top = -56.0
 offset_right = 120.0
 offset_bottom = 56.0
 grow_vertical = 2
-texture = ExtResource("8_mjqbr")
+texture = ExtResource("3")
 expand_mode = 2
 stretch_mode = 5
 
@@ -2848,26 +2848,32 @@ explosiveness = 0.7
 fixed_fps = 0
 process_material = SubResource("ParticleProcessMaterial_1t818")
 
-[node name="Prompts" type="Node2D" parent="Data"]
+[node name="NavigationButtons" type="HBoxContainer" parent="Data"]
 modulate = Color(1, 1, 1, 0)
-position = Vector2(0, 40)
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 384.0
+offset_top = 404.0
+offset_right = -448.0
+offset_bottom = 452.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 64
+alignment = 2
 
-[node name="Retry" parent="Data/Prompts" instance=ExtResource("6_ms8ry")]
+[node name="Retry" parent="Data/NavigationButtons" instance=ExtResource("6_ms8ry")]
 z_as_relative = true
-offset_left = 904.0
-offset_top = 896.0
-offset_right = 1133.0
-offset_bottom = 960.0
+layout_mode = 2
 ActionKey = &"sys_retry"
 inputKey = &"button_action"
 fallbackKey = &"ui_cancel"
 
-[node name="Next" parent="Data/Prompts" instance=ExtResource("6_ms8ry")]
+[node name="Next" parent="Data/NavigationButtons" instance=ExtResource("6_ms8ry")]
 z_as_relative = true
-offset_left = 1272.0
-offset_top = 896.0
-offset_right = 1501.0
-offset_bottom = 960.0
+layout_mode = 2
 ActionKey = &"sys_next"
 inputKey = &"button_jump"
 fallbackKey = &"ui_select"
@@ -2884,7 +2890,7 @@ stream = ExtResource("13_fl1gd")
 bus = &"BGM"
 script = ExtResource("2")
 loopStartPosition = 5.789
-loopEndPosition = 28.7
+loopEndPosition = 29.0
 
 [node name="MissionClearGold" type="AudioStreamPlayer" parent="."]
 process_mode = 3
@@ -2892,7 +2898,7 @@ stream = ExtResource("14_cabbv")
 bus = &"BGM"
 script = ExtResource("2")
 loopStartPosition = 5.83
-loopEndPosition = 34.85
+loopEndPosition = 34.89
 
 [node name="FailSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("9_xr8rf")

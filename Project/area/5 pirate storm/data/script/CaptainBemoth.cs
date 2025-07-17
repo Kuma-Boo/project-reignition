@@ -696,9 +696,13 @@ public partial class CaptainBemoth : PathFollow3D
 
 	private void ActivateShockScreenShake()
 	{
+		ShakeScreen();
+
+		if (hasPlayerJumpedOffHorn) // Player has already left the horn
+			return;
+
 		jumpCameraTrigger.GlobalPosition = Player.Camera.Camera.GlobalPosition; // Sync jump camera's position
 		jumpCameraTrigger.Activate();
-		ShakeScreen();
 	}
 
 	private void ShakeScreen()

@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dowhra81lhhjh"]
+[gd_scene load_steps=6 format=3 uid="uid://dowhra81lhhjh"]
 
 [ext_resource type="PackedScene" uid="uid://bqrpc4l71qki4" path="res://area/6 skeleton dome/act 1/environment/model/05CavernA.gltf" id="1_cuemr"]
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="2_oci1t"]
 [ext_resource type="PackedScene" uid="uid://0o1ds8o5k04j" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="3_y6xva"]
 [ext_resource type="Material" uid="uid://bia2fywx2kiva" path="res://area/6 skeleton dome/data/material/Water.tres" id="4_u0ur3"]
+[ext_resource type="PackedScene" uid="uid://wnnthoykndrj" path="res://effect/particle/Lantern.tscn" id="5_0i3g6"]
 
 [node name="05CavernA" instance=ExtResource("1_cuemr")]
 script = ExtResource("2_oci1t")
@@ -136,7 +137,7 @@ cast_shadow = 0
 gi_mode = 1
 
 [node name="stg040_w17_Mesh_0000" parent="." index="25"]
-layers = 4
+layers = 8
 cast_shadow = 0
 gi_mode = 1
 
@@ -148,15 +149,17 @@ directional_shadow_mode = 0
 
 [node name="PlanarReflectionRenderer" parent="." index="27" instance=ExtResource("3_y6xva")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 340, -25, -889)
-renderMask = 5
+disableRenderering = true
 reflectionMaterials = [ExtResource("4_u0ur3")]
-editorPreview = true
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="." index="28"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 339, -25, -895)
-size = Vector3(279, 168, 190)
-interior = true
-cull_mask = 4
-ambient_mode = 2
-ambient_color = Color(1, 1, 1, 1)
-ambient_color_energy = 0.5
+[node name="Lantern1" parent="." index="28" instance=ExtResource("5_0i3g6")]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 439.2, 6.8, -894)
+
+[node name="Lantern2" parent="." index="29" instance=ExtResource("5_0i3g6")]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 457.024, 5.4, -899.278)
+
+[node name="Lantern3" parent="." index="30" instance=ExtResource("5_0i3g6")]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 468.824, 11.6, -918.347)
+
+[connection signal="Activated" from="." to="PlanarReflectionRenderer" method="EnableRendering"]
+[connection signal="Deactivated" from="." to="PlanarReflectionRenderer" method="DisableRendering"]

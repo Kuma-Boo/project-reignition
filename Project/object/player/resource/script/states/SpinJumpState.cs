@@ -23,6 +23,7 @@ public partial class SpinJumpState : PlayerState
 		Player.AttackState = PlayerController.AttackStates.Weak;
 		Player.Animator.StartSpin(5f);
 		Player.Effect.StartSpinFX();
+		Player.Effect.StartSpinSquashFX();
 	}
 
 	public override void ExitState()
@@ -35,7 +36,7 @@ public partial class SpinJumpState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
-		if (!Input.IsActionPressed("button_jump"))
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) && !Input.IsActionPressed("button_jump"))
 			IsShortenedJump = true;
 
 		ProcessMoveSpeed();
@@ -55,6 +56,13 @@ public partial class SpinJumpState : PlayerState
 		if (Player.Controller.IsJumpBufferActive)
 		{
 			Player.Controller.ResetJumpBuffer();
+
+			if (Player.CanDoubleJump && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.DoubleJump)) // Start a double jump
+			{
+				Player.StartDoubleJump();
+				return null;
+			}
+
 			if (SaveManager.Config.useStompJumpButtonMode)
 				return stompState;
 

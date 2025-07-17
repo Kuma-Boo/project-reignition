@@ -50,7 +50,8 @@ public partial class CullingTrigger : StageTriggerModule
 			// Listen for checkpoint signals
 			DebugManager.Instance.TriggeredDebugCheckpoint += ProcessDebugCheckpoint;
 			Stage.TriggeredCheckpoint += ProcessCheckpoint;
-			Stage.Respawned += Respawn;
+			Stage.Respawned += () =>
+				GetTree().CreateTimer(PhysicsManager.physicsDelta, false, true).Timeout += Respawn;
 		}
 
 		if (isStageVisuals)

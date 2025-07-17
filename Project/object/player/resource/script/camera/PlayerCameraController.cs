@@ -369,6 +369,7 @@ public partial class PlayerCameraController : Node3D
 		};
 
 		float distance = 0;
+		float xformAngle = 0;
 		float staticBlendRatio = 0; // Blend value of whether to use static camera positions or not
 		float lockonPitchReferenceAngle = 0;
 		Vector2 viewportOffset = Vector2.Zero;
@@ -391,8 +392,12 @@ public partial class PlayerCameraController : Node3D
 
 				float blendedDistance = Mathf.Lerp(iData.blendData.distance, secondaryData.blendData.distance, secondaryInfluence);
 				distance = Mathf.Lerp(distance, blendedDistance, CameraBlendList[i].SmoothedInfluence);
+
 				float blendedFov = Mathf.Lerp(iData.blendData.Fov, secondaryData.blendData.Fov, secondaryInfluence);
 				fov = Mathf.Lerp(fov, blendedFov, CameraBlendList[i].SmoothedInfluence);
+
+				float blendedXformAngle = Mathf.Lerp(iData.blendData.yawAngle, secondaryData.blendData.yawAngle, secondaryInfluence);
+				xformAngle = Mathf.Lerp(xformAngle, blendedXformAngle, CameraBlendList[i].SmoothedInfluence);
 
 				Vector2 blendedViewportOffset = iData.blendData.SettingsResource.viewportOffset;
 				blendedViewportOffset = blendedViewportOffset.Lerp(secondaryData.blendData.SettingsResource.viewportOffset, secondaryInfluence);
@@ -400,6 +405,7 @@ public partial class PlayerCameraController : Node3D
 			}
 			else
 			{
+				xformAngle = Mathf.Lerp(xformAngle, iData.blendData.yawAngle, CameraBlendList[i].SmoothedInfluence);
 				distance = Mathf.Lerp(distance, iData.blendData.distance, CameraBlendList[i].SmoothedInfluence);
 				fov = Mathf.Lerp(fov, iData.blendData.Fov, CameraBlendList[i].SmoothedInfluence);
 
@@ -409,7 +415,6 @@ public partial class PlayerCameraController : Node3D
 			lockonPitchReferenceAngle = Mathf.Lerp(lockonPitchReferenceAngle, CameraBlendList[i].pitchAngle, CameraBlendList[i].SmoothedInfluence);
 
 			data.offsetBasis = data.offsetBasis.Slerp(iData.offsetBasis, CameraBlendList[i].SmoothedInfluence);
-
 			data.precalculatedPosition = data.precalculatedPosition.Lerp(iData.precalculatedPosition, CameraBlendList[i].SmoothedInfluence);
 
 			data.yawTracking = Mathf.LerpAngle(data.yawTracking, iData.yawTracking, CameraBlendList[i].SmoothedInfluence);
@@ -429,11 +434,11 @@ public partial class PlayerCameraController : Node3D
 		Transform3D cameraTransform = new(data.offsetBasis, position.Lerp(data.precalculatedPosition, staticBlendRatio));
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Up, data.yawTracking);
 
-		// Calculate xform angle before applying pitch tracking
-		UpdateInputXForm(ExtensionMethods.ModAngle(data.blendData.yawAngle + Mathf.Pi));
-
 		// Apply pitch tracking
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, data.pitchTracking);
+
+		// Calculate xform angle before applying pitch tracking
+		UpdateInputXForm(xformAngle);
 
 		// Apply secondary yaw tracking
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Up, data.secondaryYawTracking);
@@ -492,7 +497,7 @@ public partial class PlayerCameraController : Node3D
 	}
 
 	/// <summary> Blends xform angles for smoother inputs between camera cuts. </summary>
-	private void UpdateInputXForm(float yawAngle)
+	private void UpdateInputXForm(float newXFormAngle)
 	{
 		// Snap xform blend when no input is held
 		if (Mathf.IsZeroApprox(Player.Controller.GetInputStrength()) ||
@@ -504,7 +509,7 @@ public partial class PlayerCameraController : Node3D
 		}
 
 		xformBlend = Mathf.MoveToward(xformBlend, 1, XformSmoothing * PhysicsManager.physicsDelta);
-		Player.Controller.XformAngle = Mathf.LerpAngle(cachedXFormAngle, yawAngle, xformBlend);
+		Player.Controller.XformAngle = Mathf.LerpAngle(cachedXFormAngle, newXFormAngle, xformBlend);
 	}
 
 	public void SnapXform() => xformBlend = 1;
@@ -833,12 +838,11 @@ public partial class PlayerCameraController : Node3D
 
 	public int motionBlurRequests;
 
-	private readonly float TimeBreakMotionBlurStrength = 2.0f;
-	private readonly float MotionBlurStrength = .5f;
+	private readonly float TimeBreakMotionBlurStrength = 4.0f;
+	private readonly float RotationMotionBlurStrength = 5.0f;
 	private readonly string OpacityParameter = "opacity";
 	private readonly string LinearVelocityParameter = "linear_velocity";
 	private readonly string AngularVelocityParameter = "angular_velocity";
-
 	private void UpdateMotionBlur()
 	{
 		if (motionBlurMaterial == null || !SaveManager.Config.useMotionBlur)
@@ -858,13 +862,10 @@ public partial class PlayerCameraController : Node3D
 	private Vector3 CalculateLinearVelocity()
 	{
 		Vector3 velocity = Camera.GlobalPosition - previousCameraPosition;
-		if (!Mathf.IsZeroApprox(Engine.TimeScale))
-			velocity /= (float)Engine.TimeScale;
-
 		if (Player.Skills.IsTimeBreakActive)
-			return velocity * TimeBreakMotionBlurStrength;
+			return velocity * PhysicsManager.physicsDelta * TimeBreakMotionBlurStrength;
 
-		return velocity * MotionBlurStrength;
+		return velocity * PhysicsManager.physicsDelta;
 	}
 
 	private Vector3 CalculateAngularVelocity()
@@ -873,7 +874,7 @@ public partial class PlayerCameraController : Node3D
 		Quaternion rotationDifference = rotation - previousCameraRotation;
 		Quaternion rotationConjugate = new(-rotation.X, -rotation.Y, -rotation.Z, rotation.W);
 		Quaternion angularRotation = rotationDifference * 2.0f * rotationConjugate;
-		return new Vector3(angularRotation.X, angularRotation.Y, angularRotation.Z) * MotionBlurStrength;
+		return new Vector3(angularRotation.X, angularRotation.Y, angularRotation.Z) * RotationMotionBlurStrength * PhysicsManager.physicsDelta;
 	}
 
 	public void RequestMotionBlur() => motionBlurRequests++;
@@ -1071,7 +1072,7 @@ public partial class PlayerCameraController : Node3D
 		DebugManager.Instance.RedrawCamData(FreeCamRoot.GlobalPosition, freeCamRotation);
 		if (isFreeCamLocked)
 			UpdateFreeCamData(freeCamPosition, freeCamRotation);
-		else
+		else if (isFreeCamActive)
 			UpdateMotionBlur();
 	}
 

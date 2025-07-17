@@ -29,7 +29,7 @@ public partial class MultiplicativeBloomRenderer : Node
 
 	public override void _EnterTree()
 	{
-		bloomViewport.Size = SaveManager.WindowSizes[SaveManager.Config.windowSize];
+		bloomViewport.Size = GetTree().Root.Size;
 		switch (SaveManager.Config.bloomMode)
 		{
 			case SaveManager.QualitySetting.Disabled:

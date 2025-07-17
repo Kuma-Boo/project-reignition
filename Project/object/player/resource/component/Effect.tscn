@@ -1,4 +1,4 @@
-[gd_scene load_steps=235 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=243 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" uid="uid://b1jbgylbmqgrv" path="res://object/player/resource/script/PlayerEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -20,7 +20,7 @@
 [ext_resource type="Texture2D" uid="uid://cm6hder0accd6" path="res://object/player/resource/effect/texture/aegis feather.png" id="17_qxei6"]
 [ext_resource type="ArrayMesh" uid="uid://ce83fnfx4ei27" path="res://object/player/resource/effect/model/WindCycloneFX.res" id="18_0tfkp"]
 [ext_resource type="Material" uid="uid://cfj2lar13vb43" path="res://effect/particle/material/environment/Water Splash Ripple.tres" id="18_1h3ie"]
-[ext_resource type="Texture2D" uid="uid://dyumkeul6m5d" path="res://object/player/resource/effect/texture/aegis dust.png" id="18_yfxek"]
+[ext_resource type="Material" uid="uid://daxgiwacdioqf" path="res://effect/particle/material/environment/Water Splash Ripple No Cull.tres" id="18_50bad"]
 [ext_resource type="ArrayMesh" uid="uid://bfcpv7samapqy" path="res://object/player/resource/effect/model/WindCycloneTallFX.res" id="19_3cabv"]
 [ext_resource type="Texture2D" uid="uid://dhjpuxq4ygh78" path="res://object/player/resource/effect/texture/soul slider feather.png" id="19_r8kdf"]
 [ext_resource type="Material" uid="uid://bhj21xbsvtun5" path="res://effect/particle/material/environment/Common Dust Splatter Add.tres" id="19_twcq0"]
@@ -30,6 +30,7 @@
 [ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="21_nenuf"]
 [ext_resource type="Texture2D" uid="uid://dvioww06e1hj3" path="res://effect/particle/texture/flame/flame explosion.png" id="22_gd0vj"]
 [ext_resource type="Material" uid="uid://boyiki4rgce2h" path="res://effect/particle/material/environment/Common Dust Splatter.tres" id="22_r2x5i"]
+[ext_resource type="Material" uid="uid://2uyghhoj7ydh" path="res://object/player/resource/effect/material/Aegis Dust.tres" id="24_50bad"]
 [ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://effect/particle/material/environment/Sand Dust.tres" id="24_k1k5o"]
 [ext_resource type="Material" uid="uid://b4847susbcf6p" path="res://effect/particle/material/Ember Purple Billboard.tres" id="25_1c1xs"]
 [ext_resource type="Material" uid="uid://cctsu5ymh5eev" path="res://effect/particle/material/environment/Common Splatter.tres" id="25_5ci2n"]
@@ -195,10 +196,48 @@ _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2
 point_count = 3
 
 [sub_resource type="SphereMesh" id="SphereMesh_0nuab"]
-radius = 0.4
-height = 0.8
+radius = 0.45
+height = 0.9
 radial_segments = 32
 rings = 16
+
+[sub_resource type="Animation" id="Animation_k45g7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_50bad"]
+resource_name = "squish"
+length = 0.5
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 0.5, 1, 2, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(0.9, 1.2, 1), Vector3(1.4, 0.8, 1), Vector3(0.9, 1.1, 1), Vector3(1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8do38"]
+_data = {
+&"RESET": SubResource("Animation_k45g7"),
+&"squish": SubResource("Animation_50bad")
+}
 
 [sub_resource type="Curve" id="Curve_3cj20"]
 _data = [Vector2(0.158392, 0.00608158), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(0.858156, 0.0173762), -3.83366, 0.0, 0, 0]
@@ -320,6 +359,45 @@ lightmap_size_hint = Vector2i(4, 27)
 material = ExtResource("20_rtch5")
 size = Vector2(0.5, 5)
 center_offset = Vector3(0, 3, 0)
+
+[sub_resource type="Curve" id="Curve_k45g7"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_8do38"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_k45g7")
+
+[sub_resource type="Gradient" id="Gradient_qls6t"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_h4qlt"]
+gradient = SubResource("Gradient_qls6t")
+width = 64
+
+[sub_resource type="Curve" id="Curve_6y5m5"]
+_data = [Vector2(0, 0), 0.0, 1.625, 0, 0, Vector2(1, 1), 7.30582e-07, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ldqlj"]
+width = 64
+curve = SubResource("Curve_6y5m5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bj5hu"]
+lifetime_randomness = 0.2
+particle_flag_rotate_y = true
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_ldqlj")
+color_ramp = SubResource("GradientTexture1D_h4qlt")
+alpha_curve = SubResource("CurveTexture_8do38")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_t1nvy"]
+material = ExtResource("18_50bad")
+center_offset = Vector3(0, 0.01, 0)
 
 [sub_resource type="Gradient" id="Gradient_r3ows"]
 offsets = PackedFloat32Array(0, 0.255556, 0.552778, 1)
@@ -553,21 +631,8 @@ scale_min = 0.3
 color_ramp = SubResource("GradientTexture1D_x45k4")
 alpha_curve = SubResource("CurveTexture_kwvbn")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mjcra"]
-transparency = 1
-blend_mode = 1
-shading_mode = 0
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("18_yfxek")
-texture_repeat = false
-billboard_mode = 3
-billboard_keep_scale = true
-particles_anim_h_frames = 1
-particles_anim_v_frames = 1
-particles_anim_loop = false
-
 [sub_resource type="QuadMesh" id="QuadMesh_nrasy"]
-material = SubResource("StandardMaterial3D_mjcra")
+material = ExtResource("24_50bad")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pdjb5"]
 lifetime_randomness = 0.4
@@ -609,17 +674,6 @@ material = SubResource("StandardMaterial3D_vlsxb")
 
 [sub_resource type="QuadMesh" id="QuadMesh_0e8qo"]
 material = ExtResource("25_1c1xs")
-
-[sub_resource type="Gradient" id="Gradient_qls6t"]
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_h4qlt"]
-gradient = SubResource("Gradient_qls6t")
-width = 64
-
-[sub_resource type="Curve" id="Curve_6y5m5"]
-_data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
-point_count = 2
 
 [sub_resource type="CurveTexture" id="CurveTexture_jnxgk"]
 width = 64
@@ -1453,13 +1507,15 @@ anim_speed_min = 1.0
 anim_speed_max = 2.0
 anim_offset_max = 1.0
 
-[node name="Effect" type="Node3D" node_paths=PackedStringArray("trailFX", "spinFX", "teleportParticle", "dustParticle", "windParticle", "fireParticle", "stompParticle", "splashJumpParticle", "quickStepParticle", "lightDashParticle", "aegisSlideParticle", "volcanoSlideParticle", "soulSlideParticle", "darkSpiralParticle", "darkCrestParticle", "windCrestParticle", "fireCrestParticle", "chargeParticle", "fullChargeParticle", "grindrailSparkParticle", "grindrailBurstParticle", "perfectShuffleParticle", "grindrailSfx", "petrifyParticle", "footstepChannel", "landingChannel", "landingParticles", "stepEmitters", "waterStep", "voiceChannel")]
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("trailFX", "spinFX", "teleportParticle", "dustParticle", "spinFXAnimator", "doubleJumpFx", "windParticle", "fireParticle", "stompParticle", "splashJumpParticle", "quickStepParticle", "lightDashParticle", "aegisSlideParticle", "volcanoSlideParticle", "soulSlideParticle", "darkSpiralParticle", "darkCrestParticle", "windCrestParticle", "fireCrestParticle", "chargeParticle", "fullChargeParticle", "grindrailSparkParticle", "grindrailBurstParticle", "perfectShuffleParticle", "grindrailSfx", "petrifyParticle", "footstepChannel", "landingChannel", "landingParticles", "stepEmitters", "waterStep", "voiceChannel")]
 script = ExtResource("1_udd16")
 actionSFXLibrary = ExtResource("2_fxiha")
 trailFX = NodePath("VFX/ActionFX/TrailMesh")
 spinFX = NodePath("VFX/ActionFX/SpinMesh")
 teleportParticle = NodePath("VFX/ActionFX/TeleportFX")
 dustParticle = NodePath("VFX/ActionFX/Dust")
+spinFXAnimator = NodePath("VFX/ActionFX/SpinMesh/AnimationPlayer")
+doubleJumpFx = NodePath("VFX/ActionFX/DoubleJump")
 windParticle = NodePath("VFX/ActionFX/Wind")
 fireParticle = NodePath("VFX/ActionFX/Fire")
 stompParticle = NodePath("VFX/ActionFX/Stomp")
@@ -1611,7 +1667,9 @@ draw_pass_1 = ExtResource("11_sq88t")
 [node name="TrailMesh" type="Node3D" parent="VFX/ActionFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("10_1mog6")
+radius = 0.4
 distanceDeadzone = 0.01
+lifetime = 0.2
 lifetimeCurve = SubResource("Curve_r8a0k")
 positionCurve = SubResource("Curve_5i4ya")
 layer = 32
@@ -1623,8 +1681,14 @@ layers = 32
 material_override = ExtResource("11_lk1sb")
 transparency = 1.0
 cast_shadow = 0
+lod_bias = 128.0
 mesh = SubResource("SphereMesh_0nuab")
 skeleton = NodePath("../..")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="VFX/ActionFX/SpinMesh"]
+libraries = {
+&"": SubResource("AnimationLibrary_8do38")
+}
 
 [node name="Stomp" type="GPUParticles3D" parent="VFX/ActionFX" node_paths=PackedStringArray("subSystems")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1, 0)
@@ -1674,6 +1738,21 @@ draw_order = 3
 transform_align = 2
 process_material = SubResource("ParticleProcessMaterial_c4e0w")
 draw_pass_1 = SubResource("QuadMesh_6vbwi")
+
+[node name="DoubleJump" type="GPUParticles3D" parent="VFX/ActionFX"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 4
+lifetime = 0.2
+one_shot = true
+explosiveness = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_bj5hu")
+draw_pass_1 = SubResource("PlaneMesh_t1nvy")
 
 [node name="SplashJump" type="GPUParticles3D" parent="VFX/ActionFX" node_paths=PackedStringArray("subSystems")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1.45, -4.37114e-08)

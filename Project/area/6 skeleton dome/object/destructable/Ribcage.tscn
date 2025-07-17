@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://b5ipaawceltfm" path="res://area/6 skeleton dome/object/model/destructable/RibcagePieces.gltf" id="3_gwtx7"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_2dhly"]
-radius = 0.9
+radius = 1.0
 
 [sub_resource type="Animation" id="Animation_uuo4r"]
 length = 0.001
@@ -85,12 +85,11 @@ _data = {
 [node name="Ribcage" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator")]
 script = ExtResource("1_v75fs")
 pieceMass = 0.1
-disableEnvironmentCollision = true
+shatterFlags = 28
+bounceStrength = 1.0
 root = NodePath("Root")
 pieceRoot = NodePath("RibcagePieces")
 animator = NodePath("AnimationPlayer")
-shatterFlags = 16
-bounceStrength = 1.0
 
 [node name="Root" type="Node3D" parent="."]
 
@@ -103,10 +102,9 @@ layers = 0
 collision_layer = 8
 
 [node name="Area3D" type="Area3D" parent="Root"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -0.193185, 0.0517638)
-collision_layer = 0
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+collision_layer = 4
 collision_mask = 2
-monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Root/Area3D"]
 shape = SubResource("CylinderShape3D_2dhly")
@@ -116,7 +114,7 @@ visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_rd8ot")
+&"": SubResource("AnimationLibrary_rd8ot")
 }
 
 [connection signal="area_entered" from="Root/Area3D" to="." method="OnEntered"]

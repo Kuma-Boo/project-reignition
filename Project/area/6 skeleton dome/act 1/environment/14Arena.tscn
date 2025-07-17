@@ -1,7 +1,31 @@
-[gd_scene load_steps=3 format=3 uid="uid://wnhqambb5iaa"]
+[gd_scene load_steps=8 format=3 uid="uid://wnhqambb5iaa"]
 
 [ext_resource type="PackedScene" uid="uid://xkgyt5j8vsv3" path="res://area/6 skeleton dome/act 1/environment/model/14Arena.gltf" id="1_ybsp0"]
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="2_k4a0o"]
+[ext_resource type="Material" uid="uid://dito0mk420nbo" path="res://effect/particle/material/flame/Flame Lantern.tres" id="3_dt38c"]
+
+[sub_resource type="Gradient" id="Gradient_rfsfu"]
+offsets = PackedFloat32Array(0, 0.19174, 0.79941, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 0.257962, 0.257962, 0.257962, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_qvt04"]
+gradient = SubResource("Gradient_rfsfu")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_14v2l"]
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 3.0
+color = Color(0, 0.486582, 0.863999, 1)
+color_ramp = SubResource("GradientTexture1D_qvt04")
+anim_speed_min = 1.0
+anim_speed_max = 1.0
+anim_offset_max = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_kq52s"]
+material = ExtResource("3_dt38c")
+size = Vector2(3, 5)
+center_offset = Vector3(0, 2.5, 0)
 
 [node name="14Arena" instance=ExtResource("1_ybsp0")]
 script = ExtResource("2_k4a0o")
@@ -183,12 +207,24 @@ layers = 2
 cast_shadow = 0
 gi_mode = 1
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="." index="35"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1000, 40, -1000)
-layers = 2
-size = Vector3(300, 100, 300)
-interior = true
-cull_mask = 2
-ambient_mode = 2
-ambient_color = Color(1, 1, 1, 1)
-ambient_color_energy = 0.5
+[node name="Lantern1" type="GPUParticles3D" parent="." index="35"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1092.32, 33.6, -1012.15)
+layers = 32
+lifetime = 1.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-2, -1, -2, 4, 4, 4)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_14v2l")
+draw_pass_1 = SubResource("QuadMesh_kq52s")
+
+[node name="Lantern2" type="GPUParticles3D" parent="." index="36"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1092.32, 33.6, -993.147)
+layers = 32
+lifetime = 1.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-2, -1, -2, 4, 4, 4)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_14v2l")
+draw_pass_1 = SubResource("QuadMesh_kq52s")

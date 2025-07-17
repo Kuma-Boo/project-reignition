@@ -188,6 +188,7 @@ public partial class PlayerSkillController : Node3D
 		Player.Effect.PlayFireCrestFX();
 		Player.AttackState = PlayerController.AttackStates.Weak;
 		Player.ChangeHitbox("fire-crest");
+		Player.StartInvincibility(0.1f, false); // Provide brief invincibility during CoF
 	}
 
 	private float crestTimer;

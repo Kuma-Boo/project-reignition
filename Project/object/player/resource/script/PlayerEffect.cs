@@ -127,8 +127,19 @@ public partial class PlayerEffect : Node3D
 	public void StartTrailFX() => trailFX.IsEmitting = true;
 	public void StopTrailFX() => trailFX.IsEmitting = false;
 
-	public void StartSpinFX() => CreateTween().TweenProperty(spinFX, "transparency", 0.0f, .2f);
-	public void StopSpinFX() => CreateTween().TweenProperty(spinFX, "transparency", 1.0f, .2f);
+	public void StartSpinFX() => CreateTween().TweenProperty(spinFX, "transparency", 0.0f, .1f);
+	public void StopSpinFX() => CreateTween().TweenProperty(spinFX, "transparency", 1.0f, .1f);
+
+	[Export] private AnimationPlayer spinFXAnimator;
+	public void StartSpinSquashFX()
+	{
+		spinFXAnimator.Seek(0.0, true);
+		spinFXAnimator.Play("squish");
+	}
+
+	[Export]
+	public GpuParticles3D doubleJumpFx;
+	public void PlayDoubleJumpFX() => doubleJumpFx.Restart();
 
 	[Export]
 	private GpuParticles3D windParticle;

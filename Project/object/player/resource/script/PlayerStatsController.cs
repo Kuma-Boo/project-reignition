@@ -33,9 +33,6 @@ public partial class PlayerStatsController : Node
 	private float tractionHighRatio = 2f;
 	[Export(PropertyHint.Range, "1,5,.1f")]
 	private float turnaroundHighRatio = 2f;
-	/// <summary> How much should the steepest slope affect the player? </summary>
-	[Export]
-	public float slopeInfluence = .2f;
 
 	public float GetBaseSpeedRatio()
 	{
@@ -166,6 +163,9 @@ public partial class PlayerStatsController : Node
 	private float slideDistanceHighFrictionRatio = .2f;
 	[Export(PropertyHint.Range, "0,1,.1f")]
 	private float slideSlopeSpeedInfluence = .5f;
+	/// <summary> How much should the steepest slope affect the player? </summary>
+	[Export]
+	public float slopeInfluence = 1f;
 
 	/// <summary> Updates slide settings to take slope ratio into account. </summary>
 	public void UpdateSlideSpeed(float slopeRatio)
@@ -173,7 +173,7 @@ public partial class PlayerStatsController : Node
 		// Calculate top speed
 		float t = Mathf.Clamp(-slopeRatio * 5.0f, 0, 1);
 		SlideSettings.Speed = GroundSettings.Speed * (1 + (t * slideSlopeSpeedInfluence));
-		float slopeInfluence = slopeRatio * this.slopeInfluence;
+		float slopeInfluence = slopeRatio;
 		float frictionRatio = GetSlidingFrictionRatio();
 		SlideSettings.Friction = baseSlideFriction * frictionRatio * (1 + slopeInfluence);
 		SlideSettings.Overspeed = baseSlideOverspeed * frictionRatio * (1 + slopeInfluence);
@@ -223,6 +223,10 @@ public partial class PlayerStatsController : Node
 	private int baseBackstepTurnaround;
 	[Export]
 	public float JumpHeight { get; private set; }
+	[Export]
+	public float DoubleJumpHeight { get; private set; }
+	[Export]
+	public float DoubleJumpSpeed { get; private set; }
 
 	[ExportGroup("Grind Settings")]
 	[Export]

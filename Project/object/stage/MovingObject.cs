@@ -39,7 +39,7 @@ public partial class MovingObject : Node3D
 			{
 				properties.Add(ExtensionMethods.CreateProperty("Movement/Horizontal Size", Variant.Type.Float, PropertyHint.Range, "0,32,.1"));
 				properties.Add(ExtensionMethods.CreateProperty("Movement/Vertical Size", Variant.Type.Float, PropertyHint.Range, "0,32,.1"));
-				properties.Add(ExtensionMethods.CreateProperty("Movement/Radius", Variant.Type.Float, PropertyHint.Range, "0,32,.1"));
+				properties.Add(ExtensionMethods.CreateProperty("Movement/Radius", Variant.Type.Float, PropertyHint.Range, "0,32,.1,or_greater"));
 			}
 		}
 

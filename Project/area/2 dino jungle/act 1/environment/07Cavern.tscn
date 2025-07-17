@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://caqiuuvpry7nb"]
+[gd_scene load_steps=4 format=3 uid="uid://caqiuuvpry7nb"]
 
 [ext_resource type="PackedScene" uid="uid://beuj67h800mco" path="res://area/2 dino jungle/act 1/environment/model/07Cavern.gltf" id="1_6cbe1"]
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="2_w4gd3"]
+[ext_resource type="AudioStream" uid="uid://sgalfc464ai6" path="res://sound/sfx/stage/dinosaur jungle/stg020_area_01.ogg" id="3_q78mp"]
 
 [node name="07Cavern" instance=ExtResource("1_6cbe1")]
 script = ExtResource("2_w4gd3")
@@ -29,14 +30,14 @@ layers = 4
 cast_shadow = 0
 
 [node name="stg020_o05_Mesh_4_001" parent="." index="5"]
-layers = 5
+layers = 4
 
 [node name="stg020_ripple_k_18_Mesh_1" parent="." index="6"]
 layers = 4
 cast_shadow = 0
 
 [node name="stg020_ripple_k_18_Mesh_2" parent="." index="7"]
-layers = 5
+layers = 4
 cast_shadow = 0
 
 [node name="stg020_w18_Mesh_0" parent="." index="8"]
@@ -65,6 +66,7 @@ spot_angle_attenuation = 0.0693484
 
 [node name="SpotLight3D3" type="SpotLight3D" parent="." index="11"]
 transform = Transform3D(0.906664, -0.421273, 0.0221109, 0.0168995, 0.088643, 0.99592, -0.421514, -0.902592, 0.0874887, -556.492, -214.988, -1073.76)
+visible = false
 light_color = Color(1, 0.9805, 0.61, 1)
 light_energy = 0.4
 light_cull_mask = 4293918721
@@ -73,36 +75,14 @@ spot_attenuation = 1e-05
 spot_angle = 19.1878
 spot_angle_attenuation = 0.435277
 
-[node name="EnvironmentProbe" type="ReflectionProbe" parent="." index="12"]
-transform = Transform3D(0.828559, 0, 0.559902, 0, 1, 0, -0.559902, 0, 0.828559, -561.977, -254.348, -1103.17)
-layers = 1024
-size = Vector3(188, 84.4327, 106.284)
-interior = true
-cull_mask = 28
-reflection_mask = 12
-ambient_mode = 2
-ambient_color = Color(0, 0.75, 1, 1)
-ambient_color_energy = 0.8
-
-[node name="TopEnvironmentProbe" type="ReflectionProbe" parent="." index="13"]
-transform = Transform3D(0.828559, 0, 0.559902, 0, 1, 0, -0.559902, 0, 0.828559, -561.977, -262.624, -1103.17)
-layers = 1024
-blend_distance = 5.0
-size = Vector3(188, 27, 106.284)
-interior = true
-cull_mask = 0
-reflection_mask = 4
-ambient_mode = 2
-ambient_color = Color(0.339101, 1, 0.931915, 1)
-ambient_color_energy = 5.0
-
-[node name="ObjectProbe" type="ReflectionProbe" parent="." index="14"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -568.898, -266.565, -1097.27)
-layers = 1024
-size = Vector3(157.058, 60, 123.316)
-interior = true
-cull_mask = 0
-reflection_mask = 65
-ambient_mode = 2
-ambient_color = Color(0.589204, 1, 0.856287, 1)
-ambient_color_energy = 0.1
+[node name="SFX" type="AudioStreamPlayer3D" parent="." index="12"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -568, -281, -1086)
+stream = ExtResource("3_q78mp")
+attenuation_model = 3
+volume_db = 6.0
+unit_size = 20.0
+max_db = 6.0
+autoplay = true
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0

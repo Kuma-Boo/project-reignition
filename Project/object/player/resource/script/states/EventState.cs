@@ -73,15 +73,14 @@ public partial class EventState : PlayerState
 			// Call deferred so sync happens AFTER event animator updates
 			if (Trigger.PlayerStandin != null)
 				Player.CallDeferred(PlayerController.MethodName.UpdateExternalControl, true);
+
 			return null;
 		}
 
 		if (Trigger.PlayerStandin == null)
 			return null;
 
-
-		Player.CheckGround();
-		if (!Player.IsOnGround)
+		if (!Player.CheckGround())
 			return fallState;
 
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))

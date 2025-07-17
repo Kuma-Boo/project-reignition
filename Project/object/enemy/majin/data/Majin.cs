@@ -358,6 +358,14 @@ public partial class Majin : Enemy
 			wanderHomePosition = GlobalPosition;
 	}
 
+	public void AttemptRespawn()
+	{
+		if (IsActive && !IsDefeated)
+			return;
+
+		CallDeferred(MethodName.Respawn);
+	}
+
 	public override void Respawn()
 	{
 		// Kill any active tweens
@@ -436,17 +444,13 @@ public partial class Majin : Enemy
 
 	protected override void Defeat()
 	{
-		if (isSpawning) // Prevent signals from killing majin during spawn intervals
-			return;
-
+		// Kill any existing (spawn) tween
+		tweener?.Kill();
 		SetHitboxStatus(false, IsDefeatLaunchEnabled);
 
 		AnimationPlayer.Play("defeat");
 		if (!IsSpeedbreakDefeat && IsDefeatLaunchEnabled && !Mathf.IsZeroApprox(defeatLaunchTime))
 		{
-			// Kill any existing tween
-			tweener?.Kill();
-
 			AnimationTree.Set(DefeatTransitionParameter, EnabledState);
 			AnimationTree.Set(HitTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
 
@@ -774,6 +778,7 @@ public partial class Majin : Enemy
 		}
 		else // Spawn instantly
 		{
+			CallDeferred(MethodName.SetHitboxStatus, true); // Enable hurtbox instantly to allow for insta-speedbreak points
 			AnimationPlayer.Play("spawn");
 			AnimationTree.Set(SpawnTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(.5f); // Delay by length of teleport animation

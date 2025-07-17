@@ -15,7 +15,8 @@ public partial class TimedHazard : Hazard
 		Array<Dictionary> properties =
 			[
 				ExtensionMethods.CreateProperty("Current State", Variant.Type.Int, PropertyHint.Enum, GetStateNames()),
-				ExtensionMethods.CreateProperty("Auto Advance", Variant.Type.Bool)
+				ExtensionMethods.CreateProperty("Auto Advance", Variant.Type.Bool),
+				ExtensionMethods.CreateProperty("Start Paused", Variant.Type.Bool)
 			];
 
 		if (autoAdvance)
@@ -53,6 +54,8 @@ public partial class TimedHazard : Hazard
 				return startingTime;
 			case "Auto Advance":
 				return autoAdvance;
+			case "Start Paused":
+				return startPaused;
 		}
 
 		return base._Get(property);
@@ -84,6 +87,9 @@ public partial class TimedHazard : Hazard
 				autoAdvance = (bool)value;
 				NotifyPropertyListChanged();
 				break;
+			case "Start Paused":
+				startPaused = (bool)value;
+				break;
 			default:
 				return false;
 		}
@@ -112,6 +118,8 @@ public partial class TimedHazard : Hazard
 	private int currentStateIndex;
 	/// <summary> What time to start with. </summary>
 	private float startingTime;
+	/// <summary> Should the timer start in a paused state? </summary>
+	private bool startPaused;
 
 	[ExportGroup("Editor")]
 	/// <summary> State/Animation names. </summary>
@@ -152,6 +160,9 @@ public partial class TimedHazard : Hazard
 			StartTimer(stateLengths[currentStateIndex] - startingTime);
 		else
 			OnTimerCompleted();
+
+		if (startPaused)
+			Pause();
 	}
 
 	/// <summary> Instantly transitions to a particular state. </summary>
@@ -205,4 +216,7 @@ public partial class TimedHazard : Hazard
 			Timer.Start();
 		}
 	}
+
+	public void Pause() => Timer.Paused = true;
+	public void Unpause() => Timer.Paused = false;
 }
