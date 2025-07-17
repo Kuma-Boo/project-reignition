@@ -552,7 +552,7 @@ public partial class SaveManager : Node
 		foreach (StringName action in InputMap.GetActions())
 		{
 			// Only store gameplay actions
-			if (!action.ToString().StartsWith("move_") && !action.ToString().StartsWith("button_"))
+			if (!action.ToString().StartsWith("move_") && !action.ToString().StartsWith("button_") && !action.ToString().StartsWith("sys_"))
 				continue;
 
 			initialInputMap.Add(action, GenerateInputMappingString(action));

@@ -126,10 +126,19 @@ public partial class Options : Menu
 	{
 		UpdateCursor();
 
-		if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept") || Input.IsActionJustPressed("ui_clear"))
+		if ((Input.IsActionJustPressed("sys_pause") || (Input.IsActionJustPressed("ui_accept")) &&
+			!Input.IsActionJustPressed("toggle_fullscreen")))
+		{
 			Select();
+		}
+		else if (Input.IsActionJustPressed("sys_clear") || Input.IsActionJustPressed("ui_text_delete"))
+		{
+			DeleteMapping();
+		}
 		else
+		{
 			base.ProcessMenu();
+		}
 
 		if (isPlayerLocked)
 			CallDeferred(MethodName.UpdatePlayerPosition);
@@ -177,18 +186,7 @@ public partial class Options : Menu
 				ConfirmControlOption();
 				break;
 			case Submenus.Mapping:
-				if (!controlMappingOptions[VerticalSelection].IsReady)
-					return;
-
 				ConfirmSFX();
-
-				if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_clear"))
-				{
-					// Clear input mapping
-					controlMappingOptions[VerticalSelection].ClearMapping();
-					return;
-				}
-
 				controlMappingOptions[VerticalSelection].CallDeferred(ControlOption.MethodName.StartListening);
 				break;
 			case Submenus.PartyMapping:
@@ -203,14 +201,6 @@ public partial class Options : Menu
 					return;
 
 				ConfirmSFX();
-
-				if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_clear"))
-				{
-					// Clear input mapping
-					partyMappingOptions[selectedIndex].ClearMapping();
-					return;
-				}
-
 				partyMappingOptions[selectedIndex].CallDeferred(ControlOption.MethodName.StartListening);
 				break;
 			case Submenus.Test:
@@ -236,6 +226,25 @@ public partial class Options : Menu
 		SaveManager.ApplyConfig();
 	}
 
+	private void DeleteMapping()
+	{
+		if (currentSubmenu != Submenus.Mapping && currentSubmenu != Submenus.PartyMapping)
+			return;
+
+		ConfirmSFX();
+		if (currentSubmenu == Submenus.Mapping)
+		{
+			if (!controlMappingOptions[VerticalSelection].IsReady)
+				return;
+
+			controlMappingOptions[VerticalSelection].ClearMapping();
+			return;
+		}
+
+		int selectedIndex = VerticalSelection - ExtraPartyModeOptionCount;
+		partyMappingOptions[selectedIndex].ClearMapping();
+	}
+
 	protected override void Cancel()
 	{
 		switch (currentSubmenu)
@@ -257,7 +266,7 @@ public partial class Options : Menu
 				if (!controlMappingOptions[VerticalSelection].IsReady) return;
 
 				CancelSFX();
-				FlipBook(Submenus.Control, true, 4);
+				FlipBook(Submenus.Control, true, 6);
 				break;
 			case Submenus.PartyMapping:
 				if (VerticalSelection >= ExtraPartyModeOptionCount &&
@@ -267,7 +276,7 @@ public partial class Options : Menu
 				}
 
 				CancelSFX();
-				FlipBook(Submenus.Control, true, 5);
+				FlipBook(Submenus.Control, true, 7);
 				break;
 			case Submenus.Test:
 				return;

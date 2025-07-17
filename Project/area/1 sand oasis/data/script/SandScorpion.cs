@@ -251,7 +251,7 @@ public partial class SandScorpion : Node3D
 		switch (fightState)
 		{
 			case FightState.Introduction:
-				if ((Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("button_jump")) &&
+				if ((Input.IsActionJustPressed("sys_pause") || Input.IsActionJustPressed("button_jump")) &&
 					SaveManager.ActiveGameData.CanSkipCutscene(IntroCutsceneID))
 				{
 					FinishIntroduction();
@@ -273,7 +273,7 @@ public partial class SandScorpion : Node3D
 				UpdateHitboxes();
 				break;
 			case FightState.Defeated:
-				if ((Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("button_jump")) &&
+				if ((Input.IsActionJustPressed("sys_pause") || Input.IsActionJustPressed("button_jump")) &&
 					SaveManager.ActiveGameData.CanSkipCutscene(DefeatCutsceneID))
 				{
 					eventAnimator.Play("finish-defeat");

@@ -177,14 +177,14 @@ public partial class IfritGolem : Node3D
 		switch (currentState)
 		{
 			case GolemState.Introduction:
-				if ((Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("button_jump")) &&
+				if ((Input.IsActionJustPressed("sys_pause") || Input.IsActionJustPressed("button_jump")) &&
 					SaveManager.ActiveGameData.CanSkipCutscene(IntroCutsceneID))
 				{
 					FinishIntroduction();
 				}
 				break;
 			case GolemState.Defeated:
-				if ((Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("button_jump")) &&
+				if ((Input.IsActionJustPressed("sys_pause") || Input.IsActionJustPressed("button_jump")) &&
 					SaveManager.ActiveGameData.CanSkipCutscene(DefeatCutsceneID))
 				{
 					AnimationTree.Set(DefeatSeek, 20);
