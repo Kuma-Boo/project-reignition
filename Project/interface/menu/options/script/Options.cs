@@ -424,10 +424,8 @@ public partial class Options : Menu
     private readonly string FullscreenNormalString = "option_normal_fullscreen";
     private readonly string FullscreenExclusiveString = "option_exclusive_fullscreen";
     private readonly string PlayerString = "option_player_number";
-    private readonly string Aspect4x3 = "4:3";
     private readonly string Aspect16x9 = "16:9";
     private readonly string Aspect16x10 = "16:10";
-    private readonly string Aspect21x9 = "21:9";
 
     private void UpdateLabels()
     {
@@ -436,20 +434,12 @@ public partial class Options : Menu
         switch (SaveManager.Config.aspectRatio)
         {
             case 0:
-                videoLabels[1].Text = Aspect4x3;
-                resolution = SaveManager.WindowSizes4x3[SaveManager.Config.windowSize];
-                break;
-            case 1:
                 videoLabels[1].Text = Aspect16x9;
                 resolution = SaveManager.WindowSizes[SaveManager.Config.windowSize];
                 break;
-            case 2:
+            case 1:
                 videoLabels[1].Text = Aspect16x10;
                 resolution = SaveManager.WindowSizes16x10[SaveManager.Config.windowSize];
-                break;
-            case 3:
-                videoLabels[1].Text = Aspect21x9;
-                resolution = SaveManager.WindowSizes21x9[SaveManager.Config.windowSize];
                 break;
             default:
                 videoLabels[1].Text = Aspect16x9;
@@ -658,7 +648,7 @@ public partial class Options : Menu
         }
         else if (VerticalSelection == 1)
         {
-            SaveManager.Config.aspectRatio = WrapSelection(SaveManager.Config.aspectRatio + direction, 4);
+            SaveManager.Config.aspectRatio = WrapSelection(SaveManager.Config.aspectRatio + direction, 2);
         }
         else if (VerticalSelection == 2)
         {

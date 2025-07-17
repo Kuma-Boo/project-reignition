@@ -182,7 +182,7 @@ public partial class SaveManager : Node
     {
         // Video
         public int targetDisplay = DisplayServer.GetPrimaryScreen();
-        public int aspectRatio = 1; //Defaults to 16:9
+        public int aspectRatio = 0; //Defaults to 16:9
         public int windowSize = 3; // Defaults to one lower than 1080p
         public bool useFullscreen = true;
         public bool useExclusiveFullscreen;
@@ -459,7 +459,19 @@ public partial class SaveManager : Node
         if (DisplayServer.WindowGetMode() != targetMode)
             DisplayServer.WindowSetMode(targetMode);
         if (!Config.useFullscreen)
-            DisplayServer.WindowSetSize(WindowSizes[Config.windowSize]);
+        {
+            switch (Config.aspectRatio)
+            {
+                case 0:
+                    DisplayServer.WindowSetSize(WindowSizes[Config.windowSize]);
+                    break;
+                case 1:
+                    DisplayServer.WindowSetSize(WindowSizes16x10[Config.windowSize]);
+                    break;
+            }
+
+        }
+        //DisplayServer.WindowSetSize(WindowSizes[Config.windowSize]);
 
         Engine.MaxFps = FrameRates[Config.framerate];
         DisplayServer.VSyncMode targetVSyncMode =
