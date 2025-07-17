@@ -35,7 +35,8 @@ public partial class ReadyMenu : Menu
 
 	protected override void ProcessMenu()
 	{
-		if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept"))
+		if ((Input.IsActionJustPressed("sys_pause") || (Input.IsActionJustPressed("ui_accept")) &&
+			!Input.IsActionJustPressed("toggle_fullscreen")))
 		{
 			menuMemory[MemoryKeys.SkillMenuOpen] = 1;
 			HideDescription();

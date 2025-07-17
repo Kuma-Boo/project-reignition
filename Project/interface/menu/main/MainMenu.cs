@@ -38,11 +38,12 @@ public partial class MainMenu : Menu
 
 	protected override void ProcessMenu()
 	{
-		if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept"))
+		if ((Input.IsActionJustPressed("sys_pause") || (Input.IsActionJustPressed("ui_accept")) &&
+			!Input.IsActionJustPressed("toggle_fullscreen")))
 		{
 			if (isQuitMenuActive)
 			{
-				Confirm();
+				CancelQuitMenu();
 			}
 			else
 			{

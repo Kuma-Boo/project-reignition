@@ -44,42 +44,60 @@ public partial class SaveSelect : Menu
 
 	protected override void ProcessMenu()
 	{
-		if (isDeleteMenuActive)
+		if (Input.IsActionJustPressed("sys_clear") || Input.IsActionJustPressed("ui_text_delete"))
 		{
-			if (Input.IsActionJustPressed("button_jump") || Input.IsActionJustPressed("ui_select"))
-			{
-				if (isDeleteSelected)
-				{
-					deleteAnimator.Play("confirm");
-					DeleteSaveFile();
-					isDeleteMenuActive = false;
-					return;
-				}
-				else
-				{
-					CancelDeleteMenu();
-					return;
-				}
-			}
-			else if (Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("ui_cancel"))
-			{
+			if (isDeleteMenuActive)
 				CancelDeleteMenu();
-				return;
-			}
-		}
-		else if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept"))
-		{
-			int saveIndex = _saveOptions[ActiveSaveOptionIndex].SaveIndex;
-			if (SaveManager.GameSaveSlots[saveIndex].IsNewFile()) // Check if a save file is new
-				return;
+			else
+				ShowDeleteMenu();
 
-			deleteAnimator.Play("show");
-			isDeleteMenuActive = true;
-			isDeleteSelected = false;
 			return;
 		}
 
 		base.ProcessMenu();
+	}
+
+	protected override void Confirm()
+	{
+		if (isDeleteMenuActive)
+		{
+			if (isDeleteSelected)
+			{
+				deleteAnimator.Play("confirm");
+				DeleteSaveFile();
+				isDeleteMenuActive = false;
+			}
+			else
+			{
+				CancelDeleteMenu();
+			}
+
+			return;
+		}
+
+		base.Confirm();
+	}
+
+	protected override void Cancel()
+	{
+		if (isDeleteMenuActive)
+		{
+			CancelDeleteMenu();
+			return;
+		}
+
+		base.Confirm();
+	}
+
+	private void ShowDeleteMenu()
+	{
+		int saveIndex = _saveOptions[ActiveSaveOptionIndex].SaveIndex;
+		if (SaveManager.GameSaveSlots[saveIndex].IsNewFile()) // Check if a save file is new
+			return;
+
+		deleteAnimator.Play("show");
+		isDeleteMenuActive = true;
+		isDeleteSelected = false;
 	}
 
 	protected override void UpdateSelection()

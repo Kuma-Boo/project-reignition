@@ -48,8 +48,8 @@ public partial class LevelResult : Control
 			if (animator.CurrentAnimationPosition < 1f)
 				return;
 
-			if (Input.IsActionJustPressed("button_jump") || Input.IsActionJustPressed("ui_select") ||
-				Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("ui_cancel")) // Skip animation
+			if (Input.IsActionJustPressed("sys_select") || Input.IsActionJustPressed("ui_select") ||
+				Input.IsActionJustPressed("sys_cancel") || Input.IsActionJustPressed("ui_cancel")) // Skip animation
 			{
 				StringName nextAnimation = animator.AnimationGetNext(animator.CurrentAnimation);
 				animator.Advance(animator.CurrentAnimationLength);
@@ -62,14 +62,14 @@ public partial class LevelResult : Control
 				}
 			}
 		}
-		else if (Input.IsActionJustPressed("button_jump") || Input.IsActionJustPressed("ui_select") ||
-			Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("ui_cancel"))
+		else if (Input.IsActionJustPressed("sys_select") || Input.IsActionJustPressed("ui_select") ||
+			Input.IsActionJustPressed("sys_cancel") || Input.IsActionJustPressed("ui_cancel"))
 		{
 			isFadingBgm = true; // Start fading bgm
 			SetInputProcessing(false);
 
 			// Determine which scene to load without connecting it
-			if (Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("ui_cancel")) // Retry stage
+			if (Input.IsActionJustPressed("sys_cancel") || Input.IsActionJustPressed("ui_cancel")) // Retry stage
 				TransitionManager.instance.QueuedScene = string.Empty;
 			else// if (Level.storyEventIndex == 0) // Load main menu
 				TransitionManager.instance.QueuedScene = TransitionManager.MenuScenePath;

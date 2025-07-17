@@ -57,7 +57,8 @@ public partial class EventPlayer : Node
 		if (Menu.menuMemory[Menu.MemoryKeys.ActiveMenu] != (int)Menu.MemoryKeys.SpecialBook)
 		{
 			// Process skipping story cutscene
-			if (Input.IsActionPressed("button_pause"))
+			if ((Input.IsActionJustPressed("sys_pause") || (Input.IsActionJustPressed("ui_accept")) &&
+				!Input.IsActionJustPressed("toggle_fullscreen")))
 			{
 				skipTimer = Mathf.MoveToward(skipTimer, 1, PhysicsManager.physicsDelta);
 				if (Mathf.IsEqualApprox(skipTimer, 1))
@@ -71,7 +72,7 @@ public partial class EventPlayer : Node
 		}
 
 		// Allow players to exit immediately when viewing from the special book
-		if (Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("ui_cancel"))
+		if (Input.IsActionJustPressed("sys_cancel") || Input.IsActionJustPressed("ui_cancel"))
 			OnEventFinished();
 	}
 
