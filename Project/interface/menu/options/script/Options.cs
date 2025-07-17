@@ -369,11 +369,13 @@ public partial class Options : Menu
 		if (maxSelection < 8)
 			scrollOffset = 0;
 
-		if (!scrollBar.IsVisibleInTree())
+		if (!scrollBar.IsVisibleInTree() || snap)
 		{
 			scrollBar.Position = Vector2.Zero;
 			scrollOffset = 0;
-			return;
+
+			if (!scrollBar.IsVisibleInTree())
+				return;
 		}
 
 		if (VerticalSelection > scrollOffset + 7)
