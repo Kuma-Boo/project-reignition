@@ -124,6 +124,7 @@ public partial class SaveManager : Node
 		FourByThree,
 		SixteenByNine,
 		SixteenByTen,
+		TwentyoneByNine,
 		Count
 	}
 
@@ -140,39 +141,40 @@ public partial class SaveManager : Node
 
 	public static readonly Vector2I[] WindowSizes4x3 =
 	[
-		new (640, 480), // 480p, VGA
-		new (800, 600), // 600p, SVGA
-		new (1024, 768), // 768p, XGA
-		new (1152, 864), // 864p, XGA+
-		new (2048, 1536), // 1536p, QXGA
-		new (3200, 2400), // 2400p, QUXGA
-		new (4096, 3072), // 3072p, HXGA
-		new (6400, 4800), // 4800p, HUXGA
+		new(640, 480), // 480p, VGA
+		new(800, 600), // 600p, SVGA
+		new(1024, 768), // 768p, XGA
+		new(1152, 864), // 864p, XGA+
+		new(2048, 1536), // 1536p, QXGA
+		new(3200, 2400), // 2400p, QUXGA
+		new(4096, 3072), // 3072p, HXGA
+		new(6400, 4800), // 4800p, HUXGA
     ];
 
 	public static readonly Vector2I[] WindowSizes16x10 =
 	[
-		new (1280, 800), //800p, WXGA (steam deck)
-		new (1440, 900), //900p, WXGA+
-		new (1680, 1050),//1050p, WSXGA+
-		new (1920, 1200),//1200p, WUXGA
-		new (2560, 1600),//1600p, WQXGA
-		new (3840, 2400),//2400p, WQUXGA
+		new(1280, 800), // 800p, WXGA (steam deck)
+		new(1440, 900), // 900p, WXGA+
+		new(1680, 1050),// 1050p, WSXGA+
+		new(1920, 1200),// 1200p, WUXGA
+		new(2560, 1600),// 1600p, WQXGA
+		new(3840, 2400),// 2400p, WQUXGA
     ];
 
 	public static readonly Vector2I[] WindowSizes21x9 =
 	[
-		new (2560, 1080), // 1080p, WFHD
-		new (2880, 1200), // 1200p, WFHD+
-		new (3440, 1440), // 1440p, WQHD
-		new (3840, 1600), // 1600p, WQHD+
-		new (4320, 1800), // 1800p, UW4k
-		new (5120, 2160), // 2160p, UW5K
-		new (5760, 2400), // 2400p, UW5K+
-		new (6144, 2560), // 2560p, UW6K
-		new (6880, 2880), // 2880p, UW6K+
-		new (7680, 3200), // 3200p, UW7K
-		new (8640, 3600), // 3600p, UW10K
+		new(1400, 600), // Test Resolution
+		new(2560, 1080), // 1080p, WFHD
+		new(2880, 1200), // 1200p, WFHD+
+		new(3440, 1440), // 1440p, WQHD
+		new(3840, 1600), // 1600p, WQHD+
+		new(4320, 1800), // 1800p, UW4k
+		new(5120, 2160), // 2160p, UW5K
+		new(5760, 2400), // 2400p, UW5K+
+		new(6144, 2560), // 2560p, UW6K
+		new(6880, 2880), // 2880p, UW6K+
+		new(7680, 3200), // 3200p, UW7K
+		new(8640, 3600), // 3600p, UW10K
     ];
 
 	public static readonly int[] FrameRates =
@@ -474,11 +476,14 @@ public partial class SaveManager : Node
 				case AspectRatio.FourByThree:
 					Instance.GetTree().Root.Size = WindowSizes4x3[Config.windowSize];
 					break;
-				case AspectRatio.SixteenByNine:
-					Instance.GetTree().Root.Size = WindowSizes[Config.windowSize];
-					break;
 				case AspectRatio.SixteenByTen:
 					Instance.GetTree().Root.Size = WindowSizes16x10[Config.windowSize];
+					break;
+				case AspectRatio.TwentyoneByNine:
+					Instance.GetTree().Root.Size = WindowSizes21x9[Config.windowSize];
+					break;
+				default:
+					Instance.GetTree().Root.Size = WindowSizes[Config.windowSize];
 					break;
 			}
 		}

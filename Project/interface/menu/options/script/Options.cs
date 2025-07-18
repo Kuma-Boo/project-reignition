@@ -446,6 +446,7 @@ public partial class Options : Menu
 	private readonly string Aspect4x3 = "4:3";
 	private readonly string Aspect16x9 = "16:9";
 	private readonly string Aspect16x10 = "16:10";
+	private readonly string Aspect21x9 = "21:9";
 	private void UpdateLabels()
 	{
 		videoLabels[0].Text = Tr("option_display").Replace("0", (SaveManager.Config.targetDisplay + 1).ToString());
@@ -466,6 +467,10 @@ public partial class Options : Menu
 				case SaveManager.AspectRatio.SixteenByTen:
 					videoLabels[1].Text = Aspect16x10;
 					resolution = SaveManager.WindowSizes16x10[SaveManager.Config.windowSize];
+					break;
+				case SaveManager.AspectRatio.TwentyoneByNine:
+					videoLabels[1].Text = Aspect21x9;
+					resolution = SaveManager.WindowSizes21x9[SaveManager.Config.windowSize];
 					break;
 				default:
 					videoLabels[1].Text = Aspect16x9;
@@ -796,6 +801,9 @@ public partial class Options : Menu
 				break;
 			case SaveManager.AspectRatio.SixteenByTen:
 				windows = SaveManager.WindowSizes16x10;
+				break;
+			case SaveManager.AspectRatio.TwentyoneByNine:
+				windows = SaveManager.WindowSizes21x9;
 				break;
 			default:
 				windows = SaveManager.WindowSizes;
