@@ -33,7 +33,7 @@ public partial class MainMenu : Menu
 		VerticalSelection = currentSelection / 2;
 
 		if (menuMemory[MemoryKeys.ActiveMenu] == (int)MemoryKeys.MainMenu)
-			ShowMenu();
+			CallDeferred(MethodName.ShowMenu);
 	}
 
 	protected override void ProcessMenu()
