@@ -741,25 +741,40 @@ _data = {
 
 [node name="Title" type="Control" node_paths=PackedStringArray("versionLabel", "animator")]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("35")
 versionLabel = NodePath("VersionLabel")
 animator = NodePath("AnimationPlayer")
 
-[node name="Background" type="Node2D" parent="."]
+[node name="Background" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="BackgroundClip" type="Control" parent="Background"]
 clip_contents = true
-layout_mode = 3
-anchors_preset = 0
-offset_right = 1920.0
-offset_bottom = 1080.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Background" type="TextureRect" parent="Background/BackgroundClip"]
-layout_mode = 0
-offset_right = 1920.0
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
 offset_bottom = 1080.0
+grow_horizontal = 2
 texture = ExtResource("27_lbk60")
+expand_mode = 2
 
 [node name="WipePosition" type="Node2D" parent="Background"]
 visible = false
@@ -953,20 +968,23 @@ libraries = {
 }
 
 [node name="Flames" parent="." instance=ExtResource("33_hglwt")]
-layout_mode = 0
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+offset_top = -1080.0
+offset_right = -1920.0
+offset_bottom = -1080.0
 grow_horizontal = 1
 grow_vertical = 1
 
 [node name="Press Start" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
-anchors_preset = 0
-offset_left = 944.0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -16.0
 offset_top = 787.0
-offset_right = 944.0
+offset_right = -16.0
 offset_bottom = 787.0
 
 [node name="Text" type="Sprite2D" parent="Press Start"]
@@ -1002,9 +1020,14 @@ texture = ExtResource("29_2jf04")
 stretch_mode = 4
 flip_h = true
 
-[node name="Logo" type="Sprite2D" parent="."]
-position = Vector2(960, 360)
-scale = Vector2(1.1, 1.1)
+[node name="Logo" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -560.0
+offset_right = 565.0
+offset_bottom = 720.0
 texture = ExtResource("1")
 
 [node name="VersionLabel" type="Label" parent="."]
@@ -1031,10 +1054,12 @@ text = "Version 0.0.1a"
 
 [node name="Cutscene" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-offset_left = -1.0
-offset_right = 1920.0
-offset_bottom = 1080.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
 [node name="CutscenePlayer" type="VideoStreamPlayer" parent="Cutscene"]

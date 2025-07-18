@@ -7,10 +7,10 @@ namespace Project.Interface.Menus;
 public partial class MainMenu : Menu
 {
 	[Export] private Description description;
-	[Export] private Node2D optionParent;
+	[Export] private Node optionParent;
 	[Export] private Node2D cursor;
 	private Vector2 cursorVelocity;
-	private readonly Array<Node2D> options = [];
+	private readonly Array<Control> options = [];
 	private const float CursorSmoothing = .08f;
 
 	private int currentSelection;
@@ -26,7 +26,7 @@ public partial class MainMenu : Menu
 	protected override void SetUp()
 	{
 		for (int i = 0; i < optionParent.GetChildCount(); i++)
-			options.Add(optionParent.GetChild<Node2D>(i));
+			options.Add(optionParent.GetChild<Control>(i));
 
 		currentSelection = menuMemory[MemoryKeys.MainMenu];
 		HorizontalSelection = currentSelection % 2;

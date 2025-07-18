@@ -532,7 +532,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Description:modulate")
+tracks/7/path = NodePath("Description/Description:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -842,7 +842,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Description:modulate")
+tracks/7/path = NodePath("Description/Description:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -854,7 +854,7 @@ tracks/7/keys = {
 tracks/8/type = "method"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Description")
+tracks/8/path = NodePath("Description/Description")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -1680,7 +1680,7 @@ tracks/12/keys = {
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("Description:modulate")
+tracks/13/path = NodePath("Description/Description:modulate")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
@@ -1692,7 +1692,7 @@ tracks/13/keys = {
 tracks/14/type = "method"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("Description")
+tracks/14/path = NodePath("Description/Description")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
@@ -1924,7 +1924,7 @@ tracks/12/keys = {
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("Description:modulate")
+tracks/13/path = NodePath("Description/Description:modulate")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
@@ -1936,7 +1936,7 @@ tracks/13/keys = {
 tracks/14/type = "method"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("Description")
+tracks/14/path = NodePath("Description/Description")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
@@ -2039,13 +2039,15 @@ _data = {
 
 [node name="WorldSelect" type="Control" node_paths=PackedStringArray("retailBgm", "videoPlayers", "description", "bgm", "animator")]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 1920.0
-offset_bottom = 1080.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_7vrge")
 retailBgm = NodePath("RetailBGM")
 videoPlayers = [NodePath("DemoVideo/LostPrologue"), NodePath("DemoVideo/SandOasis"), NodePath("DemoVideo/DinosaurJungle"), NodePath("DemoVideo/EvilFoundry"), NodePath("DemoVideo/LevitatedRuin"), NodePath("DemoVideo/PirateStorm"), NodePath("DemoVideo/SkeletonDome"), NodePath("DemoVideo/NightPalace")]
-description = NodePath("Description")
+description = NodePath("Description/Description")
 levelSpriteRegions = Array[Rect2]([Rect2(0, 800, 1024, 120), Rect2(0, 0, 1024, 120), Rect2(0, 460, 1024, 120), Rect2(0, 580, 1024, 100), Rect2(0, 700, 1024, 100), Rect2(0, 240, 1024, 100), Rect2(0, 126, 1024, 100), Rect2(0, 360, 1024, 100), Rect2(0, 920, 1024, 100)])
 levelDescriptionKeys = Array[String](["lost_prologue_description", "sand_oasis_description", "dinosaur_jungle_description", "evil_foundry_description", "levitated_ruin_description", "pirate_storm_description", "skeleton_dome_description", "night_palace_description", "sys_world_locked"])
 levelTextSprites = Array[NodePath]([NodePath("AreaSelection/Text/Top/Sprite"), NodePath("AreaSelection/Text/Center/Sprite"), NodePath("AreaSelection/Text/Bottom/Sprite"), NodePath("AreaSelection/Text/TransitionText/Sprite")])
@@ -2054,7 +2056,6 @@ levelNewSprites = Array[NodePath]([NodePath("AreaSelection/Text/Top/New"), NodeP
 submenus = Array[NodePath]([NodePath("Submenus/LostPrologue"), NodePath("Submenus/SandOasis"), NodePath("Submenus/DinosaurJungle"), NodePath("Submenus/EvilFoundry"), NodePath("Submenus/LevitatedRuin"), NodePath("Submenus/PirateStorm"), NodePath("Submenus/SkeletonDome"), NodePath("Submenus/NightPalace")])
 bgm = NodePath("BGM")
 animator = NodePath("AnimationPlayer")
-metadata/_edit_lock_ = true
 
 [node name="DemoVideo" type="Control" parent="."]
 layout_mode = 1
@@ -2063,7 +2064,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-metadata/_edit_lock_ = true
 metadata/_edit_group_ = true
 
 [node name="LostPrologue" type="VideoStreamPlayer" parent="DemoVideo"]
@@ -2163,11 +2163,13 @@ script = ExtResource("2_rcls3")
 videoFilePath = "res://video/demo/Movie Test 07.mp4"
 
 [node name="Background" type="TextureRect" parent="."]
-layout_mode = 0
-offset_right = 1920.0
-offset_bottom = 1080.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("10_p8mo5")
-metadata/_edit_lock_ = true
 
 [node name="AreaSelection" type="Control" parent="."]
 layout_mode = 1
@@ -2176,12 +2178,16 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-metadata/_edit_lock_ = true
 
-[node name="Text" type="Node2D" parent="AreaSelection"]
-position = Vector2(960, 456)
+[node name="Text" type="Control" parent="AreaSelection"]
+layout_mode = 1
+anchor_left = 0.5
+anchor_top = 0.422
+anchor_right = 0.5
+anchor_bottom = 0.422
+offset_top = 0.23999
+offset_bottom = 0.23999
 metadata/_edit_group_ = true
-metadata/_edit_lock_ = true
 
 [node name="Top" type="Node2D" parent="AreaSelection/Text"]
 position = Vector2(0, -144)
@@ -2434,10 +2440,15 @@ libraries = {
 }
 autoplay = "loop"
 
-[node name="Cursor" type="Node2D" parent="AreaSelection"]
-position = Vector2(960, 456)
+[node name="Cursor" type="Control" parent="AreaSelection"]
+layout_mode = 1
+anchor_left = 0.5
+anchor_top = 0.422
+anchor_right = 0.5
+anchor_bottom = 0.422
+offset_top = 0.23999
+offset_bottom = 0.23999
 metadata/_edit_group_ = true
-metadata/_edit_lock_ = true
 
 [node name="CursorTop" type="Sprite2D" parent="AreaSelection/Cursor"]
 material = SubResource("ShaderMaterial_7at8s")
@@ -2468,49 +2479,49 @@ metadata/_edit_lock_ = true
 
 [node name="LostPrologue" parent="Submenus" node_paths=PackedStringArray("description", "readyMenu", "parentMenu") instance=ExtResource("17_xanqf")]
 layout_mode = 1
-description = NodePath("../../Description")
+description = NodePath("../../Description/Description")
 readyMenu = NodePath("../ReadyMenu")
 parentMenu = NodePath("../..")
 
 [node name="SandOasis" parent="Submenus" node_paths=PackedStringArray("description", "readyMenu", "parentMenu") instance=ExtResource("18_0kdsm")]
 layout_mode = 1
-description = NodePath("../../Description")
+description = NodePath("../../Description/Description")
 readyMenu = NodePath("../ReadyMenu")
 parentMenu = NodePath("../..")
 
 [node name="DinosaurJungle" parent="Submenus" node_paths=PackedStringArray("description", "readyMenu", "parentMenu") instance=ExtResource("15_3h61q")]
 layout_mode = 1
-description = NodePath("../../Description")
+description = NodePath("../../Description/Description")
 readyMenu = NodePath("../ReadyMenu")
 parentMenu = NodePath("../..")
 
 [node name="EvilFoundry" parent="Submenus" node_paths=PackedStringArray("description", "readyMenu", "parentMenu") instance=ExtResource("16_tfnbe")]
 layout_mode = 1
-description = NodePath("../../Description")
+description = NodePath("../../Description/Description")
 readyMenu = NodePath("../ReadyMenu")
 parentMenu = NodePath("../..")
 
 [node name="LevitatedRuin" parent="Submenus" node_paths=PackedStringArray("description", "readyMenu", "parentMenu") instance=ExtResource("17_6ds0g")]
 layout_mode = 1
-description = NodePath("../../Description")
+description = NodePath("../../Description/Description")
 readyMenu = NodePath("../ReadyMenu")
 parentMenu = NodePath("../..")
 
 [node name="PirateStorm" parent="Submenus" node_paths=PackedStringArray("description", "readyMenu", "parentMenu") instance=ExtResource("18_dsf0x")]
 layout_mode = 1
-description = NodePath("../../Description")
+description = NodePath("../../Description/Description")
 readyMenu = NodePath("../ReadyMenu")
 parentMenu = NodePath("../..")
 
 [node name="SkeletonDome" parent="Submenus" node_paths=PackedStringArray("description", "readyMenu", "parentMenu") instance=ExtResource("19_3xa6d")]
 layout_mode = 1
-description = NodePath("../../Description")
+description = NodePath("../../Description/Description")
 readyMenu = NodePath("../ReadyMenu")
 parentMenu = NodePath("../..")
 
 [node name="NightPalace" parent="Submenus" node_paths=PackedStringArray("description", "readyMenu", "parentMenu") instance=ExtResource("20_y3iyc")]
 layout_mode = 1
-description = NodePath("../../Description")
+description = NodePath("../../Description/Description")
 readyMenu = NodePath("../ReadyMenu")
 parentMenu = NodePath("../..")
 
@@ -2518,7 +2529,7 @@ parentMenu = NodePath("../..")
 z_index = 5
 z_as_relative = false
 layout_mode = 1
-description = NodePath("../../Description")
+description = NodePath("../../Description/Description")
 submenus = Array[NodePath]([NodePath("../SkillSelect")])
 bgm = NodePath("../../RetailBGM")
 
@@ -2536,12 +2547,12 @@ parentMenu = NodePath("../SkillSelect")
 
 [node name="NavigationButtons" type="HBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
+anchors_preset = -1
+anchor_top = 1.0
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = 228.0
-offset_bottom = 276.0
+anchor_bottom = 1.0
+offset_top = -312.0
+offset_bottom = -264.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 64
@@ -2559,12 +2570,34 @@ ActionKey = &"sys_return"
 inputKey = &"sys_cancel"
 fallbackKey = &"ui_cancel"
 
-[node name="Description" parent="." instance=ExtResource("18_w35s5")]
+[node name="Description" type="Control" parent="."]
+z_index = 100
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 384.0
+offset_top = -280.0
+offset_right = -1536.0
+offset_bottom = -280.0
+grow_horizontal = 2
+grow_vertical = 0
+metadata/_edit_group_ = true
+
+[node name="Description" parent="Description" instance=ExtResource("18_w35s5")]
 z_index = 10
 z_as_relative = false
 layout_mode = 1
-offset_top = 260.0
-offset_bottom = 516.0
+anchors_preset = -1
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 1152.0
+offset_bottom = 256.0
 
 [node name="SFX" type="Node" parent="."]
 

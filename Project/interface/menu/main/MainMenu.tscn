@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c8xggtgtbxr2d" path="res://interface/menu/main/MainMenu.cs" id="3"]
 [ext_resource type="Texture2D" uid="uid://cgr5n541nctwp" path="res://interface/menu/main/texture/text/base en.png" id="5"]
-[ext_resource type="Shader" uid="uid://cywcr73eavwo2" path="res://effect/shader/interface/InterfaceFlashAdd.gdshader" id="5_ken8k"]
+[ext_resource type="Shader" uid="uid://dj2vtehay1fej" path="res://effect/shader/interface/InterfaceFlashAdd.gdshader" id="5_ken8k"]
 [ext_resource type="SpriteFrames" uid="uid://jc646omm5n2y" path="res://effect/particle/sprite frames/Flame Menu Short.tres" id="5_qg1tb"]
 [ext_resource type="Texture2D" uid="uid://d2miktvv7um1f" path="res://interface/menu/main/texture/text/glow en.png" id="6"]
 [ext_resource type="SpriteFrames" uid="uid://btjml6xghvlgt" path="res://effect/particle/sprite frames/Flame Menu Tall.tres" id="6_bfng4"]
@@ -560,7 +560,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(960, 470)]
+"values": [Vector2(0, 470)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -903,7 +903,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
-"values": [Vector2(960, 634), Vector2(960, 470)]
+"values": [Vector2(0, 634), Vector2(0, 470)]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -2381,12 +2381,25 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Options" type="Node2D" parent="MenuRoot"]
-metadata/_edit_lock_ = true
+[node name="Options" type="Control" parent="MenuRoot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 metadata/_edit_group_ = true
 
-[node name="Adventure" type="Node2D" parent="MenuRoot/Options"]
-position = Vector2(568, 264)
+[node name="Adventure" type="Control" parent="MenuRoot/Options"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -392.0
+offset_top = 264.0
+offset_right = -392.0
+offset_bottom = 264.0
+grow_horizontal = 2
 scale = Vector2(0.885, 0.885)
 
 [node name="Text" type="Sprite2D" parent="MenuRoot/Options/Adventure"]
@@ -2446,9 +2459,17 @@ position = Vector2(264.348, -34.7826)
 sprite_frames = ExtResource("6_bfng4")
 autoplay = "default"
 
-[node name="Party" type="Node2D" parent="MenuRoot/Options"]
+[node name="Party" type="Control" parent="MenuRoot/Options"]
 modulate = Color(1, 1, 1, 0.392157)
-position = Vector2(1378.92, 360)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 418.92
+offset_top = 360.0
+offset_right = 418.92
+offset_bottom = 360.0
+grow_horizontal = 2
 scale = Vector2(0.975, 0.975)
 
 [node name="Text" type="Sprite2D" parent="MenuRoot/Options/Party"]
@@ -2500,9 +2521,17 @@ scale = Vector2(2.5, 2.41848)
 sprite_frames = ExtResource("6_bfng4")
 autoplay = "default"
 
-[node name="Book" type="Node2D" parent="MenuRoot/Options"]
+[node name="Book" type="Control" parent="MenuRoot/Options"]
 modulate = Color(1, 1, 1, 0.392157)
-position = Vector2(584, 544)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -376.0
+offset_top = 544.0
+offset_right = -376.0
+offset_bottom = 544.0
+grow_horizontal = 2
 
 [node name="Text" type="Sprite2D" parent="MenuRoot/Options/Book"]
 texture = ExtResource("5")
@@ -2561,8 +2590,16 @@ sprite_frames = ExtResource("6_bfng4")
 autoplay = "default"
 flip_h = true
 
-[node name="Option" type="Node2D" parent="MenuRoot/Options"]
-position = Vector2(1350.26, 597.805)
+[node name="Option" type="Control" parent="MenuRoot/Options"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 390.26
+offset_top = 597.805
+offset_right = 390.26
+offset_bottom = 597.805
+grow_horizontal = 2
 scale = Vector2(0.955, 0.955)
 
 [node name="Text" type="Sprite2D" parent="MenuRoot/Options/Option"]
@@ -2648,17 +2685,28 @@ libraries = {
 autoplay = "init"
 next/show = &"loop"
 
-[node name="Description" type="Node2D" parent="MenuRoot"]
+[node name="Description" type="Control" parent="MenuRoot"]
 z_index = 100
-position = Vector2(384, 800)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 384.0
+offset_top = -280.0
+offset_right = -1536.0
+offset_bottom = -280.0
+grow_horizontal = 2
+grow_vertical = 0
 metadata/_edit_group_ = true
 
 [node name="Description" parent="MenuRoot/Description" instance=ExtResource("9_wprkd")]
 modulate = Color(1, 1, 1, 1)
+layout_mode = 1
 offset_left = 0.0
 offset_top = 0.0
 offset_right = 1152.0
-offset_bottom = 255.999
+offset_bottom = 256.0
 
 [node name="NavigationButtons" type="HBoxContainer" parent="MenuRoot"]
 layout_mode = 1
@@ -2746,17 +2794,15 @@ metadata/_edit_lock_ = true
 
 [node name="Menu" type="Control" parent="QuitMenu"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+anchor_left = 0.5
+anchor_right = 0.5
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Parent" type="Control" parent="QuitMenu/Menu"]
 anchors_preset = 0
-offset_left = 960.0
 offset_top = 470.0
-offset_right = 960.0
 offset_bottom = 470.0
 
 [node name="Window" type="Node2D" parent="QuitMenu/Menu/Parent"]

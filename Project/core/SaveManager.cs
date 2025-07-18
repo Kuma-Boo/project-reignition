@@ -466,23 +466,26 @@ public partial class SaveManager : Node
 
 		if (DisplayServer.WindowGetMode() != targetMode)
 			DisplayServer.WindowSetMode(targetMode);
+
 		if (!Config.useFullscreen)
 		{
 			switch (Config.aspectRatio)
 			{
 				case AspectRatio.FourByThree:
-					DisplayServer.WindowSetSize(WindowSizes4x3[Config.windowSize]);
+					Instance.GetTree().Root.Size = WindowSizes4x3[Config.windowSize];
 					break;
 				case AspectRatio.SixteenByNine:
-					DisplayServer.WindowSetSize(WindowSizes[Config.windowSize]);
+					Instance.GetTree().Root.Size = WindowSizes[Config.windowSize];
 					break;
 				case AspectRatio.SixteenByTen:
-					DisplayServer.WindowSetSize(WindowSizes16x10[Config.windowSize]);
+					Instance.GetTree().Root.Size = WindowSizes16x10[Config.windowSize];
 					break;
 			}
-
 		}
-		//DisplayServer.WindowSetSize(WindowSizes[Config.windowSize]);
+
+		Vector2I resolution = Instance.GetTree().Root.Size;
+		float ratio = resolution.X / (float)resolution.Y;
+		Instance.GetTree().Root.ContentScaleSize = new Vector2I(Mathf.RoundToInt(1920 / ratio), 1080);
 
 		Engine.MaxFps = FrameRates[Config.framerate];
 		DisplayServer.VSyncMode targetVSyncMode =
