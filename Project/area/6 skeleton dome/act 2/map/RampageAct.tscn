@@ -1,8 +1,21 @@
-[gd_scene load_steps=4 format=3 uid="uid://6rhkc33287q1"]
+[gd_scene load_steps=14 format=3 uid="uid://6rhkc33287q1"]
 
 [ext_resource type="PackedScene" uid="uid://c5ajp56pbyegl" path="res://area/6 skeleton dome/act 2/Static.tscn" id="1_klfa3"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_3uee3"]
 [ext_resource type="Resource" uid="uid://dye8lwmr1u1pd" path="res://resource/level data/skeleton dome/Act2Rampage.tres" id="2_hve45"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="4_22mc0"]
+[ext_resource type="PackedScene" uid="uid://vqw834asl36p" path="res://area/6 skeleton dome/object/obstacle/Gate.tscn" id="5_wk4ah"]
+[ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="6_yf0ya"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="7_w7ftd"]
+[ext_resource type="PackedScene" uid="uid://d21ummt57uq4a" path="res://area/6 skeleton dome/object/obstacle/Sickle.tscn" id="8_w7ftd"]
+[ext_resource type="PackedScene" uid="uid://cl7a6swbawl4b" path="res://area/6 skeleton dome/object/platform/PlatformExteriorEnd.tscn" id="9_l4u23"]
+[ext_resource type="PackedScene" uid="uid://dee1migehwfmq" path="res://area/6 skeleton dome/object/platform/PlatformExterior.tscn" id="10_uy80d"]
+[ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="11_uy80d"]
+[ext_resource type="PackedScene" uid="uid://cvjx50c0en38" path="res://area/6 skeleton dome/object/obstacle/Door.tscn" id="12_42fea"]
+
+[sub_resource type="Curve" id="Curve_42fea"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 2.95701, 0.0, 0, 0]
+point_count = 2
 
 [node name="World" type="Node"]
 
@@ -16,3 +29,167 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1150, 0, -1125)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="RampageAct/SpawnPosition" instance=ExtResource("2_3uee3")]
+
+[node name="Hall" type="Node3D" parent="RampageAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1150, 0, -1125)
+script = ExtResource("4_22mc0")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="Gate" parent="RampageAct/Hall" instance=ExtResource("5_wk4ah")]
+transform = Transform3D(-0.8, 0, -6.99382e-08, 0, 0.6, 0, 6.99382e-08, 0, -0.8, 0, 5, 25.5)
+
+[node name="Rings1" type="Node3D" parent="RampageAct/Hall"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 6.11959e-07, 0.7, 35)
+script = ExtResource("6_yf0ya")
+Source = ExtResource("7_w7ftd")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Hall/Rings1" instance=ExtResource("7_w7ftd")]
+
+[node name="Child02" parent="RampageAct/Hall/Rings1" instance=ExtResource("7_w7ftd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="RampageAct/Hall/Rings1" instance=ExtResource("7_w7ftd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child04" parent="RampageAct/Hall/Rings1" instance=ExtResource("7_w7ftd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Hall2" type="Node3D" parent="RampageAct/Hall"]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -5, 0, 60)
+
+[node name="RingsL" type="Node3D" parent="RampageAct/Hall/Hall2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.7, -7)
+script = ExtResource("6_yf0ya")
+Source = ExtResource("7_w7ftd")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Hall/Hall2/RingsL" instance=ExtResource("7_w7ftd")]
+
+[node name="Child02" parent="RampageAct/Hall/Hall2/RingsL" instance=ExtResource("7_w7ftd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="RampageAct/Hall/Hall2/RingsL" instance=ExtResource("7_w7ftd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child04" parent="RampageAct/Hall/Hall2/RingsL" instance=ExtResource("7_w7ftd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child05" parent="RampageAct/Hall/Hall2/RingsL" instance=ExtResource("7_w7ftd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="RingsR" type="Node3D" parent="RampageAct/Hall/Hall2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.7, -7)
+script = ExtResource("6_yf0ya")
+Source = ExtResource("7_w7ftd")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Hall/Hall2/RingsR" instance=ExtResource("7_w7ftd")]
+
+[node name="Child02" parent="RampageAct/Hall/Hall2/RingsR" instance=ExtResource("7_w7ftd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="RampageAct/Hall/Hall2/RingsR" instance=ExtResource("7_w7ftd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child04" parent="RampageAct/Hall/Hall2/RingsR" instance=ExtResource("7_w7ftd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child05" parent="RampageAct/Hall/Hall2/RingsR" instance=ExtResource("7_w7ftd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Sickle1" parent="RampageAct/Hall/Hall2" instance=ExtResource("8_w7ftd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -10)
+rotationAmount = 35.0
+cycleLength = 8.0
+currentRatio = 1.0
+chainLength = 4
+
+[node name="Sickle2" parent="RampageAct/Hall/Hall2" instance=ExtResource("8_w7ftd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -30)
+rotationAmount = 35.0
+cycleLength = 7.0
+currentRatio = 0.0
+chainLength = 4
+
+[node name="Gate1" parent="RampageAct/Hall/Hall2" instance=ExtResource("5_wk4ah")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 4, -39)
+
+[node name="Gate2" parent="RampageAct/Hall/Hall2" instance=ExtResource("5_wk4ah")]
+transform = Transform3D(-2.18557e-08, 0, 0.7, 0, 0.7, 0, -0.5, 0, -3.0598e-08, -3.57, -0.9, -44.3)
+
+[node name="Gate3" parent="RampageAct/Hall/Hall2" instance=ExtResource("5_wk4ah")]
+transform = Transform3D(-2.18557e-08, 0, 0.7, 0, 0.7, 0, -0.5, 0, -3.0598e-08, -3.57, -0.9, -49.3)
+
+[node name="Rings1" type="Node3D" parent="RampageAct/Hall/Hall2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50012, 0.7, -43.9999)
+script = ExtResource("6_yf0ya")
+Source = ExtResource("7_w7ftd")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = SubResource("Curve_42fea")
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Hall/Hall2/Rings1" instance=ExtResource("7_w7ftd")]
+
+[node name="Child02" parent="RampageAct/Hall/Hall2/Rings1" instance=ExtResource("7_w7ftd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0402213, 0, -4)
+
+[node name="Child03" parent="RampageAct/Hall/Hall2/Rings1" instance=ExtResource("7_w7ftd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.302665, 0, -8)
+
+[node name="Child04" parent="RampageAct/Hall/Hall2/Rings1" instance=ExtResource("7_w7ftd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -12)
+
+[node name="PlatformExteriorEnd1" parent="RampageAct/Hall/Hall2" instance=ExtResource("9_l4u23")]
+transform = Transform3D(-0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, -0.939693, 3.57404, 1, -47.4622)
+
+[node name="PlatformExterior" parent="RampageAct/Hall/Hall2/PlatformExteriorEnd1" instance=ExtResource("10_uy80d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="Sickle3" parent="RampageAct/Hall/Hall2" instance=ExtResource("8_w7ftd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10352e-05, 8, -65)
+rotationAmount = 35.0
+cycleLength = 8.0
+currentRatio = 1.0
+chainLength = 4
+
+[node name="PlatformExteriorEnd2" parent="RampageAct/Hall/Hall2" instance=ExtResource("9_l4u23")]
+transform = Transform3D(0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, 0.34202, -2.55273, 1, -69.9186)
+
+[node name="PlatformExterior" parent="RampageAct/Hall/Hall2/PlatformExteriorEnd2" instance=ExtResource("10_uy80d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="DashPanel" parent="RampageAct/Hall/Hall2" instance=ExtResource("11_uy80d")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -4.37114e-07, 0, -84)
+
+[node name="DoorL" parent="RampageAct/Hall/Hall2" instance=ExtResource("12_42fea")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.5, 0, -86.5)
+
+[node name="DoorR" parent="RampageAct/Hall/Hall2" instance=ExtResource("12_42fea")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2.4, 0, -86.5)
+
+[node name="Arena" type="Node3D" parent="RampageAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1000, 0, -1000)
