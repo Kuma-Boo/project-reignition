@@ -153,17 +153,20 @@ public partial class SaveManager : Node
 
 	public static readonly Vector2I[] WindowSizes16x10 =
 	[
+		new(768, 480), // 480p
+		new(1152, 720), // 720p
 		new(1280, 800), // 800p, WXGA (steam deck)
 		new(1440, 900), // 900p, WXGA+
-		new(1680, 1050),// 1050p, WSXGA+
-		new(1920, 1200),// 1200p, WUXGA
-		new(2560, 1600),// 1600p, WQXGA
-		new(3840, 2400),// 2400p, WQUXGA
+		new(1680, 1050), // 1050p, WSXGA+
+		new(1920, 1200), // 1200p, WUXGA
+		new(2560, 1600), // 1600p, WQXGA
+		new(3840, 2400), // 2400p, WQUXGA
     ];
 
 	public static readonly Vector2I[] WindowSizes21x9 =
 	[
-		new(1400, 600), // Test Resolution
+		new(1120, 480), // 480p
+		new(1400, 600), // 600p
 		new(2560, 1080), // 1080p, WFHD
 		new(2880, 1200), // 1200p, WFHD+
 		new(3440, 1440), // 1440p, WQHD
@@ -471,6 +474,7 @@ public partial class SaveManager : Node
 
 		if (!Config.useFullscreen)
 		{
+			GD.PushWarning("APPLYING CONFIG!");
 			switch (Config.aspectRatio)
 			{
 				case AspectRatio.FourByThree:
