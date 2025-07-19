@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://dsougvfwmdiun"]
+[gd_scene load_steps=11 format=3 uid="uid://dsougvfwmdiun"]
 
 [ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/texture/background.png" id="1_mkeet"]
 [ext_resource type="Script" uid="uid://v0xr7h3y4olt" path="res://interface/menu/MenuAspectController.cs" id="1_p2s00"]
 [ext_resource type="PackedScene" uid="uid://do5h1l0j40l23" path="res://interface/menu/main/MainMenu.tscn" id="3"]
+[ext_resource type="Texture2D" uid="uid://k8exixourkta" path="res://interface/menu/main/texture/char.png" id="3_al5xi"]
 [ext_resource type="PackedScene" uid="uid://cumqwrsj6eqpd" path="res://interface/menu/level select/WorldSelect.tscn" id="3_ftqsn"]
 [ext_resource type="PackedScene" uid="uid://cufdusdk0inmc" path="res://interface/menu/save select/SaveSelect.tscn" id="4_2j1w0"]
 [ext_resource type="PackedScene" uid="uid://cbamk7p3d1ddn" path="res://interface/menu/title/Title.tscn" id="5"]
@@ -33,16 +34,20 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_mkeet")
+expand_mode = 2
+stretch_mode = 6
 
-[node name="MainMenu" parent="Clip" node_paths=PackedStringArray("parentMenu", "bgm") instance=ExtResource("3")]
+[node name="Char" type="TextureRect" parent="Clip"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 0.0
-offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("3_al5xi")
+
+[node name="MainMenu" parent="Clip" node_paths=PackedStringArray("parentMenu", "bgm") instance=ExtResource("3")]
+layout_mode = 1
 parentMenu = NodePath("../Title")
 submenus = [NodePath("../SaveSelect")]
 bgm = NodePath("../MainMenuBGM")
