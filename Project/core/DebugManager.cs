@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Project.Core;
 
-public partial class DebugManager : Node2D
+public partial class DebugManager : Control
 {
 	public static DebugManager Instance { get; set; }
 

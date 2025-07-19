@@ -9,6 +9,7 @@ public partial class ControlOption : Control
 	[Signal]
 	public delegate void SwapMappingEventHandler(StringName id, InputEvent e); // Emitted when a remap results in a mapping swap
 
+	[Export] private StringName actionId;
 	[Export] private StringName inputId;
 	public StringName ActionName => IsPartyModeMapping ? inputId + PartyModeControllerIndex.ToString() : inputId;
 	[Export(PropertyHint.Range, "1, 4, 1")] private int partyModeControllerIndex = 1;
@@ -61,7 +62,7 @@ public partial class ControlOption : Control
 		AxisTextureRect = GetNodeOrNull<TextureRect>(axisTextureRect);
 		ButtonTextureRect = GetNodeOrNull<TextureRect>(buttonTextureRect);
 
-		ActionLabel.Text = Tr(inputId.ToString());
+		ActionLabel.Text = Tr(actionId);
 
 		RedrawBinding();
 
@@ -231,6 +232,8 @@ public partial class ControlOption : Control
 	/// <summary> Checks whether the input can be remapped to the target binding. </summary>
 	private bool FilterInput(InputEvent e)
 	{
+		bool isSystemInput = inputId.ToString().StartsWith("sys_");
+
 		if (e is InputEventJoypadButton button) // Exclude certain buttons (such as guides)
 		{
 			switch (button.ButtonIndex)
@@ -238,11 +241,23 @@ public partial class ControlOption : Control
 				case JoyButton.Guide:
 					return false;
 			}
+
+			if (isSystemInput)
+			{
+				switch (button.ButtonIndex)
+				{
+					case JoyButton.DpadUp:
+					case JoyButton.DpadDown:
+					case JoyButton.DpadLeft:
+					case JoyButton.DpadRight:
+						return false;
+				}
+			}
 		}
 
 		if (e is InputEventJoypadMotion motion) // Only allow joystick axis in a certain range
 		{
-			if (Mathf.Abs(motion.AxisValue) < SaveManager.Config.deadZone)
+			if (isSystemInput || Mathf.Abs(motion.AxisValue) < SaveManager.Config.deadZone)
 				return false;
 
 			switch (motion.Axis)
@@ -265,9 +280,20 @@ public partial class ControlOption : Control
 			{
 				case Key.Alt:
 				case Key.Meta:
-				case Key.Escape:
 				case Key.Numlock:
 					return false;
+			}
+
+			if (isSystemInput)
+			{
+				switch (key.Keycode)
+				{
+					case Key.Up:
+					case Key.Down:
+					case Key.Left:
+					case Key.Right:
+						return false;
+				}
 			}
 		}
 

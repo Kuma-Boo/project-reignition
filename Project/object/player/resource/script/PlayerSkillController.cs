@@ -251,6 +251,8 @@ public partial class PlayerSkillController : Node3D
 	private bool isTimeBreakEnabled = true;
 
 	[Export]
+	private Control speedBreakShockwave;
+	[Export]
 	private AnimationPlayer speedBreakAnimator;
 	// Audio clips
 	[Export]
@@ -449,6 +451,7 @@ public partial class PlayerSkillController : Node3D
 			speedBreakAnimator.Play(SaveManager.Config.useMotionBlur ? "enable-blur" : "disable-blur");
 			speedBreakAnimator.Advance(0.0);
 
+			speedBreakShockwave.PivotOffset = speedBreakShockwave.Size * 0.5f;
 			speedBreakAnimator.Play("start");
 			Player.Effect.PlayVoice("speed break");
 			Player.MovementAngle = Player.PathFollower.ForwardAngle;

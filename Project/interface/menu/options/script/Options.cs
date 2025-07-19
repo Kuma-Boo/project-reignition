@@ -12,8 +12,6 @@ public partial class Options : Menu
 
 	[Export] private AnimationPlayer resetAnimator;
 	private bool isResetSelected;
-	private bool isCustomWindowSize;
-	private bool isResizingWindowFromOptionsMenu;
 
 	private int maxSelection;
 	private int scrollOffset;
@@ -79,10 +77,7 @@ public partial class Options : Menu
 
 		// Prevent the options menu from jumping displays when moving through the options menu
 		SaveManager.Config.targetDisplay = DisplayServer.WindowGetCurrentScreen();
-
-		isCustomWindowSize = GetWindowSize() == -1;
-		if (isCustomWindowSize)
-			SaveManager.Config.windowSize = GetClosestWindowSize();
+		SaveManager.Config.windowSize = GetClosestWindowSize();
 
 		cursorBasePosition = cursor.Position.Y;
 		SetUpControlOptions();
@@ -90,7 +85,6 @@ public partial class Options : Menu
 		CalculateMaxSelection();
 		UpdatePartyModeDevice(0);
 		DebugManager.Instance.Connect(DebugManager.SignalName.FullscreenToggled, FullscreenToggleCallable);
-		GetTree().Root.SizeChanged += WindowResized;
 	}
 
 	public override void _ExitTree() => DebugManager.Instance.Disconnect(DebugManager.SignalName.FullscreenToggled, FullscreenToggleCallable);
@@ -126,10 +120,19 @@ public partial class Options : Menu
 	{
 		UpdateCursor();
 
-		if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept") || Input.IsActionJustPressed("ui_clear"))
+		if ((Input.IsActionJustPressed("sys_pause") || (Input.IsActionJustPressed("ui_accept")) &&
+			!Input.IsActionJustPressed("toggle_fullscreen")))
+		{
 			Select();
+		}
+		else if (Input.IsActionJustPressed("sys_clear") || Input.IsActionJustPressed("ui_text_delete"))
+		{
+			DeleteMapping();
+		}
 		else
+		{
 			base.ProcessMenu();
+		}
 
 		if (isPlayerLocked)
 			CallDeferred(MethodName.UpdatePlayerPosition);
@@ -177,18 +180,7 @@ public partial class Options : Menu
 				ConfirmControlOption();
 				break;
 			case Submenus.Mapping:
-				if (!controlMappingOptions[VerticalSelection].IsReady)
-					return;
-
 				ConfirmSFX();
-
-				if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_clear"))
-				{
-					// Clear input mapping
-					controlMappingOptions[VerticalSelection].ClearMapping();
-					return;
-				}
-
 				controlMappingOptions[VerticalSelection].CallDeferred(ControlOption.MethodName.StartListening);
 				break;
 			case Submenus.PartyMapping:
@@ -203,14 +195,6 @@ public partial class Options : Menu
 					return;
 
 				ConfirmSFX();
-
-				if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_clear"))
-				{
-					// Clear input mapping
-					partyMappingOptions[selectedIndex].ClearMapping();
-					return;
-				}
-
 				partyMappingOptions[selectedIndex].CallDeferred(ControlOption.MethodName.StartListening);
 				break;
 			case Submenus.Test:
@@ -236,6 +220,25 @@ public partial class Options : Menu
 		SaveManager.ApplyConfig();
 	}
 
+	private void DeleteMapping()
+	{
+		if (currentSubmenu != Submenus.Mapping && currentSubmenu != Submenus.PartyMapping)
+			return;
+
+		ConfirmSFX();
+		if (currentSubmenu == Submenus.Mapping)
+		{
+			if (!controlMappingOptions[VerticalSelection].IsReady)
+				return;
+
+			controlMappingOptions[VerticalSelection].ClearMapping();
+			return;
+		}
+
+		int selectedIndex = VerticalSelection - ExtraPartyModeOptionCount;
+		partyMappingOptions[selectedIndex].ClearMapping();
+	}
+
 	protected override void Cancel()
 	{
 		switch (currentSubmenu)
@@ -257,7 +260,7 @@ public partial class Options : Menu
 				if (!controlMappingOptions[VerticalSelection].IsReady) return;
 
 				CancelSFX();
-				FlipBook(Submenus.Control, true, 4);
+				FlipBook(Submenus.Control, true, 6);
 				break;
 			case Submenus.PartyMapping:
 				if (VerticalSelection >= ExtraPartyModeOptionCount &&
@@ -267,7 +270,7 @@ public partial class Options : Menu
 				}
 
 				CancelSFX();
-				FlipBook(Submenus.Control, true, 5);
+				FlipBook(Submenus.Control, true, 7);
 				break;
 			case Submenus.Test:
 				return;
@@ -360,11 +363,13 @@ public partial class Options : Menu
 		if (maxSelection < 8)
 			scrollOffset = 0;
 
-		if (!scrollBar.IsVisibleInTree())
+		if (!scrollBar.IsVisibleInTree() || snap)
 		{
 			scrollBar.Position = Vector2.Zero;
 			scrollOffset = 0;
-			return;
+
+			if (!scrollBar.IsVisibleInTree())
+				return;
 		}
 
 		if (VerticalSelection > scrollOffset + 7)
@@ -432,55 +437,80 @@ public partial class Options : Menu
 	private readonly string FullscreenNormalString = "option_normal_fullscreen";
 	private readonly string FullscreenExclusiveString = "option_exclusive_fullscreen";
 	private readonly string PlayerString = "option_player_number";
+	private readonly string Aspect4x3 = "4:3";
+	private readonly string Aspect16x9 = "16:9";
+	private readonly string Aspect16x10 = "16:10";
+	private readonly string Aspect21x9 = "21:9";
 	private void UpdateLabels()
 	{
 		videoLabels[0].Text = Tr("option_display").Replace("0", (SaveManager.Config.targetDisplay + 1).ToString());
 
-		if (isCustomWindowSize)
+		if (SaveManager.Config.useFullscreen)
 		{
-			videoLabels[1].Text = CustomString;
+			videoLabels[1].Text = videoLabels[2].Text = FullscreenString;
 		}
 		else
 		{
-			Vector2I resolution = SaveManager.WindowSizes[SaveManager.Config.windowSize];
-			videoLabels[1].Text = SaveManager.Config.useFullscreen ? FullscreenString : $"{resolution.X}:{resolution.Y}";
+			Vector2I resolution;
+			switch (SaveManager.Config.aspectRatio)
+			{
+				case SaveManager.AspectRatio.FourByThree:
+					videoLabels[1].Text = Aspect4x3;
+					resolution = SaveManager.WindowSizes4x3[SaveManager.Config.windowSize];
+					break;
+				case SaveManager.AspectRatio.SixteenByTen:
+					videoLabels[1].Text = Aspect16x10;
+					resolution = SaveManager.WindowSizes16x10[SaveManager.Config.windowSize];
+					break;
+				case SaveManager.AspectRatio.TwentyoneByNine:
+					videoLabels[1].Text = Aspect21x9;
+					resolution = SaveManager.WindowSizes21x9[SaveManager.Config.windowSize];
+					break;
+				default:
+					videoLabels[1].Text = Aspect16x9;
+					resolution = SaveManager.WindowSizes[SaveManager.Config.windowSize];
+					break;
+			}
+
+			videoLabels[2].Text = $"{resolution.X}:{resolution.Y}";
 		}
-		videoLabels[2].Text = SaveManager.Config.useExclusiveFullscreen ? FullscreenExclusiveString : FullscreenNormalString;
+
+		videoLabels[3].Text = SaveManager.Config.useExclusiveFullscreen ? FullscreenExclusiveString : FullscreenNormalString;
 		if (SaveManager.Config.framerate == 0)
-			videoLabels[3].Text = Tr("option_unlimited_fps");
+			videoLabels[4].Text = Tr("option_unlimited_fps");
 		else
-			videoLabels[3].Text = Tr("option_fps").Replace("0", SaveManager.FrameRates[SaveManager.Config.framerate].ToString());
-		videoLabels[4].Text = SaveManager.Config.useVsync ? EnabledString : DisabledString;
-		videoLabels[5].Text = $"{SaveManager.Config.renderScale}%";
-		videoLabels[6].Text = SaveManager.Config.resizeMode.ToString();
+			videoLabels[4].Text = Tr("option_fps").Replace("0", SaveManager.FrameRates[SaveManager.Config.framerate].ToString());
+		videoLabels[5].Text = SaveManager.Config.useVsync ? EnabledString : DisabledString;
+		videoLabels[6].Text = $"{SaveManager.Config.renderScale}%";
+		videoLabels[7].Text = SaveManager.Config.resizeMode.ToString();
 		switch (SaveManager.Config.antiAliasing)
 		{
 			case 0:
-				videoLabels[7].Text = DisabledString;
+				videoLabels[8].Text = DisabledString;
 				break;
 			case 1:
-				videoLabels[7].Text = "FXAA";
+				videoLabels[8].Text = "FXAA";
 				break;
 			case 2:
-				videoLabels[7].Text = "2x MSAA";
+				videoLabels[8].Text = "2x MSAA";
 				break;
 			case 3:
-				videoLabels[7].Text = "4x MSAA";
+				videoLabels[8].Text = "4x MSAA";
 				break;
 			case 4:
-				videoLabels[7].Text = "8x MSAA";
+				videoLabels[8].Text = "8x MSAA";
 				break;
 		}
-		videoLabels[8].Text = GetQualityString(SaveManager.Config.bloomMode);
+		videoLabels[9].Text = GetQualityString(SaveManager.Config.bloomMode);
 
 		if (SaveManager.Config.softShadowQuality == SaveManager.QualitySetting.Disabled)
-			videoLabels[9].Text = "option_hard_shadows";
+			videoLabels[10].Text = "option_hard_shadows";
 		else
-			videoLabels[9].Text = GetQualityString(SaveManager.Config.softShadowQuality);
-		videoLabels[10].Text = GetQualityString(SaveManager.Config.postProcessingQuality);
-		videoLabels[11].Text = GetQualityString(SaveManager.Config.reflectionQuality);
-		videoLabels[12].Text = SaveManager.Config.useMotionBlur ? EnabledString : DisabledString;
-		videoLabels[13].Text = SaveManager.Config.useScreenShake ? $"{SaveManager.Config.screenShake}%" : DisabledString;
+			videoLabels[10].Text = GetQualityString(SaveManager.Config.softShadowQuality);
+		videoLabels[11].Text = GetQualityString(SaveManager.Config.postProcessingQuality);
+		videoLabels[12].Text = GetQualityString(SaveManager.Config.reflectionQuality);
+		videoLabels[13].Text = SaveManager.Config.useMotionBlur ? EnabledString : DisabledString;
+		videoLabels[14].Text = SaveManager.Config.useScreenShake ? $"{SaveManager.Config.screenShake}%" : DisabledString;
 
 		audioLabels[0].Text = SaveManager.Config.isMasterMuted ? MuteString : $"{SaveManager.Config.masterVolume}%";
 		audioLabels[1].Text = SaveManager.Config.isBgmMuted ? MuteString : $"{SaveManager.Config.bgmVolume}%";
@@ -643,14 +673,14 @@ public partial class Options : Menu
 		}
 		else if (VerticalSelection == 1)
 		{
-			if (isCustomWindowSize)
-			{
-				isCustomWindowSize = false;
-				SaveManager.Config.windowSize = GetClosestWindowSize();
-				return true;
-			}
+			SaveManager.Config.aspectRatio = (SaveManager.AspectRatio)WrapSelection((int)SaveManager.Config.aspectRatio + direction, (int)SaveManager.AspectRatio.Count);
+			SaveManager.Config.windowSize = GetClosestWindowSizeClamped();
 
-			isResizingWindowFromOptionsMenu = true;
+			if (SaveManager.Config.useFullscreen)
+				SaveManager.Config.useFullscreen = !SaveManager.Config.useFullscreen;
+		}
+		else if (VerticalSelection == 2)
+		{
 			int fullscreenResolution = GetLargestWindowSize() + 1;
 
 			// Switch out of fullscreen mode
@@ -675,35 +705,35 @@ public partial class Options : Menu
 				SaveManager.Config.windowSize = GetLargestWindowSize();
 			}
 		}
-		else if (VerticalSelection == 2)
+		else if (VerticalSelection == 3)
 		{
 			SaveManager.Config.useExclusiveFullscreen = !SaveManager.Config.useExclusiveFullscreen;
 		}
-		else if (VerticalSelection == 3)
+		else if (VerticalSelection == 4)
 		{
 			SaveManager.Config.framerate = WrapSelection(SaveManager.Config.framerate + direction, SaveManager.FrameRates.Length);
 		}
-		else if (VerticalSelection == 4)
+		else if (VerticalSelection == 5)
 		{
 			SaveManager.Config.useVsync = !SaveManager.Config.useVsync;
 		}
-		else if (VerticalSelection == 5)
+		else if (VerticalSelection == 6)
 		{
 			SaveManager.Config.renderScale += direction * 10;
 			SaveManager.Config.renderScale = Mathf.Clamp(SaveManager.Config.renderScale, 50, 150);
 		}
-		else if (VerticalSelection == 6)
+		else if (VerticalSelection == 7)
 		{
 			int resizeMode = (int)SaveManager.Config.resizeMode;
 			// TODO Enable Metal rendering backend on AppleOS
 			resizeMode = WrapSelection(resizeMode + direction, (int)RenderingServer.ViewportScaling3DMode.Fsr2 + 1);
 			SaveManager.Config.resizeMode = (RenderingServer.ViewportScaling3DMode)resizeMode;
 		}
-		else if (VerticalSelection == 7) // TODO Change this to 6 when upgrading to godot v4.3
+		else if (VerticalSelection == 8) // TODO Change this to 6 when upgrading to godot v4.3
 		{
 			SaveManager.Config.antiAliasing = WrapSelection(SaveManager.Config.antiAliasing + direction, 3);
 		}
-		else if (VerticalSelection == 8)
+		else if (VerticalSelection == 9)
 		{
 			int bloomMode = (int)SaveManager.Config.bloomMode;
 			bloomMode = WrapSelection(bloomMode + direction, (int)SaveManager.QualitySetting.Count);
@@ -711,30 +741,30 @@ public partial class Options : Menu
 				bloomMode = WrapSelection(bloomMode + direction, (int)SaveManager.QualitySetting.Count);
 			SaveManager.Config.bloomMode = (SaveManager.QualitySetting)bloomMode;
 		}
-		else if (VerticalSelection == 9)
+		else if (VerticalSelection == 10)
 		{
 			int softShadowQuality = (int)SaveManager.Config.softShadowQuality;
 			softShadowQuality = WrapSelection(softShadowQuality + direction, (int)SaveManager.QualitySetting.Count);
 			SaveManager.Config.softShadowQuality = (SaveManager.QualitySetting)softShadowQuality;
 		}
-		else if (VerticalSelection == 10)
+		else if (VerticalSelection == 11)
 		{
 			int postProcessingQuality = (int)SaveManager.Config.postProcessingQuality;
 			postProcessingQuality = WrapSelection(postProcessingQuality + direction, (int)SaveManager.QualitySetting.Count);
 			SaveManager.Config.postProcessingQuality = (SaveManager.QualitySetting)postProcessingQuality;
 			StageSettings.Instance.UpdatePostProcessingStatus();
 		}
-		else if (VerticalSelection == 11)
+		else if (VerticalSelection == 12)
 		{
 			int reflectionQuality = (int)SaveManager.Config.reflectionQuality;
 			reflectionQuality = WrapSelection(reflectionQuality + direction, (int)SaveManager.QualitySetting.Count);
 			SaveManager.Config.reflectionQuality = (SaveManager.QualitySetting)reflectionQuality;
 		}
-		else if (VerticalSelection == 12)
+		else if (VerticalSelection == 13)
 		{
 			SaveManager.Config.useMotionBlur = !SaveManager.Config.useMotionBlur;
 		}
-		else if (VerticalSelection == 13)
+		else if (VerticalSelection == 14)
 		{
 			if (!IsSlideVolumeValid(SaveManager.Config.screenShake, direction))
 				return false;
@@ -746,11 +776,34 @@ public partial class Options : Menu
 		return true;
 	}
 
+	private Vector2I[] GetWindowSizeArray()
+	{
+		Vector2I[] windows;
+		switch (SaveManager.Config.aspectRatio)
+		{
+			case SaveManager.AspectRatio.FourByThree:
+				windows = SaveManager.WindowSizes4x3;
+				break;
+			case SaveManager.AspectRatio.SixteenByTen:
+				windows = SaveManager.WindowSizes16x10;
+				break;
+			case SaveManager.AspectRatio.TwentyoneByNine:
+				windows = SaveManager.WindowSizes21x9;
+				break;
+			default:
+				windows = SaveManager.WindowSizes;
+				break;
+		}
+
+		return windows;
+	}
+
 	private int GetLargestWindowSize()
 	{
-		for (int i = SaveManager.WindowSizes.Length - 1; i >= 0; i--)
+		Vector2I[] windows = GetWindowSizeArray();
+		for (int i = windows.Length - 1; i >= 0; i--)
 		{
-			if (SaveManager.WindowSizes[i] >= DisplayServer.ScreenGetSize())
+			if (windows[i] >= DisplayServer.ScreenGetSize())
 				continue;
 
 			return i;
@@ -761,13 +814,14 @@ public partial class Options : Menu
 
 	private int GetClosestWindowSize()
 	{
+		Vector2I[] windows = GetWindowSizeArray();
 		Vector2I currentWindowSize = GetTree().Root.Size;
 		int smallestDelta = int.MaxValue;
-		int returnValue = SaveManager.WindowSizes.Length - 1;
+		int returnValue = windows.Length - 1;
 
-		for (int i = SaveManager.WindowSizes.Length - 1; i >= 0; i--)
+		for (int i = windows.Length - 1; i >= 0; i--)
 		{
-			Vector2I currentSize = SaveManager.WindowSizes[i];
+			Vector2I currentSize = windows[i];
 			int currentDelta = Mathf.Abs(currentWindowSize.X - currentSize.X) + Mathf.Abs(currentWindowSize.Y - currentSize.Y);
 			if (currentDelta > smallestDelta)
 				return returnValue;
@@ -779,37 +833,22 @@ public partial class Options : Menu
 		return returnValue;
 	}
 
+	private int GetClosestWindowSizeClamped() => Mathf.Min(GetLargestWindowSize(), GetClosestWindowSize());
+
 	private int GetWindowSize()
 	{
 		if (SaveManager.Config.useFullscreen) // Don't change when in fullscreen mode
 			return SaveManager.Config.windowSize;
 
+		Vector2I[] windows = GetWindowSizeArray();
 		Vector2I currentWindowSize = GetTree().Root.Size;
-		for (int i = 0; i < SaveManager.WindowSizes.Length; i++)
+		for (int i = 0; i < windows.Length; i++)
 		{
-			if (currentWindowSize == SaveManager.WindowSizes[i])
+			if (currentWindowSize == windows[i])
 				return i;
 		}
 
 		return -1;
-	}
-
-	private void WindowResized()
-	{
-		if (SaveManager.Config.useFullscreen || isCustomWindowSize)
-			return;
-
-		if (isResizingWindowFromOptionsMenu)
-		{
-			isResizingWindowFromOptionsMenu = false; // Ignore resize event
-			return;
-		}
-
-		if (GetWindowSize() != -1)
-			return;
-
-		isCustomWindowSize = true;
-		videoLabels[1].Text = CustomString;
 	}
 
 	private bool SlideAudioOption(int direction)
@@ -996,12 +1035,12 @@ public partial class Options : Menu
 
 	private void ConfirmVideoOption()
 	{
-		if (VerticalSelection == 1) // Toggle fullscreen mode
+		if (VerticalSelection == 2) // Toggle fullscreen mode
 		{
 			SaveManager.Config.useFullscreen = !SaveManager.Config.useFullscreen;
 			SaveManager.Config.windowSize = GetLargestWindowSize();
 		}
-		else if (VerticalSelection == 13)
+		else if (VerticalSelection == 14)
 		{
 			SaveManager.Config.useScreenShake = !SaveManager.Config.useScreenShake;
 		}
