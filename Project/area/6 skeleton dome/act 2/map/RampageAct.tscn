@@ -1433,6 +1433,7 @@ transform = Transform3D(-1.79759, 0, -0.876742, 0, 2, 0, 0.876742, 0, -1.79759, 
 transform = Transform3D(0.500001, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.500001, -41.0254, 9.9, -63.3538)
 script = ExtResource("28_jsnae")
 root = NodePath("ItemBoxFlying")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 2.0
 "Movement/Starting Offset" = 0.0
@@ -1487,23 +1488,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000183105, 2.83402, 14.96)
 [node name="Child05" parent="RampageAct/Arena/Objects/Switch3Cull/Rings" instance=ExtResource("7_w7ftd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00012207, 2.17042, 18.48)
 
-[node name="Spring1" parent="RampageAct/Arena/Objects/Switch3Cull" instance=ExtResource("16_e42k8")]
-transform = Transform3D(-0.90038, 0.33331, 0.27968, -1.2595e-08, 0.642788, -0.766045, -0.435106, -0.689731, -0.578753, 0.22937, 0.3, -6.95959)
+[node name="Spring1" parent="RampageAct/Arena/Objects" instance=ExtResource("16_e42k8")]
+transform = Transform3D(-0.160019, 0.756173, 0.634505, -1.2595e-08, 0.642788, -0.766045, -0.987115, -0.122582, -0.102859, -35.1929, 6.2, -67.1577)
 startHidden = true
 MiddleHeight = 3.0
 FinalHeight = 1.0
 Distance = 22.0
 
-[node name="Spring2" parent="RampageAct/Arena/Objects/Switch3Cull" instance=ExtResource("16_e42k8")]
-transform = Transform3D(-0.92164, 0.297261, 0.249432, 1.40025e-08, 0.642788, -0.766044, -0.388047, -0.706017, -0.592419, 1.60815, 0.3, -6.71643)
+[node name="Spring3" parent="RampageAct/Arena/Objects" instance=ExtResource("16_e42k8")]
+transform = Transform3D(-0.210762, 0.748837, 0.62835, 1.40025e-08, 0.642788, -0.766044, -0.977538, -0.161453, -0.135475, -34.6012, 6.2, -65.8888)
 startHidden = true
 MiddleHeight = 3.0
 FinalHeight = 1.0
 Distance = 22.0
+sfxPlayer = NodePath("../Spring2/SFX")
 
-[node name="LaunchRing" parent="RampageAct/Arena/Objects/Switch3Cull" instance=ExtResource("31_q2wwj")]
-transform = Transform3D(-0.642788, -0.133022, 0.754407, 7.45058e-09, 0.984808, 0.173648, -0.766044, 0.111619, -0.633022, 9.96191, 2, -26.5449)
-MiddleHeight = 3.0
+[node name="LaunchRing" parent="RampageAct/Arena/Objects" instance=ExtResource("31_q2wwj")]
+transform = Transform3D(0.258818, -0.167731, 0.951252, 7.45058e-09, 0.984808, 0.173648, -0.965926, -0.0449431, 0.254887, -13.5671, 7.9, -70.4189)
 FinalHeight = -4.0
 Distance = 26.0
 
@@ -1518,7 +1519,7 @@ transform = Transform3D(-0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, -0.173648
 switchIndex = 4
 
 [node name="Number" parent="RampageAct/Arena/Objects/Switch4" index="3"]
-transform = Transform3D(1, -7.45058e-09, -1.63913e-07, 1.16878e-07, 0.866025, 0.5, 1.3411e-07, -0.5, 0.866025, 0.000244141, 0.701971, 0.373474)
+transform = Transform3D(1, -7.45058e-09, -1.63913e-07, 1.16878e-07, 0.866025, 0.5, 1.3411e-07, -0.5, 0.866025, 0.00012207, 0.701971, 0.373474)
 
 [node name="Switch4" parent="RampageAct/Arena/Objects/Switch4/Number/Root" index="0" instance=ExtResource("24_huew3")]
 
@@ -1565,6 +1566,11 @@ transform = Transform3D(1, 0, -1.78814e-07, 1.16878e-07, 0.866025, 0.5, 1.49012e
 [connection signal="Respawned" from="RampageAct/Arena/Objects/PlatformSpiralLarge5/Switch" to="RampageAct/Arena/Objects/PlatformSpiralLarge5/Spring" method="HideLauncher"]
 [connection signal="Activated" from="RampageAct/Arena/Objects/Switch" to="RampageAct/Arena/Objects/Switch/Spring" method="ShowLauncher"]
 [connection signal="Respawned" from="RampageAct/Arena/Objects/Switch" to="RampageAct/Arena/Objects/Switch/Spring" method="HideLauncher"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch3" to="RampageAct/Arena/Objects/Switch3Cull" method="Activate"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch3" to="RampageAct/Arena/Objects/Spring1" method="ShowLauncher"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch3" to="RampageAct/Arena/Objects/Spring3" method="ShowLauncher"]
+[connection signal="Respawned" from="RampageAct/Arena/Objects/Switch3" to="RampageAct/Arena/Objects/Spring1" method="HideLauncher"]
+[connection signal="Respawned" from="RampageAct/Arena/Objects/Switch3" to="RampageAct/Arena/Objects/Spring3" method="HideLauncher"]
 
 [editable path="Static"]
 [editable path="Static/Collision"]

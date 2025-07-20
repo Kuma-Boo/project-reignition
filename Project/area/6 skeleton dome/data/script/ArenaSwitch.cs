@@ -45,7 +45,7 @@ public partial class ArenaSwitch : Node3D
 	{
 		isActivated = true;
 		CurrentSwitchIndex++;
-		animator.Play("activated");
+		animator.Play("activate");
 		EmitSignal(SignalName.Activated);
 	}
 
