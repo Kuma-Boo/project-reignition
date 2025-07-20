@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://6rhkc33287q1"]
+[gd_scene load_steps=40 format=3 uid="uid://6rhkc33287q1"]
 
 [ext_resource type="PackedScene" uid="uid://c5ajp56pbyegl" path="res://area/6 skeleton dome/act 2/Static.tscn" id="1_klfa3"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_3uee3"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://dee1migehwfmq" path="res://area/6 skeleton dome/object/platform/PlatformExterior.tscn" id="10_uy80d"]
 [ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="11_uy80d"]
 [ext_resource type="PackedScene" uid="uid://cvjx50c0en38" path="res://area/6 skeleton dome/object/obstacle/Door.tscn" id="12_42fea"]
+[ext_resource type="PackedScene" uid="uid://c7s3kkj8pq6ox" path="res://object/enemy/skeleton/SkeletonMajin.tscn" id="13_a8x4j"]
 [ext_resource type="PackedScene" uid="uid://b1daf70kelhld" path="res://area/6 skeleton dome/object/platform/PlatformCavernLarge.tscn" id="13_bldk5"]
 [ext_resource type="PackedScene" uid="uid://cxb1fxhrsja13" path="res://object/stage/common/SpikeBallStatic.tscn" id="13_duve7"]
 [ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="14_8i4y8"]
@@ -34,6 +35,8 @@
 [ext_resource type="Script" uid="uid://dpt5o0lh62p6t" path="res://object/stage/MovingObject.cs" id="28_jsnae"]
 [ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="29_kedyi"]
 [ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="31_q2wwj"]
+[ext_resource type="PackedScene" uid="uid://di8tdo65qjkbe" path="res://object/enemy/majin/data/skeleton dome/BlueMajin.tscn" id="36_6tr2b"]
+[ext_resource type="PackedScene" uid="uid://ctkxmjdylid4k" path="res://object/enemy/majin/data/skeleton dome/GreenMajin.tscn" id="37_m2t8m"]
 
 [sub_resource type="Curve" id="Curve_42fea"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 2.95701, 0.0, 0, 0]
@@ -59,9 +62,6 @@ metadata/_edit_lock_ = true
 
 [node name="Hall" type="Node3D" parent="RampageAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1150, 0, -1125)
-script = ExtResource("4_22mc0")
-startEnabled = true
-saveVisibilityOnCheckpoint = true
 
 [node name="Gate" parent="RampageAct/Hall" instance=ExtResource("5_wk4ah")]
 transform = Transform3D(-0.8, 0, -6.99382e-08, 0, 0.6, 0, 6.99382e-08, 0, -0.8, 0, 5, 25.5)
@@ -217,6 +217,14 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.5, 
 
 [node name="DoorR" parent="RampageAct/Hall/Hall2" instance=ExtResource("12_42fea")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2.4, 0, -86.5)
+
+[node name="SkeletonMajin1" parent="RampageAct/Hall" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -25, 0, 76)
+SpawnMode = 1
+
+[node name="SkeletonMajin2" parent="RampageAct/Hall" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, -38.8953, 0, 90.3801)
+SpawnMode = 1
 
 [node name="Arena" type="Node3D" parent="RampageAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1000, 0, -1000)
@@ -699,7 +707,7 @@ cycleLength = 6.0
 chainLength = 5
 
 [node name="Sickle19" parent="RampageAct/Arena/Hazards" instance=ExtResource("8_w7ftd")]
-transform = Transform3D(-0.848048, 0, -0.529919, 0, 1, 0, 0.529919, 0, -0.848048, 45.2646, 14, -29.4637)
+transform = Transform3D(-0.848048, 0, -0.529919, 0, 1, 0, 0.529919, 0, -0.848048, 44.9469, 13, -28.086)
 rotationAmount = 60.0
 cycleLength = 4.0
 enableSparkParticles = false
@@ -988,7 +996,7 @@ transform = Transform3D(1.53209, 0, 1.28558, 0, 2, 0, -1.28558, 0, 1.53209, 50.1
 transform = Transform3D(2.81908, 0, 1.02606, 0, 3, 0, -1.02606, 0, 2.81908, 53.6903, 0, -20.6058)
 
 [node name="Sickle20" parent="RampageAct/Arena/Hazards" instance=ExtResource("8_w7ftd")]
-transform = Transform3D(-0.961262, 0, -0.275637, 0, 1, 0, 0.275637, 0, -0.961262, 51.6324, 13, -15.8456)
+transform = Transform3D(-0.961262, 0, -0.275637, 0, 1, 0, 0.275637, 0, -0.961262, 51.632, 12, -15.846)
 rotationAmount = 60.0
 cycleLength = 6.0
 enableSparkParticles = false
@@ -1237,12 +1245,15 @@ transform = Transform3D(0.996195, 0, -0.0871558, 0, 1, 0, 0.0871558, 0, 0.996195
 
 [node name="EnemyStone1" parent="RampageAct/Arena/Objects/PlatformSpiralLarge5" instance=ExtResource("25_6iv5t")]
 transform = Transform3D(0.796956, 0, 0.0697246, 0, 0.8, 0, -0.0697246, 0, 0.796956, 1.1015, 0.7, 2.88385)
+enemyCount = 1
 
 [node name="EnemyStone2" parent="RampageAct/Arena/Objects/PlatformSpiralLarge5" instance=ExtResource("25_6iv5t")]
 transform = Transform3D(1.73867, 0, -0.465874, 0, 1.8, 0, 0.465874, 0, 1.73867, -0.0786743, 1.4, -0.306213)
+enemyCount = 1
 
 [node name="EnemyStone3" parent="RampageAct/Arena/Objects/PlatformSpiralLarge5" instance=ExtResource("25_6iv5t")]
 transform = Transform3D(1.79315, 0, -0.15688, 0, 1.8, 0, 0.15688, 0, 1.79315, 0.221619, 1.4, -4.32019)
+enemyCount = 1
 
 [node name="Spring" parent="RampageAct/Arena/Objects/PlatformSpiralLarge5" instance=ExtResource("16_e42k8")]
 transform = Transform3D(-0.996195, 0.0435778, 0.075479, 0, 0.866025, -0.5, -0.0871557, -0.498097, -0.86273, 0.348755, 0.1, -4.98779)
@@ -1394,6 +1405,7 @@ transform = Transform3D(-0.777146, 0, 0.943981, 0, 1.5, 0, -0.62932, 0, -1.16572
 
 [node name="EnemyStone" parent="RampageAct/Arena/Objects" instance=ExtResource("25_6iv5t")]
 transform = Transform3D(-1.94287, 0, 1.06984, 0, 1.5, 0, -1.5733, 0, -1.32115, -59.5445, 4.5, -45.6447)
+enemyCount = 2
 
 [node name="PlatformCavernLarge8" parent="RampageAct/Arena/Objects" instance=ExtResource("13_bldk5")]
 transform = Transform3D(-0.777146, 0, 0.47199, 0, 1, 0, -0.62932, 0, -0.582859, -57.342, 4, -48.3647)
@@ -1425,9 +1437,11 @@ Distance = 3.0
 
 [node name="EnemyStone2" parent="RampageAct/Arena/Objects" instance=ExtResource("25_6iv5t")]
 transform = Transform3D(-1.79759, 0, -0.876742, 0, 1.2, 0, 0.876742, 0, -1.79759, 54.7079, 1.2435, -35.2681)
+enemyCount = 2
 
 [node name="EnemyStone3" parent="RampageAct/Arena/Objects" instance=ExtResource("25_6iv5t")]
 transform = Transform3D(-1.79759, 0, -0.876742, 0, 2, 0, 0.876742, 0, -1.79759, 56.5749, 2.00775, -31.6884)
+enemyCount = 2
 
 [node name="ItemBoxMovement" type="Node3D" parent="RampageAct/Arena/Objects"]
 transform = Transform3D(0.500001, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.500001, -41.0254, 9.9, -63.3538)
@@ -1503,7 +1517,7 @@ FinalHeight = 1.0
 Distance = 22.0
 sfxPlayer = NodePath("../Spring2/SFX")
 
-[node name="LaunchRing" parent="RampageAct/Arena/Objects" instance=ExtResource("31_q2wwj")]
+[node name="LaunchRing1" parent="RampageAct/Arena/Objects" instance=ExtResource("31_q2wwj")]
 transform = Transform3D(0.258818, -0.167731, 0.951252, 7.45058e-09, 0.984808, 0.173648, -0.965926, -0.0449431, 0.254887, -13.5671, 7.9, -70.4189)
 FinalHeight = -4.0
 Distance = 26.0
@@ -1541,6 +1555,63 @@ transform = Transform3D(0.754709, 0, -0.656059, 0, 1, 0, 0.656059, 0, 0.754709, 
 [node name="BonePillar3" parent="RampageAct/Arena/Objects" instance=ExtResource("14_jikjh")]
 transform = Transform3D(0.438371, 0, -0.898794, 0, 1, 0, 0.898794, 0, 0.438371, 52.5684, -12, -24.5267)
 
+[node name="LaunchRing2" parent="RampageAct/Arena/Objects" instance=ExtResource("31_q2wwj")]
+transform = Transform3D(0.847974, 0, 0.530038, 0, 1, 0, -0.530038, 0, 0.847975, 40.4509, 5.9, -35.3889)
+MiddleHeight = 0.0
+Distance = 20.0
+
+[node name="PearlsL" type="Node3D" parent="RampageAct/Arena/Objects/LaunchRing2"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0.4, 0, 4)
+script = ExtResource("6_yf0ya")
+Source = ExtResource("23_vbssa")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Arena/Objects/LaunchRing2/PearlsL" instance=ExtResource("23_vbssa")]
+
+[node name="Child02" parent="RampageAct/Arena/Objects/LaunchRing2/PearlsL" instance=ExtResource("23_vbssa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="RampageAct/Arena/Objects/LaunchRing2/PearlsL" instance=ExtResource("23_vbssa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child04" parent="RampageAct/Arena/Objects/LaunchRing2/PearlsL" instance=ExtResource("23_vbssa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child05" parent="RampageAct/Arena/Objects/LaunchRing2/PearlsL" instance=ExtResource("23_vbssa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="PearlsR" type="Node3D" parent="RampageAct/Arena/Objects/LaunchRing2"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -0.4, 0, 4)
+script = ExtResource("6_yf0ya")
+Source = ExtResource("23_vbssa")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Arena/Objects/LaunchRing2/PearlsR" instance=ExtResource("23_vbssa")]
+
+[node name="Child02" parent="RampageAct/Arena/Objects/LaunchRing2/PearlsR" instance=ExtResource("23_vbssa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="RampageAct/Arena/Objects/LaunchRing2/PearlsR" instance=ExtResource("23_vbssa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child04" parent="RampageAct/Arena/Objects/LaunchRing2/PearlsR" instance=ExtResource("23_vbssa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child05" parent="RampageAct/Arena/Objects/LaunchRing2/PearlsR" instance=ExtResource("23_vbssa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
 [node name="BonePillar4" parent="RampageAct/Arena/Objects" instance=ExtResource("14_jikjh")]
 transform = Transform3D(0.438371, 0, -0.898794, 0, 1, 0, 0.898794, 0, 0.438371, 65.1515, -12, -30.6639)
 
@@ -1558,6 +1629,169 @@ transform = Transform3D(1, 0, -1.78814e-07, 1.16878e-07, 0.866025, 0.5, 1.49012e
 
 [node name="Enemies" type="Node3D" parent="RampageAct/Arena"]
 
+[node name="SkeletonMajin1" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 55, 0, 6)
+SpawnMode = 1
+
+[node name="SkeletonMajin2" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 54, 0, 13)
+SpawnMode = 1
+
+[node name="SkeletonMajin3" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(-0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, -0.984808, 51, 0, 18)
+SpawnMode = 1
+
+[node name="SkeletonMajin4" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(-0.0871556, 0, 0.996195, 0, 1, 0, -0.996195, 0, -0.0871556, 57.7224, 0, 37.463)
+SpawnMode = 1
+
+[node name="SkeletonMajin5" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(-0.173648, 0, 0.984808, 0, 1, 0, -0.984808, 0, -0.173648, 55.7578, 0, 48.6048)
+SpawnMode = 1
+
+[node name="SkeletonMajin6" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(-0.173648, 0, 0.984808, 0, 1, 0, -0.984808, 0, -0.173648, 48.0847, 0, 51.0795)
+SpawnMode = 1
+
+[node name="SkeletonMajin7" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(-0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, -0.258819, 10.3156, 2.9, 75.858)
+SpawnMode = 1
+
+[node name="SkeletonMajin8" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(-0.0871556, 0, 0.996195, 0, 1, 0, -0.996195, 0, -0.0871556, 5.59964, 5.4, 52.2591)
+SpawnMode = 1
+
+[node name="SkeletonMajin9" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, -3.387, 0, 68.796)
+SpawnMode = 1
+
+[node name="SkeletonMajin10" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, -22.4675, 1, 64.211)
+SpawnMode = 1
+
+[node name="SkeletonMajin11" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, -19.7891, 1, 58.6074)
+SpawnMode = 1
+
+[node name="SkeletonMajin12" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, -30.393, 0, 59.754)
+SpawnMode = 1
+
+[node name="SkeletonMajin13" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, -30, 0, 55)
+SpawnMode = 1
+
+[node name="SkeletonMajin14" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(0.996195, 0, 0.0871556, 0, 1, 0, -0.0871556, 0, 0.996195, -42.6939, 2.9, 41.8338)
+SpawnMode = 1
+
+[node name="SkeletonMajin15" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(0.996194, 0, -0.0871559, 0, 1, 0, 0.0871559, 0, 0.996194, -38.5335, 2.9, 37.7557)
+SpawnMode = 1
+
+[node name="SkeletonMajin16" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(0.939692, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939692, -51.0472, 2.9, 13.2719)
+SpawnMode = 1
+
+[node name="SkeletonMajin17" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -67.837, 0, -15.551)
+SpawnMode = 1
+
+[node name="SkeletonMajin18" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -71.837, 0, -25.551)
+SpawnMode = 1
+
+[node name="SkeletonMajin19" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, -44.203, 0, -33.917)
+SpawnMode = 1
+
+[node name="SkeletonMajin20" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(-0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, -0.258819, -27.9184, 0, -51.9792)
+SpawnMode = 1
+
+[node name="SkeletonMajin21" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, -13.5555, 1, -50.4949)
+SpawnMode = 1
+
+[node name="SkeletonMajin22" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, -14.8043, 1, -55.3479)
+SpawnMode = 1
+
+[node name="SkeletonMajin23" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(-1.49012e-08, 0, -1, 0, 1, 0, 1, 0, -1.49012e-08, 0.833, 0, -62.221)
+SpawnMode = 1
+
+[node name="SkeletonMajin24" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618, 17.913, 0, -61.049)
+SpawnMode = 1
+
+[node name="SkeletonMajin25" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(-0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, 27.1095, 0, -55.2159)
+SpawnMode = 1
+
+[node name="SkeletonMajin26" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(-0.573576, 0, -0.819152, 0, 1, 0, 0.819152, 0, -0.573576, 37.0701, 0, -60.3206)
+SpawnMode = 1
+
+[node name="SkeletonMajin27" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618, 47.556, 0, -57.8614)
+SpawnMode = 1
+
+[node name="SkeletonMajin28" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(-0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, -0.642788, 35.4714, 2, -39.5499)
+SpawnMode = 1
+
+[node name="SkeletonMajin29" parent="RampageAct/Arena/Enemies" instance=ExtResource("13_a8x4j")]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 39.2489, 2, -43.4294)
+SpawnMode = 1
+
+[node name="BlueMajin1" parent="RampageAct/Arena/Enemies" instance=ExtResource("36_6tr2b")]
+transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, 28.5, 0, 54.3301)
+rangeOverride = 35
+
+[node name="BlueMajin2" parent="RampageAct/Arena/Enemies" instance=ExtResource("36_6tr2b")]
+transform = Transform3D(-0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, -0.422618, 22.4737, 0, 65.8923)
+rangeOverride = 35
+
+[node name="BlueMajin3" parent="RampageAct/Arena/Enemies" instance=ExtResource("36_6tr2b")]
+transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, -33.8298, 0, 63.4592)
+rangeOverride = 35
+
+[node name="GreenMajin1" parent="RampageAct/Arena/Enemies" instance=ExtResource("37_m2t8m")]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -46.9297, 5, 26.6556)
+rangeOverride = 35
+
+[node name="BlueMajin4" parent="RampageAct/Arena/Enemies" instance=ExtResource("36_6tr2b")]
+transform = Transform3D(0.766044, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.766044, -55.5431, 0, 42.4037)
+rangeOverride = 30
+
+[node name="BlueMajin5" parent="RampageAct/Arena/Enemies" instance=ExtResource("36_6tr2b")]
+transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, -60.5747, 1, 40.0591)
+rangeOverride = 30
+
+[node name="BlueMajin6" parent="RampageAct/Arena/Enemies" instance=ExtResource("36_6tr2b")]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -64.5577, 3, 32.2495)
+rangeOverride = 30
+
+[node name="GreenMajin2" parent="RampageAct/Arena/Enemies" instance=ExtResource("37_m2t8m")]
+transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, -60.2224, 0, -37.0914)
+rangeOverride = 40
+
+[node name="GreenMajin3" parent="RampageAct/Arena/Enemies" instance=ExtResource("37_m2t8m")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -62.4061, 0, -42.4856)
+rangeOverride = 40
+
+[node name="BlueMajin7" parent="RampageAct/Arena/Enemies" instance=ExtResource("36_6tr2b")]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -39.595, 7, -51.5849)
+rangeOverride = 30
+
+[node name="GreenMajin4" parent="RampageAct/Arena/Enemies" instance=ExtResource("37_m2t8m")]
+transform = Transform3D(-0.766044, 0, -0.642788, 0, 1, 0, 0.642788, 0, -0.766044, 52.8568, 0, -43.3382)
+
+[node name="GreenMajin5" parent="RampageAct/Arena/Enemies" instance=ExtResource("37_m2t8m")]
+transform = Transform3D(-0.819152, 0, -0.573576, 0, 1, 0, 0.573576, 0, -0.819152, 51.721, 0, -38.4689)
+rangeOverride = 40
+
 [connection signal="Activated" from="RampageAct/Arena/Objects/Switch1" to="RampageAct/Arena/Objects/Switch1Cull" method="Activate"]
 [connection signal="Activated" from="RampageAct/Arena/Objects/Switch2" to="RampageAct/Arena/Objects/Switch2Cull" method="Activate"]
 [connection signal="Activated" from="RampageAct/Arena/Objects/Switch2" to="RampageAct/Arena/Objects/Spring2" method="ShowLauncher"]
@@ -1571,6 +1805,44 @@ transform = Transform3D(1, 0, -1.78814e-07, 1.16878e-07, 0.866025, 0.5, 1.49012e
 [connection signal="Activated" from="RampageAct/Arena/Objects/Switch3" to="RampageAct/Arena/Objects/Spring3" method="ShowLauncher"]
 [connection signal="Respawned" from="RampageAct/Arena/Objects/Switch3" to="RampageAct/Arena/Objects/Spring1" method="HideLauncher"]
 [connection signal="Respawned" from="RampageAct/Arena/Objects/Switch3" to="RampageAct/Arena/Objects/Spring3" method="HideLauncher"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin1" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin2" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin3" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin4" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin5" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin6" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin7" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin8" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin9" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin10" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin11" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin12" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin13" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin14" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin15" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin16" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin17" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin18" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin19" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin20" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin21" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin22" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin23" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin24" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin25" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin26" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin27" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin28" method="Spawn"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin29" method="Spawn"]
+[connection signal="Defeated" from="RampageAct/Arena/Enemies/GreenMajin1" to="RampageAct/Arena/Objects/PlatformSpiralLarge5/EnemyStone1" method="IncrementCounter"]
+[connection signal="Defeated" from="RampageAct/Arena/Enemies/GreenMajin1" to="RampageAct/Arena/Objects/PlatformSpiralLarge5/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="RampageAct/Arena/Enemies/GreenMajin1" to="RampageAct/Arena/Objects/PlatformSpiralLarge5/EnemyStone3" method="IncrementCounter"]
+[connection signal="Defeated" from="RampageAct/Arena/Enemies/GreenMajin2" to="RampageAct/Arena/Objects/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="RampageAct/Arena/Enemies/GreenMajin3" to="RampageAct/Arena/Objects/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="RampageAct/Arena/Enemies/GreenMajin4" to="RampageAct/Arena/Objects/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="RampageAct/Arena/Enemies/GreenMajin4" to="RampageAct/Arena/Objects/EnemyStone3" method="IncrementCounter"]
+[connection signal="Defeated" from="RampageAct/Arena/Enemies/GreenMajin5" to="RampageAct/Arena/Objects/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="RampageAct/Arena/Enemies/GreenMajin5" to="RampageAct/Arena/Objects/EnemyStone3" method="IncrementCounter"]
 
 [editable path="Static"]
 [editable path="Static/Collision"]
