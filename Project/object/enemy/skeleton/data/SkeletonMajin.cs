@@ -74,7 +74,7 @@ public partial class SkeletonMajin : Enemy
 		SetAttackStatus(false);
 		SetHitboxStatus(false);
 
-		if (SpawnMode != SpawnModes.Always)
+		if (SpawnMode == SpawnModes.Always)
 		{
 			Spawn();
 			return;
