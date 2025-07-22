@@ -33,6 +33,8 @@ public partial class SkeletonMajin : Enemy
 	private bool isAttacking;
 	public void SetAttackStatus(bool value) => isAttacking = value;
 
+	private bool isImpededByWall;
+	private float wallCastTimer;
 	private float movementSpeed;
 	private Vector3 movementDirection;
 	private Vector3 homePosition;
@@ -42,6 +44,7 @@ public partial class SkeletonMajin : Enemy
 	private readonly float MovementTraction = 40f;
 	private readonly float MovementFriction = 120f;
 	private readonly float StrikeRangeSquared = 9f;
+	private readonly float WallCastInterval = .2f;
 
 	/// <summary> Keeps track of whether the skeleton has been spawned before. </summary>
 	private bool wasSpawned;
@@ -119,10 +122,11 @@ public partial class SkeletonMajin : Enemy
 
 	protected override void Spawn()
 	{
-		if (IsActive) return; // Already spawned
+		wasSpawned = true;
+
+		if (IsActive || !IsInRange) return; // Already spawned
 
 		IsActive = true;
-		wasSpawned = true;
 		movementSpeed = 0;
 
 		currentHealth = maxHealth; // Reset health
@@ -191,6 +195,14 @@ public partial class SkeletonMajin : Enemy
 		if (!isMovementEnabled)
 			return;
 
+		wallCastTimer = Mathf.MoveToward(wallCastTimer, 0, PhysicsManager.physicsDelta);
+		if (Mathf.IsZeroApprox(wallCastTimer) && (!Mathf.IsZeroApprox(movementSpeed) || isImpededByWall))
+		{
+			wallCastTimer = WallCastInterval;
+			RaycastHit wallHit = this.CastRay(GlobalPosition + Vector3.Up * 0.2f, Player.GlobalPosition - GlobalPosition, Runtime.Instance.environmentMask);
+			isImpededByWall = wallHit && wallHit.collidedObject.IsInGroup("wall");
+		}
+
 		float homeDistanceSquared = rangeOverride * rangeOverride;
 		bool leftHome = GlobalPosition.DistanceSquaredTo(homePosition) > homeDistanceSquared;
 		if (leftHome) // Allow skeleton to walk back towards player when player is close to home
@@ -199,7 +211,7 @@ public partial class SkeletonMajin : Enemy
 		if (attackType == AttackType.Spin)
 		{
 			// Only move when spinning
-			if (isAttacking && !leftHome)
+			if (isAttacking && !leftHome && !isImpededByWall)
 				movementSpeed = Mathf.MoveToward(movementSpeed, MaxMovementSpeed, MovementTraction * PhysicsManager.physicsDelta);
 			else
 				movementSpeed = Mathf.MoveToward(movementSpeed, 0f, MovementFriction * PhysicsManager.physicsDelta);
@@ -207,7 +219,7 @@ public partial class SkeletonMajin : Enemy
 		else
 		{
 			bool isInStrikeRange = GlobalPosition.RemoveVertical().DistanceSquaredTo(Player.GlobalPosition.RemoveVertical()) <= StrikeRangeSquared;
-			if (isAttacking || isInStrikeRange || leftHome)
+			if (isAttacking || isInStrikeRange || leftHome || isImpededByWall)
 			{
 				movementSpeed = Mathf.MoveToward(movementSpeed, 0f, MovementFriction * PhysicsManager.physicsDelta);
 

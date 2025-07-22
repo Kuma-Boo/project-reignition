@@ -58,8 +58,8 @@ public partial class ItemBox : Pickup
 				travelDelayRange = (float)value;
 				break;
 			case "Spawn Settings/Pickup Parent":
-				pickupParentPath = (NodePath)value;
-				pickupParent = GetNodeOrNull<Node3D>(pickupParentPath);
+				pickupParent = (NodePath)value;
+				PickupParent = GetNodeOrNull<Node3D>(pickupParent);
 				break;
 
 			default:
@@ -86,7 +86,7 @@ public partial class ItemBox : Pickup
 			case "Spawn Settings/Travel Delay Range":
 				return travelDelayRange;
 			case "Spawn Settings/Pickup Parent":
-				return pickupParentPath;
+				return pickupParent;
 		}
 		return base._Get(property);
 	}
@@ -94,17 +94,18 @@ public partial class ItemBox : Pickup
 
 	/// <summary> Use RuntimeConstants method for pearls? </summary>
 	public bool spawnPearls;
+	[Export] private bool startHidden;
 
 	/// <summary> Position to spawn nodes. </summary>
-	private NodePath pickupParentPath;
-	private Node3D pickupParent;
+	private NodePath pickupParent;
+	private Node3D PickupParent { get; set; }
 	private void DisablePickupParent()
 	{
-		if (pickupParent == null) return;
+		if (PickupParent == null) return;
 
 		// Disable node parent
-		pickupParent.Visible = false;
-		pickupParent.ProcessMode = ProcessModeEnum.Disabled;
+		PickupParent.Visible = false;
+		PickupParent.ProcessMode = ProcessModeEnum.Disabled;
 	}
 
 	/// <summary> How many objects to spawn. </summary>
@@ -124,17 +125,17 @@ public partial class ItemBox : Pickup
 	{
 		get
 		{
-			if (pickupParent == null)
+			if (PickupParent == null)
 				return GlobalPosition;
 
-			return Engine.IsEditorHint() ? pickupParent.GlobalPosition : cachedEndPosition;
+			return Engine.IsEditorHint() ? PickupParent.GlobalPosition : cachedEndPosition;
 		}
 	}
 
 	public LaunchSettings GetLaunchSettings() => LaunchSettings.Create(SpawnPosition, EndPosition, travelHeight);
 
 	[Export] private NodePath animator;
-	private AnimationPlayer _animator;
+	private AnimationPlayer Animator { get; set; }
 
 	private bool isOpened;
 	private bool isMovingObjects;
@@ -149,29 +150,32 @@ public partial class ItemBox : Pickup
 
 	protected override void SetUp()
 	{
-		_animator = GetNodeOrNull<AnimationPlayer>(animator);
-		pickupParent = GetNodeOrNull<Node3D>(pickupParentPath);
+		Animator = GetNodeOrNull<AnimationPlayer>(animator);
+		PickupParent = GetNodeOrNull<Node3D>(pickupParent);
 
 		if (Engine.IsEditorHint()) return;
 
-		if (!spawnPearls && pickupParent != null)
+		if (!spawnPearls && PickupParent != null)
 		{
-			cachedEndPosition = pickupParent.GlobalPosition;
+			cachedEndPosition = PickupParent.GlobalPosition;
 
 			// Pool objects
-			if (pickupParent is Pickup)
+			if (PickupParent is Pickup)
 			{
-				PoolPickup(pickupParent as Pickup);
+				PoolPickup(PickupParent as Pickup);
 			}
 			else
 			{
-				for (int i = 0; i < pickupParent.GetChildCount(); i++)
-					PoolPickup(pickupParent.GetChildOrNull<Pickup>(i));
+				for (int i = 0; i < PickupParent.GetChildCount(); i++)
+					PoolPickup(PickupParent.GetChildOrNull<Pickup>(i));
 			}
 		}
 
 		base.SetUp();
 		DisablePickupParent();
+
+		if (startHidden)
+			StartHidden();
 	}
 
 	public override void Unload() // Prevent memory leak
@@ -192,14 +196,26 @@ public partial class ItemBox : Pickup
 		isOpened = false;
 		isMovingObjects = false;
 
-		_animator.Play("RESET");
-		_animator.Seek(0, true);
+		Animator.Play("RESET");
+		Animator.Seek(0, true);
 
 		CallDeferred(MethodName.DisablePickupParent);
 
 		for (int i = 0; i < objectPool.Count; i++)
 			objectPool[i].Respawn();
+
+		if (startHidden)
+			StartHidden();
 	}
+
+	private void StartHidden()
+	{
+		HideItemBox();
+		Animator.Seek(Animator.CurrentAnimationLength, true, true);
+	}
+
+	public void ShowItemBox() => Animator.Play("show");
+	public void HideItemBox() => Animator.Play("hide");
 
 	public override void _PhysicsProcess(double _)
 	{
@@ -244,7 +260,7 @@ public partial class ItemBox : Pickup
 				if (!objectLaunchSettings[i].IsInitialized)
 				{
 					Vector3 endPosition = EndPosition;
-					if (objectPool[i] != pickupParent)
+					if (objectPool[i] != PickupParent)
 						endPosition = objectPool[i].GlobalPosition;
 					objectLaunchSettings[i] = LaunchSettings.Create(SpawnPosition, endPosition, travelHeight);
 				}
@@ -263,12 +279,12 @@ public partial class ItemBox : Pickup
 
 		if (Player.IsJumpDashOrHomingAttack)
 		{
-			_animator.Play("disable-collision");
-			_animator.Advance(0.0);
 			Player.StartBounce(BounceState.SnapMode.SnappingEnabledNoHeight);
+			Animator.Play("disable-collision");
+			Animator.Advance(0.0);
 		}
 
-		_animator.Play("open");
+		Animator.Play("open");
 		isOpened = true;
 
 		if (spawnPearls)
@@ -279,10 +295,10 @@ public partial class ItemBox : Pickup
 
 		isMovingObjects = true;
 
-		if (pickupParent != null)
+		if (PickupParent != null)
 		{
-			pickupParent.Visible = true;
-			pickupParent.ProcessMode = ProcessModeEnum.Inherit;
+			PickupParent.Visible = true;
+			PickupParent.ProcessMode = ProcessModeEnum.Inherit;
 		}
 
 		// Spawn objects
