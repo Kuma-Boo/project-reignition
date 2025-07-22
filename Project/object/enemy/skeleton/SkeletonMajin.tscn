@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://c7s3kkj8pq6ox"]
+[gd_scene load_steps=40 format=3 uid="uid://c7s3kkj8pq6ox"]
 
 [ext_resource type="Script" uid="uid://xoterrnak5w1" path="res://object/enemy/skeleton/data/SkeletonMajin.cs" id="1_73oxv"]
 [ext_resource type="PackedScene" uid="uid://chpp4pf0r6nsb" path="res://object/enemy/skeleton/data/model/SkeletonMajin.gltf" id="1_84j8u"]
@@ -90,11 +90,17 @@ animation = &"defeat"
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_csure"]
 animation = &"idle"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_28jlw"]
+animation = &"overhead"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wpuis"]
 animation = &"shatter-reset"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hutrf"]
 animation = &"spawn"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rxhx1"]
+animation = &"walk"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_h360r"]
 
@@ -129,6 +135,23 @@ xfade_time = 0.5
 switch_mode = 2
 advance_mode = 2
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_kb1n2"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_l5hdd"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ok4iv"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_noghd"]
+xfade_time = 0.2
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_qgmxb"]
+switch_mode = 2
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_7hob3"]
 states/attack/node = SubResource("AnimationNodeAnimation_kbpyb")
 states/attack/position = Vector2(364.028, 348.413)
@@ -137,17 +160,21 @@ states/attack-start/position = Vector2(215.803, 348.413)
 states/attack-stop/node = SubResource("AnimationNodeAnimation_sw50w")
 states/attack-stop/position = Vector2(497.103, 348.413)
 states/damage/node = SubResource("AnimationNodeAnimation_ekin1")
-states/damage/position = Vector2(497.103, 240.136)
+states/damage/position = Vector2(497.103, 237.793)
 states/defeat/node = SubResource("AnimationNodeAnimation_e2dlr")
 states/defeat/position = Vector2(497.103, 166.8)
 states/idle/node = SubResource("AnimationNodeAnimation_csure")
 states/idle/position = Vector2(364.028, 237.793)
+states/overhead/node = SubResource("AnimationNodeAnimation_28jlw")
+states/overhead/position = Vector2(200, 166.8)
 states/shatter-reset/node = SubResource("AnimationNodeAnimation_wpuis")
 states/shatter-reset/position = Vector2(361.6, 99.44)
 states/spawn/node = SubResource("AnimationNodeAnimation_hutrf")
 states/spawn/position = Vector2(361.44, 166.8)
-transitions = ["Start", "shatter-reset", SubResource("AnimationNodeStateMachineTransition_h360r"), "shatter-reset", "spawn", SubResource("AnimationNodeStateMachineTransition_xhd0m"), "spawn", "idle", SubResource("AnimationNodeStateMachineTransition_qbqno"), "idle", "damage", SubResource("AnimationNodeStateMachineTransition_kw7dt"), "idle", "defeat", SubResource("AnimationNodeStateMachineTransition_nj5sa"), "idle", "attack-start", SubResource("AnimationNodeStateMachineTransition_28jlw"), "attack-start", "attack", SubResource("AnimationNodeStateMachineTransition_rxhx1"), "attack", "attack-stop", SubResource("AnimationNodeStateMachineTransition_r78uq"), "attack-stop", "idle", SubResource("AnimationNodeStateMachineTransition_sw50w")]
-graph_offset = Vector2(-282, 69)
+states/walk/node = SubResource("AnimationNodeAnimation_rxhx1")
+states/walk/position = Vector2(200, 237.793)
+transitions = ["Start", "shatter-reset", SubResource("AnimationNodeStateMachineTransition_h360r"), "shatter-reset", "spawn", SubResource("AnimationNodeStateMachineTransition_xhd0m"), "spawn", "idle", SubResource("AnimationNodeStateMachineTransition_qbqno"), "idle", "damage", SubResource("AnimationNodeStateMachineTransition_kw7dt"), "idle", "defeat", SubResource("AnimationNodeStateMachineTransition_nj5sa"), "idle", "attack-start", SubResource("AnimationNodeStateMachineTransition_28jlw"), "attack-start", "attack", SubResource("AnimationNodeStateMachineTransition_rxhx1"), "attack", "attack-stop", SubResource("AnimationNodeStateMachineTransition_r78uq"), "attack-stop", "idle", SubResource("AnimationNodeStateMachineTransition_sw50w"), "idle", "walk", SubResource("AnimationNodeStateMachineTransition_kb1n2"), "walk", "idle", SubResource("AnimationNodeStateMachineTransition_l5hdd"), "idle", "overhead", SubResource("AnimationNodeStateMachineTransition_ok4iv"), "overhead", "idle", SubResource("AnimationNodeStateMachineTransition_noghd"), "damage", "spawn", SubResource("AnimationNodeStateMachineTransition_qgmxb")]
+graph_offset = Vector2(-331, 72)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u22e4"]
 radius = 0.4
@@ -180,7 +207,7 @@ animator = NodePath("ShatterAnimator")
 [node name="SkeletonMajin" parent="Root" instance=ExtResource("1_84j8u")]
 
 [node name="Head" type="BoneAttachment3D" parent="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D" index="1"]
-transform = Transform3D(1, -9.15829e-08, 2.94914e-07, 9.15817e-08, 0.999981, 5.4501e-06, -2.94912e-07, 4.43496e-06, 1.00001, -7.86638e-08, 2.45, -0.109998)
+transform = Transform3D(1, -1.00692e-07, 3.39116e-07, 1.0069e-07, 0.99998, 6.38701e-06, -3.39114e-07, 5.06267e-06, 1.00002, -6.8964e-08, 2.44999, -0.109997)
 bone_name = "head"
 bone_idx = 5
 
@@ -196,7 +223,7 @@ transform = Transform3D(1, -1.71304e-16, 0, 3.14505e-15, 1, 0, 0, -4.54747e-13, 
 shape = SubResource("SphereShape3D_xm0ol")
 
 [node name="LSword" type="BoneAttachment3D" parent="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D" index="2"]
-transform = Transform3D(8.68792e-08, 1.00001, -5.05981e-08, 0.99999, -8.24633e-08, -4.07544e-06, 5.84126e-06, -5.16156e-08, -0.999997, 1.14498, 2.09403, 3.24574e-07)
+transform = Transform3D(9.57127e-08, 1.00001, -3.05617e-08, 0.999989, -9.19356e-08, -5.02069e-06, 6.44945e-06, -3.15897e-08, -0.999998, 1.14498, 2.09403, 8.16423e-07)
 bone_name = "l_arm02"
 bone_idx = 9
 
@@ -212,7 +239,7 @@ transform = Transform3D(1, 2.61943e-15, 0, 3.324e-14, 1, 7.10543e-15, 0, -4.5474
 shape = SubResource("CylinderShape3D_4f7fu")
 
 [node name="RSword" type="BoneAttachment3D" parent="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D" index="3"]
-transform = Transform3D(1.17396e-07, -1.00001, 2.49969e-08, -1, -1.12979e-07, -4.08563e-06, -5.82738e-06, -2.22895e-08, -0.999988, -1.14498, 2.09403, 3.20678e-07)
+transform = Transform3D(1.08051e-07, -1.00001, 3.20808e-08, -0.999999, -1.03442e-07, -5.02439e-06, -6.44578e-06, -3.30957e-08, -0.999989, -1.14498, 2.09403, 7.90907e-07)
 bone_name = "r_arm02"
 bone_idx = 11
 
@@ -228,7 +255,7 @@ transform = Transform3D(1, 2.61943e-15, 0, 3.324e-14, 1, 7.10543e-15, 0, -4.5474
 shape = SubResource("CylinderShape3D_4f7fu")
 
 [node name="Chest" type="BoneAttachment3D" parent="Root/SkeletonMajin/SkeletonMajinRoot/Skeleton3D" index="4"]
-transform = Transform3D(1, -1.30496e-08, 8.98185e-09, 1.33494e-08, 0.99941, -0.0342859, -8.52947e-09, 0.0342959, 0.999413, 9.23184e-10, 1.74, -0.130001)
+transform = Transform3D(1, -3.87003e-09, 4.00409e-09, 4.00447e-09, 0.999409, -0.0342849, -3.8693e-09, 0.0342966, 0.999414, 5.80307e-09, 1.74, -0.130001)
 bone_name = "chest"
 bone_idx = 3
 
