@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://6rhkc33287q1"]
+[gd_scene load_steps=50 format=3 uid="uid://6rhkc33287q1"]
 
 [ext_resource type="PackedScene" uid="uid://c5ajp56pbyegl" path="res://area/6 skeleton dome/act 2/Static.tscn" id="1_klfa3"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_3uee3"]
@@ -36,9 +36,15 @@
 [ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="29_kedyi"]
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="29_wvr4u"]
 [ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="31_q2wwj"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="34_fkegp"]
+[ext_resource type="Resource" uid="uid://c26uxgkra8q1u" path="res://area/6 skeleton dome/act 2/camera/LaunchRing1Cam.tres" id="35_b5rld"]
 [ext_resource type="PackedScene" uid="uid://di8tdo65qjkbe" path="res://object/enemy/majin/data/skeleton dome/BlueMajin.tscn" id="36_6tr2b"]
 [ext_resource type="PackedScene" uid="uid://wnnthoykndrj" path="res://effect/particle/Lantern.tscn" id="36_l6r2f"]
+[ext_resource type="Resource" uid="uid://c886rphxqnhnb" path="res://resource/preset/camera/common/StaticTransitionCam.tres" id="36_nttmr"]
+[ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="36_o6eh7"]
 [ext_resource type="PackedScene" uid="uid://ctkxmjdylid4k" path="res://object/enemy/majin/data/skeleton dome/GreenMajin.tscn" id="37_m2t8m"]
+[ext_resource type="Resource" uid="uid://dp07uop3x8vjr" path="res://area/6 skeleton dome/act 2/camera/ArenaCam.tres" id="37_n47jx"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="38_rpv6m"]
 
 [sub_resource type="Curve" id="Curve_42fea"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 2.95701, 0.0, 0, 0]
@@ -48,6 +54,12 @@ point_count = 2
 _limits = [-1.0, 0.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, -1), -3.0279, 0.0, 0, 0]
 point_count = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kybv8"]
+size = Vector3(11, 4, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nttmr"]
+size = Vector3(13, 4, 5)
 
 [node name="World" type="Node"]
 
@@ -1538,6 +1550,35 @@ FinalHeight = 2.0
 Distance = 15.0
 LauncherDirection = 2
 
+[node name="Camera" type="Node3D" parent="RampageAct/Arena/Objects/LaunchRing1"]
+script = ExtResource("34_fkegp")
+settings = ExtResource("35_b5rld")
+
+[node name="LaunchCamera" type="Node3D" parent="RampageAct/Arena/Objects/LaunchRing1"]
+transform = Transform3D(1, 0, 0, 0, 1, -2.79397e-09, 0, -1.76951e-08, 1, -5.77698, -1.98059, 16.9911)
+script = ExtResource("34_fkegp")
+transitionType = 1
+settings = ExtResource("36_nttmr")
+previousSettings = ExtResource("37_n47jx")
+UpdateEveryFrame = true
+
+[node name="PlatformCamera1" parent="RampageAct/Arena/Objects" instance=ExtResource("38_rpv6m")]
+transform = Transform3D(0.201847, 0, 0.979418, 0, 1, 0, -0.979417, 0, 0.201847, 11.1781, 7.9, -63.9587)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Camera" type="Node3D" parent="RampageAct/Arena/Objects/PlatformCamera1"]
+transform = Transform3D(1, 0, 0, 0, 1, -2.79397e-09, 0, -1.76951e-08, 1, -3.77698, 1.01941, -6.00891)
+script = ExtResource("34_fkegp")
+settings = ExtResource("36_o6eh7")
+previousSettings = ExtResource("37_n47jx")
+UpdateEveryFrame = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Arena/Objects/PlatformCamera1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_kybv8")
+
 [node name="PlatformSpiralSmall5" parent="RampageAct/Arena/Objects" instance=ExtResource("14_cv5kw")]
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -14.235, 1, -53.126)
 
@@ -1654,6 +1695,23 @@ emitting = false
 
 [node name="PlatformSpiralLarge8" parent="RampageAct/Arena/Objects" instance=ExtResource("15_cv5kw")]
 transform = Transform3D(0.438371, 0, -0.898794, 0, 1, 0, 0.898794, 0, 0.438371, 58.86, 6.5, -27.5953)
+
+[node name="PlatformCamera2" parent="RampageAct/Arena/Objects" instance=ExtResource("38_rpv6m")]
+transform = Transform3D(0.906308, 0, 0.422619, 0, 1, 0, -0.422618, 0, 0.906308, 58.4226, 6.4, -27.8437)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Camera" type="Node3D" parent="RampageAct/Arena/Objects/PlatformCamera2"]
+transform = Transform3D(1, 0, 0, 0, 1, -2.79397e-09, 0, -1.76951e-08, 1, -3.77698, 1.01941, -6.00891)
+script = ExtResource("34_fkegp")
+settings = ExtResource("36_o6eh7")
+previousSettings = ExtResource("37_n47jx")
+UpdateEveryFrame = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Arena/Objects/PlatformCamera2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_nttmr")
 
 [node name="Switch5" parent="RampageAct/Arena/Objects" instance=ExtResource("20_e3qh6")]
 transform = Transform3D(-0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, -0.906308, 58.4226, 6.4, -27.8437)
@@ -1900,6 +1958,10 @@ rangeOverride = 40
 [connection signal="Activated" from="RampageAct/Arena/Objects/Switch3" to="RampageAct/Arena/Objects/Spring3" method="ShowLauncher"]
 [connection signal="Respawned" from="RampageAct/Arena/Objects/Switch3" to="RampageAct/Arena/Objects/Spring1" method="HideLauncher"]
 [connection signal="Respawned" from="RampageAct/Arena/Objects/Switch3" to="RampageAct/Arena/Objects/Spring3" method="HideLauncher"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/LaunchRing1" to="RampageAct/Arena/Objects/LaunchRing1/LaunchCamera" method="Activate"]
+[connection signal="Deactivated" from="RampageAct/Arena/Objects/LaunchRing1" to="RampageAct/Arena/Objects/LaunchRing1/LaunchCamera" method="Deactivate"]
+[connection signal="Entered" from="RampageAct/Arena/Objects/LaunchRing1" to="RampageAct/Arena/Objects/LaunchRing1/Camera" method="Activate"]
+[connection signal="Exited" from="RampageAct/Arena/Objects/LaunchRing1" to="RampageAct/Arena/Objects/LaunchRing1/Camera" method="Deactivate"]
 [connection signal="Activated" from="RampageAct/Arena/Objects/Switch4" to="RampageAct/Arena/Objects/BonePillar1/Lantern1" method="set_emitting" binds= [true]]
 [connection signal="Activated" from="RampageAct/Arena/Objects/Switch4" to="RampageAct/Arena/Objects/BonePillar2/Lantern2" method="set_emitting" binds= [true]]
 [connection signal="Respawned" from="RampageAct/Arena/Objects/Switch4" to="RampageAct/Arena/Objects/BonePillar1/Lantern1" method="set_emitting" binds= [false]]
