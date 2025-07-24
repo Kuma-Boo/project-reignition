@@ -474,7 +474,6 @@ public partial class SaveManager : Node
 
 		if (!Config.useFullscreen)
 		{
-			GD.PushWarning("APPLYING CONFIG!");
 			switch (Config.aspectRatio)
 			{
 				case AspectRatio.FourByThree:
