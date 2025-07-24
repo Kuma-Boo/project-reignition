@@ -1,0 +1,319 @@
+[gd_scene load_steps=18 format=3 uid="uid://b7o2lh2q0ps6c"]
+
+[ext_resource type="Script" uid="uid://dwcys4550bm6m" path="res://interface/gameplay/hud/script/SoulGauge.cs" id="1_jyksu"]
+[ext_resource type="Texture2D" uid="uid://hjdee6dcqgs1" path="res://interface/gameplay/hud/texture/soul gauge/sprite atlas.png" id="1_lo3e7"]
+[ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="2_jyksu"]
+[ext_resource type="Texture2D" uid="uid://dgtjbbydbhw88" path="res://interface/gameplay/hud/texture/soul gauge/gradient.png" id="3_h5ow6"]
+[ext_resource type="Material" uid="uid://b5getvsmwl4ql" path="res://interface/gameplay/hud/material/Soul Gauge Fill.tres" id="4_2kbtm"]
+[ext_resource type="Texture2D" uid="uid://bypa7d6a6vjnr" path="res://interface/gameplay/hud/texture/soul gauge/fill dimensions.png" id="5_q05br"]
+[ext_resource type="Material" uid="uid://bxllidy1ci2b1" path="res://interface/gameplay/hud/material/Soul Gauge Surface.tres" id="6_8y1t0"]
+[ext_resource type="Texture2D" uid="uid://bfpp6wa7clovs" path="res://interface/gameplay/hud/texture/soul gauge/surface dimensions.png" id="7_dv42l"]
+[ext_resource type="Texture2D" uid="uid://y6m76qloqq21" path="res://interface/gameplay/hud/texture/soul gauge/fill blue.png" id="8_sbp0o"]
+[ext_resource type="Texture2D" uid="uid://d2chsgj5rnd0g" path="res://interface/gameplay/hud/texture/soul gauge/surface blue.png" id="9_44o10"]
+[ext_resource type="Texture2D" uid="uid://be22jije73ycj" path="res://interface/gameplay/hud/texture/soul gauge/sprite_atlas_hd.png" id="9_s0ic1"]
+[ext_resource type="Texture2D" uid="uid://2c2b843w6r0j" path="res://interface/gameplay/hud/texture/soul gauge/fill orange.png" id="10_8hpwa"]
+[ext_resource type="Texture2D" uid="uid://wehmqy1nfvqd" path="res://interface/gameplay/hud/texture/soul gauge/surface orange.png" id="11_vyrfn"]
+[ext_resource type="AudioStream" uid="uid://bsa7lyjyg7nhi" path="res://sound/sfx/system/soul gauge charged.wav" id="12_laxar"]
+
+[sub_resource type="Animation" id="56"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SoulGauge/Gradient/Fill:material:shader_parameter/albedo")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("8_sbp0o")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SoulGauge/Gradient/Fill/Surface:material:shader_parameter/albedo")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("9_44o10")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SoulGauge/Glow:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SparkleBottom:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="55"]
+resource_name = "charged"
+length = 0.5
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SoulGauge/Gradient/Fill:material:shader_parameter/albedo")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("10_8hpwa")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SoulGauge/Gradient/Fill/Surface:material:shader_parameter/albedo")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("11_vyrfn")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SoulGauge/Glow:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.0666666, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SparkleBottom:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SFX")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_x2ft5"]
+_data = {
+&"RESET": SubResource("56"),
+&"charged": SubResource("55")
+}
+
+[node name="SoulGauge" type="Control" node_paths=PackedStringArray("soulGaugeRect", "soulGaugeRoot", "soulGaugeFill", "soulGaugeBackground", "soulGaugeAnimator")]
+layout_mode = 3
+anchor_left = 1.0
+anchor_top = 0.296
+anchor_right = 1.0
+anchor_bottom = 0.889
+offset_left = -262.0
+offset_top = 75.32
+offset_right = -134.0
+offset_bottom = 74.88
+script = ExtResource("1_jyksu")
+soulGaugeRect = NodePath("SoulGauge")
+soulGaugeRoot = NodePath(".")
+soulGaugeFill = NodePath("SoulGauge/Gradient/Fill")
+soulGaugeBackground = NodePath("SoulGauge/Gradient")
+soulGaugeAnimator = NodePath("AnimationPlayer")
+
+[node name="SoulGauge" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.234375
+anchor_top = -0.18125
+anchor_right = 1.23438
+anchor_bottom = 1.59531
+offset_top = 320.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1, 0.5)
+texture = ExtResource("9_s0ic1")
+region_rect = Rect2(7, 9, 298, 1015)
+patch_margin_top = 249
+patch_margin_bottom = 233
+metadata/_edit_use_anchors_ = true
+
+[node name="Glow" type="Control" parent="SoulGauge"]
+modulate = Color(1, 1, 1, 0)
+material = ExtResource("2_jyksu")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Glow" type="NinePatchRect" parent="SoulGauge/Glow"]
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_lo3e7")
+region_rect = Rect2(8, 10, 96, 326)
+patch_margin_top = 82
+patch_margin_bottom = 176
+metadata/_edit_use_anchors_ = true
+
+[node name="SparkleTop1" type="Sprite2D" parent="SoulGauge/Glow"]
+use_parent_material = true
+position = Vector2(88.0001, 16)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("1_lo3e7")
+region_enabled = true
+region_rect = Rect2(120, 8, 72, 72)
+
+[node name="SparkleTop2" type="Sprite2D" parent="SoulGauge/Glow"]
+use_parent_material = true
+position = Vector2(24.0001, 64)
+rotation = -1.309
+texture = ExtResource("1_lo3e7")
+region_enabled = true
+region_rect = Rect2(120, 8, 72, 72)
+
+[node name="Gradient" type="TextureRect" parent="SoulGauge"]
+show_behind_parent = true
+clip_contents = true
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 46.0
+offset_top = 64.0
+offset_right = -48.72
+offset_bottom = -56.1599
+texture = ExtResource("3_h5ow6")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Fill" type="TextureRect" parent="SoulGauge/Gradient"]
+material = ExtResource("4_2kbtm")
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -96.0
+offset_right = -16.0
+offset_bottom = 260.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(2, 2)
+texture = ExtResource("5_q05br")
+stretch_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Surface" type="TextureRect" parent="SoulGauge/Gradient/Fill"]
+material = ExtResource("6_8y1t0")
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = -8.0
+offset_top = -16.0
+offset_right = 8.0
+offset_bottom = 16.0
+grow_horizontal = 2
+scale = Vector2(1, 0.6)
+pivot_offset = Vector2(16, 16)
+texture = ExtResource("7_dv42l")
+stretch_mode = 3
+metadata/_edit_use_anchors_ = true
+
+[node name="BurstPoint" type="Sprite2D" parent="."]
+position = Vector2(91, 488)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("9_s0ic1")
+region_enabled = true
+region_rect = Rect2(310, 327, 308, 112)
+
+[node name="SparkleBottom" type="Node2D" parent="."]
+modulate = Color(1, 1, 1, 0)
+material = ExtResource("2_jyksu")
+position = Vector2(64, 704)
+
+[node name="SparkleBottom1" type="Sprite2D" parent="SparkleBottom"]
+use_parent_material = true
+position = Vector2(-48, -88)
+rotation = -1.309
+texture = ExtResource("1_lo3e7")
+region_enabled = true
+region_rect = Rect2(120, 8, 72, 72)
+
+[node name="SparkleBottom2" type="Sprite2D" parent="SparkleBottom"]
+use_parent_material = true
+position = Vector2(-40, -39.9999)
+rotation = -1.83259
+scale = Vector2(1.69211, 1.69211)
+texture = ExtResource("1_lo3e7")
+region_enabled = true
+region_rect = Rect2(120, 8, 72, 72)
+
+[node name="SparkleBottom3" type="Sprite2D" parent="SparkleBottom"]
+use_parent_material = true
+position = Vector2(32, -24)
+rotation = -1.15572
+scale = Vector2(1.96274, 1.96274)
+texture = ExtResource("1_lo3e7")
+region_enabled = true
+region_rect = Rect2(120, 8, 72, 72)
+
+[node name="BurstPointGlow" type="Sprite2D" parent="SparkleBottom"]
+use_parent_material = true
+position = Vector2(0, -152)
+scale = Vector2(1.25, 1.25)
+texture = ExtResource("1_lo3e7")
+region_enabled = true
+region_rect = Rect2(112, 120, 88, 24)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_x2ft5")
+}
+
+[node name="SFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("12_laxar")
+volume_db = -6.0
+bus = &"SFX"

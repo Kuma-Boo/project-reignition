@@ -431,7 +431,7 @@ public partial class PlayerSkillController : Node3D
 
 			breakTimer = BreakSkillsCooldown;
 			BGMPlayer.SetStageMusicVolume(0f);
-			HeadsUpDisplay.Instance?.UpdateSoulGaugeColor(IsSoulGaugeCharged);
+			HeadsUpDisplay.Instance?.GetCurrentSoulGauge().UpdateSoulGaugeColor(IsSoulGaugeCharged);
 			EmitSignal(SignalName.TimeBreakStopped);
 		}
 	}
@@ -475,7 +475,7 @@ public partial class PlayerSkillController : Node3D
 			EmitSignal(SignalName.SpeedBreakStopped);
 		}
 
-		HeadsUpDisplay.Instance?.UpdateSoulGaugeColor(IsSoulGaugeCharged);
+		HeadsUpDisplay.Instance?.GetCurrentSoulGauge().UpdateSoulGaugeColor(IsSoulGaugeCharged);
 	}
 
 	public void EnableBreakSkills() => IsTimeBreakEnabled = IsSpeedBreakEnabled = true;
@@ -496,7 +496,7 @@ public partial class PlayerSkillController : Node3D
 		else
 			ratio = (SoulPower - MinimumSoulPower) / ((float)MaxSoulPower - MinimumSoulPower);
 
-		HeadsUpDisplay.Instance?.ModifySoulGauge(ratio, IsSoulGaugeCharged);
+		HeadsUpDisplay.Instance?.GetCurrentSoulGauge().ModifySoulGauge(ratio, IsSoulGaugeCharged);
 	}
 
 	/// <summary> Returns a string representing the soul gauge for menus to display. </summary>

@@ -127,6 +127,14 @@ public partial class SaveManager : Node
 		Count
 	}
 
+	public enum HudStyle
+	{
+		Retail,
+		Reignition,
+		E3,
+		Count
+	}
+
 	public static readonly Vector2I[] WindowSizes =
 	[
 		new(640, 360), // 360p
@@ -207,6 +215,9 @@ public partial class SaveManager : Node
 		public QualitySetting postProcessingQuality = QualitySetting.Medium;
 		public QualitySetting reflectionQuality = QualitySetting.High;
 
+		public HudStyle hudStyle = HudStyle.Reignition;
+		public bool rotateSoulGauge = false;
+
 		// Audio
 		public bool isMasterMuted;
 		public int masterVolume = 30;
@@ -258,6 +269,8 @@ public partial class SaveManager : Node
 				{ nameof(useMotionBlur), useMotionBlur },
 				{ nameof(useScreenShake), useScreenShake },
 				{ nameof(screenShake), screenShake },
+				{ nameof(hudStyle), (int)hudStyle },
+				{ nameof(rotateSoulGauge), (bool)rotateSoulGauge},
 
 				// Audio
 				{ nameof(isMasterMuted), isMasterMuted },
@@ -327,6 +340,8 @@ public partial class SaveManager : Node
 				useScreenShake = (bool)var;
 			if (dictionary.TryGetValue(nameof(screenShake), out var))
 				screenShake = (int)var;
+			if (dictionary.TryGetValue(nameof(hudStyle), out var))
+				hudStyle = (HudStyle)(int)var;
 
 			// Audio
 			if (dictionary.TryGetValue(nameof(isMasterMuted), out var))

@@ -1,0 +1,80 @@
+[gd_scene load_steps=9 format=3 uid="uid://df0glfg6jnspd"]
+
+[ext_resource type="Script" uid="uid://d3bwpan3sifbl" path="res://interface/gameplay/hud/script/Score.cs" id="1_njxm6"]
+[ext_resource type="Texture2D" uid="uid://clnr8mw5xvxn1" path="res://interface/menu/level select/texture/no medal.png" id="2_njxm6"]
+[ext_resource type="Texture2D" uid="uid://daym7a6tnri40" path="res://interface/menu/level select/texture/bronze.png" id="2_scb50"]
+[ext_resource type="Texture2D" uid="uid://bongvk7uwqsco" path="res://interface/menu/level select/texture/gold.png" id="3_dhir1"]
+[ext_resource type="Texture2D" uid="uid://cbnh0am0av0ts" path="res://interface/menu/level select/texture/silver.png" id="3_kmwi2"]
+[ext_resource type="AudioStream" uid="uid://c2ntlq8k605f0" path="res://sound/sfx/system/SYSTEM_57.wav" id="4_scb50"]
+[ext_resource type="AudioStream" uid="uid://dnehqc85xb54p" path="res://sound/sfx/system/SYSTEM_58.wav" id="5_kmwi2"]
+[ext_resource type="FontFile" uid="uid://dsuh2v4ae6nay" path="res://interface/font/otf/PR Bevel V3.otf" id="5_scb50"]
+
+[node name="Score" type="Control" node_paths=PackedStringArray("rankPreviewerRoot", "mainRank", "transitionRank", "rankUpSFX", "rankDownSFX", "time", "score")]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -512.0
+offset_top = 64.0
+offset_right = -128.0
+offset_bottom = 192.0
+grow_horizontal = 0
+script = ExtResource("1_njxm6")
+rankPreviewerRoot = NodePath("Rank")
+mainRank = NodePath("Rank/MainRank")
+transitionRank = NodePath("Rank/TransitionRank")
+rankTextures = Array[Texture2D]([ExtResource("3_dhir1"), ExtResource("2_scb50"), ExtResource("3_kmwi2")])
+rankUpSFX = NodePath("Rank/RankUp")
+rankDownSFX = NodePath("Rank/RankDown")
+time = NodePath("Time")
+score = NodePath("Score")
+
+[node name="Score" type="Label" parent="."]
+layout_mode = 0
+offset_right = 384.0
+offset_bottom = 67.0
+theme_override_fonts/font = ExtResource("5_scb50")
+theme_override_font_sizes/font_size = 45
+text = "00000000"
+vertical_alignment = 1
+
+[node name="Time" type="Label" parent="."]
+layout_mode = 0
+offset_top = 67.0
+offset_right = 384.0
+offset_bottom = 134.0
+theme_override_fonts/font = ExtResource("5_scb50")
+theme_override_font_sizes/font_size = 45
+text = "00:00.00"
+vertical_alignment = 1
+
+[node name="Rank" type="Control" parent="."]
+anchors_preset = 0
+offset_left = -128.0
+offset_right = -128.0
+scale = Vector2(2, 2)
+
+[node name="MainRank" type="TextureRect" parent="Rank"]
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 64.0
+texture = ExtResource("2_njxm6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TransitionRank" type="TextureRect" parent="Rank"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 64.0
+texture = ExtResource("3_dhir1")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RankUp" type="AudioStreamPlayer" parent="Rank"]
+stream = ExtResource("4_scb50")
+bus = &"SFX"
+
+[node name="RankDown" type="AudioStreamPlayer" parent="Rank"]
+stream = ExtResource("5_kmwi2")
+bus = &"SFX"

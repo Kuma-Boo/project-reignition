@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=3 uid="uid://mnp6i3ew1m2a"]
+
+[ext_resource type="Texture2D" uid="uid://dx4vxnhtgd13t" path="res://interface/menu/common/common menu atlas.png" id="1_2lpiu"]
+[ext_resource type="Script" uid="uid://eq700crn2hyv" path="res://interface/gameplay/hud/script/Race.cs" id="1_gnp8a"]
+[ext_resource type="Texture2D" uid="uid://bfshr1ptvr744" path="res://interface/gameplay/hud/texture/race/uhu.png" id="2_gnp8a"]
+[ext_resource type="Texture2D" uid="uid://dxukrbt64dvpn" path="res://interface/gameplay/hud/texture/race/sonic.png" id="3_a21y1"]
+
+[node name="Race" type="Control" node_paths=PackedStringArray("raceRoot", "raceUhu", "racePlayer")]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -320.0
+offset_top = 96.0
+offset_right = 320.0
+offset_bottom = 160.0
+grow_horizontal = 2
+script = ExtResource("1_gnp8a")
+raceRoot = NodePath(".")
+raceUhu = NodePath("Uhu")
+racePlayer = NodePath("Sonic")
+
+[node name="ScrollBar" type="Sprite2D" parent="."]
+position = Vector2(328, 32)
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("1_2lpiu")
+region_enabled = true
+region_rect = Rect2(64, 448, 448, 64)
+
+[node name="Uhu" type="TextureRect" parent="."]
+layout_mode = 1
+offset_top = -32.0
+offset_right = 128.0
+offset_bottom = 96.0
+pivot_offset = Vector2(64, 64)
+texture = ExtResource("2_gnp8a")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Sonic" type="TextureRect" parent="."]
+layout_mode = 1
+offset_left = 512.0
+offset_top = -32.0
+offset_right = 640.0
+offset_bottom = 96.0
+pivot_offset = Vector2(64, 64)
+texture = ExtResource("3_a21y1")
+expand_mode = 1
+stretch_mode = 4

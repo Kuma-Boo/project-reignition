@@ -1,0 +1,988 @@
+[gd_scene load_steps=40 format=3 uid="uid://d0vk7rwr6xxft"]
+
+[ext_resource type="Texture2D" uid="uid://q2red5fhpctn" path="res://interface/gameplay/hud/texture/objective/enemy.png" id="1_baim8"]
+[ext_resource type="Script" uid="uid://c05jt6xoey6uv" path="res://interface/gameplay/hud/script/Objectives.cs" id="1_m1rpe"]
+[ext_resource type="Texture2D" uid="uid://dhrfettblkn0f" path="res://interface/gameplay/hud/texture/objective/unknown egg.png" id="2_m1rpe"]
+[ext_resource type="Texture2D" uid="uid://d18e4j4ulqc2g" path="res://interface/gameplay/hud/texture/objective/green spot.png" id="3_vky5u"]
+[ext_resource type="Texture2D" uid="uid://bxb8q6g410ux3" path="res://interface/gameplay/hud/texture/objective/green star.png" id="4_f4u8t"]
+[ext_resource type="Texture2D" uid="uid://cygfxejuwdxy1" path="res://interface/gameplay/hud/texture/objective/green stripe.png" id="5_qrnqp"]
+[ext_resource type="Texture2D" uid="uid://dvl2su8vrh1ah" path="res://interface/gameplay/hud/texture/objective/red spot.png" id="6_8k5hc"]
+[ext_resource type="Texture2D" uid="uid://dj70wln1g428o" path="res://interface/gameplay/hud/texture/objective/red star.png" id="7_tsji1"]
+[ext_resource type="Texture2D" uid="uid://un2y1n4hhn20" path="res://interface/gameplay/hud/texture/objective/red stripe.png" id="8_rt1ff"]
+[ext_resource type="Texture2D" uid="uid://ehjem3txnk3c" path="res://interface/gameplay/hud/texture/objective/yellow spot.png" id="9_50hks"]
+[ext_resource type="Texture2D" uid="uid://cuxy2xfg28on0" path="res://interface/gameplay/hud/texture/objective/yellow star.png" id="10_8ytd1"]
+[ext_resource type="Texture2D" uid="uid://dpvx1dvlmx78p" path="res://interface/gameplay/hud/texture/objective/yellow stripe.png" id="11_ji7np"]
+[ext_resource type="Texture2D" uid="uid://vjbphryyw45" path="res://interface/gameplay/hud/texture/objective/jar.png" id="12_mb0f2"]
+[ext_resource type="Texture2D" uid="uid://bwnbix3fo601c" path="res://interface/gameplay/hud/texture/objective/majin egg.png" id="13_4vqnv"]
+[ext_resource type="Texture2D" uid="uid://b7jrgeml1pi83" path="res://interface/gameplay/hud/texture/objective/ring chain.png" id="14_bkjs6"]
+[ext_resource type="FontFile" uid="uid://metby7j5vbho" path="res://interface/font/bitmap fonts/HUD Numbers.fnt" id="15_ipiok"]
+[ext_resource type="AudioStream" uid="uid://dk0nbt6u6r65r" path="res://sound/sfx/system/objective.wav" id="16_7ogxs"]
+[ext_resource type="FontFile" uid="uid://dsuh2v4ae6nay" path="res://interface/font/otf/PR Bevel V3.otf" id="16_vky5u"]
+
+[sub_resource type="Animation" id="Animation_egvi3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_baim8")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_5t1on"]
+resource_name = "bad"
+length = 0.333337
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.133333, 0.2, 0.266667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-17, -3), Vector2(-4, -9), Vector2(-9, 2), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_fbwlm"]
+resource_name = "dino-egg"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_m1rpe")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_fyni2"]
+resource_name = "dino-egg-loss"
+length = 0.5
+capture_included = true
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.233333),
+"transitions": PackedFloat32Array(1),
+"update": 2,
+"values": [ExtResource("2_m1rpe")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.166667, 0.266667, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.166667, 0.266667),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.261799, -0.261799, 0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.266667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(2, 1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_88j1c"]
+resource_name = "dino-egg-return"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.2, 0.366667),
+"transitions": PackedFloat32Array(1, 0.5, 2, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(0, -20), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 0.1, 0.2, 0.3, 0.366667, 0.466667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 0.8), Vector2(0.8, 1.2), Vector2(1, 1), Vector2(0.8, 1.2), Vector2(1.2, 0.8), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.366667, 0.466667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(0.5, 0.5, 0.5, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_t7mo4"]
+resource_name = "dino-egg1"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_m1rpe"), ExtResource("3_vky5u")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.166667, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.133333, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 2, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(0, -64), Vector2(0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.333333, 0.4, 0.466667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1.2), Vector2(1.2, 0.8), Vector2(0.9, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_3wyse"]
+resource_name = "dino-egg2"
+length = 0.500003
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_m1rpe"), ExtResource("4_f4u8t")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.166667, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.133333, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 2, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(0, -64), Vector2(0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.333333, 0.4, 0.466667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1.2), Vector2(1.2, 0.8), Vector2(0.9, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_lct1t"]
+resource_name = "dino-egg3"
+length = 0.500003
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_m1rpe"), ExtResource("5_qrnqp")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.166667, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.133333, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 2, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(0, -64), Vector2(0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.333333, 0.4, 0.466667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1.2), Vector2(1.2, 0.8), Vector2(0.9, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_4d6v0"]
+resource_name = "dino-egg4"
+length = 0.500003
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_m1rpe"), ExtResource("6_8k5hc")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.166667, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.133333, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 2, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(0, -64), Vector2(0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.333333, 0.4, 0.466667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1.2), Vector2(1.2, 0.8), Vector2(0.9, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_wee68"]
+resource_name = "dino-egg5"
+length = 0.500003
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_m1rpe"), ExtResource("7_tsji1")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.166667, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.133333, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 2, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(0, -64), Vector2(0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.333333, 0.4, 0.466667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1.2), Vector2(1.2, 0.8), Vector2(0.9, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_xgdiw"]
+resource_name = "dino-egg6"
+length = 0.500003
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_m1rpe"), ExtResource("8_rt1ff")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.166667, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.133333, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 2, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(0, -64), Vector2(0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.333333, 0.4, 0.466667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1.2), Vector2(1.2, 0.8), Vector2(0.9, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_fokaq"]
+resource_name = "dino-egg7"
+length = 0.500003
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_m1rpe"), ExtResource("9_50hks")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.166667, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.133333, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 2, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(0, -64), Vector2(0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.333333, 0.4, 0.466667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1.2), Vector2(1.2, 0.8), Vector2(0.9, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_lf6m0"]
+resource_name = "dino-egg8"
+length = 0.500003
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_m1rpe"), ExtResource("10_8ytd1")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.166667, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.133333, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 2, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(0, -64), Vector2(0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.333333, 0.4, 0.466667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1.2), Vector2(1.2, 0.8), Vector2(0.9, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_8if12"]
+resource_name = "dino-egg9"
+length = 0.500003
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_m1rpe"), ExtResource("11_ji7np")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.166667, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.133333, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 2, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(0, -64), Vector2(0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.333333, 0.4, 0.466667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1.2), Vector2(1.2, 0.8), Vector2(0.9, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_xl0sp"]
+resource_name = "enemy"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_baim8")]
+}
+
+[sub_resource type="Animation" id="Animation_34rru"]
+resource_name = "good"
+length = 0.333337
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.266667),
+"transitions": PackedFloat32Array(0.5, 2, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.2, 1.2), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_j4bj5"]
+resource_name = "hide"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_lw1hn"]
+resource_name = "jar"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("12_mb0f2")]
+}
+
+[sub_resource type="Animation" id="Animation_0fnew"]
+resource_name = "majin-egg"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("13_4vqnv")]
+}
+
+[sub_resource type="Animation" id="Animation_iq5js"]
+resource_name = "ring_chain"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("14_bkjs6")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lw1hn"]
+_data = {
+&"RESET": SubResource("Animation_egvi3"),
+&"bad": SubResource("Animation_5t1on"),
+&"dino-egg": SubResource("Animation_fbwlm"),
+&"dino-egg-loss": SubResource("Animation_fyni2"),
+&"dino-egg-return": SubResource("Animation_88j1c"),
+&"dino-egg1": SubResource("Animation_t7mo4"),
+&"dino-egg2": SubResource("Animation_3wyse"),
+&"dino-egg3": SubResource("Animation_lct1t"),
+&"dino-egg4": SubResource("Animation_4d6v0"),
+&"dino-egg5": SubResource("Animation_wee68"),
+&"dino-egg6": SubResource("Animation_xgdiw"),
+&"dino-egg7": SubResource("Animation_fokaq"),
+&"dino-egg8": SubResource("Animation_lf6m0"),
+&"dino-egg9": SubResource("Animation_8if12"),
+&"enemy": SubResource("Animation_xl0sp"),
+&"good": SubResource("Animation_34rru"),
+&"hide": SubResource("Animation_j4bj5"),
+&"jar": SubResource("Animation_lw1hn"),
+&"majin-egg": SubResource("Animation_0fnew"),
+&"ring_chain": SubResource("Animation_iq5js")
+}
+
+[node name="Objectives" type="Control" node_paths=PackedStringArray("objectiveRoot", "objectiveSprite", "objectiveValue", "objectiveMaxValue", "objectiveAnimators", "objectiveSfx")]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1504.0
+offset_top = 192.0
+offset_right = 1792.0
+offset_bottom = 320.0
+script = ExtResource("1_m1rpe")
+objectiveRoot = NodePath(".")
+objectiveSprite = NodePath("ObjectiveSprites/ObjectiveRoot4/Sprite")
+objectiveValue = NodePath("Value")
+objectiveMaxValue = NodePath("MaxValue")
+objectiveAnimators = [NodePath("ObjectiveSprites/ObjectiveRoot4/Sprite/AnimationPlayer"), NodePath("ObjectiveSprites/ObjectiveRoot3/Sprite/AnimationPlayer"), NodePath("ObjectiveSprites/ObjectiveRoot2/Sprite/AnimationPlayer"), NodePath("ObjectiveSprites/ObjectiveRoot1/Sprite/AnimationPlayer")]
+objectiveSfx = NodePath("Sfx")
+
+[node name="ObjectiveSprites" type="Control" parent="."]
+anchors_preset = 0
+offset_left = -160.0
+offset_top = 16.0
+offset_right = 96.0
+offset_bottom = 112.0
+
+[node name="ObjectiveRoot4" type="Control" parent="ObjectiveSprites"]
+custom_minimum_size = Vector2(96, 96)
+anchors_preset = 0
+offset_left = 52.0
+offset_right = 148.0
+offset_bottom = 96.0
+
+[node name="Sprite" type="TextureRect" parent="ObjectiveSprites/ObjectiveRoot4"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+offset_right = 96.0
+offset_bottom = 96.0
+pivot_offset = Vector2(48, 82)
+texture = ExtResource("1_baim8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ObjectiveSprites/ObjectiveRoot4/Sprite"]
+libraries = {
+&"": SubResource("AnimationLibrary_lw1hn")
+}
+autoplay = "hide"
+
+[node name="ObjectiveRoot3" type="Control" parent="ObjectiveSprites"]
+custom_minimum_size = Vector2(96, 96)
+anchors_preset = 0
+offset_left = 88.0
+offset_right = 128.0
+offset_bottom = 40.0
+
+[node name="Sprite" type="TextureRect" parent="ObjectiveSprites/ObjectiveRoot3"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+offset_right = 96.0
+offset_bottom = 96.0
+pivot_offset = Vector2(48, 82)
+texture = ExtResource("1_baim8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ObjectiveSprites/ObjectiveRoot3/Sprite"]
+libraries = {
+&"": SubResource("AnimationLibrary_lw1hn")
+}
+autoplay = "hide"
+
+[node name="ObjectiveRoot2" type="Control" parent="ObjectiveSprites"]
+custom_minimum_size = Vector2(96, 96)
+anchors_preset = 0
+offset_left = 124.0
+offset_right = 164.0
+offset_bottom = 40.0
+
+[node name="Sprite" type="TextureRect" parent="ObjectiveSprites/ObjectiveRoot2"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+offset_right = 96.0
+offset_bottom = 96.0
+pivot_offset = Vector2(48, 82)
+texture = ExtResource("1_baim8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ObjectiveSprites/ObjectiveRoot2/Sprite"]
+libraries = {
+&"": SubResource("AnimationLibrary_lw1hn")
+}
+autoplay = "hide"
+
+[node name="ObjectiveRoot1" type="Control" parent="ObjectiveSprites"]
+custom_minimum_size = Vector2(96, 96)
+anchors_preset = 0
+offset_left = 160.0
+offset_right = 200.0
+offset_bottom = 40.0
+
+[node name="Sprite" type="TextureRect" parent="ObjectiveSprites/ObjectiveRoot1"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+offset_right = 96.0
+offset_bottom = 96.0
+pivot_offset = Vector2(48, 82)
+texture = ExtResource("1_baim8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ObjectiveSprites/ObjectiveRoot1/Sprite"]
+libraries = {
+&"": SubResource("AnimationLibrary_lw1hn")
+}
+
+[node name="Value" type="Label" parent="."]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 40.0
+offset_right = 212.0
+offset_bottom = 107.0
+scale = Vector2(0.8, 0.8)
+theme_override_fonts/font = ExtResource("16_vky5u")
+theme_override_font_sizes/font_size = 45
+text = "00"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="MaxValue" type="Label" parent="."]
+layout_mode = 0
+offset_left = 200.0
+offset_top = 40.0
+offset_right = 392.0
+offset_bottom = 107.0
+scale = Vector2(0.8, 0.8)
+theme_override_fonts/font = ExtResource("16_vky5u")
+theme_override_font_sizes/font_size = 45
+text = "22"
+vertical_alignment = 1
+
+[node name="Divider" type="Label" parent="."]
+layout_mode = 0
+offset_left = 168.0
+offset_top = 40.0
+offset_right = 216.0
+offset_bottom = 107.0
+scale = Vector2(0.8, 0.8)
+theme_override_fonts/font = ExtResource("15_ipiok")
+theme_override_font_sizes/font_size = 64
+text = "/"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Sfx" type="AudioStreamPlayer" parent="."]
+process_mode = 1
+stream = ExtResource("16_7ogxs")
+bus = &"GAME SFX"
