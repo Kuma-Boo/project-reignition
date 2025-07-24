@@ -1,7 +1,6 @@
-[gd_scene load_steps=18 format=3 uid="uid://b7o2lh2q0ps6c"]
+[gd_scene load_steps=17 format=3 uid="uid://b7o2lh2q0ps6c"]
 
 [ext_resource type="Script" uid="uid://dwcys4550bm6m" path="res://interface/gameplay/hud/script/SoulGauge.cs" id="1_jyksu"]
-[ext_resource type="Texture2D" uid="uid://hjdee6dcqgs1" path="res://interface/gameplay/hud/texture/soul gauge/sprite atlas.png" id="1_lo3e7"]
 [ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="2_jyksu"]
 [ext_resource type="Texture2D" uid="uid://dgtjbbydbhw88" path="res://interface/gameplay/hud/texture/soul gauge/gradient.png" id="3_h5ow6"]
 [ext_resource type="Material" uid="uid://b5getvsmwl4ql" path="res://interface/gameplay/hud/material/Soul Gauge Fill.tres" id="4_2kbtm"]
@@ -145,10 +144,10 @@ anchor_left = 1.0
 anchor_top = 0.296
 anchor_right = 1.0
 anchor_bottom = 0.889
-offset_left = -262.0
-offset_top = 75.32
-offset_right = -134.0
-offset_bottom = 74.88
+offset_left = -1920.0
+offset_top = -319.68
+offset_right = -1792.0
+offset_bottom = -320.12
 script = ExtResource("1_jyksu")
 soulGaugeRect = NodePath("SoulGauge")
 soulGaugeRoot = NodePath(".")
@@ -157,20 +156,24 @@ soulGaugeBackground = NodePath("SoulGauge/Gradient")
 soulGaugeAnimator = NodePath("AnimationPlayer")
 
 [node name="SoulGauge" type="NinePatchRect" parent="."]
+custom_minimum_size = Vector2(310, 1015)
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.234375
-anchor_top = -0.18125
-anchor_right = 1.23438
-anchor_bottom = 1.59531
-offset_top = 320.0
+anchor_left = 0.0161874
+anchor_top = 0.247938
+anchor_right = 0.0161874
+anchor_bottom = 0.277
+offset_left = -0.0719872
+offset_top = 1.31967
+offset_right = 309.928
+offset_bottom = 1016.32
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(1, 0.5)
+scale = Vector2(0.4, 0.4)
 texture = ExtResource("9_s0ic1")
-region_rect = Rect2(7, 9, 298, 1015)
-patch_margin_top = 249
-patch_margin_bottom = 233
+region_rect = Rect2(0, 9, 310, 1015)
+patch_margin_top = 250
+patch_margin_bottom = 500
 metadata/_edit_use_anchors_ = true
 
 [node name="Glow" type="Control" parent="SoulGauge"]
@@ -192,39 +195,41 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_lo3e7")
-region_rect = Rect2(8, 10, 96, 326)
-patch_margin_top = 82
-patch_margin_bottom = 176
-metadata/_edit_use_anchors_ = true
+texture = ExtResource("9_s0ic1")
+region_rect = Rect2(0, 9, 310, 1015)
+patch_margin_top = 250
+patch_margin_bottom = 500
 
 [node name="SparkleTop1" type="Sprite2D" parent="SoulGauge/Glow"]
 use_parent_material = true
-position = Vector2(88.0001, 16)
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("1_lo3e7")
+position = Vector2(256, 40)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("9_s0ic1")
 region_enabled = true
-region_rect = Rect2(120, 8, 72, 72)
+region_rect = Rect2(380, 40, 180, 160)
 
 [node name="SparkleTop2" type="Sprite2D" parent="SoulGauge/Glow"]
 use_parent_material = true
-position = Vector2(24.0001, 64)
+position = Vector2(64, 70)
 rotation = -1.309
-texture = ExtResource("1_lo3e7")
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("9_s0ic1")
 region_enabled = true
-region_rect = Rect2(120, 8, 72, 72)
+region_rect = Rect2(380, 40, 180, 160)
 
 [node name="Gradient" type="TextureRect" parent="SoulGauge"]
 show_behind_parent = true
 clip_contents = true
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 46.0
-offset_top = 64.0
-offset_right = -48.72
-offset_bottom = -56.1599
+anchor_left = 0.361
+anchor_top = 0.203
+anchor_right = 0.671
+anchor_bottom = 0.849
+offset_left = 0.0899887
+offset_top = -0.0450134
+offset_right = -0.00999451
+offset_bottom = 0.264954
 texture = ExtResource("3_h5ow6")
 expand_mode = 1
 metadata/_edit_use_anchors_ = true
@@ -236,77 +241,78 @@ anchors_preset = -1
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -96.0
-offset_right = -16.0
-offset_bottom = 260.0
+offset_top = -96.0156
+offset_right = -48.0
+offset_bottom = 259.984
 grow_horizontal = 2
-grow_vertical = 0
-scale = Vector2(2, 2)
+grow_vertical = 2
+scale = Vector2(4, 4)
 texture = ExtResource("5_q05br")
 stretch_mode = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="Surface" type="TextureRect" parent="SoulGauge/Gradient/Fill"]
 material = ExtResource("6_8y1t0")
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = -8.0
+anchors_preset = -1
+anchor_left = -0.235312
+anchor_right = 0.764688
+offset_left = -8.705
 offset_top = -16.0
-offset_right = 8.0
+offset_right = 7.295
 offset_bottom = 16.0
 grow_horizontal = 2
 scale = Vector2(1, 0.6)
-pivot_offset = Vector2(16, 16)
+pivot_offset = Vector2(32, 16)
 texture = ExtResource("7_dv42l")
 stretch_mode = 3
 metadata/_edit_use_anchors_ = true
 
 [node name="BurstPoint" type="Sprite2D" parent="."]
-position = Vector2(91, 488)
-scale = Vector2(0.3, 0.3)
+position = Vector2(64, 380)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("9_s0ic1")
 region_enabled = true
-region_rect = Rect2(310, 327, 308, 112)
+region_rect = Rect2(310, 320, 310, 140)
 
 [node name="SparkleBottom" type="Node2D" parent="."]
 modulate = Color(1, 1, 1, 0)
 material = ExtResource("2_jyksu")
-position = Vector2(64, 704)
+position = Vector2(64, 540)
 
 [node name="SparkleBottom1" type="Sprite2D" parent="SparkleBottom"]
 use_parent_material = true
-position = Vector2(-48, -88)
+position = Vector2(-39.773, -88)
 rotation = -1.309
-texture = ExtResource("1_lo3e7")
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("9_s0ic1")
 region_enabled = true
-region_rect = Rect2(120, 8, 72, 72)
+region_rect = Rect2(380, 40, 180, 160)
 
 [node name="SparkleBottom2" type="Sprite2D" parent="SparkleBottom"]
 use_parent_material = true
-position = Vector2(-40, -39.9999)
+position = Vector2(-47.773, -36)
 rotation = -1.83259
-scale = Vector2(1.69211, 1.69211)
-texture = ExtResource("1_lo3e7")
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("9_s0ic1")
 region_enabled = true
-region_rect = Rect2(120, 8, 72, 72)
+region_rect = Rect2(380, 40, 180, 160)
 
 [node name="SparkleBottom3" type="Sprite2D" parent="SparkleBottom"]
 use_parent_material = true
-position = Vector2(32, -24)
+position = Vector2(48.227, -28)
 rotation = -1.15572
-scale = Vector2(1.96274, 1.96274)
-texture = ExtResource("1_lo3e7")
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("9_s0ic1")
 region_enabled = true
-region_rect = Rect2(120, 8, 72, 72)
+region_rect = Rect2(380, 40, 180, 160)
 
 [node name="BurstPointGlow" type="Sprite2D" parent="SparkleBottom"]
 use_parent_material = true
-position = Vector2(0, -152)
-scale = Vector2(1.25, 1.25)
-texture = ExtResource("1_lo3e7")
+position = Vector2(0, -160)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("9_s0ic1")
 region_enabled = true
-region_rect = Rect2(112, 120, 88, 24)
+region_rect = Rect2(310, 320, 310, 140)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
