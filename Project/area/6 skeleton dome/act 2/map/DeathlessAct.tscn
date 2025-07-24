@@ -1,0 +1,1537 @@
+[gd_scene load_steps=32 format=3 uid="uid://dqfly5rgktp46"]
+
+[ext_resource type="PackedScene" uid="uid://c5ajp56pbyegl" path="res://area/6 skeleton dome/act 2/Static.tscn" id="1_x2xwi"]
+[ext_resource type="Resource" uid="uid://bkjgbcpj6hv35" path="res://resource/level data/skeleton dome/Act2Deathless.tres" id="2_x2xwi"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_1j74h"]
+[ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_r2rp8"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_8d45c"]
+[ext_resource type="PackedScene" uid="uid://d21ummt57uq4a" path="res://area/6 skeleton dome/object/obstacle/Sickle.tscn" id="7_vhdq4"]
+[ext_resource type="PackedScene" uid="uid://cl7a6swbawl4b" path="res://area/6 skeleton dome/object/platform/PlatformExteriorEnd.tscn" id="8_1d335"]
+[ext_resource type="PackedScene" uid="uid://dee1migehwfmq" path="res://area/6 skeleton dome/object/platform/PlatformExterior.tscn" id="9_auwfn"]
+[ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="10_jc28q"]
+[ext_resource type="PackedScene" uid="uid://cvjx50c0en38" path="res://area/6 skeleton dome/object/obstacle/Door.tscn" id="11_abo0c"]
+[ext_resource type="PackedScene" uid="uid://cxb1fxhrsja13" path="res://object/stage/common/SpikeBallStatic.tscn" id="13_jgpix"]
+[ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="14_cdwvu"]
+[ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="15_d8vk2"]
+[ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="15_mappm"]
+[ext_resource type="PackedScene" uid="uid://b1daf70kelhld" path="res://area/6 skeleton dome/object/platform/PlatformCavernLarge.tscn" id="16_6dkgs"]
+[ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="17_hrcwr"]
+[ext_resource type="PackedScene" uid="uid://bgrpp6vriyi1w" path="res://area/6 skeleton dome/object/platform/PlatformSpiralSmall.tscn" id="18_4on0u"]
+[ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="19_lrv3s"]
+[ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="20_nh5wr"]
+[ext_resource type="PackedScene" uid="uid://nso0vvogx8g0" path="res://area/6 skeleton dome/object/platform/PlatformSpiralLarge.tscn" id="21_unu26"]
+[ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="24_1xqdv"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="25_x5102"]
+[ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="26_s5c4u"]
+[ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="28_0ay28"]
+[ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="29_ntixi"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="31_d8vk2"]
+[ext_resource type="PackedScene" uid="uid://csaug6ajhbtce" path="res://object/enemy/majin/data/skeleton dome/RedMajin.tscn" id="32_bcads"]
+[ext_resource type="PackedScene" uid="uid://c2etn7ijwk0bg" path="res://area/6 skeleton dome/object/obstacle/BonePillar.tscn" id="35_isigk"]
+[ext_resource type="PackedScene" uid="uid://di8tdo65qjkbe" path="res://object/enemy/majin/data/skeleton dome/BlueMajin.tscn" id="38_b2g64"]
+[ext_resource type="PackedScene" uid="uid://ctkxmjdylid4k" path="res://object/enemy/majin/data/skeleton dome/GreenMajin.tscn" id="39_7mv21"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bcads"]
+size = Vector3(35, 20, 5)
+
+[node name="World" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_x2xwi")]
+Data = ExtResource("2_x2xwi")
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
+
+[node name="Path" parent="Static/Trigger/ArenaEntranceTriggers/ArenaPath" index="0"]
+cameraPathBlendTime = 0.0
+
+[node name="RampageAct" type="Node3D" parent="."]
+
+[node name="SpawnPosition" type="Node3D" parent="RampageAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1150, 10, -1235)
+metadata/_edit_lock_ = true
+
+[node name="CharacterSpawn" parent="RampageAct/SpawnPosition" instance=ExtResource("3_1j74h")]
+
+[node name="Hall" type="Node3D" parent="RampageAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1150, 0, -1125)
+
+[node name="RingsL1" type="Node3D" parent="RampageAct/Hall"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.599976, 10.7, -105)
+script = ExtResource("5_r2rp8")
+Source = ExtResource("6_8d45c")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Hall/RingsL1" instance=ExtResource("6_8d45c")]
+
+[node name="Child02" parent="RampageAct/Hall/RingsL1" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="RampageAct/Hall/RingsL1" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child04" parent="RampageAct/Hall/RingsL1" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child05" parent="RampageAct/Hall/RingsL1" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child06" parent="RampageAct/Hall/RingsL1" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="RingsR1" type="Node3D" parent="RampageAct/Hall"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.599976, 10.7, -105)
+script = ExtResource("5_r2rp8")
+Source = ExtResource("6_8d45c")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Hall/RingsR1" instance=ExtResource("6_8d45c")]
+
+[node name="Child02" parent="RampageAct/Hall/RingsR1" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="RampageAct/Hall/RingsR1" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child04" parent="RampageAct/Hall/RingsR1" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child05" parent="RampageAct/Hall/RingsR1" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child06" parent="RampageAct/Hall/RingsR1" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="RingsL2" type="Node3D" parent="RampageAct/Hall"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2, 0.7, -12)
+script = ExtResource("5_r2rp8")
+Source = ExtResource("6_8d45c")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Hall/RingsL2" instance=ExtResource("6_8d45c")]
+
+[node name="Child02" parent="RampageAct/Hall/RingsL2" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child03" parent="RampageAct/Hall/RingsL2" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child04" parent="RampageAct/Hall/RingsL2" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child05" parent="RampageAct/Hall/RingsL2" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="RingsR2" type="Node3D" parent="RampageAct/Hall"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 0.7, -12)
+script = ExtResource("5_r2rp8")
+Source = ExtResource("6_8d45c")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Hall/RingsR2" instance=ExtResource("6_8d45c")]
+
+[node name="Child02" parent="RampageAct/Hall/RingsR2" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child03" parent="RampageAct/Hall/RingsR2" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child04" parent="RampageAct/Hall/RingsR2" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child05" parent="RampageAct/Hall/RingsR2" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Rings5" type="Node3D" parent="RampageAct/Hall"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.7, 36)
+script = ExtResource("5_r2rp8")
+Source = ExtResource("6_8d45c")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Hall/Rings5" instance=ExtResource("6_8d45c")]
+
+[node name="Child02" parent="RampageAct/Hall/Rings5" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child03" parent="RampageAct/Hall/Rings5" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Sickle1" parent="RampageAct/Hall" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19, -81)
+rotationAmount = 50.0
+cycleLength = 5.0
+currentRatio = 1.0
+chainLength = 5
+
+[node name="Sickle2" parent="RampageAct/Hall" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19, -73)
+rotationAmount = 50.0
+cycleLength = 5.0
+currentRatio = 0.0
+chainLength = 5
+
+[node name="SickleGroup1" type="Node3D" parent="RampageAct/Hall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 12.5, -16)
+
+[node name="Sickle1" parent="RampageAct/Hall/SickleGroup1" instance=ExtResource("7_vhdq4")]
+cycleLength = 5.0
+chainLength = 8
+
+[node name="Sickle2" parent="RampageAct/Hall/SickleGroup1" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+cycleLength = 5.0
+chainLength = 8
+
+[node name="Sickle3" parent="RampageAct/Hall/SickleGroup1" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+cycleLength = 5.0
+chainLength = 8
+
+[node name="Sickle4" parent="RampageAct/Hall/SickleGroup1" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
+cycleLength = 5.0
+chainLength = 8
+
+[node name="Sickle5" parent="RampageAct/Hall/SickleGroup1" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20)
+cycleLength = 5.0
+chainLength = 8
+
+[node name="Sickle6" parent="RampageAct/Hall/SickleGroup1" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 25)
+cycleLength = 5.0
+chainLength = 8
+
+[node name="SickleGroup2" type="Node3D" parent="RampageAct/Hall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 12.5, -18.5)
+
+[node name="Sickle1" parent="RampageAct/Hall/SickleGroup2" instance=ExtResource("7_vhdq4")]
+cycleLength = 5.0
+chainLength = 8
+
+[node name="Sickle2" parent="RampageAct/Hall/SickleGroup2" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+cycleLength = 5.0
+chainLength = 8
+
+[node name="Sickle3" parent="RampageAct/Hall/SickleGroup2" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+cycleLength = 5.0
+chainLength = 8
+
+[node name="Sickle4" parent="RampageAct/Hall/SickleGroup2" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
+cycleLength = 5.0
+chainLength = 8
+
+[node name="Sickle5" parent="RampageAct/Hall/SickleGroup2" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20)
+cycleLength = 5.0
+chainLength = 8
+
+[node name="Sickle6" parent="RampageAct/Hall/SickleGroup2" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 25)
+cycleLength = 5.0
+chainLength = 8
+
+[node name="Hall2" type="Node3D" parent="RampageAct/Hall"]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -5, 0, 60)
+
+[node name="Sickle1" parent="RampageAct/Hall/Hall2" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -27)
+rotationAmount = 35.0
+cycleLength = 3.0
+currentRatio = 1.0
+chainLength = 4
+
+[node name="Rings1" type="Node3D" parent="RampageAct/Hall/Hall2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10352e-05, 0.7, -30)
+script = ExtResource("5_r2rp8")
+Source = ExtResource("6_8d45c")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Hall/Hall2/Rings1" instance=ExtResource("6_8d45c")]
+
+[node name="Child02" parent="RampageAct/Hall/Hall2/Rings1" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child03" parent="RampageAct/Hall/Hall2/Rings1" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child04" parent="RampageAct/Hall/Hall2/Rings1" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Sickle2" parent="RampageAct/Hall/Hall2" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -47)
+rotationAmount = 35.0
+cycleLength = 3.0
+currentRatio = 0.0
+chainLength = 4
+
+[node name="BlueMajin1" parent="RampageAct/Hall/Hall2" instance=ExtResource("38_b2g64")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00012207, 0, -65)
+rangeOverride = 35
+
+[node name="Sickle3" parent="RampageAct/Hall/Hall2" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00012207, 8, -67)
+rotationAmount = 35.0
+cycleLength = 3.0
+currentRatio = 1.0
+chainLength = 4
+
+[node name="PlatformExteriorEnd1" parent="RampageAct/Hall/Hall2" instance=ExtResource("8_1d335")]
+transform = Transform3D(5.96046e-08, 0, 1, -8.74228e-08, -1, 0, 1, -8.74228e-08, -5.96046e-08, -6, 1, -69)
+
+[node name="PlatformExterior1" parent="RampageAct/Hall/Hall2/PlatformExteriorEnd1" instance=ExtResource("9_auwfn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, -3.55271e-15, 1, 0, 0, 3.99994)
+
+[node name="PlatformExterior2" parent="RampageAct/Hall/Hall2/PlatformExteriorEnd1" instance=ExtResource("9_auwfn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, -3.55271e-15, 1, 0, 0, 8)
+
+[node name="PlatformExterior3" parent="RampageAct/Hall/Hall2/PlatformExteriorEnd1" instance=ExtResource("9_auwfn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, -3.55271e-15, 1, 0, 1.19209e-07, 11.9999)
+
+[node name="BlueMajin2" parent="RampageAct/Hall/Hall2" instance=ExtResource("38_b2g64")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10352e-05, 1, -84)
+rangeOverride = 25
+
+[node name="DashPanel" parent="RampageAct/Hall/Hall2" instance=ExtResource("10_jc28q")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -4.37114e-07, 0, -84)
+
+[node name="DoorL" parent="RampageAct/Hall/Hall2" instance=ExtResource("11_abo0c")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.5, 0, -86.5)
+
+[node name="DoorR" parent="RampageAct/Hall/Hall2" instance=ExtResource("11_abo0c")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2.4, 0, -86.5)
+
+[node name="Arena" type="Node3D" parent="RampageAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1000, 0, -1000)
+
+[node name="Quarter1" type="Node3D" parent="RampageAct/Arena"]
+
+[node name="BonePillar1" parent="RampageAct/Arena/Quarter1" instance=ExtResource("35_isigk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 67.7, -15.5, 1.20001)
+
+[node name="BonePillar2" parent="RampageAct/Arena/Quarter1" instance=ExtResource("35_isigk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 57.5, -15.5, 1.20001)
+
+[node name="BonePillar3" parent="RampageAct/Arena/Quarter1" instance=ExtResource("35_isigk")]
+transform = Transform3D(0.951057, 0, -0.309017, 0, 1, 0, 0.309017, 0, 0.951057, 58.0145, -13, 18.85)
+
+[node name="SpikeBall" parent="RampageAct/Arena/Quarter1/BonePillar3" instance=ExtResource("15_d8vk2")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 14.85, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 2.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 4.0
+
+[node name="BonePillar4" parent="RampageAct/Arena/Quarter1" instance=ExtResource("35_isigk")]
+transform = Transform3D(0.857167, 0, -0.515038, 0, 1, 0, 0.515038, 0, 0.857167, 57.4302, -13, 34.5076)
+
+[node name="SpikeBall" parent="RampageAct/Arena/Quarter1/BonePillar4" instance=ExtResource("15_d8vk2")]
+transform = Transform3D(1.5, 0, 5.96046e-08, 0, 1.5, 0, -5.96046e-08, 0, 1.5, 0, 14.85, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 2.0
+"Movement/Starting Offset" = 0.1
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 4.0
+
+[node name="Rings1" type="Node3D" parent="RampageAct/Arena/Quarter1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 72, 0.7, 20)
+script = ExtResource("5_r2rp8")
+Source = ExtResource("6_8d45c")
+Amount = 4
+Shape = 2
+Path = NodePath("../../../../Static/Path/ArenaPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Arena/Quarter1/Rings1" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000244141, 0, 0.000854492)
+
+[node name="Child02" parent="RampageAct/Arena/Quarter1/Rings1" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.36731, 0, 4.39484)
+
+[node name="Child03" parent="RampageAct/Arena/Quarter1/Rings1" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.00391, 0, 8.69519)
+
+[node name="Child04" parent="RampageAct/Arena/Quarter1/Rings1" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.90295, 0, 12.8848)
+
+[node name="Sickle1" parent="RampageAct/Arena/Quarter1" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(-0.71325, 0, 0.700909, 0, 1, 0, -0.700909, 0, -0.71325, 53.4814, 6.5, 51.1541)
+rotationAmount = 40.0
+cycleLength = 2.5
+currentRatio = 0.0
+chainLength = 3
+
+[node name="PlatformGroup1" type="Node3D" parent="RampageAct/Arena/Quarter1"]
+transform = Transform3D(-0.62932, 0, 0.777146, 0, 1.5, 0, -0.777146, 0, -0.62932, 38.1837, 1, 39.2078)
+
+[node name="PlatformCavernLarge1" parent="RampageAct/Arena/Quarter1/PlatformGroup1" instance=ExtResource("16_6dkgs")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
+
+[node name="PlatformCavernLarge2" parent="RampageAct/Arena/Quarter1/PlatformGroup1" instance=ExtResource("16_6dkgs")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1.66667, 0, -2.98023e-08, 0, 1, 0, 0.666667, -5)
+
+[node name="SpikeBallStatic1" parent="RampageAct/Arena/Quarter1/PlatformGroup1" instance=ExtResource("13_jgpix")]
+transform = Transform3D(-1.4854, 0, -0.208761, 0, 1, 0, 0.208761, 0, -1.4854, -3.65234, -0.666667, 1.20325)
+
+[node name="SpikeBallStatic6" parent="RampageAct/Arena/Quarter1/PlatformGroup1" instance=ExtResource("13_jgpix")]
+transform = Transform3D(-1.4854, 0, -0.208761, 0, 1, 0, 0.208761, 0, -1.4854, 3.08246, -0.666667, -0.0964355)
+
+[node name="SpikeBallStatic5" parent="RampageAct/Arena/Quarter1/PlatformGroup1" instance=ExtResource("13_jgpix")]
+transform = Transform3D(-1.4854, 0, -0.208761, 0, 1, 0, 0.208761, 0, -1.4854, -7.896, -0.333333, 1.54749)
+
+[node name="SpikeBallStatic2" parent="RampageAct/Arena/Quarter1/PlatformGroup1" instance=ExtResource("13_jgpix")]
+transform = Transform3D(-2.9708, 0, -0.41752, 0, 2, 0, 0.41752, 0, -2.9708, -6.1767, 0.4, -2.02661)
+
+[node name="Sickle2" parent="RampageAct/Arena/Quarter1" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(-0.580703, 0, 0.814115, 0, 1, 0, -0.814115, 0, -0.580703, 41.4479, 6.5, 52.2119)
+currentRatio = 0.0
+chainLength = 3
+
+[node name="PlatformExteriorEnd1" parent="RampageAct/Arena/Quarter1" instance=ExtResource("8_1d335")]
+transform = Transform3D(0.931468, 0.128019, 0.340558, -0.102353, 0.99045, -0.0923706, -0.349131, 0.051183, 0.935675, 42.7306, 0.845849, 59.2777)
+
+[node name="PlatformExterior" parent="RampageAct/Arena/Quarter1/PlatformExteriorEnd1" instance=ExtResource("9_auwfn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="BlueMajin1" parent="RampageAct/Arena/Quarter1" instance=ExtResource("38_b2g64")]
+transform = Transform3D(-0.422619, 0, 0.906308, 0, 1, 0, -0.906308, 0, -0.422619, 36.2535, 0.5, 52.2106)
+rangeOverride = 35
+
+[node name="SpikeBallStatic1" parent="RampageAct/Arena/Quarter1" instance=ExtResource("13_jgpix")]
+transform = Transform3D(1.09703, 0, -1.023, 0, 1.5, 0, 1.023, 0, 1.09703, 38.1119, 0.5, 60.0834)
+
+[node name="PlatformExteriorEnd2" parent="RampageAct/Arena/Quarter1" instance=ExtResource("8_1d335")]
+transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618, 27.7621, 0.743496, 54.6286)
+
+[node name="PlatformExterior" parent="RampageAct/Arena/Quarter1/PlatformExteriorEnd2" instance=ExtResource("9_auwfn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="BlueMajin2" parent="RampageAct/Arena/Quarter1" instance=ExtResource("38_b2g64")]
+transform = Transform3D(-0.5, 0, 0.866026, 0, 1, 0, -0.866026, 0, -0.5, 27.2, 2, 54.3301)
+rangeOverride = 35
+
+[node name="Sickle3" parent="RampageAct/Arena/Quarter1" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(-0.390731, 0, 0.920505, 0, 1, 0, -0.920505, 0, -0.390731, 28.6624, 10, 64.9651)
+rotationAmount = 40.0
+cycleLength = 7.0
+chainLength = 6
+
+[node name="BlueMajin3" parent="RampageAct/Arena/Quarter1" instance=ExtResource("38_b2g64")]
+transform = Transform3D(-0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, -0.258819, 15.9663, 0, 63.0529)
+rangeOverride = 35
+
+[node name="Sickle4" parent="RampageAct/Arena/Quarter1" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(-0.21644, 0, 0.976296, 0, 1, 0, -0.976296, 0, -0.21644, 13.4147, 12.4, 69.7499)
+rotationAmount = 40.0
+cycleLength = 6.0
+chainLength = 8
+
+[node name="SpikeBallStatic2" parent="RampageAct/Arena/Quarter1" instance=ExtResource("13_jgpix")]
+transform = Transform3D(0.312869, 0, -1.97538, 0, 2, 0, 1.97538, 0, 0.312869, 5.68909, -0.2, 77.0768)
+
+[node name="PlatformExteriorEnd3" parent="RampageAct/Arena/Quarter1" instance=ExtResource("8_1d335")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 4.65002, 1, 69.479)
+
+[node name="PlatformExterior1" parent="RampageAct/Arena/Quarter1/PlatformExteriorEnd3" instance=ExtResource("9_auwfn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="PlatformExterior2" parent="RampageAct/Arena/Quarter1/PlatformExteriorEnd3" instance=ExtResource("9_auwfn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+
+[node name="ItemBox" parent="RampageAct/Arena/Quarter1/PlatformExteriorEnd3" instance=ExtResource("15_mappm")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2.62268e-07, 1.4, 3)
+"Spawn Settings/Pickup Parent" = NodePath("RichRing")
+
+[node name="RichRing" parent="RampageAct/Arena/Quarter1/PlatformExteriorEnd3/ItemBox" instance=ExtResource("24_1xqdv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.5, -1.4, 6.6)
+
+[node name="Quarter2" type="Node3D" parent="RampageAct/Arena"]
+
+[node name="Rings1" type="Node3D" parent="RampageAct/Arena/Quarter2"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.29999, 0.6, 65)
+script = ExtResource("5_r2rp8")
+Source = ExtResource("6_8d45c")
+Amount = 3
+Shape = 2
+Path = NodePath("../../../../Static/Path/ArenaPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Arena/Quarter2/Rings1" instance=ExtResource("6_8d45c")]
+
+[node name="Child02" parent="RampageAct/Arena/Quarter2/Rings1" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0908203, 0, -4.99896)
+
+[node name="Child03" parent="RampageAct/Arena/Quarter2/Rings1" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.561646, 0, -9.9765)
+
+[node name="Sickle1" parent="RampageAct/Arena/Quarter2" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(0.0523358, 0, 0.99863, 0, 1, 0, -0.99863, 0, 0.0523358, -5.69464, 10.5, 56.1152)
+rotationAmount = 40.0
+cycleLength = 5.0
+chainLength = 6
+
+[node name="GreenMajin1" parent="RampageAct/Arena/Quarter2" instance=ExtResource("39_7mv21")]
+transform = Transform3D(0.388228, 0, 1.44889, 0, 1.5, 0, -1.44889, 0, 0.388228, -13.7674, 2, 62.8417)
+rangeOverride = 35
+
+[node name="SpikePanelGroup" type="Node3D" parent="RampageAct/Arena/Quarter2"]
+transform = Transform3D(0.961262, 0, -0.275637, 0, 1, 0, 0.275637, 0, 0.961262, -18.3586, 0.1, 61.6223)
+
+[node name="Left" type="Node3D" parent="RampageAct/Arena/Quarter2/SpikePanelGroup"]
+transform = Transform3D(-2.98023e-08, 0, 1, 0, 1, 0, -1, 0, -2.98023e-08, 5.25, 0, 5.25)
+
+[node name="SpikePanel1" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Left" instance=ExtResource("14_cdwvu")]
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel2" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Left" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel3" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Left" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel4" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Left" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.5)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel6" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Left" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 0)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel7" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Left" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -1.5)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel8" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Left" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -3)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel9" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Left" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 1.5)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel11" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Left" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel12" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Left" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -1.5)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel13" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Left" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -3)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel14" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Left" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 1.5)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="Right" type="Node3D" parent="RampageAct/Arena/Quarter2/SpikePanelGroup"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 5.25, 0, -5.25)
+
+[node name="SpikePanel1" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Right" instance=ExtResource("14_cdwvu")]
+stateLengths = PackedFloat32Array(0.4, 0, 0.8)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.8
+
+[node name="SpikePanel2" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Right" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+stateLengths = PackedFloat32Array(0.4, 0, 0.8)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.8
+
+[node name="SpikePanel3" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Right" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+stateLengths = PackedFloat32Array(0.4, 0, 0.8)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.8
+
+[node name="SpikePanel4" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Right" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.5)
+stateLengths = PackedFloat32Array(0.4, 0, 0.8)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.8
+
+[node name="SpikePanel6" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Right" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 0)
+stateLengths = PackedFloat32Array(0.4, 0, 0.8)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.8
+
+[node name="SpikePanel7" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Right" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -1.5)
+stateLengths = PackedFloat32Array(0.4, 0, 0.8)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.8
+
+[node name="SpikePanel8" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Right" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -3)
+stateLengths = PackedFloat32Array(0.4, 0, 0.8)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.8
+
+[node name="SpikePanel9" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Right" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 1.5)
+stateLengths = PackedFloat32Array(0.4, 0, 0.8)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.8
+
+[node name="SpikePanel11" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Right" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0)
+stateLengths = PackedFloat32Array(0.4, 0, 0.8)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.8
+
+[node name="SpikePanel12" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Right" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -1.5)
+stateLengths = PackedFloat32Array(0.4, 0, 0.8)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.8
+
+[node name="SpikePanel13" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Right" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -3)
+stateLengths = PackedFloat32Array(0.4, 0, 0.8)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.8
+
+[node name="SpikePanel14" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Right" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 1.5)
+stateLengths = PackedFloat32Array(0.4, 0, 0.8)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.8
+
+[node name="Back" type="Node3D" parent="RampageAct/Arena/Quarter2/SpikePanelGroup"]
+
+[node name="SpikePanel1" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Back" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, -0.75)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel2" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Back" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, -2.25)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel3" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Back" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, -3.75)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel4" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Back" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, -5.25)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel5" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Back" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0.75)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel6" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Back" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 2.25)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel7" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Back" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 3.75)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel8" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Back" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 5.25)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel9" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Back" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 6.75)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel10" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Back" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, -6.75)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel11" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Back" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, -0.75)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel12" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Back" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, -2.25)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel13" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Back" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, -3.75)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel14" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Back" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, -5.25)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel15" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Back" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0.75)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel16" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Back" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 2.25)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel17" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Back" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 3.75)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel18" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Back" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 5.25)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel19" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Back" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 6.75)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel20" parent="RampageAct/Arena/Quarter2/SpikePanelGroup/Back" instance=ExtResource("14_cdwvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, -6.75)
+stateLengths = PackedFloat32Array(0.4, 0, 0.5)
+"Start Paused" = false
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 0.5
+
+[node name="PlatformSpiralSmall1" parent="RampageAct/Arena/Quarter2" instance=ExtResource("18_4on0u")]
+transform = Transform3D(-0.963974, 0, 0.265994, 0, 1, 0, -0.265994, 0, -0.963974, -21.041, 1, 60.9736)
+
+[node name="Sickle" parent="RampageAct/Arena/Quarter2/PlatformSpiralSmall1" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 7.5, 0)
+cycleLength = 5.0
+currentRatio = 1.0
+chainLength = 4
+
+[node name="Rings3" type="Node3D" parent="RampageAct/Arena/Quarter2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0.6, 70.4)
+script = ExtResource("5_r2rp8")
+Source = ExtResource("6_8d45c")
+Amount = 3
+Shape = 2
+Path = NodePath("../../../../Static/Path/ArenaPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Arena/Quarter2/Rings3" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00427246, 0, 0.00134277)
+
+[node name="Child02" parent="RampageAct/Arena/Quarter2/Rings3" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.34424, 0, -1.89948)
+
+[node name="Child03" parent="RampageAct/Arena/Quarter2/Rings3" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.5283, 0, -4.2077)
+
+[node name="SpikeBallStatic1" parent="RampageAct/Arena/Quarter2" instance=ExtResource("13_jgpix")]
+transform = Transform3D(-1.85437, 0, -0.749214, 0, 2, 0, 0.749214, 0, -1.85437, -27.958, 0, 72.1492)
+
+[node name="SpikeBallStatic2" parent="RampageAct/Arena/Quarter2" instance=ExtResource("13_jgpix")]
+transform = Transform3D(-2.78155, 0, -1.12382, 0, 3, 0, 1.12382, 0, -2.78155, -29.358, 0, 59.341)
+
+[node name="SpikeBallStatic3" parent="RampageAct/Arena/Quarter2" instance=ExtResource("13_jgpix")]
+transform = Transform3D(-2.78155, 0, -1.12382, 0, 3, 0, 1.12382, 0, -2.78155, -22.545, 1.5, 48.176)
+
+[node name="SpikeBallStatic4" parent="RampageAct/Arena/Quarter2" instance=ExtResource("13_jgpix")]
+transform = Transform3D(-1.85437, 0, -0.749214, 0, 2, 0, 0.749214, 0, -1.85437, -27.1082, 0, 49.6959)
+
+[node name="Sickle2" parent="RampageAct/Arena/Quarter2" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(0.582762, 0, 0.812643, 0, 1, 0, -0.812643, 0, 0.582762, -35.7668, 7.5, 64.726)
+rotationAmount = 40.0
+cycleLength = 4.0
+currentRatio = 1.0
+chainLength = 4
+
+[node name="BlueMajin4" parent="RampageAct/Arena/Quarter2" instance=ExtResource("38_b2g64")]
+transform = Transform3D(0.75, 0, 1.29904, 0, 1.5, 0, -1.29904, 0, 0.75, -31.9729, 3, 54.9184)
+rangeOverride = 30
+
+[node name="RedMajinGroup" type="Node3D" parent="RampageAct/Arena/Quarter2"]
+transform = Transform3D(0.860365, 0, 1.22873, 0, 1.5, 0, -1.22873, 0, 0.860365, -42.3652, 2, 48.9184)
+
+[node name="RedMajin1" parent="RampageAct/Arena/Quarter2/RedMajinGroup" instance=ExtResource("32_bcads")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 2.5
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 15
+"Attack Settings/Attack Instantly" = true
+
+[node name="SpikeBall1" parent="RampageAct/Arena/Quarter2/RedMajinGroup" instance=ExtResource("15_d8vk2")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 4.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 4.0
+
+[node name="SpikeBall2" parent="RampageAct/Arena/Quarter2/RedMajinGroup" instance=ExtResource("15_d8vk2")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 4.0
+"Movement/Starting Offset" = 0.5
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 4.0
+
+[node name="SpikeBall3" parent="RampageAct/Arena/Quarter2/RedMajinGroup" instance=ExtResource("15_d8vk2")]
+transform = Transform3D(1.5, 0, 4.47035e-08, 0, 1.5, 0, -4.47035e-08, 0, 1.5, 0, 0.75, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = -6.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 8.0
+
+[node name="SpikeBall4" parent="RampageAct/Arena/Quarter2/RedMajinGroup" instance=ExtResource("15_d8vk2")]
+transform = Transform3D(1.5, 0, 4.47035e-08, 0, 1.5, 0, -4.47035e-08, 0, 1.5, 0, 0.75, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = -6.0
+"Movement/Starting Offset" = 0.5
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 8.0
+
+[node name="PlatformGroupR" type="Node3D" parent="RampageAct/Arena/Quarter2"]
+transform = Transform3D(-0.559193, 0, 0.829037, 0, 1, 0, -0.829037, 0, -0.559193, -41.9833, 1, 37.226)
+
+[node name="PlatformCavernLarge3" parent="RampageAct/Arena/Quarter2/PlatformGroupR" instance=ExtResource("16_6dkgs")]
+transform = Transform3D(0.6, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="PlatformSpiralLarge3" parent="RampageAct/Arena/Quarter2/PlatformGroupR" instance=ExtResource("21_unu26")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.53998, 2, -0.300049)
+
+[node name="Switch" parent="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge3" instance=ExtResource("28_0ay28")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 0.2)
+
+[node name="Sickle" parent="RampageAct/Arena/Quarter2/PlatformGroupR" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(-0.139173, 0, -0.990268, 0, 1, 0, 0.990268, 0, -0.139173, 12.0515, 11, 1.00269)
+cycleLength = 4.0
+enableSparkParticles = false
+chainLength = 4
+
+[node name="BlueMajin" parent="RampageAct/Arena/Quarter2/PlatformGroupR" instance=ExtResource("38_b2g64")]
+transform = Transform3D(-0.272415, 4.79505e-09, -0.96218, 7.00367e-09, 1, 3.00062e-09, 0.96218, -5.92138e-09, -0.272415, 18.4407, 3, 3.13367)
+rangeOverride = 30
+
+[node name="PlatformSpiralLarge5" parent="RampageAct/Arena/Quarter2/PlatformGroupR" instance=ExtResource("21_unu26")]
+transform = Transform3D(-0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, 29.3613, 2, 8.49414)
+
+[node name="ItemBox" parent="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge5" instance=ExtResource("15_mappm")]
+transform = Transform3D(1, 0, -2.23517e-08, 0, 1, 0, 2.23517e-08, 0, 1, -0.378674, 0.3, -0.306213)
+startHidden = true
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 10
+
+[node name="Spring" parent="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge5" instance=ExtResource("17_hrcwr")]
+transform = Transform3D(-0.996195, 0.0435778, 0.075479, 0, 0.866025, -0.5, -0.0871557, -0.498097, -0.86273, 0.348755, 0.1, -4.98779)
+startHidden = true
+MiddleHeight = 7.0
+FinalHeight = 4.0
+Distance = 18.0
+
+[node name="Rings" type="Node3D" parent="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge5"]
+transform = Transform3D(-0.996195, 0, 0.0871556, 0, 0.999999, 0, -0.0871557, 0, -0.996195, 0.348755, 0.1, -4.98779)
+script = ExtResource("5_r2rp8")
+Source = ExtResource("6_8d45c")
+Amount = 4
+Shape = 3
+"Launcher Type" = 0
+"Launch Distance" = 18.0
+"Launch Middle Height" = 7.0
+"Launch End Height" = 4.0
+"Launch Offset" = 0.2
+"Launch Ratio" = 0.6
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge5/Rings" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 1.86265e-09, 0, 1, 0, 3.86643, 3.59998)
+
+[node name="Child02" parent="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge5/Rings" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 1.86265e-09, 0, 1, 0, 5.76008, 6.29993)
+
+[node name="Child03" parent="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge5/Rings" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 1.86265e-09, 0, 1, 0, 6.79129, 8.99994)
+
+[node name="Child04" parent="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge5/Rings" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 1.86265e-09, 0, 1, -6.10352e-05, 6.96008, 11.7001)
+
+[node name="InvisibleGrindrail" parent="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge5" instance=ExtResource("29_ntixi")]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 0.144567, 4, -19.9894)
+railLength = 25
+
+[node name="Rings" type="Node3D" parent="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge5/InvisibleGrindrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -5)
+script = ExtResource("5_r2rp8")
+Source = ExtResource("6_8d45c")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge5/InvisibleGrindrail/Rings" instance=ExtResource("6_8d45c")]
+
+[node name="Child02" parent="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge5/InvisibleGrindrail/Rings" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child03" parent="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge5/InvisibleGrindrail/Rings" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child04" parent="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge5/InvisibleGrindrail/Rings" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="PlatformExteriorEnd4" parent="RampageAct/Arena/Quarter2/PlatformGroupR" instance=ExtResource("8_1d335")]
+transform = Transform3D(0.515038, 0, -0.857168, 0, 1, 0, 0.857168, 0, 0.515038, 40.5288, -0.256504, 10.3009)
+
+[node name="PlatformExterior" parent="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformExteriorEnd4" instance=ExtResource("9_auwfn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="PlatformGroupL" type="Node3D" parent="RampageAct/Arena/Quarter2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -63.1307, 1, 34.4143)
+
+[node name="BlueMajin5" parent="RampageAct/Arena/Quarter2/PlatformGroupL" instance=ExtResource("38_b2g64")]
+transform = Transform3D(0.766044, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.766044, 5.28943, -1, 9.91779)
+rangeOverride = 30
+
+[node name="PlatformCavernLarge4" parent="RampageAct/Arena/Quarter2/PlatformGroupL" instance=ExtResource("16_6dkgs")]
+transform = Transform3D(-0.261889, 0, 0.851855, 0, 1, 0, -0.425927, 0, -0.523778, 0, 0, 0)
+
+[node name="EnemyStone4" parent="RampageAct/Arena/Quarter2/PlatformGroupL" instance=ExtResource("20_nh5wr")]
+transform = Transform3D(-0.628534, 0, 2.12964, 0, 1.5, 0, -1.02223, 0, -1.30944, 0, 2.45, 0)
+enemyCount = 1
+
+[node name="PlatformSpiralLarge4" parent="RampageAct/Arena/Quarter2/PlatformGroupL" instance=ExtResource("21_unu26")]
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, -3.62665, 2, -7.44263)
+
+[node name="PlatformSpiralSmall3" parent="RampageAct/Arena/Quarter2/PlatformGroupL" instance=ExtResource("18_4on0u")]
+transform = Transform3D(0.992546, 0, 0.121869, 0, 1, 0, -0.121869, 0, 0.992546, -13.7916, 5, -24.9694)
+
+[node name="ItemBox2" parent="RampageAct/Arena/Quarter2/PlatformGroupL/PlatformSpiralSmall3" instance=ExtResource("15_mappm")]
+transform = Transform3D(0.99863, 0, 0.0523361, 0, 1, 0, -0.0523361, 0, 0.99863, -0.150879, 0.5, 3.86609)
+startHidden = true
+
+[node name="Spring2" parent="RampageAct/Arena/Quarter2/PlatformGroupL/PlatformSpiralSmall3" instance=ExtResource("17_hrcwr")]
+transform = Transform3D(-0.515038, 0.656628, 0.550976, 0, 0.642788, -0.766044, -0.857167, -0.394542, -0.33106, 1.35229, 0.2, -3.9574)
+MiddleHeight = 5.0
+FinalHeight = 1.0
+Distance = 31.0
+sfxPlayer = NodePath("")
+
+[node name="SpikeBallStatic5" parent="RampageAct/Arena/Quarter2" instance=ExtResource("13_jgpix")]
+transform = Transform3D(-1.85437, 0, -0.749214, 0, 2, 0, 0.749214, 0, -1.85437, -74.2461, 1.2, 20.3146)
+
+[node name="Sickle3" parent="RampageAct/Arena/Quarter2" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(0.994522, 0, 0.104529, 0, 1, 0, -0.104529, 0, 0.994522, -60.9249, 9, 14.9402)
+rotationAmount = 40.0
+cycleLength = 4.0
+enableSparkParticles = false
+chainLength = 5
+
+[node name="Sickle4" parent="RampageAct/Arena/Quarter2" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(0.994522, 0, 0.104529, 0, 1, 0, -0.104529, 0, 0.994522, -61.4475, 9, 9.96759)
+rotationAmount = 40.0
+cycleLength = 4.0
+enableSparkParticles = false
+chainLength = 5
+
+[node name="Sickle5" parent="RampageAct/Arena/Quarter2" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(0.994522, 0, 0.104529, 0, 1, 0, -0.104529, 0, 0.994522, -61.9702, 9, 4.995)
+rotationAmount = 40.0
+cycleLength = 4.0
+enableSparkParticles = false
+chainLength = 5
+
+[node name="Quarter3" type="Node3D" parent="RampageAct/Arena"]
+
+[node name="BlueMajin1" parent="RampageAct/Arena/Quarter3" instance=ExtResource("38_b2g64")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -67.5, 1, -1.40002)
+rangeOverride = 30
+
+[node name="Sickle1" parent="RampageAct/Arena/Quarter3" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(1, 0, 5.96046e-08, 0, 1, 0, -5.96046e-08, 0, 1, -72.9783, 7.5, -9.06519)
+rotationAmount = 50.0
+cycleLength = 4.0
+currentRatio = 0.0
+chainLength = 4
+
+[node name="SpikeBallStatic1" parent="RampageAct/Arena/Quarter3" instance=ExtResource("13_jgpix")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -66.7131, 1.2, -11.8742)
+
+[node name="SpikeBallStatic2" parent="RampageAct/Arena/Quarter3" instance=ExtResource("13_jgpix")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -63.1132, 1.2, -14.0742)
+
+[node name="RedMajin1" parent="RampageAct/Arena/Quarter3" instance=ExtResource("32_bcads")]
+transform = Transform3D(1.5, 0, -4.76837e-07, 0, 1.5, 0, 4.76837e-07, 0, 1.5, -71.2759, 2, -14.957)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 5.0
+"Attack Settings/Flame Active Time" = 3.0
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 10
+"Attack Settings/Attack Instantly" = true
+rangeOverride = 25
+
+[node name="Sickle2" parent="RampageAct/Arena/Quarter3" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(0.981627, 0, -0.190809, 0, 1, 0, 0.190809, 0, 0.981627, -67.634, 7.5, -19.7604)
+rotationAmount = 50.0
+cycleLength = 4.0
+chainLength = 4
+
+[node name="PlatformCavernLarge1" parent="RampageAct/Arena/Quarter3" instance=ExtResource("16_6dkgs")]
+transform = Transform3D(-0.87462, 0, 0.484809, 0, 1, 0, -0.484809, 0, -0.87462, -63.8591, 1, -37.8775)
+
+[node name="EnemyStone" parent="RampageAct/Arena/Quarter3/PlatformCavernLarge1" instance=ExtResource("20_nh5wr")]
+transform = Transform3D(1.5, 0, 1.78814e-06, 0, 1.5, 0, -1.78814e-06, 0, 1.5, 0, 2.5, 0)
+enemyCount = 2
+
+[node name="FireSoul1" parent="RampageAct/Arena/Quarter3/PlatformCavernLarge1" instance=ExtResource("19_lrv3s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+
+[node name="SpikeBallStatic3" parent="RampageAct/Arena/Quarter3" instance=ExtResource("13_jgpix")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -45, 1.5, -25.774)
+
+[node name="PlatformExteriorEnd1" parent="RampageAct/Arena/Quarter3" instance=ExtResource("8_1d335")]
+transform = Transform3D(0.0871557, 0, 0.996195, 0, 1, 0, -0.996195, 0, 0.0871557, -53.0834, 0, -44.091)
+
+[node name="PlatformExterior1" parent="RampageAct/Arena/Quarter3/PlatformExteriorEnd1" instance=ExtResource("9_auwfn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="PlatformExterior2" parent="RampageAct/Arena/Quarter3/PlatformExteriorEnd1" instance=ExtResource("9_auwfn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+
+[node name="PlatformExterior3" parent="RampageAct/Arena/Quarter3/PlatformExteriorEnd1" instance=ExtResource("9_auwfn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12)
+
+[node name="BonePillar1" parent="RampageAct/Arena/Quarter3" instance=ExtResource("35_isigk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47, -15, -35)
+
+[node name="SpikeBall1" parent="RampageAct/Arena/Quarter3/BonePillar1" instance=ExtResource("15_d8vk2")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 17.5, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 5.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 4.0
+
+[node name="SpikeBall2" parent="RampageAct/Arena/Quarter3/BonePillar1" instance=ExtResource("15_d8vk2")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 17.5, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 5.0
+"Movement/Starting Offset" = 0.5
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 4.0
+
+[node name="RichRing" parent="RampageAct/Arena/Quarter3" instance=ExtResource("24_1xqdv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -43, 1, -34)
+
+[node name="SpikeBallStatic4" parent="RampageAct/Arena/Quarter3" instance=ExtResource("13_jgpix")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -57.5, 1.5, -50.774)
+
+[node name="Switch" parent="RampageAct/Arena/Quarter3" instance=ExtResource("28_0ay28")]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -52, 0.1, -51)
+
+[node name="SwitchCull" type="Node3D" parent="RampageAct/Arena/Quarter3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.6, 0.7, -65.5)
+script = ExtResource("25_x5102")
+
+[node name="Rings" type="Node3D" parent="RampageAct/Arena/Quarter3/SwitchCull"]
+script = ExtResource("5_r2rp8")
+Source = ExtResource("6_8d45c")
+Amount = 6
+Shape = 2
+Path = NodePath("../../../../../Static/Path/ArenaPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Arena/Quarter3/SwitchCull/Rings" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.010376, 0, -0.00646973)
+
+[node name="Child02" parent="RampageAct/Arena/Quarter3/SwitchCull/Rings" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.11395, 0, -2.38257)
+
+[node name="Child03" parent="RampageAct/Arena/Quarter3/SwitchCull/Rings" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.35803, 0, -4.50208)
+
+[node name="Child04" parent="RampageAct/Arena/Quarter3/SwitchCull/Rings" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.7267, 0, -6.35608)
+
+[node name="Child05" parent="RampageAct/Arena/Quarter3/SwitchCull/Rings" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.203, 0, -7.93628)
+
+[node name="Child06" parent="RampageAct/Arena/Quarter3/SwitchCull/Rings" instance=ExtResource("6_8d45c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.7689, 0, -9.23608)
+
+[node name="Sickle3" parent="RampageAct/Arena/Quarter3" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(0.559193, 0, -0.829037, 0, 1, 0, 0.829037, 0, 0.559193, -31.6694, 10, -45.8624)
+rotationAmount = 40.0
+cycleLength = 3.0
+currentRatio = 1.0
+chainLength = 6
+
+[node name="BonePillar2" parent="RampageAct/Arena/Quarter3" instance=ExtResource("35_isigk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.3, -15, -57)
+
+[node name="Spring" parent="RampageAct/Arena/Quarter3/BonePillar2" instance=ExtResource("17_hrcwr")]
+transform = Transform3D(0.0871558, 0.704416, 0.704416, 0, 0.707107, -0.707107, -0.996195, 0.0616284, 0.0616284, 0, 20.4, 0)
+MiddleHeight = 5.0
+FinalHeight = 3.0
+Distance = 18.0
+
+[node name="SpikeBall1" parent="RampageAct/Arena/Quarter3/BonePillar2" instance=ExtResource("15_d8vk2")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 17.5, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 3.5
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 6.0
+
+[node name="BonePillar3" parent="RampageAct/Arena/Quarter3" instance=ExtResource("35_isigk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.3, -12, -70)
+
+[node name="SpikeBall1" parent="RampageAct/Arena/Quarter3/BonePillar3" instance=ExtResource("15_d8vk2")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 14.5, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 5.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 4.0
+
+[node name="Sickle4" parent="RampageAct/Arena/Quarter3" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(0.406737, 0, -0.913545, 0, 1, 0, 0.913545, 0, 0.406737, -24.1527, 7.5, -69.0075)
+rotationAmount = 40.0
+cycleLength = 4.0
+currentRatio = 0.0
+chainLength = 4
+
+[node name="PlatformSpiralSmall1" parent="RampageAct/Arena/Quarter3" instance=ExtResource("18_4on0u")]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -14.235, 1, -53.126)
+
+[node name="SpikeBall1" parent="RampageAct/Arena/Quarter3/PlatformSpiralSmall1" instance=ExtResource("15_d8vk2")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 1.5, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 4.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 6.0
+
+[node name="SpikeBall2" parent="RampageAct/Arena/Quarter3/PlatformSpiralSmall1" instance=ExtResource("15_d8vk2")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 1.5, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 4.0
+"Movement/Starting Offset" = 0.5
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 6.0
+
+[node name="Sickle5" parent="RampageAct/Arena/Quarter3" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2.15272, 7.5, -56.0076)
+rotationAmount = 40.0
+cycleLength = 5.5
+chainLength = 4
+
+[node name="PlatformExteriorEnd2" parent="RampageAct/Arena/Quarter3" instance=ExtResource("8_1d335")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1, -61)
+
+[node name="PlatformExterior1" parent="RampageAct/Arena/Quarter3/PlatformExteriorEnd2" instance=ExtResource("9_auwfn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="PlatformExterior2" parent="RampageAct/Arena/Quarter3/PlatformExteriorEnd2" instance=ExtResource("9_auwfn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+
+[node name="Quarter4" type="Node3D" parent="RampageAct/Arena"]
+
+[node name="BonePillar1" parent="RampageAct/Arena/Quarter4" instance=ExtResource("35_isigk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.7, -12, -64)
+
+[node name="FireSoul2" parent="RampageAct/Arena/Quarter4/BonePillar1" instance=ExtResource("19_lrv3s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 12.8, -1)
+fireSoulIndex = 2
+
+[node name="SpikeBall1" parent="RampageAct/Arena/Quarter4/BonePillar1" instance=ExtResource("15_d8vk2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.5, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 2.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 4.0
+
+[node name="SpikeBallStatic" parent="RampageAct/Arena/Quarter4" instance=ExtResource("13_jgpix")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 20.5, 1.2, -74.5)
+
+[node name="Sickle1" parent="RampageAct/Arena/Quarter4" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, 0.422618, 9.2, 15, -67.9)
+rotationAmount = 70.0
+cycleLength = 6.0
+chainLength = 4
+
+[node name="SickleBase" parent="RampageAct/Arena/Quarter4/Sickle1" index="0"]
+visible = false
+
+[node name="CollisionShape3D" parent="RampageAct/Arena/Quarter4/Sickle1/SickleBase/SickleBaseMesh/StaticBody3D" index="0"]
+disabled = true
+
+[node name="SickleHead" parent="RampageAct/Arena/Quarter4/Sickle1/Root" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6.1, 0)
+
+[node name="InvisibleGrindrail" parent="RampageAct/Arena/Quarter4" instance=ExtResource("29_ntixi")]
+transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -14.2679, 8, -54.5)
+railLength = 30
+
+[node name="Pearls" type="Node3D" parent="RampageAct/Arena/Quarter4/InvisibleGrindrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -4)
+script = ExtResource("5_r2rp8")
+Source = ExtResource("26_s5c4u")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Arena/Quarter4/InvisibleGrindrail/Pearls" instance=ExtResource("26_s5c4u")]
+
+[node name="Child02" parent="RampageAct/Arena/Quarter4/InvisibleGrindrail/Pearls" instance=ExtResource("26_s5c4u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="RampageAct/Arena/Quarter4/InvisibleGrindrail/Pearls" instance=ExtResource("26_s5c4u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="RampageAct/Arena/Quarter4/InvisibleGrindrail/Pearls" instance=ExtResource("26_s5c4u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="RampageAct/Arena/Quarter4/InvisibleGrindrail/Pearls" instance=ExtResource("26_s5c4u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="RampageAct/Arena/Quarter4/InvisibleGrindrail/Pearls" instance=ExtResource("26_s5c4u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="RampageAct/Arena/Quarter4/InvisibleGrindrail/Pearls" instance=ExtResource("26_s5c4u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="RampageAct/Arena/Quarter4/InvisibleGrindrail/Pearls" instance=ExtResource("26_s5c4u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="Child09" parent="RampageAct/Arena/Quarter4/InvisibleGrindrail/Pearls" instance=ExtResource("26_s5c4u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child10" parent="RampageAct/Arena/Quarter4/InvisibleGrindrail/Pearls" instance=ExtResource("26_s5c4u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="Sickle2" parent="RampageAct/Arena/Quarter4" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, 13.708, 8, -54.0661)
+rotationAmount = 50.0
+cycleLength = 6.0
+chainLength = 4
+
+[node name="BonePillar2" parent="RampageAct/Arena/Quarter4" instance=ExtResource("35_isigk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, -12, -58)
+
+[node name="SpikeBall1" parent="RampageAct/Arena/Quarter4/BonePillar2" instance=ExtResource("15_d8vk2")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 13.5, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 2.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 4.0
+
+[node name="PlatformExteriorEnd1" parent="RampageAct/Arena/Quarter4" instance=ExtResource("8_1d335")]
+transform = Transform3D(0.984218, 0, -0.176965, 0, 1, 0, 0.176965, 0, 0.984218, 32.6084, 1, -68.5098)
+
+[node name="PlatformExterior1" parent="RampageAct/Arena/Quarter4/PlatformExteriorEnd1" instance=ExtResource("9_auwfn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="PlatformExterior2" parent="RampageAct/Arena/Quarter4/PlatformExteriorEnd1" instance=ExtResource("9_auwfn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+
+[node name="PlatformExterior3" parent="RampageAct/Arena/Quarter4/PlatformExteriorEnd1" instance=ExtResource("9_auwfn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12)
+
+[node name="Sickle3" parent="RampageAct/Arena/Quarter4" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, 32.3359, 11, -64.3129)
+rotationAmount = 50.0
+cycleLength = 5.0
+chainLength = 5
+
+[node name="Sickle4" parent="RampageAct/Arena/Quarter4" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(-0.573576, 0, -0.819152, 0, 1, 0, 0.819152, 0, -0.573576, 29.8647, 7.5, -45.8723)
+rotationAmount = 50.0
+cycleLength = 5.0
+chainLength = 4
+
+[node name="SpikeBall1" parent="RampageAct/Arena/Quarter4" instance=ExtResource("15_d8vk2")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 39.6, 2.6, -58.9)
+Movement/Mode = 2
+"Movement/Cycle Length" = 2.5
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 5.0
+
+[node name="BlueMajin2" parent="RampageAct/Arena/Quarter4" instance=ExtResource("38_b2g64")]
+transform = Transform3D(-0.388229, 0, -1.44889, 0, 1.5, 0, 1.44889, 0, -0.388229, 39.518, 2, -58.978)
+rangeOverride = 35
+
+[node name="Sickle5" parent="RampageAct/Arena/Quarter4" instance=ExtResource("7_vhdq4")]
+transform = Transform3D(0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, 0.173648, 36.092, 14, -51.278)
+rotationAmount = 50.0
+cycleLength = 5.0
+enableSparkParticles = false
+chainLength = 4
+
+[node name="FinalPlatformGroup" type="Node3D" parent="RampageAct/Arena/Quarter4"]
+transform = Transform3D(0.766044, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.766044, 52, 0.1, -39)
+
+[node name="BlueMajin1" parent="RampageAct/Arena/Quarter4/FinalPlatformGroup" instance=ExtResource("38_b2g64")]
+transform = Transform3D(-0.964181, 0, -1.14907, 0, 1.5, 0, 1.14907, 0, -0.964181, -5.62598, 4.9, -39.9669)
+rangeOverride = 35
+
+[node name="EnemyStone" parent="RampageAct/Arena/Quarter4/FinalPlatformGroup" instance=ExtResource("20_nh5wr")]
+transform = Transform3D(2, 0, 5.96046e-08, 0, 1.5, 0, -5.96046e-08, 0, 2, 0, 1.45, 0)
+enemyCount = 1
+
+[node name="Switch" parent="RampageAct/Arena/Quarter4/FinalPlatformGroup" instance=ExtResource("28_0ay28")]
+
+[node name="SpikeBall" parent="RampageAct/Arena/Quarter4/FinalPlatformGroup" instance=ExtResource("15_d8vk2")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2.2, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 2.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 5.0
+
+[node name="SpikeBallStatic1" parent="RampageAct/Arena/Quarter4/FinalPlatformGroup" instance=ExtResource("13_jgpix")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 10, 1.5, 11)
+
+[node name="SpikeBallStatic2" parent="RampageAct/Arena/Quarter4/FinalPlatformGroup" instance=ExtResource("13_jgpix")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.6, 1, 13.6)
+
+[node name="SpikeBallStatic3" parent="RampageAct/Arena/Quarter4/FinalPlatformGroup" instance=ExtResource("13_jgpix")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -13, 1, 4.3)
+
+[node name="SpikeBallStatic4" parent="RampageAct/Arena/Quarter4/FinalPlatformGroup" instance=ExtResource("13_jgpix")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -10, 1, 8.5)
+
+[node name="BlueMajin2" parent="RampageAct/Arena/Quarter4/FinalPlatformGroup" instance=ExtResource("38_b2g64")]
+transform = Transform3D(-0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, -0.984808, -0.162857, 0.9, 4.94486)
+rangeOverride = 35
+
+[node name="PlatformCavernLarge1" parent="RampageAct/Arena/Quarter4/FinalPlatformGroup" instance=ExtResource("16_6dkgs")]
+transform = Transform3D(0.787846, 0, -0.0868241, 0, 0.5, 0, 0.138918, 0, 0.492404, -0.554442, 0.5, 6.91391)
+
+[node name="Spring" parent="RampageAct/Arena/Quarter4/FinalPlatformGroup" instance=ExtResource("17_hrcwr")]
+transform = Transform3D(0.965926, -0.0885211, -0.24321, 7.39398e-09, 0.939693, -0.34202, 0.258818, 0.330366, 0.907674, -0.554565, 1.3, 6.91376)
+startHidden = true
+MiddleHeight = 10.0
+FinalHeight = 8.0
+Distance = 14.0
+
+[node name="FireSoul3" parent="RampageAct/Arena/Quarter4/FinalPlatformGroup" instance=ExtResource("19_lrv3s")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -4, 10, 20)
+fireSoulIndex = 3
+
+[node name="PlatformCavernLarge2" parent="RampageAct/Arena/Quarter4/FinalPlatformGroup" instance=ExtResource("16_6dkgs")]
+transform = Transform3D(1.44568, 0, -0.266683, 0, 1.5, 0, 0.400025, 0, 0.963784, 1.8186, 1.5, 14.6352)
+
+[node name="PlatformCavernLarge3" parent="RampageAct/Arena/Quarter4/FinalPlatformGroup" instance=ExtResource("16_6dkgs")]
+transform = Transform3D(1.44568, 0, -0.266683, 0, 1.5, 0, 0.400025, 0, 0.963784, -5.40967, 1.5, 12.6351)
+
+[node name="PlatformSpiralLarge" parent="RampageAct/Arena/Quarter4/FinalPlatformGroup" instance=ExtResource("21_unu26")]
+transform = Transform3D(-0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, -0.258819, -1.614, 4, 13.906)
+
+[node name="EnemyStone1" parent="RampageAct/Arena/Quarter4/FinalPlatformGroup/PlatformSpiralLarge" instance=ExtResource("20_nh5wr")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2.5, -1, 1.9, 0)
+enemyCount = 1
+
+[node name="EnemyStone3" parent="RampageAct/Arena/Quarter4/FinalPlatformGroup/PlatformSpiralLarge" instance=ExtResource("20_nh5wr")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2.5, -1, 1.9, -5)
+enemyCount = 1
+
+[node name="EnemyStone2" parent="RampageAct/Arena/Quarter4/FinalPlatformGroup/PlatformSpiralLarge" instance=ExtResource("20_nh5wr")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2.5, -1, 1.9, 5)
+enemyCount = 1
+
+[node name="Goal" parent="RampageAct/Arena/Quarter4" instance=ExtResource("31_d8vk2")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 64, 9, -10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Arena/Quarter4/Goal"]
+transform = Transform3D(1, 0, -7.10543e-15, 0, 1, 0, 7.10543e-15, 0, 1, 0, 0, 0)
+shape = SubResource("BoxShape3D_bcads")
+
+[connection signal="Defeated" from="RampageAct/Arena/Quarter2/RedMajinGroup/RedMajin1" to="RampageAct/Arena/Quarter2/PlatformGroupL/EnemyStone4" method="IncrementCounter"]
+[connection signal="Defeated" from="RampageAct/Arena/Quarter2/RedMajinGroup/RedMajin1" to="RampageAct/Arena/Quarter2/PlatformGroupL/PlatformSpiralSmall3/ItemBox2" method="ShowItemBox"]
+[connection signal="Activated" from="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge3/Switch" to="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge5/ItemBox" method="ShowItemBox"]
+[connection signal="Activated" from="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge3/Switch" to="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge5/Spring" method="ShowLauncher"]
+[connection signal="Respawned" from="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge3/Switch" to="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge5/ItemBox" method="HideItemBox"]
+[connection signal="Respawned" from="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge3/Switch" to="RampageAct/Arena/Quarter2/PlatformGroupR/PlatformSpiralLarge5/Spring" method="HideLauncher"]
+[connection signal="Defeated" from="RampageAct/Arena/Quarter3/BlueMajin1" to="RampageAct/Arena/Quarter3/PlatformCavernLarge1/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="RampageAct/Arena/Quarter3/RedMajin1" to="RampageAct/Arena/Quarter3/PlatformCavernLarge1/EnemyStone" method="IncrementCounter"]
+[connection signal="Activated" from="RampageAct/Arena/Quarter3/Switch" to="RampageAct/Arena/Quarter3/SwitchCull" method="Activate"]
+[connection signal="Defeated" from="RampageAct/Arena/Quarter4/FinalPlatformGroup/BlueMajin1" to="RampageAct/Arena/Quarter4/FinalPlatformGroup/EnemyStone" method="IncrementCounter"]
+[connection signal="Activated" from="RampageAct/Arena/Quarter4/FinalPlatformGroup/Switch" to="RampageAct/Arena/Quarter4/FinalPlatformGroup/Spring" method="ShowLauncher"]
+[connection signal="Respawned" from="RampageAct/Arena/Quarter4/FinalPlatformGroup/Switch" to="RampageAct/Arena/Quarter4/FinalPlatformGroup/Spring" method="HideLauncher"]
+[connection signal="Defeated" from="RampageAct/Arena/Quarter4/FinalPlatformGroup/BlueMajin2" to="RampageAct/Arena/Quarter4/FinalPlatformGroup/PlatformSpiralLarge/EnemyStone1" method="IncrementCounter"]
+[connection signal="Defeated" from="RampageAct/Arena/Quarter4/FinalPlatformGroup/BlueMajin2" to="RampageAct/Arena/Quarter4/FinalPlatformGroup/PlatformSpiralLarge/EnemyStone3" method="IncrementCounter"]
+[connection signal="Defeated" from="RampageAct/Arena/Quarter4/FinalPlatformGroup/BlueMajin2" to="RampageAct/Arena/Quarter4/FinalPlatformGroup/PlatformSpiralLarge/EnemyStone2" method="IncrementCounter"]
+
+[editable path="Static"]
+[editable path="Static/Collision"]
+[editable path="RampageAct/Arena/Quarter4/Sickle1"]
+[editable path="RampageAct/Arena/Quarter4/Sickle1/SickleBase"]
+[editable path="RampageAct/Arena/Quarter4/Sickle1/Root/SickleHead"]

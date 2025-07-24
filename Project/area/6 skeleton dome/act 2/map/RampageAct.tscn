@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://6rhkc33287q1"]
+[gd_scene load_steps=49 format=3 uid="uid://6rhkc33287q1"]
 
 [ext_resource type="PackedScene" uid="uid://c5ajp56pbyegl" path="res://area/6 skeleton dome/act 2/Static.tscn" id="1_klfa3"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_3uee3"]
@@ -39,7 +39,6 @@
 [ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="34_fkegp"]
 [ext_resource type="Resource" uid="uid://c26uxgkra8q1u" path="res://area/6 skeleton dome/act 2/camera/LaunchRing1Cam.tres" id="35_b5rld"]
 [ext_resource type="PackedScene" uid="uid://di8tdo65qjkbe" path="res://object/enemy/majin/data/skeleton dome/BlueMajin.tscn" id="36_6tr2b"]
-[ext_resource type="PackedScene" uid="uid://wnnthoykndrj" path="res://effect/particle/Lantern.tscn" id="36_l6r2f"]
 [ext_resource type="Resource" uid="uid://c886rphxqnhnb" path="res://resource/preset/camera/common/StaticTransitionCam.tres" id="36_nttmr"]
 [ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="36_o6eh7"]
 [ext_resource type="PackedScene" uid="uid://ctkxmjdylid4k" path="res://object/enemy/majin/data/skeleton dome/GreenMajin.tscn" id="37_m2t8m"]
@@ -1596,17 +1595,11 @@ transform = Transform3D(1, -2.98023e-08, -1.63913e-07, 1.16878e-07, 0.866025, 0.
 
 [node name="BonePillar1" parent="RampageAct/Arena/Objects" instance=ExtResource("14_jikjh")]
 transform = Transform3D(0.173648, 0, 0.984808, 0, 1, 0, -0.984808, 0, 0.173648, 10.2452, -10, -58.1036)
-
-[node name="Lantern1" parent="RampageAct/Arena/Objects/BonePillar1" instance=ExtResource("36_l6r2f")]
-transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 20, 0)
-emitting = false
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="BonePillar2" parent="RampageAct/Arena/Objects" instance=ExtResource("14_jikjh")]
 transform = Transform3D(0.173648, 0, 0.984808, 0, 1, 0, -0.984808, 0, 0.173648, 12.329, -10, -69.9214)
-
-[node name="Lantern2" parent="RampageAct/Arena/Objects/BonePillar2" instance=ExtResource("36_l6r2f")]
-transform = Transform3D(1, 0, -1.49012e-08, 0, 2, 0, 1.49012e-08, 0, 1, 0, 20, 0)
-emitting = false
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="PlatformSpiralSmall7" parent="RampageAct/Arena/Objects" instance=ExtResource("14_cv5kw")]
 transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 30.8511, 1, -66.1605)
@@ -1681,17 +1674,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20)
 
 [node name="BonePillar3" parent="RampageAct/Arena/Objects" instance=ExtResource("14_jikjh")]
 transform = Transform3D(0.438371, 0, -0.898794, 0, 1, 0, 0.898794, 0, 0.438371, 52.5684, -12, -24.5267)
-
-[node name="Lantern3" parent="RampageAct/Arena/Objects/BonePillar3" instance=ExtResource("36_l6r2f")]
-transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 20, 0)
-emitting = false
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="BonePillar4" parent="RampageAct/Arena/Objects" instance=ExtResource("14_jikjh")]
 transform = Transform3D(0.438371, 0, -0.898794, 0, 1, 0, 0.898794, 0, 0.438371, 65.1515, -12, -30.6639)
-
-[node name="Lantern4" parent="RampageAct/Arena/Objects/BonePillar4" instance=ExtResource("36_l6r2f")]
-transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 20, 0)
-emitting = false
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="PlatformSpiralLarge8" parent="RampageAct/Arena/Objects" instance=ExtResource("15_cv5kw")]
 transform = Transform3D(0.438371, 0, -0.898794, 0, 1, 0, 0.898794, 0, 0.438371, 58.86, 6.5, -27.5953)
@@ -1962,11 +1949,11 @@ rangeOverride = 40
 [connection signal="Deactivated" from="RampageAct/Arena/Objects/LaunchRing1" to="RampageAct/Arena/Objects/LaunchRing1/LaunchCamera" method="Deactivate"]
 [connection signal="Entered" from="RampageAct/Arena/Objects/LaunchRing1" to="RampageAct/Arena/Objects/LaunchRing1/Camera" method="Activate"]
 [connection signal="Exited" from="RampageAct/Arena/Objects/LaunchRing1" to="RampageAct/Arena/Objects/LaunchRing1/Camera" method="Deactivate"]
-[connection signal="Activated" from="RampageAct/Arena/Objects/Switch4" to="RampageAct/Arena/Objects/BonePillar1/Lantern1" method="set_emitting" binds= [true]]
-[connection signal="Activated" from="RampageAct/Arena/Objects/Switch4" to="RampageAct/Arena/Objects/BonePillar2/Lantern2" method="set_emitting" binds= [true]]
-[connection signal="Respawned" from="RampageAct/Arena/Objects/Switch4" to="RampageAct/Arena/Objects/BonePillar1/Lantern1" method="set_emitting" binds= [false]]
-[connection signal="Respawned" from="RampageAct/Arena/Objects/Switch4" to="RampageAct/Arena/Objects/BonePillar2/Lantern2" method="set_emitting" binds= [false]]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch4" to="RampageAct/Arena/Objects/BonePillar1" method="Activate"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch4" to="RampageAct/Arena/Objects/BonePillar2" method="Activate"]
 [connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Objects/ItemBoxSwitch5" method="ShowItemBox"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Objects/BonePillar3" method="Activate"]
+[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Objects/BonePillar4" method="Activate"]
 [connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin1" method="Spawn"]
 [connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin2" method="Spawn"]
 [connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin3" method="Spawn"]
@@ -1997,11 +1984,7 @@ rangeOverride = 40
 [connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin27" method="Spawn"]
 [connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin28" method="Spawn"]
 [connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Enemies/SkeletonMajin29" method="Spawn"]
-[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Objects/BonePillar3/Lantern3" method="set_emitting" binds= [true]]
-[connection signal="Activated" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Objects/BonePillar4/Lantern4" method="set_emitting" binds= [true]]
 [connection signal="Respawned" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Objects/ItemBoxSwitch5" method="HideItemBox"]
-[connection signal="Respawned" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Objects/BonePillar3/Lantern3" method="set_emitting" binds= [false]]
-[connection signal="Respawned" from="RampageAct/Arena/Objects/Switch5" to="RampageAct/Arena/Objects/BonePillar4/Lantern4" method="set_emitting" binds= [false]]
 [connection signal="Defeated" from="RampageAct/Arena/Enemies/SkeletonMajin4" to="RampageAct/Arena/Objects/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="RampageAct/Arena/Enemies/SkeletonMajin4" to="RampageAct/Arena/Objects/EnemyStone5" method="IncrementCounter"]
 [connection signal="Defeated" from="RampageAct/Arena/Enemies/SkeletonMajin5" to="RampageAct/Arena/Objects/EnemyStone4" method="IncrementCounter"]
