@@ -5,17 +5,10 @@ namespace Project.Gameplay;
 
 public partial class SoulGauge : Control
 {
-	[Export]
-	private Control soulGaugeRect;
-	[Export]
-	private Control soulGaugeRoot;
-	[Export]
-	private Control soulGaugeFill;
-	[Export]
-	private Control soulGaugeBackground;
-	[Export]
-	private AnimationPlayer soulGaugeAnimator;
-
+	[Export] private NinePatchRect soulGaugeRect;
+	[Export] private Control soulGaugeFill;
+	[Export] private Control soulGaugeBackground;
+	[Export] private AnimationPlayer soulGaugeAnimator;
 
 	public override void _PhysicsProcess(double _) => UpdateSoulGauge(); // Animate the soul gauge
 	/// <summary>
@@ -26,8 +19,18 @@ public partial class SoulGauge : Control
 		soulGaugeBackground = soulGaugeFill.GetParent<Control>();
 
 		// Resize the soul gauge
-		soulGaugeRect.OffsetTop = Mathf.Lerp(soulGaugeRect.OffsetTop, 0, SaveManager.ActiveGameData.CalculateSoulGaugeLevelRatio());
-		ModifySoulGauge(0f, false);
+		float soulGaugeRatio = SaveManager.ActiveGameData.CalculateSoulGaugeLevelRatio();
+		float maxMovementAmount = soulGaugeRect.Position.Y;
+		float maxSize = soulGaugeRect.RegionRect.Size.Y + (maxMovementAmount / soulGaugeRect.Scale.Y);
+		soulGaugeRect.Size = new Vector2(
+			soulGaugeRect.Size.X,
+			Mathf.Lerp(soulGaugeRect.RegionRect.Size.Y, maxSize, soulGaugeRatio)
+		);
+
+		soulGaugeRect.Position = new Vector2(
+			soulGaugeRect.Position.X,
+			Mathf.Lerp(maxMovementAmount, 0, soulGaugeRatio)
+		);
 	}
 
 	public void ModifySoulGauge(float ratio, bool isCharged)
