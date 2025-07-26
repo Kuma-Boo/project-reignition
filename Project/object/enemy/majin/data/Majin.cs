@@ -587,14 +587,15 @@ public partial class Majin : Enemy
 			{
 				flameTimer = flameInactiveTime;
 				ProcessRotation(Player.GlobalPosition);
-
 			}
 			return;
 		}
 
-		if (trackPlayer && (attackType == AttackTypes.Disabled || attackType == AttackTypes.Fire)) // Rotate to face player
+		if (trackPlayer)
 		{
-			ProcessRotation(Player.GlobalPosition);
+			if (attackType == AttackTypes.Disabled || attackType == AttackTypes.Fire) // Rotate to face player
+				ProcessRotation(Player.GlobalPosition);
+
 			return;
 		}
 
