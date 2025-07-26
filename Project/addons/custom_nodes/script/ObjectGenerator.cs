@@ -347,12 +347,23 @@ public partial class ObjectGenerator : Node3D
 		Vector3 endPosition = startPosition + (GetLaunchDirection() * launchDistance) + (Vector3.Up * launchEndHeight);
 
 		LaunchSettings settings = LaunchSettings.Create(startPosition, endPosition, launchMiddleHeight);
+		if (amount == 1)
+		{
+			SpawnNode(settings.InterpolatePositionRatio(spacing), true);
+			return;
+		}
+
+		if (amount == 2)
+		{
+			SpawnNode(settings.InterpolatePositionRatio(spacing), true);
+			SpawnNode(settings.InterpolatePositionRatio(ringRatio), true);
+			return;
+		}
 
 		for (int i = 0; i < amount; i++)
 		{
-			float t = i / (float)amount;
-			t *= ringRatio;
-			t += spacing;
+			float t = i / (amount - 1f);
+			t = Mathf.Lerp(spacing, ringRatio, t);
 			SpawnNode(settings.InterpolatePositionRatio(t), true);
 		}
 	}
