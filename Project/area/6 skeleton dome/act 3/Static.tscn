@@ -1,9 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://slvtrs84m8s0"]
+[gd_scene load_steps=29 format=3 uid="uid://slvtrs84m8s0"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_drnsg"]
 [ext_resource type="PackedScene" uid="uid://bsd07snxevqk5" path="res://area/6 skeleton dome/act 3/environment/01Throne.tscn" id="1_gpt5a"]
 [ext_resource type="PackedScene" uid="uid://bu0lner26nq0c" path="res://area/6 skeleton dome/act 3/environment/collision/Collision.tscn" id="2_aafq0"]
 [ext_resource type="PackedScene" uid="uid://dw20dfbj0lhjl" path="res://area/6 skeleton dome/act 3/environment/02HallA.tscn" id="2_oax81"]
+[ext_resource type="Resource" uid="uid://dg4m3a87hm3yo" path="res://area/6 skeleton dome/act 3/camera/HallCam.tres" id="2_vay8w"]
 [ext_resource type="PackedScene" uid="uid://bhtsnehtlucli" path="res://area/6 skeleton dome/act 3/environment/03HallB.tscn" id="3_7ka4t"]
 [ext_resource type="PackedScene" uid="uid://geveeoh07g8f" path="res://area/6 skeleton dome/act 3/environment/04HallC.tscn" id="4_24cxb"]
 [ext_resource type="PackedScene" uid="uid://bosu54mwdw1rw" path="res://area/6 skeleton dome/act 3/environment/05HallTreasure.tscn" id="5_sry27"]
@@ -17,6 +18,21 @@
 [ext_resource type="Curve3D" path="res://area/6 skeleton dome/act 3/environment/path/HallBPath.tres" id="12_asv45"]
 [ext_resource type="Curve3D" path="res://area/6 skeleton dome/act 3/environment/path/HallCPath.tres" id="13_drnsg"]
 [ext_resource type="Curve3D" path="res://area/6 skeleton dome/act 3/environment/path/HallTreasurePath.tres" id="14_aafq0"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="18_ip6k8"]
+[ext_resource type="Script" uid="uid://bssd28yqn1cxg" path="res://object/trigger/modules/PathTrigger.cs" id="18_jmh45"]
+[ext_resource type="Script" uid="uid://bvmyay4bo83qu" path="res://object/trigger/modules/DeathTrigger.cs" id="19_p5olh"]
+[ext_resource type="PackedScene" uid="uid://cry4fy5icucbc" path="res://object/trigger/state trigger/SidleTrigger.tscn" id="20_l48wn"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="22_44cky"]
+[ext_resource type="Resource" uid="uid://bj30jk812uvqh" path="res://area/6 skeleton dome/act 1/camera/SidleCam.tres" id="23_cpjtx"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n6xm6"]
+size = Vector3(150, 5, 150)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_byhyn"]
+size = Vector3(20, 15, 60)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_u13k2"]
+size = Vector3(20, 15, 4)
 
 [sub_resource type="Environment" id="Environment_asv45"]
 background_mode = 1
@@ -36,6 +52,7 @@ adjustment_enabled = true
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
 script = ExtResource("1_drnsg")
+InitialCameraSettings = ExtResource("2_vay8w")
 pathParent = NodePath("Path")
 Environment = NodePath("WorldEnvironment")
 
@@ -147,6 +164,15 @@ shadow_enabled = true
 shadow_caster_mask = 65
 directional_shadow_blend_splits = true
 
+[node name="ObjectLighting" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_color = Color(1, 0.86, 0.86, 1)
+light_energy = 0.5
+light_cull_mask = 4293918785
+shadow_caster_mask = 65
+directional_shadow_blend_splits = true
+
 [node name="Path" type="Node3D" parent="."]
 
 [node name="Throne" type="Path3D" parent="Path"]
@@ -157,31 +183,102 @@ curve = ExtResource("8_asv45")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1065, 0, -1000)
 curve = ExtResource("9_asv45")
 
-[node name="SpiralPath" type="Path3D" parent="Path"]
+[node name="Spiral" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 779.959, 20, -1208.91)
 curve = ExtResource("8_ov4ai")
 
-[node name="SidlePath" type="Path3D" parent="Path"]
+[node name="Sidle" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 779.746, -6.417, -1299.89)
 curve = ExtResource("9_vlt0c")
 
-[node name="HallAPath" type="Path3D" parent="Path"]
+[node name="HallA" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 500, 0, -485.371)
 curve = ExtResource("11_vlt0c")
 
-[node name="HallBPath" type="Path3D" parent="Path"]
+[node name="HallB" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 700, 0, -485.371)
 curve = ExtResource("12_asv45")
 
-[node name="HallCPath" type="Path3D" parent="Path"]
+[node name="HallC" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 900, 0, -485.371)
 curve = ExtResource("13_drnsg")
 
-[node name="HallTreasurePath" type="Path3D" parent="Path"]
+[node name="HallTreasure" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1100, 0, -485.371)
 curve = ExtResource("14_aafq0")
 
+[node name="Trigger" type="Node3D" parent="."]
+
+[node name="Object" type="Node3D" parent="Trigger"]
+
+[node name="FallTrigger" parent="Trigger/Object" instance=ExtResource("18_ip6k8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 843, -42.9, -1303)
+"Enter Mode" = 0
+
+[node name="Fall" type="Node3D" parent="Trigger/Object/FallTrigger"]
+script = ExtResource("19_p5olh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/FallTrigger"]
+shape = SubResource("BoxShape3D_n6xm6")
+
+[node name="SidleTrigger" parent="Trigger/Object" instance=ExtResource("20_l48wn")]
+transform = Transform3D(0.724677, 0, -0.689089, 0, 1, 0, 0.689089, 0, 0.724677, 804.548, -6, -1345.89)
+
+[node name="Path" type="Node3D" parent="Trigger/Object/SidleTrigger" node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+script = ExtResource("18_jmh45")
+path = NodePath("")
+
+[node name="Camera" type="Node3D" parent="Trigger/Object/SidleTrigger"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+script = ExtResource("22_44cky")
+settings = ExtResource("23_cpjtx")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/SidleTrigger"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+shape = SubResource("BoxShape3D_byhyn")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger/Object/SidleTrigger"]
+transform = Transform3D(0.906307, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906307, 0.18988, 0, -28.7083)
+shape = SubResource("BoxShape3D_u13k2")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Trigger/Object/SidleTrigger"]
+transform = Transform3D(0.906307, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906307, -2.87848, 0, 30.071)
+shape = SubResource("BoxShape3D_u13k2")
+
+[node name="Path" type="Node3D" parent="Trigger"]
+
+[node name="ThronePath" type="Node3D" parent="Trigger/Path" node_paths=PackedStringArray("path")]
+script = ExtResource("18_jmh45")
+path = NodePath("../../../Path/Throne")
+
+[node name="ThronePathReverse" type="Node3D" parent="Trigger/Path" node_paths=PackedStringArray("path")]
+script = ExtResource("18_jmh45")
+path = NodePath("../../../Path/Throne")
+pathMode = 1
+
+[node name="ArenaPath" type="Node3D" parent="Trigger/Path" node_paths=PackedStringArray("path")]
+script = ExtResource("18_jmh45")
+path = NodePath("../../../Path/Arena")
+
+[node name="SpiralPath" type="Node3D" parent="Trigger/Path" node_paths=PackedStringArray("path")]
+script = ExtResource("18_jmh45")
+path = NodePath("../../../Path/Arena")
+
+[node name="HallRed" type="Node3D" parent="Trigger/Path" node_paths=PackedStringArray("path")]
+script = ExtResource("18_jmh45")
+path = NodePath("../../../Path/HallA")
+
+[node name="Checkpoint" type="Node3D" parent="Trigger"]
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_asv45")
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[connection signal="Activated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Path" method="Activate"]
+[connection signal="Activated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Camera" method="Activate"]
+[connection signal="Deactivated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Path" method="Deactivate"]
+[connection signal="Deactivated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Camera" method="Deactivate"]
 
 [editable path="Collision"]
