@@ -1,11 +1,10 @@
-[gd_scene load_steps=28 format=3 uid="uid://dwcesmn6mdb55"]
+[gd_scene load_steps=26 format=3 uid="uid://bgqkl6m4c27kk"]
 
-[ext_resource type="Script" uid="uid://dtvj1vg0nkhi6" path="res://object/trigger/modules/TeleportTrigger.cs" id="1_5dhhn"]
-[ext_resource type="PackedScene" uid="uid://cp8owtrig0i60" path="res://area/6 skeleton dome/object/model/obstacle/WarpBase.gltf" id="2_jl87v"]
-[ext_resource type="Shader" uid="uid://dr8jyv71a8xic" path="res://effect/shader/particle/ParticleSpiral.gdshader" id="3_fab6w"]
-[ext_resource type="Material" uid="uid://chrq2jlovey6c" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters.tres" id="4_6dkao"]
-[ext_resource type="Material" uid="uid://72qi5wpg8kme" path="res://effect/particle/material/environment/Boss Splatter Add.tres" id="5_gk3dv"]
-[ext_resource type="PackedScene" uid="uid://cd68e1r8fc1jq" path="res://area/6 skeleton dome/object/model/obstacle/WarpHead.gltf" id="6_yjb4x"]
+[ext_resource type="Script" uid="uid://dtvj1vg0nkhi6" path="res://object/trigger/modules/TeleportTrigger.cs" id="1_35hvm"]
+[ext_resource type="PackedScene" uid="uid://cp8owtrig0i60" path="res://area/6 skeleton dome/object/model/obstacle/WarpBase.gltf" id="1_2348r"]
+[ext_resource type="Shader" uid="uid://dr8jyv71a8xic" path="res://effect/shader/particle/ParticleSpiral.gdshader" id="3_m286k"]
+[ext_resource type="Material" uid="uid://chrq2jlovey6c" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters.tres" id="4_6ysg3"]
+[ext_resource type="Material" uid="uid://72qi5wpg8kme" path="res://effect/particle/material/environment/Boss Splatter Add.tres" id="5_to2ds"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_r5wk0"]
 height = 3.0
@@ -44,7 +43,7 @@ curve_y = SubResource("Curve_ftecv")
 curve_z = SubResource("Curve_qy8u0")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rker8"]
-shader = ExtResource("3_fab6w")
+shader = ExtResource("3_m286k")
 shader_parameter/height = 5.0
 shader_parameter/rotation_bias = -0.8
 shader_parameter/rotation_speed = 5.0
@@ -55,7 +54,7 @@ shader_parameter/scale_curve = SubResource("CurveXYZTexture_p224c")
 shader_parameter/color_ramp = SubResource("GradientTexture1D_ddtke")
 
 [sub_resource type="QuadMesh" id="QuadMesh_hfpo1"]
-material = ExtResource("4_6dkao")
+material = ExtResource("4_6ysg3")
 
 [sub_resource type="Gradient" id="Gradient_qxwxt"]
 offsets = PackedFloat32Array(0, 0.181435, 0.57384, 0.848101)
@@ -94,7 +93,7 @@ curve_y = SubResource("Curve_joiyj")
 curve_z = SubResource("Curve_4j1br")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3qt4o"]
-shader = ExtResource("3_fab6w")
+shader = ExtResource("3_m286k")
 shader_parameter/height = 6.0
 shader_parameter/rotation_bias = 0.0
 shader_parameter/rotation_speed = 3.0
@@ -105,21 +104,17 @@ shader_parameter/scale_curve = SubResource("CurveXYZTexture_uchoe")
 shader_parameter/color_ramp = SubResource("GradientTexture1D_7b4w1")
 
 [sub_resource type="QuadMesh" id="QuadMesh_fefwq"]
-material = ExtResource("5_gk3dv")
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4mcr6"]
-radius = 1.25
-height = 3.4
+material = ExtResource("5_to2ds")
 
 [node name="Warp" type="Area3D"]
 collision_layer = 0
 collision_mask = 2
 monitorable = false
-script = ExtResource("1_5dhhn")
+script = ExtResource("1_35hvm")
 enableStartFX = true
 crossfade = true
 
-[node name="WarpBase" parent="." instance=ExtResource("2_jl87v")]
+[node name="WarpBase" parent="." instance=ExtResource("1_2348r")]
 
 [node name="WarpBaseCollision" parent="WarpBase" index="1"]
 visible = false
@@ -156,24 +151,4 @@ local_coords = true
 process_material = SubResource("ShaderMaterial_3qt4o")
 draw_pass_1 = SubResource("QuadMesh_fefwq")
 
-[node name="WarpHead" parent="." instance=ExtResource("6_yjb4x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0.5)
-
-[node name="WarpHeadMesh" parent="WarpHead" index="0"]
-cast_shadow = 0
-
-[node name="WarpRedMesh" parent="WarpHead" index="1"]
-visible = false
-cast_shadow = 0
-
-[node name="WarpWhiteMesh" parent="WarpHead" index="2"]
-cast_shadow = 0
-
-[node name="StaticBody3D" type="StaticBody3D" parent="WarpHead" groups=["wall"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -0.3)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WarpHead/StaticBody3D"]
-shape = SubResource("CapsuleShape3D_4mcr6")
-
 [editable path="WarpBase"]
-[editable path="WarpHead"]
