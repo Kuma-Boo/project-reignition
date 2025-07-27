@@ -12,6 +12,7 @@ public partial class SkeletonMajin : Enemy
 	/// <summary> Should this skeleton move towards the player when attacking? </summary>
 	[Export] private bool isMovementEnabled;
 	[Export] private bool onlyAttackInRange;
+	[Export] private bool despawnOnRangeExit;
 	/// <summary> How should this skeleton attack? </summary>
 	[Export] private AttackType attackType;
 	private enum AttackType
@@ -115,6 +116,9 @@ public partial class SkeletonMajin : Enemy
 	protected override void ExitRange()
 	{
 		if (!IsActive)
+			return;
+
+		if (!despawnOnRangeExit)
 			return;
 
 		Deactivate(false);
