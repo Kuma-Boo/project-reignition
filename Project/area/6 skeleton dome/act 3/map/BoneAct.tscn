@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://b4bdc5vtf52m6"]
+[gd_scene load_steps=28 format=3 uid="uid://b4bdc5vtf52m6"]
 
 [ext_resource type="PackedScene" uid="uid://slvtrs84m8s0" path="res://area/6 skeleton dome/act 3/Static.tscn" id="1_7mhht"]
 [ext_resource type="Resource" uid="uid://cxmfjdvam8ucj" path="res://resource/level data/skeleton dome/Act3Bone.tres" id="2_ftyvr"]
@@ -15,9 +15,17 @@
 [ext_resource type="PackedScene" uid="uid://63pn4rd1drw0" path="res://area/6 skeleton dome/object/obstacle/WarpRed.tscn" id="13_7ln1s"]
 [ext_resource type="PackedScene" uid="uid://ddqtfsujegqep" path="res://object/stage/common/SpikeBallSpawner.tscn" id="14_dcfkh"]
 [ext_resource type="PackedScene" uid="uid://mlaecfbmxihk" path="res://area/6 skeleton dome/object/special/Bone.tscn" id="15_ccn7f"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="16_v6q0e"]
 [ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="17_c2bi5"]
+[ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="17_hm2eq"]
+[ext_resource type="PackedScene" uid="uid://vqw834asl36p" path="res://area/6 skeleton dome/object/obstacle/Gate.tscn" id="18_8r6bi"]
 [ext_resource type="Script" uid="uid://dpt5o0lh62p6t" path="res://object/stage/MovingObject.cs" id="18_oboek"]
+[ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="19_18g7e"]
 [ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="19_g8qy3"]
+[ext_resource type="PackedScene" uid="uid://csqmprgowblp8" path="res://area/6 skeleton dome/object/obstacle/WarpWall.tscn" id="20_pvpxi"]
+[ext_resource type="PackedScene" uid="uid://dwcesmn6mdb55" path="res://area/6 skeleton dome/object/obstacle/WarpWhite.tscn" id="21_ne6wt"]
+[ext_resource type="PackedScene" uid="uid://0jj0alw37l1s" path="res://area/6 skeleton dome/object/grindrail/Grindrail04.tscn" id="22_8r6bi"]
+[ext_resource type="PackedScene" uid="uid://d21ummt57uq4a" path="res://area/6 skeleton dome/object/obstacle/Sickle.tscn" id="23_18g7e"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0bgs1"]
 size = Vector3(30, 30, 5)
@@ -34,6 +42,12 @@ disableObjectiveAutocompletion = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1150, 0.000195503, -1125)
 
 [node name="CharacterSpawn" parent="BoneAct/SpawnPosition" instance=ExtResource("2_mh17e")]
+
+[node name="BoneWarp" type="Node3D" parent="BoneAct" node_paths=PackedStringArray("warpTarget")]
+script = ExtResource("7_vp6ye")
+enableStartFX = true
+crossfade = true
+warpTarget = NodePath("../TreasureHall/WarpExit")
 
 [node name="Throne" type="Node3D" parent="BoneAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1150, 0, -1295)
@@ -65,12 +79,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 26, -5)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="BoneAct/Throne/Goal"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10, 5)
 shape = SubResource("BoxShape3D_0bgs1")
-
-[node name="BoneWarp" type="Node3D" parent="BoneAct" node_paths=PackedStringArray("warpTarget")]
-script = ExtResource("7_vp6ye")
-enableStartFX = true
-crossfade = true
-warpTarget = NodePath("../TreasureHall/WarpExit")
 
 [node name="RedHall" type="Node3D" parent="BoneAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 500, 0, -488)
@@ -112,6 +120,41 @@ enemyCount = 7
 [node name="DashPanel" parent="BoneAct/RedHall" instance=ExtResource("10_pxfsp")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -64)
 
+[node name="SpikeBallSpawner1" parent="BoneAct/RedHall" instance=ExtResource("14_dcfkh")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 11, -85)
+maxSpawnAmount = 3
+lifetime = 10.0
+spawnInterval = 5.0
+initialVelocity = 1.0
+
+[node name="SpikeBallSpawner2" parent="BoneAct/RedHall" instance=ExtResource("14_dcfkh")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -3, 11, -94)
+maxSpawnAmount = 3
+lifetime = 10.0
+spawnInterval = 5.0
+initialVelocity = 1.0
+
+[node name="SpikeBallSpawner3" parent="BoneAct/RedHall" instance=ExtResource("14_dcfkh")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.5, 11, -102)
+maxSpawnAmount = 3
+lifetime = 10.0
+spawnInterval = 5.0
+initialVelocity = 1.0
+
+[node name="SpikeBallSpawner4" parent="BoneAct/RedHall" instance=ExtResource("14_dcfkh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 11, -109)
+maxSpawnAmount = 3
+lifetime = 10.0
+spawnInterval = 5.0
+initialVelocity = 1.0
+
+[node name="SpikeBallSpawner5" parent="BoneAct/RedHall" instance=ExtResource("14_dcfkh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 11, -111)
+maxSpawnAmount = 3
+lifetime = 6.0
+spawnInterval = 4.5
+initialVelocity = 1.0
+
 [node name="Rings" type="Node3D" parent="BoneAct/RedHall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, -73)
 script = ExtResource("11_yellp")
@@ -152,46 +195,374 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -40)
 [node name="Child10" parent="BoneAct/RedHall/Rings" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -45)
 
-[node name="WarpRed" parent="BoneAct/RedHall" instance=ExtResource("13_7ln1s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -138)
-
-[node name="SpikeBallSpawner1" parent="BoneAct/RedHall" instance=ExtResource("14_dcfkh")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 11, -85)
-maxSpawnAmount = 3
-lifetime = 10.0
-spawnInterval = 5.0
-initialVelocity = 1.0
-
-[node name="SpikeBallSpawner2" parent="BoneAct/RedHall" instance=ExtResource("14_dcfkh")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -3, 11, -94)
-maxSpawnAmount = 3
-lifetime = 10.0
-spawnInterval = 5.0
-initialVelocity = 1.0
-
-[node name="SpikeBallSpawner3" parent="BoneAct/RedHall" instance=ExtResource("14_dcfkh")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.5, 11, -102)
-maxSpawnAmount = 3
-lifetime = 10.0
-spawnInterval = 5.0
-initialVelocity = 1.0
-
-[node name="SpikeBallSpawner4" parent="BoneAct/RedHall" instance=ExtResource("14_dcfkh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 11, -109)
-maxSpawnAmount = 3
-lifetime = 10.0
-spawnInterval = 5.0
-initialVelocity = 1.0
-
-[node name="SpikeBallSpawner5" parent="BoneAct/RedHall" instance=ExtResource("14_dcfkh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 11, -111)
-maxSpawnAmount = 3
-lifetime = 6.0
-spawnInterval = 4.5
-initialVelocity = 1.0
-
 [node name="Bone" parent="BoneAct/RedHall" instance=ExtResource("15_ccn7f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -123)
+
+[node name="WarpRed" parent="BoneAct/RedHall" node_paths=PackedStringArray("warpTarget") instance=ExtResource("13_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -138)
+warpTarget = NodePath("../../BlueHall/WarpExit")
+
+[node name="BlueHall" type="Node3D" parent="BoneAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 700, 0, -488)
+
+[node name="WarpExit" parent="BoneAct/BlueHall" instance=ExtResource("4_46mj5")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -4.5)
+
+[node name="SwitchGroup1" type="Node3D" parent="BoneAct/BlueHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
+
+[node name="Switch" parent="BoneAct/BlueHall/SwitchGroup1" instance=ExtResource("17_hm2eq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+
+[node name="Gate" parent="BoneAct/BlueHall/SwitchGroup1" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="SwitchGroup2" type="Node3D" parent="BoneAct/BlueHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -53)
+
+[node name="SpikeBall1" parent="BoneAct/BlueHall/SwitchGroup2" instance=ExtResource("19_18g7e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+animatorSpeedScale = 0.8
+Movement/Mode = 2
+"Movement/Cycle Length" = 2.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="SpikeBall2" parent="BoneAct/BlueHall/SwitchGroup2" instance=ExtResource("19_18g7e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+animatorSpeedScale = 0.8
+Movement/Mode = 2
+"Movement/Cycle Length" = 2.0
+"Movement/Starting Offset" = 0.25
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="SpikeBall3" parent="BoneAct/BlueHall/SwitchGroup2" instance=ExtResource("19_18g7e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+animatorSpeedScale = 0.8
+Movement/Mode = 2
+"Movement/Cycle Length" = 2.0
+"Movement/Starting Offset" = 0.5
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="SpikeBall4" parent="BoneAct/BlueHall/SwitchGroup2" instance=ExtResource("19_18g7e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+animatorSpeedScale = 0.8
+Movement/Mode = 2
+"Movement/Cycle Length" = 2.0
+"Movement/Starting Offset" = 0.75
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="Switch" parent="BoneAct/BlueHall/SwitchGroup2" instance=ExtResource("17_hm2eq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+
+[node name="Gate" parent="BoneAct/BlueHall/SwitchGroup2" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="BoneCull" type="Node3D" parent="BoneAct/BlueHall/SwitchGroup2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 16)
+script = ExtResource("16_v6q0e")
+
+[node name="Bone" parent="BoneAct/BlueHall/SwitchGroup2/BoneCull" instance=ExtResource("15_ccn7f")]
+
+[node name="SwitchGroup3" type="Node3D" parent="BoneAct/BlueHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -71)
+
+[node name="SkeletonMajin1" parent="BoneAct/BlueHall/SwitchGroup3" instance=ExtResource("8_be1y2")]
+isImmortal = true
+SpawnMode = 2
+
+[node name="SkeletonMajin2" parent="BoneAct/BlueHall/SwitchGroup3" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.29999, 0, -2.20001)
+isImmortal = true
+SpawnMode = 2
+
+[node name="SkeletonMajin3" parent="BoneAct/BlueHall/SwitchGroup3" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.599976, 0, -6)
+isImmortal = true
+SpawnMode = 2
+
+[node name="Switch" parent="BoneAct/BlueHall/SwitchGroup3" instance=ExtResource("17_hm2eq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+
+[node name="Gate" parent="BoneAct/BlueHall/SwitchGroup3" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Rings" type="Node3D" parent="BoneAct/BlueHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, -83)
+script = ExtResource("11_yellp")
+Source = ExtResource("12_7ln1s")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="BoneAct/BlueHall/Rings" instance=ExtResource("12_7ln1s")]
+
+[node name="Child02" parent="BoneAct/BlueHall/Rings" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="BoneAct/BlueHall/Rings" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="BoneAct/BlueHall/Rings" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="BoneAct/BlueHall/Rings" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="SwitchGroup4" type="Node3D" parent="BoneAct/BlueHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -97)
+
+[node name="Switch" parent="BoneAct/BlueHall/SwitchGroup4" instance=ExtResource("17_hm2eq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+
+[node name="Gate" parent="BoneAct/BlueHall/SwitchGroup4" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="BoneCull" type="Node3D" parent="BoneAct/BlueHall/SwitchGroup4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 12)
+script = ExtResource("16_v6q0e")
+
+[node name="Bone" parent="BoneAct/BlueHall/SwitchGroup4/BoneCull" instance=ExtResource("15_ccn7f")]
+
+[node name="SwitchGroup5" type="Node3D" parent="BoneAct/BlueHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -106)
+
+[node name="SkeletonMajin1" parent="BoneAct/BlueHall/SwitchGroup5" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -2.70001)
+isImmortal = true
+rangeOverride = 10
+
+[node name="SkeletonMajin2" parent="BoneAct/BlueHall/SwitchGroup5" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+isImmortal = true
+SpawnMode = 2
+
+[node name="SkeletonMajin3" parent="BoneAct/BlueHall/SwitchGroup5" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -11)
+isImmortal = true
+rangeOverride = 10
+
+[node name="SkeletonMajin4" parent="BoneAct/BlueHall/SwitchGroup5" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.40002, 0, -12.7)
+isImmortal = true
+rangeOverride = 10
+
+[node name="SkeletonMajin5" parent="BoneAct/BlueHall/SwitchGroup5" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.40002, 0, -16.2)
+isImmortal = true
+rangeOverride = 10
+
+[node name="SkeletonMajin6" parent="BoneAct/BlueHall/SwitchGroup5" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.599976, 0, -16.2)
+isImmortal = true
+rangeOverride = 10
+
+[node name="SkeletonMajin7" parent="BoneAct/BlueHall/SwitchGroup5" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.59998, 0, -18.2)
+isImmortal = true
+SpawnMode = 2
+
+[node name="Switch" parent="BoneAct/BlueHall/SwitchGroup5" instance=ExtResource("17_hm2eq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+
+[node name="Gate" parent="BoneAct/BlueHall/SwitchGroup5" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Bone" parent="BoneAct/BlueHall/SwitchGroup5" instance=ExtResource("15_ccn7f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -14)
+
+[node name="WarpWhite" parent="BoneAct/BlueHall" node_paths=PackedStringArray("warpTarget") instance=ExtResource("21_ne6wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, -138)
+warpTarget = NodePath("../../RedHall/WarpExit")
+
+[node name="WarpWall" parent="BoneAct/BlueHall" instance=ExtResource("20_pvpxi")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, -138)
+
+[node name="WarpRed" parent="BoneAct/BlueHall" node_paths=PackedStringArray("warpTarget") instance=ExtResource("13_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, -138)
+warpTarget = NodePath("../../YellowHall/WarpExit")
+
+[node name="YellowHall" type="Node3D" parent="BoneAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 900, 0, -488)
+
+[node name="WarpExit" parent="BoneAct/YellowHall" instance=ExtResource("4_46mj5")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -4.5)
+
+[node name="GrindrailL" parent="BoneAct/YellowHall" instance=ExtResource("22_8r6bi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.3, -48)
+
+[node name="Rings1" type="Node3D" parent="BoneAct/YellowHall/GrindrailL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.24538e-07, 1.1, -2)
+script = ExtResource("11_yellp")
+Source = ExtResource("12_7ln1s")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.8
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="BoneAct/YellowHall/GrindrailL/Rings1" instance=ExtResource("12_7ln1s")]
+
+[node name="Child02" parent="BoneAct/YellowHall/GrindrailL/Rings1" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8)
+
+[node name="Child03" parent="BoneAct/YellowHall/GrindrailL/Rings1" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
+
+[node name="Child04" parent="BoneAct/YellowHall/GrindrailL/Rings1" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.4)
+
+[node name="Child05" parent="BoneAct/YellowHall/GrindrailL/Rings1" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="Child06" parent="BoneAct/YellowHall/GrindrailL/Rings1" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child07" parent="BoneAct/YellowHall/GrindrailL/Rings1" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
+
+[node name="Child08" parent="BoneAct/YellowHall/GrindrailL/Rings1" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.6)
+
+[node name="Child09" parent="BoneAct/YellowHall/GrindrailL/Rings1" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.4)
+
+[node name="Child10" parent="BoneAct/YellowHall/GrindrailL/Rings1" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.2)
+
+[node name="GrindrailR" parent="BoneAct/YellowHall" instance=ExtResource("22_8r6bi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.3, -48)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="Rings1" type="Node3D" parent="BoneAct/YellowHall/GrindrailR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.24538e-07, 1.1, -33)
+script = ExtResource("11_yellp")
+Source = ExtResource("12_7ln1s")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.8
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="BoneAct/YellowHall/GrindrailR/Rings1" instance=ExtResource("12_7ln1s")]
+
+[node name="Child02" parent="BoneAct/YellowHall/GrindrailR/Rings1" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8)
+
+[node name="Child03" parent="BoneAct/YellowHall/GrindrailR/Rings1" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
+
+[node name="Child04" parent="BoneAct/YellowHall/GrindrailR/Rings1" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.4)
+
+[node name="Child05" parent="BoneAct/YellowHall/GrindrailR/Rings1" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="Child06" parent="BoneAct/YellowHall/GrindrailR/Rings1" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child07" parent="BoneAct/YellowHall/GrindrailR/Rings1" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
+
+[node name="Child08" parent="BoneAct/YellowHall/GrindrailR/Rings1" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.6)
+
+[node name="Child09" parent="BoneAct/YellowHall/GrindrailR/Rings1" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.4)
+
+[node name="Child10" parent="BoneAct/YellowHall/GrindrailR/Rings1" instance=ExtResource("12_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.2)
+
+[node name="Sickle1" parent="BoneAct/YellowHall" instance=ExtResource("23_18g7e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 11.5, -78)
+cycleLength = 4.0
+chainLength = 7
+
+[node name="Sickle2" parent="BoneAct/YellowHall" instance=ExtResource("23_18g7e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 11.5, -79)
+cycleLength = 4.5
+chainLength = 7
+
+[node name="SkeletonMajin1" parent="BoneAct/YellowHall" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -114)
+
+[node name="SkeletonMajin2" parent="BoneAct/YellowHall" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -115.5)
+
+[node name="SkeletonMajin3" parent="BoneAct/YellowHall" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -117)
+
+[node name="SkeletonMajin4" parent="BoneAct/YellowHall" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, -117.6)
+
+[node name="SkeletonMajin5" parent="BoneAct/YellowHall" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -119.6)
+
+[node name="SkeletonMajin6" parent="BoneAct/YellowHall" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, -117.5)
+
+[node name="SkeletonMajin7" parent="BoneAct/YellowHall" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -118.1)
+
+[node name="SkeletonMajin8" parent="BoneAct/YellowHall" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -120.1)
+
+[node name="SkeletonMajin9" parent="BoneAct/YellowHall" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -120.6)
+
+[node name="EnemyStone1" parent="BoneAct/YellowHall" instance=ExtResource("9_fsrbu")]
+transform = Transform3D(2.5, 0, 0, 0, 3, 0, 0, 0, 3, -5, 3, -125)
+enemyCount = 2
+
+[node name="EnemyStone2" parent="BoneAct/YellowHall" instance=ExtResource("9_fsrbu")]
+transform = Transform3D(2.5, 0, 0, 0, 3, 0, 0, 0, 3, 0, 3, -125)
+enemyCount = 4
+
+[node name="EnemyStone3" parent="BoneAct/YellowHall" instance=ExtResource("9_fsrbu")]
+transform = Transform3D(2.5, 0, 0, 0, 3, 0, 0, 0, 3, 5, 3, -125)
+enemyCount = 2
+
+[node name="Bone1" parent="BoneAct/YellowHall" instance=ExtResource("15_ccn7f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 3, -125)
+
+[node name="Bone2" parent="BoneAct/YellowHall" instance=ExtResource("15_ccn7f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -125)
+
+[node name="Bone3" parent="BoneAct/YellowHall" instance=ExtResource("15_ccn7f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 3, -125)
+
+[node name="WarpRed" parent="BoneAct/YellowHall" node_paths=PackedStringArray("warpTarget") instance=ExtResource("13_7ln1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -138.5)
+warpTarget = NodePath("../../RedHall/WarpExit")
+
+[node name="WarpWallL" parent="BoneAct/YellowHall" instance=ExtResource("20_pvpxi")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -3, 0, -138.5)
+
+[node name="WarpWhiteL" parent="BoneAct/YellowHall" node_paths=PackedStringArray("warpTarget") instance=ExtResource("21_ne6wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -138.5)
+warpTarget = NodePath("../../BlueHall/WarpExit")
+
+[node name="WarpWallR" parent="BoneAct/YellowHall" instance=ExtResource("20_pvpxi")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 3, 0, -138.5)
+
+[node name="WarpWhiteR" parent="BoneAct/YellowHall" node_paths=PackedStringArray("warpTarget") instance=ExtResource("21_ne6wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -138.5)
+warpTarget = NodePath("../WarpExit")
 
 [node name="TreasureHall" type="Node3D" parent="BoneAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1100, 0, -488)
@@ -514,7 +885,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -116.7)
 [node name="Warp" parent="BoneAct/TreasureHall" instance=ExtResource("3_6sudf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -134)
 
-[connection signal="Teleport" from="BoneAct/Throne/Warp" to="Static/Trigger/Path/HallRed" method="Activate"]
+[connection signal="Teleport" from="BoneAct/Throne/Warp" to="Static/Trigger/Path/HallRedPath" method="Activate"]
 [connection signal="Defeated" from="BoneAct/RedHall/SkeletonMajin1" to="BoneAct/RedHall/EnemyStone" method="IncrementCounter"]
 [connection signal="Spawned" from="BoneAct/RedHall/SkeletonMajin1" to="BoneAct/RedHall/SkeletonMajin5" method="Spawn"]
 [connection signal="Spawned" from="BoneAct/RedHall/SkeletonMajin1" to="BoneAct/RedHall/SkeletonMajin6" method="Spawn"]
@@ -526,6 +897,27 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -134)
 [connection signal="Defeated" from="BoneAct/RedHall/SkeletonMajin6" to="BoneAct/RedHall/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="BoneAct/RedHall/SkeletonMajin7" to="BoneAct/RedHall/EnemyStone" method="IncrementCounter"]
 [connection signal="ObjectiveFinished" from="BoneAct/RedHall/Bone" to="BoneAct/BoneWarp" method="Activate"]
+[connection signal="Teleport" from="BoneAct/RedHall/WarpRed" to="Static/Trigger/Path/HallBluePath" method="Activate"]
+[connection signal="Activated" from="BoneAct/BlueHall/SwitchGroup1/Switch" to="BoneAct/BlueHall/SwitchGroup1/Gate" method="Activate"]
+[connection signal="Activated" from="BoneAct/BlueHall/SwitchGroup2/Switch" to="BoneAct/BlueHall/SwitchGroup2/Gate" method="Activate"]
+[connection signal="Activated" from="BoneAct/BlueHall/SwitchGroup2/Switch" to="BoneAct/BlueHall/SwitchGroup2/BoneCull" method="Activate"]
+[connection signal="Activated" from="BoneAct/BlueHall/SwitchGroup3/Switch" to="BoneAct/BlueHall/SwitchGroup3/Gate" method="Activate"]
+[connection signal="Activated" from="BoneAct/BlueHall/SwitchGroup4/Switch" to="BoneAct/BlueHall/SwitchGroup4/Gate" method="Activate"]
+[connection signal="Activated" from="BoneAct/BlueHall/SwitchGroup4/Switch" to="BoneAct/BlueHall/SwitchGroup4/BoneCull" method="Activate"]
+[connection signal="Activated" from="BoneAct/BlueHall/SwitchGroup5/Switch" to="BoneAct/BlueHall/SwitchGroup5/Gate" method="Activate"]
+[connection signal="Teleport" from="BoneAct/BlueHall/WarpWhite" to="Static/Trigger/Path/HallRedPath" method="Activate"]
+[connection signal="Teleport" from="BoneAct/BlueHall/WarpRed" to="Static/Trigger/Path/HallYellowPath" method="Activate"]
+[connection signal="Defeated" from="BoneAct/YellowHall/SkeletonMajin2" to="BoneAct/YellowHall/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="BoneAct/YellowHall/SkeletonMajin3" to="BoneAct/YellowHall/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="BoneAct/YellowHall/SkeletonMajin4" to="BoneAct/YellowHall/EnemyStone3" method="IncrementCounter"]
+[connection signal="Defeated" from="BoneAct/YellowHall/SkeletonMajin5" to="BoneAct/YellowHall/EnemyStone3" method="IncrementCounter"]
+[connection signal="Defeated" from="BoneAct/YellowHall/SkeletonMajin6" to="BoneAct/YellowHall/EnemyStone1" method="IncrementCounter"]
+[connection signal="Defeated" from="BoneAct/YellowHall/SkeletonMajin7" to="BoneAct/YellowHall/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="BoneAct/YellowHall/SkeletonMajin8" to="BoneAct/YellowHall/EnemyStone1" method="IncrementCounter"]
+[connection signal="Defeated" from="BoneAct/YellowHall/SkeletonMajin9" to="BoneAct/YellowHall/EnemyStone2" method="IncrementCounter"]
+[connection signal="Teleport" from="BoneAct/YellowHall/WarpRed" to="BoneAct/YellowHall" method="Deactivate"]
+[connection signal="Teleport" from="BoneAct/YellowHall/WarpWhiteL" to="BoneAct/YellowHall" method="Deactivate"]
+[connection signal="Teleport" from="BoneAct/YellowHall/WarpWhiteR" to="BoneAct/YellowHall" method="Deactivate"]
 [connection signal="Collected" from="BoneAct/TreasureHall/ItemBoxGroup1/ItemBox4/ItemBoxFlying" to="BoneAct/TreasureHall/ItemBoxGroup1/ItemBox4/HorizontalMovement" method="Pause"]
 [connection signal="Collected" from="BoneAct/TreasureHall/ItemBoxGroup1/ItemBox4/ItemBoxFlying" to="BoneAct/TreasureHall/ItemBoxGroup1/ItemBox4/VerticalMovement" method="Pause"]
 [connection signal="Respawned" from="BoneAct/TreasureHall/ItemBoxGroup1/ItemBox4/ItemBoxFlying" to="BoneAct/TreasureHall/ItemBoxGroup1/ItemBox4/HorizontalMovement" method="Unpause"]
