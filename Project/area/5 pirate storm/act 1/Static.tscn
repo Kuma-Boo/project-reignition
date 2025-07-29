@@ -1,4 +1,4 @@
-[gd_scene load_steps=86 format=3 uid="uid://csk7y7y8vgg6l"]
+[gd_scene load_steps=91 format=3 uid="uid://csk7y7y8vgg6l"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_g84th"]
 [ext_resource type="PackedScene" uid="uid://npgcl1ctbjyt" path="res://area/5 pirate storm/act 1/environment/01Opening.tscn" id="2_444mk"]
@@ -21,6 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://d3bwpl53f2wsi" path="res://area/5 pirate storm/data/skybox/SkyboxLightning.tscn" id="17_qhv7k"]
 [ext_resource type="Curve3D" uid="uid://c5j02crpfbnpp" path="res://area/5 pirate storm/act 1/environment/path/CannonballPath.tres" id="18_fqgif"]
 [ext_resource type="Curve3D" uid="uid://bviukq0alfhkb" path="res://area/5 pirate storm/act 1/environment/path/CavePath.tres" id="18_v0vsi"]
+[ext_resource type="Curve3D" uid="uid://daxwi5bboh0vv" path="res://area/5 pirate storm/act 1/environment/path/OpeningCameraPath.tres" id="19_0tpv1"]
 [ext_resource type="Curve3D" uid="uid://d73fv1nlv4ds" path="res://area/5 pirate storm/act 1/environment/path/SurfboardPath.tres" id="19_4ui3u"]
 [ext_resource type="Curve3D" uid="uid://d1g7gn830812p" path="res://area/5 pirate storm/act 1/environment/path/GrindPath.tres" id="19_28ai1"]
 [ext_resource type="PackedScene" uid="uid://dwg8morsdrkm" path="res://area/5 pirate storm/object/Cannonball.tscn" id="19_fqgif"]
@@ -44,8 +45,9 @@
 [ext_resource type="Resource" uid="uid://cnxy1brw4b7p1" path="res://area/5 pirate storm/act 1/camera/ShipCam.tres" id="32_82sha"]
 [ext_resource type="PackedScene" uid="uid://ukucb8f0iscj" path="res://area/5 pirate storm/act 1/environment/cannon event/CannonEvent.tscn" id="32_fej2y"]
 [ext_resource type="Resource" uid="uid://sarcvxdyvdrv" path="res://area/5 pirate storm/act 1/camera/BrokenShipWoodCam.tres" id="32_p0r0b"]
-[ext_resource type="Resource" uid="uid://c48axuw8cwjqg" path="res://area/5 pirate storm/act 1/camera/CannonballCam.tres" id="34_3rek1"]
+[ext_resource type="Resource" uid="uid://c48axuw8cwjqg" path="res://area/5 pirate storm/act 1/camera/CannonballStartCam.tres" id="34_3rek1"]
 [ext_resource type="Resource" uid="uid://unk8vyncg7mg" path="res://area/5 pirate storm/act 1/camera/ShipCloseCam.tres" id="34_dsog2"]
+[ext_resource type="Resource" uid="uid://8ohrkt7m4ui2" path="res://area/5 pirate storm/act 1/camera/BrokenHullEntryCam.tres" id="36_gulv4"]
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="36_oxnth"]
 [ext_resource type="Resource" uid="uid://dy6dx46jqb4wq" path="res://area/5 pirate storm/act 1/camera/CaveBladeCam.tres" id="38_nwdj3"]
 [ext_resource type="Resource" uid="uid://cisjflsap7bod" path="res://area/5 pirate storm/act 1/camera/CaveSlopeCam.tres" id="39_5xsdu"]
@@ -55,7 +57,10 @@
 [ext_resource type="Script" uid="uid://ch4pb1qqwy5al" path="res://object/stage/common/resource/script/CameraFollower.cs" id="41_08hmi"]
 [ext_resource type="Material" uid="uid://86s1me03t0lu" path="res://area/5 pirate storm/data/material/Rain Impact.tres" id="42_q3kya"]
 [ext_resource type="Material" uid="uid://6q7k10n0i0bn" path="res://area/5 pirate storm/data/material/Rain Drop.tres" id="43_08hmi"]
+[ext_resource type="Resource" uid="uid://c8f63q8b0ffti" path="res://area/5 pirate storm/act 1/camera/CannonballCam.tres" id="47_dpvh1"]
+[ext_resource type="Resource" uid="uid://cppeiepucyyse" path="res://area/5 pirate storm/act 1/camera/CannonballEndCam.tres" id="48_p2b7g"]
 [ext_resource type="Script" uid="uid://coiui4qvdxbqe" path="res://object/trigger/modules/EventTrigger.cs" id="49_qhv7k"]
+[ext_resource type="Resource" uid="uid://wd6b8tved132" path="res://area/5 pirate storm/act 1/camera/CannonballVTrackCam.tres" id="50_dpvh1"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_k720b"]
 size = Vector3(25, 20, 5)
@@ -1042,6 +1047,10 @@ curve = ExtResource("2_hm1f8")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.003, 0.55, 63.919)
 curve = ExtResource("12_duubi")
 
+[node name="OpeningCameraPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14.426, -49.185)
+curve = ExtResource("19_0tpv1")
+
 [node name="BrokenShipPath" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.747, 9.575, 101.127)
 curve = ExtResource("14_v0vsi")
@@ -1139,6 +1148,19 @@ shape = SubResource("BoxShape3D_auuan")
 
 [node name="PathAndCameraTriggers" type="Node3D" parent="Triggers"]
 
+[node name="OpeningCamera" parent="Triggers/PathAndCameraTriggers" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0401298, 8.3, 13.4712)
+"Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="Triggers/PathAndCameraTriggers/OpeningCamera" node_paths=PackedStringArray("path")]
+script = ExtResource("23_vf6sl")
+path = NodePath("../../../../Path/OpeningCameraPath")
+affectPlayer = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathAndCameraTriggers/OpeningCamera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_k720b")
+
 [node name="OpeningWood" parent="Triggers/PathAndCameraTriggers" instance=ExtResource("22_ypnsc")]
 transform = Transform3D(0.991445, 0, 0.130526, 0, 1, 0, -0.130526, 0, 0.991445, -1.84013, 0.5, 64.4712)
 "Trigger Mode" = 2
@@ -1147,7 +1169,7 @@ transform = Transform3D(0.991445, 0, 0.130526, 0, 1, 0, -0.130526, 0, 0.991445, 
 [node name="Path" type="Node3D" parent="Triggers/PathAndCameraTriggers/OpeningWood" node_paths=PackedStringArray("path")]
 script = ExtResource("23_vf6sl")
 path = NodePath("../../../../Path/OpeningWoodPath")
-cameraPathBlendTime = 1.0
+affectCamera = false
 
 [node name="Camera" type="Node3D" parent="Triggers/PathAndCameraTriggers/OpeningWood"]
 script = ExtResource("25_f6rbm")
@@ -1165,7 +1187,7 @@ transform = Transform3D(0.887011, 0, -0.461749, 0, 1, 0, 0.461749, 0, 0.887011, 
 [node name="Path" type="Node3D" parent="Triggers/PathAndCameraTriggers/OpeningWood2" node_paths=PackedStringArray("path")]
 script = ExtResource("23_vf6sl")
 path = NodePath("../../../../Path/BrokenShipPath")
-cameraPathBlendTime = 1.0
+affectCamera = false
 
 [node name="Camera" type="Node3D" parent="Triggers/PathAndCameraTriggers/OpeningWood2"]
 transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
@@ -1214,10 +1236,26 @@ transform = Transform3D(0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 37.3959, 1
 [node name="Camera" type="Node3D" parent="Triggers/PathAndCameraTriggers/BrokenHullEntry"]
 transform = Transform3D(1, 7.45058e-09, 0, 7.45058e-09, 1, -1.49012e-08, -2.98023e-08, 0, 1, 0, 0, 0)
 script = ExtResource("25_f6rbm")
-settings = ExtResource("26_ybwgy")
+settings = ExtResource("36_gulv4")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathAndCameraTriggers/BrokenHullEntry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_k720b")
+
+[node name="BrokenHullEntry2" parent="Triggers/PathAndCameraTriggers" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965925, 42.5256, 2.77669, 309.203)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Triggers/PathAndCameraTriggers/BrokenHullEntry2"]
+transform = Transform3D(1, 7.45058e-09, 0, 7.45058e-09, 1, -1.49012e-08, -2.98023e-08, 0, 1, 0, 0, 0)
+script = ExtResource("25_f6rbm")
+distanceBlending = 10
+settings = ExtResource("26_ybwgy")
+previousSettings = ExtResource("36_gulv4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathAndCameraTriggers/BrokenHullEntry2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 shape = SubResource("BoxShape3D_k720b")
 
 [node name="BrokenHull" parent="Triggers/PathAndCameraTriggers" instance=ExtResource("22_ypnsc")]
@@ -1241,7 +1279,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.83636, 1.99232, 365.639)
 [node name="Path" type="Node3D" parent="Triggers/PathAndCameraTriggers/Islands" node_paths=PackedStringArray("path")]
 script = ExtResource("23_vf6sl")
 path = NodePath("../../../../Path/IslandPath")
-cameraPathBlendTime = 1.0
+affectCamera = false
 
 [node name="PlatformingCamera" type="Node3D" parent="Triggers/PathAndCameraTriggers/Islands"]
 script = ExtResource("25_f6rbm")
@@ -1704,6 +1742,20 @@ OneShot = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_k720b")
 
+[node name="CannonEndTrigger" parent="Triggers/CannonEvent" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(1, 0, 0, 0, 0.707107, -0.707107, 0, 0.707107, 0.707107, -130, 161.261, 958.431)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="Triggers/CannonEvent/CannonEndTrigger"]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, 0, 0)
+script = ExtResource("25_f6rbm")
+distanceBlending = 50
+settings = ExtResource("48_p2b7g")
+previousSettings = ExtResource("47_dpvh1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/CannonEvent/CannonEndTrigger"]
+shape = SubResource("BoxShape3D_k720b")
+
 [node name="CannonEventCull" type="Node3D" parent="Triggers/CannonEvent"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -129.7, 5, 750.8)
 script = ExtResource("36_oxnth")
@@ -1715,7 +1767,14 @@ startEnabled = true
 transform = Transform3D(1, 0, 0, 0, 0.975534, 0.219846, 0, -0.219846, 0.975534, -129.7, 189.707, 821.746)
 script = ExtResource("25_f6rbm")
 transitionType = 1
-settings = ExtResource("34_3rek1")
+settings = ExtResource("50_dpvh1")
+
+[node name="StartCamera" type="Node3D" parent="Triggers/CannonEvent"]
+transform = Transform3D(0.999257, -0.0360399, 0.0136655, 0.0313388, 0.966091, 0.256291, -0.0224389, -0.255672, 0.966502, -129.755, 190.682, 824.88)
+script = ExtResource("25_f6rbm")
+distanceBlending = 50
+settings = ExtResource("47_dpvh1")
+previousSettings = ExtResource("34_3rek1")
 
 [node name="Path" type="Node3D" parent="Triggers/CannonEvent" node_paths=PackedStringArray("path")]
 transform = Transform3D(1, 0, 0, 0, 0.975534, 0.219846, 0, -0.219846, 0.975534, -129.7, 189.707, 821.746)
@@ -2210,6 +2269,7 @@ isStageMusic = true
 [connection signal="EventFinished" from="Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Triggers/CannonEvent/Path" method="Activate"]
 [connection signal="EventFinished" from="Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Triggers/CannonEvent/CannonBallCull" method="Activate"]
 [connection signal="EventFinished" from="Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Triggers/CannonEvent/CannonBallCull/Cannonball/JumpTrigger" method="Activate" flags=3]
+[connection signal="Activated" from="Triggers/CannonEvent/CannonBallCull/Cannonball" to="Triggers/CannonEvent/StartCamera" method="Activate"]
 [connection signal="JumpFinished" from="Triggers/CannonEvent/CannonBallCull/Cannonball/JumpTrigger" to="Triggers/CannonEvent/CannonBallCull/Cannonball" method="Activate"]
 [connection signal="Activated" from="Triggers/EnvironmentFX/EnableWaterReflection" to="PlanarReflectionRenderer" method="EnableRendering"]
 [connection signal="Deactivated" from="Triggers/EnvironmentFX/EnableWaterReflection" to="PlanarReflectionRenderer" method="DisableRendering"]
