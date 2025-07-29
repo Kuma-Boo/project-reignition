@@ -84,11 +84,12 @@ public partial class PlayerSkillController : Node3D
 
 		InitializeCrestSkills();
 		// Update crest of flame's trail color
-		Player.Effect.UpdateTrailHueShift(AllowCrestSkill && SkillRing.IsSkillEquipped(SkillKey.CrestFire) ? CrestOfFlameHueOffset : 0f);
+		Player.Effect.UpdateTrailHueShift(AllowCrestSkill && SkillRing.IsSkillEquipped(SkillKey.CrestFire) ? CrestOfFlameHueOffset : DefaultHueOffset);
 		speedbreakOverlayMaterial.SetShaderParameter(SpeedbreakOverlayOpacityKey, 0);
 	}
 
 	private readonly float CrestOfFlameHueOffset = .45f;
+	private readonly float DefaultHueOffset = .02f;
 	private void InitializeCrestSkills()
 	{
 		int crestRequirement;
