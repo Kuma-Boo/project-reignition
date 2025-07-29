@@ -91,6 +91,12 @@ public partial class Surfboard : PathTraveller
 	{
 		base.ProcessPathTraveller();
 
+		if (currentWave == null)
+		{
+			for (int i = 0; i < waveIndex; i++)
+				SoundManager.FadeAudioPlayer(waveSFX[i]);
+		}
+
 		if (!Mathf.IsZeroApprox(jumpCameraTimer)) // Don't allow turning during a high jump
 		{
 			CurrentTurnAmount = Vector2.Zero;
@@ -140,12 +146,7 @@ public partial class Surfboard : PathTraveller
 	public void SetCurrentWave(Wave wave)
 	{
 		// Update wave sound effects
-		if (wave == null)
-		{
-			for (int i = 0; i < waveIndex; i++)
-				waveSFX[i].Stop();
-		}
-		else
+		if (wave != null)
 		{
 			waveIndex = wave.Index;
 			for (int i = 0; i < waveIndex; i++)
