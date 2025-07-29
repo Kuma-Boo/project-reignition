@@ -320,9 +320,7 @@ fog_enabled = true
 fog_mode = 1
 fog_light_color = Color(0.1824, 0.235147, 0.32, 1)
 fog_density = 1.0
-fog_height = 48.96
-fog_height_density = -0.001
-fog_depth_begin = 500.0
+fog_depth_begin = 100.0
 fog_depth_end = 1000.0
 volumetric_fog_albedo = Color(0.154876, 0.154876, 0.154876, 1)
 adjustment_enabled = true
@@ -2258,6 +2256,7 @@ isStageMusic = true
 [connection signal="Deactivated" from="Visuals/CullingTriggers/06-U" to="Visuals/06GhostShip" method="Activate"]
 [connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Visuals/02Islands" method="Deactivate"]
 [connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Visuals/Sea1" method="Deactivate"]
+[connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Visuals/PSSky/FogSkyboxMesh" method="Deactivate"]
 [connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/PathAndCameraTriggers/ShipsStart/Checkpoint" method="Activate"]
 [connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/PathAndCameraTriggers/ShipsStart/Camera" method="Activate"]
 [connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/PathAndCameraTriggers/ShipsStart/Jump" method="Activate" flags=3]
@@ -2265,6 +2264,7 @@ isStageMusic = true
 [connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/CannonEvent/CannonBallCull/Cannonball" method="Advance" binds= [30.0]]
 [connection signal="JumpFinished" from="Triggers/PathAndCameraTriggers/ShipsStart/Jump" to="Triggers/PathAndCameraTriggers/ShipsStart/Camera" method="Deactivate"]
 [connection signal="Activated" from="Triggers/CannonEvent/CannonEventTrigger" to="Triggers/CannonEvent/CannonEventCull/CannonEvent" method="Activate"]
+[connection signal="EventFinished" from="Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Visuals/PSSky/FogSkyboxMesh" method="Activate"]
 [connection signal="EventFinished" from="Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Triggers/CannonEvent/CannonEventCull" method="Deactivate"]
 [connection signal="EventFinished" from="Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Triggers/CannonEvent/Camera" method="Activate"]
 [connection signal="EventFinished" from="Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Triggers/CannonEvent/Path" method="Activate"]

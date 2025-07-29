@@ -1,4 +1,4 @@
-[gd_scene load_steps=123 format=3 uid="uid://bkuwj6xj81tuv"]
+[gd_scene load_steps=122 format=3 uid="uid://bkuwj6xj81tuv"]
 
 [ext_resource type="PackedScene" uid="uid://csk7y7y8vgg6l" path="res://area/5 pirate storm/act 1/Static.tscn" id="1_8fsep"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_kflh0"]
@@ -48,7 +48,6 @@
 [ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="41_wekfv"]
 [ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="42_my4pc"]
 [ext_resource type="PackedScene" uid="uid://153wwjnd7nv6" path="res://object/stage/common/FlyingPot.tscn" id="43_tusv3"]
-[ext_resource type="Resource" uid="uid://cjnkxhoprjmyr" path="res://area/5 pirate storm/act 1/camera/ShipFlyingPotCam.tres" id="44_706b0"]
 [ext_resource type="Resource" uid="uid://c5s0h1gnjue1t" path="res://area/5 pirate storm/act 1/camera/ShipCatapultCam.tres" id="44_wf3po"]
 [ext_resource type="PackedScene" uid="uid://bl5rffbayfil" path="res://object/enemy/majin/data/pirate storm/RedMajin.tscn" id="45_22rft"]
 [ext_resource type="Resource" uid="uid://cgw4symq728mm" path="res://area/5 pirate storm/act 1/camera/ShipCatapultLaunchCam.tres" id="45_42pck"]
@@ -278,6 +277,15 @@ Data = ExtResource("2_qkxl1")
 InitialCameraSettings = ExtResource("3_8cccl")
 environmentFxFactor = 1.0
 
+[node name="Sea2" parent="Static/Visuals" index="7"]
+startEnabled = true
+
+[node name="06GhostShip" parent="Static/Visuals" index="8"]
+startEnabled = true
+
+[node name="07End" parent="Static/Visuals" index="9"]
+startEnabled = true
+
 [node name="Dialog" type="Node3D" parent="Static/Triggers/PathAndCameraTriggers/ShipsStart" index="2"]
 transform = Transform3D(-1, -8.60942e-08, 1.51807e-08, 0, 0.173648, 0.984808, -8.74232e-08, 0.984808, -0.173648, 0, 16.2208, -5.90643)
 script = ExtResource("5_mrnau")
@@ -293,6 +301,9 @@ textKeys = Array[String](["pir_surf_jump3_so"])
 
 [node name="RainCollision" parent="Static/Rain" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 7.45058e-09, 0, -7.45058e-09, 1, -1, 7.47332e-09, 1)
+
+[node name="Camera" parent="Static/DemoCamera" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0.996195, 0.0871558, 0, -0.0871558, 0.996195, 0, 0, 0)
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -560,6 +571,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.69, 0)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("2_kflh0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -516, -3, 1936)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 visible = false
@@ -1854,7 +1866,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="Blade" parent="MainAct/Islands/Island4/MovingBlade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1, -1.49012e-08, -2.53131e-14, 0, -4.37114e-08, -1, 1.49012e-08, 1, -4.37115e-08, 0, 0, 0)
+transform = Transform3D(1, -1.49012e-08, -2.62013e-14, 0, -4.37114e-08, -1, 1.49012e-08, 1, -4.37115e-08, 0, 0, 0)
 
 [node name="MovingBlade2" type="Node3D" parent="MainAct/Islands/Island4"]
 transform = Transform3D(0.990268, 0, 0.139173, 0, 1, 0, -0.139173, 0, 0.990268, -30.323, 0.3, 6.98822)
@@ -2917,13 +2929,11 @@ sfxPlayer = NodePath("../Spring/SFX")
 
 [node name="FlyingPot1" parent="MainAct/Ships/Ship2" instance=ExtResource("43_tusv3")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 20, 3.5)
-travelBounds = Vector2(0, 20)
-customCameraSettings = ExtResource("44_706b0")
+customCameraSettings = null
 
 [node name="FlyingPot2" parent="MainAct/Ships/Ship2" instance=ExtResource("43_tusv3")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 35, 6)
-travelBounds = Vector2(0, 25)
-customCameraSettings = ExtResource("44_706b0")
+customCameraSettings = null
 
 [node name="BombL" parent="MainAct/Ships/Ship2" instance=ExtResource("28_6yc6x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.00006, 0, 16.2003)
@@ -4532,7 +4542,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup3/Blade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(0.999999, 2.35438e-06, 8.76188e-06, -6.55651e-06, 1, -4.29153e-06, 3.12924e-06, -3.65078e-07, 0.999993, 0, 0, 0)
+transform = Transform3D(0.999999, 2.35438e-06, 8.76188e-06, -6.57141e-06, 1, -4.29153e-06, 3.09944e-06, -3.65078e-07, 0.999993, 0, 0, 0)
 playSFX = false
 
 [node name="Blade2" type="Node3D" parent="MainAct/Cave/BladeGroup3"]
@@ -4877,6 +4887,7 @@ transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 
 [node name="GhostShip" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -521, 2, 1829)
 script = ExtResource("36_7jc22")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="SlimeMajin1" parent="MainAct/GhostShip" instance=ExtResource("3_qkxl1")]
@@ -5194,6 +5205,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
 [node name="Surf" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -497, 0, 1960)
 script = ExtResource("36_7jc22")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="SurfJump" parent="MainAct/Surf" instance=ExtResource("26_1c4me")]
