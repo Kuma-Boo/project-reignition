@@ -114,7 +114,7 @@ public partial class PlayerCameraController : Node3D
 			IsDefeatFreezeActive = false;
 		}
 
-		UpdateGameplayCamera();
+		CallDeferred(MethodName.UpdateGameplayCamera);
 		UpdateScreenShake();
 		UpdateMotionBlur();
 	}
@@ -385,6 +385,7 @@ public partial class PlayerCameraController : Node3D
 				Note that since distance blend datas come in pairs of two, it's safe to access
 				the Trigger even after we increment i.
 			*/
+
 			if (CameraBlendList[i].Trigger?.UseDistanceBlending == true)
 			{
 				i++; // Iterate so we can simulate the next item in the blend list
