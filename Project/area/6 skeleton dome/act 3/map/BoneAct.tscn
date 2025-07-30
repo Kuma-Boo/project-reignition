@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://b4bdc5vtf52m6"]
+[gd_scene load_steps=33 format=3 uid="uid://b4bdc5vtf52m6"]
 
 [ext_resource type="PackedScene" uid="uid://slvtrs84m8s0" path="res://area/6 skeleton dome/act 3/Static.tscn" id="1_7mhht"]
 [ext_resource type="Resource" uid="uid://cxmfjdvam8ucj" path="res://resource/level data/skeleton dome/Act3Bone.tres" id="2_ftyvr"]
@@ -30,6 +30,7 @@
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="28_pvpxi"]
 [ext_resource type="PackedScene" uid="uid://bbgtmxw55soah" path="res://object/stage/destructable/Stone.tscn" id="29_m5a1p"]
 [ext_resource type="PackedScene" uid="uid://2h6xrqn3jp6l" path="res://object/stage/destructable/Cage.tscn" id="30_wv35e"]
+[ext_resource type="PackedScene" uid="uid://csaug6ajhbtce" path="res://object/enemy/majin/data/skeleton dome/RedMajin.tscn" id="31_wv35e"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0bgs1"]
 size = Vector3(30, 30, 5)
@@ -890,8 +891,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -116.7)
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 100
 
-[node name="Warp" parent="BoneAct/TreasureHall" instance=ExtResource("3_6sudf")]
+[node name="Warp" parent="BoneAct/TreasureHall" node_paths=PackedStringArray("warpTarget") instance=ExtResource("3_6sudf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -134)
+warpTarget = NodePath("../../Arena/WarpExit")
 
 [node name="Arena" type="Node3D" parent="BoneAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1000, 0, -1000)
@@ -1053,7 +1055,6 @@ transform = Transform3D(-0.544639, 0, -0.83867, 0, 1, 0, 0.83867, 0, -0.544639, 
 transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -5.50391, 1, 10.173)
 
 [node name="SpikeBall1" parent="BoneAct/Arena/SwitchGroup3/SpikeBallGroup1" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 Movement/Mode = 2
 "Movement/Cycle Length" = 2.0
 "Movement/Horizontal Size" = 0.0
@@ -1061,7 +1062,6 @@ Movement/Mode = 2
 Movement/Radius = 2.0
 
 [node name="SpikeBall2" parent="BoneAct/Arena/SwitchGroup3/SpikeBallGroup1" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 Movement/Mode = 2
 "Movement/Cycle Length" = 2.0
 "Movement/Starting Offset" = 0.15
@@ -1076,7 +1076,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.224, 1, 8.102)
 
 [node name="SpikeBall1" parent="BoneAct/Arena/SwitchGroup3/SpikeBallGroup2" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 Movement/Mode = 2
 "Movement/Cycle Length" = -2.0
 "Movement/Horizontal Size" = 0.0
@@ -1084,7 +1083,6 @@ Movement/Mode = 2
 Movement/Radius = 2.0
 
 [node name="SpikeBall2" parent="BoneAct/Arena/SwitchGroup3/SpikeBallGroup2" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 Movement/Mode = 2
 "Movement/Cycle Length" = -2.0
 "Movement/Starting Offset" = 0.15
@@ -1093,7 +1091,6 @@ Movement/Mode = 2
 Movement/Radius = 2.0
 
 [node name="SpikeBall3" parent="BoneAct/Arena/SwitchGroup3/SpikeBallGroup2" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 Movement/Mode = 2
 "Movement/Cycle Length" = -2.0
 "Movement/Starting Offset" = 0.3
@@ -1105,7 +1102,6 @@ Movement/Radius = 2.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.951, 1, 6.032)
 
 [node name="SpikeBall1" parent="BoneAct/Arena/SwitchGroup3/SpikeBallGroup3" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 Movement/Mode = 2
 "Movement/Cycle Length" = 1.5
 "Movement/Horizontal Size" = 0.0
@@ -1113,7 +1109,6 @@ Movement/Mode = 2
 Movement/Radius = 2.0
 
 [node name="SpikeBall2" parent="BoneAct/Arena/SwitchGroup3/SpikeBallGroup3" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 Movement/Mode = 2
 "Movement/Cycle Length" = 1.5
 "Movement/Starting Offset" = 0.15
@@ -1146,7 +1141,6 @@ transform = Transform3D(0.996917, 0, 0.0784591, 0, 1, 0, -0.0784591, 0, 0.996917
 transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -8, 1, -10)
 
 [node name="SpikeBall1" parent="BoneAct/Arena/SwitchGroup3/SpikeBallGroup4" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 Movement/Mode = 2
 "Movement/Cycle Length" = -2.0
 "Movement/Horizontal Size" = 0.0
@@ -1154,7 +1148,6 @@ Movement/Mode = 2
 Movement/Radius = 2.0
 
 [node name="SpikeBall2" parent="BoneAct/Arena/SwitchGroup3/SpikeBallGroup4" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 Movement/Mode = 2
 "Movement/Cycle Length" = -2.0
 "Movement/Starting Offset" = 0.15
@@ -1163,7 +1156,6 @@ Movement/Mode = 2
 Movement/Radius = 2.0
 
 [node name="SpikeBall3" parent="BoneAct/Arena/SwitchGroup3/SpikeBallGroup4" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 Movement/Mode = 2
 "Movement/Cycle Length" = -2.0
 "Movement/Starting Offset" = 0.58
@@ -1175,7 +1167,6 @@ Movement/Radius = 2.0
 transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 1, -10)
 
 [node name="SpikeBall1" parent="BoneAct/Arena/SwitchGroup3/SpikeBallGroup5" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 Movement/Mode = 2
 "Movement/Cycle Length" = 2.0
 "Movement/Horizontal Size" = 0.0
@@ -1183,7 +1174,6 @@ Movement/Mode = 2
 Movement/Radius = 2.0
 
 [node name="SpikeBall2" parent="BoneAct/Arena/SwitchGroup3/SpikeBallGroup5" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 Movement/Mode = 2
 "Movement/Cycle Length" = 2.0
 "Movement/Starting Offset" = 0.15
@@ -1192,7 +1182,6 @@ Movement/Mode = 2
 Movement/Radius = 2.0
 
 [node name="SpikeBall3" parent="BoneAct/Arena/SwitchGroup3/SpikeBallGroup5" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 Movement/Mode = 2
 "Movement/Cycle Length" = 2.0
 "Movement/Starting Offset" = 0.85
@@ -1201,7 +1190,6 @@ Movement/Mode = 2
 Movement/Radius = 2.0
 
 [node name="SpikeBall4" parent="BoneAct/Arena/SwitchGroup3/SpikeBallGroup5" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 Movement/Mode = 2
 "Movement/Cycle Length" = 2.0
 "Movement/Starting Offset" = 0.5
@@ -1213,7 +1201,6 @@ Movement/Radius = 2.0
 transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 8, 1, -10)
 
 [node name="SpikeBall1" parent="BoneAct/Arena/SwitchGroup3/SpikeBallGroup6" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 Movement/Mode = 2
 "Movement/Cycle Length" = -2.0
 "Movement/Horizontal Size" = 0.0
@@ -1221,7 +1208,6 @@ Movement/Mode = 2
 Movement/Radius = 2.0
 
 [node name="SpikeBall2" parent="BoneAct/Arena/SwitchGroup3/SpikeBallGroup6" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 Movement/Mode = 2
 "Movement/Cycle Length" = -2.0
 "Movement/Starting Offset" = 0.15
@@ -1230,7 +1216,6 @@ Movement/Mode = 2
 Movement/Radius = 2.0
 
 [node name="SpikeBall3" parent="BoneAct/Arena/SwitchGroup3/SpikeBallGroup6" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 Movement/Mode = 2
 "Movement/Cycle Length" = -2.0
 "Movement/Starting Offset" = 0.58
@@ -1344,6 +1329,252 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17)
 [node name="Gate6" parent="BoneAct/Arena/SwitchGroup4" instance=ExtResource("18_8r6bi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.2, 0, -17)
 
+[node name="SkeletonMajin1" parent="BoneAct/Arena/SwitchGroup4" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -4)
+isImmortal = true
+
+[node name="SkeletonMajin2" parent="BoneAct/Arena/SwitchGroup4" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -6)
+isImmortal = true
+
+[node name="SkeletonMajin3" parent="BoneAct/Arena/SwitchGroup4" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -8)
+isImmortal = true
+
+[node name="SkeletonMajin4" parent="BoneAct/Arena/SwitchGroup4" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+isImmortal = true
+
+[node name="SkeletonMajin5" parent="BoneAct/Arena/SwitchGroup4" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -11)
+isImmortal = true
+
+[node name="SkeletonMajin1" parent="BoneAct/Arena" instance=ExtResource("8_be1y2")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 64, 0, 12)
+isImmortal = true
+
+[node name="SkeletonMajin2" parent="BoneAct/Arena" instance=ExtResource("8_be1y2")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 60, 0, 14)
+isImmortal = true
+
+[node name="SkeletonMajin3" parent="BoneAct/Arena" instance=ExtResource("8_be1y2")]
+transform = Transform3D(-0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, -0.906308, 62.0479, 0, 27.7842)
+isImmortal = true
+
+[node name="SkeletonMajin4" parent="BoneAct/Arena" instance=ExtResource("8_be1y2")]
+transform = Transform3D(-0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, -0.906308, 54.4969, 0, 29.78)
+isImmortal = true
+
+[node name="StoneGroup4" type="Node3D" parent="BoneAct/Arena"]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 67.6527, 1, 19.9696)
+
+[node name="Stone1" parent="BoneAct/Arena/StoneGroup4" instance=ExtResource("29_m5a1p")]
+
+[node name="Stone2" parent="BoneAct/Arena/StoneGroup4" instance=ExtResource("29_m5a1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+
+[node name="Stone3" parent="BoneAct/Arena/StoneGroup4" instance=ExtResource("29_m5a1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="SkeletonMajin" parent="BoneAct/Arena/StoneGroup4" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, 0)
+
+[node name="StoneGroup5" type="Node3D" parent="BoneAct/Arena"]
+transform = Transform3D(-0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, -0.939693, 52.494, 1, 20.945)
+
+[node name="Stone1" parent="BoneAct/Arena/StoneGroup5" instance=ExtResource("29_m5a1p")]
+
+[node name="Stone2" parent="BoneAct/Arena/StoneGroup5" instance=ExtResource("29_m5a1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+
+[node name="Stone3" parent="BoneAct/Arena/StoneGroup5" instance=ExtResource("29_m5a1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="SkeletonMajin" parent="BoneAct/Arena/StoneGroup5" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1, 0)
+
+[node name="StoneGroup6" type="Node3D" parent="BoneAct/Arena"]
+transform = Transform3D(-0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, -0.819152, 53.1418, 1, 37.5517)
+
+[node name="Stone1" parent="BoneAct/Arena/StoneGroup6" instance=ExtResource("29_m5a1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+
+[node name="Stone2" parent="BoneAct/Arena/StoneGroup6" instance=ExtResource("29_m5a1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
+
+[node name="Stone3" parent="BoneAct/Arena/StoneGroup6" instance=ExtResource("29_m5a1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Stone4" parent="BoneAct/Arena/StoneGroup6" instance=ExtResource("29_m5a1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
+
+[node name="SkeletonMajin1" parent="BoneAct/Arena/StoneGroup6" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1, 0)
+
+[node name="SkeletonMajin2" parent="BoneAct/Arena/StoneGroup6" instance=ExtResource("8_be1y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, 0)
+
+[node name="SwitchGroup5" type="Node3D" parent="BoneAct/Arena"]
+transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, 39.7939, 0, 50.926)
+
+[node name="Sickle1" parent="BoneAct/Arena/SwitchGroup5" instance=ExtResource("23_18g7e")]
+transform = Transform3D(0.976503, 0, 0.215502, 0, 1, 0, -0.215502, 0, 0.976503, -0.476503, 15, 5.3155)
+rotationAmount = 40.0
+cycleLength = 4.0
+chainLength = 10
+
+[node name="SickleBase" parent="BoneAct/Arena/SwitchGroup5/Sickle1" index="0"]
+visible = false
+
+[node name="CollisionShape3D" parent="BoneAct/Arena/SwitchGroup5/Sickle1/SickleBase/SickleBaseMesh/StaticBody3D" index="0"]
+disabled = true
+
+[node name="SickleHead" parent="BoneAct/Arena/SwitchGroup5/Sickle1/Root" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -13.3, 0)
+
+[node name="Sickle2" parent="BoneAct/Arena/SwitchGroup5" instance=ExtResource("23_18g7e")]
+transform = Transform3D(0.886567, 0, -0.4626, 0, 1, 0, 0.4626, 0, 0.886567, 2.07594, 15, -34.1621)
+rotationAmount = 40.0
+cycleLength = 4.0
+chainLength = 10
+
+[node name="SickleBase" parent="BoneAct/Arena/SwitchGroup5/Sickle2" index="0"]
+visible = false
+
+[node name="CollisionShape3D" parent="BoneAct/Arena/SwitchGroup5/Sickle2/SickleBase/SickleBaseMesh/StaticBody3D" index="0"]
+disabled = true
+
+[node name="SickleHead" parent="BoneAct/Arena/SwitchGroup5/Sickle2/Root" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -13.3, 0)
+
+[node name="Sickle3" parent="BoneAct/Arena/SwitchGroup5" instance=ExtResource("23_18g7e")]
+transform = Transform3D(0.832438, 0, -0.554118, 0, 1, 0, 0.554118, 0, 0.832438, 11.7788, 15, -49.5151)
+rotationAmount = 40.0
+cycleLength = 4.0
+currentRatio = 0.0
+chainLength = 10
+
+[node name="SickleBase" parent="BoneAct/Arena/SwitchGroup5/Sickle3" index="0"]
+visible = false
+
+[node name="CollisionShape3D" parent="BoneAct/Arena/SwitchGroup5/Sickle3/SickleBase/SickleBaseMesh/StaticBody3D" index="0"]
+disabled = true
+
+[node name="Root" parent="BoneAct/Arena/SwitchGroup5/Sickle3" index="1"]
+transform = Transform3D(0.766044, 0.642788, 0, -0.642788, 0.766044, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="SickleHead" parent="BoneAct/Arena/SwitchGroup5/Sickle3/Root" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -13.3, 0)
+
+[node name="Switch1" parent="BoneAct/Arena/SwitchGroup5" instance=ExtResource("17_hm2eq")]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -5.45944, 0.1, 10.3386)
+
+[node name="Switch2" parent="BoneAct/Arena/SwitchGroup5" instance=ExtResource("17_hm2eq")]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.26788, 0.1, 8.26794)
+
+[node name="Switch3" parent="BoneAct/Arena/SwitchGroup5" instance=ExtResource("17_hm2eq")]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 9.99527, 0.1, 6.19751)
+
+[node name="Gate1" parent="BoneAct/Arena/SwitchGroup5" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(0.996917, 0, 0.0784591, 0, 1, 0, -0.0784591, 0, 0.996917, -10.5846, 0, -0.479248)
+
+[node name="Gate2" parent="BoneAct/Arena/SwitchGroup5" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(0.996917, 0, 0.0784591, 0, 1, 0, -0.0784591, 0, 0.996917, -0.416016, 0, -1.27942)
+
+[node name="Gate3" parent="BoneAct/Arena/SwitchGroup5" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(0.996917, 0, 0.0784591, 0, 1, 0, -0.0784591, 0, 0.996917, 9.7525, 0, -2.07959)
+
+[node name="Switch4" parent="BoneAct/Arena/SwitchGroup5" instance=ExtResource("17_hm2eq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.00003, 0.1, -10)
+
+[node name="Switch5" parent="BoneAct/Arena/SwitchGroup5" instance=ExtResource("17_hm2eq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.05176e-05, 0.1, -10)
+
+[node name="Switch6" parent="BoneAct/Arena/SwitchGroup5" instance=ExtResource("17_hm2eq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.00003, 0.1, -10)
+
+[node name="Gate4" parent="BoneAct/Arena/SwitchGroup5" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.4603, 0, -17)
+
+[node name="Gate5" parent="BoneAct/Arena/SwitchGroup5" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.260254, 0, -17)
+
+[node name="Gate6" parent="BoneAct/Arena/SwitchGroup5" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.93975, 0, -17)
+
+[node name="ItemBox1" parent="BoneAct/Arena/SwitchGroup5" instance=ExtResource("19_g8qy3")]
+transform = Transform3D(0.996195, 2.0489e-09, -0.0871557, -1.7608e-09, 1, 3.38246e-09, 0.0871557, -3.21613e-09, 0.996195, -7, 0.5, -20.0001)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 50
+
+[node name="ItemBox2" parent="BoneAct/Arena/SwitchGroup5" instance=ExtResource("19_g8qy3")]
+transform = Transform3D(0.866025, 2.0489e-09, -0.5, -1.66336e-10, 1, 3.8097e-09, 0.5, -3.21613e-09, 0.866025, 13.71, 0.5, -35.8655)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 50
+
+[node name="SwitchGroup6" type="Node3D" parent="BoneAct/Arena"]
+transform = Transform3D(0.544639, 0, 0.83867, 0, 1, 0, -0.83867, 0, 0.544639, -23.43, 0, 60.218)
+
+[node name="RedMajin1" parent="BoneAct/Arena/SwitchGroup6" instance=ExtResource("31_wv35e")]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.224, 3, 8.10199)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 3.0
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 25
+"Attack Settings/Attack Instantly" = true
+
+[node name="EnemyStone1" parent="BoneAct/Arena/SwitchGroup6" instance=ExtResource("9_fsrbu")]
+transform = Transform3D(1.44889, 0, 0.388229, 0, 1.5, 0, -0.388229, 0, 1.44889, 2.224, 1.5, 8.102)
+enemyCount = 1
+
+[node name="Switch2" parent="BoneAct/Arena/SwitchGroup6" instance=ExtResource("17_hm2eq")]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.22354, 0.1, 8.10222)
+
+[node name="Gate1" parent="BoneAct/Arena/SwitchGroup6" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(0.996917, 0, 0.0784591, 0, 1, 0, -0.0784591, 0, 0.996917, -10.5846, 0, -0.479248)
+
+[node name="Gate2" parent="BoneAct/Arena/SwitchGroup6" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(0.996917, 0, 0.0784591, 0, 1, 0, -0.0784591, 0, 0.996917, -0.416016, 0, -1.27942)
+
+[node name="Gate3" parent="BoneAct/Arena/SwitchGroup6" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(0.996917, 0, 0.0784591, 0, 1, 0, -0.0784591, 0, 0.996917, 9.7525, 0, -2.07959)
+
+[node name="Switch5" parent="BoneAct/Arena/SwitchGroup6" instance=ExtResource("17_hm2eq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.05176e-05, 0.1, -10)
+
+[node name="RedMajin2" parent="BoneAct/Arena/SwitchGroup6" instance=ExtResource("31_wv35e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -10)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 0.5
+"Attack Settings/Flame Active Time" = 6.0
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 25
+"Attack Settings/Attack Instantly" = true
+
+[node name="EnemyStone2" parent="BoneAct/Arena/SwitchGroup6" instance=ExtResource("9_fsrbu")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 1.5, -10)
+enemyCount = 1
+
+[node name="Gate4" parent="BoneAct/Arena/SwitchGroup6" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.3, 0, -17)
+
+[node name="Gate5" parent="BoneAct/Arena/SwitchGroup6" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1, 0, -17)
+
+[node name="Gate6" parent="BoneAct/Arena/SwitchGroup6" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.1, 0, -17)
+
 [connection signal="Teleport" from="BoneAct/Throne/Warp" to="Static/Trigger/Path/HallRedPath" method="Activate"]
 [connection signal="Defeated" from="BoneAct/RedHall/SkeletonMajin1" to="BoneAct/RedHall/EnemyStone" method="IncrementCounter"]
 [connection signal="Spawned" from="BoneAct/RedHall/SkeletonMajin1" to="BoneAct/RedHall/SkeletonMajin5" method="Spawn"]
@@ -1360,10 +1591,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.2, 0, -17)
 [connection signal="Activated" from="BoneAct/BlueHall/SwitchGroup1/Switch" to="BoneAct/BlueHall/SwitchGroup1/Gate" method="Activate"]
 [connection signal="Activated" from="BoneAct/BlueHall/SwitchGroup2/Switch" to="BoneAct/BlueHall/SwitchGroup2/Gate" method="Activate"]
 [connection signal="Activated" from="BoneAct/BlueHall/SwitchGroup2/Switch" to="BoneAct/BlueHall/SwitchGroup2/BoneCull" method="Activate"]
+[connection signal="ObjectiveFinished" from="BoneAct/BlueHall/SwitchGroup2/BoneCull/Bone" to="BoneAct/BoneWarp" method="Activate"]
 [connection signal="Activated" from="BoneAct/BlueHall/SwitchGroup3/Switch" to="BoneAct/BlueHall/SwitchGroup3/Gate" method="Activate"]
 [connection signal="Activated" from="BoneAct/BlueHall/SwitchGroup4/Switch" to="BoneAct/BlueHall/SwitchGroup4/Gate" method="Activate"]
 [connection signal="Activated" from="BoneAct/BlueHall/SwitchGroup4/Switch" to="BoneAct/BlueHall/SwitchGroup4/BoneCull" method="Activate"]
+[connection signal="ObjectiveFinished" from="BoneAct/BlueHall/SwitchGroup4/BoneCull/Bone" to="BoneAct/BoneWarp" method="Activate"]
 [connection signal="Activated" from="BoneAct/BlueHall/SwitchGroup5/Switch" to="BoneAct/BlueHall/SwitchGroup5/Gate" method="Activate"]
+[connection signal="ObjectiveFinished" from="BoneAct/BlueHall/SwitchGroup5/Bone" to="BoneAct/BoneWarp" method="Activate"]
 [connection signal="Teleport" from="BoneAct/BlueHall/WarpWhite" to="Static/Trigger/Path/HallRedPath" method="Activate"]
 [connection signal="Teleport" from="BoneAct/BlueHall/WarpRed" to="Static/Trigger/Path/HallYellowPath" method="Activate"]
 [connection signal="Defeated" from="BoneAct/YellowHall/SkeletonMajin2" to="BoneAct/YellowHall/EnemyStone2" method="IncrementCounter"]
@@ -1374,6 +1608,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.2, 0, -17)
 [connection signal="Defeated" from="BoneAct/YellowHall/SkeletonMajin7" to="BoneAct/YellowHall/EnemyStone2" method="IncrementCounter"]
 [connection signal="Defeated" from="BoneAct/YellowHall/SkeletonMajin8" to="BoneAct/YellowHall/EnemyStone1" method="IncrementCounter"]
 [connection signal="Defeated" from="BoneAct/YellowHall/SkeletonMajin9" to="BoneAct/YellowHall/EnemyStone2" method="IncrementCounter"]
+[connection signal="ObjectiveFinished" from="BoneAct/YellowHall/Bone1" to="BoneAct/BoneWarp" method="Activate"]
+[connection signal="ObjectiveFinished" from="BoneAct/YellowHall/Bone2" to="BoneAct/BoneWarp" method="Activate"]
+[connection signal="ObjectiveFinished" from="BoneAct/YellowHall/Bone3" to="BoneAct/BoneWarp" method="Activate"]
 [connection signal="Teleport" from="BoneAct/YellowHall/WarpRed" to="BoneAct/YellowHall" method="Deactivate"]
 [connection signal="Teleport" from="BoneAct/YellowHall/WarpWhiteL" to="BoneAct/YellowHall" method="Deactivate"]
 [connection signal="Teleport" from="BoneAct/YellowHall/WarpWhiteR" to="BoneAct/YellowHall" method="Deactivate"]
@@ -1393,6 +1630,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.2, 0, -17)
 [connection signal="Collected" from="BoneAct/TreasureHall/ItemBoxGroup2/ItemBox3/ItemBoxFlying" to="BoneAct/TreasureHall/ItemBoxGroup2/ItemBox3/VerticalMovement" method="Pause"]
 [connection signal="Respawned" from="BoneAct/TreasureHall/ItemBoxGroup2/ItemBox3/ItemBoxFlying" to="BoneAct/TreasureHall/ItemBoxGroup2/ItemBox3/HorizontalMovement" method="Unpause"]
 [connection signal="Respawned" from="BoneAct/TreasureHall/ItemBoxGroup2/ItemBox3/ItemBoxFlying" to="BoneAct/TreasureHall/ItemBoxGroup2/ItemBox3/VerticalMovement" method="Unpause"]
+[connection signal="Teleport" from="BoneAct/TreasureHall/Warp" to="Static/Trigger/Path/ArenaPath" method="Activate"]
 [connection signal="Activated" from="BoneAct/Arena/SwitchGroup1/Switch1" to="BoneAct/Arena/SwitchGroup1/Gate1" method="Activate"]
 [connection signal="Activated" from="BoneAct/Arena/SwitchGroup1/Switch2" to="BoneAct/Arena/SwitchGroup1/Gate2" method="Activate"]
 [connection signal="Activated" from="BoneAct/Arena/SwitchGroup1/Switch3" to="BoneAct/Arena/SwitchGroup1/Gate3" method="Activate"]
@@ -1432,6 +1670,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.2, 0, -17)
 [connection signal="Activated" from="BoneAct/Arena/SwitchGroup4/Switch4" to="BoneAct/Arena/SwitchGroup4/Gate4" method="Activate"]
 [connection signal="Activated" from="BoneAct/Arena/SwitchGroup4/Switch5" to="BoneAct/Arena/SwitchGroup4/Gate5" method="Activate"]
 [connection signal="Activated" from="BoneAct/Arena/SwitchGroup4/Switch6" to="BoneAct/Arena/SwitchGroup4/Gate6" method="Activate"]
+[connection signal="Activated" from="BoneAct/Arena/SwitchGroup5/Switch1" to="BoneAct/Arena/SwitchGroup5/Gate1" method="Activate"]
+[connection signal="Activated" from="BoneAct/Arena/SwitchGroup5/Switch2" to="BoneAct/Arena/SwitchGroup5/Gate2" method="Activate"]
+[connection signal="Activated" from="BoneAct/Arena/SwitchGroup5/Switch3" to="BoneAct/Arena/SwitchGroup5/Gate3" method="Activate"]
+[connection signal="Activated" from="BoneAct/Arena/SwitchGroup5/Switch4" to="BoneAct/Arena/SwitchGroup5/Gate4" method="Activate"]
+[connection signal="Activated" from="BoneAct/Arena/SwitchGroup5/Switch5" to="BoneAct/Arena/SwitchGroup5/Gate5" method="Activate"]
+[connection signal="Activated" from="BoneAct/Arena/SwitchGroup5/Switch6" to="BoneAct/Arena/SwitchGroup5/Gate6" method="Activate"]
+[connection signal="Defeated" from="BoneAct/Arena/SwitchGroup6/RedMajin1" to="BoneAct/Arena/SwitchGroup6/EnemyStone1" method="IncrementCounter"]
+[connection signal="Activated" from="BoneAct/Arena/SwitchGroup6/Switch2" to="BoneAct/Arena/SwitchGroup6/Gate2" method="Activate"]
+[connection signal="Activated" from="BoneAct/Arena/SwitchGroup6/Switch5" to="BoneAct/Arena/SwitchGroup6/Gate5" method="Activate"]
+[connection signal="Defeated" from="BoneAct/Arena/SwitchGroup6/RedMajin2" to="BoneAct/Arena/SwitchGroup6/EnemyStone2" method="IncrementCounter"]
 
 [editable path="Static"]
 [editable path="Static/Collision"]
+[editable path="BoneAct/Arena/SwitchGroup5/Sickle1"]
+[editable path="BoneAct/Arena/SwitchGroup5/Sickle1/SickleBase"]
+[editable path="BoneAct/Arena/SwitchGroup5/Sickle1/Root/SickleHead"]
+[editable path="BoneAct/Arena/SwitchGroup5/Sickle2"]
+[editable path="BoneAct/Arena/SwitchGroup5/Sickle2/SickleBase"]
+[editable path="BoneAct/Arena/SwitchGroup5/Sickle2/Root/SickleHead"]
+[editable path="BoneAct/Arena/SwitchGroup5/Sickle3"]
+[editable path="BoneAct/Arena/SwitchGroup5/Sickle3/SickleBase"]
+[editable path="BoneAct/Arena/SwitchGroup5/Sickle3/Root/SickleHead"]
