@@ -428,7 +428,8 @@ public partial class PlayerSkillController : Node3D
 		}
 		else
 		{
-			timeBreakAnimator.Play("stop");
+			timeBreakAnimator.Play(isTimeBreakEnabled ? "stop" : "RESET");
+			timeBreakAnimator.Advance(0.0);
 			Player.Camera.UnrequestMotionBlur();
 			Player.Animator.StopMotionBlur();
 
@@ -466,7 +467,8 @@ public partial class PlayerSkillController : Node3D
 		}
 		else
 		{
-			speedBreakAnimator.Play("stop");
+			speedBreakAnimator.Play(isSpeedBreakEnabled ? "stop" : "RESET");
+			speedBreakAnimator.Advance(0.0);
 			speedBreakSFX.Stream = speedBreakDeactivate;
 			speedBreakSFX.Play();
 
