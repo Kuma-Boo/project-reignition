@@ -467,8 +467,16 @@ public partial class PlayerSkillController : Node3D
 		}
 		else
 		{
-			speedBreakAnimator.Play(isSpeedBreakEnabled ? "stop" : "RESET");
-			speedBreakAnimator.Advance(0.0);
+			if (!StageSettings.Instance.IsLevelIngame)
+			{
+				speedBreakAnimator.Play("RESET");
+				speedBreakAnimator.Advance(0.0);
+			}
+			else
+			{
+				speedBreakAnimator.Play("stop");
+			}
+
 			speedBreakSFX.Stream = speedBreakDeactivate;
 			speedBreakSFX.Play();
 
