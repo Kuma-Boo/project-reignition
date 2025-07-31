@@ -480,7 +480,6 @@ public partial class PlayerAnimator : Node3D
 		animationTree.Set(AccelJumpTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 	public void JumpDashAnimation() => UpdateAirState("launch", false);
-	public void LaunchAnimation() => UpdateAirState("launch", true);
 
 	private readonly StringName StompState = "stomp";
 	private readonly StringName StompTrigger = "parameters/air_tree/stomp_trigger/request";
@@ -537,7 +536,7 @@ public partial class PlayerAnimator : Node3D
 		Player.Effect.IsEmittingStepDust = false;
 		animationTree.Set(GroundTransition, DisabledConstant);
 
-		if (IsFallTransitionEnabled && Player.VerticalSpeed < 0 && !Player.IsLaunching)
+		if (IsFallTransitionEnabled && Player.VerticalSpeed < 0)
 		{
 			UpdateAirState(FallState, false);
 			animationTree.Set(FallSpeed, 1.0f);

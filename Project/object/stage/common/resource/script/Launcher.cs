@@ -221,7 +221,7 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 			if (GetLaunchSettings().InitialVelocity.AngleTo(Vector3.Up) < Mathf.Pi * .1f)
 				Player.Animator.JumpAnimation();
 			else
-				Player.Animator.LaunchAnimation();
+				Player.Animator.JumpDashAnimation();
 		}
 		else if (LaunchAnimationType == LauncherAnimations.Jump)
 		{
@@ -229,7 +229,7 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		}
 		else
 		{
-			Player.Animator.LaunchAnimation();
+			Player.Animator.JumpDashAnimation();
 		}
 	}
 
