@@ -44,7 +44,8 @@ public partial class FlyingPot : Node3D
 	private readonly StringName EnabledState = "enabled";
 	private readonly StringName DisabledState = "disabled";
 
-	private bool isSleeping = true;
+	private bool isSleeping;
+	private bool isOnFloor;
 	private bool interactingWithPlayer;
 	private bool isPlayerJumpingIntoPot;
 	private float angle;
@@ -79,15 +80,17 @@ public partial class FlyingPot : Node3D
 
 	private void Respawn()
 	{
-		ResetPosition();
+		isSleeping = true;
+		CallDeferred(MethodName.ResetPosition);
 
 		interactionAnimator.Play("RESET");
 		lockonArea.SetDeferred("monitorable", true);
+		animationTree.Set(FallTransition, DisabledState);
 	}
 
 	public override void _PhysicsProcess(double _)
 	{
-		if (isSleeping || Engine.IsEditorHint()) return;
+		if (Engine.IsEditorHint() || isSleeping) return;
 
 		if (!interactingWithPlayer && !lockonArea.Monitorable) // Re-enable lockon
 			lockonArea.SetDeferred("monitorable", Player.VerticalSpeed < 0f);
@@ -178,8 +181,9 @@ public partial class FlyingPot : Node3D
 
 		localPosition.X = Mathf.Clamp(localPosition.X, -travelBounds.X + boundOffset, travelBounds.X + boundOffset);
 		localPosition.Y = Mathf.Clamp(localPosition.Y, 0f, travelBounds.Y);
+		CheckFloor();
 
-		if (!Mathf.IsZeroApprox(localPosition.Y)) // Fall
+		if (!Mathf.IsZeroApprox(localPosition.Y) && !isOnFloor) // Fall
 		{
 			// Update velocity
 			Velocity -= Runtime.Gravity * PhysicsManager.physicsDelta; // Floaty fall
@@ -198,8 +202,25 @@ public partial class FlyingPot : Node3D
 		root.Position = new Vector3(localPosition.X, localPosition.Y, 0);
 		root.Rotation = Vector3.Forward * Angle;
 
-		if (lockonArea.Monitorable && !interactingWithPlayer)
-			isSleeping = Mathf.IsZeroApprox(localPosition.Y) && Mathf.IsZeroApprox(Angle); // Update sleeping status
+		if (lockonArea.Monitorable && !interactingWithPlayer) // Update sleeping status
+		{
+			if ((Mathf.IsZeroApprox(localPosition.Y) || isOnFloor) && Mathf.IsZeroApprox(Angle))
+				isSleeping = true;
+		}
+	}
+
+	private void CheckFloor()
+	{
+		if (Velocity > 0)
+		{
+			// Moving up
+			isOnFloor = false;
+			return;
+		}
+
+		float checkLength = 1f + Velocity * PhysicsManager.physicsDelta;
+		DebugManager.DrawRay(Root.GlobalPosition, Vector3.Down * checkLength, Colors.White);
+		isOnFloor = this.CastRay(Root.GlobalPosition, Vector3.Down * checkLength, Runtime.Instance.environmentMask);
 	}
 
 	private void Activate()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://b4bdc5vtf52m6"]
+[gd_scene load_steps=51 format=3 uid="uid://b4bdc5vtf52m6"]
 
 [ext_resource type="PackedScene" uid="uid://slvtrs84m8s0" path="res://area/6 skeleton dome/act 3/Static.tscn" id="1_7mhht"]
 [ext_resource type="Resource" uid="uid://cxmfjdvam8ucj" path="res://resource/level data/skeleton dome/Act3Bone.tres" id="2_ftyvr"]
@@ -36,10 +36,8 @@
 [ext_resource type="PackedScene" uid="uid://di8tdo65qjkbe" path="res://object/enemy/majin/data/skeleton dome/BlueMajin.tscn" id="33_48ldw"]
 [ext_resource type="PackedScene" uid="uid://csaug6ajhbtce" path="res://object/enemy/majin/data/skeleton dome/RedMajin.tscn" id="33_n0wyt"]
 [ext_resource type="PackedScene" uid="uid://bgrpp6vriyi1w" path="res://area/6 skeleton dome/object/platform/PlatformSpiralSmall.tscn" id="34_n0wyt"]
-[ext_resource type="PackedScene" uid="uid://doc2lrkdh0ga3" path="res://object/trigger/state trigger/FootholdTrigger.tscn" id="35_phq0i"]
-[ext_resource type="PackedScene" uid="uid://ehm8lwnod2pl" path="res://area/6 skeleton dome/object/foothold/FootholdLeft.tscn" id="36_7mqa4"]
-[ext_resource type="PackedScene" uid="uid://cpiujtcf5l6df" path="res://area/6 skeleton dome/object/foothold/FootholdCenter.tscn" id="37_dtcli"]
-[ext_resource type="PackedScene" uid="uid://t44brdb5vw67" path="res://area/6 skeleton dome/object/foothold/FootholdRight.tscn" id="38_rdv7x"]
+[ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="36_n0wyt"]
+[ext_resource type="PackedScene" uid="uid://db770ujvjdio4" path="res://object/stage/common/LaunchRingSpike.tscn" id="37_phq0i"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="39_qgy35"]
 [ext_resource type="Script" uid="uid://coiui4qvdxbqe" path="res://object/trigger/modules/EventTrigger.cs" id="40_q5r1r"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="41_xs83w"]
@@ -50,11 +48,8 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_0bgs1"]
 size = Vector3(30, 30, 5)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_srca5"]
-size = Vector3(3, 5, 2)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_jplsn"]
-size = Vector3(8, 5, 2)
+[sub_resource type="BoxShape3D" id="BoxShape3D_n0wyt"]
+size = Vector3(20, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1e57r"]
 size = Vector3(20, 15, 60)
@@ -240,7 +235,7 @@ warpTarget = NodePath("../TreasureHall/WarpExit")
 script = ExtResource("7_vp6ye")
 enableStartFX = true
 crossfade = true
-warpTarget = NodePath("../Spiral [NOT STARTED YET]/WarpExit")
+warpTarget = NodePath("../Spiral/WarpExit")
 
 [node name="Throne" type="Node3D" parent="BoneAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1150, 0, -1295)
@@ -1772,262 +1767,103 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1, 0, -17)
 [node name="Gate6" parent="BoneAct/Arena/SwitchGroup6" instance=ExtResource("18_8r6bi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.1, 0, -17)
 
-[node name="Spiral [NOT STARTED YET]" type="Node3D" parent="BoneAct"]
+[node name="Spiral" type="Node3D" parent="BoneAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 779.8, 20, -1268)
 
-[node name="WarpExit" parent="BoneAct/Spiral [NOT STARTED YET]" instance=ExtResource("4_46mj5")]
+[node name="WarpExit" parent="BoneAct/Spiral" instance=ExtResource("4_46mj5")]
 transform = Transform3D(0.707107, 0.0370071, 0.706138, 0, 0.99863, -0.052336, -0.707107, 0.0370071, 0.706138, 118, -9.8, -84)
 
-[node name="TopRow" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]"]
+[node name="StaticBody3D" type="StaticBody3D" parent="BoneAct/Spiral" groups=["wall"]]
+transform = Transform3D(0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, 0.642788, 111.396, -9.3, -88.8419)
 
-[node name="PlatformGroup1" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow"]
-transform = Transform3D(0.725266, 0, -0.688469, 0, 1, 0, 0.688469, 0, 0.725266, 17.9254, 0, -79.2449)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BoneAct/Spiral/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0)
+shape = SubResource("BoxShape3D_n0wyt")
 
-[node name="GreenMajin1" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup1" instance=ExtResource("27_18g7e")]
-transform = Transform3D(0.97301, 0, 0.230763, 0, 1, 0, -0.230763, 0, 0.97301, 1.42615, -2, 11.5493)
-"Spawn Settings/Spawn Travel Time" = 1.0
-"Spawn Settings/Spawn Delay" = 0.0
-"Spawn Settings/Spawn Offset" = Vector3(0, 30, 0)
-"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
-"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
-"Attack Settings/Attack Type" = 1
+[node name="TopRow" type="Node3D" parent="BoneAct/Spiral"]
 
-[node name="GreenMajin2" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup1" instance=ExtResource("27_18g7e")]
-transform = Transform3D(0.988993, 0, 0.147965, 0, 1, 0, -0.147965, 0, 0.988993, 0.7276, 0, 8.41821)
-"Spawn Settings/Spawn Travel Time" = 1.0
-"Spawn Settings/Spawn Delay" = 0.5
-"Spawn Settings/Spawn Offset" = Vector3(0, 30, 0)
-"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
-"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
-"Attack Settings/Attack Type" = 1
-SpawnMode = 1
-
-[node name="GreenMajin3" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup1" instance=ExtResource("27_18g7e")]
-transform = Transform3D(0.992508, 0, 0.122181, 0, 1, 0, -0.122181, 0, 0.992508, 0.113281, 2, 5.47681)
-"Spawn Settings/Spawn Travel Time" = 1.0
-"Spawn Settings/Spawn Delay" = 1.0
-"Spawn Settings/Spawn Offset" = Vector3(0, 30, 0)
-"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
-"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
-"Attack Settings/Attack Type" = 1
-SpawnMode = 1
-
-[node name="PlatformSpiralLarge1" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup1" instance=ExtResource("32_v31tp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.300049, 0, 0)
-
-[node name="Rings" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup1/PlatformSpiralLarge1"]
-transform = Transform3D(0.997918, 0, 0.0645148, 0, 1, 0, -0.0645148, 0, 0.997918, -0.183411, 1, 4.18848)
-script = ExtResource("11_yellp")
-Source = ExtResource("12_7ln1s")
-Amount = 5
-Shape = 2
-Path = NodePath("../../../../../../Static/Path/SpiralPath")
-"Path Progress Offset" = 0.0
-"Reverse Path" = false
-"Disable Path Y" = true
-Spacing = 2.5
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup1/PlatformSpiralLarge1/Rings" instance=ExtResource("12_7ln1s")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0.000244141)
-
-[node name="Child02" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup1/PlatformSpiralLarge1/Rings" instance=ExtResource("12_7ln1s")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0.00878906, 0, -2.52246)
-
-[node name="Child03" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup1/PlatformSpiralLarge1/Rings" instance=ExtResource("12_7ln1s")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0.105713, 0, -5.04297)
-
-[node name="Child04" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup1/PlatformSpiralLarge1/Rings" instance=ExtResource("12_7ln1s")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0.290283, 0, -7.55884)
-
-[node name="Child05" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup1/PlatformSpiralLarge1/Rings" instance=ExtResource("12_7ln1s")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0.562134, 0, -10.0667)
-
-[node name="PlatformSpiralLarge2" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup1" instance=ExtResource("32_v31tp")]
-transform = Transform3D(0.999661, 0, -0.0260199, 0, 1, 0, 0.0260199, 0, 0.999661, 0.418823, 5.6, -3.29114)
-
-[node name="ItemBox" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup1/PlatformSpiralLarge2" instance=ExtResource("19_g8qy3")]
-transform = Transform3D(0.996479, 0, -0.0838521, 0, 1, 0, 0.0838521, 0, 0.996479, -0.00897217, 0.4, -5.19775)
-"Spawn Settings/Spawn Pearls" = true
-"Spawn Settings/Amount" = 100
-
-[node name="Rings1" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow"]
-transform = Transform3D(0.50287, 0, -0.864364, 0, 1, 0, 0.864364, 0, 0.50287, 34.6365, -3.3, -92.4053)
-script = ExtResource("11_yellp")
-Source = ExtResource("12_7ln1s")
-Amount = 5
-Shape = 2
-Path = NodePath("../../../../Static/Path/SpiralPath")
-"Path Progress Offset" = 0.0
-"Reverse Path" = false
-"Disable Path Y" = false
-Spacing = 2.5
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/Rings1" instance=ExtResource("12_7ln1s")]
-
-[node name="Child02" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/Rings1" instance=ExtResource("12_7ln1s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0181274, -0.1514, -2.49561)
-
-[node name="Child03" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/Rings1" instance=ExtResource("12_7ln1s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.123108, -0.303844, -4.98901)
-
-[node name="Child04" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/Rings1" instance=ExtResource("12_7ln1s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.314636, -0.457415, -7.47729)
-
-[node name="Child05" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/Rings1" instance=ExtResource("12_7ln1s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.593079, -0.612188, -9.95752)
-
-[node name="PlatformGroup2" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow"]
-transform = Transform3D(-0.147965, 0.0475362, -0.98785, 0, 0.998844, 0.0480653, 0.988993, 0.00711197, -0.147794, 78.9422, -3.54606, -101.084)
-
-[node name="SkeletonMajin" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup2" instance=ExtResource("8_be1y2")]
-transform = Transform3D(1, -6.0536e-09, 1.19209e-07, 1.86265e-09, 1, 1.86265e-09, -1.49012e-08, -3.62052e-08, 1, -0.400024, -0.119995, -0.572083)
-SpawnMode = 2
-
-[node name="PlatformSpiralLarge" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup2" instance=ExtResource("32_v31tp")]
-transform = Transform3D(1, -4.65661e-10, 0, 0, 1, 1.04774e-09, 0, -2.79397e-09, 1, 0, 0, 0)
-
-[node name="ItemBox" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup2" instance=ExtResource("19_g8qy3")]
-transform = Transform3D(0.996195, -2.79397e-09, -0.0871558, 2.79397e-09, 1, 1.12923e-08, 0.0871558, -2.52621e-08, 0.996195, -0.0175781, 0.400013, -5.30133)
-"Spawn Settings/Spawn Pearls" = true
-"Spawn Settings/Amount" = 100
-
-[node name="Rings2" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow"]
-transform = Transform3D(-0.319076, 0, -0.947731, 0, 1, 0, 0.947731, 0, -0.319076, 92.4423, -6.9, -98.306)
-script = ExtResource("11_yellp")
-Source = ExtResource("12_7ln1s")
-Amount = 6
-Shape = 2
-Path = NodePath("../../../../Static/Path/SpiralPath")
-"Path Progress Offset" = 0.0
-"Reverse Path" = false
-"Disable Path Y" = false
-Spacing = 4.0
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/Rings2" instance=ExtResource("12_7ln1s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00012207, 1.23978e-05, 0.000183105)
-
-[node name="Child02" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/Rings2" instance=ExtResource("12_7ln1s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.115845, -0.267788, -3.96582)
-
-[node name="Child03" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/Rings2" instance=ExtResource("12_7ln1s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.461792, -0.533027, -7.91876)
-
-[node name="Child04" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/Rings2" instance=ExtResource("12_7ln1s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.03564, -0.795388, -11.845)
-
-[node name="Child05" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/Rings2" instance=ExtResource("12_7ln1s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.83508, -1.05464, -15.7319)
-
-[node name="Child06" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/Rings2" instance=ExtResource("12_7ln1s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.85608, -1.31059, -19.567)
-
-[node name="PlatformGroup3" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow"]
+[node name="PlatformGroup3" type="Node3D" parent="BoneAct/Spiral/TopRow"]
 transform = Transform3D(-0.921998, 0, -0.387194, 0, 1, 0, 0.387194, 0, -0.921998, 137.158, 0, -56.918)
 
-[node name="BlueMajin1" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup3" instance=ExtResource("33_48ldw")]
-transform = Transform3D(0.955175, 0, 0.296041, 0, 1, 0, -0.296041, 0, 0.955175, 4.23291, -8.5, 22.9512)
-
-[node name="BlueMajin2" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup3" instance=ExtResource("33_48ldw")]
-transform = Transform3D(0.985321, 0, 0.170708, 0, 1, 0, -0.170708, 0, 0.985321, 3.58862, -6.2, 15.1271)
-
-[node name="BlueMajin3" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup3" instance=ExtResource("33_48ldw")]
-transform = Transform3D(0.998018, 0, 0.0629298, 0, 1, 0, -0.0629298, 0, 0.998018, 0.744141, -3.7, 8.8736)
-
-[node name="PlatformSpiralSmall" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup3" instance=ExtResource("34_n0wyt")]
+[node name="PlatformSpiralSmall" parent="BoneAct/Spiral/TopRow/PlatformGroup3" instance=ExtResource("34_n0wyt")]
 transform = Transform3D(1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, 1, 0, 0, 0)
 
-[node name="Sickle" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup3" instance=ExtResource("23_18g7e")]
+[node name="Sickle" parent="BoneAct/Spiral/TopRow/PlatformGroup3" instance=ExtResource("23_18g7e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, -4.5, -4)
 rotationAmount = 10.0
 cycleLength = 3.0
 chainLength = 4
 
-[node name="ItemBoxGroup" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup3"]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -0.0994873, 2, -1.5)
-
-[node name="ItemBoxFlying" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup3/ItemBoxGroup" instance=ExtResource("17_c2bi5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.896, 0)
-"Spawn Settings/Spawn Pearls" = true
-"Spawn Settings/Amount" = 100
-
-[node name="HorizontalMovement" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup3/ItemBoxGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.896, 0)
-script = ExtResource("18_oboek")
-root = NodePath("../ItemBoxFlying")
-animator = NodePath("")
-Movement/Mode = 1
-"Movement/Cycle Length" = 2.0
-"Movement/Starting Offset" = 0.0
-Movement/Distance = 3.0
-Movement/Angle = -90.0
-"Vertical Orientation" = false
-
-[node name="VerticalMovement" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup3/ItemBoxGroup"]
-script = ExtResource("18_oboek")
-root = NodePath("../HorizontalMovement")
-animator = NodePath("")
-Movement/Mode = 1
-"Movement/Cycle Length" = 1.0
-"Movement/Starting Offset" = 0.4
-Movement/Distance = 1.0
-Movement/Angle = 0.0
-"Vertical Orientation" = true
-
-[node name="PlatformGroup4" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow"]
+[node name="PlatformGroup4" type="Node3D" parent="BoneAct/Spiral/TopRow"]
 transform = Transform3D(-0.995253, 0, 0.0973224, 0, 1, 0, -0.0973224, 0, -0.995253, 141.436, -3, -22.1171)
 
-[node name="PlatformSpiralSmall" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup4" instance=ExtResource("34_n0wyt")]
+[node name="PlatformSpiralSmall" parent="BoneAct/Spiral/TopRow/PlatformGroup4" instance=ExtResource("34_n0wyt")]
 transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, 0, 0, 0)
 
-[node name="Sickle" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup4" instance=ExtResource("23_18g7e")]
+[node name="Sickle" parent="BoneAct/Spiral/TopRow/PlatformGroup4" instance=ExtResource("23_18g7e")]
 transform = Transform3D(1, 0, 9.68575e-08, 0, 1, 0, -9.68575e-08, 0, 1, 1.10059, -4.8, -3)
 rotationAmount = 10.0
 chainLength = 3
 
-[node name="SkeletonMajin1" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow" instance=ExtResource("8_be1y2")]
+[node name="SkeletonMajin1" parent="BoneAct/Spiral/TopRow" instance=ExtResource("8_be1y2")]
 transform = Transform3D(-0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, -0.939693, 135.538, -14.8671, -5.97571)
-SpawnMode = 2
 
-[node name="SkeletonMajin2" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow" instance=ExtResource("8_be1y2")]
+[node name="SkeletonMajin2" parent="BoneAct/Spiral/TopRow" instance=ExtResource("8_be1y2")]
 transform = Transform3D(-0.819152, 0, 0.573577, 0, 1, 0, -0.573577, 0, -0.819152, 129.294, -15.7026, 4.39294)
-SpawnMode = 2
 
-[node name="SkeletonMajin3" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow" instance=ExtResource("8_be1y2")]
+[node name="SkeletonMajin3" parent="BoneAct/Spiral/TopRow" instance=ExtResource("8_be1y2")]
 transform = Transform3D(-0.78509, 0, 0.619382, 0, 1, 0, -0.619382, 0, -0.78509, 126.308, -16.1622, 12.0699)
-SpawnMode = 2
 
-[node name="SkeletonMajin4" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow" instance=ExtResource("8_be1y2")]
+[node name="SkeletonMajin4" parent="BoneAct/Spiral/TopRow" instance=ExtResource("8_be1y2")]
 transform = Transform3D(-0.666389, 0, 0.745604, 0, 1, 0, -0.745604, 0, -0.666389, 117.755, -16.796, 18.9983)
-SpawnMode = 2
 
-[node name="SkeletonMajin5" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow" instance=ExtResource("8_be1y2")]
+[node name="SkeletonMajin5" parent="BoneAct/Spiral/TopRow" instance=ExtResource("8_be1y2")]
 transform = Transform3D(-0.588717, 0, 0.808339, 0, 1, 0, -0.808339, 0, -0.588717, 113.337, -17.2111, 24.714)
-SpawnMode = 2
 
-[node name="PlatformGroup5" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow"]
+[node name="PlatformGroup5" type="Node3D" parent="BoneAct/Spiral/TopRow"]
 transform = Transform3D(0.120657, 0, 0.992694, 0, 1, 0, -0.992694, 0, 0.120657, 61.1971, -16.2111, 37.3098)
 
-[node name="SkeletonMajin1" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup5" instance=ExtResource("8_be1y2")]
+[node name="SkeletonMajin1" parent="BoneAct/Spiral/TopRow/PlatformGroup5" instance=ExtResource("8_be1y2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.30005, -0.0999999, 2.1994)
-SpawnMode = 2
 
-[node name="SkeletonMajin2" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup5" instance=ExtResource("8_be1y2")]
+[node name="SkeletonMajin2" parent="BoneAct/Spiral/TopRow/PlatformGroup5" instance=ExtResource("8_be1y2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.300415, -0.0999999, -1.40076)
-SpawnMode = 2
 
-[node name="PlatformSpiralLarge1" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup5" instance=ExtResource("32_v31tp")]
+[node name="PlatformSpiralLarge1" parent="BoneAct/Spiral/TopRow/PlatformGroup5" instance=ExtResource("32_v31tp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.999878)
 
-[node name="PlatformSpiralLarge2" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup5" instance=ExtResource("32_v31tp")]
+[node name="PlatformSpiralLarge2" parent="BoneAct/Spiral/TopRow/PlatformGroup5" instance=ExtResource("32_v31tp")]
 transform = Transform3D(0.987942, 0, -0.154831, 0, 1, 0, 0.154831, 0, 0.987942, 0.253174, 4.7, -9.65948)
 
-[node name="Rings3" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow"]
+[node name="LaunchRing1" parent="BoneAct/Spiral/TopRow/PlatformGroup5" instance=ExtResource("36_n0wyt")]
+transform = Transform3D(-0.916851, 0, 0.399229, 0, 1, 0, -0.399229, 0, -0.916851, 2.21764, 5, -18.1319)
+"Secondary Settings/Middle Height" = 1.0
+"Secondary Settings/Final Height" = 0.0
+"Secondary Settings/Distance" = 25.0
+MiddleHeight = 0.0
+FinalHeight = -2.0
+
+[node name="LaunchRing2" parent="BoneAct/Spiral/TopRow/PlatformGroup5" instance=ExtResource("36_n0wyt")]
+transform = Transform3D(-0.73989, 0, 0.672729, 0, 1, 0, -0.672729, 0, -0.73989, 11.5299, 5, -38.2182)
+"Secondary Settings/Middle Height" = 1.0
+"Secondary Settings/Final Height" = 0.0
+"Secondary Settings/Distance" = 25.0
+MiddleHeight = 0.0
+FinalHeight = -2.0
+
+[node name="Sickle1" parent="BoneAct/Spiral/TopRow/PlatformGroup5" instance=ExtResource("23_18g7e")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 18.5858, 18, -46.5858)
+rotationAmount = 10.0
+enableSparkParticles = false
+chainLength = 10
+
+[node name="LaunchRingSpike" parent="BoneAct/Spiral/TopRow/PlatformGroup5" instance=ExtResource("37_phq0i")]
+transform = Transform3D(-0.197709, 0, 0.980261, 0, 1, 0, -0.980261, 0, -0.197709, 26.1587, 4, -54.4121)
+"Secondary Settings/Middle Height" = 1.0
+"Secondary Settings/Final Height" = -2.0
+"Secondary Settings/Distance" = 30.0
+
+[node name="Rings3" type="Node3D" parent="BoneAct/Spiral/TopRow"]
 transform = Transform3D(0.553494, 0, 0.832855, 0, 1, 0, -0.832855, 0, 0.553494, 28.9608, -21.6, 24.6774)
 script = ExtResource("11_yellp")
 Source = ExtResource("12_7ln1s")
@@ -2041,25 +1877,25 @@ Spacing = 5.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/Rings3" instance=ExtResource("12_7ln1s")]
+[node name="Child01" parent="BoneAct/Spiral/TopRow/Rings3" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.90735e-06, -6.10352e-05)
 
-[node name="Child02" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/Rings3" instance=ExtResource("12_7ln1s")]
+[node name="Child02" parent="BoneAct/Spiral/TopRow/Rings3" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.418335, -0.315186, -4.96295)
 
-[node name="Child03" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/Rings3" instance=ExtResource("12_7ln1s")]
+[node name="Child03" parent="BoneAct/Spiral/TopRow/Rings3" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.18481, -0.630629, -9.88397)
 
-[node name="Child04" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/Rings3" instance=ExtResource("12_7ln1s")]
+[node name="Child04" parent="BoneAct/Spiral/TopRow/Rings3" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.29333, -0.945667, -14.7393)
 
-[node name="Child05" parent="BoneAct/Spiral [NOT STARTED YET]/TopRow/Rings3" instance=ExtResource("12_7ln1s")]
+[node name="Child05" parent="BoneAct/Spiral/TopRow/Rings3" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.73657, -1.2597, -19.5058)
 
-[node name="Sidle" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]"]
+[node name="Sidle" type="Node3D" parent="BoneAct/Spiral"]
 transform = Transform3D(0.718126, 0.0424845, -0.694615, 0, 0.998135, 0.0610485, 0.695913, -0.0438406, 0.716787, 19.0896, -29.9926, -83.0826)
 
-[node name="Rings1" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle"]
+[node name="Rings1" type="Node3D" parent="BoneAct/Spiral/Sidle"]
 transform = Transform3D(0.939693, 4.09782e-08, 0.34202, -9.31323e-09, 0.999999, 7.45058e-09, -0.34202, -1.11759e-08, 0.939693, 4.60571, 1.00003, 25.8667)
 script = ExtResource("11_yellp")
 Source = ExtResource("12_7ln1s")
@@ -2073,88 +1909,22 @@ Spacing = 2.5
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/Rings1" instance=ExtResource("12_7ln1s")]
+[node name="Child01" parent="BoneAct/Spiral/Sidle/Rings1" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 1.86265e-09, -2.98023e-08, 3.72529e-09, 1, 0, 0, -3.72529e-09, 1, 0, 7.62939e-06, -0.000244141)
 
-[node name="Child02" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/Rings1" instance=ExtResource("12_7ln1s")]
+[node name="Child02" parent="BoneAct/Spiral/Sidle/Rings1" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 1.86265e-09, -2.98023e-08, 3.72529e-09, 1, 0, 0, -3.72529e-09, 1, 0.0704346, -0.00105286, -2.49109)
 
-[node name="Child03" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/Rings1" instance=ExtResource("12_7ln1s")]
+[node name="Child03" parent="BoneAct/Spiral/Sidle/Rings1" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 1.86265e-09, -2.98023e-08, 3.72529e-09, 1, 0, 0, -3.72529e-09, 1, 0.209351, -0.00117493, -4.97839)
 
-[node name="Child04" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/Rings1" instance=ExtResource("12_7ln1s")]
+[node name="Child04" parent="BoneAct/Spiral/Sidle/Rings1" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 1.86265e-09, -2.98023e-08, 3.72529e-09, 1, 0, 0, -3.72529e-09, 1, 0.421997, -0.000343323, -7.45984)
 
-[node name="Child05" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/Rings1" instance=ExtResource("12_7ln1s")]
+[node name="Child05" parent="BoneAct/Spiral/Sidle/Rings1" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 1.86265e-09, -2.98023e-08, 3.72529e-09, 1, 0, 0, -3.72529e-09, 1, 0.713562, 0.00144958, -9.93262)
 
-[node name="FootholdTrigger1" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle" instance=ExtResource("35_phq0i")]
-transform = Transform3D(-0.309017, 0, 0.951057, 0, 0.999998, 0, -0.951057, 0, -0.309017, 3.85718, -0.0302582, 24.5527)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger1"]
-transform = Transform3D(1, 3.72529e-09, 5.96046e-08, -1.49012e-08, 1, -9.31323e-09, 0, 1.11759e-08, 1, 1.5, 7.62939e-06, -0.00012207)
-shape = SubResource("BoxShape3D_srca5")
-
-[node name="FootholdLeft" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger1" instance=ExtResource("36_7mqa4")]
-transform = Transform3D(1, 7.45058e-09, -2.98023e-08, 0, 1, 0, 0, -3.72529e-09, 1, -0.0999756, -0.5, 0.5)
-
-[node name="FootholdCenter1" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger1" instance=ExtResource("37_dtcli")]
-transform = Transform3D(1, 7.45058e-09, -2.98023e-08, 0, 1, 0, 0, -3.72529e-09, 1, 0.5, -0.5, 0.5)
-
-[node name="FootholdCenter2" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger1" instance=ExtResource("37_dtcli")]
-transform = Transform3D(1, 9.31323e-09, -2.98023e-08, 0, 1, 0, 0, -3.72529e-09, 1, 1.5, -0.5, 0.5)
-
-[node name="FootholdCenter3" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger1" instance=ExtResource("37_dtcli")]
-transform = Transform3D(1, 1.11759e-08, -2.98023e-08, 3.72529e-09, 1, 3.72529e-09, 5.96046e-08, 1.86265e-09, 1, 2.5, -0.499985, 0.500061)
-
-[node name="FootholdRight" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger1" instance=ExtResource("38_rdv7x")]
-transform = Transform3D(1, 1.11759e-08, -2.98023e-08, 3.72529e-09, 1, 3.72529e-09, 5.96046e-08, 1.86265e-09, 1, 3.1001, -0.499985, 0.499878)
-
-[node name="FootholdTrigger2" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle" instance=ExtResource("35_phq0i")]
-transform = Transform3D(-0.195312, 5.02914e-08, 0.980741, 1.11759e-08, 0.999997, 1.86265e-08, -0.980741, -1.49012e-08, -0.195313, 1.99945, -0.0302505, 18.1111)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger2"]
-transform = Transform3D(1, 3.72529e-09, 5.96046e-08, -1.49012e-08, 1, -9.31323e-09, 0, 1.11759e-08, 1, 1.5, 7.62939e-06, -0.00012207)
-shape = SubResource("BoxShape3D_srca5")
-
-[node name="FootholdLeft" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger2" instance=ExtResource("36_7mqa4")]
-transform = Transform3D(1, 7.45058e-09, -2.98023e-08, 0, 1, 0, 0, -3.72529e-09, 1, -0.0999756, -0.5, 0.5)
-
-[node name="FootholdCenter1" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger2" instance=ExtResource("37_dtcli")]
-transform = Transform3D(1, 7.45058e-09, -2.98023e-08, 0, 1, 0, 0, -3.72529e-09, 1, 0.5, -0.5, 0.5)
-
-[node name="FootholdCenter2" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger2" instance=ExtResource("37_dtcli")]
-transform = Transform3D(1, 9.31323e-09, -2.98023e-08, 0, 1, 0, 0, -3.72529e-09, 1, 1.5, -0.5, 0.5)
-
-[node name="FootholdCenter3" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger2" instance=ExtResource("37_dtcli")]
-transform = Transform3D(1, 1.11759e-08, -2.98023e-08, 3.72529e-09, 1, 3.72529e-09, 5.96046e-08, 1.86265e-09, 1, 2.5, -0.499985, 0.500061)
-
-[node name="FootholdRight" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger2" instance=ExtResource("38_rdv7x")]
-transform = Transform3D(1, 1.11759e-08, -2.98023e-08, 3.72529e-09, 1, 3.72529e-09, 5.96046e-08, 1.86265e-09, 1, 3.1001, -0.499985, 0.499878)
-
-[node name="FootholdTrigger3" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle" instance=ExtResource("35_phq0i")]
-transform = Transform3D(-0.000418067, 6.14673e-08, 1, 2.23517e-08, 0.999997, 2.23517e-08, -1, -3.35276e-08, -0.000418514, -0.013855, -0.0302429, 3.22791)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger3"]
-transform = Transform3D(1, 3.72529e-09, 5.96046e-08, -1.49012e-08, 1, -9.31323e-09, 0, 1.11759e-08, 1, 1.5, 7.62939e-06, -0.00012207)
-shape = SubResource("BoxShape3D_srca5")
-
-[node name="FootholdLeft" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger3" instance=ExtResource("36_7mqa4")]
-transform = Transform3D(1, 7.45058e-09, -2.98023e-08, 0, 1, 0, 0, -3.72529e-09, 1, -0.0999756, -0.5, 0.5)
-
-[node name="FootholdCenter1" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger3" instance=ExtResource("37_dtcli")]
-transform = Transform3D(1, 7.45058e-09, -2.98023e-08, 0, 1, 0, 0, -3.72529e-09, 1, 0.5, -0.5, 0.5)
-
-[node name="FootholdCenter2" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger3" instance=ExtResource("37_dtcli")]
-transform = Transform3D(1, 9.31323e-09, -2.98023e-08, 0, 1, 0, 0, -3.72529e-09, 1, 1.5, -0.5, 0.5)
-
-[node name="FootholdCenter3" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger3" instance=ExtResource("37_dtcli")]
-transform = Transform3D(1, 1.11759e-08, -2.98023e-08, 3.72529e-09, 1, 3.72529e-09, 5.96046e-08, 1.86265e-09, 1, 2.5, -0.499985, 0.500061)
-
-[node name="FootholdRight" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger3" instance=ExtResource("38_rdv7x")]
-transform = Transform3D(1, 1.11759e-08, -2.98023e-08, 3.72529e-09, 1, 3.72529e-09, 5.96046e-08, 1.86265e-09, 1, 3.1001, -0.499985, 0.499878)
-
-[node name="Rings2" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle"]
+[node name="Rings2" type="Node3D" parent="BoneAct/Spiral/Sidle"]
 transform = Transform3D(0.996195, 7.82311e-08, -0.0871557, -7.45058e-09, 0.999998, 3.35276e-08, 0.0871558, -3.72529e-08, 0.996195, 1.02631, 1.00005, -8.19946)
 script = ExtResource("11_yellp")
 Source = ExtResource("12_7ln1s")
@@ -2168,62 +1938,25 @@ Spacing = 2.5
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/Rings2" instance=ExtResource("12_7ln1s")]
+[node name="Child01" parent="BoneAct/Spiral/Sidle/Rings2" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, -1.86265e-09, 0, -5.58794e-09, 1, 0, 0, -0.00012207)
 
-[node name="Child02" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/Rings2" instance=ExtResource("12_7ln1s")]
+[node name="Child02" parent="BoneAct/Spiral/Sidle/Rings2" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, -1.86265e-09, 0, -5.58794e-09, 1, 0.152039, 0.00314331, -2.48035)
 
-[node name="Child03" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/Rings2" instance=ExtResource("12_7ln1s")]
+[node name="Child03" parent="BoneAct/Spiral/Sidle/Rings2" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, -1.86265e-09, 0, -5.58794e-09, 1, 0.391724, 0.00487518, -4.95398)
 
-[node name="FootholdTrigger4" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle" instance=ExtResource("35_phq0i")]
-transform = Transform3D(0.241922, 0, 0.970296, 0, 0.999995, 0, -0.970296, 0, 0.241922, 1.34937, -0.00224304, -12.7515)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger4"]
-transform = Transform3D(1, -1.86265e-09, -2.68221e-07, -1.86265e-09, 1, 3.72529e-09, -1.49012e-07, 1.11759e-08, 1, 4.09985, 1.52588e-05, -0.000244141)
-shape = SubResource("BoxShape3D_jplsn")
-
-[node name="FootholdLeft" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger4" instance=ExtResource("36_7mqa4")]
-transform = Transform3D(1, 7.45058e-09, -2.98023e-08, 0, 1, 0, 0, -3.72529e-09, 1, -0.0999756, -0.5, 0.5)
-
-[node name="FootholdCenter1" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger4" instance=ExtResource("37_dtcli")]
-transform = Transform3D(1, 7.45058e-09, -2.98023e-08, 0, 1, 0, 0, -3.72529e-09, 1, 0.5, -0.5, 0.5)
-
-[node name="FootholdCenter2" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger4" instance=ExtResource("37_dtcli")]
-transform = Transform3D(1, 9.31323e-09, -2.98023e-08, 0, 1, 0, 0, -3.72529e-09, 1, 1.5, -0.5, 0.5)
-
-[node name="FootholdCenter3" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger4" instance=ExtResource("37_dtcli")]
-transform = Transform3D(1, 1.11759e-08, -2.98023e-08, 3.72529e-09, 1, 3.72529e-09, 5.96046e-08, 1.86265e-09, 1, 2.5, -0.499985, 0.500061)
-
-[node name="FootholdCenter4" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger4" instance=ExtResource("37_dtcli")]
-transform = Transform3D(1, 1.67638e-08, -2.98023e-08, -1.11759e-08, 1, -9.31323e-10, 1.78814e-07, 1.49012e-08, 1, 3.5, -0.499969, 0.500122)
-
-[node name="FootholdCenter5" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger4" instance=ExtResource("37_dtcli")]
-transform = Transform3D(1, 2.79397e-08, -2.98023e-08, -1.86265e-09, 1, -6.51926e-09, 2.98023e-08, 1.02445e-08, 1, 4.50012, -0.499985, 0.500244)
-
-[node name="FootholdCenter6" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger4" instance=ExtResource("37_dtcli")]
-transform = Transform3D(1, 1.67638e-08, -2.98023e-08, -1.86265e-09, 1, -6.51926e-09, 2.98023e-08, 1.49012e-08, 1, 5.50012, -0.499985, 0.500366)
-
-[node name="FootholdCenter7" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger4" instance=ExtResource("37_dtcli")]
-transform = Transform3D(1, 1.95578e-08, -2.98023e-08, -1.49012e-08, 1, -2.79397e-09, 1.78814e-07, 2.04891e-08, 1, 6.49988, -0.499977, 0.500549)
-
-[node name="FootholdCenter8" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger4" instance=ExtResource("37_dtcli")]
-transform = Transform3D(1, 2.14204e-08, -2.98023e-08, -2.6077e-08, 1, -8.3819e-09, 1.78814e-07, 3.35276e-08, 1, 7.49988, -0.499954, 0.500488)
-
-[node name="FootholdRight" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/FootholdTrigger4" instance=ExtResource("38_rdv7x")]
-transform = Transform3D(1, 9.31323e-09, -5.96046e-08, -1.86265e-09, 1, 3.72529e-09, 1.19209e-07, 1.11759e-08, 1, 8.1001, -0.499969, 0.499817)
-
-[node name="SpikeBallTrigger" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle" instance=ExtResource("39_qgy35")]
+[node name="SpikeBallTrigger" parent="BoneAct/Spiral/Sidle" instance=ExtResource("39_qgy35")]
 transform = Transform3D(0.999955, 2.35915e-09, 0.00945914, 0.000577493, 0.998134, -0.0610457, -0.00944179, 0.0610485, 0.99809, 7.677, 3.99786, 0.0354004)
 "Trigger Mode" = 2
 "Enter Mode" = 0
 "Exit Mode" = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/SpikeBallTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BoneAct/Spiral/Sidle/SpikeBallTrigger"]
 shape = SubResource("BoxShape3D_1e57r")
 
-[node name="SpikeBallSpawners" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle" node_paths=PackedStringArray("animator")]
+[node name="SpikeBallSpawners" type="Node3D" parent="BoneAct/Spiral/Sidle" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 5.58794e-09, -2.98023e-08, -1.86265e-09, 0.999999, -3.35276e-08, 8.9407e-08, -1.19209e-07, 1, -6.10352e-05, -1.52588e-05, 0.00012207)
 script = ExtResource("40_q5r1r")
 animator = NodePath("AnimationPlayer")
@@ -2232,51 +1965,51 @@ animator = NodePath("AnimationPlayer")
 "Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
 
-[node name="SpikeBallSpawner1" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/SpikeBallSpawners" instance=ExtResource("14_dcfkh")]
+[node name="SpikeBallSpawner1" parent="BoneAct/Spiral/Sidle/SpikeBallSpawners" instance=ExtResource("14_dcfkh")]
 transform = Transform3D(0.999998, 5.7742e-08, -5.66244e-07, 3.72529e-08, 0.999994, 1.11759e-08, 8.9407e-08, 3.72529e-09, 0.999998, 4.07593, 8.98747, 22.9705)
 isPaused = true
 lifetime = 3.0
 spawnInterval = 5.0
 
-[node name="SpikeBallSpawner2" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/SpikeBallSpawners" instance=ExtResource("14_dcfkh")]
+[node name="SpikeBallSpawner2" parent="BoneAct/Spiral/Sidle/SpikeBallSpawners" instance=ExtResource("14_dcfkh")]
 transform = Transform3D(0.999999, 2.42144e-08, -1.49012e-07, 1.67638e-08, 0.999995, -2.23517e-08, 5.96046e-08, 3.72529e-09, 0.999999, 2.08069, 9.00487, 16.4877)
 isPaused = true
 lifetime = 3.0
 spawnInterval = 3.0
 
-[node name="SpikeBallSpawner3" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/SpikeBallSpawners" instance=ExtResource("14_dcfkh")]
+[node name="SpikeBallSpawner3" parent="BoneAct/Spiral/Sidle/SpikeBallSpawners" instance=ExtResource("14_dcfkh")]
 transform = Transform3D(0.999998, 5.58794e-08, -7.45058e-07, 3.53903e-08, 0.999994, -2.98023e-08, 8.9407e-08, 3.72529e-09, 0.999998, 0.63501, 9.00879, 1.62244)
 isPaused = true
 lifetime = 3.0
 spawnInterval = 2.5
 
-[node name="SpikeBallSpawner4" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/SpikeBallSpawners" instance=ExtResource("14_dcfkh")]
+[node name="SpikeBallSpawner4" parent="BoneAct/Spiral/Sidle/SpikeBallSpawners" instance=ExtResource("14_dcfkh")]
 transform = Transform3D(0.999998, 6.51926e-08, -9.23872e-07, 4.65661e-08, 0.999993, -4.09782e-08, 1.19209e-07, 3.72529e-09, 0.999998, 0.534912, 9.00872, -1.37756)
 isPaused = true
 lifetime = 3.0
 spawnInterval = 3.0
 
-[node name="SpikeBallSpawner5" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/SpikeBallSpawners" instance=ExtResource("14_dcfkh")]
+[node name="SpikeBallSpawner5" parent="BoneAct/Spiral/Sidle/SpikeBallSpawners" instance=ExtResource("14_dcfkh")]
 transform = Transform3D(0.999996, 1.17347e-07, -1.54972e-06, 1.00583e-07, 0.999991, -9.68575e-08, 1.19209e-07, 7.45058e-09, 0.999995, 2.50482, 9.36612, -14.2223)
 isPaused = true
 lifetime = 3.0
 spawnInterval = 2.5
 
-[node name="SpikeBallSpawner6" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/SpikeBallSpawners" instance=ExtResource("14_dcfkh")]
+[node name="SpikeBallSpawner6" parent="BoneAct/Spiral/Sidle/SpikeBallSpawners" instance=ExtResource("14_dcfkh")]
 transform = Transform3D(0.999995, 1.28523e-07, -1.60933e-06, 1.06171e-07, 0.999991, -1.04308e-07, 1.19209e-07, 3.72529e-09, 0.999995, 2.89667, 9.35261, -17.0027)
 isPaused = true
 lifetime = 3.0
 spawnInterval = 3.0
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="BoneAct/Spiral [NOT STARTED YET]/Sidle/SpikeBallSpawners"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="BoneAct/Spiral/Sidle/SpikeBallSpawners"]
 libraries = {
 &"": SubResource("AnimationLibrary_pruoy")
 }
 
-[node name="MiddleRow" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]"]
+[node name="MiddleRow" type="Node3D" parent="BoneAct/Spiral"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 59, -32.6, -101.5)
 
-[node name="Rings1" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow"]
+[node name="Rings1" type="Node3D" parent="BoneAct/Spiral/MiddleRow"]
 transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618, 38.8453, -1.5, 5.18738)
 script = ExtResource("11_yellp")
 Source = ExtResource("12_7ln1s")
@@ -2290,96 +2023,97 @@ Spacing = 5.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/Rings1" instance=ExtResource("12_7ln1s")]
+[node name="Child01" parent="BoneAct/Spiral/MiddleRow/Rings1" instance=ExtResource("12_7ln1s")]
 
-[node name="Child02" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/Rings1" instance=ExtResource("12_7ln1s")]
+[node name="Child02" parent="BoneAct/Spiral/MiddleRow/Rings1" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0223389, -0.309944, -4.98743)
 
-[node name="Child03" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/Rings1" instance=ExtResource("12_7ln1s")]
+[node name="Child03" parent="BoneAct/Spiral/MiddleRow/Rings1" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.404297, -0.622753, -9.95996)
 
-[node name="Child04" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/Rings1" instance=ExtResource("12_7ln1s")]
+[node name="Child04" parent="BoneAct/Spiral/MiddleRow/Rings1" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1416, -0.937592, -14.8921)
 
-[node name="Child05" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/Rings1" instance=ExtResource("12_7ln1s")]
+[node name="Child05" parent="BoneAct/Spiral/MiddleRow/Rings1" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.22852, -1.25365, -19.7589)
 
-[node name="SpringGroup" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow"]
+[node name="SpringGroup" type="Node3D" parent="BoneAct/Spiral/MiddleRow"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65.4186, -4.48331, 25.2853)
 
-[node name="SkeletonMajin1" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/SpringGroup" instance=ExtResource("8_be1y2")]
+[node name="SkeletonMajin1" parent="BoneAct/Spiral/MiddleRow/SpringGroup" instance=ExtResource("8_be1y2")]
 transform = Transform3D(-0.770569, 0, -0.637357, 0, 1, 0, 0.637357, 0, -0.770569, 0, 0, 0)
-SpawnMode = 2
 
-[node name="SkeletonMajin2" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/SpringGroup" instance=ExtResource("8_be1y2")]
+[node name="SkeletonMajin2" parent="BoneAct/Spiral/MiddleRow/SpringGroup" instance=ExtResource("8_be1y2")]
 transform = Transform3D(-0.770569, 0, -0.637357, 0, 1, 0, 0.637357, 0, -0.770569, 2.68262, -0.190571, 1.67432)
-SpawnMode = 2
 
-[node name="SkeletonMajin3" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/SpringGroup" instance=ExtResource("8_be1y2")]
+[node name="SkeletonMajin3" parent="BoneAct/Spiral/MiddleRow/SpringGroup" instance=ExtResource("8_be1y2")]
 transform = Transform3D(-0.817949, 0, -0.575291, 0, 1, 0, 0.575291, 0, -0.817949, 2.70819, -0.337093, 5.15686)
-SpawnMode = 2
 
-[node name="Spring" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/SpringGroup" instance=ExtResource("41_xs83w")]
+[node name="Spring" parent="BoneAct/Spiral/MiddleRow/SpringGroup" instance=ExtResource("41_xs83w")]
 transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 7.08136, -0.459303, 10.0188)
 FinalHeight = 8.0
 
-[node name="EnemyStone" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/SpringGroup" instance=ExtResource("9_fsrbu")]
+[node name="EnemyStone" parent="BoneAct/Spiral/MiddleRow/SpringGroup" instance=ExtResource("9_fsrbu")]
 transform = Transform3D(1, 0, 0, 0, 0.998831, -0.0483442, 0, 0.0483442, 0.998831, 7.08136, 0.207632, 10.0144)
 enemyCount = 3
 
-[node name="PlatformGroup1" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow"]
+[node name="PlatformGroup1" type="Node3D" parent="BoneAct/Spiral/MiddleRow"]
 transform = Transform3D(-0.933737, 0, -0.357961, 0, 1, 0, 0.357961, 0, -0.933737, 76.2753, 2, 43.9041)
 
-[node name="PlatformSpiralLarge" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/PlatformGroup1" instance=ExtResource("32_v31tp")]
+[node name="PlatformSpiralLarge" parent="BoneAct/Spiral/MiddleRow/PlatformGroup1" instance=ExtResource("32_v31tp")]
 
-[node name="Sickle1" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/PlatformGroup1" instance=ExtResource("23_18g7e")]
+[node name="Sickle1" parent="BoneAct/Spiral/MiddleRow/PlatformGroup1" instance=ExtResource("23_18g7e")]
 transform = Transform3D(0.994567, 0, -0.104095, 0, 1, 0, 0.104095, 0, 0.994567, 8.51245, 9.5, -3.23572)
 rotationAmount = 25.0
 chainLength = 12
 
-[node name="ItemBox" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/PlatformGroup1" instance=ExtResource("19_g8qy3")]
+[node name="ItemBox" parent="BoneAct/Spiral/MiddleRow/PlatformGroup1" instance=ExtResource("19_g8qy3")]
 transform = Transform3D(0.998059, 0, -0.0622679, 0, 1, 0, 0.0622679, 0, 0.998059, 0, 0.4, -5.30005)
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 50
 
-[node name="ThornSpring1" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow" instance=ExtResource("42_coxly")]
+[node name="ThornSpring1" parent="BoneAct/Spiral/MiddleRow" instance=ExtResource("42_coxly")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 80.4, -3.5, 55)
+isTimeBreakSpring = true
 
-[node name="ThornSpring2" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow" instance=ExtResource("42_coxly")]
+[node name="ThornSpring2" parent="BoneAct/Spiral/MiddleRow" instance=ExtResource("42_coxly")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 81.6503, -4.5, 62.0906)
+isTimeBreakSpring = true
 
-[node name="PlatformGroup2" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow"]
+[node name="PlatformGroup2" type="Node3D" parent="BoneAct/Spiral/MiddleRow"]
 transform = Transform3D(-0.989874, 0, 0.141955, 0, 1, 0, -0.141955, 0, -0.989874, 80.6027, -1.5, 78.5769)
 
-[node name="PlatformSpiralLarge" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/PlatformGroup2" instance=ExtResource("32_v31tp")]
+[node name="PlatformSpiralLarge" parent="BoneAct/Spiral/MiddleRow/PlatformGroup2" instance=ExtResource("32_v31tp")]
 
-[node name="Sickle" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/PlatformGroup2" instance=ExtResource("23_18g7e")]
+[node name="Sickle" parent="BoneAct/Spiral/MiddleRow/PlatformGroup2" instance=ExtResource("23_18g7e")]
 transform = Transform3D(0.998478, 0, 0.0551413, 0, 1, 0, -0.0551413, 0, 0.998478, 8.22314, 11, -0.649048)
 rotationAmount = 25.0
 chainLength = 12
 
-[node name="ItemBox" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/PlatformGroup2" instance=ExtResource("19_g8qy3")]
+[node name="ItemBox" parent="BoneAct/Spiral/MiddleRow/PlatformGroup2" instance=ExtResource("19_g8qy3")]
 transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195, 0.000305176, 0.400001, -5.19995)
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 50
 
-[node name="ThornSpring3" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow" instance=ExtResource("42_coxly")]
+[node name="ThornSpring3" parent="BoneAct/Spiral/MiddleRow" instance=ExtResource("42_coxly")]
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 77.6749, -4, 92.5256)
 staticTime = 3.0
+isTimeBreakSpring = true
 
-[node name="ThornSpring4" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow" instance=ExtResource("42_coxly")]
+[node name="ThornSpring4" parent="BoneAct/Spiral/MiddleRow" instance=ExtResource("42_coxly")]
 transform = Transform3D(0.906308, 0, -0.422619, 0, 1, 0, 0.422619, 0, 0.906308, 75.0311, -4.5, 99.2069)
 staticTime = 3.0
+isTimeBreakSpring = true
 
-[node name="PlatformGroup3" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow"]
+[node name="PlatformGroup3" type="Node3D" parent="BoneAct/Spiral/MiddleRow"]
 transform = Transform3D(-0.804977, 0, 0.593307, 0, 1, 0, -0.593307, 0, -0.804977, 66.4971, -3.5, 113.213)
 
-[node name="PlatformSpiralLarge" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/PlatformGroup3" instance=ExtResource("32_v31tp")]
+[node name="PlatformSpiralLarge" parent="BoneAct/Spiral/MiddleRow/PlatformGroup3" instance=ExtResource("32_v31tp")]
 
-[node name="Cage" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/PlatformGroup3" instance=ExtResource("30_wv35e")]
+[node name="Cage" parent="BoneAct/Spiral/MiddleRow/PlatformGroup3" instance=ExtResource("30_wv35e")]
 transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -0.000244141, 1, -4.19995)
 
-[node name="Rings2" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow"]
+[node name="Rings2" type="Node3D" parent="BoneAct/Spiral/MiddleRow"]
 transform = Transform3D(-0.492545, 0, 0.870287, 0, 1, 0, -0.870287, 0, -0.492545, 48.5193, -10.8, 129.766)
 script = ExtResource("11_yellp")
 Source = ExtResource("12_7ln1s")
@@ -2393,22 +2127,22 @@ Spacing = 5.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/Rings2" instance=ExtResource("12_7ln1s")]
+[node name="Child01" parent="BoneAct/Spiral/MiddleRow/Rings2" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.14441e-05, -0.000244141)
 
-[node name="Child02" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/Rings2" instance=ExtResource("12_7ln1s")]
+[node name="Child02" parent="BoneAct/Spiral/MiddleRow/Rings2" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0317383, -0.309704, -5.04236)
 
-[node name="Child03" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/Rings2" instance=ExtResource("12_7ln1s")]
+[node name="Child03" parent="BoneAct/Spiral/MiddleRow/Rings2" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.287048, -0.616299, -10.0736)
 
-[node name="Child04" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/Rings2" instance=ExtResource("12_7ln1s")]
+[node name="Child04" parent="BoneAct/Spiral/MiddleRow/Rings2" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.957031, -0.919342, -15.0719)
 
-[node name="Child05" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/Rings2" instance=ExtResource("12_7ln1s")]
+[node name="Child05" parent="BoneAct/Spiral/MiddleRow/Rings2" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.97797, -1.21812, -20.0105)
 
-[node name="Rings3" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow"]
+[node name="Rings3" type="Node3D" parent="BoneAct/Spiral/MiddleRow"]
 transform = Transform3D(0.0542703, 0, 0.998526, 0, 1, 0, -0.998526, 0, 0.0542703, 8.48932, -13.4594, 137.626)
 script = ExtResource("11_yellp")
 Source = ExtResource("12_7ln1s")
@@ -2422,32 +2156,32 @@ Spacing = 5.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/Rings3" instance=ExtResource("12_7ln1s")]
+[node name="Child01" parent="BoneAct/Spiral/MiddleRow/Rings3" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.39233e-05, 0.00146484)
 
-[node name="Child02" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/Rings3" instance=ExtResource("12_7ln1s")]
+[node name="Child02" parent="BoneAct/Spiral/MiddleRow/Rings3" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0963135, -0.281231, -4.84381)
 
-[node name="Child03" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/Rings3" instance=ExtResource("12_7ln1s")]
+[node name="Child03" parent="BoneAct/Spiral/MiddleRow/Rings3" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.533569, -0.569603, -9.6676)
 
-[node name="Child04" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/Rings3" instance=ExtResource("12_7ln1s")]
+[node name="Child04" parent="BoneAct/Spiral/MiddleRow/Rings3" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.31421, -0.864262, -14.4453)
 
-[node name="Child05" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/Rings3" instance=ExtResource("12_7ln1s")]
+[node name="Child05" parent="BoneAct/Spiral/MiddleRow/Rings3" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.43726, -1.16438, -19.152)
 
-[node name="Sickle1" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow" instance=ExtResource("23_18g7e")]
+[node name="Sickle1" parent="BoneAct/Spiral/MiddleRow" instance=ExtResource("23_18g7e")]
 transform = Transform3D(0.438371, 0, 0.898794, 0, 1, 0, -0.898794, 0, 0.438371, -18.039, 3.699, 133.392)
 rotationAmount = 5.0
 chainLength = 14
 
-[node name="Sickle2" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow" instance=ExtResource("23_18g7e")]
+[node name="Sickle2" parent="BoneAct/Spiral/MiddleRow" instance=ExtResource("23_18g7e")]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -37.024, 2.15, 117.97)
 rotationAmount = 10.0
 chainLength = 14
 
-[node name="Rings4" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow"]
+[node name="Rings4" type="Node3D" parent="BoneAct/Spiral/MiddleRow"]
 transform = Transform3D(0.999457, 0, 0.0329636, 0, 1, 0, -0.0329636, 0, 0.999457, -58.5508, -19.4594, 73.8934)
 script = ExtResource("11_yellp")
 Source = ExtResource("12_7ln1s")
@@ -2461,31 +2195,31 @@ Spacing = 5.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/Rings4" instance=ExtResource("12_7ln1s")]
+[node name="Child01" parent="BoneAct/Spiral/MiddleRow/Rings4" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10352e-05, -1.52588e-05, -0.000244141)
 
-[node name="Child02" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/Rings4" instance=ExtResource("12_7ln1s")]
+[node name="Child02" parent="BoneAct/Spiral/MiddleRow/Rings4" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0299683, -0.275837, -4.9635)
 
-[node name="Child03" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/Rings4" instance=ExtResource("12_7ln1s")]
+[node name="Child03" parent="BoneAct/Spiral/MiddleRow/Rings4" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.411499, -0.554134, -9.9165)
 
-[node name="Child04" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/Rings4" instance=ExtResource("12_7ln1s")]
+[node name="Child04" parent="BoneAct/Spiral/MiddleRow/Rings4" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.13782, -0.840012, -14.8296)
 
-[node name="Child05" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/Rings4" instance=ExtResource("12_7ln1s")]
+[node name="Child05" parent="BoneAct/Spiral/MiddleRow/Rings4" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.21149, -1.13268, -19.6774)
 
-[node name="JumpPanel" parent="BoneAct/Spiral [NOT STARTED YET]/MiddleRow" instance=ExtResource("43_trb6j")]
+[node name="JumpPanel" parent="BoneAct/Spiral/MiddleRow" instance=ExtResource("43_trb6j")]
 transform = Transform3D(-0.694658, 0, 0.71934, 0, 1, 0, -0.71934, 0, -0.694658, -55.2628, -21.7594, 49.8519)
 MiddleHeight = 8.0
 FinalHeight = -6.0
 Distance = 70.0
 
-[node name="Warp" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]"]
+[node name="Warp" type="Node3D" parent="BoneAct/Spiral"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 74, -60, -102.2)
 
-[node name="Rings1" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/Warp"]
+[node name="Rings1" type="Node3D" parent="BoneAct/Spiral/Warp"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3.59998, 0.899998, 0.199951)
 script = ExtResource("11_yellp")
 Source = ExtResource("12_7ln1s")
@@ -2496,121 +2230,114 @@ Spacing = 2.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/Rings1" instance=ExtResource("12_7ln1s")]
+[node name="Child01" parent="BoneAct/Spiral/Warp/Rings1" instance=ExtResource("12_7ln1s")]
 
-[node name="Child02" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/Rings1" instance=ExtResource("12_7ln1s")]
+[node name="Child02" parent="BoneAct/Spiral/Warp/Rings1" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
-[node name="Child03" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/Rings1" instance=ExtResource("12_7ln1s")]
+[node name="Child03" parent="BoneAct/Spiral/Warp/Rings1" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 
-[node name="Child04" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/Rings1" instance=ExtResource("12_7ln1s")]
+[node name="Child04" parent="BoneAct/Spiral/Warp/Rings1" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 
-[node name="Child05" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/Rings1" instance=ExtResource("12_7ln1s")]
+[node name="Child05" parent="BoneAct/Spiral/Warp/Rings1" instance=ExtResource("12_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
-[node name="FlyingPot" parent="BoneAct/Spiral [NOT STARTED YET]/Warp" instance=ExtResource("44_jbw0i")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 4.5, 0.799999, -1.80005)
-customCameraSettings = null
-
-[node name="SwitchGroup1" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/Warp"]
+[node name="SwitchGroup1" type="Node3D" parent="BoneAct/Spiral/Warp"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 16.4, 0.0999985, 0)
 
-[node name="GreenMajin1" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/SwitchGroup1" instance=ExtResource("27_18g7e")]
+[node name="RedMajin" parent="BoneAct/Spiral/Warp/SwitchGroup1" instance=ExtResource("33_n0wyt")]
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 3.0
+"Attack Settings/Flame Inactive Time" = 0.8
+"Attack Settings/Flame Aggression Radius" = 30
+"Attack Settings/Attack Instantly" = true
 
-[node name="GreenMajin2" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/SwitchGroup1" instance=ExtResource("27_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+[node name="Switch" parent="BoneAct/Spiral/Warp/SwitchGroup1" instance=ExtResource("17_hm2eq")]
 
-[node name="GreenMajin3" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/SwitchGroup1" instance=ExtResource("27_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.8, 0)
-
-[node name="Switch" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/SwitchGroup1" instance=ExtResource("17_hm2eq")]
-
-[node name="Gate" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/SwitchGroup1" instance=ExtResource("18_8r6bi")]
+[node name="Gate" parent="BoneAct/Spiral/Warp/SwitchGroup1" instance=ExtResource("18_8r6bi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
-[node name="SpikeBall1" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/SwitchGroup1" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-animatorSpeedScale = 0.5
-Movement/Mode = 2
-"Movement/Cycle Length" = 0.6
-"Movement/Horizontal Size" = 0.0
-"Movement/Vertical Size" = 0.0
-Movement/Radius = 2.0
-
-[node name="SpikeBall2" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/SwitchGroup1" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
-Movement/Mode = 2
-"Movement/Cycle Length" = 1.0
-"Movement/Horizontal Size" = 0.0
-"Movement/Vertical Size" = 0.0
-Movement/Radius = 2.0
-
-[node name="Rings2" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/Warp"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 41.1, 0.899998, 0.199951)
-script = ExtResource("11_yellp")
-Source = ExtResource("12_7ln1s")
-Amount = 5
-Shape = 0
-Orientation = 0
-Spacing = 5.0
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/Rings2" instance=ExtResource("12_7ln1s")]
-
-[node name="Child02" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/Rings2" instance=ExtResource("12_7ln1s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
-
-[node name="Child03" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/Rings2" instance=ExtResource("12_7ln1s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
-
-[node name="Child04" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/Rings2" instance=ExtResource("12_7ln1s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
-
-[node name="Child05" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/Rings2" instance=ExtResource("12_7ln1s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
-
-[node name="SwitchGroup2" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]/Warp"]
+[node name="SwitchGroup2" type="Node3D" parent="BoneAct/Spiral/Warp"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 107.1, 0.0999985, 0.199951)
 
-[node name="Switch" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/SwitchGroup2" instance=ExtResource("17_hm2eq")]
+[node name="Switch" parent="BoneAct/Spiral/Warp/SwitchGroup2" instance=ExtResource("17_hm2eq")]
 
-[node name="SpikeBall1" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/SwitchGroup2" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-animatorSpeedScale = 0.5
-Movement/Mode = 2
-"Movement/Cycle Length" = 2.0
-"Movement/Horizontal Size" = 0.0
-"Movement/Vertical Size" = 0.0
-Movement/Radius = 2.0
-
-[node name="SpikeBall2" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/SwitchGroup2" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-animatorSpeedScale = 0.5
-Movement/Mode = 2
-"Movement/Cycle Length" = 2.0
-"Movement/Starting Offset" = 0.25
-"Movement/Horizontal Size" = 0.0
-"Movement/Vertical Size" = 0.0
-Movement/Radius = 2.0
-
-[node name="SpikeBall3" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/SwitchGroup2" instance=ExtResource("19_18g7e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-animatorSpeedScale = 0.5
-Movement/Mode = 2
-"Movement/Cycle Length" = 2.0
-"Movement/Starting Offset" = 0.5
-"Movement/Horizontal Size" = 0.0
-"Movement/Vertical Size" = 0.0
-Movement/Radius = 2.0
-
-[node name="Gate" parent="BoneAct/Spiral [NOT STARTED YET]/Warp/SwitchGroup2" instance=ExtResource("18_8r6bi")]
+[node name="Gate" parent="BoneAct/Spiral/Warp/SwitchGroup2" instance=ExtResource("18_8r6bi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.70001)
 
-[node name="WarpRed" parent="BoneAct/Spiral [NOT STARTED YET]/Warp" instance=ExtResource("13_7ln1s")]
+[node name="GreenMajin1" parent="BoneAct/Spiral/Warp" instance=ExtResource("27_18g7e")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 83, 0, 1.5)
+rangeOverride = 15
+
+[node name="GreenMajin2" parent="BoneAct/Spiral/Warp" instance=ExtResource("27_18g7e")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 83, 0, -1.5)
+SpawnMode = 1
+
+[node name="RedMajin1" parent="BoneAct/Spiral/Warp" instance=ExtResource("33_n0wyt")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 91, 0, -1.5)
+"Attack Settings/Flame Active Time" = 5.0
+"Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 8
+"Attack Settings/Attack Instantly" = true
+SpawnMode = 1
+
+[node name="BlueMajin" parent="BoneAct/Spiral/Warp" instance=ExtResource("33_48ldw")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 91, 0, 1.5)
+SpawnMode = 1
+
+[node name="RedMajin2" parent="BoneAct/Spiral/Warp" instance=ExtResource("33_n0wyt")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 99, 0, -1.5)
+"Attack Settings/Flame Active Time" = 5.0
+"Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 8
+"Attack Settings/Attack Instantly" = true
+SpawnMode = 1
+
+[node name="RedMajin3" parent="BoneAct/Spiral/Warp" instance=ExtResource("33_n0wyt")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 99, 0, 1.5)
+"Attack Settings/Flame Active Time" = 5.0
+"Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 8
+"Attack Settings/Attack Instantly" = true
+SpawnMode = 1
+
+[node name="Gate1" parent="BoneAct/Spiral/Warp" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 50, 1, 0)
+
+[node name="Gate2" parent="BoneAct/Spiral/Warp" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 60, 1, 0)
+
+[node name="Gate3" parent="BoneAct/Spiral/Warp" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 80, 1, -4.37114e-07)
+
+[node name="Gate4" parent="BoneAct/Spiral/Warp" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 88, 1, 0)
+
+[node name="Gate5" parent="BoneAct/Spiral/Warp" instance=ExtResource("18_8r6bi")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 96, 1, 0)
+
+[node name="WarpRed" parent="BoneAct/Spiral/Warp" node_paths=PackedStringArray("warpTarget") instance=ExtResource("13_7ln1s")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 140, 0, 0)
+warpTarget = NodePath("../../../Throne/WarpExit")
+
+[node name="FlyingPot1" parent="BoneAct/Spiral" instance=ExtResource("44_jbw0i")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 8, -60, -25)
+travelBounds = Vector2(0, 45)
+customCameraSettings = null
+InitialLocalPosition = Vector2(0, 45)
+
+[node name="FlyingPot2" parent="BoneAct/Spiral" instance=ExtResource("44_jbw0i")]
+transform = Transform3D(1, 0, -7.35137e-08, 0, 1, 0, 7.35137e-08, 0, 1, 6, -55, -32)
+travelBounds = Vector2(8, 10)
+InitialLocalPosition = Vector2(5, 0)
 
 [connection signal="Teleport" from="BoneAct/BoneWarp" to="Static/Trigger/Path/HallTreasurePath" method="Activate"]
 [connection signal="Teleport" from="BoneAct/HandWarp" to="Static/Trigger/Path/SpiralPath" method="Activate"]
@@ -2721,20 +2448,16 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 140, 0
 [connection signal="Activated" from="BoneAct/Arena/SwitchGroup6/Switch2" to="BoneAct/Arena/SwitchGroup6/Gate2" method="Activate"]
 [connection signal="Activated" from="BoneAct/Arena/SwitchGroup6/Switch5" to="BoneAct/Arena/SwitchGroup6/Gate5" method="Activate"]
 [connection signal="Defeated" from="BoneAct/Arena/SwitchGroup6/RedMajin2" to="BoneAct/Arena/SwitchGroup6/EnemyStone2" method="IncrementCounter"]
-[connection signal="Spawned" from="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup1/GreenMajin1" to="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup1/GreenMajin2" method="Spawn"]
-[connection signal="Spawned" from="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup1/GreenMajin1" to="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup1/GreenMajin3" method="Spawn"]
-[connection signal="Collected" from="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup3/ItemBoxGroup/ItemBoxFlying" to="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup3/ItemBoxGroup/HorizontalMovement" method="Pause"]
-[connection signal="Collected" from="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup3/ItemBoxGroup/ItemBoxFlying" to="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup3/ItemBoxGroup/VerticalMovement" method="Pause"]
-[connection signal="Respawned" from="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup3/ItemBoxGroup/ItemBoxFlying" to="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup3/ItemBoxGroup/HorizontalMovement" method="Unpause"]
-[connection signal="Respawned" from="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup3/ItemBoxGroup/ItemBoxFlying" to="BoneAct/Spiral [NOT STARTED YET]/TopRow/PlatformGroup3/ItemBoxGroup/VerticalMovement" method="Unpause"]
-[connection signal="Activated" from="BoneAct/Spiral [NOT STARTED YET]/Sidle/SpikeBallTrigger" to="BoneAct/Spiral [NOT STARTED YET]/Sidle/SpikeBallSpawners" method="Activate"]
-[connection signal="Deactivated" from="BoneAct/Spiral [NOT STARTED YET]/Sidle/SpikeBallTrigger" to="BoneAct/Spiral [NOT STARTED YET]/Sidle/SpikeBallSpawners" method="Respawn"]
-[connection signal="Defeated" from="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/SpringGroup/SkeletonMajin1" to="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/SpringGroup/EnemyStone" method="IncrementCounter"]
-[connection signal="Defeated" from="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/SpringGroup/SkeletonMajin2" to="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/SpringGroup/EnemyStone" method="IncrementCounter"]
-[connection signal="Defeated" from="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/SpringGroup/SkeletonMajin3" to="BoneAct/Spiral [NOT STARTED YET]/MiddleRow/SpringGroup/EnemyStone" method="IncrementCounter"]
-[connection signal="Activated" from="BoneAct/Spiral [NOT STARTED YET]/Warp/SwitchGroup1/Switch" to="BoneAct/Spiral [NOT STARTED YET]/Warp/SwitchGroup1/Gate" method="Activate"]
-[connection signal="Activated" from="BoneAct/Spiral [NOT STARTED YET]/Warp/SwitchGroup2/Switch" to="BoneAct/Spiral [NOT STARTED YET]/Warp/SwitchGroup2/Gate" method="Activate"]
-[connection signal="Teleport" from="BoneAct/Spiral [NOT STARTED YET]/Warp/WarpRed" to="BoneAct/Spiral [NOT STARTED YET]" method="Deactivate"]
+[connection signal="Activated" from="BoneAct/Spiral/TopRow/PlatformGroup5/LaunchRingSpike" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="Deactivated" from="BoneAct/Spiral/TopRow/PlatformGroup5/LaunchRingSpike" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="BoneAct/Spiral/Sidle/SpikeBallTrigger" to="BoneAct/Spiral/Sidle/SpikeBallSpawners" method="Activate"]
+[connection signal="Deactivated" from="BoneAct/Spiral/Sidle/SpikeBallTrigger" to="BoneAct/Spiral/Sidle/SpikeBallSpawners" method="Respawn"]
+[connection signal="Defeated" from="BoneAct/Spiral/MiddleRow/SpringGroup/SkeletonMajin1" to="BoneAct/Spiral/MiddleRow/SpringGroup/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="BoneAct/Spiral/MiddleRow/SpringGroup/SkeletonMajin2" to="BoneAct/Spiral/MiddleRow/SpringGroup/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="BoneAct/Spiral/MiddleRow/SpringGroup/SkeletonMajin3" to="BoneAct/Spiral/MiddleRow/SpringGroup/EnemyStone" method="IncrementCounter"]
+[connection signal="Activated" from="BoneAct/Spiral/Warp/SwitchGroup1/Switch" to="BoneAct/Spiral/Warp/SwitchGroup1/Gate" method="Activate"]
+[connection signal="Activated" from="BoneAct/Spiral/Warp/SwitchGroup2/Switch" to="BoneAct/Spiral/Warp/SwitchGroup2/Gate" method="Activate"]
+[connection signal="Teleport" from="BoneAct/Spiral/Warp/WarpRed" to="Static/Trigger/Path/ThronePathReverse" method="Activate"]
 
 [editable path="Static"]
 [editable path="Static/Collision"]

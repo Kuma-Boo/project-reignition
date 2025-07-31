@@ -75,7 +75,7 @@ public partial class Hand : PathFollow3D
 	private float moveSpeed;
 	private float moveSpeedVelocity;
 	private readonly float MoveSpeedSmoothing = 10f;
-	private readonly float BaseMoveSpeed = 30f;
+	private readonly float BaseMoveSpeed = 25f;
 	private readonly float MinimumDistance = 2f;
 	private readonly float MinimumDistanceSmoothingStart = 10f;
 	private readonly float StopDistance = 40f;
