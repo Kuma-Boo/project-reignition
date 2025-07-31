@@ -84,11 +84,12 @@ public partial class PlayerSkillController : Node3D
 
 		InitializeCrestSkills();
 		// Update crest of flame's trail color
-		Player.Effect.UpdateTrailHueShift(AllowCrestSkill && SkillRing.IsSkillEquipped(SkillKey.CrestFire) ? CrestOfFlameHueOffset : 0f);
+		Player.Effect.UpdateTrailHueShift(AllowCrestSkill && SkillRing.IsSkillEquipped(SkillKey.CrestFire) ? CrestOfFlameHueOffset : DefaultHueOffset);
 		speedbreakOverlayMaterial.SetShaderParameter(SpeedbreakOverlayOpacityKey, 0);
 	}
 
 	private readonly float CrestOfFlameHueOffset = .45f;
+	private readonly float DefaultHueOffset = .02f;
 	private void InitializeCrestSkills()
 	{
 		int crestRequirement;
@@ -188,6 +189,7 @@ public partial class PlayerSkillController : Node3D
 		Player.Effect.PlayFireCrestFX();
 		Player.AttackState = PlayerController.AttackStates.Weak;
 		Player.ChangeHitbox("fire-crest");
+		Player.StartInvincibility(0.1f, false); // Provide brief invincibility during CoF
 	}
 
 	private float crestTimer;
@@ -249,6 +251,8 @@ public partial class PlayerSkillController : Node3D
 	private bool isSpeedBreakEnabled = true;
 	private bool isTimeBreakEnabled = true;
 
+	[Export]
+	private Control speedBreakShockwave;
 	[Export]
 	private AnimationPlayer speedBreakAnimator;
 	// Audio clips
@@ -424,7 +428,8 @@ public partial class PlayerSkillController : Node3D
 		}
 		else
 		{
-			timeBreakAnimator.Play("stop");
+			timeBreakAnimator.Play(isTimeBreakEnabled ? "stop" : "RESET");
+			timeBreakAnimator.Advance(0.0);
 			Player.Camera.UnrequestMotionBlur();
 			Player.Animator.StopMotionBlur();
 
@@ -448,6 +453,7 @@ public partial class PlayerSkillController : Node3D
 			speedBreakAnimator.Play(SaveManager.Config.useMotionBlur ? "enable-blur" : "disable-blur");
 			speedBreakAnimator.Advance(0.0);
 
+			speedBreakShockwave.PivotOffset = speedBreakShockwave.Size * 0.5f;
 			speedBreakAnimator.Play("start");
 			Player.Effect.PlayVoice("speed break");
 			Player.MovementAngle = Player.PathFollower.ForwardAngle;
@@ -461,7 +467,8 @@ public partial class PlayerSkillController : Node3D
 		}
 		else
 		{
-			speedBreakAnimator.Play("stop");
+			speedBreakAnimator.Play(isSpeedBreakEnabled ? "stop" : "RESET");
+			speedBreakAnimator.Advance(0.0);
 			speedBreakSFX.Stream = speedBreakDeactivate;
 			speedBreakSFX.Play();
 

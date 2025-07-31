@@ -232,7 +232,7 @@ public partial class PlayerInputController : Node
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) && InputAxis.IsZeroApprox())
 			return Player.PathFollower.ForwardAngle;
 
-		return NonZeroInputAxis.Rotated(-XformAngle).AngleTo(Vector2.Down);
+		return NonZeroInputAxis.Rotated(-XformAngle).AngleTo(Vector2.Up);
 	}
 
 	private float CalculateLockoutForwardAngle(float inputAngle)

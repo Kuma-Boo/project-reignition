@@ -479,7 +479,8 @@ public partial class PlayerAnimator : Node3D
 		IsFallTransitionEnabled = false;
 		animationTree.Set(AccelJumpTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
-	public void LaunchAnimation() => UpdateAirState("launch", false);
+	public void JumpDashAnimation() => UpdateAirState("launch", false);
+	public void LaunchAnimation() => UpdateAirState("launch", true);
 
 	private readonly StringName StompState = "stomp";
 	private readonly StringName StompTrigger = "parameters/air_tree/stomp_trigger/request";
@@ -536,7 +537,7 @@ public partial class PlayerAnimator : Node3D
 		Player.Effect.IsEmittingStepDust = false;
 		animationTree.Set(GroundTransition, DisabledConstant);
 
-		if (IsFallTransitionEnabled && Player.VerticalSpeed < 0)
+		if (IsFallTransitionEnabled && Player.VerticalSpeed < 0 && !Player.IsLaunching)
 		{
 			UpdateAirState(FallState, false);
 			animationTree.Set(FallSpeed, 1.0f);
@@ -666,7 +667,7 @@ public partial class PlayerAnimator : Node3D
 		else if (Player.IsMovingBackward) // Backstepping
 			targetRotation = Player.PathFollower.ForwardAngle + (groundTurnRatio * Mathf.Pi * .15f);
 		else if (Player.IsLockoutActive && Player.ActiveLockoutData.recenterPlayer)
-			targetRotation = Player.PathFollower.ForwardAngle + Player.PathFollower.DeltaAngle * Player.Camera.ActiveSettings.pathControlInfluence;
+			targetRotation = Player.PathFollower.ForwardAngle + Player.PathTurnInfluence;
 		else if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) && Mathf.IsZeroApprox(Player.MoveSpeed))
 			targetRotation = VisualAngle;
 

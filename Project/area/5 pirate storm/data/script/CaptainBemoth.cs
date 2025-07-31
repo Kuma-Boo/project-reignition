@@ -203,14 +203,14 @@ public partial class CaptainBemoth : PathFollow3D
 		switch (currentState)
 		{
 			case BemothState.Introduction:
-				if ((Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("button_jump")) &&
+				if ((Input.IsActionJustPressed("sys_pause") || Input.IsActionJustPressed("button_jump")) &&
 					SaveManager.ActiveGameData.CanSkipCutscene(IntroCutsceneID))
 				{
 					FinishIntroduction();
 				}
 				return;
 			case BemothState.Defeated:
-				if ((Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("button_jump")) &&
+				if ((Input.IsActionJustPressed("sys_pause") || Input.IsActionJustPressed("button_jump")) &&
 					SaveManager.ActiveGameData.CanSkipCutscene(DefeatCutsceneID))
 				{
 					animator.Set(DefeatSeek, 20f);
@@ -696,9 +696,13 @@ public partial class CaptainBemoth : PathFollow3D
 
 	private void ActivateShockScreenShake()
 	{
+		ShakeScreen();
+
+		if (hasPlayerJumpedOffHorn) // Player has already left the horn
+			return;
+
 		jumpCameraTrigger.GlobalPosition = Player.Camera.Camera.GlobalPosition; // Sync jump camera's position
 		jumpCameraTrigger.Activate();
-		ShakeScreen();
 	}
 
 	private void ShakeScreen()

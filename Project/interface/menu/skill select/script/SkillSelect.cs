@@ -118,13 +118,14 @@ public partial class SkillSelect : Menu
 
 	protected override void ProcessMenu()
 	{
-		if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept"))
+		if ((Input.IsActionJustPressed("sys_pause") || (Input.IsActionJustPressed("ui_accept")) &&
+			!Input.IsActionJustPressed("toggle_fullscreen")))
 		{
 			OpenPresetMenu();
 			return;
 		}
 
-		if ((Input.IsActionJustPressed("button_speedbreak") || Input.IsActionJustPressed("ui_sort")) && !IsEditingAugment)
+		if (Input.IsActionJustPressed("sys_sort") || Input.IsActionJustPressed("ui_focus_next") && !IsEditingAugment)
 		{
 			if (isDescendingSort || currentSortType >= SortEnum.Wind)
 			{

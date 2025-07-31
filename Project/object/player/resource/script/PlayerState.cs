@@ -59,7 +59,8 @@ public partial class PlayerState : Node
 			return;
 		}
 
-		float targetInputAngle = Player.Controller.GetTargetInputAngle();
+		float pathControlAmount = Player.Controller.CalculatePathControlAmount();
+		float targetInputAngle = Player.Controller.GetTargetInputAngle() + pathControlAmount;
 		if (IsBraking(targetInputAngle)) // Turning around
 		{
 			Brake();

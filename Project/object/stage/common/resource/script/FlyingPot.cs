@@ -13,6 +13,18 @@ public partial class FlyingPot : Node3D
 	[Export] public Vector2 travelBounds;
 	[Export] public float boundOffset;
 	[Export] private CameraSettingsResource customCameraSettings;
+	[Export]
+	private Vector2 InitialLocalPosition
+	{
+		get => initialLocalPosition;
+		set
+		{
+			initialLocalPosition = new Vector2(Mathf.Clamp(value.X, -travelBounds.X + boundOffset, travelBounds.X + boundOffset),
+				Mathf.Clamp(value.Y, -travelBounds.Y, travelBounds.Y));
+			root.Position = new Vector3(initialLocalPosition.X, initialLocalPosition.Y, 0);
+		}
+	}
+	private Vector2 initialLocalPosition;
 
 	[ExportGroup("Components")]
 	[Export] private Node3D root;
@@ -51,6 +63,7 @@ public partial class FlyingPot : Node3D
 
 		animationTree.Active = true;
 		StageSettings.Instance.Respawned += Respawn;
+		Respawn();
 
 		if (customCameraSettings == null)
 			return;
@@ -93,7 +106,7 @@ public partial class FlyingPot : Node3D
 	{
 		angle = 0f;
 		Velocity = 0f;
-		localPosition = Vector2.Zero;
+		localPosition = initialLocalPosition;
 		ApplyMovement();
 	}
 
@@ -103,15 +116,19 @@ public partial class FlyingPot : Node3D
 
 	private void StartJump()
 	{
+		if (isPlayerJumpingIntoPot)
+			return;
+
 		isPlayerJumpingIntoPot = true;
 		environmentCollider.Disabled = true;
 
 		float jumpHeight = GlobalPosition.Y + 1 - Player.GlobalPosition.Y;
-		jumpHeight = Mathf.Clamp(jumpHeight * 2, 0, 2);
+		jumpHeight = Mathf.Clamp(jumpHeight * 2f, 0.5f, 2f);
 		LaunchSettings settings = LaunchSettings.Create(Player.GlobalPosition, root.GlobalPosition, jumpHeight, false);
-		settings.IsJump = true;
 		settings.AllowJumpDash = false;
 		Player.StartLauncher(settings);
+		Player.Animator.AutoJumpAnimation();
+		Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
 
 		lockonArea.SetDeferred("monitorable", false);
 
@@ -208,6 +225,9 @@ public partial class FlyingPot : Node3D
 	public void OnExited(Area3D a)
 	{
 		if (!a.IsInGroup("player detection"))
+			return;
+
+		if (isPlayerJumpingIntoPot)
 			return;
 
 		interactingWithPlayer = false;

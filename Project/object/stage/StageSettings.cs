@@ -116,12 +116,10 @@ public partial class StageSettings : Node3D
 
 	#region Level Settings
 	/// <summary> Reference to the level's data. </summary>
-	[Export]
-	public LevelDataResource Data { get; private set; }
-	[Export]
-	public CameraSettingsResource InitialCameraSettings { get; private set; }
-	[Export]
-	public SFXLibraryResource dialogLibrary;
+	[Export] public LevelDataResource Data { get; private set; }
+	[Export] private bool disableObjectiveAutocompletion;
+	[Export] public CameraSettingsResource InitialCameraSettings { get; private set; }
+	[Export] public SFXLibraryResource dialogLibrary;
 
 	/// <summary>
 	/// Calculates the rank [Fail = -1, None = 0, Bronze = 1, Silver = 2, Gold = 3]
@@ -281,7 +279,7 @@ public partial class StageSettings : Node3D
 		TechnicalBonus = 2.0f; // Perfect run
 	}
 
-	//Objectives
+	// Objectives
 	public int CurrentObjectiveCount { get; private set; } // How much has the player currently completed?
 	[Signal]
 	public delegate void ObjectiveChangedEventHandler(); // Progress towards the objective has changed
@@ -293,6 +291,9 @@ public partial class StageSettings : Node3D
 		CurrentObjectiveCount = Mathf.Clamp(CurrentObjectiveCount, 0, Data.MissionObjectiveCount);
 		HeadsUpDisplay.Instance.PlayObjectiveAnimation("good");
 		EmitSignal(SignalName.ObjectiveChanged);
+
+		if (disableObjectiveAutocompletion)
+			return;
 
 		if (Data.MissionObjectiveCount == 0) // i.e. Sand Oasis's "Don't break the jars!" mission.
 		{

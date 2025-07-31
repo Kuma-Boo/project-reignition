@@ -2453,7 +2453,6 @@ _data = {
 }
 
 [node name="SkillPresetSelect" type="Control" node_paths=PackedStringArray("presetContainer", "cursor", "scrollbar", "saveLabel", "nameEditor", "submenuAnimator", "nameEditorAnimator", "alertAnimator", "confirmSFX", "cancelSFX", "selectSFX", "failSFX", "animator")]
-modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -2480,11 +2479,12 @@ animator = NodePath("AnimationPlayer")
 [node name="Content" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 320.0
-offset_right = -320.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -640.0
+offset_right = 640.0
+offset_bottom = 1080.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -2492,14 +2492,14 @@ grow_vertical = 2
 clip_contents = true
 custom_minimum_size = Vector2(1072, 500)
 layout_mode = 1
-anchor_left = 0.069
+anchor_left = 0.5
 anchor_top = 0.003
-anchor_right = 0.906
-anchor_bottom = 0.652
-offset_left = -152.32
+anchor_right = 0.5
+anchor_bottom = 0.003
+offset_left = -704.0
 offset_top = 124.76
-offset_right = 120.32
-offset_bottom = 247.84
+offset_right = 640.0
+offset_bottom = 948.76
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 0
@@ -2518,8 +2518,13 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Cursor" type="Node2D" parent="Content"]
 
-[node name="Window" type="Node2D" parent="Content"]
-position = Vector2(640, 480)
+[node name="Window" type="Control" parent="Content"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_top = 480.0
+offset_bottom = 480.0
 
 [node name="TopBar" type="Node2D" parent="Content/Window"]
 position = Vector2(0, -352)
@@ -2589,6 +2594,7 @@ region_enabled = true
 region_rect = Rect2(367, 0, 140, 60)
 
 [node name="Scrollbar" type="NinePatchRect" parent="Content/Window"]
+layout_mode = 0
 offset_left = 576.0
 offset_top = -224.0
 offset_right = 1073.0
@@ -2609,12 +2615,12 @@ region_rect = Rect2(0, 448, 62, 64)
 [node name="NavigationButtons" type="HBoxContainer" parent="."]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
+anchors_preset = -1
+anchor_top = 1.0
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = 460.0
-offset_bottom = 508.0
+anchor_bottom = 1.0
+offset_top = -80.0
+offset_bottom = -32.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 64
@@ -2623,25 +2629,25 @@ alignment = 1
 [node name="Select" parent="NavigationButtons" instance=ExtResource("2_w3g84")]
 layout_mode = 2
 ActionKey = &"sys_select"
-inputKey = &"button_jump"
+inputKey = &"sys_select"
+fallbackKey = &"ui_select"
 
 [node name="Cancel" parent="NavigationButtons" instance=ExtResource("2_w3g84")]
 layout_mode = 2
-ActionKey = &"sys_cancel"
-inputKey = &"button_action"
+ActionKey = &"sys_return"
+inputKey = &"sys_cancel"
+fallbackKey = &"ui_cancel"
 
 [node name="Submenu" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 592.0
-offset_top = -515.0
-offset_right = 952.0
-offset_bottom = -275.0
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -368.0
+offset_top = 25.0
+offset_right = -8.0
+offset_bottom = 265.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(1e-05, 1)
@@ -2889,7 +2895,7 @@ overrideKey = 4194309
 [node name="Cancel" parent="NameEdit/NavigationButtons" instance=ExtResource("2_w3g84")]
 z_as_relative = true
 layout_mode = 2
-ActionKey = &"sys_cancel"
+ActionKey = &"sys_return"
 overrideKey = 4194305
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="NameEdit"]

@@ -119,6 +119,15 @@ public partial class SaveManager : Node
 		Count
 	}
 
+	public enum AspectRatio
+	{
+		FourByThree,
+		SixteenByNine,
+		SixteenByTen,
+		TwentyoneByNine,
+		Count
+	}
+
 	public static readonly Vector2I[] WindowSizes =
 	[
 		new(640, 360), // 360p
@@ -129,6 +138,47 @@ public partial class SaveManager : Node
 		new(2560, 1440), // 1440p
 		new(3840, 2160), // 4K
 	];
+
+	public static readonly Vector2I[] WindowSizes4x3 =
+	[
+		new(640, 480), // 480p, VGA
+		new(800, 600), // 600p, SVGA
+		new(1024, 768), // 768p, XGA
+		new(1152, 864), // 864p, XGA+
+		new(2048, 1536), // 1536p, QXGA
+		new(3200, 2400), // 2400p, QUXGA
+		new(4096, 3072), // 3072p, HXGA
+		new(6400, 4800), // 4800p, HUXGA
+    ];
+
+	public static readonly Vector2I[] WindowSizes16x10 =
+	[
+		new(768, 480), // 480p
+		new(1152, 720), // 720p
+		new(1280, 800), // 800p, WXGA (steam deck)
+		new(1440, 900), // 900p, WXGA+
+		new(1680, 1050), // 1050p, WSXGA+
+		new(1920, 1200), // 1200p, WUXGA
+		new(2560, 1600), // 1600p, WQXGA
+		new(3840, 2400), // 2400p, WQUXGA
+    ];
+
+	public static readonly Vector2I[] WindowSizes21x9 =
+	[
+		new(1120, 480), // 480p
+		new(1400, 600), // 600p
+		new(2560, 1080), // 1080p, WFHD
+		new(2880, 1200), // 1200p, WFHD+
+		new(3440, 1440), // 1440p, WQHD
+		new(3840, 1600), // 1600p, WQHD+
+		new(4320, 1800), // 1800p, UW4k
+		new(5120, 2160), // 2160p, UW5K
+		new(5760, 2400), // 2400p, UW5K+
+		new(6144, 2560), // 2560p, UW6K
+		new(6880, 2880), // 2880p, UW6K+
+		new(7680, 3200), // 3200p, UW7K
+		new(8640, 3600), // 3600p, UW10K
+    ];
 
 	public static readonly int[] FrameRates =
 	[
@@ -145,6 +195,7 @@ public partial class SaveManager : Node
 	{
 		// Video
 		public int targetDisplay = DisplayServer.GetPrimaryScreen();
+		public AspectRatio aspectRatio = AspectRatio.SixteenByNine;
 		public int windowSize = 3; // Defaults to one lower than 1080p
 		public bool useFullscreen = true;
 		public bool useExclusiveFullscreen;
@@ -195,6 +246,7 @@ public partial class SaveManager : Node
 			{
 				// Video
 				{ nameof(targetDisplay), targetDisplay },
+				{ nameof(aspectRatio), (int)aspectRatio},
 				{ nameof(windowSize), windowSize },
 				{ nameof(useFullscreen), useFullscreen },
 				{ nameof(useExclusiveFullscreen), useExclusiveFullscreen },
@@ -251,6 +303,8 @@ public partial class SaveManager : Node
 				useFullscreen = (bool)var;
 			if (dictionary.TryGetValue(nameof(useExclusiveFullscreen), out var))
 				useExclusiveFullscreen = (bool)var;
+			if (dictionary.TryGetValue(nameof(aspectRatio), out var))
+				aspectRatio = (AspectRatio)(int)var;
 			if (dictionary.TryGetValue(nameof(windowSize), out var))
 				windowSize = (int)var;
 			if (dictionary.TryGetValue(nameof(framerate), out var))
@@ -417,8 +471,29 @@ public partial class SaveManager : Node
 
 		if (DisplayServer.WindowGetMode() != targetMode)
 			DisplayServer.WindowSetMode(targetMode);
-		if (!Config.useFullscreen && Config.windowSize != -1)
-			DisplayServer.WindowSetSize(WindowSizes[Config.windowSize]);
+
+		if (!Config.useFullscreen)
+		{
+			switch (Config.aspectRatio)
+			{
+				case AspectRatio.FourByThree:
+					Instance.GetTree().Root.Size = WindowSizes4x3[Config.windowSize];
+					break;
+				case AspectRatio.SixteenByTen:
+					Instance.GetTree().Root.Size = WindowSizes16x10[Config.windowSize];
+					break;
+				case AspectRatio.TwentyoneByNine:
+					Instance.GetTree().Root.Size = WindowSizes21x9[Config.windowSize];
+					break;
+				default:
+					Instance.GetTree().Root.Size = WindowSizes[Config.windowSize];
+					break;
+			}
+		}
+
+		Vector2I resolution = Instance.GetTree().Root.Size;
+		float ratio = resolution.X / (float)resolution.Y;
+		Instance.GetTree().Root.ContentScaleSize = new Vector2I(Mathf.RoundToInt(1920 / ratio), 1080);
 
 		Engine.MaxFps = FrameRates[Config.framerate];
 		DisplayServer.VSyncMode targetVSyncMode =
@@ -552,7 +627,7 @@ public partial class SaveManager : Node
 		foreach (StringName action in InputMap.GetActions())
 		{
 			// Only store gameplay actions
-			if (!action.ToString().StartsWith("move_") && !action.ToString().StartsWith("button_"))
+			if (!action.ToString().StartsWith("move_") && !action.ToString().StartsWith("button_") && !action.ToString().StartsWith("sys_"))
 				continue;
 
 			initialInputMap.Add(action, GenerateInputMappingString(action));

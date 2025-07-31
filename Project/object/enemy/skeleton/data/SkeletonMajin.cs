@@ -3,9 +3,7 @@ using Project.Core;
 
 namespace Project.Gameplay.Objects;
 
-/// <summary>
-/// Special enemy found in the Skeleton Dome.
-/// </summary>
+/// <summary> Special enemy found in the Skeleton Dome. </summary>
 [Tool]
 public partial class SkeletonMajin : Enemy
 {
@@ -13,6 +11,17 @@ public partial class SkeletonMajin : Enemy
 	[Export] private bool isImmortal;
 	/// <summary> Should this skeleton move towards the player when attacking? </summary>
 	[Export] private bool isMovementEnabled;
+	[Export] private bool onlyAttackInRange;
+	[Export] private bool despawnOnRangeExit;
+	/// <summary> How should this skeleton attack? </summary>
+	[Export] private AttackType attackType;
+	private enum AttackType
+	{
+		Spin,
+		Overhead,
+		Disabled,
+	}
+
 	private bool isHurtboxInteraction;
 
 	/// <summary> Timer to keep track of state. </summary>
@@ -25,14 +34,20 @@ public partial class SkeletonMajin : Enemy
 	private bool isAttacking;
 	public void SetAttackStatus(bool value) => isAttacking = value;
 
+	private bool isImpededByWall;
+	private float wallCastTimer;
 	private float movementSpeed;
 	private Vector3 movementDirection;
+	private Vector3 homePosition;
+	private readonly float WalkSpeed = 3f;
 	private readonly float MaxMovementSpeed = 5f;
 	private readonly float MovementTrackingSmoothing = 20f;
 	private readonly float MovementTraction = 40f;
 	private readonly float MovementFriction = 120f;
+	private readonly float StrikeRangeSquared = 9f;
+	private readonly float WallCastInterval = .2f;
 
-	/// <summary> Keeps track of whether the skeleton's range was already triggered. </summary>
+	/// <summary> Keeps track of whether the skeleton has been spawned before. </summary>
 	private bool wasSpawned;
 	/// <summary> How long to stay shattered when isImmortal is true. </summary>
 	private readonly float ImmortalRespawnTime = 1.5f;
@@ -40,6 +55,9 @@ public partial class SkeletonMajin : Enemy
 	private AnimationNodeStateMachinePlayback AnimationState => AnimationTree.Get(AnimationPlayback).Obj as AnimationNodeStateMachinePlayback;
 	private readonly StringName AnimationPlayback = "parameters/playback";
 	private readonly StringName SpawnAnimation = "spawn";
+	private readonly StringName OverheadAnimation = "overhead";
+	private readonly StringName IdleAnimation = "idle";
+	private readonly StringName WalkAnimation = "walk";
 	private readonly StringName AttackStartAnimation = "attack-start";
 	private readonly StringName AttackStopAnimation = "attack-stop";
 	private readonly StringName ShatterResetAnimation = "shatter-reset";
@@ -54,6 +72,7 @@ public partial class SkeletonMajin : Enemy
 
 		base.SetUp();
 		AnimationTree.Active = true;
+		homePosition = GlobalPosition;
 	}
 
 	protected override void UpdateInteraction()
@@ -74,7 +93,7 @@ public partial class SkeletonMajin : Enemy
 		SetAttackStatus(false);
 		SetHitboxStatus(false);
 
-		if (SpawnMode != SpawnModes.Always)
+		if (SpawnMode == SpawnModes.Always)
 		{
 			Spawn();
 			return;
@@ -85,17 +104,33 @@ public partial class SkeletonMajin : Enemy
 
 	protected override void EnterRange()
 	{
-		if (wasSpawned || SpawnMode == SpawnModes.Signal) return;
+		if (wasSpawned && !IsActive)
+		{
+			Spawn();
+			return;
+		}
 
-		Spawn();
+		base.EnterRange();
+	}
+
+	protected override void ExitRange()
+	{
+		if (!IsActive)
+			return;
+
+		if (!despawnOnRangeExit)
+			return;
+
+		Deactivate(false);
 	}
 
 	protected override void Spawn()
 	{
-		if (IsActive) return; // Already spawned
+		wasSpawned = true;
+
+		if (IsActive || !IsInRange) return; // Already spawned
 
 		IsActive = true;
-		wasSpawned = true;
 		movementSpeed = 0;
 
 		currentHealth = maxHealth; // Reset health
@@ -112,18 +147,19 @@ public partial class SkeletonMajin : Enemy
 
 		if (IsActive)
 		{
-			if (isMovementEnabled)
-				ProcessMovement();
+			ProcessMovement();
 
 			if (isAttacking)
 			{
-				if (IsStateFinished())
+				if (attackType == AttackType.Spin && IsStateFinished())
 					FinishAttack();
 
 				return;
 			}
 
-			ProcessRotation(Player.GlobalPosition);
+			if (!isMovementEnabled)
+				ProcessRotation(Player.GlobalPosition);
+
 			if (IsHitboxEnabled && IsStateFinished()) // Check whether we can start attacking
 				StartAttack();
 
@@ -142,7 +178,13 @@ public partial class SkeletonMajin : Enemy
 
 	private void StartAttack()
 	{
-		AnimationState.Travel(AttackStartAnimation);
+		if (attackType == AttackType.Disabled)
+			return;
+
+		if (onlyAttackInRange && Player.GlobalPosition.DistanceSquaredTo(GlobalPosition) > StrikeRangeSquared)
+			return;
+
+		AnimationState.Travel(attackType == AttackType.Overhead ? OverheadAnimation : AttackStartAnimation);
 		stateTimer = attackLength;
 	}
 
@@ -154,35 +196,84 @@ public partial class SkeletonMajin : Enemy
 
 	private void ProcessMovement()
 	{
-		if (!isAttacking)
-		{
-			if (!Mathf.IsZeroApprox(movementSpeed))
-				movementSpeed = Mathf.MoveToward(movementSpeed, 0f, MovementFriction * PhysicsManager.physicsDelta);
-
+		if (!isMovementEnabled)
 			return;
+
+		wallCastTimer = Mathf.MoveToward(wallCastTimer, 0, PhysicsManager.physicsDelta);
+		if (Mathf.IsZeroApprox(wallCastTimer) && (!Mathf.IsZeroApprox(movementSpeed) || isImpededByWall))
+		{
+			wallCastTimer = WallCastInterval;
+			RaycastHit wallHit = this.CastRay(GlobalPosition + Vector3.Up * 0.2f, Player.GlobalPosition - GlobalPosition, Runtime.Instance.environmentMask);
+			isImpededByWall = wallHit && wallHit.collidedObject.IsInGroup("wall");
 		}
 
-		// Move towards player
-		movementSpeed = Mathf.MoveToward(movementSpeed, MaxMovementSpeed, MovementTraction * PhysicsManager.physicsDelta);
-		ProcessRotation(Player.GlobalPosition, MovementTrackingSmoothing);
+		float homeDistanceSquared = rangeOverride * rangeOverride;
+		bool leftHome = GlobalPosition.DistanceSquaredTo(homePosition) > homeDistanceSquared;
+		if (leftHome) // Allow skeleton to walk back towards player when player is close to home
+			leftHome = Player.GlobalPosition.DistanceSquaredTo(homePosition) > homeDistanceSquared;
 
+		if (attackType == AttackType.Spin)
+		{
+			// Only move when spinning
+			if (isAttacking && !leftHome && !isImpededByWall)
+				movementSpeed = Mathf.MoveToward(movementSpeed, MaxMovementSpeed, MovementTraction * PhysicsManager.physicsDelta);
+			else
+				movementSpeed = Mathf.MoveToward(movementSpeed, 0f, MovementFriction * PhysicsManager.physicsDelta);
+		}
+		else
+		{
+			bool isInStrikeRange = GlobalPosition.RemoveVertical().DistanceSquaredTo(Player.GlobalPosition.RemoveVertical()) <= StrikeRangeSquared;
+			if (isAttacking || isInStrikeRange || leftHome || isImpededByWall)
+			{
+				movementSpeed = Mathf.MoveToward(movementSpeed, 0f, MovementFriction * PhysicsManager.physicsDelta);
+
+				if (!isAttacking && AnimationState.GetCurrentNode() == WalkAnimation)
+					AnimationState.Travel(IdleAnimation);
+			}
+			else
+			{
+				movementSpeed = Mathf.MoveToward(movementSpeed, WalkSpeed, MovementTraction * PhysicsManager.physicsDelta);
+
+				if (AnimationState.GetCurrentNode() == IdleAnimation)
+					AnimationState.Travel(WalkAnimation);
+			}
+		}
+
+		ApplyMovement();
+	}
+
+	private void ApplyMovement()
+	{
+		if (!isAttacking)
+			ProcessRotation(Player.GlobalPosition, MovementTrackingSmoothing);
+
+		if (Mathf.IsZeroApprox(movementSpeed))
+			return;
+
+		// Move towards player
 		GlobalTranslate(Root.Forward() * movementSpeed * PhysicsManager.physicsDelta);
+
 		RaycastHit groundHit = this.CastRay(GlobalPosition + Vector3.Up, Vector3.Down * 2f, Runtime.Instance.environmentMask);
 		GlobalPosition = groundHit.point;
+
+		// TODO Wall Checks?
 	}
 
 	protected override void Defeat()
 	{
 		base.Defeat();
-
-		IsActive = false;
-		AnimationState.Start(isImmortal ? DamageAnimation : DefeatAnimation);
-		SetHitboxStatus(false);
+		Deactivate(true);
 
 		Player.MovementAngle = Player.PathFollower.ForwardAngle; // More consistent direction
-
 		if (isImmortal)
 			stateTimer = ImmortalRespawnTime;
+	}
+
+	private void Deactivate(bool isDefeated)
+	{
+		IsActive = false;
+		AnimationState.Start((!isDefeated || isImmortal) ? DamageAnimation : DefeatAnimation);
+		CallDeferred(MethodName.SetHitboxStatus, false);
 	}
 
 	public void OnHurtboxEntered(Area3D a)

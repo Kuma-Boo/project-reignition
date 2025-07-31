@@ -1,0 +1,295 @@
+[gd_scene load_steps=29 format=3 uid="uid://slvtrs84m8s0"]
+
+[ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_drnsg"]
+[ext_resource type="PackedScene" uid="uid://bsd07snxevqk5" path="res://area/6 skeleton dome/act 3/environment/01Throne.tscn" id="1_gpt5a"]
+[ext_resource type="PackedScene" uid="uid://bu0lner26nq0c" path="res://area/6 skeleton dome/act 3/environment/collision/Collision.tscn" id="2_aafq0"]
+[ext_resource type="PackedScene" uid="uid://dw20dfbj0lhjl" path="res://area/6 skeleton dome/act 3/environment/02HallA.tscn" id="2_oax81"]
+[ext_resource type="Resource" uid="uid://dg4m3a87hm3yo" path="res://area/6 skeleton dome/act 3/camera/HallCam.tres" id="2_vay8w"]
+[ext_resource type="PackedScene" uid="uid://bhtsnehtlucli" path="res://area/6 skeleton dome/act 3/environment/03HallB.tscn" id="3_7ka4t"]
+[ext_resource type="PackedScene" uid="uid://geveeoh07g8f" path="res://area/6 skeleton dome/act 3/environment/04HallC.tscn" id="4_24cxb"]
+[ext_resource type="PackedScene" uid="uid://bosu54mwdw1rw" path="res://area/6 skeleton dome/act 3/environment/05HallTreasure.tscn" id="5_sry27"]
+[ext_resource type="PackedScene" uid="uid://b1dlkxish3oxb" path="res://area/6 skeleton dome/act 3/environment/06Arena.tscn" id="6_ohpjv"]
+[ext_resource type="PackedScene" uid="uid://cafjjtonkykom" path="res://area/6 skeleton dome/act 3/environment/07Spiral.tscn" id="7_ov4ai"]
+[ext_resource type="Curve3D" uid="uid://dw15d2vpkdcxj" path="res://area/6 skeleton dome/act 3/environment/path/ThronePath.tres" id="8_asv45"]
+[ext_resource type="Curve3D" path="res://area/6 skeleton dome/act 3/environment/path/SpiralPath.tres" id="8_ov4ai"]
+[ext_resource type="Curve3D" uid="uid://6dy4edktfy11" path="res://area/6 skeleton dome/act 3/environment/path/ArenaPath.tres" id="9_asv45"]
+[ext_resource type="Curve3D" path="res://area/6 skeleton dome/act 3/environment/path/SidlePath.tres" id="9_vlt0c"]
+[ext_resource type="Curve3D" path="res://area/6 skeleton dome/act 3/environment/path/HallAPath.tres" id="11_vlt0c"]
+[ext_resource type="Curve3D" path="res://area/6 skeleton dome/act 3/environment/path/HallBPath.tres" id="12_asv45"]
+[ext_resource type="Curve3D" path="res://area/6 skeleton dome/act 3/environment/path/HallCPath.tres" id="13_drnsg"]
+[ext_resource type="Curve3D" path="res://area/6 skeleton dome/act 3/environment/path/HallTreasurePath.tres" id="14_aafq0"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="18_ip6k8"]
+[ext_resource type="Script" uid="uid://bssd28yqn1cxg" path="res://object/trigger/modules/PathTrigger.cs" id="18_jmh45"]
+[ext_resource type="Script" uid="uid://bvmyay4bo83qu" path="res://object/trigger/modules/DeathTrigger.cs" id="19_p5olh"]
+[ext_resource type="PackedScene" uid="uid://cry4fy5icucbc" path="res://object/trigger/state trigger/SidleTrigger.tscn" id="20_l48wn"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="22_44cky"]
+[ext_resource type="Resource" uid="uid://bj30jk812uvqh" path="res://area/6 skeleton dome/act 1/camera/SidleCam.tres" id="23_cpjtx"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n6xm6"]
+size = Vector3(150, 5, 150)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_byhyn"]
+size = Vector3(20, 15, 60)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_u13k2"]
+size = Vector3(20, 15, 4)
+
+[sub_resource type="Environment" id="Environment_asv45"]
+background_mode = 1
+ambient_light_source = 2
+ambient_light_color = Color(0.277528, 0.277528, 0.277528, 1)
+tonemap_mode = 2
+tonemap_exposure = 1.2
+tonemap_white = 2.0
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 1.0
+glow_strength = 0.9
+glow_bloom = 0.1
+glow_blend_mode = 1
+glow_hdr_threshold = 2.0
+adjustment_enabled = true
+
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
+script = ExtResource("1_drnsg")
+InitialCameraSettings = ExtResource("2_vay8w")
+pathParent = NodePath("Path")
+Environment = NodePath("WorldEnvironment")
+
+[node name="Collision" parent="." instance=ExtResource("2_aafq0")]
+visible = false
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="01Throne" parent="Visuals" instance=ExtResource("1_gpt5a")]
+
+[node name="02HallA" parent="Visuals" instance=ExtResource("2_oax81")]
+
+[node name="03HallB" parent="Visuals" instance=ExtResource("3_7ka4t")]
+
+[node name="04HallC" parent="Visuals" instance=ExtResource("4_24cxb")]
+
+[node name="05HallTreasure" parent="Visuals" instance=ExtResource("5_sry27")]
+
+[node name="06Arena" parent="Visuals" instance=ExtResource("6_ohpjv")]
+
+[node name="07Spiral" parent="Visuals" instance=ExtResource("7_ov4ai")]
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="SpiralProbe" type="ReflectionProbe" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 848.232, -23, -1260.57)
+layers = 1024
+size = Vector3(313.537, 160, 258.858)
+interior = true
+cull_mask = 4
+reflection_mask = 4
+ambient_mode = 2
+ambient_color = Color(0.66699, 0.581258, 0.359394, 1)
+ambient_color_energy = 1.5
+
+[node name="EndingProbe" type="ReflectionProbe" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1130, 20, -1160)
+layers = 1024
+size = Vector3(100, 60, 320)
+interior = true
+cull_mask = 4
+reflection_mask = 4
+ambient_mode = 2
+ambient_color = Color(1, 0.843137, 0.694118, 1)
+ambient_color_energy = 0.3
+
+[node name="ArenaProbe" type="ReflectionProbe" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1000, 40, -1000)
+layers = 1024
+size = Vector3(300, 100, 300)
+interior = true
+cull_mask = 2
+reflection_mask = 2
+ambient_mode = 2
+ambient_color = Color(0.588235, 1, 0.862745, 1)
+ambient_color_energy = 0.5
+
+[node name="HallAProbe" type="ReflectionProbe" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 500, 8, -558)
+layers = 1024
+size = Vector3(25, 20, 147)
+interior = true
+cull_mask = 4
+reflection_mask = 4
+ambient_mode = 2
+ambient_color = Color(1, 0.81, 0.81, 1)
+ambient_color_energy = 0.5
+
+[node name="HallBProbe" type="ReflectionProbe" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 700, 8, -557)
+layers = 1024
+size = Vector3(26, 20, 147)
+interior = true
+cull_mask = 4
+reflection_mask = 4
+ambient_mode = 2
+ambient_color = Color(0.49, 0.847, 1, 1)
+ambient_color_energy = 0.5
+
+[node name="HallCProbe" type="ReflectionProbe" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 900, 8, -558)
+layers = 1024
+size = Vector3(23, 20, 147)
+interior = true
+cull_mask = 4
+reflection_mask = 4
+ambient_mode = 2
+ambient_color = Color(1, 0.886333, 0.78, 1)
+ambient_color_energy = 0.5
+
+[node name="HallTreasureProbe" type="ReflectionProbe" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1100, 5, -558)
+layers = 1024
+size = Vector3(40, 20, 148)
+interior = true
+cull_mask = 4
+reflection_mask = 4
+ambient_mode = 2
+ambient_color = Color(1, 0.9835, 0.67, 1)
+ambient_color_energy = 0.5
+
+[node name="EnvironmentLighting" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_color = Color(1, 0.86, 0.86, 1)
+light_energy = 0.8
+light_cull_mask = 4293918724
+shadow_enabled = true
+shadow_caster_mask = 65
+directional_shadow_blend_splits = true
+
+[node name="ObjectLighting" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_color = Color(1, 0.86, 0.86, 1)
+light_energy = 0.5
+light_cull_mask = 4293918785
+shadow_caster_mask = 65
+directional_shadow_blend_splits = true
+
+[node name="Path" type="Node3D" parent="."]
+
+[node name="Throne" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1150, 13, -1300)
+curve = ExtResource("8_asv45")
+
+[node name="Arena" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1065, 0, -1000)
+curve = ExtResource("9_asv45")
+
+[node name="Spiral" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 779.959, 20, -1208.91)
+curve = ExtResource("8_ov4ai")
+
+[node name="Sidle" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 779.746, -6.417, -1299.89)
+curve = ExtResource("9_vlt0c")
+
+[node name="HallA" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 500, 0, -485.371)
+curve = ExtResource("11_vlt0c")
+
+[node name="HallB" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 700, 0, -485.371)
+curve = ExtResource("12_asv45")
+
+[node name="HallC" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 900, 0, -485.371)
+curve = ExtResource("13_drnsg")
+
+[node name="HallTreasure" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1100, 0, -485.371)
+curve = ExtResource("14_aafq0")
+
+[node name="Trigger" type="Node3D" parent="."]
+
+[node name="Object" type="Node3D" parent="Trigger"]
+
+[node name="FallTrigger" parent="Trigger/Object" instance=ExtResource("18_ip6k8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 843, -42.9, -1303)
+"Enter Mode" = 0
+
+[node name="Fall" type="Node3D" parent="Trigger/Object/FallTrigger"]
+script = ExtResource("19_p5olh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/FallTrigger"]
+shape = SubResource("BoxShape3D_n6xm6")
+
+[node name="SidleTrigger" parent="Trigger/Object" instance=ExtResource("20_l48wn")]
+transform = Transform3D(0.724677, 0, -0.689089, 0, 1, 0, 0.689089, 0, 0.724677, 804.548, -6, -1345.89)
+
+[node name="Path" type="Node3D" parent="Trigger/Object/SidleTrigger"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+script = ExtResource("18_jmh45")
+
+[node name="Camera" type="Node3D" parent="Trigger/Object/SidleTrigger"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+script = ExtResource("22_44cky")
+settings = ExtResource("23_cpjtx")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/SidleTrigger"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+shape = SubResource("BoxShape3D_byhyn")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger/Object/SidleTrigger"]
+transform = Transform3D(0.906307, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906307, 0.18988, 0, -28.7083)
+shape = SubResource("BoxShape3D_u13k2")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Trigger/Object/SidleTrigger"]
+transform = Transform3D(0.906307, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906307, -2.87848, 0, 30.071)
+shape = SubResource("BoxShape3D_u13k2")
+
+[node name="Path" type="Node3D" parent="Trigger"]
+
+[node name="ThronePath" type="Node3D" parent="Trigger/Path" node_paths=PackedStringArray("path")]
+script = ExtResource("18_jmh45")
+path = NodePath("../../../Path/Throne")
+
+[node name="ThronePathReverse" type="Node3D" parent="Trigger/Path" node_paths=PackedStringArray("path")]
+script = ExtResource("18_jmh45")
+path = NodePath("../../../Path/Throne")
+pathMode = 1
+
+[node name="ArenaPath" type="Node3D" parent="Trigger/Path" node_paths=PackedStringArray("path")]
+script = ExtResource("18_jmh45")
+path = NodePath("../../../Path/Arena")
+
+[node name="SpiralPath" type="Node3D" parent="Trigger/Path" node_paths=PackedStringArray("path")]
+script = ExtResource("18_jmh45")
+path = NodePath("../../../Path/Arena")
+
+[node name="HallRedPath" type="Node3D" parent="Trigger/Path" node_paths=PackedStringArray("path")]
+script = ExtResource("18_jmh45")
+path = NodePath("../../../Path/HallA")
+
+[node name="HallBluePath" type="Node3D" parent="Trigger/Path" node_paths=PackedStringArray("path")]
+script = ExtResource("18_jmh45")
+path = NodePath("../../../Path/HallB")
+
+[node name="HallYellowPath" type="Node3D" parent="Trigger/Path" node_paths=PackedStringArray("path")]
+script = ExtResource("18_jmh45")
+path = NodePath("../../../Path/HallC")
+
+[node name="HallTreasurePath" type="Node3D" parent="Trigger/Path" node_paths=PackedStringArray("path")]
+script = ExtResource("18_jmh45")
+path = NodePath("../../../Path/HallTreasure")
+
+[node name="Checkpoint" type="Node3D" parent="Trigger"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_asv45")
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[connection signal="Activated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Path" method="Activate"]
+[connection signal="Activated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Camera" method="Activate"]
+[connection signal="Deactivated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Path" method="Deactivate"]
+[connection signal="Deactivated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Camera" method="Deactivate"]
+
+[editable path="Collision"]

@@ -1,5 +1,6 @@
 using Godot;
 using Project.Core;
+using Project.Gameplay.Triggers;
 
 namespace Project.Gameplay.Objects;
 
@@ -10,7 +11,6 @@ public partial class Surfboard : PathTraveller
 {
 	[Signal] public delegate void WaveStartedEventHandler();
 	[Signal] public delegate void HighJumpStartedEventHandler();
-	[Signal] public delegate void JumpFinishedEventHandler();
 	[Signal] public delegate void MediumJumpStartedEventHandler();
 	[Signal] public delegate void LowJumpStartedEventHandler();
 	[Signal] public delegate void WaveFinishedEventHandler();
@@ -31,6 +31,7 @@ public partial class Surfboard : PathTraveller
 	private Path3D originalPath;
 
 	[Export] private CameraSettingsResource waveCameraSettings;
+	[Export] private CameraTrigger clearCameraTrigger;
 	private bool isCrouching;
 	private float jumpCameraTimer;
 	private float screenshakeTimer;
@@ -42,6 +43,7 @@ public partial class Surfboard : PathTraveller
 	private readonly float FocusedWaveFov = 70f;
 	private readonly float BaseWaveDistance = 5f;
 	private readonly float FocusedWaveDistance = 3f;
+	private readonly float BaseWaveLength = 200f;
 
 	protected override float GetCurrentMaxSpeed
 	{
@@ -89,6 +91,12 @@ public partial class Surfboard : PathTraveller
 	{
 		base.ProcessPathTraveller();
 
+		if (currentWave == null)
+		{
+			for (int i = 0; i < waveIndex; i++)
+				SoundManager.FadeAudioPlayer(waveSFX[i]);
+		}
+
 		if (!Mathf.IsZeroApprox(jumpCameraTimer)) // Don't allow turning during a high jump
 		{
 			CurrentTurnAmount = Vector2.Zero;
@@ -113,7 +121,11 @@ public partial class Surfboard : PathTraveller
 
 		jumpCameraTimer = Mathf.MoveToward(jumpCameraTimer, 0, PhysicsManager.physicsDelta);
 		if (Mathf.IsZeroApprox(jumpCameraTimer))
-			EmitSignal(SignalName.JumpFinished);
+		{
+			clearCameraTrigger.distanceBlending = Mathf.FloorToInt(currentWave.Scale.Z * BaseWaveLength);
+			clearCameraTrigger.Activate();
+			clearCameraTrigger.GlobalPosition = Player.Camera.PathFollower.GlobalPosition;
+		}
 	}
 
 	protected override void Accelerate()
@@ -134,12 +146,7 @@ public partial class Surfboard : PathTraveller
 	public void SetCurrentWave(Wave wave)
 	{
 		// Update wave sound effects
-		if (wave == null)
-		{
-			for (int i = 0; i < waveIndex; i++)
-				waveSFX[i].Stop();
-		}
-		else
+		if (wave != null)
 		{
 			waveIndex = wave.Index;
 			for (int i = 0; i < waveIndex; i++)
@@ -157,7 +164,9 @@ public partial class Surfboard : PathTraveller
 		PathFollower.GetParent().RemoveChild(PathFollower);
 		path.AddChild(PathFollower);
 		PathFollower.Progress = path.Curve.GetClosestOffset(GlobalPosition - path.GlobalPosition);
-		EmitSignal(wave != null ? SignalName.WaveStarted : SignalName.WaveFinished);
+
+		if (wave != null)
+			EmitSignal(SignalName.WaveStarted);
 	}
 
 	public void StartJump()

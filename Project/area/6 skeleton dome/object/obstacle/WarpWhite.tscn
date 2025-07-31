@@ -1,14 +1,181 @@
-[gd_scene load_steps=2 format=3 uid="uid://dwcesmn6mdb55"]
+[gd_scene load_steps=28 format=3 uid="uid://dwcesmn6mdb55"]
 
-[ext_resource type="PackedScene" uid="uid://63pn4rd1drw0" path="res://area/6 skeleton dome/object/obstacle/WarpRed.tscn" id="1_ormy5"]
+[ext_resource type="Script" uid="uid://dtvj1vg0nkhi6" path="res://object/trigger/modules/TeleportTrigger.cs" id="1_5dhhn"]
+[ext_resource type="PackedScene" uid="uid://cp8owtrig0i60" path="res://area/6 skeleton dome/object/model/obstacle/WarpBase.gltf" id="2_jl87v"]
+[ext_resource type="Shader" uid="uid://dr8jyv71a8xic" path="res://effect/shader/particle/ParticleSpiral.gdshader" id="3_fab6w"]
+[ext_resource type="Material" uid="uid://chrq2jlovey6c" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters.tres" id="4_6dkao"]
+[ext_resource type="Material" uid="uid://72qi5wpg8kme" path="res://effect/particle/material/environment/Boss Splatter Add.tres" id="5_gk3dv"]
+[ext_resource type="PackedScene" uid="uid://cd68e1r8fc1jq" path="res://area/6 skeleton dome/object/model/obstacle/WarpHead.gltf" id="6_yjb4x"]
 
-[node name="WarpWhite" instance=ExtResource("1_ormy5")]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_r5wk0"]
+height = 3.0
+radius = 1.5
+
+[sub_resource type="Gradient" id="Gradient_o2anh"]
+offsets = PackedFloat32Array(0, 0.168776, 0.35443, 0.578059, 0.763713, 0.911392)
+colors = PackedColorArray(0, 0, 0, 1, 0, 1, 1, 1, 0.152941, 0.219608, 0.858824, 1, 0.831373, 0.176471, 0.772549, 1, 1, 0, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ddtke"]
+gradient = SubResource("Gradient_o2anh")
+width = 64
+
+[sub_resource type="Curve" id="Curve_wcg88"]
+_limits = [0.0, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 2), 0.0, 0.0, 0, 0, Vector2(1, 0.6), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ljbk0"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_wcg88")
+
+[sub_resource type="Curve" id="Curve_qy8u0"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_ftecv"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.2), -2.2, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_p224c"]
+width = 64
+curve_x = SubResource("Curve_qy8u0")
+curve_y = SubResource("Curve_ftecv")
+curve_z = SubResource("Curve_qy8u0")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rker8"]
+shader = ExtResource("3_fab6w")
+shader_parameter/height = 5.0
+shader_parameter/rotation_bias = -0.8
+shader_parameter/rotation_speed = 5.0
+shader_parameter/radius_randomness = 0.4
+shader_parameter/radius_randomness_bias = 0.2
+shader_parameter/radius_curve = SubResource("CurveTexture_ljbk0")
+shader_parameter/scale_curve = SubResource("CurveXYZTexture_p224c")
+shader_parameter/color_ramp = SubResource("GradientTexture1D_ddtke")
+
+[sub_resource type="QuadMesh" id="QuadMesh_hfpo1"]
+material = ExtResource("4_6dkao")
+
+[sub_resource type="Gradient" id="Gradient_qxwxt"]
+offsets = PackedFloat32Array(0, 0.181435, 0.57384, 0.848101)
+colors = PackedColorArray(0, 0, 0, 1, 0.110123, 0.496443, 0.999999, 1, 0.023745, 0.475004, 0.999981, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7b4w1"]
+gradient = SubResource("Gradient_qxwxt")
+width = 64
+
+[sub_resource type="Curve" id="Curve_cx0np"]
+_data = [Vector2(0, 0.8), 0.0, 0.0, 0, 0, Vector2(1, 0.2), -1.30351, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_0anll"]
+width = 64
+curve = SubResource("Curve_cx0np")
+
+[sub_resource type="Curve" id="Curve_sm17h"]
+_limits = [0.0, 1.5, 0.0, 1.0]
+_data = [Vector2(0, 0.1875), 0.0, 19.5, 0, 0, Vector2(0.2, 1.5), 0.0, 0.0, 0, 0, Vector2(0.8, 1.5), 0.0, 0.0, 0, 0, Vector2(1, 0), -23.556, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_joiyj"]
+_limits = [0.0, 4.0, 0.0, 1.0]
+_data = [Vector2(0, 0.5), 0.0, 47.5, 0, 0, Vector2(0.2, 3.5), 0.0, 0.0, 0, 0, Vector2(0.7, 3.5), 0.0, 0.0, 0, 0, Vector2(1, 0), -29.1685, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_4j1br"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_uchoe"]
+width = 64
+curve_x = SubResource("Curve_sm17h")
+curve_y = SubResource("Curve_joiyj")
+curve_z = SubResource("Curve_4j1br")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3qt4o"]
+shader = ExtResource("3_fab6w")
+shader_parameter/height = 6.0
+shader_parameter/rotation_bias = 0.0
+shader_parameter/rotation_speed = 3.0
+shader_parameter/radius_randomness = 0.1
+shader_parameter/radius_randomness_bias = 1.49012e-08
+shader_parameter/radius_curve = SubResource("CurveTexture_0anll")
+shader_parameter/scale_curve = SubResource("CurveXYZTexture_uchoe")
+shader_parameter/color_ramp = SubResource("GradientTexture1D_7b4w1")
+
+[sub_resource type="QuadMesh" id="QuadMesh_fefwq"]
+material = ExtResource("5_gk3dv")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4mcr6"]
+radius = 1.25
+height = 3.4
+
+[node name="WarpWhite" type="Area3D"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("1_5dhhn")
+enableStartFX = true
+crossfade = true
+
+[node name="WarpBase" parent="." instance=ExtResource("2_jl87v")]
+
+[node name="WarpBaseCollision" parent="WarpBase" index="1"]
+visible = false
+
+[node name="StaticBody3D" parent="WarpBase/WarpBaseCollision" index="0" groups=["wall"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("CylinderShape3D_r5wk0")
+
+[node name="Letters" type="GPUParticles3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.25, 0)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+amount = 48
+lifetime = 2.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-4, -2, -4, 8, 10, 8)
+local_coords = true
+process_material = SubResource("ShaderMaterial_rker8")
+draw_pass_1 = SubResource("QuadMesh_hfpo1")
+
+[node name="Light" type="GPUParticles3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.25, 0)
+cast_shadow = 0
+gi_mode = 0
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-2, 0, -2, 4, 8, 4)
+local_coords = true
+process_material = SubResource("ShaderMaterial_3qt4o")
+draw_pass_1 = SubResource("QuadMesh_fefwq")
+
+[node name="WarpHead" parent="." instance=ExtResource("6_yjb4x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0.5)
+
+[node name="WarpHeadMesh" parent="WarpHead" index="0"]
+cast_shadow = 0
 
 [node name="WarpRedMesh" parent="WarpHead" index="1"]
 visible = false
+cast_shadow = 0
 
 [node name="WarpWhiteMesh" parent="WarpHead" index="2"]
-visible = true
+cast_shadow = 0
+
+[node name="StaticBody3D" type="StaticBody3D" parent="WarpHead" groups=["wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -0.3)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WarpHead/StaticBody3D"]
+shape = SubResource("CapsuleShape3D_4mcr6")
+
+[connection signal="area_entered" from="." to="." method="Activate"]
 
 [editable path="WarpBase"]
 [editable path="WarpHead"]

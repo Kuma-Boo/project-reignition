@@ -42,6 +42,7 @@ public partial class ObjectGenerator : Node3D
 	public NodePath _path;
 	public Path3D path;
 	public Launcher.LaunchDirection launchDirection;
+	public bool reversePath;
 	public float launchDistance;
 	public float launchEndHeight;
 	public float launchMiddleHeight;
@@ -87,6 +88,7 @@ public partial class ObjectGenerator : Node3D
 		{
 			properties.Add(ExtensionMethods.CreateProperty("Path", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "Path3D"));
 			properties.Add(ExtensionMethods.CreateProperty("Path Progress Offset", Variant.Type.Float, PropertyHint.Range, "-64,64,.1"));
+			properties.Add(ExtensionMethods.CreateProperty("Reverse Path", Variant.Type.Bool));
 			properties.Add(ExtensionMethods.CreateProperty("Disable Path Y", Variant.Type.Bool));
 		}
 		else if (shape == SpawnShape.Launcher)
@@ -105,7 +107,7 @@ public partial class ObjectGenerator : Node3D
 
 		if (shape == SpawnShape.Ring)
 		{
-			properties.Add(ExtensionMethods.CreateProperty("Ring Size", Variant.Type.Float, PropertyHint.Range, "0,12,.1"));
+			properties.Add(ExtensionMethods.CreateProperty("Ring Size", Variant.Type.Float, PropertyHint.Range, "0,30,.1"));
 			properties.Add(ExtensionMethods.CreateProperty("Ring Ratio", Variant.Type.Float, PropertyHint.Range, "0,1,.1"));
 		}
 		else if (shape != SpawnShape.Launcher)
@@ -162,6 +164,9 @@ public partial class ObjectGenerator : Node3D
 			case "Path Progress Offset":
 				progressOffset = (float)value;
 				break;
+			case "Reverse Path":
+				reversePath = (bool)value;
+				break;
 			case "Disable Path Y":
 				disablePathY = (bool)value;
 				break;
@@ -211,6 +216,8 @@ public partial class ObjectGenerator : Node3D
 				return _path;
 			case "Path Progress Offset":
 				return progressOffset;
+			case "Reverse Path":
+				return reversePath;
 			case "Disable Path Y":
 				return disablePathY;
 
@@ -318,7 +325,7 @@ public partial class ObjectGenerator : Node3D
 				spawnPosition.Y = GlobalPosition.Y;
 
 			SpawnNode(spawnPosition, true);
-			follow.Progress += spacing;
+			follow.Progress += spacing * (reversePath ? -1 : 1);
 		}
 
 		follow.QueueFree();
@@ -340,12 +347,23 @@ public partial class ObjectGenerator : Node3D
 		Vector3 endPosition = startPosition + (GetLaunchDirection() * launchDistance) + (Vector3.Up * launchEndHeight);
 
 		LaunchSettings settings = LaunchSettings.Create(startPosition, endPosition, launchMiddleHeight);
+		if (amount == 1)
+		{
+			SpawnNode(settings.InterpolatePositionRatio(spacing), true);
+			return;
+		}
+
+		if (amount == 2)
+		{
+			SpawnNode(settings.InterpolatePositionRatio(spacing), true);
+			SpawnNode(settings.InterpolatePositionRatio(ringRatio), true);
+			return;
+		}
 
 		for (int i = 0; i < amount; i++)
 		{
-			float t = i / (float)amount;
-			t *= ringRatio;
-			t += spacing;
+			float t = i / (amount - 1f);
+			t = Mathf.Lerp(spacing, ringRatio, t);
 			SpawnNode(settings.InterpolatePositionRatio(t), true);
 		}
 	}

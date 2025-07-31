@@ -396,8 +396,8 @@ public partial class Enemy : Node3D
 	{
 		if (!a.IsInGroup("player detection")) return;
 
-		EnterRange();
 		IsInRange = true;
+		EnterRange();
 	}
 
 	protected virtual void ApplyRotation() => Root.Rotation = Vector3.Up * currentRotation;
@@ -406,7 +406,7 @@ public partial class Enemy : Node3D
 	{
 		if (!a.IsInGroup("player detection")) return;
 
-		ExitRange();
 		IsInRange = false;
+		ExitRange();
 	}
 }

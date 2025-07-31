@@ -36,7 +36,7 @@ public partial class SpinJumpState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
-		if (!Input.IsActionPressed("button_jump"))
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) && !Input.IsActionPressed("button_jump"))
 			IsShortenedJump = true;
 
 		ProcessMoveSpeed();

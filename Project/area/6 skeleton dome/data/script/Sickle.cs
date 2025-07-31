@@ -61,7 +61,7 @@ public partial class Sickle : Node3D
 		}
 
 		float targetRatio = isSwingingRight ? 1 : 0;
-		currentRatio = Mathf.MoveToward(currentRatio, targetRatio, (1.0f / cycleLength) * PhysicsManager.physicsDelta);
+		currentRatio = Mathf.MoveToward(currentRatio, targetRatio, (2.0f / cycleLength) * PhysicsManager.physicsDelta);
 
 		if (Mathf.IsEqualApprox(currentRatio, targetRatio))
 		{
