@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://b4bdc5vtf52m6"]
+[gd_scene load_steps=53 format=3 uid="uid://b4bdc5vtf52m6"]
 
 [ext_resource type="PackedScene" uid="uid://slvtrs84m8s0" path="res://area/6 skeleton dome/act 3/Static.tscn" id="1_7mhht"]
 [ext_resource type="Resource" uid="uid://cxmfjdvam8ucj" path="res://resource/level data/skeleton dome/Act3Bone.tres" id="2_ftyvr"]
@@ -35,6 +35,7 @@
 [ext_resource type="PackedScene" uid="uid://nso0vvogx8g0" path="res://area/6 skeleton dome/object/platform/PlatformSpiralLarge.tscn" id="32_v31tp"]
 [ext_resource type="PackedScene" uid="uid://di8tdo65qjkbe" path="res://object/enemy/majin/data/skeleton dome/BlueMajin.tscn" id="33_48ldw"]
 [ext_resource type="PackedScene" uid="uid://csaug6ajhbtce" path="res://object/enemy/majin/data/skeleton dome/RedMajin.tscn" id="33_n0wyt"]
+[ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="33_phq0i"]
 [ext_resource type="PackedScene" uid="uid://bgrpp6vriyi1w" path="res://area/6 skeleton dome/object/platform/PlatformSpiralSmall.tscn" id="34_n0wyt"]
 [ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="36_n0wyt"]
 [ext_resource type="PackedScene" uid="uid://db770ujvjdio4" path="res://object/stage/common/LaunchRingSpike.tscn" id="37_phq0i"]
@@ -211,6 +212,9 @@ _data = {
 &"RESET": SubResource("Animation_wad3v"),
 &"event": SubResource("Animation_w2xm8")
 }
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v31tp"]
+size = Vector3(30, 15, 6)
 
 [node name="World" type="Node"]
 
@@ -1492,6 +1496,9 @@ Movement/Radius = 2.0
 [node name="RichRing" parent="BoneAct/Arena/SwitchGroup3/SpikeBallGroup3" instance=ExtResource("28_pvpxi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
+[node name="FireSoul1" parent="BoneAct/Arena/SwitchGroup3" instance=ExtResource("33_phq0i")]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.22363, 2.1, 8.10217)
+
 [node name="Switch1" parent="BoneAct/Arena/SwitchGroup3" instance=ExtResource("17_hm2eq")]
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -5.50388, 0.1, 10.1728)
 
@@ -2296,6 +2303,11 @@ transform = Transform3D(-0.804977, 0, 0.593307, 0, 1, 0, -0.593307, 0, -0.804977
 [node name="Cage" parent="BoneAct/Spiral/MiddleRow/PlatformGroup3" instance=ExtResource("30_wv35e")]
 transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -0.000244141, 1, -4.19995)
 
+[node name="FireSoul2" parent="BoneAct/Spiral/MiddleRow/PlatformGroup3" instance=ExtResource("33_phq0i")]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -0.000244141, 1, -4.19995)
+fireSoulIndex = 2
+isTimeBreakOnly = true
+
 [node name="Rings2" type="Node3D" parent="BoneAct/Spiral/MiddleRow"]
 transform = Transform3D(-0.492545, 0, 0.870287, 0, 1, 0, -0.870287, 0, -0.492545, 48.5193, -10.8, 129.766)
 script = ExtResource("11_yellp")
@@ -2511,13 +2523,28 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 96, 1,
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 140, 0, 0)
 warpTarget = NodePath("../../../Throne/WarpExit")
 
+[node name="FireSoul3" parent="BoneAct/Spiral/Warp" instance=ExtResource("33_phq0i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 115, 7, 0.2)
+fireSoulIndex = 3
+
+[node name="OneWayEnableTrigger" parent="BoneAct/Spiral" instance=ExtResource("39_qgy35")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2.38419e-07, -53, -32)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BoneAct/Spiral/OneWayEnableTrigger"]
+shape = SubResource("BoxShape3D_v31tp")
+
 [node name="FlyingPot1" parent="BoneAct/Spiral" instance=ExtResource("44_jbw0i")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 8, -60, -25)
-customCameraSettings = null
+travelBounds = Vector2(0, 45)
+InitialLocalPosition = Vector2(0, 45)
 
 [node name="FlyingPot2" parent="BoneAct/Spiral" instance=ExtResource("44_jbw0i")]
 transform = Transform3D(1, 0, -7.35137e-08, 0, 1, 0, 7.35137e-08, 0, 1, 6, -55, -32)
-customCameraSettings = null
+travelBounds = Vector2(8, 10)
+InitialLocalPosition = Vector2(2, 0)
 
 [connection signal="Teleport" from="BoneAct/BoneWarp" to="Static/Visuals/02HallA" method="Deactivate"]
 [connection signal="Teleport" from="BoneAct/BoneWarp" to="Static/Visuals/03HallB" method="Deactivate"]
@@ -2706,6 +2733,7 @@ customCameraSettings = null
 [connection signal="Teleport" from="BoneAct/Spiral/Warp/WarpRed" to="Static/Trigger/Path/ThronePathReverse" method="Activate"]
 [connection signal="Teleport" from="BoneAct/Spiral/Warp/WarpRed" to="BoneAct/Throne" method="Activate"]
 [connection signal="Teleport" from="BoneAct/Spiral/Warp/WarpRed" to="BoneAct/Spiral" method="Deactivate"]
+[connection signal="Activated" from="BoneAct/Spiral/OneWayEnableTrigger" to="Static/Collision/OneWayWall" method="Activate"]
 
 [editable path="Static"]
 [editable path="Static/Collision"]

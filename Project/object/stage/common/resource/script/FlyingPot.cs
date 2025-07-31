@@ -13,18 +13,7 @@ public partial class FlyingPot : Node3D
 	[Export] public Vector2 travelBounds;
 	[Export] public float boundOffset;
 	[Export] private CameraSettingsResource customCameraSettings;
-	[Export]
-	private Vector2 InitialLocalPosition
-	{
-		get => initialLocalPosition;
-		set
-		{
-			initialLocalPosition = new Vector2(Mathf.Clamp(value.X, -travelBounds.X + boundOffset, travelBounds.X + boundOffset),
-				Mathf.Clamp(value.Y, -travelBounds.Y, travelBounds.Y));
-			root.Position = new Vector3(initialLocalPosition.X, initialLocalPosition.Y, 0);
-		}
-	}
-	private Vector2 initialLocalPosition;
+	[Export] private Vector2 initialLocalPosition;
 
 	[ExportGroup("Components")]
 	[Export] private Node3D root;
@@ -90,7 +79,16 @@ public partial class FlyingPot : Node3D
 
 	public override void _PhysicsProcess(double _)
 	{
-		if (Engine.IsEditorHint() || isSleeping) return;
+		if (Engine.IsEditorHint())
+		{
+			initialLocalPosition = new Vector2(Mathf.Clamp(initialLocalPosition.X, -travelBounds.X + boundOffset, travelBounds.X + boundOffset),
+				Mathf.Clamp(initialLocalPosition.Y, -travelBounds.Y, travelBounds.Y));
+			root.Position = new Vector3(initialLocalPosition.X, initialLocalPosition.Y, 0);
+			return;
+		}
+
+
+		if (isSleeping) return;
 
 		if (!interactingWithPlayer && !lockonArea.Monitorable) // Re-enable lockon
 			lockonArea.SetDeferred("monitorable", Player.VerticalSpeed < 0f);
