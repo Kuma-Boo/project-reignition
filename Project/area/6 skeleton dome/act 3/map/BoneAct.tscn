@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://b4bdc5vtf52m6"]
+[gd_scene load_steps=54 format=3 uid="uid://b4bdc5vtf52m6"]
 
 [ext_resource type="PackedScene" uid="uid://slvtrs84m8s0" path="res://area/6 skeleton dome/act 3/Static.tscn" id="1_7mhht"]
 [ext_resource type="Resource" uid="uid://cxmfjdvam8ucj" path="res://resource/level data/skeleton dome/Act3Bone.tres" id="2_ftyvr"]
@@ -27,12 +27,14 @@
 [ext_resource type="PackedScene" uid="uid://0jj0alw37l1s" path="res://area/6 skeleton dome/object/grindrail/Grindrail04.tscn" id="22_8r6bi"]
 [ext_resource type="PackedScene" uid="uid://d21ummt57uq4a" path="res://area/6 skeleton dome/object/obstacle/Sickle.tscn" id="23_18g7e"]
 [ext_resource type="PackedScene" uid="uid://ctkxmjdylid4k" path="res://object/enemy/majin/data/skeleton dome/GreenMajin.tscn" id="27_18g7e"]
+[ext_resource type="Curve3D" uid="uid://6dy4edktfy11" path="res://area/6 skeleton dome/act 3/environment/path/ArenaPath.tres" id="27_ih6gw"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="28_pvpxi"]
 [ext_resource type="PackedScene" uid="uid://bbgtmxw55soah" path="res://object/stage/destructable/Stone.tscn" id="29_m5a1p"]
 [ext_resource type="PackedScene" uid="uid://2h6xrqn3jp6l" path="res://object/stage/destructable/Cage.tscn" id="30_wv35e"]
-[ext_resource type="PackedScene" uid="uid://csaug6ajhbtce" path="res://object/enemy/majin/data/skeleton dome/RedMajin.tscn" id="31_wv35e"]
+[ext_resource type="PackedScene" uid="uid://cnpbnknx7gq3e" path="res://area/6 skeleton dome/object/special/Hand.tscn" id="31_wv35e"]
 [ext_resource type="PackedScene" uid="uid://nso0vvogx8g0" path="res://area/6 skeleton dome/object/platform/PlatformSpiralLarge.tscn" id="32_v31tp"]
 [ext_resource type="PackedScene" uid="uid://di8tdo65qjkbe" path="res://object/enemy/majin/data/skeleton dome/BlueMajin.tscn" id="33_48ldw"]
+[ext_resource type="PackedScene" uid="uid://csaug6ajhbtce" path="res://object/enemy/majin/data/skeleton dome/RedMajin.tscn" id="33_n0wyt"]
 [ext_resource type="PackedScene" uid="uid://bgrpp6vriyi1w" path="res://area/6 skeleton dome/object/platform/PlatformSpiralSmall.tscn" id="34_n0wyt"]
 [ext_resource type="PackedScene" uid="uid://doc2lrkdh0ga3" path="res://object/trigger/state trigger/FootholdTrigger.tscn" id="35_phq0i"]
 [ext_resource type="PackedScene" uid="uid://ehm8lwnod2pl" path="res://area/6 skeleton dome/object/foothold/FootholdLeft.tscn" id="36_7mqa4"]
@@ -233,6 +235,12 @@ script = ExtResource("7_vp6ye")
 enableStartFX = true
 crossfade = true
 warpTarget = NodePath("../TreasureHall/WarpExit")
+
+[node name="HandWarp" type="Node3D" parent="BoneAct" node_paths=PackedStringArray("warpTarget")]
+script = ExtResource("7_vp6ye")
+enableStartFX = true
+crossfade = true
+warpTarget = NodePath("../Spiral [NOT STARTED YET]/WarpExit")
 
 [node name="Throne" type="Node3D" parent="BoneAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1150, 0, -1295)
@@ -1078,6 +1086,15 @@ warpTarget = NodePath("../../Arena/WarpExit")
 [node name="Arena" type="Node3D" parent="BoneAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1000, 0, -1000)
 
+[node name="ArenaPath" type="Path3D" parent="BoneAct/Arena"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65, 0, 0)
+curve = ExtResource("27_ih6gw")
+
+[node name="Hand" parent="BoneAct/Arena/ArenaPath" instance=ExtResource("31_wv35e")]
+transform = Transform3D(-0.900271, 0, -0.435316, 0, 1, 0, 0.435316, 0, -0.900271, -123.553, 0, 28.2493)
+progress = 175.0
+use_model_front = true
+
 [node name="WarpExit" parent="BoneAct/Arena" instance=ExtResource("4_46mj5")]
 transform = Transform3D(-0.7241, 0, -0.689695, 0, 1, 0, 0.689695, 0, -0.7241, -46.8137, 0, 45.1552)
 
@@ -1641,7 +1658,7 @@ visible = false
 disabled = true
 
 [node name="Root" parent="BoneAct/Arena/SwitchGroup5/Sickle3" index="1"]
-transform = Transform3D(0.766044, 0.642788, 0, -0.642788, 0.766044, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(0.766044, 0.642787, 0, -0.642787, 0.766044, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="SickleHead" parent="BoneAct/Arena/SwitchGroup5/Sickle3/Root" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -13.3, 0)
@@ -1695,7 +1712,7 @@ transform = Transform3D(0.866025, 2.0489e-09, -0.5, -1.66336e-10, 1, 3.8097e-09,
 [node name="SwitchGroup6" type="Node3D" parent="BoneAct/Arena"]
 transform = Transform3D(0.544639, 0, 0.83867, 0, 1, 0, -0.83867, 0, 0.544639, -23.43, 0, 60.218)
 
-[node name="RedMajin1" parent="BoneAct/Arena/SwitchGroup6" instance=ExtResource("31_wv35e")]
+[node name="RedMajin1" parent="BoneAct/Arena/SwitchGroup6" instance=ExtResource("33_n0wyt")]
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.224, 3, 8.10199)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
@@ -1728,7 +1745,7 @@ transform = Transform3D(0.996917, 0, 0.0784591, 0, 1, 0, -0.0784591, 0, 0.996917
 [node name="Switch5" parent="BoneAct/Arena/SwitchGroup6" instance=ExtResource("17_hm2eq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.05176e-05, 0.1, -10)
 
-[node name="RedMajin2" parent="BoneAct/Arena/SwitchGroup6" instance=ExtResource("31_wv35e")]
+[node name="RedMajin2" parent="BoneAct/Arena/SwitchGroup6" instance=ExtResource("33_n0wyt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -10)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
@@ -1757,6 +1774,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.1, 0, -17)
 
 [node name="Spiral [NOT STARTED YET]" type="Node3D" parent="BoneAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 779.8, 20, -1268)
+
+[node name="WarpExit" parent="BoneAct/Spiral [NOT STARTED YET]" instance=ExtResource("4_46mj5")]
+transform = Transform3D(0.707107, 0.0370071, 0.706138, 0, 0.99863, -0.052336, -0.707107, 0.0370071, 0.706138, 118, -9.8, -84)
 
 [node name="TopRow" type="Node3D" parent="BoneAct/Spiral [NOT STARTED YET]"]
 
@@ -2592,6 +2612,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.70001)
 [node name="WarpRed" parent="BoneAct/Spiral [NOT STARTED YET]/Warp" instance=ExtResource("13_7ln1s")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 140, 0, 0)
 
+[connection signal="Teleport" from="BoneAct/BoneWarp" to="Static/Trigger/Path/HallTreasurePath" method="Activate"]
+[connection signal="Teleport" from="BoneAct/HandWarp" to="Static/Trigger/Path/SpiralPath" method="Activate"]
+[connection signal="Teleport" from="BoneAct/HandWarp" to="BoneAct/Arena/ArenaPath/Hand" method="Deactivate"]
 [connection signal="Teleport" from="BoneAct/Throne/Warp" to="Static/Trigger/Path/HallRedPath" method="Activate"]
 [connection signal="Defeated" from="BoneAct/RedHall/SkeletonMajin1" to="BoneAct/RedHall/EnemyStone" method="IncrementCounter"]
 [connection signal="Spawned" from="BoneAct/RedHall/SkeletonMajin1" to="BoneAct/RedHall/SkeletonMajin5" method="Spawn"]
@@ -2628,9 +2651,8 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 140, 0
 [connection signal="ObjectiveFinished" from="BoneAct/YellowHall/Bone1" to="BoneAct/BoneWarp" method="Activate"]
 [connection signal="ObjectiveFinished" from="BoneAct/YellowHall/Bone2" to="BoneAct/BoneWarp" method="Activate"]
 [connection signal="ObjectiveFinished" from="BoneAct/YellowHall/Bone3" to="BoneAct/BoneWarp" method="Activate"]
-[connection signal="Teleport" from="BoneAct/YellowHall/WarpRed" to="BoneAct/YellowHall" method="Deactivate"]
-[connection signal="Teleport" from="BoneAct/YellowHall/WarpWhiteL" to="BoneAct/YellowHall" method="Deactivate"]
-[connection signal="Teleport" from="BoneAct/YellowHall/WarpWhiteR" to="BoneAct/YellowHall" method="Deactivate"]
+[connection signal="Teleport" from="BoneAct/YellowHall/WarpRed" to="Static/Trigger/Path/HallRedPath" method="Activate"]
+[connection signal="Teleport" from="BoneAct/YellowHall/WarpWhiteL" to="Static/Trigger/Path/HallBluePath" method="Activate"]
 [connection signal="Collected" from="BoneAct/TreasureHall/ItemBoxGroup1/ItemBox4/ItemBoxFlying" to="BoneAct/TreasureHall/ItemBoxGroup1/ItemBox4/HorizontalMovement" method="Pause"]
 [connection signal="Collected" from="BoneAct/TreasureHall/ItemBoxGroup1/ItemBox4/ItemBoxFlying" to="BoneAct/TreasureHall/ItemBoxGroup1/ItemBox4/VerticalMovement" method="Pause"]
 [connection signal="Respawned" from="BoneAct/TreasureHall/ItemBoxGroup1/ItemBox4/ItemBoxFlying" to="BoneAct/TreasureHall/ItemBoxGroup1/ItemBox4/HorizontalMovement" method="Unpause"]
@@ -2648,6 +2670,8 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 140, 0
 [connection signal="Respawned" from="BoneAct/TreasureHall/ItemBoxGroup2/ItemBox3/ItemBoxFlying" to="BoneAct/TreasureHall/ItemBoxGroup2/ItemBox3/HorizontalMovement" method="Unpause"]
 [connection signal="Respawned" from="BoneAct/TreasureHall/ItemBoxGroup2/ItemBox3/ItemBoxFlying" to="BoneAct/TreasureHall/ItemBoxGroup2/ItemBox3/VerticalMovement" method="Unpause"]
 [connection signal="Teleport" from="BoneAct/TreasureHall/Warp" to="Static/Trigger/Path/ArenaPath" method="Activate"]
+[connection signal="Teleport" from="BoneAct/TreasureHall/Warp" to="BoneAct/Arena/ArenaPath/Hand" method="Activate"]
+[connection signal="PlayerCaught" from="BoneAct/Arena/ArenaPath/Hand" to="BoneAct/HandWarp" method="Activate"]
 [connection signal="Activated" from="BoneAct/Arena/SwitchGroup1/Switch1" to="BoneAct/Arena/SwitchGroup1/Gate1" method="Activate"]
 [connection signal="Activated" from="BoneAct/Arena/SwitchGroup1/Switch2" to="BoneAct/Arena/SwitchGroup1/Gate2" method="Activate"]
 [connection signal="Activated" from="BoneAct/Arena/SwitchGroup1/Switch3" to="BoneAct/Arena/SwitchGroup1/Gate3" method="Activate"]
