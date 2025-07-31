@@ -87,10 +87,10 @@ public partial class CullingTrigger : StageTriggerModule
 		if (StageSettings.Instance.IsLevelLoading)
 			visibleOnCheckpoint = startEnabled;
 		else
-			visibleOnCheckpoint = Visible;
+			visibleOnCheckpoint = isActive;
 	}
 
-	private void ProcessDebugCheckpoint() => visibleOnDebugCheckpoint = Visible;
+	private void ProcessDebugCheckpoint() => visibleOnDebugCheckpoint = isActive;
 
 	public override void Respawn()
 	{

@@ -15,6 +15,7 @@ namespace Project.Gameplay.Triggers
 
 		public override void Activate()
 		{
+			GD.Print("Activating Checkpoint");
 			// Already the current checkpoint!
 			if (Stage.CurrentCheckpoint == this)
 				return;
