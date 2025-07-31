@@ -399,8 +399,8 @@ public partial class PlayerCameraController : Node3D
 				float blendedFov = Mathf.Lerp(iData.blendData.Fov, secondaryData.blendData.Fov, secondaryInfluence);
 				fov = Mathf.Lerp(fov, blendedFov, CameraBlendList[i].SmoothedInfluence);
 
-				float blendedXformAngle = Mathf.Lerp(iData.blendData.yawAngle, secondaryData.blendData.yawAngle, secondaryInfluence);
-				xformAngle = Mathf.Lerp(xformAngle, blendedXformAngle, CameraBlendList[i].SmoothedInfluence);
+				float blendedXformAngle = Mathf.LerpAngle(iData.blendData.yawAngle, secondaryData.blendData.yawAngle, secondaryInfluence);
+				xformAngle = Mathf.LerpAngle(xformAngle, blendedXformAngle, CameraBlendList[i].SmoothedInfluence);
 
 				Vector2 blendedViewportOffset = iData.blendData.SettingsResource.viewportOffset;
 				blendedViewportOffset = blendedViewportOffset.Lerp(secondaryData.blendData.SettingsResource.viewportOffset, secondaryInfluence);
@@ -408,7 +408,7 @@ public partial class PlayerCameraController : Node3D
 			}
 			else
 			{
-				xformAngle = Mathf.Lerp(xformAngle, iData.blendData.yawAngle, CameraBlendList[i].SmoothedInfluence);
+				xformAngle = Mathf.LerpAngle(xformAngle, iData.blendData.yawAngle, CameraBlendList[i].SmoothedInfluence);
 				distance = Mathf.Lerp(distance, iData.blendData.distance, CameraBlendList[i].SmoothedInfluence);
 				fov = Mathf.Lerp(fov, iData.blendData.Fov, CameraBlendList[i].SmoothedInfluence);
 
