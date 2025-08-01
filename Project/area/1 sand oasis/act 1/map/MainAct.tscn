@@ -1,4 +1,4 @@
-[gd_scene load_steps=201 format=3 uid="uid://ms7rm6vsb708"]
+[gd_scene load_steps=202 format=3 uid="uid://ms7rm6vsb708"]
 
 [ext_resource type="Resource" uid="uid://chdva6qp0d51h" path="res://resource/level data/sand oasis/Act1Main.tres" id="2_62va5"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_n7uj2"]
@@ -10922,6 +10922,9 @@ _data = {
 &"event": SubResource("Animation_hspqj")
 }
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_efwu1"]
+size = Vector3(6, 5, 1)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_fr7xe"]
 size = Vector3(8.4, 5, 2)
 
@@ -13576,6 +13579,7 @@ Amount = 10
 Shape = 2
 Path = NodePath("../../../../Static/Path/OasisPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 1.9
 "Horizontal Offset" = null
@@ -13619,6 +13623,7 @@ Amount = 10
 Shape = 2
 Path = NodePath("../../../../Static/Path/OasisPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 1.1
 "Horizontal Offset" = null
@@ -13662,6 +13667,7 @@ Amount = 10
 Shape = 2
 Path = NodePath("../../../../Static/Path/OasisPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 1.4
 "Horizontal Offset" = null
@@ -13705,6 +13711,7 @@ Amount = 10
 Shape = 2
 Path = NodePath("../../../../Static/Path/OasisPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 1.1
 "Horizontal Offset" = null
@@ -13748,6 +13755,7 @@ Amount = 13
 Shape = 2
 Path = NodePath("../../../../Static/Path/OasisPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 1.0
 "Horizontal Offset" = null
@@ -13800,6 +13808,7 @@ Amount = 11
 Shape = 2
 Path = NodePath("../../../../Static/Path/OasisPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 1.5
 "Horizontal Offset" = null
@@ -13846,6 +13855,7 @@ Amount = 8
 Shape = 2
 Path = NodePath("../../../../Static/Path/OasisPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 1.4
 "Horizontal Offset" = null
@@ -17154,6 +17164,7 @@ Amount = 20
 Shape = 2
 Path = NodePath("../../../Static/Path/BeachPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 1.4
 "Horizontal Offset" = null
@@ -19216,7 +19227,7 @@ shape = SubResource("BoxShape3D_0rd0k")
 [node name="SpearGroup2" parent="MainAct/Sidle" instance=ExtResource("4_v6hfg")]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.275024, 0, 56)
 OneShot = true
-"Respawn Mode" = 0
+"Respawn Mode" = 3
 "Trigger Mode" = 1
 "Exit Mode" = 1
 
@@ -19225,7 +19236,7 @@ transform = Transform3D(0.996195, -0.0871557, 0, 0.0871557, 0.996195, 0, 0, 0, 1
 visible = false
 script = ExtResource("6_gjqoq")
 animator = NodePath("AnimationPlayer")
-"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
 "Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
@@ -19266,6 +19277,16 @@ libraries = {
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 2, 0)
 shape = SubResource("BoxShape3D_0rd0k")
 
+[node name="ReverseStepCollision" type="Node3D" parent="MainAct/Sidle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.275024, 0, 55.4)
+script = ExtResource("8_w6s07")
+saveVisibilityOnCheckpoint = true
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MainAct/Sidle/ReverseStepCollision" groups=["sidle wall", "wall"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Sidle/ReverseStepCollision/StaticBody3D"]
+shape = SubResource("BoxShape3D_efwu1")
+
 [node name="Rings1" type="Node3D" parent="MainAct/Sidle"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.224976, 0.8, 55.3)
 script = ExtResource("10_1plec")
@@ -19274,6 +19295,7 @@ Amount = 15
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 1.7
 "Horizontal Offset" = null
@@ -19427,6 +19449,7 @@ Amount = 4
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 1.7
 "Horizontal Offset" = null
@@ -19452,6 +19475,7 @@ Amount = 4
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 1.7
 "Horizontal Offset" = null
@@ -19701,14 +19725,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.1)
 [node name="SpearGroup3" parent="MainAct/Sidle" instance=ExtResource("4_v6hfg")]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.275024, 0, -45.2)
 OneShot = true
-"Respawn Mode" = 0
+"Respawn Mode" = 3
+"Trigger Mode" = 1
+"Exit Mode" = 1
 
 [node name="Event" type="Node3D" parent="MainAct/Sidle/SpearGroup3" node_paths=PackedStringArray("animator")]
 transform = Transform3D(0.984808, -0.173648, 0, 0.173648, 0.984808, 0, 0, 0, 1, 0, 0, 0)
 visible = false
 script = ExtResource("6_gjqoq")
 animator = NodePath("AnimationPlayer")
-"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
 "Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
@@ -19752,14 +19778,16 @@ shape = SubResource("BoxShape3D_0rd0k")
 [node name="SpearGroup4" parent="MainAct/Sidle" instance=ExtResource("4_v6hfg")]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.275024, 0, -47.8)
 OneShot = true
-"Respawn Mode" = 0
+"Respawn Mode" = 3
+"Trigger Mode" = 1
+"Exit Mode" = 1
 
 [node name="Event" type="Node3D" parent="MainAct/Sidle/SpearGroup4" node_paths=PackedStringArray("animator")]
 transform = Transform3D(0.939693, -0.34202, 0, 0.34202, 0.939693, 0, 0, 0, 1, 0, 0, 0)
 visible = false
 script = ExtResource("6_gjqoq")
 animator = NodePath("AnimationPlayer")
-"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
 "Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
@@ -19803,13 +19831,15 @@ shape = SubResource("BoxShape3D_0rd0k")
 [node name="SpearGroup5" parent="MainAct/Sidle" instance=ExtResource("4_v6hfg")]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.275, 0, -52.7)
 OneShot = true
-"Respawn Mode" = 0
+"Respawn Mode" = 3
+"Trigger Mode" = 1
+"Exit Mode" = 1
 
 [node name="Event" type="Node3D" parent="MainAct/Sidle/SpearGroup5" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
 script = ExtResource("6_gjqoq")
 animator = NodePath("AnimationPlayer")
-"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
 "Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
@@ -19928,6 +19958,7 @@ Amount = 12
 Shape = 2
 Path = NodePath("")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 3.5
 "Horizontal Offset" = null
@@ -21131,6 +21162,8 @@ shape = SubResource("65")
 [connection signal="area_entered" from="MainAct/Hallway/Switch/EventTrigger/Pillar1/Pillar1Root/PlatformTrigger" to="MainAct/Hallway/Switch/EventTrigger/Pillar1" method="OnEntered"]
 [connection signal="area_exited" from="MainAct/Hallway/Switch/EventTrigger/Pillar1/Pillar1Root/PlatformTrigger" to="MainAct/Hallway/Switch/EventTrigger/Pillar1" method="OnExited"]
 [connection signal="Defeated" from="MainAct/Hallway/Switch/EventTrigger/BlueMajin1" to="MainAct/Hallway/Switch/EventTrigger/EventTrigger" method="Activate"]
+[connection signal="Activated" from="MainAct/Sidle/SpearGroup2" to="MainAct/Sidle/ReverseStepCollision" method="Activate"]
+[connection signal="Respawned" from="MainAct/Sidle/SpearGroup2" to="MainAct/Sidle/ReverseStepCollision" method="Deactivate"]
 [connection signal="Shattered" from="MainAct/End/JarGroup3/JarM2" to="MainAct/End/JarGroup3/GreenMajin" method="Spawn"]
 
 [editable path="Static"]
