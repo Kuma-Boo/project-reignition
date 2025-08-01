@@ -725,10 +725,12 @@ public partial class CaptainBemoth : PathFollow3D
 		if (hasPlayerJumpedOffHorn) // Player must have jumped off already
 			return;
 
+		// Shock attack
 		Player.StartKnockback(new()
 		{
 			ignoreMovementState = true,
 			overrideKnockbackHeight = true,
+			disableDownCancel = true,
 			knockbackHeight = LaunchFallHeight,
 		});
 	}

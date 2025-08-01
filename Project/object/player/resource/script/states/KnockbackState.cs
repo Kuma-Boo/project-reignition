@@ -65,7 +65,8 @@ public partial class KnockbackState : PlayerState
 		Player.ApplyMovement();
 		Player.UpdateUpDirection();
 
-		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.DownCancel) &&
+		if (!Settings.disableDownCancel &&
+			SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.DownCancel) &&
 			Player.Controller.IsJumpBufferActive)
 		{
 			Player.Controller.ResetJumpBuffer();
@@ -92,6 +93,9 @@ public struct KnockbackSettings
 	public bool disableDamage;
 	/// <summary> Always apply knockback, regardless of state. </summary>
 	public bool ignoreMovementState;
+
+	/// <summary> Don't allow the player to down cancel damage? </summary>
+	public bool disableDownCancel;
 
 	/// <summary> Override default knockback amount? </summary>
 	public bool overrideKnockbackSpeed;
