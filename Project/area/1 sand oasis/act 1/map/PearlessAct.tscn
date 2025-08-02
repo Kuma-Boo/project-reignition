@@ -8368,6 +8368,9 @@ size = Vector3(20, 10, 5)
 Data = ExtResource("2_r2us6")
 InitialCameraSettings = ExtResource("3_ve6dn")
 
+[node name="HallOneWay" parent="Static/Collision" index="6"]
+startEnabled = true
+
 [node name="CollisionShape3D" parent="Static/Trigger/Camera/WallClimbTopTrigger" index="1"]
 disabled = true
 
@@ -8461,10 +8464,11 @@ OneShot = true
 
 [node name="Event" type="Node3D" parent="PearlessAct/Hallway/PillarGroup" node_paths=PackedStringArray("animator")]
 script = ExtResource("11_isphd")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Pillar1" type="Node3D" parent="PearlessAct/Hallway/PillarGroup/Event"]
 transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -7.49802, 0, -20.8091)
@@ -8473,11 +8477,11 @@ transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, -12, 0)
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/PillarGroup/Event/Pillar1/Pillar"]
+process_mode = 1
 stream = ExtResource("13_vtm4a")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="SandDustParticle" parent="PearlessAct/Hallway/PillarGroup/Event/Pillar1" instance=ExtResource("14_hg8p1")]
 visible = false
@@ -8492,11 +8496,11 @@ transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12, 0)
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/PillarGroup/Event/Pillar2/Pillar"]
+process_mode = 1
 stream = ExtResource("13_vtm4a")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="SandDustParticle" parent="PearlessAct/Hallway/PillarGroup/Event/Pillar2" instance=ExtResource("14_hg8p1")]
 visible = false
@@ -8511,11 +8515,11 @@ transform = Transform3D(-0.778441, 0, -0.627719, 0, 1, 0, 0.627719, 0, -0.778441
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12, 0)
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/PillarGroup/Event/Pillar3/Pillar"]
+process_mode = 1
 stream = ExtResource("13_vtm4a")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="SandDustParticle" parent="PearlessAct/Hallway/PillarGroup/Event/Pillar3" instance=ExtResource("14_hg8p1")]
 visible = false
@@ -8526,7 +8530,7 @@ visible = false
 [node name="AnimationPlayer" type="AnimationPlayer" parent="PearlessAct/Hallway/PillarGroup/Event"]
 callback_mode_process = 0
 libraries = {
-"": SubResource("AnimationLibrary_d2cqs")
+&"": SubResource("AnimationLibrary_d2cqs")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PearlessAct/Hallway/PillarGroup"]
@@ -8646,6 +8650,7 @@ Amount = 7
 Shape = 2
 Path = NodePath("../../../Static/Path/BeachPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 4.0
 "Horizontal Offset" = null
@@ -8685,10 +8690,11 @@ OneShot = true
 
 [node name="Event" type="Node3D" parent="PearlessAct/Hallway/SpearGroup1" node_paths=PackedStringArray("animator")]
 script = ExtResource("11_isphd")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Spear1" type="Node3D" parent="PearlessAct/Hallway/SpearGroup1/Event"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 0, -12.5)
@@ -8699,19 +8705,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
 isDisabled = true
 
 [node name="TravelSFX1" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup1/Event/Spear1/Spear1"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("50_0y3m1")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup1/Event/Spear1/Spear1"]
+process_mode = 1
 stream = ExtResource("51_2g1wa")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Rock1Particle1" parent="PearlessAct/Hallway/SpearGroup1/Event/Spear1" instance=ExtResource("52_k8rm4")]
 visible = false
@@ -8728,19 +8734,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.28882e-05, 2.4, 6.10352e-05
 isDisabled = true
 
 [node name="TravelSFX2" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup1/Event/Spear2/Spear2"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("50_0y3m1")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX2" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup1/Event/Spear2/Spear2"]
+process_mode = 1
 stream = ExtResource("51_2g1wa")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Rock1Particle2" parent="PearlessAct/Hallway/SpearGroup1/Event/Spear2" instance=ExtResource("52_k8rm4")]
 visible = false
@@ -8757,19 +8763,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
 isDisabled = true
 
 [node name="TravelSFX3" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup1/Event/Spear3/Spear3"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("50_0y3m1")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX3" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup1/Event/Spear3/Spear3"]
+process_mode = 1
 stream = ExtResource("51_2g1wa")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Rock1Particle3" parent="PearlessAct/Hallway/SpearGroup1/Event/Spear3" instance=ExtResource("52_k8rm4")]
 visible = false
@@ -8779,7 +8785,7 @@ visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="PearlessAct/Hallway/SpearGroup1/Event"]
 libraries = {
-"": SubResource("AnimationLibrary_ngs81")
+&"": SubResource("AnimationLibrary_ngs81")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PearlessAct/Hallway/SpearGroup1"]
@@ -8794,29 +8800,30 @@ OneShot = true
 [node name="Event" type="Node3D" parent="PearlessAct/Hallway/WallSpearGroup" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 script = ExtResource("11_isphd")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Spear1" parent="PearlessAct/Hallway/WallSpearGroup/Event" instance=ExtResource("49_s3da8")]
 transform = Transform3D(0.866025, 1.69747e-15, 0.5, 0, 1, -3.39494e-15, -0.5, 2.9401e-15, 0.866025, 0, 2.4, 0)
 visible = false
 
 [node name="TravelSFX1" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/WallSpearGroup/Event/Spear1"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("50_0y3m1")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/WallSpearGroup/Event/Spear1"]
+process_mode = 1
 stream = ExtResource("51_2g1wa")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Rock1Particle1" parent="PearlessAct/Hallway/WallSpearGroup/Event" instance=ExtResource("52_k8rm4")]
 visibility_aabb = AABB(-4, 0, -12, 8, 8, 16)
@@ -8827,7 +8834,7 @@ visibility_aabb = AABB(-4, 0, -12, 8, 8, 16)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="PearlessAct/Hallway/WallSpearGroup/Event"]
 libraries = {
-"": SubResource("AnimationLibrary_g1xip")
+&"": SubResource("AnimationLibrary_g1xip")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PearlessAct/Hallway/WallSpearGroup"]
@@ -8842,10 +8849,11 @@ OneShot = true
 [node name="Event" type="Node3D" parent="PearlessAct/Hallway/SpearGroup2" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
 script = ExtResource("11_isphd")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Spear1" type="Node3D" parent="PearlessAct/Hallway/SpearGroup2/Event"]
 transform = Transform3D(0.996195, 0, 0.0871558, 0, 1, 0, -0.0871558, 0, 0.996195, 2.467, 0, 4.465)
@@ -8855,19 +8863,19 @@ visible = false
 isDisabled = true
 
 [node name="TravelSFX1" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup2/Event/Spear1/Spear1"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("50_0y3m1")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup2/Event/Spear1/Spear1"]
+process_mode = 1
 stream = ExtResource("51_2g1wa")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Rock1Particle1" parent="PearlessAct/Hallway/SpearGroup2/Event/Spear1" instance=ExtResource("52_k8rm4")]
 visible = false
@@ -8884,19 +8892,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
 isDisabled = true
 
 [node name="TravelSFX2" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup2/Event/Spear2/Spear2"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("50_0y3m1")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX2" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup2/Event/Spear2/Spear2"]
+process_mode = 1
 stream = ExtResource("51_2g1wa")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Rock1Particle2" parent="PearlessAct/Hallway/SpearGroup2/Event/Spear2" instance=ExtResource("52_k8rm4")]
 visible = false
@@ -8913,19 +8921,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
 isDisabled = true
 
 [node name="TravelSFX3" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup2/Event/Spear3/Spear3"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("50_0y3m1")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX3" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup2/Event/Spear3/Spear3"]
+process_mode = 1
 stream = ExtResource("51_2g1wa")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Rock1Particle3" parent="PearlessAct/Hallway/SpearGroup2/Event/Spear3" instance=ExtResource("52_k8rm4")]
 visible = false
@@ -8935,7 +8943,7 @@ visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="PearlessAct/Hallway/SpearGroup2/Event"]
 libraries = {
-"": SubResource("AnimationLibrary_4vqq1")
+&"": SubResource("AnimationLibrary_4vqq1")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PearlessAct/Hallway/SpearGroup2"]
@@ -8950,10 +8958,11 @@ OneShot = true
 [node name="Event" type="Node3D" parent="PearlessAct/Hallway/SpearGroup3" node_paths=PackedStringArray("animator")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 0, 0, 0)
 script = ExtResource("11_isphd")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Spear1" type="Node3D" parent="PearlessAct/Hallway/SpearGroup3/Event"]
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 2.257, 0, 2.179)
@@ -8964,19 +8973,19 @@ transform = Transform3D(1, 0, 4.65661e-08, 0, 1, 0, -4.65661e-08, 0, 1, 0, 2.4, 
 isDisabled = true
 
 [node name="TravelSFX1" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup3/Event/Spear1/Spear1"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("50_0y3m1")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup3/Event/Spear1/Spear1"]
+process_mode = 1
 stream = ExtResource("51_2g1wa")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Rock1Particle1" parent="PearlessAct/Hallway/SpearGroup3/Event/Spear1" instance=ExtResource("52_k8rm4")]
 visible = false
@@ -8993,19 +9002,19 @@ transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 
 isDisabled = true
 
 [node name="TravelSFX2" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup3/Event/Spear2/Spear2"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("50_0y3m1")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX2" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup3/Event/Spear2/Spear2"]
+process_mode = 1
 stream = ExtResource("51_2g1wa")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Rock1Particle2" parent="PearlessAct/Hallway/SpearGroup3/Event/Spear2" instance=ExtResource("52_k8rm4")]
 visible = false
@@ -9022,19 +9031,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
 isDisabled = true
 
 [node name="TravelSFX3" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup3/Event/Spear3/Spear3"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("50_0y3m1")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX3" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup3/Event/Spear3/Spear3"]
+process_mode = 1
 stream = ExtResource("51_2g1wa")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="SandDustParticle3" parent="PearlessAct/Hallway/SpearGroup3/Event/Spear3" instance=ExtResource("14_hg8p1")]
 transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)
@@ -9053,19 +9062,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
 isDisabled = true
 
 [node name="TravelSFX4" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup3/Event/Spear4/Spear4"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("50_0y3m1")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX4" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup3/Event/Spear4/Spear4"]
+process_mode = 1
 stream = ExtResource("51_2g1wa")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="SandDustParticle4" parent="PearlessAct/Hallway/SpearGroup3/Event/Spear4" instance=ExtResource("14_hg8p1")]
 transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)
@@ -9077,7 +9086,7 @@ visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="PearlessAct/Hallway/SpearGroup3/Event"]
 libraries = {
-"": SubResource("AnimationLibrary_jkr7i")
+&"": SubResource("AnimationLibrary_jkr7i")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PearlessAct/Hallway/SpearGroup3"]
@@ -9092,26 +9101,27 @@ OneShot = true
 [node name="Event" type="Node3D" parent="PearlessAct/Hallway/SpearGroup4" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.28882e-05, 0, -3.05176e-05)
 script = ExtResource("11_isphd")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="TravelSFX" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup4/Event"]
+process_mode = 1
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -2.378, -0.799995, -1.60001)
 stream = ExtResource("50_0y3m1")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX" type="AudioStreamPlayer3D" parent="PearlessAct/Hallway/SpearGroup4/Event"]
+process_mode = 1
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -2.378, -0.799995, -1.60001)
 stream = ExtResource("51_2g1wa")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Spear1" type="Node3D" parent="PearlessAct/Hallway/SpearGroup4/Event"]
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -2.74625, -1.9, -3.33997)
@@ -9163,7 +9173,7 @@ visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="PearlessAct/Hallway/SpearGroup4/Event"]
 libraries = {
-"": SubResource("AnimationLibrary_jphx6")
+&"": SubResource("AnimationLibrary_jphx6")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PearlessAct/Hallway/SpearGroup4"]
@@ -9341,29 +9351,35 @@ transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 
 
 [node name="FlameShooter1" parent="PearlessAct/Interior/FlameGroup1" instance=ExtResource("54_ww0w6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.59993, 0, -1.6499)
-"State Lengths/active" = 1.6
 stateLengths = PackedFloat32Array(0.5, 1.6)
+"Start Paused" = false
+"State Lengths/active" = 1.6
 
 [node name="FlameShooter2" parent="PearlessAct/Interior/FlameGroup1" instance=ExtResource("54_ww0w6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4211, 0, -32.0109)
-"State Lengths/active" = 1.6
 stateLengths = PackedFloat32Array(0.5, 1.6)
+"Start Paused" = false
+"State Lengths/active" = 1.6
 
 [node name="FlameShooter3" parent="PearlessAct/Interior/FlameGroup1" instance=ExtResource("54_ww0w6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.35413, 0, -53.4526)
+"Start Paused" = false
 
 [node name="FlameShooter6" parent="PearlessAct/Interior/FlameGroup1" instance=ExtResource("54_ww0w6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.318787, 0, -53.4526)
+"Start Paused" = false
 
 [node name="FlameShooter4" parent="PearlessAct/Interior/FlameGroup1" instance=ExtResource("54_ww0w6")]
 transform = Transform3D(-4.37113e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.49992, 0.699997, -74.0999)
-"State Lengths/active" = 2.5
 stateLengths = PackedFloat32Array(0.5, 2.5)
+"Start Paused" = false
+"State Lengths/active" = 2.5
 
 [node name="FlameShooter5" parent="PearlessAct/Interior/FlameGroup1" instance=ExtResource("54_ww0w6")]
 transform = Transform3D(-4.37113e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.49992, 1.8, -74.0999)
-"State Lengths/active" = 2.5
 stateLengths = PackedFloat32Array(0.5, 2.5)
+"Start Paused" = false
+"State Lengths/active" = 2.5
 
 [node name="Rings2" type="Node3D" parent="PearlessAct/Interior"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -18.2472, 0.699997, -0.00387573)
@@ -9373,6 +9389,7 @@ Amount = 11
 Shape = 2
 Path = NodePath("../../../Static/Path/BeachPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 2.0
 "Horizontal Offset" = SubResource("Curve_hnqag")
@@ -9416,8 +9433,9 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -23.08
 
 [node name="FlameShooter1" parent="PearlessAct/Interior/FlameGroup2" instance=ExtResource("54_ww0w6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.06879, 0, -0.000289917)
-"State Lengths/active" = 1.5
 stateLengths = PackedFloat32Array(0.5, 1.5)
+"Start Paused" = false
+"State Lengths/active" = 1.5
 
 [node name="Pearl" type="Node3D" parent="PearlessAct/Interior/FlameGroup2/FlameShooter1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.595123, 0)
@@ -9541,8 +9559,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, -0.587785)
 
 [node name="FlameShooter4" parent="PearlessAct/Interior/FlameGroup2" instance=ExtResource("54_ww0w6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.10721, 0, -11.0003)
-"State Lengths/active" = 1.5
 stateLengths = PackedFloat32Array(0.5, 1.5)
+"Start Paused" = false
+"State Lengths/active" = 1.5
 
 [node name="Pearl" type="Node3D" parent="PearlessAct/Interior/FlameGroup2/FlameShooter4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.609222, 0)
@@ -9666,25 +9685,29 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, -0.587785)
 
 [node name="FlameShooter5" parent="PearlessAct/Interior/FlameGroup2" instance=ExtResource("54_ww0w6")]
 transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, -1, -4.37114e-08, -4.37114e-08, -4.37114e-08, 4.37114e-08, 1, -2.53714, 0.750015, -19.3003)
-"State Lengths/inactive" = 1.2
 stateLengths = PackedFloat32Array(1.2, 1)
+"Start Paused" = false
+"State Lengths/inactive" = 1.2
 
 [node name="FlameShooter6" parent="PearlessAct/Interior/FlameGroup2" instance=ExtResource("54_ww0w6")]
 transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, -1, -4.37114e-08, -4.37114e-08, -4.37114e-08, 4.37114e-08, 1, -2.53714, 1.85002, -19.3003)
-"State Lengths/inactive" = 1.2
 stateLengths = PackedFloat32Array(1.2, 1)
+"Start Paused" = false
+"State Lengths/inactive" = 1.2
 
 [node name="FlameShooter7" parent="PearlessAct/Interior/FlameGroup2" instance=ExtResource("54_ww0w6")]
 transform = Transform3D(-6.18172e-08, -0.707107, 0.707107, 1, -4.37114e-08, 4.37114e-08, -2.70212e-15, 0.707107, 0.707107, -1.33505, 5.15002, -30.5024)
+stateLengths = PackedFloat32Array(1, 3)
+"Start Paused" = false
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 3.0
-stateLengths = PackedFloat32Array(1, 3)
 
 [node name="FlameShooter8" parent="PearlessAct/Interior/FlameGroup2" instance=ExtResource("54_ww0w6")]
 transform = Transform3D(-6.18172e-08, -0.707107, 0.707107, 1, -4.37114e-08, 4.37114e-08, -2.70212e-15, 0.707107, 0.707107, -1.33505, 4.05001, -30.5024)
+stateLengths = PackedFloat32Array(1, 3)
+"Start Paused" = false
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 3.0
-stateLengths = PackedFloat32Array(1, 3)
 
 [node name="Pearls2" type="Node3D" parent="PearlessAct/Interior"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -45, 5.5, 0)
@@ -9780,10 +9803,11 @@ collision_layer = 0
 [node name="Event" type="Node3D" parent="PearlessAct/Interior/DoorCrumble" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.4001, 0, 3.05176e-05)
 script = ExtResource("11_isphd")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="FallingSandDustParticle1" parent="PearlessAct/Interior/DoorCrumble/Event" instance=ExtResource("22_rrihq")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.999985, 0, 0)
@@ -9814,17 +9838,17 @@ transform = Transform3D(-0.998331, -0.0259043, 0.0516204, 0.0262542, -0.999637, 
 visible = false
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="PearlessAct/Interior/DoorCrumble/Event"]
+process_mode = 1
 stream = ExtResource("13_vtm4a")
 max_db = 0.0
 max_distance = 100.0
 max_polyphony = 4
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="PearlessAct/Interior/DoorCrumble/Event"]
 root_node = NodePath("../..")
 libraries = {
-"": SubResource("AnimationLibrary_11hcs")
+&"": SubResource("AnimationLibrary_11hcs")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PearlessAct/Interior/DoorCrumble"]
@@ -10082,10 +10106,11 @@ OneShot = true
 
 [node name="Event" type="Node3D" parent="PearlessAct/Beach/SpearGroup1" node_paths=PackedStringArray("animator")]
 script = ExtResource("11_isphd")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Spear1" type="Node3D" parent="PearlessAct/Beach/SpearGroup1/Event"]
 transform = Transform3D(0.683013, -0.183013, 0.707107, 0.258819, 0.965926, 0, -0.683013, 0.183013, 0.707107, 4.60001, 2, 19.1)
@@ -10095,19 +10120,19 @@ visible = false
 transform = Transform3D(1, -1.49012e-08, 0, 1.49012e-08, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="TravelSFX1" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/SpearGroup1/Event/Spear1/Spear1"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("50_0y3m1")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/SpearGroup1/Event/Spear1/Spear1"]
+process_mode = 1
 stream = ExtResource("51_2g1wa")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="SandDustParticle1" parent="PearlessAct/Beach/SpearGroup1/Event/Spear1" instance=ExtResource("14_hg8p1")]
 transform = Transform3D(0.433013, 0.5, 0, -0.25, 0.866026, 0, 0, 0, 0.5, -3.05176e-05, -2.49999, 0)
@@ -10125,19 +10150,19 @@ visible = false
 transform = Transform3D(0.999999, 2.98023e-08, 0, -2.98023e-08, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="TravelSFX2" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/SpearGroup1/Event/Spear2/Spear2"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("50_0y3m1")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX2" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/SpearGroup1/Event/Spear2/Spear2"]
+process_mode = 1
 stream = ExtResource("51_2g1wa")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="SandDustParticle2" parent="PearlessAct/Beach/SpearGroup1/Event/Spear2" instance=ExtResource("14_hg8p1")]
 transform = Transform3D(0.353554, 0.707107, 0, -0.353554, 0.707107, 0, 0, 0, 0.5, -4.57764e-05, -2.00002, 0)
@@ -10155,19 +10180,19 @@ visible = false
 transform = Transform3D(1, -1.49012e-08, 2.98023e-08, 1.49012e-08, 1, -2.98023e-08, -2.98023e-08, 2.98023e-08, 1, 0, 0, 0)
 
 [node name="TravelSFX3" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/SpearGroup1/Event/Spear3/Spear3"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("50_0y3m1")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX3" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/SpearGroup1/Event/Spear3/Spear3"]
+process_mode = 1
 stream = ExtResource("51_2g1wa")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="WaterDustParticle3" parent="PearlessAct/Beach/SpearGroup1/Event/Spear3" instance=ExtResource("17_q3bih")]
 transform = Transform3D(0.353553, 0.707107, 1.49012e-08, -0.353553, 0.707107, -5.21541e-08, -7.45058e-08, 2.98023e-08, 0.5, 0, -2.19999, 6.10352e-05)
@@ -10185,19 +10210,19 @@ visible = false
 transform = Transform3D(1, 5.58793e-09, -2.08167e-17, -5.58793e-09, 1, 2.58845e-31, 2.08167e-17, 1.16322e-25, 1, 0, 0, 0)
 
 [node name="TravelSFX4" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/SpearGroup1/Event/Spear4/Spear4"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("50_0y3m1")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX4" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/SpearGroup1/Event/Spear4/Spear4"]
+process_mode = 1
 stream = ExtResource("51_2g1wa")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="WaterDustParticle4" parent="PearlessAct/Beach/SpearGroup1/Event/Spear4" instance=ExtResource("17_q3bih")]
 transform = Transform3D(0.497541, 0.0990593, 0, -0.0495296, 0.995082, 0, -1.49012e-08, -1.86265e-09, 0.5, 0, -2.25, 0)
@@ -10209,7 +10234,7 @@ visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="PearlessAct/Beach/SpearGroup1/Event"]
 libraries = {
-"": SubResource("AnimationLibrary_b77q4")
+&"": SubResource("AnimationLibrary_b77q4")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PearlessAct/Beach/SpearGroup1"]
@@ -10220,33 +10245,38 @@ shape = SubResource("BoxShape3D_lac0l")
 transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, 43.174, -0.0999985, 56.673)
 
 [node name="SpikePanel1" parent="PearlessAct/Beach/SpikeGroup1" instance=ExtResource("57_4h45r")]
+stateLengths = PackedFloat32Array(1, 0, 0.1)
+"Start Paused" = false
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 0.1
-stateLengths = PackedFloat32Array(1, 0, 0.1)
 
 [node name="SpikePanel2" parent="PearlessAct/Beach/SpikeGroup1" instance=ExtResource("57_4h45r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.50003, 0, 0)
+stateLengths = PackedFloat32Array(1, 0, 0.1)
+"Start Paused" = false
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 0.1
-stateLengths = PackedFloat32Array(1, 0, 0.1)
 
 [node name="SpikePanel3" parent="PearlessAct/Beach/SpikeGroup1" instance=ExtResource("57_4h45r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -6.10352e-05)
+stateLengths = PackedFloat32Array(1, 0, 0.1)
+"Start Paused" = false
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 0.1
-stateLengths = PackedFloat32Array(1, 0, 0.1)
 
 [node name="SpikePanel4" parent="PearlessAct/Beach/SpikeGroup1" instance=ExtResource("57_4h45r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.50003, 0, -6.10352e-05)
+stateLengths = PackedFloat32Array(1, 0, 0.1)
+"Start Paused" = false
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 0.1
-stateLengths = PackedFloat32Array(1, 0, 0.1)
 
 [node name="SpikePanel5" parent="PearlessAct/Beach/SpikeGroup1" instance=ExtResource("57_4h45r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -6.10352e-05)
+stateLengths = PackedFloat32Array(1, 0, 0.1)
+"Start Paused" = false
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 0.1
-stateLengths = PackedFloat32Array(1, 0, 0.1)
 
 [node name="Pearlring" type="Node3D" parent="PearlessAct/Beach"]
 transform = Transform3D(0.861212, 0, 0.508245, 0, 1, 0, -0.508245, 0, 0.861212, 22.8884, 0.328968, 31.8385)
@@ -10318,10 +10348,11 @@ OneShot = true
 [node name="Event" type="Node3D" parent="PearlessAct/Beach/SpearGroup2" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, 1, 0, 0, 0)
 script = ExtResource("11_isphd")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Spear1" type="Node3D" parent="PearlessAct/Beach/SpearGroup2/Event"]
 transform = Transform3D(0.641983, -0.00292918, 0.766714, -0.491566, 0.765855, 0.414522, -0.588406, -0.643006, 0.490226, -14.7821, 1.03433, 0.971191)
@@ -10331,19 +10362,19 @@ visible = false
 transform = Transform3D(1, -4.65661e-08, -1.74623e-08, 4.65661e-08, 1, 1.29512e-07, 1.74623e-08, -1.29512e-07, 1, 0, 0, 0)
 
 [node name="TravelSFX1" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/SpearGroup2/Event/Spear1/Spear1"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("50_0y3m1")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/SpearGroup2/Event/Spear1/Spear1"]
+process_mode = 1
 stream = ExtResource("51_2g1wa")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="SandDustParticle1" parent="PearlessAct/Beach/SpearGroup2/Event/Spear1" instance=ExtResource("14_hg8p1")]
 transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)
@@ -10406,19 +10437,19 @@ visible = false
 transform = Transform3D(1, -5.42103e-16, -2.32831e-08, 0, 1, -2.32831e-08, 2.32831e-08, 2.32831e-08, 1, 7.62939e-05, 2.50003, 3.05176e-05)
 
 [node name="TravelSFX5" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/SpearGroup2/Event/Spear5/Spear5"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("50_0y3m1")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX5" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/SpearGroup2/Event/Spear5/Spear5"]
+process_mode = 1
 stream = ExtResource("51_2g1wa")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="WaterDustParticle5" parent="PearlessAct/Beach/SpearGroup2/Event/Spear5" instance=ExtResource("17_q3bih")]
 transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)
@@ -10430,7 +10461,7 @@ visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="PearlessAct/Beach/SpearGroup2/Event"]
 libraries = {
-"": SubResource("AnimationLibrary_rkbtl")
+&"": SubResource("AnimationLibrary_rkbtl")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PearlessAct/Beach/SpearGroup2"]
@@ -10441,33 +10472,38 @@ shape = SubResource("BoxShape3D_6vt8a")
 transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 28.492, -0.0999985, 35.1039)
 
 [node name="SpikePanel1" parent="PearlessAct/Beach/SpikeGroup2" instance=ExtResource("57_4h45r")]
+stateLengths = PackedFloat32Array(1, 0, 0.1)
+"Start Paused" = false
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 0.1
-stateLengths = PackedFloat32Array(1, 0, 0.1)
 
 [node name="SpikePanel2" parent="PearlessAct/Beach/SpikeGroup2" instance=ExtResource("57_4h45r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.50003, 0, 0)
+stateLengths = PackedFloat32Array(1, 0, 0.1)
+"Start Paused" = false
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 0.1
-stateLengths = PackedFloat32Array(1, 0, 0.1)
 
 [node name="SpikePanel3" parent="PearlessAct/Beach/SpikeGroup2" instance=ExtResource("57_4h45r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -6.10352e-05)
+stateLengths = PackedFloat32Array(1, 0, 0.1)
+"Start Paused" = false
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 0.1
-stateLengths = PackedFloat32Array(1, 0, 0.1)
 
 [node name="SpikePanel4" parent="PearlessAct/Beach/SpikeGroup2" instance=ExtResource("57_4h45r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.50003, 0, -6.10352e-05)
+stateLengths = PackedFloat32Array(1, 0, 0.1)
+"Start Paused" = false
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 0.1
-stateLengths = PackedFloat32Array(1, 0, 0.1)
 
 [node name="SpikePanel5" parent="PearlessAct/Beach/SpikeGroup2" instance=ExtResource("57_4h45r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -6.10352e-05)
+stateLengths = PackedFloat32Array(1, 0, 0.1)
+"Start Paused" = false
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 0.1
-stateLengths = PackedFloat32Array(1, 0, 0.1)
 
 [node name="PearlRing2" type="Node3D" parent="PearlessAct/Beach"]
 transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, 24.6514, 0.328968, 20.9918)
@@ -10498,33 +10534,38 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -8.74228e-08, 0)
 transform = Transform3D(0.831703, 0, 0.555222, 0, 1, 0, -0.555222, 0, 0.831703, 18.2196, -0.0999985, 23.101)
 
 [node name="SpikePanel1" parent="PearlessAct/Beach/SpikeGroup3" instance=ExtResource("57_4h45r")]
+stateLengths = PackedFloat32Array(1, 0, 0.1)
+"Start Paused" = false
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 0.1
-stateLengths = PackedFloat32Array(1, 0, 0.1)
 
 [node name="SpikePanel2" parent="PearlessAct/Beach/SpikeGroup3" instance=ExtResource("57_4h45r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.50003, 0, 0)
+stateLengths = PackedFloat32Array(1, 0, 0.1)
+"Start Paused" = false
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 0.1
-stateLengths = PackedFloat32Array(1, 0, 0.1)
 
 [node name="SpikePanel3" parent="PearlessAct/Beach/SpikeGroup3" instance=ExtResource("57_4h45r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -6.10352e-05)
+stateLengths = PackedFloat32Array(1, 0, 0.1)
+"Start Paused" = false
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 0.1
-stateLengths = PackedFloat32Array(1, 0, 0.1)
 
 [node name="SpikePanel4" parent="PearlessAct/Beach/SpikeGroup3" instance=ExtResource("57_4h45r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.50003, 0, -6.10352e-05)
+stateLengths = PackedFloat32Array(1, 0, 0.1)
+"Start Paused" = false
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 0.1
-stateLengths = PackedFloat32Array(1, 0, 0.1)
 
 [node name="SpikePanel5" parent="PearlessAct/Beach/SpikeGroup3" instance=ExtResource("57_4h45r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -6.10352e-05)
+stateLengths = PackedFloat32Array(1, 0, 0.1)
+"Start Paused" = false
 "State Lengths/inactive" = 1.0
 "State Lengths/active" = 0.1
-stateLengths = PackedFloat32Array(1, 0, 0.1)
 
 [node name="GrindrailM2" parent="PearlessAct/Beach" instance=ExtResource("32_ioccf")]
 transform = Transform3D(0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, 0.642788, 15.2055, 0.150002, 13.1707)
@@ -10601,10 +10642,11 @@ OneShot = true
 
 [node name="Event" type="Node3D" parent="PearlessAct/Beach/SpearGroup3" node_paths=PackedStringArray("animator")]
 script = ExtResource("11_isphd")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Spear1" type="Node3D" parent="PearlessAct/Beach/SpearGroup3/Event"]
 transform = Transform3D(0.641983, -0.00292909, 0.766714, -0.491566, 0.765855, 0.414523, -0.588406, -0.643007, 0.490226, -13.4089, 0.351402, 0.568115)
@@ -10614,19 +10656,19 @@ visible = false
 transform = Transform3D(1, 0, 0, 0, 1, -1.16415e-08, 0, 1.16415e-08, 1, 0, 2.4, 0)
 
 [node name="TravelSFX1" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/SpearGroup3/Event/Spear1/Spear1"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("50_0y3m1")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/SpearGroup3/Event/Spear1/Spear1"]
+process_mode = 1
 stream = ExtResource("51_2g1wa")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="SandDustParticle1" parent="PearlessAct/Beach/SpearGroup3/Event/Spear1" instance=ExtResource("14_hg8p1")]
 transform = Transform3D(0.5, 0, 0, 0, 0.999999, 0, 0, 0, 0.5, 0, 0, 0)
@@ -10689,19 +10731,19 @@ visible = false
 transform = Transform3D(1, 3.33067e-16, 1.49012e-08, 0, 1, -2.23517e-08, -1.49012e-08, 2.23517e-08, 1, 6.10352e-05, 2.39999, 6.10352e-05)
 
 [node name="TravelSFX5" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/SpearGroup3/Event/Spear5/Spear5"]
+process_mode = 1
 transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("50_0y3m1")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX5" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/SpearGroup3/Event/Spear5/Spear5"]
+process_mode = 1
 stream = ExtResource("51_2g1wa")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="WaterDustParticle5" parent="PearlessAct/Beach/SpearGroup3/Event/Spear5" instance=ExtResource("17_q3bih")]
 transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0)
@@ -10713,7 +10755,7 @@ visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="PearlessAct/Beach/SpearGroup3/Event"]
 libraries = {
-"": SubResource("AnimationLibrary_ms8nw")
+&"": SubResource("AnimationLibrary_ms8nw")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PearlessAct/Beach/SpearGroup3"]
@@ -10724,33 +10766,38 @@ shape = SubResource("BoxShape3D_6vt8a")
 transform = Transform3D(0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, 0.642788, 3.87161, -0.0999985, 13.227)
 
 [node name="SpikePanel1" parent="PearlessAct/Beach/SpikeGroup4" instance=ExtResource("57_4h45r")]
+stateLengths = PackedFloat32Array(0.2, 0, 0.1)
+"Start Paused" = false
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.1
-stateLengths = PackedFloat32Array(0.2, 0, 0.1)
 
 [node name="SpikePanel2" parent="PearlessAct/Beach/SpikeGroup4" instance=ExtResource("57_4h45r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.50003, 0, 0)
+stateLengths = PackedFloat32Array(0.2, 0, 0.1)
+"Start Paused" = false
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.1
-stateLengths = PackedFloat32Array(0.2, 0, 0.1)
 
 [node name="SpikePanel3" parent="PearlessAct/Beach/SpikeGroup4" instance=ExtResource("57_4h45r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -6.10352e-05)
+stateLengths = PackedFloat32Array(0.2, 0, 0.1)
+"Start Paused" = false
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.1
-stateLengths = PackedFloat32Array(0.2, 0, 0.1)
 
 [node name="SpikePanel4" parent="PearlessAct/Beach/SpikeGroup4" instance=ExtResource("57_4h45r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.50003, 0, -6.10352e-05)
+stateLengths = PackedFloat32Array(0.2, 0, 0.1)
+"Start Paused" = false
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.1
-stateLengths = PackedFloat32Array(0.2, 0, 0.1)
 
 [node name="SpikePanel5" parent="PearlessAct/Beach/SpikeGroup4" instance=ExtResource("57_4h45r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -6.10352e-05)
+stateLengths = PackedFloat32Array(0.2, 0, 0.1)
+"Start Paused" = false
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.1
-stateLengths = PackedFloat32Array(0.2, 0, 0.1)
 
 [node name="Ringpearl2" type="Node3D" parent="PearlessAct/Beach"]
 transform = Transform3D(0.616734, 0, 0.787171, 0, 1, 0, -0.787171, 0, 0.616734, -33.2256, 0.328968, -7.37415)
@@ -10834,27 +10881,28 @@ OneShot = true
 
 [node name="Event" type="Node3D" parent="PearlessAct/Beach/FallingPillarGroup1" node_paths=PackedStringArray("animator")]
 script = ExtResource("11_isphd")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="FallingSFX" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/FallingPillarGroup1/Event"]
+process_mode = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.40744, 0, 0.0440674)
 stream = ExtResource("20_uc6da")
 volume_db = -80.0
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/FallingPillarGroup1/Event"]
+process_mode = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.40744, 0, 0.0440674)
 stream = ExtResource("21_8afhp")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Pillar1" type="Node3D" parent="PearlessAct/Beach/FallingPillarGroup1/Event"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.71945, 0, 8.8916)
@@ -10898,7 +10946,7 @@ visible = false
 [node name="AnimationPlayer" type="AnimationPlayer" parent="PearlessAct/Beach/FallingPillarGroup1/Event"]
 callback_mode_process = 0
 libraries = {
-"": SubResource("AnimationLibrary_r6umu")
+&"": SubResource("AnimationLibrary_r6umu")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PearlessAct/Beach/FallingPillarGroup1"]
@@ -10924,10 +10972,11 @@ OneShot = true
 
 [node name="Event" type="Node3D" parent="PearlessAct/Beach/FallingPillarGroup2" node_paths=PackedStringArray("animator")]
 script = ExtResource("11_isphd")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Pillar1" type="Node3D" parent="PearlessAct/Beach/FallingPillarGroup2/Event"]
 transform = Transform3D(-1.19209e-07, 0, 1, 0, 1, 0, -1, 0, -1.19209e-07, 0.424683, 0, 11.3176)
@@ -10935,20 +10984,20 @@ transform = Transform3D(-1.19209e-07, 0, 1, 0, 1, 0, -1, 0, -1.19209e-07, 0.4246
 [node name="SquarePillarShort1" parent="PearlessAct/Beach/FallingPillarGroup2/Event/Pillar1" groups=["crusher"] instance=ExtResource("31_k3qnl")]
 
 [node name="FallingSFX1" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/FallingPillarGroup2/Event/Pillar1/SquarePillarShort1"]
+process_mode = 1
 transform = Transform3D(1.00001, 0, 0, 0, 1, 0, 0, 0, 1.00001, 0, 0, 0)
 stream = ExtResource("20_uc6da")
 volume_db = -80.0
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/FallingPillarGroup2/Event/Pillar1/SquarePillarShort1"]
+process_mode = 1
 stream = ExtResource("21_8afhp")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="FallingSandDustParticle1" parent="PearlessAct/Beach/FallingPillarGroup2/Event/Pillar1" instance=ExtResource("22_rrihq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 8)
@@ -10964,20 +11013,20 @@ transform = Transform3D(-0.173648, 0, 0.984808, 0, 1, 0, -0.984808, 0, -0.173648
 [node name="SquarePillarShort2" parent="PearlessAct/Beach/FallingPillarGroup2/Event/Pillar2" groups=["crusher"] instance=ExtResource("31_k3qnl")]
 
 [node name="FallingSFX2" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/FallingPillarGroup2/Event/Pillar2/SquarePillarShort2"]
+process_mode = 1
 transform = Transform3D(1.00001, 0, 0, 0, 1, 0, 0, 0, 1.00001, 0, 0, 0)
 stream = ExtResource("20_uc6da")
 volume_db = -80.0
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX2" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/FallingPillarGroup2/Event/Pillar2/SquarePillarShort2"]
+process_mode = 1
 stream = ExtResource("21_8afhp")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="FallingSandDustParticle2" parent="PearlessAct/Beach/FallingPillarGroup2/Event/Pillar2" instance=ExtResource("22_rrihq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 8)
@@ -10990,7 +11039,7 @@ visible = false
 [node name="AnimationPlayer" type="AnimationPlayer" parent="PearlessAct/Beach/FallingPillarGroup2/Event"]
 callback_mode_process = 0
 libraries = {
-"": SubResource("AnimationLibrary_7betf")
+&"": SubResource("AnimationLibrary_7betf")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PearlessAct/Beach/FallingPillarGroup2"]
@@ -11004,10 +11053,11 @@ OneShot = true
 
 [node name="Event" type="Node3D" parent="PearlessAct/Beach/FallingPillarGroup3" node_paths=PackedStringArray("animator")]
 script = ExtResource("11_isphd")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Pillar1" type="Node3D" parent="PearlessAct/Beach/FallingPillarGroup3/Event"]
 transform = Transform3D(-0.0871558, 0, -0.996195, 0, 1, 0, 0.996195, 0, -0.0871558, 16.1549, -0.299999, 22.1517)
@@ -11015,20 +11065,20 @@ transform = Transform3D(-0.0871558, 0, -0.996195, 0, 1, 0, 0.996195, 0, -0.08715
 [node name="Pillar1" parent="PearlessAct/Beach/FallingPillarGroup3/Event/Pillar1" groups=["crusher"] instance=ExtResource("31_k3qnl")]
 
 [node name="FallingSFX1" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/FallingPillarGroup3/Event/Pillar1/Pillar1"]
+process_mode = 1
 transform = Transform3D(1.00001, 0, 0, 0, 1, 0, 0, 0, 1.00001, 0, 0, 0)
 stream = ExtResource("20_uc6da")
 volume_db = -80.0
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/FallingPillarGroup3/Event/Pillar1/Pillar1"]
+process_mode = 1
 stream = ExtResource("21_8afhp")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="FallingSandDustParticle1" parent="PearlessAct/Beach/FallingPillarGroup3/Event/Pillar1" instance=ExtResource("22_rrihq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 9)
@@ -11045,20 +11095,20 @@ transform = Transform3D(-3.61999e-06, 0, -1, 0, 1, 0, 1, 0, -3.61999e-06, 17.642
 transform = Transform3D(1, -1.66533e-16, -1.38667e-32, 1.66533e-16, 1, 8.32667e-17, 4.55504e-38, -8.32667e-17, 1, 0, 10, 0)
 
 [node name="FallingSFX2" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/FallingPillarGroup3/Event/Pillar2/Pillar2"]
+process_mode = 1
 transform = Transform3D(1.00001, 0, 0, 0, 1, 0, 0, 0, 1.00001, 0, 0, 0)
 stream = ExtResource("20_uc6da")
 volume_db = -80.0
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX2" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/FallingPillarGroup3/Event/Pillar2/Pillar2"]
+process_mode = 1
 stream = ExtResource("21_8afhp")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="BasePillar2" parent="PearlessAct/Beach/FallingPillarGroup3/Event/Pillar2" instance=ExtResource("31_k3qnl")]
 transform = Transform3D(1, 1.66533e-16, 2.98023e-08, 1.66533e-16, 1, -2.77556e-16, -2.98023e-08, -8.32667e-17, 1, 0, 0, 0)
@@ -11078,20 +11128,20 @@ transform = Transform3D(-0.173649, 0, 0.984808, 0, 1, 0, -0.984808, 0, -0.173649
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
 
 [node name="FallingSFX3" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/FallingPillarGroup3/Event/Pillar3/Pillar3"]
+process_mode = 1
 transform = Transform3D(1.00001, 0, 0, 0, 1, 0, 0, 0, 1.00001, 0, 0, 0)
 stream = ExtResource("20_uc6da")
 volume_db = -80.0
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX3" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/FallingPillarGroup3/Event/Pillar3/Pillar3"]
+process_mode = 1
 stream = ExtResource("21_8afhp")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="BasePillar3" parent="PearlessAct/Beach/FallingPillarGroup3/Event/Pillar3" instance=ExtResource("31_k3qnl")]
 
@@ -11106,7 +11156,7 @@ visible = false
 [node name="AnimationPlayer" type="AnimationPlayer" parent="PearlessAct/Beach/FallingPillarGroup3/Event"]
 callback_mode_process = 0
 libraries = {
-"": SubResource("AnimationLibrary_fcpew")
+&"": SubResource("AnimationLibrary_fcpew")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PearlessAct/Beach/FallingPillarGroup3"]
@@ -11710,7 +11760,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.56785, -0.834346, 0)
 transform = Transform3D(0.948202, 0, -0.317669, 0, 1, 0, 0.317669, 0, 0.948202, -148.741, 10.4835, -81.4879)
 Distance = 10.0
 LauncherDirection = 1
-voiceKey = &""
 
 [node name="EndingPillarGroup1" parent="PearlessAct/Beach" instance=ExtResource("4_brs0h")]
 transform = Transform3D(-0.29404, 0, -0.955794, 0, 1, 0, 0.955793, 0, -0.294041, -159.133, 9.99902, -84.7075)
@@ -11719,10 +11768,11 @@ OneShot = true
 
 [node name="Event" type="Node3D" parent="PearlessAct/Beach/EndingPillarGroup1" node_paths=PackedStringArray("animator")]
 script = ExtResource("11_isphd")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Pillar1" type="Node3D" parent="PearlessAct/Beach/EndingPillarGroup1/Event"]
 transform = Transform3D(0.845632, -0.532443, -0.0375552, 0.531694, 0.834069, 0.147069, -0.0469825, -0.144334, 0.988413, 14.5093, -0.523022, 9.91528)
@@ -11731,11 +11781,11 @@ transform = Transform3D(0.845632, -0.532443, -0.0375552, 0.531694, 0.834069, 0.1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12, 0)
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/EndingPillarGroup1/Event/Pillar1/Pillar"]
+process_mode = 1
 stream = ExtResource("13_vtm4a")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="SandDustParticle" parent="PearlessAct/Beach/EndingPillarGroup1/Event/Pillar1" instance=ExtResource("14_hg8p1")]
 visible = false
@@ -11750,11 +11800,11 @@ transform = Transform3D(0.647687, 0.400413, -0.648206, -0.283134, 0.916334, 0.28
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12, 0)
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/EndingPillarGroup1/Event/Pillar2/Pillar"]
+process_mode = 1
 stream = ExtResource("13_vtm4a")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="SandDustParticle" parent="PearlessAct/Beach/EndingPillarGroup1/Event/Pillar2" instance=ExtResource("14_hg8p1")]
 visible = false
@@ -11769,11 +11819,11 @@ transform = Transform3D(0.757433, 0.384768, -0.527492, -0.261549, 0.91906, 0.294
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12, 0)
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/EndingPillarGroup1/Event/Pillar3/Pillar"]
+process_mode = 1
 stream = ExtResource("13_vtm4a")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="SandDustParticle" parent="PearlessAct/Beach/EndingPillarGroup1/Event/Pillar3" instance=ExtResource("14_hg8p1")]
 visible = false
@@ -11788,11 +11838,11 @@ transform = Transform3D(0.815925, -0.53856, -0.210286, 0.527642, 0.842321, -0.10
 transform = Transform3D(1, 1.96695e-06, 5.06639e-07, -8.9407e-08, 0.999999, -4.76837e-07, 2.98023e-08, -5.96046e-08, 1, 0, -12, 0)
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/EndingPillarGroup1/Event/Pillar4/Pillar"]
+process_mode = 1
 stream = ExtResource("13_vtm4a")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="SandDustParticle" parent="PearlessAct/Beach/EndingPillarGroup1/Event/Pillar4" instance=ExtResource("14_hg8p1")]
 transform = Transform3D(1, 1.96695e-06, 5.06639e-07, -8.9407e-08, 0.999999, -4.76837e-07, 2.98023e-08, -5.96046e-08, 1, 0, 0, 0)
@@ -11804,7 +11854,7 @@ visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="PearlessAct/Beach/EndingPillarGroup1/Event"]
 libraries = {
-"": SubResource("AnimationLibrary_63gpw")
+&"": SubResource("AnimationLibrary_63gpw")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PearlessAct/Beach/EndingPillarGroup1"]
@@ -11819,10 +11869,11 @@ OneShot = true
 [node name="Event" type="Node3D" parent="PearlessAct/Beach/EndingPillarGroup2" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("11_isphd")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Pillar1" type="Node3D" parent="PearlessAct/Beach/EndingPillarGroup2/Event"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
@@ -11833,20 +11884,20 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 0, 0)
 
 [node name="FallingSFX" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/EndingPillarGroup2/Event/Pillar1/Root/Pillar"]
+process_mode = 1
 stream = ExtResource("20_uc6da")
 volume_db = -80.0
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/EndingPillarGroup2/Event/Pillar1"]
+process_mode = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8.6, -8)
 stream = ExtResource("21_8afhp")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="SandDustParticle" parent="PearlessAct/Beach/EndingPillarGroup2/Event/Pillar1" instance=ExtResource("14_hg8p1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8.6, -8)
@@ -11861,20 +11912,20 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -3.051
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 0, 0)
 
 [node name="FallingSFX" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/EndingPillarGroup2/Event/Pillar2/Root/Pillar"]
+process_mode = 1
 stream = ExtResource("20_uc6da")
 volume_db = -80.0
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/EndingPillarGroup2/Event/Pillar2"]
+process_mode = 1
 transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 1, 1.67041, -8.6, -6.41495)
 stream = ExtResource("21_8afhp")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="SandDustParticle" parent="PearlessAct/Beach/EndingPillarGroup2/Event/Pillar2" instance=ExtResource("14_hg8p1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, -8.9407e-08, 0, 1, 1.67041, -8.6, -6.41495)
@@ -11889,20 +11940,20 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 0, 0)
 
 [node name="FallingSFX" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/EndingPillarGroup2/Event/Pillar3/Root/Pillar"]
+process_mode = 1
 stream = ExtResource("20_uc6da")
 volume_db = -80.0
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/EndingPillarGroup2/Event/Pillar3"]
+process_mode = 1
 transform = Transform3D(0.999999, 0, 5.96046e-08, 0, 1, 0, -5.96046e-08, 0, 1, 3.40613, -8.6, -4.53308)
 stream = ExtResource("21_8afhp")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="SandDustParticle" parent="PearlessAct/Beach/EndingPillarGroup2/Event/Pillar3" instance=ExtResource("14_hg8p1")]
 transform = Transform3D(1, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 1, 3.40613, -8.6, -4.53308)
@@ -11911,7 +11962,7 @@ visible = false
 [node name="AnimationPlayer" type="AnimationPlayer" parent="PearlessAct/Beach/EndingPillarGroup2/Event"]
 callback_mode_process = 0
 libraries = {
-"": SubResource("AnimationLibrary_f43sg")
+&"": SubResource("AnimationLibrary_f43sg")
 }
 speed_scale = 0.6
 
@@ -11927,10 +11978,11 @@ OneShot = true
 [node name="Event" type="Node3D" parent="PearlessAct/Beach/EndingPillarGroup3" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("11_isphd")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Pillar1" type="Node3D" parent="PearlessAct/Beach/EndingPillarGroup3/Event"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
@@ -11941,20 +11993,20 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 0, 0)
 
 [node name="FallingSFX" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/EndingPillarGroup3/Event/Pillar1/Root/Pillar"]
+process_mode = 1
 stream = ExtResource("20_uc6da")
 volume_db = -80.0
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/EndingPillarGroup3/Event/Pillar1"]
+process_mode = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8.6, -8)
 stream = ExtResource("21_8afhp")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="SandDustParticle" parent="PearlessAct/Beach/EndingPillarGroup3/Event/Pillar1" instance=ExtResource("14_hg8p1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8.6, -8)
@@ -11969,20 +12021,20 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3.051
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 0, 0)
 
 [node name="FallingSFX" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/EndingPillarGroup3/Event/Pillar2/Root/Pillar"]
+process_mode = 1
 stream = ExtResource("20_uc6da")
 volume_db = -80.0
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/EndingPillarGroup3/Event/Pillar2"]
+process_mode = 1
 transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 1, -1.67, -8.6, -6.415)
 stream = ExtResource("21_8afhp")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="SandDustParticle" parent="PearlessAct/Beach/EndingPillarGroup3/Event/Pillar2" instance=ExtResource("14_hg8p1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, -8.9407e-08, 0, 1, -1.67, -8.6, -6.415)
@@ -11997,20 +12049,20 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 0, 0)
 
 [node name="FallingSFX" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/EndingPillarGroup3/Event/Pillar3/Root/Pillar"]
+process_mode = 1
 stream = ExtResource("20_uc6da")
 volume_db = -80.0
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ImpactSFX" type="AudioStreamPlayer3D" parent="PearlessAct/Beach/EndingPillarGroup3/Event/Pillar3"]
+process_mode = 1
 transform = Transform3D(0.999999, 0, 5.96046e-08, 0, 1, 0, -5.96046e-08, 0, 1, -3.406, -8.6, -4.533)
 stream = ExtResource("21_8afhp")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="SandDustParticle" parent="PearlessAct/Beach/EndingPillarGroup3/Event/Pillar3" instance=ExtResource("14_hg8p1")]
 transform = Transform3D(1, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 1, -3.406, -8.6, -4.533)
@@ -12019,7 +12071,7 @@ visible = false
 [node name="AnimationPlayer" type="AnimationPlayer" parent="PearlessAct/Beach/EndingPillarGroup3/Event"]
 callback_mode_process = 0
 libraries = {
-"": SubResource("AnimationLibrary_h2442")
+&"": SubResource("AnimationLibrary_h2442")
 }
 speed_scale = 0.6
 
@@ -12412,3 +12464,4 @@ shape = SubResource("BoxShape3D_utuvw")
 [connection signal="Deactivated" from="PearlessAct/CullingMap/InteriorUnload" to="PearlessAct/Interior" method="Activate"]
 
 [editable path="Static"]
+[editable path="Static/Collision"]
