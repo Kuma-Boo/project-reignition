@@ -36,7 +36,6 @@ public partial class FireSoul : Pickup
 		{
 			Player.Skills.TimeBreakStarted += ShowFireSoul;
 			Player.Skills.TimeBreakStopped += HideFireSoul;
-			HideFireSoul();
 		}
 	}
 
@@ -73,7 +72,11 @@ public partial class FireSoul : Pickup
 		Animator.Play("RESET");
 		Animator.Advance(0);
 		UpdateLockon();
-		Animator.Play("loop");
+
+		if (isTimeBreakOnly)
+			HideFireSoul();
+		else
+			Animator.Play("loop");
 
 		StageSettings.Instance.SetFireSoulCheckpointFlag(fireSoulIndex - 1, false);
 		if (StageSettings.Instance.IsConnected(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint)))
