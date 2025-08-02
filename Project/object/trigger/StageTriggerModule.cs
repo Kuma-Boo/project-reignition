@@ -10,7 +10,13 @@ public partial class StageTriggerModule : Node3D
 {
 	protected PlayerController Player => StageSettings.Player;
 
-	public override void _Ready() => StageSettings.Instance.Respawned += Respawn;
+	public override void _Ready()
+	{
+		if (Engine.IsEditorHint())
+			return;
+
+		StageSettings.Instance.Respawned += Respawn;
+	}
 
 	public virtual void Activate(Area3D a)
 	{
