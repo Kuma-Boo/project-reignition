@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://mlaecfbmxihk"]
+[gd_scene load_steps=22 format=3 uid="uid://mlaecfbmxihk"]
 
 [ext_resource type="PackedScene" uid="uid://bxq56vewfoodk" path="res://area/6 skeleton dome/object/model/special/Bone.gltf" id="1_3jkna"]
 [ext_resource type="Script" uid="uid://hofqefwd2eym" path="res://area/6 skeleton dome/data/script/Bone.cs" id="1_dl4pl"]
 [ext_resource type="Material" uid="uid://bef3nf037vgw8" path="res://object/stage/common/resource/model/material/Flying Pot Shine.tres" id="2_0hift"]
 [ext_resource type="PackedScene" uid="uid://ohu3dilki5ib" path="res://area/6 skeleton dome/object/WarpVfx.tscn" id="4_dqaqq"]
+[ext_resource type="Material" uid="uid://ca62uiedbfw5x" path="res://effect/particle/material/Ember Blue.tres" id="4_g2ar6"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0hift"]
 height = 5.0
@@ -36,6 +37,51 @@ hue_variation_max = 0.15
 material = ExtResource("2_0hift")
 size = Vector2(1, 1)
 orientation = 2
+
+[sub_resource type="Curve" id="Curve_qdqox"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_xmnfn"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_qdqox")
+
+[sub_resource type="Curve" id="Curve_wydip"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_7vbvu"]
+_data = [Vector2(0, 0.6), 0.0, 1.28844, 0, 0, Vector2(0.8, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.9), -0.627935, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_fc5bb"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_j7ims"]
+width = 64
+curve_x = SubResource("Curve_wydip")
+curve_y = SubResource("Curve_7vbvu")
+curve_z = SubResource("Curve_fc5bb")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_gvqj4"]
+lifetime_randomness = 0.8
+direction = Vector3(0, 1, 0)
+spread = 180.0
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 4.0
+scale_curve = SubResource("CurveXYZTexture_j7ims")
+color = Color(1, 0.77514, 0.304062, 1)
+alpha_curve = SubResource("CurveTexture_xmnfn")
+
+[sub_resource type="QuadMesh" id="QuadMesh_lbsyn"]
+material = ExtResource("4_g2ar6")
+size = Vector2(0.1, 1)
+center_offset = Vector3(0, 0.5, 0)
 
 [sub_resource type="Animation" id="Animation_g2ar6"]
 length = 0.001
@@ -103,6 +149,20 @@ visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
 process_material = SubResource("ParticleProcessMaterial_g2ar6")
 draw_pass_1 = SubResource("PlaneMesh_qdqox")
 
+[node name="CollectFX" type="GPUParticles3D" parent="."]
+layers = 32
+emitting = false
+amount = 16
+lifetime = 0.2
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_gvqj4")
+draw_pass_1 = SubResource("QuadMesh_lbsyn")
+
 [node name="WarpVFX" parent="." instance=ExtResource("4_dqaqq")]
 emitting = false
 
@@ -116,6 +176,7 @@ libraries = {
 autoplay = "loop"
 
 [connection signal="Collected" from="." to="SparkleFX" method="set_emitting" binds= [false]]
+[connection signal="CollectionFinished" from="." to="CollectFX" method="restart"]
 [connection signal="Respawned" from="." to="SparkleFX" method="set_emitting" binds= [true]]
 [connection signal="area_entered" from="BoneRoot/Trigger" to="." method="OnEntered"]
 

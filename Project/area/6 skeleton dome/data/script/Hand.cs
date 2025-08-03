@@ -64,7 +64,7 @@ public partial class Hand : PathFollow3D
 		if (isGrabbingPlayer || !a.IsInGroup("player detection"))
 			return;
 
-		LaunchSettings settings = LaunchSettings.Create(Player.GlobalPosition, root.GlobalPosition + Vector3.Up * 0.5f, 2f, true);
+		LaunchSettings settings = LaunchSettings.Create(Player.GlobalPosition, root.GlobalPosition + Vector3.Up * 0.5f, 1.8f, true);
 		Player.StartLauncher(settings);
 		Player.Animator.StartSpin();
 

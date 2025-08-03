@@ -9,6 +9,7 @@ public partial class Bone : Node3D
 {
 	[Signal] public delegate void RespawnedEventHandler();
 	[Signal] public delegate void CollectedEventHandler();
+	[Signal] public delegate void CollectionFinishedEventHandler();
 	[Signal] public delegate void JumpFinishedEventHandler();
 	[Signal] public delegate void ObjectiveFinishedEventHandler();
 
@@ -112,7 +113,8 @@ public partial class Bone : Node3D
 			return;
 		}
 
-		tween.TweenCallback(Callable.From(() => Despawn())).SetDelay(1f);
+		tween.TweenCallback(Callable.From(() => EmitSignal(SignalName.CollectionFinished))).SetDelay(1f);
+		tween.TweenCallback(Callable.From(() => Despawn())).SetDelay(2f);
 		if (Player.IsHomingAttacking)
 			Player.StartBounce();
 	}
