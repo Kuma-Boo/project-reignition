@@ -23,14 +23,47 @@ public partial class Score : Control
 	private AudioStreamPlayer rankDownSFX;
 	private int CurrentRank { get; set; }
 	private Tween rankTween;
+	[Export]
+	private bool enableHudDecal;
+	[Export]
+	private Sprite2D hudDecalScore;
+	[Export]
+	private Sprite2D hudDecalScoreNoRank;
+	[Export]
+	private Sprite2D hudDecalTime;
+
 	public void InitializeRankPreviewer()
 	{
+
+		if (hudDecalScore != null && hudDecalScoreNoRank != null)
+		{
+			GD.Print("Score hud decal is true");
+			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.RankPreview))
+			{
+				GD.Print("Setting rank decal visibility");
+				hudDecalScore.Visible = true;
+				hudDecalScoreNoRank.Visible = false;
+			}
+			else
+			{
+				GD.Print("Setting score decal visibility");
+				hudDecalScore.Visible = false;
+				hudDecalScoreNoRank.Visible = true;
+			}
+		}
+
+
 		rankPreviewerRoot.Visible = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.RankPreview);
 		if (!rankPreviewerRoot.Visible)
 			return;
 
 		CurrentRank = Mathf.Max(0, Stage.CalculateRank(true));
 		mainRank.Texture = rankTextures[CurrentRank];
+
+
+
+
+
 	}
 
 	private void UpdateRankPreviewer()

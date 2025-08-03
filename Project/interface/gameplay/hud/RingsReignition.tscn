@@ -1,13 +1,14 @@
-[gd_scene load_steps=25 format=3 uid="uid://fu7502ow8bh2"]
+[gd_scene load_steps=26 format=3 uid="uid://eseecyjllmi0"]
 
-[ext_resource type="Script" uid="uid://b5j8fb7ptmifs" path="res://interface/gameplay/hud/script/Rings.cs" id="1_st3yc"]
-[ext_resource type="Texture2D" uid="uid://cmibj4ckksnci" path="res://interface/gameplay/hud/texture/ring_atlas_hd.png" id="2_nobfg"]
-[ext_resource type="Script" uid="uid://cvdq5k05y8o4e" path="res://addons/custom_nodes/script/Sprite2DPlus.cs" id="2_st3yc"]
-[ext_resource type="FontFile" uid="uid://metby7j5vbho" path="res://interface/font/bitmap fonts/HUD Numbers.fnt" id="3_srpfp"]
-[ext_resource type="FontFile" uid="uid://t65f6a0d3r7s" path="res://interface/font/otf/HUDBeveledFontV1.otf" id="4_nobfg"]
-[ext_resource type="Texture2D" uid="uid://hjdee6dcqgs1" path="res://interface/gameplay/hud/texture/soul gauge/sprite atlas.png" id="4_vrhy3"]
-[ext_resource type="Texture2D" uid="uid://be22jije73ycj" path="res://interface/gameplay/hud/texture/soul gauge/sprite_atlas_hd.png" id="5_0nlx6"]
-[ext_resource type="AudioStream" uid="uid://crk7fy6bd8job" path="res://sound/sfx/objects/ring loss.wav" id="5_ek5lp"]
+[ext_resource type="Script" uid="uid://b5j8fb7ptmifs" path="res://interface/gameplay/hud/script/Rings.cs" id="1_16h2o"]
+[ext_resource type="Texture2D" uid="uid://jvsk1vt7171o" path="res://interface/gameplay/hud/texture/hud_decal.png" id="2_8jrfo"]
+[ext_resource type="Texture2D" uid="uid://cmibj4ckksnci" path="res://interface/gameplay/hud/texture/ring_atlas_hd.png" id="2_hnel2"]
+[ext_resource type="Script" uid="uid://cvdq5k05y8o4e" path="res://addons/custom_nodes/script/Sprite2DPlus.cs" id="3_8jrfo"]
+[ext_resource type="FontFile" uid="uid://t65f6a0d3r7s" path="res://interface/font/otf/HUDBeveledFontV1.otf" id="5_hnel2"]
+[ext_resource type="Texture2D" uid="uid://be22jije73ycj" path="res://interface/gameplay/hud/texture/soul gauge/sprite_atlas_hd.png" id="5_mvyxo"]
+[ext_resource type="Texture2D" uid="uid://hjdee6dcqgs1" path="res://interface/gameplay/hud/texture/soul gauge/sprite atlas.png" id="6_cnrh0"]
+[ext_resource type="FontFile" uid="uid://metby7j5vbho" path="res://interface/font/bitmap fonts/HUD Numbers.fnt" id="7_y41d8"]
+[ext_resource type="AudioStream" uid="uid://crk7fy6bd8job" path="res://sound/sfx/objects/ring loss.wav" id="8_l53uy"]
 
 [sub_resource type="Animation" id="2"]
 length = 0.001
@@ -394,7 +395,7 @@ length = 2.33333
 step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
-tracks/0/enabled = true
+tracks/0/enabled = false
 tracks/0/path = NodePath("Current:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
@@ -931,34 +932,53 @@ nodes/ringless_transition/node = SubResource("AnimationNodeTransition_8ld87")
 nodes/ringless_transition/position = Vector2(-160, 352)
 node_connections = [&"gain_trigger", 0, &"hold-anim", &"gain_trigger", 1, &"gain-anim", &"loss_trigger", 0, &"gain_trigger", &"loss_trigger", 1, &"loss-anim", &"output", 0, &"ringless_add", &"ringless_add", 0, &"loss_trigger", &"ringless_add", 1, &"ringless_transition", &"ringless_transition", 0, &"ringless-anim", &"ringless_transition", 1, &"ring-anim"]
 
-[node name="Rings" type="Control" node_paths=PackedStringArray("ringLabel", "maxRingLabel", "ringLossLabel", "ringDividerSprite", "ringAnimator", "fireSoulAnimator")]
+[node name="RingsReignition" type="Control" node_paths=PackedStringArray("ringLabel", "maxRingLabel", "ringLossLabel", "ringDividerSprite", "ringAnimator", "fireSoulAnimator", "hudDecal", "hudDecalShort")]
 layout_mode = 3
 anchors_preset = 0
-offset_left = 176.0
+offset_left = 131.0
 offset_top = 64.0
-offset_right = 592.0
+offset_right = 547.0
 offset_bottom = 192.0
-script = ExtResource("1_st3yc")
+script = ExtResource("1_16h2o")
 ringLabel = NodePath("Current/CurrentAmount")
 maxRingLabel = NodePath("Current/RingMax")
 ringLossLabel = NodePath("Loss/LossAmount")
 ringDividerSprite = NodePath("Current/Divider")
 ringAnimator = NodePath("AnimationTree")
 fireSoulAnimator = NodePath("AnimationPlayer")
+enableHudDecal = true
+hudDecal = NodePath("Current/HudDecal")
+hudDecalShort = NodePath("Current/HudDecal2")
 
 [node name="Current" type="Control" parent="."]
 anchors_preset = 0
-offset_left = 153.0
+offset_left = 184.0
 offset_top = 64.0
-offset_right = 153.0
+offset_right = 184.0
 offset_bottom = 64.0
 
+[node name="HudDecal" type="Sprite2D" parent="Current"]
+visible = false
+position = Vector2(77.1429, -2.85715)
+scale = Vector2(1.42857, 1.42857)
+texture = ExtResource("2_8jrfo")
+region_enabled = true
+region_rect = Rect2(0, 283, 548, 120)
+
+[node name="HudDecal2" type="Sprite2D" parent="Current"]
+visible = false
+position = Vector2(-22.8572, -2.85715)
+scale = Vector2(1.42857, 1.42857)
+texture = ExtResource("2_8jrfo")
+region_enabled = true
+region_rect = Rect2(0, 419, 407, 120)
+
 [node name="Ring" type="Sprite2D" parent="Current"]
-position = Vector2(-136, 0)
+position = Vector2(-136, -4.28571)
 scale = Vector2(1.8, 1.8)
-texture = ExtResource("2_nobfg")
+texture = ExtResource("2_hnel2")
 hframes = 8
-script = ExtResource("2_st3yc")
+script = ExtResource("3_8jrfo")
 loopMode = 1
 
 [node name="CurrentAmount" type="Label" parent="Current"]
@@ -968,27 +988,29 @@ offset_top = -41.6
 offset_right = 56.0
 offset_bottom = 25.4
 scale = Vector2(1.2, 1.2)
-theme_override_fonts/font = ExtResource("4_nobfg")
+theme_override_fonts/font = ExtResource("5_hnel2")
 theme_override_font_sizes/font_size = 45
 text = "000"
 vertical_alignment = 1
 
 [node name="RingMax" type="Label" parent="Current"]
+visible = false
 layout_mode = 0
 offset_left = 128.0
 offset_top = -16.0
 offset_right = 288.0
 offset_bottom = 56.0
 scale = Vector2(0.85, 0.85)
-theme_override_fonts/font = ExtResource("4_nobfg")
+theme_override_fonts/font = ExtResource("5_hnel2")
 theme_override_font_sizes/font_size = 45
 text = "100"
 vertical_alignment = 1
 
 [node name="Divider" type="Sprite2D" parent="Current"]
+visible = false
 position = Vector2(110.4, -1.6)
 scale = Vector2(0.3, 0.3)
-texture = ExtResource("5_0nlx6")
+texture = ExtResource("5_mvyxo")
 region_enabled = true
 region_rect = Rect2(370, 520, 188, 303)
 
@@ -1027,7 +1049,7 @@ color = Color(0, 1, 0, 1)
 
 [node name="Chain" type="Sprite2D" parent="Current/Chain"]
 use_parent_material = true
-texture = ExtResource("4_vrhy3")
+texture = ExtResource("6_cnrh0")
 region_enabled = true
 region_rect = Rect2(172, 276, 28, 60)
 
@@ -1047,13 +1069,13 @@ offset_top = -64.0
 offset_right = 8.00171
 offset_bottom = 3.0
 scale = Vector2(0.85, 0.85)
-theme_override_fonts/font = ExtResource("3_srpfp")
+theme_override_fonts/font = ExtResource("7_y41d8")
 theme_override_font_sizes/font_size = 64
 text = "-20"
 vertical_alignment = 1
 
 [node name="RingLossSFX" type="AudioStreamPlayer" parent="Loss"]
-stream = ExtResource("5_ek5lp")
+stream = ExtResource("8_l53uy")
 bus = &"SFX"
 
 [node name="RingsRoot" type="Node2D" parent="Loss"]
@@ -1063,10 +1085,10 @@ modulate = Color(1, 1, 1, 0)
 [node name="Ring1" type="Sprite2D" parent="Loss/RingsRoot"]
 rotation = 0.460767
 scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_nobfg")
+texture = ExtResource("2_hnel2")
 hframes = 8
 frame = 3
-script = ExtResource("2_st3yc")
+script = ExtResource("3_8jrfo")
 playing = true
 loopMode = 1
 timeScale = 0.2
@@ -1074,88 +1096,88 @@ timeScale = 0.2
 [node name="Ring2" type="Sprite2D" parent="Loss/RingsRoot"]
 rotation = 0.523598
 scale = Vector2(1.375, 1.5)
-texture = ExtResource("2_nobfg")
+texture = ExtResource("2_hnel2")
 hframes = 8
 frame = 1
-script = ExtResource("2_st3yc")
+script = ExtResource("3_8jrfo")
 playing = true
 loopMode = 1
 
 [node name="Ring3" type="Sprite2D" parent="Loss/RingsRoot"]
 rotation = 0.236989
 scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_nobfg")
+texture = ExtResource("2_hnel2")
 hframes = 8
 frame = 1
-script = ExtResource("2_st3yc")
+script = ExtResource("3_8jrfo")
 playing = true
 loopMode = 1
 
 [node name="Ring4" type="Sprite2D" parent="Loss/RingsRoot"]
 rotation = -0.953518
 scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_nobfg")
+texture = ExtResource("2_hnel2")
 hframes = 8
 frame = 1
-script = ExtResource("2_st3yc")
+script = ExtResource("3_8jrfo")
 playing = true
 loopMode = 1
 
 [node name="Ring5" type="Sprite2D" parent="Loss/RingsRoot"]
 scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_nobfg")
+texture = ExtResource("2_hnel2")
 hframes = 8
 frame = 1
-script = ExtResource("2_st3yc")
+script = ExtResource("3_8jrfo")
 playing = true
 loopMode = 1
 
 [node name="Ring6" type="Sprite2D" parent="Loss/RingsRoot"]
 rotation = -0.332001
 scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_nobfg")
+texture = ExtResource("2_hnel2")
 hframes = 8
 frame = 1
-script = ExtResource("2_st3yc")
+script = ExtResource("3_8jrfo")
 playing = true
 loopMode = 1
 
 [node name="Ring7" type="Sprite2D" parent="Loss/RingsRoot"]
 rotation = -0.388323
 scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_nobfg")
+texture = ExtResource("2_hnel2")
 hframes = 8
 frame = 1
-script = ExtResource("2_st3yc")
+script = ExtResource("3_8jrfo")
 playing = true
 loopMode = 1
 
 [node name="Ring8" type="Sprite2D" parent="Loss/RingsRoot"]
 rotation = -0.457046
 scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_nobfg")
+texture = ExtResource("2_hnel2")
 hframes = 8
 frame = 1
-script = ExtResource("2_st3yc")
+script = ExtResource("3_8jrfo")
 playing = true
 loopMode = 1
 
 [node name="Ring9" type="Sprite2D" parent="Loss/RingsRoot"]
 rotation = -0.533923
 scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_nobfg")
+texture = ExtResource("2_hnel2")
 hframes = 8
 frame = 1
-script = ExtResource("2_st3yc")
+script = ExtResource("3_8jrfo")
 playing = true
 loopMode = 1
 
 [node name="Ring10" type="Sprite2D" parent="Loss/RingsRoot"]
 scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_nobfg")
+texture = ExtResource("2_hnel2")
 hframes = 8
 frame = 1
-script = ExtResource("2_st3yc")
+script = ExtResource("3_8jrfo")
 playing = true
 loopMode = 1
 

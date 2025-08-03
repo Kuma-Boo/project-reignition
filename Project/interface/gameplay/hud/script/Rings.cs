@@ -19,6 +19,13 @@ public partial class Rings : Control
 	private AnimationTree ringAnimator;
 	[Export]
 	private AnimationPlayer fireSoulAnimator;
+	[Export]
+	private bool enableHudDecal;
+	[Export]
+	private Sprite2D hudDecal;
+	[Export]
+	private Sprite2D hudDecalShort;
+
 	public void CollectFireSoul()
 	{
 		fireSoulAnimator.Play("firesoul");
@@ -38,6 +45,25 @@ public partial class Rings : Control
 		// Initialize ring counter
 		if (Stage != null)
 		{
+
+			if (hudDecal != null && hudDecalShort != null)
+			{
+				GD.Print("Ring hud decale is true");
+				if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Ring && Stage.Data.MissionObjectiveCount != 0)
+				{
+					GD.Print("Setting ring mission decal visibility");
+					hudDecal.Visible = true;
+					hudDecalShort.Visible = false;
+				}
+				else
+				{
+					GD.Print("Setting ring decal visibility");
+					hudDecal.Visible = false;
+					hudDecalShort.Visible = true;
+				}
+
+			}
+
 			maxRingLabel.Visible = ringDividerSprite.Visible = Stage.Data.MissionType == LevelDataResource.MissionTypes.Ring &&
 				Stage.Data.MissionObjectiveCount != 0; // Show/Hide max ring count
 			if (maxRingLabel.Visible)
@@ -45,6 +71,7 @@ public partial class Rings : Control
 
 			ringAnimator.Active = true;
 			UpdateRingCount(Stage.CurrentRingCount, true);
+
 		}
 	}
 

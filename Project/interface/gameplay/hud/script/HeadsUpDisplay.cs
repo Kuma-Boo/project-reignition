@@ -13,16 +13,44 @@ public partial class HeadsUpDisplay : Control
 
 	public override void _EnterTree() => Instance = this;
 
+	[Export]
+	private Control hudRetail;
+	[Export]
+	private Control hudReignition;
+	[Export]
+	private Control hudE3;
+
 	public override void _Ready()
 	{
+		//SaveManager.Config.hudStyle = SaveManager.HudStyle.Retail; //for debugging
+		switch (SaveManager.Config.hudStyle)
+		{
+			case SaveManager.HudStyle.Retail:
+				score.Visible = true;
+				objectives.Visible = true;
+				rings.Visible = true;
+				break;
+			case SaveManager.HudStyle.Reignition:
+				scoreReignition.Visible = true;
+				objectivesReignition.Visible = true;
+				ringsReignition.Visible = true;
+
+				score = scoreReignition;
+				objectives = objectivesReignition;
+				rings = ringsReignition;
+				break;
+			case SaveManager.HudStyle.E3:
+				//TODO:
+				//Make E3 hud
+				break;
+		}
+
 		InitializeRankPreviewer();
 		InitializeRings();
 		InitializeObjectives();
 		InitializeSoulGauge();
 		InitializeRace();
 		InitializePrompts();
-
-
 		if (Stage != null) // Decouple from level settings
 		{
 			Stage.Connect(nameof(StageSettings.RingChanged), new Callable(this, MethodName.UpdateRingCount));
@@ -30,10 +58,15 @@ public partial class HeadsUpDisplay : Control
 			Stage.Connect(nameof(StageSettings.ScoreChanged), new Callable(this, MethodName.UpdateScore));
 			Stage.Connect(nameof(StageSettings.LevelCompleted), new Callable(this, MethodName.OnLevelCompleted)); // Hide interface
 		}
+
+
+
 	}
 
 	#region Rings
 	[Export] Rings rings;
+	[Export]
+	private Rings ringsReignition;
 
 	public void CollectFireSoul()
 	{
@@ -59,11 +92,14 @@ public partial class HeadsUpDisplay : Control
 
 	[Export]
 	private Score score;
+	[Export]
+	private Score scoreReignition;
 	private void InitializeRankPreviewer() => score.InitializeRankPreviewer();
 
 	private void UpdateTime() => score.UpdateTime();
 
 	private void UpdateScore() => score.UpdateScore();
+
 
 	#endregion
 
@@ -71,6 +107,8 @@ public partial class HeadsUpDisplay : Control
 
 	[Export]
 	private Objectives objectives;
+	[Export]
+	private Objectives objectivesReignition;
 	private void InitializeObjectives() => objectives.InitializeObjectives();
 
 

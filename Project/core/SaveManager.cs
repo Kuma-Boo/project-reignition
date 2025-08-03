@@ -215,7 +215,7 @@ public partial class SaveManager : Node
 		public QualitySetting postProcessingQuality = QualitySetting.Medium;
 		public QualitySetting reflectionQuality = QualitySetting.High;
 
-		public HudStyle hudStyle = HudStyle.Reignition;
+		public HudStyle hudStyle = HudStyle.Retail;
 		public bool rotateSoulGauge = false;
 
 		// Audio

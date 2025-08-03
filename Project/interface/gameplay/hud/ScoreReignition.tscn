@@ -1,0 +1,113 @@
+[gd_scene load_steps=10 format=3 uid="uid://cejriml1lso1w"]
+
+[ext_resource type="Script" uid="uid://d3bwpan3sifbl" path="res://interface/gameplay/hud/script/Score.cs" id="1_mijso"]
+[ext_resource type="Texture2D" uid="uid://bongvk7uwqsco" path="res://interface/menu/level select/texture/gold.png" id="2_lsv6o"]
+[ext_resource type="Texture2D" uid="uid://daym7a6tnri40" path="res://interface/menu/level select/texture/bronze.png" id="3_lub0i"]
+[ext_resource type="Texture2D" uid="uid://cbnh0am0av0ts" path="res://interface/menu/level select/texture/silver.png" id="4_7pwex"]
+[ext_resource type="Texture2D" uid="uid://jvsk1vt7171o" path="res://interface/gameplay/hud/texture/hud_decal.png" id="5_lsv6o"]
+[ext_resource type="Texture2D" uid="uid://clnr8mw5xvxn1" path="res://interface/menu/level select/texture/no medal.png" id="6_kftt6"]
+[ext_resource type="FontFile" uid="uid://t65f6a0d3r7s" path="res://interface/font/otf/HUDBeveledFontV1.otf" id="6_lsv6o"]
+[ext_resource type="AudioStream" uid="uid://c2ntlq8k605f0" path="res://sound/sfx/system/SYSTEM_57.wav" id="7_cerrl"]
+[ext_resource type="AudioStream" uid="uid://dnehqc85xb54p" path="res://sound/sfx/system/SYSTEM_58.wav" id="8_ypcc7"]
+
+[node name="ScoreReignition" type="Control" node_paths=PackedStringArray("rankPreviewerRoot", "mainRank", "transitionRank", "rankUpSFX", "rankDownSFX", "hudDecalScore", "hudDecalScoreNoRank", "hudDecalTime", "time", "score")]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -512.0
+offset_top = 64.0
+offset_right = -128.0
+offset_bottom = 192.0
+grow_horizontal = 0
+script = ExtResource("1_mijso")
+rankPreviewerRoot = NodePath("Rank")
+mainRank = NodePath("Rank/MainRank")
+transitionRank = NodePath("Rank/TransitionRank")
+rankTextures = Array[Texture2D]([ExtResource("2_lsv6o"), ExtResource("3_lub0i"), ExtResource("4_7pwex")])
+rankUpSFX = NodePath("Rank/RankUp")
+rankDownSFX = NodePath("Rank/RankDown")
+hudDecalScore = NodePath("ScoreDecal")
+hudDecalScoreNoRank = NodePath("ScoreDecalNoRank")
+hudDecalTime = NodePath("TimeDecal")
+time = NodePath("Time")
+score = NodePath("Score")
+
+[node name="ScoreDecal" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(167, 23)
+texture = ExtResource("5_lsv6o")
+region_enabled = true
+region_rect = Rect2(14, 33, 688, 120)
+
+[node name="ScoreDecalNoRank" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(223, 23)
+texture = ExtResource("5_lsv6o")
+region_enabled = true
+region_rect = Rect2(125, 168, 577, 100)
+
+[node name="TimeDecal" type="Sprite2D" parent="."]
+position = Vector2(223, 137)
+texture = ExtResource("5_lsv6o")
+region_enabled = true
+region_rect = Rect2(125, 168, 577, 100)
+
+[node name="Score" type="Label" parent="."]
+layout_mode = 0
+offset_left = 138.0
+offset_top = -5.0
+offset_right = 537.0
+offset_bottom = 83.2705
+scale = Vector2(0.9, 0.9)
+theme_override_fonts/font = ExtResource("6_lsv6o")
+theme_override_font_sizes/font_size = 45
+text = "00000000"
+vertical_alignment = 1
+
+[node name="Time" type="Label" parent="."]
+layout_mode = 0
+offset_left = 138.0
+offset_top = 111.0
+offset_right = 522.0
+offset_bottom = 199.27
+scale = Vector2(0.9, 0.9)
+theme_override_fonts/font = ExtResource("6_lsv6o")
+theme_override_font_sizes/font_size = 45
+text = "00:00.00"
+vertical_alignment = 1
+
+[node name="Rank" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 17.0
+offset_top = -7.0
+offset_right = 17.0
+offset_bottom = -7.0
+
+[node name="MainRank" type="TextureRect" parent="Rank"]
+layout_mode = 0
+offset_left = -7.0
+offset_top = -9.0
+offset_right = 57.0
+offset_bottom = 55.0
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("6_kftt6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TransitionRank" type="TextureRect" parent="Rank"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 64.0
+texture = ExtResource("2_lsv6o")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RankUp" type="AudioStreamPlayer" parent="Rank"]
+stream = ExtResource("7_cerrl")
+bus = &"SFX"
+
+[node name="RankDown" type="AudioStreamPlayer" parent="Rank"]
+stream = ExtResource("8_ypcc7")
+bus = &"SFX"
