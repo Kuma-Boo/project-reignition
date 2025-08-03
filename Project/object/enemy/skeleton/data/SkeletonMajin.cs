@@ -261,7 +261,20 @@ public partial class SkeletonMajin : Enemy
 
 	protected override void Defeat()
 	{
-		base.Defeat();
+		if (isImmortal)
+		{
+			currentHealth = 0;
+			Player.Camera.SetLockonTarget(null);
+			Player.Lockon.ResetLockonTarget();
+
+			CheckLightSpeedAttack();
+			EmitSignal(SignalName.Defeated);
+		}
+		else
+		{
+			base.Defeat();
+		}
+
 		Deactivate(true);
 
 		Player.MovementAngle = Player.PathFollower.ForwardAngle; // More consistent direction

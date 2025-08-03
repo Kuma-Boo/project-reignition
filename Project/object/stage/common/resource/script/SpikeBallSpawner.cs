@@ -9,6 +9,8 @@ namespace Project.Gameplay.Hazards;
 /// </summary>
 public partial class SpikeBallSpawner : Node3D
 {
+	[Export(PropertyHint.Range, "0,1")] private float initialTimerRatio;
+
 	/// <summary> Timer to keep track of spawn interval. </summary>
 	private float timer;
 
@@ -32,6 +34,7 @@ public partial class SpikeBallSpawner : Node3D
 	{
 		// Hide the editor mesh
 		GetChild<Node3D>(0).Visible = false;
+		timer = initialTimerRatio * spawnInterval;
 
 		// Pool spike balls
 		for (int i = 0; i < maxSpawnAmount; i++)

@@ -1,0 +1,1019 @@
+[gd_scene load_steps=32 format=3 uid="uid://bo7bhfrfcn38x"]
+
+[ext_resource type="PackedScene" uid="uid://slvtrs84m8s0" path="res://area/6 skeleton dome/act 3/Static.tscn" id="1_q2bgh"]
+[ext_resource type="Resource" uid="uid://bayssau62u7oe" path="res://resource/level data/skeleton dome/Act3Rampage.tres" id="2_q2bgh"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_pjcmv"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="9_5uv7q"]
+[ext_resource type="PackedScene" uid="uid://bgqkl6m4c27kk" path="res://area/6 skeleton dome/object/obstacle/Warp.tscn" id="10_4fjdm"]
+[ext_resource type="PackedScene" uid="uid://dypfstf220mvi" path="res://area/6 skeleton dome/object/obstacle/WarpExit.tscn" id="11_ot83u"]
+[ext_resource type="PackedScene" uid="uid://cxb1fxhrsja13" path="res://object/stage/common/SpikeBallStatic.tscn" id="12_qremn"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="12_v1mhs"]
+[ext_resource type="PackedScene" uid="uid://ddqtfsujegqep" path="res://object/stage/common/SpikeBallSpawner.tscn" id="13_qwxme"]
+[ext_resource type="PackedScene" uid="uid://63pn4rd1drw0" path="res://area/6 skeleton dome/object/obstacle/WarpRed.tscn" id="14_okxaf"]
+[ext_resource type="PackedScene" uid="uid://c7s3kkj8pq6ox" path="res://object/enemy/skeleton/SkeletonMajin.tscn" id="15_buuwb"]
+[ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="16_hmths"]
+[ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="17_nqgsn"]
+[ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="18_dtbxe"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="19_uaemc"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="21_3aqhs"]
+[ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="21_hxtrf"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="22_buoni"]
+[ext_resource type="PackedScene" uid="uid://ctkxmjdylid4k" path="res://object/enemy/majin/data/skeleton dome/GreenMajin.tscn" id="23_ahl73"]
+[ext_resource type="Resource" uid="uid://dulon5ipuxyw" path="res://area/6 skeleton dome/act 3/camera/RampageFlyingPotCam.tres" id="23_xcw7e"]
+[ext_resource type="PackedScene" uid="uid://csaug6ajhbtce" path="res://object/enemy/majin/data/skeleton dome/RedMajin.tscn" id="24_ipntq"]
+[ext_resource type="Resource" uid="uid://dg4m3a87hm3yo" path="res://area/6 skeleton dome/act 3/camera/HallCam.tres" id="24_wts72"]
+[ext_resource type="PackedScene" uid="uid://vqw834asl36p" path="res://area/6 skeleton dome/object/obstacle/Gate.tscn" id="25_o5nvj"]
+[ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="26_ttb8i"]
+[ext_resource type="PackedScene" uid="uid://0jj0alw37l1s" path="res://area/6 skeleton dome/object/grindrail/Grindrail04.tscn" id="29_tt7yj"]
+[ext_resource type="PackedScene" uid="uid://d21ummt57uq4a" path="res://area/6 skeleton dome/object/obstacle/Sickle.tscn" id="30_4lcoe"]
+[ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="39_1enjy"]
+[ext_resource type="PackedScene" uid="uid://di8tdo65qjkbe" path="res://object/enemy/majin/data/skeleton dome/BlueMajin.tscn" id="50_v50j3"]
+[ext_resource type="PackedScene" uid="uid://153wwjnd7nv6" path="res://object/stage/common/FlyingPot.tscn" id="51_bf61b"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0bgs1"]
+size = Vector3(30, 30, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cpflb"]
+size = Vector3(20, 5, 10)
+
+[node name="World" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_q2bgh")]
+Data = ExtResource("2_q2bgh")
+
+[node name="RampageAct" type="Node3D" parent="."]
+
+[node name="SpawnPosition" type="Node3D" parent="RampageAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1150, 0.000195503, -1125)
+
+[node name="CharacterSpawn" parent="RampageAct/SpawnPosition" instance=ExtResource("3_pjcmv")]
+
+[node name="Throne" type="Node3D" parent="RampageAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1150, 0, -1295)
+script = ExtResource("9_5uv7q")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="Rings" type="Node3D" parent="RampageAct/Throne"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0.7, 178)
+script = ExtResource("18_dtbxe")
+Source = ExtResource("19_uaemc")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Throne/Rings" instance=ExtResource("19_uaemc")]
+
+[node name="Child02" parent="RampageAct/Throne/Rings" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="RampageAct/Throne/Rings" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="RampageAct/Throne/Rings" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="RampageAct/Throne/Rings" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Warp" parent="RampageAct/Throne" node_paths=PackedStringArray("warpTarget") instance=ExtResource("10_4fjdm")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 190)
+warpTarget = NodePath("../../RedHall/WarpExit")
+
+[node name="ReverseWall1" type="StaticBody3D" parent="RampageAct/Throne"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 145)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Throne/ReverseWall1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 0)
+shape = SubResource("BoxShape3D_0bgs1")
+
+[node name="ReverseWall2" type="StaticBody3D" parent="RampageAct/Throne"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 97)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Throne/ReverseWall2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 0)
+shape = SubResource("BoxShape3D_0bgs1")
+
+[node name="WarpExit" parent="RampageAct/Throne" instance=ExtResource("11_ot83u")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 10, 92)
+
+[node name="Goal" parent="RampageAct/Throne" instance=ExtResource("12_v1mhs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 26, -5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Throne/Goal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10, 5)
+shape = SubResource("BoxShape3D_0bgs1")
+
+[node name="RedHall" type="Node3D" parent="RampageAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 500, 0, -488)
+script = ExtResource("9_5uv7q")
+saveVisibilityOnCheckpoint = true
+
+[node name="WarpExit" parent="RampageAct/RedHall" instance=ExtResource("11_ot83u")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -5)
+
+[node name="SpikeBallStatic1" parent="RampageAct/RedHall" instance=ExtResource("12_qremn")]
+transform = Transform3D(0.866025, -0.25, -0.433013, 0, 0.866025, -0.5, 0.5, 0.433013, 0.75, 3, 0.75, -28.3)
+
+[node name="SpikeBallStatic2" parent="RampageAct/RedHall" instance=ExtResource("12_qremn")]
+transform = Transform3D(0.866025, -0.25, -0.433013, 0, 0.866025, -0.5, 0.5, 0.433013, 0.75, -2.5, 0.75, -33.8)
+
+[node name="SpikeBallStatic3" parent="RampageAct/RedHall" instance=ExtResource("12_qremn")]
+transform = Transform3D(0.866025, -0.25, -0.433013, 0, 0.866025, -0.5, 0.5, 0.433013, 0.75, 1, 0.75, -38)
+
+[node name="SpikeBallStatic4" parent="RampageAct/RedHall" instance=ExtResource("12_qremn")]
+transform = Transform3D(0.919301, -0.334702, -0.207026, 0.138237, 0.767141, -0.626406, 0.368478, 0.547238, 0.751502, 2.5, 0.75, -52)
+
+[node name="SpikeBallStatic5" parent="RampageAct/RedHall" instance=ExtResource("12_qremn")]
+transform = Transform3D(0.919301, -0.334702, -0.207026, 0.138237, 0.767141, -0.626406, 0.368478, 0.547238, 0.751502, -1.5, 0.75, -56)
+
+[node name="SkeletonMajin1" parent="RampageAct/RedHall" instance=ExtResource("15_buuwb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -28.5)
+isImmortal = true
+
+[node name="SkeletonMajin2" parent="RampageAct/RedHall" instance=ExtResource("15_buuwb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, -36)
+isImmortal = true
+SpawnMode = 1
+
+[node name="SkeletonMajin3" parent="RampageAct/RedHall" instance=ExtResource("15_buuwb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -41.5)
+isImmortal = true
+SpawnMode = 1
+
+[node name="SkeletonMajin4" parent="RampageAct/RedHall" instance=ExtResource("15_buuwb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -45.5)
+isImmortal = true
+rangeOverride = 10
+
+[node name="Switch1" parent="RampageAct/RedHall" instance=ExtResource("21_hxtrf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.1, -45.5)
+
+[node name="GreenMajin1" parent="RampageAct/RedHall/Switch1" instance=ExtResource("23_ahl73")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.5, -9)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+SpawnMode = 1
+
+[node name="GreenMajin2" parent="RampageAct/RedHall/Switch1" instance=ExtResource("23_ahl73")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.5, -12)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.2
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+SpawnMode = 1
+
+[node name="GreenMajin3" parent="RampageAct/RedHall/Switch1" instance=ExtResource("23_ahl73")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 2.5, -16)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.4
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+SpawnMode = 1
+
+[node name="Switch2" parent="RampageAct/RedHall" instance=ExtResource("21_hxtrf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.1, -94.5)
+
+[node name="GreenMajin" parent="RampageAct/RedHall/Switch2" instance=ExtResource("23_ahl73")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+SpawnMode = 1
+
+[node name="Switch3" parent="RampageAct/RedHall" instance=ExtResource("21_hxtrf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.1, -106.5)
+
+[node name="RedMajin" parent="RampageAct/RedHall/Switch3" instance=ExtResource("24_ipntq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 1, -28)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.5
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 30
+"Attack Settings/Attack Instantly" = true
+SpawnMode = 1
+
+[node name="DashPanel1" parent="RampageAct/RedHall" instance=ExtResource("17_nqgsn")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.5, 0, -64)
+
+[node name="DashPanel2" parent="RampageAct/RedHall" instance=ExtResource("17_nqgsn")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.5, 0, -64)
+
+[node name="Rings1" type="Node3D" parent="RampageAct/RedHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.7, -73)
+script = ExtResource("18_dtbxe")
+Source = ExtResource("19_uaemc")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RampageAct/RedHall/Rings1" instance=ExtResource("19_uaemc")]
+
+[node name="Child02" parent="RampageAct/RedHall/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child03" parent="RampageAct/RedHall/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child04" parent="RampageAct/RedHall/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child05" parent="RampageAct/RedHall/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Child06" parent="RampageAct/RedHall/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25)
+
+[node name="Child07" parent="RampageAct/RedHall/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
+
+[node name="Child08" parent="RampageAct/RedHall/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -35)
+
+[node name="Child09" parent="RampageAct/RedHall/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -40)
+
+[node name="Child10" parent="RampageAct/RedHall/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -45)
+
+[node name="Rings2" type="Node3D" parent="RampageAct/RedHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.7, -73)
+script = ExtResource("18_dtbxe")
+Source = ExtResource("19_uaemc")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RampageAct/RedHall/Rings2" instance=ExtResource("19_uaemc")]
+
+[node name="Child02" parent="RampageAct/RedHall/Rings2" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child03" parent="RampageAct/RedHall/Rings2" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child04" parent="RampageAct/RedHall/Rings2" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child05" parent="RampageAct/RedHall/Rings2" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Child06" parent="RampageAct/RedHall/Rings2" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25)
+
+[node name="Child07" parent="RampageAct/RedHall/Rings2" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
+
+[node name="Child08" parent="RampageAct/RedHall/Rings2" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -35)
+
+[node name="Child09" parent="RampageAct/RedHall/Rings2" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -40)
+
+[node name="Child10" parent="RampageAct/RedHall/Rings2" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -45)
+
+[node name="SpikeBallSpawner1" parent="RampageAct/RedHall" instance=ExtResource("13_qwxme")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 11, -85)
+initialTimerRatio = 1.0
+maxSpawnAmount = 3
+lifetime = 10.0
+spawnInterval = 5.0
+initialVelocity = 1.0
+
+[node name="SpikeBallSpawner2" parent="RampageAct/RedHall" instance=ExtResource("13_qwxme")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -3, 11, -94)
+initialTimerRatio = 1.0
+maxSpawnAmount = 3
+lifetime = 6.0
+spawnInterval = 6.0
+initialVelocity = 1.0
+
+[node name="SpikeBallSpawner7" parent="RampageAct/RedHall" instance=ExtResource("13_qwxme")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 3, 11, -97)
+initialTimerRatio = 1.0
+maxSpawnAmount = 3
+lifetime = 5.0
+spawnInterval = 8.0
+initialVelocity = 1.0
+
+[node name="SpikeBallSpawner3" parent="RampageAct/RedHall" instance=ExtResource("13_qwxme")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.5, 11, -102)
+initialTimerRatio = 1.0
+maxSpawnAmount = 3
+lifetime = 5.0
+spawnInterval = 4.0
+initialVelocity = 1.0
+
+[node name="SpikeBallSpawner4" parent="RampageAct/RedHall" instance=ExtResource("13_qwxme")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 11, -109)
+initialTimerRatio = 1.0
+maxSpawnAmount = 3
+lifetime = 6.0
+spawnInterval = 6.0
+initialVelocity = 1.0
+
+[node name="SpikeBallSpawner6" parent="RampageAct/RedHall" instance=ExtResource("13_qwxme")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 3, 11, -105)
+initialTimerRatio = 1.0
+maxSpawnAmount = 3
+lifetime = 6.0
+spawnInterval = 5.0
+initialVelocity = 1.0
+
+[node name="SpikeBallSpawner5" parent="RampageAct/RedHall" instance=ExtResource("13_qwxme")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 11, -111)
+initialTimerRatio = 1.0
+maxSpawnAmount = 3
+lifetime = 5.0
+spawnInterval = 5.0
+initialVelocity = 1.0
+
+[node name="FireSoul1" parent="RampageAct/RedHall" instance=ExtResource("39_1enjy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, -75.5)
+
+[node name="WarpRed" parent="RampageAct/RedHall" node_paths=PackedStringArray("warpTarget") instance=ExtResource("14_okxaf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -138)
+warpTarget = NodePath("../../BlueHall/WarpExit")
+
+[node name="BlueHall" type="Node3D" parent="RampageAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 700, 0, -488)
+script = ExtResource("9_5uv7q")
+saveVisibilityOnCheckpoint = true
+
+[node name="WarpExit" parent="RampageAct/BlueHall" instance=ExtResource("11_ot83u")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -4.5)
+
+[node name="SwitchGroup1" type="Node3D" parent="RampageAct/BlueHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
+
+[node name="Switch" parent="RampageAct/BlueHall/SwitchGroup1" instance=ExtResource("21_hxtrf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+
+[node name="Gate" parent="RampageAct/BlueHall/SwitchGroup1" instance=ExtResource("25_o5nvj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="SwitchGroup2" type="Node3D" parent="RampageAct/BlueHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -53)
+
+[node name="SpikeBall1" parent="RampageAct/BlueHall/SwitchGroup2" instance=ExtResource("26_ttb8i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+animatorSpeedScale = 0.8
+Movement/Mode = 2
+"Movement/Cycle Length" = 2.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="SpikeBall2" parent="RampageAct/BlueHall/SwitchGroup2" instance=ExtResource("26_ttb8i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+animatorSpeedScale = 0.8
+Movement/Mode = 2
+"Movement/Cycle Length" = 2.0
+"Movement/Starting Offset" = 0.25
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="SpikeBall3" parent="RampageAct/BlueHall/SwitchGroup2" instance=ExtResource("26_ttb8i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+animatorSpeedScale = 0.8
+Movement/Mode = 2
+"Movement/Cycle Length" = 2.0
+"Movement/Starting Offset" = 0.5
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="SpikeBall4" parent="RampageAct/BlueHall/SwitchGroup2" instance=ExtResource("26_ttb8i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+animatorSpeedScale = 0.8
+Movement/Mode = 2
+"Movement/Cycle Length" = 2.0
+"Movement/Starting Offset" = 0.75
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="Switch" parent="RampageAct/BlueHall/SwitchGroup2" instance=ExtResource("21_hxtrf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+
+[node name="Gate" parent="RampageAct/BlueHall/SwitchGroup2" instance=ExtResource("25_o5nvj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="GreenMajin" parent="RampageAct/BlueHall/SwitchGroup2" instance=ExtResource("23_ahl73")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Spawn Interval Settings/Enable Spawn Interval" = true
+"Spawn Interval Settings/Spawn Delay" = 5.0
+"Spawn Interval Settings/Separate Despawn Interval" = true
+"Spawn Interval Settings/Despawn Delay" = 1.0
+
+[node name="SwitchGroup3" type="Node3D" parent="RampageAct/BlueHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -71)
+
+[node name="SkeletonMajin1" parent="RampageAct/BlueHall/SwitchGroup3" instance=ExtResource("15_buuwb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 5)
+isImmortal = true
+SpawnMode = 2
+
+[node name="SkeletonMajin2" parent="RampageAct/BlueHall/SwitchGroup3" instance=ExtResource("15_buuwb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
+isImmortal = true
+SpawnMode = 2
+
+[node name="SkeletonMajin3" parent="RampageAct/BlueHall/SwitchGroup3" instance=ExtResource("15_buuwb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -4.5)
+isImmortal = true
+SpawnMode = 2
+
+[node name="Switch1" parent="RampageAct/BlueHall/SwitchGroup3" instance=ExtResource("21_hxtrf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.1, 5)
+
+[node name="Switch2" parent="RampageAct/BlueHall/SwitchGroup3" instance=ExtResource("21_hxtrf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.1, 0)
+
+[node name="Switch3" parent="RampageAct/BlueHall/SwitchGroup3" instance=ExtResource("21_hxtrf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.1, -4.5)
+
+[node name="Gate" parent="RampageAct/BlueHall/SwitchGroup3" instance=ExtResource("25_o5nvj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="GreenMajin1" parent="RampageAct/BlueHall/SwitchGroup3" instance=ExtResource("23_ahl73")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.5, -12)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+SpawnMode = 1
+
+[node name="GreenMajin2" parent="RampageAct/BlueHall/SwitchGroup3" instance=ExtResource("23_ahl73")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1, -14)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+SpawnMode = 1
+
+[node name="Rings" type="Node3D" parent="RampageAct/BlueHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, -83)
+script = ExtResource("18_dtbxe")
+Source = ExtResource("19_uaemc")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RampageAct/BlueHall/Rings" instance=ExtResource("19_uaemc")]
+
+[node name="Child02" parent="RampageAct/BlueHall/Rings" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="RampageAct/BlueHall/Rings" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="RampageAct/BlueHall/Rings" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="RampageAct/BlueHall/Rings" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="SwitchGroup4" type="Node3D" parent="RampageAct/BlueHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -97)
+
+[node name="Switch1" parent="RampageAct/BlueHall/SwitchGroup4" instance=ExtResource("21_hxtrf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -2)
+
+[node name="Switch2" parent="RampageAct/BlueHall/SwitchGroup4" instance=ExtResource("21_hxtrf")]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 15.1, 1)
+
+[node name="Gate" parent="RampageAct/BlueHall/SwitchGroup4" instance=ExtResource("25_o5nvj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="FlyingPotCamera" parent="RampageAct/BlueHall/SwitchGroup4" instance=ExtResource("21_3aqhs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 0)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Camera" type="Node3D" parent="RampageAct/BlueHall/SwitchGroup4/FlyingPotCamera"]
+script = ExtResource("22_buoni")
+settings = ExtResource("23_xcw7e")
+previousSettings = ExtResource("24_wts72")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/BlueHall/SwitchGroup4/FlyingPotCamera"]
+shape = SubResource("BoxShape3D_cpflb")
+
+[node name="FlyingPot" parent="RampageAct/BlueHall/SwitchGroup4" instance=ExtResource("51_bf61b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 2)
+travelBounds = Vector2(1, 8)
+
+[node name="BlueMajin1" parent="RampageAct/BlueHall/SwitchGroup4" instance=ExtResource("50_v50j3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.5, -14)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+SpawnMode = 1
+
+[node name="BlueMajin2" parent="RampageAct/BlueHall/SwitchGroup4" instance=ExtResource("50_v50j3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1, -17)
+"Spawn Settings/Spawn Travel Time" = 2.0
+"Spawn Settings/Spawn Delay" = 0.2
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+SpawnMode = 1
+
+[node name="BlueMajin3" parent="RampageAct/BlueHall/SwitchGroup4" instance=ExtResource("50_v50j3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 2, -26)
+"Spawn Settings/Spawn Travel Time" = 2.0
+"Spawn Settings/Spawn Delay" = 0.5
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+SpawnMode = 1
+
+[node name="SwitchGroup5" type="Node3D" parent="RampageAct/BlueHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -106)
+
+[node name="SkeletonMajin3" parent="RampageAct/BlueHall/SwitchGroup5" instance=ExtResource("15_buuwb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -11)
+isImmortal = true
+rangeOverride = 10
+
+[node name="SkeletonMajin4" parent="RampageAct/BlueHall/SwitchGroup5" instance=ExtResource("15_buuwb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.40002, 0, -12.7)
+isImmortal = true
+rangeOverride = 10
+
+[node name="Switch" parent="RampageAct/BlueHall/SwitchGroup5" instance=ExtResource("21_hxtrf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+
+[node name="Gate" parent="RampageAct/BlueHall/SwitchGroup5" instance=ExtResource("25_o5nvj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="WarpRed" parent="RampageAct/BlueHall" node_paths=PackedStringArray("warpTarget") instance=ExtResource("14_okxaf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -138)
+warpTarget = NodePath("../../YellowHall/WarpExit")
+
+[node name="FireSoul2" parent="RampageAct/BlueHall" instance=ExtResource("39_1enjy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 8, -130)
+fireSoulIndex = 2
+
+[node name="YellowHall" type="Node3D" parent="RampageAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 900, 0, -488)
+script = ExtResource("9_5uv7q")
+saveVisibilityOnCheckpoint = true
+
+[node name="WarpExit" parent="RampageAct/YellowHall" instance=ExtResource("11_ot83u")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -4.5)
+
+[node name="BlueMajin1" parent="RampageAct/YellowHall" instance=ExtResource("50_v50j3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -35)
+"Spawn Settings/Spawn Travel Time" = 1.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-3, 5, 30)
+"Spawn Settings/Spawn In Offset" = Vector3(-3, -2, -20)
+"Spawn Settings/Spawn Out Offset" = Vector3(-2, 0, -10)
+"Spawn Interval Settings/Enable Spawn Interval" = true
+"Spawn Interval Settings/Spawn Delay" = 1.0
+"Spawn Interval Settings/Separate Despawn Interval" = true
+"Spawn Interval Settings/Despawn Delay" = 2.0
+rangeOverride = 30
+
+[node name="BlueMajin2" parent="RampageAct/YellowHall" instance=ExtResource("50_v50j3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -38)
+"Spawn Settings/Spawn Travel Time" = 1.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-3, 5, 30)
+"Spawn Settings/Spawn In Offset" = Vector3(-3, -2, -20)
+"Spawn Settings/Spawn Out Offset" = Vector3(-2, 0, -10)
+"Spawn Interval Settings/Enable Spawn Interval" = true
+"Spawn Interval Settings/Spawn Delay" = 1.0
+"Spawn Interval Settings/Separate Despawn Interval" = true
+"Spawn Interval Settings/Despawn Delay" = 2.0
+rangeOverride = 30
+
+[node name="BlueMajin3" parent="RampageAct/YellowHall" instance=ExtResource("50_v50j3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -42)
+"Spawn Settings/Spawn Travel Time" = 1.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-3, 5, 30)
+"Spawn Settings/Spawn In Offset" = Vector3(-3, -2, -20)
+"Spawn Settings/Spawn Out Offset" = Vector3(-2, 0, -10)
+"Spawn Interval Settings/Enable Spawn Interval" = true
+"Spawn Interval Settings/Spawn Delay" = 1.0
+"Spawn Interval Settings/Separate Despawn Interval" = true
+"Spawn Interval Settings/Despawn Delay" = 2.0
+rangeOverride = 25
+
+[node name="GrindrailL1" parent="RampageAct/YellowHall" instance=ExtResource("29_tt7yj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.3, -48)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="Rings1" type="Node3D" parent="RampageAct/YellowHall/GrindrailL1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.24538e-07, 1.1, -39)
+script = ExtResource("18_dtbxe")
+Source = ExtResource("19_uaemc")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RampageAct/YellowHall/GrindrailL1/Rings1" instance=ExtResource("19_uaemc")]
+
+[node name="Child02" parent="RampageAct/YellowHall/GrindrailL1/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="RampageAct/YellowHall/GrindrailL1/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child04" parent="RampageAct/YellowHall/GrindrailL1/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child05" parent="RampageAct/YellowHall/GrindrailL1/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="GreenMajin1" parent="RampageAct/YellowHall/GrindrailL1" instance=ExtResource("23_ahl73")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -36)
+"Spawn Interval Settings/Enable Spawn Interval" = true
+"Spawn Interval Settings/Spawn Delay" = 1.5
+"Spawn Interval Settings/Separate Despawn Interval" = true
+"Spawn Interval Settings/Despawn Delay" = 2.0
+rangeOverride = 40
+
+[node name="GrindrailL2" parent="RampageAct/YellowHall" instance=ExtResource("29_tt7yj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.3, -48)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="Rings1" type="Node3D" parent="RampageAct/YellowHall/GrindrailL2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.24538e-07, 1.1, -7)
+script = ExtResource("18_dtbxe")
+Source = ExtResource("19_uaemc")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.8
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RampageAct/YellowHall/GrindrailL2/Rings1" instance=ExtResource("19_uaemc")]
+
+[node name="Child02" parent="RampageAct/YellowHall/GrindrailL2/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8)
+
+[node name="Child03" parent="RampageAct/YellowHall/GrindrailL2/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
+
+[node name="Child04" parent="RampageAct/YellowHall/GrindrailL2/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.4)
+
+[node name="Child05" parent="RampageAct/YellowHall/GrindrailL2/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="Child06" parent="RampageAct/YellowHall/GrindrailL2/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child07" parent="RampageAct/YellowHall/GrindrailL2/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
+
+[node name="Child08" parent="RampageAct/YellowHall/GrindrailL2/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.6)
+
+[node name="Child09" parent="RampageAct/YellowHall/GrindrailL2/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.4)
+
+[node name="Child10" parent="RampageAct/YellowHall/GrindrailL2/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.2)
+
+[node name="GreenMajin1" parent="RampageAct/YellowHall/GrindrailL2" instance=ExtResource("23_ahl73")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -59)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Spawn Interval Settings/Enable Spawn Interval" = true
+"Spawn Interval Settings/Spawn Delay" = 2.0
+"Spawn Interval Settings/Separate Despawn Interval" = false
+rangeOverride = 35
+
+[node name="GrindrailR1" parent="RampageAct/YellowHall" instance=ExtResource("29_tt7yj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.3, -48)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="Rings1" type="Node3D" parent="RampageAct/YellowHall/GrindrailR1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.24538e-07, 1.1, -30)
+script = ExtResource("18_dtbxe")
+Source = ExtResource("19_uaemc")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.8
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RampageAct/YellowHall/GrindrailR1/Rings1" instance=ExtResource("19_uaemc")]
+
+[node name="Child02" parent="RampageAct/YellowHall/GrindrailR1/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8)
+
+[node name="Child03" parent="RampageAct/YellowHall/GrindrailR1/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
+
+[node name="Child04" parent="RampageAct/YellowHall/GrindrailR1/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.4)
+
+[node name="Child05" parent="RampageAct/YellowHall/GrindrailR1/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="Child06" parent="RampageAct/YellowHall/GrindrailR1/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child07" parent="RampageAct/YellowHall/GrindrailR1/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
+
+[node name="Child08" parent="RampageAct/YellowHall/GrindrailR1/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.6)
+
+[node name="Child09" parent="RampageAct/YellowHall/GrindrailR1/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.4)
+
+[node name="Child10" parent="RampageAct/YellowHall/GrindrailR1/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.2)
+
+[node name="GreenMajin1" parent="RampageAct/YellowHall/GrindrailR1" instance=ExtResource("23_ahl73")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Spawn Interval Settings/Enable Spawn Interval" = true
+"Spawn Interval Settings/Spawn Delay" = 1.0
+"Spawn Interval Settings/Separate Despawn Interval" = true
+"Spawn Interval Settings/Despawn Delay" = 3.0
+rangeOverride = 15
+
+[node name="GrindrailR2" parent="RampageAct/YellowHall" instance=ExtResource("29_tt7yj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0.3, -48)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="Rings1" type="Node3D" parent="RampageAct/YellowHall/GrindrailR2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.24538e-07, 1.1, -10)
+script = ExtResource("18_dtbxe")
+Source = ExtResource("19_uaemc")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RampageAct/YellowHall/GrindrailR2/Rings1" instance=ExtResource("19_uaemc")]
+
+[node name="Child02" parent="RampageAct/YellowHall/GrindrailR2/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="RampageAct/YellowHall/GrindrailR2/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child04" parent="RampageAct/YellowHall/GrindrailR2/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child05" parent="RampageAct/YellowHall/GrindrailR2/Rings1" instance=ExtResource("19_uaemc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="GreenMajin1" parent="RampageAct/YellowHall/GrindrailR2" instance=ExtResource("23_ahl73")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -53)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Spawn Interval Settings/Enable Spawn Interval" = true
+"Spawn Interval Settings/Spawn Delay" = 2.0
+"Spawn Interval Settings/Separate Despawn Interval" = false
+rangeOverride = 30
+
+[node name="FireSoul3" parent="RampageAct/YellowHall" instance=ExtResource("39_1enjy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -81)
+fireSoulIndex = 3
+
+[node name="Sickle1" parent="RampageAct/YellowHall" instance=ExtResource("30_4lcoe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.5, -56)
+rotationAmount = 40.0
+cycleLength = 5.0
+chainLength = 7
+
+[node name="Sickle2" parent="RampageAct/YellowHall" instance=ExtResource("30_4lcoe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 11.5, -79)
+rotationAmount = 20.0
+cycleLength = 3.0
+currentRatio = 1.0
+isSwingingRight = false
+chainLength = 7
+
+[node name="Sickle3" parent="RampageAct/YellowHall" instance=ExtResource("30_4lcoe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 11.5, -80)
+rotationAmount = 20.0
+cycleLength = 2.5
+currentRatio = 0.0
+isSwingingRight = false
+chainLength = 7
+
+[node name="Sickle4" parent="RampageAct/YellowHall" instance=ExtResource("30_4lcoe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.5, -99)
+cycleLength = 4.0
+currentRatio = 0.4
+chainLength = 7
+
+[node name="Sickle5" parent="RampageAct/YellowHall" instance=ExtResource("30_4lcoe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.5, -104)
+cycleLength = 3.0
+currentRatio = 0.6
+chainLength = 7
+
+[node name="SkeletonMajin1" parent="RampageAct/YellowHall" instance=ExtResource("15_buuwb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -114)
+isImmortal = true
+
+[node name="SkeletonMajin4" parent="RampageAct/YellowHall" instance=ExtResource("15_buuwb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, -117.6)
+isImmortal = true
+
+[node name="SkeletonMajin5" parent="RampageAct/YellowHall" instance=ExtResource("15_buuwb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -119.6)
+
+[node name="SkeletonMajin6" parent="RampageAct/YellowHall" instance=ExtResource("15_buuwb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, -117.5)
+isImmortal = true
+
+[node name="SkeletonMajin8" parent="RampageAct/YellowHall" instance=ExtResource("15_buuwb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -120.1)
+
+[node name="SkeletonMajin9" parent="RampageAct/YellowHall" instance=ExtResource("15_buuwb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -120.6)
+
+[node name="EnemyStone1" parent="RampageAct/YellowHall" instance=ExtResource("16_hmths")]
+transform = Transform3D(2.5, 0, 0, 0, 3, 0, 0, 0, 3, -5, 3, -125)
+enemyCount = 1
+
+[node name="Switch1" parent="RampageAct/YellowHall" instance=ExtResource("21_hxtrf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.1, -125)
+
+[node name="EnemyStone2" parent="RampageAct/YellowHall" instance=ExtResource("16_hmths")]
+transform = Transform3D(2.5, 0, 0, 0, 3, 0, 0, 0, 3, 0, 3, -125)
+enemyCount = 1
+
+[node name="Switch2" parent="RampageAct/YellowHall" instance=ExtResource("21_hxtrf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -130)
+
+[node name="EnemyStone3" parent="RampageAct/YellowHall" instance=ExtResource("16_hmths")]
+transform = Transform3D(2.5, 0, 0, 0, 3, 0, 0, 0, 3, 5, 3, -125)
+enemyCount = 1
+
+[node name="Switch3" parent="RampageAct/YellowHall" instance=ExtResource("21_hxtrf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.1, -125)
+
+[node name="RedMajin3" parent="RampageAct/YellowHall" instance=ExtResource("24_ipntq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -130)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 30
+"Attack Settings/Attack Instantly" = true
+
+[node name="RedMajin2" parent="RampageAct/YellowHall" instance=ExtResource("24_ipntq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -134)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 30
+"Attack Settings/Attack Instantly" = true
+
+[node name="RedMajin1" parent="RampageAct/YellowHall" instance=ExtResource("24_ipntq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -130)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 30
+"Attack Settings/Attack Instantly" = true
+
+[node name="WarpRed" parent="RampageAct/YellowHall" node_paths=PackedStringArray("warpTarget") instance=ExtResource("14_okxaf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -138.5)
+warpTarget = NodePath("../../Throne/WarpExit")
+
+[connection signal="Teleport" from="RampageAct/Throne/Warp" to="Static/Visuals/01Throne" method="Deactivate"]
+[connection signal="Teleport" from="RampageAct/Throne/Warp" to="Static/Visuals/02HallA" method="Activate"]
+[connection signal="Teleport" from="RampageAct/Throne/Warp" to="Static/Trigger/Path/HallRedPath" method="Activate"]
+[connection signal="Teleport" from="RampageAct/Throne/Warp" to="Static/Trigger/Checkpoint/HallRed" method="Activate" flags=3]
+[connection signal="Teleport" from="RampageAct/Throne/Warp" to="RampageAct/Throne" method="Deactivate"]
+[connection signal="Teleport" from="RampageAct/Throne/Warp" to="RampageAct/RedHall" method="Activate"]
+[connection signal="Spawned" from="RampageAct/RedHall/SkeletonMajin1" to="RampageAct/RedHall/SkeletonMajin2" method="Spawn"]
+[connection signal="Spawned" from="RampageAct/RedHall/SkeletonMajin1" to="RampageAct/RedHall/SkeletonMajin3" method="Spawn"]
+[connection signal="Activated" from="RampageAct/RedHall/Switch1" to="RampageAct/RedHall/Switch1/GreenMajin1" method="Spawn"]
+[connection signal="Activated" from="RampageAct/RedHall/Switch1" to="RampageAct/RedHall/Switch1/GreenMajin2" method="Spawn"]
+[connection signal="Activated" from="RampageAct/RedHall/Switch1" to="RampageAct/RedHall/Switch1/GreenMajin3" method="Spawn"]
+[connection signal="Activated" from="RampageAct/RedHall/Switch2" to="RampageAct/RedHall/Switch2/GreenMajin" method="Spawn"]
+[connection signal="Activated" from="RampageAct/RedHall/Switch3" to="RampageAct/RedHall/Switch3/RedMajin" method="Spawn"]
+[connection signal="Teleport" from="RampageAct/RedHall/WarpRed" to="Static/Visuals/02HallA" method="Deactivate"]
+[connection signal="Teleport" from="RampageAct/RedHall/WarpRed" to="Static/Visuals/03HallB" method="Activate"]
+[connection signal="Teleport" from="RampageAct/RedHall/WarpRed" to="Static/Trigger/Path/HallBluePath" method="Activate"]
+[connection signal="Teleport" from="RampageAct/RedHall/WarpRed" to="Static/Trigger/Checkpoint/HallBlue" method="Activate" flags=3]
+[connection signal="Teleport" from="RampageAct/RedHall/WarpRed" to="RampageAct/RedHall" method="Deactivate"]
+[connection signal="Teleport" from="RampageAct/RedHall/WarpRed" to="RampageAct/BlueHall" method="Activate"]
+[connection signal="Activated" from="RampageAct/BlueHall/SwitchGroup1/Switch" to="RampageAct/BlueHall/SwitchGroup1/Gate" method="Activate"]
+[connection signal="Activated" from="RampageAct/BlueHall/SwitchGroup2/Switch" to="RampageAct/BlueHall/SwitchGroup2/Gate" method="Activate"]
+[connection signal="Activated" from="RampageAct/BlueHall/SwitchGroup3/Switch1" to="RampageAct/BlueHall/SwitchGroup3/GreenMajin1" method="Spawn"]
+[connection signal="Activated" from="RampageAct/BlueHall/SwitchGroup3/Switch2" to="RampageAct/BlueHall/SwitchGroup3/GreenMajin2" method="Spawn"]
+[connection signal="Activated" from="RampageAct/BlueHall/SwitchGroup3/Switch3" to="RampageAct/BlueHall/SwitchGroup3/Gate" method="Activate"]
+[connection signal="Activated" from="RampageAct/BlueHall/SwitchGroup4/Switch1" to="RampageAct/BlueHall/SwitchGroup4/Gate" method="Activate"]
+[connection signal="Activated" from="RampageAct/BlueHall/SwitchGroup4/Switch2" to="RampageAct/BlueHall/SwitchGroup4/BlueMajin1" method="Spawn"]
+[connection signal="Activated" from="RampageAct/BlueHall/SwitchGroup4/Switch2" to="RampageAct/BlueHall/SwitchGroup4/BlueMajin2" method="Spawn"]
+[connection signal="Activated" from="RampageAct/BlueHall/SwitchGroup4/Switch2" to="RampageAct/BlueHall/SwitchGroup4/BlueMajin3" method="Spawn"]
+[connection signal="Activated" from="RampageAct/BlueHall/SwitchGroup5/Switch" to="RampageAct/BlueHall/SwitchGroup5/Gate" method="Activate"]
+[connection signal="Teleport" from="RampageAct/BlueHall/WarpRed" to="Static/Visuals/03HallB" method="Deactivate"]
+[connection signal="Teleport" from="RampageAct/BlueHall/WarpRed" to="Static/Visuals/04HallC" method="Activate"]
+[connection signal="Teleport" from="RampageAct/BlueHall/WarpRed" to="Static/Trigger/Path/HallYellowPath" method="Activate"]
+[connection signal="Teleport" from="RampageAct/BlueHall/WarpRed" to="Static/Trigger/Checkpoint/HallTreasure" method="Activate" flags=3]
+[connection signal="Teleport" from="RampageAct/BlueHall/WarpRed" to="RampageAct/BlueHall" method="Deactivate"]
+[connection signal="Teleport" from="RampageAct/BlueHall/WarpRed" to="RampageAct/YellowHall" method="Activate"]
+[connection signal="Defeated" from="RampageAct/YellowHall/SkeletonMajin5" to="RampageAct/YellowHall/EnemyStone3" method="IncrementCounter"]
+[connection signal="Defeated" from="RampageAct/YellowHall/SkeletonMajin8" to="RampageAct/YellowHall/EnemyStone1" method="IncrementCounter"]
+[connection signal="Defeated" from="RampageAct/YellowHall/SkeletonMajin9" to="RampageAct/YellowHall/EnemyStone2" method="IncrementCounter"]
+[connection signal="Activated" from="RampageAct/YellowHall/Switch1" to="RampageAct/YellowHall/RedMajin1" method="Spawn"]
+[connection signal="Activated" from="RampageAct/YellowHall/Switch2" to="RampageAct/YellowHall/RedMajin2" method="Spawn"]
+[connection signal="Activated" from="RampageAct/YellowHall/Switch3" to="RampageAct/YellowHall/RedMajin3" method="Spawn"]
+[connection signal="Teleport" from="RampageAct/YellowHall/WarpRed" to="Static/Visuals/01Throne" method="Activate"]
+[connection signal="Teleport" from="RampageAct/YellowHall/WarpRed" to="Static/Visuals/04HallC" method="Deactivate"]
+[connection signal="Teleport" from="RampageAct/YellowHall/WarpRed" to="Static/Trigger/Path/ThronePathReverse" method="Activate"]
+[connection signal="Teleport" from="RampageAct/YellowHall/WarpRed" to="RampageAct/YellowHall" method="Deactivate"]
+
+[editable path="Static"]
+[editable path="Static/Collision"]
