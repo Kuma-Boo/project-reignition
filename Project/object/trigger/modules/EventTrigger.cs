@@ -165,8 +165,8 @@ public partial class EventTrigger : StageTriggerModule
 
 		if (autoRespawn)
 			StageSettings.Instance.Respawned += Respawn;
-		Respawn();
 
+		Respawn();
 		PlayerStandin = GetNodeOrNull<Node3D>(playerStandin);
 	}
 

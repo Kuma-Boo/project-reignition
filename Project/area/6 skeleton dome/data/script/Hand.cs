@@ -7,6 +7,7 @@ namespace Project.Gameplay.Objects;
 /// <summary> Controls the bone hand in Skeleton Dome. </summary>
 public partial class Hand : PathFollow3D
 {
+	[Signal] public delegate void PlayerInteractedEventHandler();
 	/// <summary> Emitted when the hand catches the player and we need to teleport. </summary>
 	[Signal] public delegate void PlayerCaughtEventHandler();
 
@@ -63,12 +64,14 @@ public partial class Hand : PathFollow3D
 		if (isGrabbingPlayer || !a.IsInGroup("player detection"))
 			return;
 
-		LaunchSettings settings = LaunchSettings.Create(Player.GlobalPosition, root.GlobalPosition, 2f, true);
+		LaunchSettings settings = LaunchSettings.Create(Player.GlobalPosition, root.GlobalPosition + Vector3.Up * 0.5f, 2f, true);
 		Player.StartLauncher(settings);
 		Player.Animator.StartSpin();
 
 		isGrabbingPlayer = true;
 		animator.Play("grab");
+
+		EmitSignal(SignalName.PlayerInteracted);
 	}
 
 	/// <summary> Copied from CaptainBemoth.cs". </summary>

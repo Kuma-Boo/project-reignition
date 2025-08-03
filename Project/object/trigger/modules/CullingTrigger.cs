@@ -150,7 +150,10 @@ public partial class CullingTrigger : StageTriggerModule
 			return;
 		}
 
-		SetDeferred("visible", isActive);
-		SetDeferred("process_mode", (long)(isActive ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled));
+		GetTree().CreateTimer(PhysicsManager.physicsDelta, false, true).Timeout += () =>
+		{
+			SetDeferred("visible", isActive);
+			SetDeferred("process_mode", (long)(isActive ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled));
+		};
 	}
 }

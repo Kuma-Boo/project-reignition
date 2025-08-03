@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://slvtrs84m8s0"]
+[gd_scene load_steps=37 format=3 uid="uid://slvtrs84m8s0"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_drnsg"]
 [ext_resource type="PackedScene" uid="uid://bsd07snxevqk5" path="res://area/6 skeleton dome/act 3/environment/01Throne.tscn" id="1_gpt5a"]
@@ -25,6 +25,8 @@
 [ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="22_44cky"]
 [ext_resource type="Resource" uid="uid://bj30jk812uvqh" path="res://area/6 skeleton dome/act 1/camera/SidleCam.tres" id="23_cpjtx"]
 [ext_resource type="Script" uid="uid://np5vcxq01ii8" path="res://object/trigger/modules/CheckpointTrigger.cs" id="25_vay8w"]
+[ext_resource type="Resource" uid="uid://dthe1vju4bxlo" path="res://area/6 skeleton dome/act 3/camera/ArenaCam.tres" id="26_q2jct"]
+[ext_resource type="Resource" uid="uid://bu377gi4d8wv5" path="res://area/6 skeleton dome/act 3/camera/SpiralCam.tres" id="27_vvehx"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_n6xm6"]
 size = Vector3(150, 5, 150)
@@ -651,6 +653,7 @@ path = NodePath("../../../../Path/Sidle")
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
 script = ExtResource("22_44cky")
 settings = ExtResource("23_cpjtx")
+previousSettings = ExtResource("27_vvehx")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/SidleTrigger"]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
@@ -730,12 +733,14 @@ transform = Transform3D(-0.766044, 0, -0.642788, 0, 1, 0, 0.642788, 0, -0.766044
 script = ExtResource("25_vay8w")
 PlayerPath = NodePath("../../../Path/Arena")
 CameraPath = NodePath("../../../Path/Arena")
+CameraSettings = ExtResource("26_q2jct")
 
 [node name="Spiral" type="Node3D" parent="Trigger/Checkpoint" node_paths=PackedStringArray("PlayerPath", "CameraPath")]
 transform = Transform3D(0.766044, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.766044, 901.449, 9.84368, -1347.78)
 script = ExtResource("25_vay8w")
 PlayerPath = NodePath("../../../Path/Spiral")
 CameraPath = NodePath("../../../Path/Spiral")
+CameraSettings = ExtResource("27_vvehx")
 
 [node name="DemoCamera" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 500, 4, -500)

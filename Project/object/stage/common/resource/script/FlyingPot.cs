@@ -9,6 +9,7 @@ namespace Project.Gameplay.Objects;
 public partial class FlyingPot : Node3D
 {
 	[Signal] public delegate void PotEnteredEventHandler();
+	[Signal] public delegate void PotExitedEventHandler();
 
 	[Export] public Vector2 travelBounds;
 	[Export] public float boundOffset;
@@ -159,6 +160,7 @@ public partial class FlyingPot : Node3D
 		exitSFX.Play();
 		animationTree.Set(EnterTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		cameraTrigger?.Deactivate();
+		EmitSignal(SignalName.PotExited);
 	}
 
 	public void Shatter()

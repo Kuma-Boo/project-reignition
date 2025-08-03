@@ -9,6 +9,7 @@ public partial class Bone : Node3D
 {
 	[Signal] public delegate void RespawnedEventHandler();
 	[Signal] public delegate void CollectedEventHandler();
+	[Signal] public delegate void JumpFinishedEventHandler();
 	[Signal] public delegate void ObjectiveFinishedEventHandler();
 
 	[Export] private Area3D area;
@@ -65,13 +66,13 @@ public partial class Bone : Node3D
 		Player.Animator.StartSpin(2f);
 		Player.Effect.StartSpinFX();
 
-		Player.Connect(PlayerController.SignalName.LaunchFinished, Callable.From(() => OnObjectiveFinished()), (uint)ConnectFlags.Deferred + (uint)ConnectFlags.OneShot);
+		Player.Connect(PlayerController.SignalName.LaunchFinished, Callable.From(() => OnJumpFinished()), (uint)ConnectFlags.Deferred + (uint)ConnectFlags.OneShot);
 	}
 
-	private void OnObjectiveFinished()
+	private void OnJumpFinished()
 	{
 		Despawn();
-		EmitSignal(SignalName.ObjectiveFinished);
+		EmitSignal(SignalName.JumpFinished);
 	}
 
 	private void OnEntered(Area3D a)
@@ -106,6 +107,7 @@ public partial class Bone : Node3D
 
 		if (Stage.CurrentObjectiveCount == Stage.Data.MissionObjectiveCount)
 		{
+			EmitSignal(SignalName.ObjectiveFinished);
 			StartTeleport();
 			return;
 		}
