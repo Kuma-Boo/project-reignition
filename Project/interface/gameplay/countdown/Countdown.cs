@@ -9,15 +9,12 @@ public partial class Countdown : Control
 	public static bool IsCountdownActive { get; private set; }
 	public static Countdown Instance { get; private set; }
 
-	[Signal]
-	public delegate void CountdownStartedEventHandler();
-	[Signal]
-	public delegate void CountdownFinishedEventHandler();
+	[Signal] public delegate void CountdownStartedEventHandler();
+	[Signal] public delegate void CountdownFinishedEventHandler();
 
-	[Export]
-	private Node2D tickParent;
-	[Export]
-	private AnimationPlayer animator;
+	[Export] private Node2D tickParent;
+	[Export] private Node2D[] tickPositions;
+	[Export] private AnimationPlayer animator;
 
 	public override void _EnterTree() => Instance = this;
 	public override void _Ready() => StageSettings.Instance.LevelStarted += StartCountdown;
@@ -56,10 +53,10 @@ public partial class Countdown : Control
 		EmitSignal(SignalName.CountdownFinished);
 	}
 
-	//The ring animation is too tedious to animate by hand, so I'm using a tween instead.
+	// The ring animation is too tedious to animate by hand, so I'm using a tween instead.
 	private void TweenCountdownTicks()
 	{
-		//Tween seems to create a temporary "memory leak" but the garbage collector cleans it up later
+		// Tween seems to create a temporary "memory leak" but the garbage collector cleans it up later
 		Tween countdownTweener = CreateTween().SetTrans(Tween.TransitionType.Sine).SetParallel(true);
 
 		for (int i = 0; i < tickParent.GetChildCount(); i++)
@@ -82,5 +79,9 @@ public partial class Countdown : Control
 			countdownTweener.TweenProperty(tick, "position", tick.Position, .2f).From(targetPosition).SetDelay(delay + .1f);
 			countdownTweener.TweenProperty(tick, "modulate", Colors.Transparent, .25f).SetDelay(delay);
 		}
+
+		tickParent.GlobalPosition = tickPositions[0].GlobalPosition;
+		countdownTweener.TweenProperty(tickParent, "global_position", tickPositions[1].GlobalPosition, 0.3f).SetDelay(1.67f);
+		countdownTweener.TweenProperty(tickParent, "global_position", tickPositions[2].GlobalPosition, 0.3f).SetDelay(2.67f);
 	}
 }
