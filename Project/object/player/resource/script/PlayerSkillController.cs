@@ -29,6 +29,8 @@ public partial class PlayerSkillController : Node3D
 		SetUpSkills();
 		timeBreakAnimator.Play("RESET");
 		speedBreakAnimator.Play("RESET");
+
+		StageSettings.Instance.LevelDemoStarted += CancelSpeedbreakFX;
 	}
 
 	#region Skills
@@ -467,16 +469,7 @@ public partial class PlayerSkillController : Node3D
 		}
 		else
 		{
-			if (!StageSettings.Instance.IsLevelIngame)
-			{
-				speedBreakAnimator.Play("RESET");
-				speedBreakAnimator.Advance(0.0);
-			}
-			else
-			{
-				speedBreakAnimator.Play("stop");
-			}
-
+			speedBreakAnimator.Play("stop");
 			speedBreakSFX.Stream = speedBreakDeactivate;
 			speedBreakSFX.Play();
 
@@ -490,6 +483,12 @@ public partial class PlayerSkillController : Node3D
 		}
 
 		HeadsUpDisplay.Instance?.UpdateSoulGaugeColor(IsSoulGaugeCharged);
+	}
+
+	private void CancelSpeedbreakFX()
+	{
+		speedBreakAnimator.Play("RESET");
+		speedBreakAnimator.Advance(0.0);
 	}
 
 	public void EnableBreakSkills() => IsTimeBreakEnabled = IsSpeedBreakEnabled = true;
