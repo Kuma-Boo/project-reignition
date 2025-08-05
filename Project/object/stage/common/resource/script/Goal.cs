@@ -46,7 +46,12 @@ public partial class Goal : Area3D
 			return;
 		}
 
-		if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Objective || Stage.Data.MissionObjectiveCount != 0)
-			Stage.FinishLevel(false); // Failed to complete the objective.
+		if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Objective)
+		{
+			Stage.FinishLevel(Stage.CurrentObjectiveCount == Stage.Data.MissionObjectiveCount);
+			return;
+		}
+
+		Stage.FinishLevel(false);
 	}
 }

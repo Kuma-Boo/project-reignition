@@ -12,7 +12,7 @@ namespace Project.Gameplay.Triggers
 
 		public override void Activate()
 		{
-			Player.AddLockoutData(lockoutData);
+			Player.CallDeferred(PlayerController.MethodName.AddLockoutData, lockoutData);
 
 			if (!Player.IsConnected(PlayerController.SignalName.Defeated, new(this, MethodName.Deactivate)))
 				Player.Connect(PlayerController.SignalName.Defeated, new(this, MethodName.Deactivate), (uint)ConnectFlags.OneShot + (uint)ConnectFlags.Deferred);

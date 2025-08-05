@@ -138,10 +138,11 @@ public partial class BonusManager : VBoxContainer
 	/// <summary> Checks whether the enemy chain should end. </summary>
 	public void UpdateEnemyChain()
 	{
-		if (!Player.IsOnGround) return; // Chain is never counted when the player is in the air
-		if (Player.AllowLandingGrind || Player.IsGrinding) return; // Ignore Grindrails
-		if (Player.ExternalController != null) return; // Chains only end during normal movement
-		if (Player.IsBouncing) return;
+		if (ResetEnemyChainTimer())
+		{
+			enemyChainTimer = 0;
+			return;
+		}
 
 		if (Player.Skills.IsSpeedBreakActive)
 		{
@@ -152,6 +153,16 @@ public partial class BonusManager : VBoxContainer
 		enemyChainTimer = Mathf.MoveToward(enemyChainTimer, 0, PhysicsManager.physicsDelta);
 		if (Mathf.IsZeroApprox(enemyChainTimer) && activeEnemyComboExtenders.Count == 0)
 			FinishEnemyChain();
+	}
+
+	private bool ResetEnemyChainTimer()
+	{
+		if (!Player.IsOnGround) return true; // Chain is never counted when the player is in the air
+		if (Player.AllowLandingGrind || Player.IsGrinding) return true; // Ignore Grindrails
+		if (Player.ExternalController != null) return true; // Chains only end during normal movement
+		if (Player.IsBouncing) return true;
+
+		return false;
 	}
 
 	/// <summary> Ends the current enemy chain. </summary>

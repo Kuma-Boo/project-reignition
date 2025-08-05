@@ -120,6 +120,7 @@ public partial class TeleportState : PlayerState
 
 	private void ApplyTeleport()
 	{
+		Player.IsMovingBackward = false;
 		Player.GlobalPosition = Trigger.WarpPosition;
 		Player.ResetPhysicsInterpolation();
 

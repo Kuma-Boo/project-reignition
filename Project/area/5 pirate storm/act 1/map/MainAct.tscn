@@ -239,7 +239,7 @@ point_count = 10
 
 [sub_resource type="Curve3D" id="Curve3D_vmmrf"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 7.5, 0, 0, -3.75, 0, 2, 9, 0, 40, 17.5, 0, 20, -10, 0, -2.5, 2.5, 0, 20, 41, 0, 2.5, -12.5, 0, 0, 0, 0, 0, 65, 0, 0, 0, 0, 0, 0, 0, 0, 75),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 7.5, 0, -1.07758, -2.56318, 0, 2.773, 6.596, 0, 39.416, 17.794, 0, 20.287, -10.143, 0, -6.773, 3.386, 0, 20, 41, 0, 3.278, -11.396, 0, -1.448, 5.034, 0, 0.77, 64.827, 0, 0, 0, 0, 0, 0, 0, 0, 75),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0)
 }
 point_count = 6
@@ -256,7 +256,7 @@ point_count = 3
 
 [sub_resource type="Curve3D" id="Curve3D_wf3po"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 25, 0, -1, -3, 0.062, 5, 16.188, 0.032, 2, 43.414, 0.0594482, -28.9438, -5.50635, -0.0222168, 17.4436, 2.35522, 0.0136719, 39.2402, 62.356, 0.0101318, -3.96813, -5.70703, 0.0114746, 4.4967, 8.1228, 0, 73, 69, 0.00158691, 43.3749, -40.4287, 0, -20, 26, 0, 33, 160, 0, 2, -60, 0, 0, 0, 0, 0, 260, 0, 0, 0, 0, 0, 0, 0, 0, 300),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.02771, 0.0799236, 12.2705, 0, 0, 25, -0.00542004, -0.696523, -3.08461, 0.0162354, 2.08639, 9.23975, 0.0172119, 3.15983, 47.603, 0, -28.944, -5.506, 0, 17.444, 2.355, 0, 39.24, 62.356, 0.00463867, -3.13714, -2.55965, -0.00837894, 5.66669, 4.62356, 0, 71.607, 67.337, 0, 44.344, -41.221, 0, -24.349, 22.634, 0, 34.727, 160.362, 0, 2, -60, 0, 0, 0, 0, 0, 260, 0, 0, 0, 0, 0, 0, 0, 0, 300),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 8
@@ -293,6 +293,9 @@ textKeys = Array[String](["pir_surf_jump3_so"])
 
 [node name="RainCollision" parent="Static/Rain" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 7.45058e-09, 0, -7.45058e-09, 1, -1, 7.47332e-09, 1)
+
+[node name="Camera" parent="Static/DemoCamera" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0.996195, 0.0871558, 0, -0.0871558, 0.996195, 0, 0, 0)
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -1089,6 +1092,7 @@ Amount = 6
 Shape = 2
 Path = NodePath("../../../../Static/Path/IslandPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 4.0
 "Horizontal Offset" = SubResource("Curve_hcghg")
@@ -1207,6 +1211,7 @@ Amount = 8
 Shape = 2
 Path = NodePath("../../../../Static/Path/IslandPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 2.5
 "Horizontal Offset" = null
@@ -1398,6 +1403,7 @@ Amount = 18
 Shape = 2
 Path = NodePath("../../../../Static/Path/IslandPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 1.8
 "Horizontal Offset" = null
@@ -1478,6 +1484,7 @@ Amount = 15
 Shape = 2
 Path = NodePath("../../../../Static/Path/IslandPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 2.5
 "Horizontal Offset" = SubResource("Curve_hlxfd")
@@ -1537,6 +1544,7 @@ Amount = 18
 Shape = 2
 Path = NodePath("../../../../Static/Path/IslandPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 2.0
 "Horizontal Offset" = null
@@ -1849,7 +1857,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="Blade" parent="MainAct/Islands/Island4/MovingBlade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1, -1.49012e-08, -2.57572e-14, 0, -4.37114e-08, -1, 1.49012e-08, 1, -4.37115e-08, 0, 0, 0)
+transform = Transform3D(1, -1.49012e-08, -2.66454e-14, 0, -4.37114e-08, -1, 1.49012e-08, 1, -4.37115e-08, 0, 0, 0)
 
 [node name="MovingBlade2" type="Node3D" parent="MainAct/Islands/Island4"]
 transform = Transform3D(0.990268, 0, 0.139173, 0, 1, 0, -0.139173, 0, 0.990268, -30.323, 0.3, 6.98822)
@@ -2004,6 +2012,7 @@ Amount = 8
 Shape = 2
 Path = NodePath("../../../Static/Path/CannonballPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 2.0
 "Horizontal Offset" = SubResource("Curve_ot04w")
@@ -2042,6 +2051,7 @@ Amount = 8
 Shape = 2
 Path = NodePath("../../../Static/Path/CannonballPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 2.0
 "Horizontal Offset" = null
@@ -2080,6 +2090,7 @@ Amount = 8
 Shape = 2
 Path = NodePath("../../../Static/Path/CannonballPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 2.0
 "Horizontal Offset" = SubResource("Curve_c8avs")
@@ -3592,6 +3603,7 @@ Amount = 10
 Shape = 2
 Path = NodePath("../../../Static/Path/GrottoPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 4.0
 "Horizontal Offset" = null
@@ -3788,6 +3800,7 @@ Amount = 8
 Shape = 2
 Path = NodePath("../../../Static/Path/GrottoPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 4.0
 "Horizontal Offset" = null
@@ -4068,6 +4081,7 @@ Amount = 5
 Shape = 2
 Path = NodePath("../../../Static/Path/CavePath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 3.0
 "Horizontal Offset" = null
@@ -4096,6 +4110,7 @@ Amount = 4
 Shape = 2
 Path = NodePath("../../../Static/Path/CavePath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 5.0
 "Horizontal Offset" = null
@@ -4128,6 +4143,7 @@ Amount = 4
 Shape = 2
 Path = NodePath("../../../Static/Path/CavePath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 4.0
 "Horizontal Offset" = SubResource("Curve_6rj8d")
@@ -4320,6 +4336,7 @@ Amount = 6
 Shape = 2
 Path = NodePath("../../../Static/Path/CavePath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 3.0
 "Horizontal Offset" = null
@@ -4518,7 +4535,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup3/Blade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(0.999998, 2.35438e-06, 8.76188e-06, -5.93066e-06, 1, -4.29153e-06, 2.41399e-06, -3.65078e-07, 0.999993, 0, 0, 0)
+transform = Transform3D(0.999999, 2.35438e-06, 8.76188e-06, -6.57141e-06, 1, -4.28408e-06, 3.09944e-06, -3.65078e-07, 0.999993, 0, 0, 0)
 playSFX = false
 
 [node name="Blade2" type="Node3D" parent="MainAct/Cave/BladeGroup3"]
@@ -4582,7 +4599,7 @@ Movement/Angle = 90.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup4/Blade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(0.999998, 2.22045e-15, -6.10948e-07, -9.31323e-09, 1, -6.27479e-08, -6.10948e-07, -4.00469e-08, 0.999998, -0.416138, 0, 3.05176e-05)
+transform = Transform3D(0.999998, 2.22045e-15, -6.10948e-07, -9.31323e-09, 1, -6.27479e-08, -5.96046e-07, -4.00469e-08, 0.999998, -0.416138, 0, 3.05176e-05)
 playSFX = false
 
 [node name="Blade2" type="Node3D" parent="MainAct/Cave/BladeGroup4"]
@@ -5199,13 +5216,19 @@ transform = Transform3D(0.819151, 0, 0.573577, 0, 1, 0, -0.573577, 0, 0.819151, 
 script = ExtResource("5_mrnau")
 textKeys = Array[String](["pir_surf_so", "pir_surf_sh"])
 
+[node name="Path" type="Node3D" parent="MainAct/Surf/SurfJump/Jump" node_paths=PackedStringArray("path")]
+transform = Transform3D(0.819151, 0, 0.573577, 0, 1, 0, -0.573577, 0, 0.819151, -17.1642, 7.3, -13.6448)
+script = ExtResource("51_01wgf")
+path = NodePath("../../../../../Static/Path/SurfboardPath")
+
 [node name="Camera" type="Node3D" parent="MainAct/Surf/SurfJump"]
 transform = Transform3D(0.819152, 0, -0.573577, 0, 1, 0, 0.573577, 0, 0.819152, 6.23376, -7.3, 21.0222)
 script = ExtResource("21_1aofs")
 settings = ExtResource("64_4ojec")
 
-[node name="Surfboard" parent="MainAct/Surf/SurfJump" node_paths=PackedStringArray("path") instance=ExtResource("58_giu0j")]
+[node name="Surfboard" parent="MainAct/Surf/SurfJump" node_paths=PackedStringArray("clearCameraTrigger", "path") instance=ExtResource("58_giu0j")]
 transform = Transform3D(0.819151, 0, -0.573576, 0, 1, 0, 0.573576, 0, 0.819151, 6.23401, -7.3, 21.0227)
+clearCameraTrigger = NodePath("../../ClearCamera")
 path = NodePath("../../../../Static/Path/SurfboardPath")
 
 [node name="DefeatDialog" type="Node3D" parent="MainAct/Surf/SurfJump/Surfboard"]
@@ -5230,15 +5253,12 @@ settings = ExtResource("70_dq5fv")
 
 [node name="HighJumpCamera" type="Node3D" parent="MainAct/Surf/SurfJump/Surfboard"]
 script = ExtResource("21_1aofs")
+transitionTime = 1.0
 settings = ExtResource("70_l0qrm")
 
 [node name="DefeatCamera" type="Node3D" parent="MainAct/Surf/SurfJump/Surfboard"]
 script = ExtResource("21_1aofs")
 settings = ExtResource("71_rdmy0")
-
-[node name="ClearCamera" type="Node3D" parent="MainAct/Surf/SurfJump/Surfboard"]
-script = ExtResource("21_1aofs")
-settings = ExtResource("72_rdmy0")
 
 [node name="Path" type="Node3D" parent="MainAct/Surf/SurfJump/Surfboard" node_paths=PackedStringArray("path")]
 transform = Transform3D(1, 0, 1.49012e-07, 0, 1, 0, -1.49012e-07, 0, 1, 0, 0, 0)
@@ -5247,6 +5267,12 @@ path = NodePath("../../../../../Static/Path/SurfboardPath")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Surf/SurfJump"]
 shape = SubResource("BoxShape3D_jvte6")
+
+[node name="ClearCamera" type="Node3D" parent="MainAct/Surf"]
+transform = Transform3D(0.999999, 0, 3.27826e-07, 0, 1, 0, -3.27826e-07, 0, 0.999999, 0.164734, 0, 8.64514)
+script = ExtResource("21_1aofs")
+settings = ExtResource("59_qdb0c")
+previousSettings = ExtResource("72_rdmy0")
 
 [node name="SurfEnd" parent="MainAct/Surf" instance=ExtResource("26_1c4me")]
 transform = Transform3D(1, 0, 4.47035e-07, 0, 1, 0, -4.47035e-07, 0, 1, -98.7185, -0.0999999, 878.802)
@@ -5354,7 +5380,7 @@ Path = NodePath("../Wave1Path")
 WaveHeight = 15.0
 
 [node name="WaterFX" type="GPUParticles3D" parent="MainAct/Surf/Wave1" node_paths=PackedStringArray("subSystems")]
-transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 68.9995, 74, 67.5605)
+transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 33.9995, 74, 67.5605)
 layers = 32
 cast_shadow = 0
 emitting = false
@@ -5588,6 +5614,7 @@ Amount = 9
 Shape = 2
 Path = NodePath("../../../Static/Path/SurfboardPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 4.0
 "Horizontal Offset" = null
@@ -5787,7 +5814,7 @@ WaveHeight = 75.0
 transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 15)
 
 [node name="JumpTrigger" parent="MainAct/Surf/Wave3" index="2"]
-transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 80, 65)
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 75, 70)
 
 [node name="WaterFX" type="GPUParticles3D" parent="MainAct/Surf/Wave3" node_paths=PackedStringArray("subSystems")]
 transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, -88.9, 73.1, 65.5)
@@ -6534,7 +6561,6 @@ shape = SubResource("BoxShape3D_6yc6x")
 [connection signal="Activated" from="MainAct/Surf/SurfJump/Surfboard" to="MainAct/Surf/SurfJump/Surfboard/Path" method="Activate"]
 [connection signal="Damaged" from="MainAct/Surf/SurfJump/Surfboard" to="MainAct/Surf/SurfJump/Surfboard/DefeatCamera" method="Activate"]
 [connection signal="HighJumpStarted" from="MainAct/Surf/SurfJump/Surfboard" to="MainAct/Surf/SurfJump/Surfboard/HighJumpCamera" method="Activate"]
-[connection signal="JumpFinished" from="MainAct/Surf/SurfJump/Surfboard" to="MainAct/Surf/SurfJump/Surfboard/ClearCamera" method="Activate"]
 [connection signal="LowJumpStarted" from="MainAct/Surf/SurfJump/Surfboard" to="MainAct/Surf/SurfJump/Surfboard/LowJumpCamera" method="Activate"]
 [connection signal="MediumJumpStarted" from="MainAct/Surf/SurfJump/Surfboard" to="MainAct/Surf/SurfJump/Surfboard/MediumJumpCamera" method="Activate"]
 [connection signal="WaveFinished" from="MainAct/Surf/SurfJump/Surfboard" to="MainAct/Surf/SurfJump/Surfboard/NormalCamera" method="Activate"]

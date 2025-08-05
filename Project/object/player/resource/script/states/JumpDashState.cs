@@ -41,7 +41,7 @@ public partial class JumpDashState : PlayerState
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestFire))
 			Player.Skills.ActivateFireCrest();
 
-		Player.Animator.LaunchAnimation();
+		Player.Animator.JumpDashAnimation();
 	}
 
 	public override void ExitState()

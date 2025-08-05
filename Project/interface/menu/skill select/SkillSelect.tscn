@@ -17,7 +17,7 @@
 [ext_resource type="AudioStream" uid="uid://cl54rftw5aiyf" path="res://sound/sfx/system/menu cancel.wav" id="11_wl6lw"]
 [ext_resource type="AudioStream" uid="uid://l2e1do1wwkg" path="res://sound/sfx/system/menu confirm.wav" id="11_xu7kr"]
 [ext_resource type="AudioStream" uid="uid://dc6pp0ugxo4e3" path="res://sound/sfx/system/menu pause.wav" id="12_4pjkd"]
-[ext_resource type="Shader" uid="uid://cywcr73eavwo2" path="res://effect/shader/interface/InterfaceFlashAdd.gdshader" id="18_yq62n"]
+[ext_resource type="Shader" uid="uid://dj2vtehay1fej" path="res://effect/shader/interface/InterfaceFlashAdd.gdshader" id="18_yq62n"]
 [ext_resource type="FontFile" uid="uid://bsoin3p4iygoo" path="res://interface/font/otf/Chiaro Std B.otf" id="19_ysjw8"]
 [ext_resource type="AudioStream" uid="uid://u5b4t01a7cva" path="res://sound/ost/bonus disc/Skill Menu.mp3" id="20_tcevv"]
 [ext_resource type="Texture2D" uid="uid://hlj4agda0gde" path="res://interface/menu/common/button small default.png" id="21_aslc8"]
@@ -714,7 +714,7 @@ tracks/1/keys = {
 tracks/2/type = "method"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("../SFX/QuitMenu")
+tracks/2/path = NodePath("../SFX/Alert")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -1081,7 +1081,7 @@ tracks/6/keys = {
 tracks/7/type = "method"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Description")
+tracks/7/path = NodePath("Description/Description")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -1235,7 +1235,7 @@ tracks/7/keys = {
 tracks/8/type = "method"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Description")
+tracks/8/path = NodePath("Description/Description")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -1282,7 +1282,7 @@ tracks/0/keys = {
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Description")
+tracks/1/path = NodePath("Description/Description")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -1430,7 +1430,7 @@ tracks/7/keys = {
 tracks/8/type = "method"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Description")
+tracks/8/path = NodePath("Description/Description")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -1534,7 +1534,7 @@ tracks/5/keys = {
 tracks/6/type = "method"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Description")
+tracks/6/path = NodePath("Description/Description")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -1602,7 +1602,7 @@ script = ExtResource("1_v1nov")
 skillOption = ExtResource("4_sgi6g")
 optionContainer = NodePath("Content/Clip/Options")
 cursor = NodePath("Content/CursorOrigin/Cursor")
-description = NodePath("Description")
+description = NodePath("Description/Description")
 scrollbar = NodePath("Content/Window/Scrollbar/ScrollPosition")
 skillPointFill = NodePath("Content/Header/SkillPointBar/Fill")
 levelLabel = NodePath("Content/Header/LevelLabel")
@@ -1614,15 +1614,15 @@ sortOrderCursor = NodePath("Content/Header/SortArrow")
 submenus = Array[NodePath]([NodePath("")])
 bgm = NodePath("BGM")
 animator = NodePath("AnimationPlayer")
-metadata/_edit_lock_ = true
 
 [node name="Content" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 320.0
-offset_right = -320.0
+offset_left = -640.0
+offset_right = 640.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -1798,9 +1798,10 @@ theme_override_constants/separation = -2
 [node name="NavigationButtons" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 768.0
+offset_top = -312.0
 offset_bottom = -264.0
 theme_override_constants/separation = 64
 alignment = 1
@@ -1859,10 +1860,25 @@ bus = &"SFX"
 stream = ExtResource("9_1265f")
 bus = &"SFX"
 
-[node name="Description" parent="." instance=ExtResource("3_ud304")]
+[node name="Description" type="Control" parent="."]
 layout_mode = 1
-offset_top = 260.0
-offset_bottom = 516.0
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 384.0
+offset_top = -280.0
+offset_right = -1536.0
+offset_bottom = -280.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Description" parent="Description" instance=ExtResource("3_ud304")]
+layout_mode = 1
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 1152.0
+offset_bottom = 256.0
 
 [node name="AlertMenu" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -1873,7 +1889,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-metadata/_edit_lock_ = true
 
 [node name="Fade" type="ColorRect" parent="AlertMenu"]
 layout_mode = 1
@@ -1887,17 +1902,19 @@ metadata/_edit_lock_ = true
 
 [node name="Menu" type="Control" parent="AlertMenu"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -960.0
+offset_right = 960.0
+offset_bottom = 1080.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Parent" type="Control" parent="AlertMenu/Menu"]
-anchors_preset = 0
-offset_left = 960.0
+layout_mode = 1
+anchor_left = 0.5
+anchor_right = 0.5
 offset_top = 470.0
-offset_right = 960.0
 offset_bottom = 470.0
 
 [node name="Window" type="Node2D" parent="AlertMenu/Menu/Parent"]

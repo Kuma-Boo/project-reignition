@@ -12,8 +12,6 @@ public partial class Options : Menu
 
 	[Export] private AnimationPlayer resetAnimator;
 	private bool isResetSelected;
-	private bool isCustomWindowSize;
-	private bool isResizingWindowFromOptionsMenu;
 
 	private int maxSelection;
 	private int scrollOffset;
@@ -79,10 +77,7 @@ public partial class Options : Menu
 
 		// Prevent the options menu from jumping displays when moving through the options menu
 		SaveManager.Config.targetDisplay = DisplayServer.WindowGetCurrentScreen();
-
-		isCustomWindowSize = GetWindowSize() == -1;
-		if (isCustomWindowSize)
-			SaveManager.Config.windowSize = GetClosestWindowSize();
+		SaveManager.Config.windowSize = GetClosestWindowSize();
 
 		cursorBasePosition = cursor.Position.Y;
 		SetUpControlOptions();
@@ -90,7 +85,6 @@ public partial class Options : Menu
 		CalculateMaxSelection();
 		UpdatePartyModeDevice(0);
 		DebugManager.Instance.Connect(DebugManager.SignalName.FullscreenToggled, FullscreenToggleCallable);
-		GetTree().Root.SizeChanged += WindowResized;
 	}
 
 	public override void _ExitTree() => DebugManager.Instance.Disconnect(DebugManager.SignalName.FullscreenToggled, FullscreenToggleCallable);
@@ -446,6 +440,7 @@ public partial class Options : Menu
 	private readonly string Aspect4x3 = "4:3";
 	private readonly string Aspect16x9 = "16:9";
 	private readonly string Aspect16x10 = "16:10";
+	private readonly string Aspect21x9 = "21:9";
 	private void UpdateLabels()
 	{
 		videoLabels[0].Text = Tr("option_display").Replace("0", (SaveManager.Config.targetDisplay + 1).ToString());
@@ -467,13 +462,17 @@ public partial class Options : Menu
 					videoLabels[1].Text = Aspect16x10;
 					resolution = SaveManager.WindowSizes16x10[SaveManager.Config.windowSize];
 					break;
+				case SaveManager.AspectRatio.TwentyoneByNine:
+					videoLabels[1].Text = Aspect21x9;
+					resolution = SaveManager.WindowSizes21x9[SaveManager.Config.windowSize];
+					break;
 				default:
 					videoLabels[1].Text = Aspect16x9;
 					resolution = SaveManager.WindowSizes[SaveManager.Config.windowSize];
 					break;
 			}
 
-			videoLabels[2].Text = isCustomWindowSize ? CustomString : $"{resolution.X}:{resolution.Y}";
+			videoLabels[2].Text = $"{resolution.X}:{resolution.Y}";
 		}
 
 		videoLabels[3].Text = SaveManager.Config.useExclusiveFullscreen ? FullscreenExclusiveString : FullscreenNormalString;
@@ -674,23 +673,14 @@ public partial class Options : Menu
 		}
 		else if (VerticalSelection == 1)
 		{
-			if (SaveManager.Config.useFullscreen)
-				return false;
-
 			SaveManager.Config.aspectRatio = (SaveManager.AspectRatio)WrapSelection((int)SaveManager.Config.aspectRatio + direction, (int)SaveManager.AspectRatio.Count);
-			isResizingWindowFromOptionsMenu = true;
-			SaveManager.Config.windowSize = GetClosestWindowSize();
+			SaveManager.Config.windowSize = GetClosestWindowSizeClamped();
+
+			if (SaveManager.Config.useFullscreen)
+				SaveManager.Config.useFullscreen = !SaveManager.Config.useFullscreen;
 		}
 		else if (VerticalSelection == 2)
 		{
-			if (isCustomWindowSize)
-			{
-				isCustomWindowSize = false;
-				SaveManager.Config.windowSize = GetClosestWindowSize();
-				return true;
-			}
-
-			isResizingWindowFromOptionsMenu = true;
 			int fullscreenResolution = GetLargestWindowSize() + 1;
 
 			// Switch out of fullscreen mode
@@ -797,6 +787,9 @@ public partial class Options : Menu
 			case SaveManager.AspectRatio.SixteenByTen:
 				windows = SaveManager.WindowSizes16x10;
 				break;
+			case SaveManager.AspectRatio.TwentyoneByNine:
+				windows = SaveManager.WindowSizes21x9;
+				break;
 			default:
 				windows = SaveManager.WindowSizes;
 				break;
@@ -840,6 +833,8 @@ public partial class Options : Menu
 		return returnValue;
 	}
 
+	private int GetClosestWindowSizeClamped() => Mathf.Min(GetLargestWindowSize(), GetClosestWindowSize());
+
 	private int GetWindowSize()
 	{
 		if (SaveManager.Config.useFullscreen) // Don't change when in fullscreen mode
@@ -854,24 +849,6 @@ public partial class Options : Menu
 		}
 
 		return -1;
-	}
-
-	private void WindowResized()
-	{
-		if (SaveManager.Config.useFullscreen || isCustomWindowSize)
-			return;
-
-		if (isResizingWindowFromOptionsMenu)
-		{
-			isResizingWindowFromOptionsMenu = false; // Ignore resize event
-			return;
-		}
-
-		if (GetWindowSize() != -1)
-			return;
-
-		isCustomWindowSize = true;
-		videoLabels[2].Text = CustomString;
 	}
 
 	private bool SlideAudioOption(int direction)

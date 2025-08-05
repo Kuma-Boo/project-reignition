@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://vqw834asl36p"]
+[gd_scene load_steps=8 format=3 uid="uid://vqw834asl36p"]
 
 [ext_resource type="PackedScene" uid="uid://b3uehomo75lco" path="res://area/6 skeleton dome/object/model/obstacle/Gate.gltf" id="1_d0m6o"]
 [ext_resource type="Script" uid="uid://coiui4qvdxbqe" path="res://object/trigger/modules/EventTrigger.cs" id="1_gs3o2"]
@@ -38,10 +38,27 @@ tracks/0/keys = {
 "values": [Vector3(0, 0, 0), Vector3(0, 8, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_outol"]
+resource_name = "event-deactivate"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatableBody3D:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector3(0, 8, 0), Vector3(0, 0, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_xhjpc"]
 _data = {
 &"RESET": SubResource("Animation_o6ljf"),
-&"event": SubResource("Animation_4ovxd")
+&"event": SubResource("Animation_4ovxd"),
+&"event-deactivate": SubResource("Animation_outol")
 }
 
 [node name="Gate" type="Node3D" node_paths=PackedStringArray("animator")]

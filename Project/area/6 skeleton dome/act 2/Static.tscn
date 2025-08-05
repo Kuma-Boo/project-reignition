@@ -1,0 +1,563 @@
+[gd_scene load_steps=24 format=3 uid="uid://c5ajp56pbyegl"]
+
+[ext_resource type="PackedScene" uid="uid://h5au062rx8gk" path="res://area/6 skeleton dome/act 2/environment/collision/Collision.tscn" id="1_1kj50"]
+[ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_51dmr"]
+[ext_resource type="PackedScene" uid="uid://cvsftn6ggx3o" path="res://area/6 skeleton dome/act 2/environment/01Opening.tscn" id="2_eo8d4"]
+[ext_resource type="Resource" uid="uid://0xsw4iln1bbe" path="res://area/6 skeleton dome/act 2/camera/ThroneCam.tres" id="2_l51ta"]
+[ext_resource type="PackedScene" uid="uid://cy0ibidd2x8jl" path="res://area/6 skeleton dome/act 2/environment/02Arena.tscn" id="3_51dmr"]
+[ext_resource type="Curve3D" uid="uid://blaxf7g3s46yb" path="res://area/6 skeleton dome/act 2/environment/path/ArenaPath.tres" id="4_eo8d4"]
+[ext_resource type="Curve3D" path="res://area/6 skeleton dome/act 2/environment/path/ThronePath.tres" id="5_51dmr"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="8_2rmnc"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="9_a5p21"]
+[ext_resource type="Script" uid="uid://np5vcxq01ii8" path="res://object/trigger/modules/CheckpointTrigger.cs" id="9_cylrg"]
+[ext_resource type="Resource" uid="uid://dp07uop3x8vjr" path="res://area/6 skeleton dome/act 2/camera/ArenaCam.tres" id="10_a5p21"]
+[ext_resource type="Resource" uid="uid://14rifwt1vwve" path="res://area/6 skeleton dome/act 2/camera/ArenaEntranceCam.tres" id="10_m755k"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="11_3sixc"]
+[ext_resource type="Script" uid="uid://bssd28yqn1cxg" path="res://object/trigger/modules/PathTrigger.cs" id="11_wvn78"]
+[ext_resource type="Resource" uid="uid://wo8gnu7agnfs" path="res://area/6 skeleton dome/act 2/camera/ArenaEntranceTransitionCam.tres" id="12_jg7jf"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2rmnc"]
+size = Vector3(20, 20, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_m755k"]
+size = Vector3(50, 60, 5)
+
+[sub_resource type="Animation" id="Animation_cylrg"]
+resource_name = "demo1"
+length = 10.0
+step = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1150, 4, -1070)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(2.8, 3.6, 4.4),
+"transitions": PackedFloat32Array(2, 0.5, 1),
+"update": 0,
+"values": [Vector3(0, 3.14159, 0), Vector3(0, 2.70526, 0), Vector3(0, 2.35619, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Camera:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 3.6, 10),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 45), Vector3(0, 0, 0), Vector3(0, 0, -65)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Camera:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Camera:fov")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [75.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Camera:current")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("..")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(10),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"OnCameraDemoAdvance"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_ty6pp"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Camera:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Camera:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Camera:fov")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [75.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Camera:current")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_sr5u3"]
+resource_name = "demo2"
+length = 10.0
+step = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1000, 4, -1000)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -3.14159, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Camera:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(68, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Camera:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 3.14159, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Camera:fov")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [60.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Camera:current")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("..")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(10),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"OnCameraDemoAdvance"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_f3q4i"]
+resource_name = "demo3"
+length = 10.0
+step = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(950, 4, -1040), Vector3(950, 4, -960)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -1.5708, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Camera:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Camera:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.174533, -0.0872665, 0), Vector3(0.174533, 0.0872665, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Camera:fov")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [50.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Camera:current")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("..")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(10),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"OnCameraDemoAdvance"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_sr5u3"]
+_data = {
+&"RESET": SubResource("Animation_ty6pp"),
+&"demo1": SubResource("Animation_cylrg"),
+&"demo2": SubResource("Animation_sr5u3"),
+&"demo3": SubResource("Animation_f3q4i")
+}
+
+[sub_resource type="Environment" id="Environment_fiacw"]
+background_mode = 1
+ambient_light_source = 2
+ambient_light_color = Color(0.277528, 0.277528, 0.277528, 1)
+tonemap_mode = 2
+tonemap_exposure = 1.2
+tonemap_white = 2.0
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 1.0
+glow_strength = 0.9
+glow_bloom = 0.1
+glow_blend_mode = 1
+glow_hdr_threshold = 2.0
+adjustment_enabled = true
+
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
+script = ExtResource("1_51dmr")
+InitialCameraSettings = ExtResource("2_l51ta")
+pathParent = NodePath("Path")
+completionAnimator = NodePath("DemoCamera/AnimationPlayer")
+Environment = NodePath("WorldEnvironment")
+
+[node name="Collision" parent="." instance=ExtResource("1_1kj50")]
+visible = false
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="01Opening" parent="Visuals" instance=ExtResource("2_eo8d4")]
+
+[node name="02Arena" parent="Visuals" instance=ExtResource("3_51dmr")]
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="ThroneProbe" type="ReflectionProbe" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1130, 20, -1160)
+layers = 1024
+size = Vector3(100, 60, 320)
+interior = true
+cull_mask = 4
+reflection_mask = 4
+ambient_mode = 2
+ambient_color = Color(1, 0.843137, 0.694118, 1)
+ambient_color_energy = 0.3
+
+[node name="ArenaProbe" type="ReflectionProbe" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1000, 40, -1000)
+layers = 1024
+size = Vector3(300, 100, 300)
+interior = true
+cull_mask = 2
+reflection_mask = 2
+ambient_mode = 2
+ambient_color = Color(0.588235, 1, 0.862745, 1)
+ambient_color_energy = 0.5
+
+[node name="EnvironmentLighting" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_color = Color(0.901131, 0.705213, 0.613799, 1)
+light_energy = 1.1
+light_cull_mask = 4293918726
+shadow_enabled = true
+shadow_caster_mask = 69
+directional_shadow_blend_splits = true
+
+[node name="ObjectLighting" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_color = Color(0.952365, 0.680373, 0.580496, 1)
+light_energy = 0.7
+light_cull_mask = 4293918721
+shadow_caster_mask = 69
+directional_shadow_blend_splits = true
+
+[node name="Path" type="Node3D" parent="."]
+
+[node name="ArenaPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1065, 0, -1000)
+curve = ExtResource("4_eo8d4")
+
+[node name="ThronePath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1150, 13, -1300)
+curve = ExtResource("5_51dmr")
+
+[node name="Trigger" type="Node3D" parent="."]
+
+[node name="Checkpoint" parent="Trigger" instance=ExtResource("8_2rmnc")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 1089.03, 0, -1009.03)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoint"]
+script = ExtResource("9_cylrg")
+CameraSettings = ExtResource("10_m755k")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_2rmnc")
+
+[node name="EntranceCamera" parent="Trigger" instance=ExtResource("8_2rmnc")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 1093.98, 0, -1013.98)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/EntranceCamera"]
+script = ExtResource("9_a5p21")
+transitionTime = 0.2
+distanceBlending = 5
+settings = ExtResource("10_m755k")
+previousSettings = ExtResource("2_l51ta")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/EntranceCamera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_2rmnc")
+
+[node name="ArenaEntranceTriggers" type="Node3D" parent="Trigger"]
+script = ExtResource("11_3sixc")
+startEnabled = true
+
+[node name="ArenaTransitionCamera" parent="Trigger/ArenaEntranceTriggers" instance=ExtResource("8_2rmnc")]
+transform = Transform3D(0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, 0.422618, 1079, 0, -1000.92)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/ArenaEntranceTriggers/ArenaTransitionCamera"]
+script = ExtResource("9_a5p21")
+distanceBlending = 20
+settings = ExtResource("12_jg7jf")
+previousSettings = ExtResource("10_m755k")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/ArenaEntranceTriggers/ArenaTransitionCamera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_2rmnc")
+
+[node name="ArenaCamera" parent="Trigger/ArenaEntranceTriggers" instance=ExtResource("8_2rmnc")]
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 1063.23, 0, -980.324)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/ArenaEntranceTriggers/ArenaCamera"]
+script = ExtResource("9_a5p21")
+settings = ExtResource("10_a5p21")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/ArenaEntranceTriggers/ArenaCamera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
+shape = SubResource("BoxShape3D_m755k")
+
+[node name="ArenaPath" parent="Trigger/ArenaEntranceTriggers" instance=ExtResource("8_2rmnc")]
+transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, 1033.04, 0, -944.043)
+"Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="Trigger/ArenaEntranceTriggers/ArenaPath" node_paths=PackedStringArray("path")]
+script = ExtResource("11_wvn78")
+path = NodePath("../../../../Path/ArenaPath")
+cameraPathBlendTime = 0.5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/ArenaEntranceTriggers/ArenaPath"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
+shape = SubResource("BoxShape3D_m755k")
+
+[node name="DemoCamera" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Camera" type="Camera3D" parent="DemoCamera"]
+cull_mask = 1086
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="DemoCamera"]
+libraries = {
+&"": SubResource("AnimationLibrary_sr5u3")
+}
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_fiacw")
+
+[connection signal="Respawned" from="Trigger/Checkpoint" to="Collision/OneWayWall" method="Deactivate"]
+[connection signal="Respawned" from="Trigger/Checkpoint" to="Collision/EntranceOneWayWall" method="Activate"]
+[connection signal="Respawned" from="Trigger/Checkpoint" to="Trigger/ArenaEntranceTriggers" method="Activate"]
+[connection signal="Activated" from="Trigger/ArenaEntranceTriggers/ArenaPath" to="Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="Trigger/ArenaEntranceTriggers/ArenaPath" to="Collision/EntranceOneWayWall" method="Deactivate"]
+[connection signal="Activated" from="Trigger/ArenaEntranceTriggers/ArenaPath" to="Trigger/ArenaEntranceTriggers" method="Deactivate"]
+
+[editable path="Collision"]

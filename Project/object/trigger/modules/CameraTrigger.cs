@@ -15,7 +15,7 @@ public partial class CameraTrigger : StageTriggerModule
 	public float deactivationTransitionTime = -1f;
 
 	/// <summary> Set this to a non-zero value to use distance blending. </summary>
-	[Export(PropertyHint.Range, "0,50,1")]
+	[Export(PropertyHint.Range, "0,50,1,or_greater")]
 	public int distanceBlending;
 	public bool UseDistanceBlending => distanceBlending != 0;
 

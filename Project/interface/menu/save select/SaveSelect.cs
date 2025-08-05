@@ -86,7 +86,7 @@ public partial class SaveSelect : Menu
 			return;
 		}
 
-		base.Confirm();
+		base.Cancel();
 	}
 
 	private void ShowDeleteMenu()

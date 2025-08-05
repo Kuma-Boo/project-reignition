@@ -118,7 +118,7 @@ public partial class GargoyleSkyroad : PathFollow3D
 		if (isFastSpeed) // Update flapping speed
 			animationTree.Set(FlapSpeedParameter, 1f + (speedBlend * .5f));
 
-		return Mathf.Lerp(BaseMovementSpeed, FastMovementSpeed, speedBlend);
+		return Mathf.Lerp(BaseMovementSpeed, FastMovementSpeed, speedBlend) + (Player.Stats.GroundSettings.Speed - Player.Stats.baseGroundSpeed);
 	}
 
 	private bool CanToggleSpeed(float pathDelta)
@@ -150,6 +150,7 @@ public partial class GargoyleSkyroad : PathFollow3D
 	/// New addition to Reignition.
 	/// Increases player speed when near Gargyole to make skyroads less boring.
 	/// </summary>
+	private bool isSlipstreamActive;
 	private float slipstreamTimer;
 	private readonly float SlipstreamInterval = 1f;
 	private readonly float SlipstreamMultiplier = 2f;
@@ -157,7 +158,20 @@ public partial class GargoyleSkyroad : PathFollow3D
 	private void ProcessSlipstream(float pathDelta)
 	{
 		if (pathDelta > MinDistanceToPlayer + SlipstreamRange)
+		{
+			isSlipstreamActive = false;
 			return;
+		}
+
+		if (!isSlipstreamActive)
+		{
+			if (Player.Skills.IsSpeedBreakActive)
+				isSlipstreamActive = true;
+			else if (!isFastSpeed) // Start flying away instantly
+				speedTimer = 0f;
+
+			return;
+		}
 
 		slipstreamTimer = Mathf.MoveToward(slipstreamTimer, 0, PhysicsManager.physicsDelta);
 

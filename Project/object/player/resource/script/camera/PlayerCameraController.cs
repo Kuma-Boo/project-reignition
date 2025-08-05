@@ -114,7 +114,7 @@ public partial class PlayerCameraController : Node3D
 			IsDefeatFreezeActive = false;
 		}
 
-		UpdateGameplayCamera();
+		CallDeferred(MethodName.UpdateGameplayCamera);
 		UpdateScreenShake();
 		UpdateMotionBlur();
 	}
@@ -354,7 +354,9 @@ public partial class PlayerCameraController : Node3D
 		UpdateTransitionTimer();
 		UpdateLockonTarget();
 		UpdateCameraBlends();
-		RenderingServer.GlobalShaderParameterSet(ShaderPlayerScreenPosition, ConvertToScreenSpace(Player.CenterPosition) / Runtime.ScreenSize);
+
+		if (IsOnScreen(Player.GlobalPosition) && !IsBehindCamera(Player.GlobalPosition))
+			RenderingServer.GlobalShaderParameterSet(ShaderPlayerScreenPosition, ConvertToScreenSpace(Player.CenterPosition) / Runtime.ScreenSize);
 
 		if (SnapFlag) // Reset flag after camera was updated
 			SnapFlag = false;
@@ -383,6 +385,7 @@ public partial class PlayerCameraController : Node3D
 				Note that since distance blend datas come in pairs of two, it's safe to access
 				the Trigger even after we increment i.
 			*/
+
 			if (CameraBlendList[i].Trigger?.UseDistanceBlending == true)
 			{
 				i++; // Iterate so we can simulate the next item in the blend list
@@ -396,8 +399,8 @@ public partial class PlayerCameraController : Node3D
 				float blendedFov = Mathf.Lerp(iData.blendData.Fov, secondaryData.blendData.Fov, secondaryInfluence);
 				fov = Mathf.Lerp(fov, blendedFov, CameraBlendList[i].SmoothedInfluence);
 
-				float blendedXformAngle = Mathf.Lerp(iData.blendData.yawAngle, secondaryData.blendData.yawAngle, secondaryInfluence);
-				xformAngle = Mathf.Lerp(xformAngle, blendedXformAngle, CameraBlendList[i].SmoothedInfluence);
+				float blendedXformAngle = Mathf.LerpAngle(iData.blendData.yawAngle, secondaryData.blendData.yawAngle, secondaryInfluence);
+				xformAngle = Mathf.LerpAngle(xformAngle, blendedXformAngle, CameraBlendList[i].SmoothedInfluence);
 
 				Vector2 blendedViewportOffset = iData.blendData.SettingsResource.viewportOffset;
 				blendedViewportOffset = blendedViewportOffset.Lerp(secondaryData.blendData.SettingsResource.viewportOffset, secondaryInfluence);
@@ -405,7 +408,7 @@ public partial class PlayerCameraController : Node3D
 			}
 			else
 			{
-				xformAngle = Mathf.Lerp(xformAngle, iData.blendData.yawAngle, CameraBlendList[i].SmoothedInfluence);
+				xformAngle = Mathf.LerpAngle(xformAngle, iData.blendData.yawAngle, CameraBlendList[i].SmoothedInfluence);
 				distance = Mathf.Lerp(distance, iData.blendData.distance, CameraBlendList[i].SmoothedInfluence);
 				fov = Mathf.Lerp(fov, iData.blendData.Fov, CameraBlendList[i].SmoothedInfluence);
 

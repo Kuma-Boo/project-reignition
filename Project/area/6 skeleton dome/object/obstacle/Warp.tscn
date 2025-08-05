@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://bgqkl6m4c27kk"]
+
+[ext_resource type="Script" uid="uid://dtvj1vg0nkhi6" path="res://object/trigger/modules/TeleportTrigger.cs" id="1_35hvm"]
+[ext_resource type="PackedScene" uid="uid://cp8owtrig0i60" path="res://area/6 skeleton dome/object/model/obstacle/WarpBase.gltf" id="1_2348r"]
+[ext_resource type="PackedScene" uid="uid://ohu3dilki5ib" path="res://area/6 skeleton dome/object/WarpVfx.tscn" id="3_rgcks"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_r5wk0"]
+height = 3.0
+radius = 1.5
+
+[node name="Warp" type="Area3D"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("1_35hvm")
+enableStartFX = true
+crossfade = true
+
+[node name="WarpBase" parent="." instance=ExtResource("1_2348r")]
+
+[node name="WarpBaseCollision" parent="WarpBase" index="1"]
+visible = false
+
+[node name="StaticBody3D" parent="WarpBase/WarpBaseCollision" index="0" groups=["wall"]]
+collision_layer = 17
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("CylinderShape3D_r5wk0")
+
+[node name="WarpVFX" parent="." instance=ExtResource("3_rgcks")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+
+[connection signal="area_entered" from="." to="." method="Activate"]
+
+[editable path="WarpBase"]

@@ -29,6 +29,8 @@ public partial class PlayerSkillController : Node3D
 		SetUpSkills();
 		timeBreakAnimator.Play("RESET");
 		speedBreakAnimator.Play("RESET");
+
+		StageSettings.Instance.LevelDemoStarted += CancelSpeedbreakFX;
 	}
 
 	#region Skills
@@ -84,11 +86,12 @@ public partial class PlayerSkillController : Node3D
 
 		InitializeCrestSkills();
 		// Update crest of flame's trail color
-		Player.Effect.UpdateTrailHueShift(AllowCrestSkill && SkillRing.IsSkillEquipped(SkillKey.CrestFire) ? CrestOfFlameHueOffset : 0f);
+		Player.Effect.UpdateTrailHueShift(AllowCrestSkill && SkillRing.IsSkillEquipped(SkillKey.CrestFire) ? CrestOfFlameHueOffset : DefaultHueOffset);
 		speedbreakOverlayMaterial.SetShaderParameter(SpeedbreakOverlayOpacityKey, 0);
 	}
 
 	private readonly float CrestOfFlameHueOffset = .45f;
+	private readonly float DefaultHueOffset = .02f;
 	private void InitializeCrestSkills()
 	{
 		int crestRequirement;
@@ -250,6 +253,8 @@ public partial class PlayerSkillController : Node3D
 	private bool isSpeedBreakEnabled = true;
 	private bool isTimeBreakEnabled = true;
 
+	[Export]
+	private Control speedBreakShockwave;
 	[Export]
 	private AnimationPlayer speedBreakAnimator;
 	// Audio clips
@@ -425,7 +430,8 @@ public partial class PlayerSkillController : Node3D
 		}
 		else
 		{
-			timeBreakAnimator.Play("stop");
+			timeBreakAnimator.Play(isTimeBreakEnabled ? "stop" : "RESET");
+			timeBreakAnimator.Advance(0.0);
 			Player.Camera.UnrequestMotionBlur();
 			Player.Animator.StopMotionBlur();
 
@@ -449,6 +455,7 @@ public partial class PlayerSkillController : Node3D
 			speedBreakAnimator.Play(SaveManager.Config.useMotionBlur ? "enable-blur" : "disable-blur");
 			speedBreakAnimator.Advance(0.0);
 
+			speedBreakShockwave.PivotOffset = speedBreakShockwave.Size * 0.5f;
 			speedBreakAnimator.Play("start");
 			Player.Effect.PlayVoice("speed break");
 			Player.MovementAngle = Player.PathFollower.ForwardAngle;
@@ -476,6 +483,12 @@ public partial class PlayerSkillController : Node3D
 		}
 
 		HeadsUpDisplay.Instance?.GetCurrentSoulGauge().UpdateSoulGaugeColor(IsSoulGaugeCharged);
+	}
+
+	private void CancelSpeedbreakFX()
+	{
+		speedBreakAnimator.Play("RESET");
+		speedBreakAnimator.Advance(0.0);
 	}
 
 	public void EnableBreakSkills() => IsTimeBreakEnabled = IsSpeedBreakEnabled = true;
