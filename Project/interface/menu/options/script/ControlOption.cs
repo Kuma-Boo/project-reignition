@@ -358,7 +358,7 @@ public partial class ControlOption : Control
 		if (Input.GetConnectedJoypads().Contains(DeviceIndex))
 			deviceString = Input.GetJoyName(DeviceIndex);
 
-		deviceString += " (" + Tr(DeviceString).Replace("0", DeviceIndex.ToString()) + ")";
+		deviceString += $" #({DeviceIndex})";
 		return deviceString;
 	}
 
