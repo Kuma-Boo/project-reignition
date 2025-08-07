@@ -136,7 +136,7 @@ public partial class HeadsUpDisplay : Control
 		soulGaugeVert.Visible = false;
 		soulGaugeHori.Visible = false;
 
-		if (!SaveManager.Config.rotateSoulGauge)
+		if (!SaveManager.Config.isUsingHorizontalSoulGauge)
 		{
 			soulGaugeVert.Visible = true;
 			soulGaugeVert.InitializeSoulGauge();
@@ -187,7 +187,7 @@ public partial class HeadsUpDisplay : Control
 	public void SetPrompt(StringName label, int index) => buttons[index].ActionKey = label;
 	public void ShowPrompts()
 	{
-		if (!SaveManager.Config.useActionPrompts)
+		if (!SaveManager.Config.isActionPromptsEnabled)
 			return;
 
 		promptAnimator.Play(promptAnimator.CurrentAnimation == "show" ? "change" : "show");

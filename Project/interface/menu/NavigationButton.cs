@@ -21,7 +21,7 @@ public partial class NavigationButton : Control
 
 	private ControllerSpriteResource GetActiveSpriteResource(int controllerIndex)
 	{
-		if (SaveManager.Config.controllerStyle == SaveManager.ControllerStyle.Style1)
+		if (SaveManager.Config.buttonStyle == SaveManager.ButtonStyle.Style1)
 			return controllerResources[controllerIndex];
 
 		return controllerResourcesStyle2[controllerIndex];
@@ -122,7 +122,7 @@ public partial class NavigationButton : Control
 
 	private void RedrawAsKeyboard(Key keycode)
 	{
-		ButtonLabel.LabelSettings = keyboardLabelSettings[(int)SaveManager.Config.controllerStyle];
+		ButtonLabel.LabelSettings = keyboardLabelSettings[(int)SaveManager.Config.buttonStyle];
 		ButtonLabel.Visible = true;
 		ButtonLabel.Text = Runtime.Instance.GetKeyLabel(keycode);
 		bool isShortButton = ButtonLabel.Text.Length <= 1;

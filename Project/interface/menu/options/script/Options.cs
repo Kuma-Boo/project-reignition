@@ -26,7 +26,7 @@ public partial class Options : Menu
 		switch (currentSubmenu)
 		{
 			case Submenus.Options:
-				maxSelection = 5;
+				maxSelection = 6;
 				break;
 			case Submenus.Video:
 				maxSelection = videoLabels.Length;
@@ -38,7 +38,10 @@ public partial class Options : Menu
 				maxSelection = 4;
 				break;
 			case Submenus.Control:
-				maxSelection = 10;
+				maxSelection = 8;
+				break;
+			case Submenus.Interface:
+				maxSelection = 4;
 				break;
 			case Submenus.Mapping:
 				maxSelection = controlMappingOptions.Length;
@@ -63,6 +66,7 @@ public partial class Options : Menu
 		Audio,  // Menu for configuring audio volume
 		Language, // Menu for localization and language
 		Control, // Menu for configuring general control settings
+		Interface, // Menu for configuring interface settings
 		ResetSettings, // Submenu for resetting the configuration settings
 		ResetControls, // Submenu for resetting the control settings
 		Mapping, // Control submenu for configuring adventure mode's input mappings
@@ -178,6 +182,9 @@ public partial class Options : Menu
 				break;
 			case Submenus.Control:
 				ConfirmControlOption();
+				break;
+			case Submenus.Interface:
+				ConfirmInterfaceOption();
 				break;
 			case Submenus.Mapping:
 				ConfirmSFX();
@@ -418,6 +425,7 @@ public partial class Options : Menu
 	[Export] private Label[] audioLabels;
 	[Export] private Label[] languageLabels;
 	[Export] private Label[] controlLabels;
+	[Export] private Label[] interfaceLabels;
 	[Export] private Label[] partyMappingLabels;
 
 	private readonly string EnabledString = "option_enable";
@@ -430,8 +438,10 @@ public partial class Options : Menu
 	private readonly string MediumString = "option_medium";
 	private readonly string HighString = "option_high";
 	private readonly string MuteString = "option_mute";
-	private readonly string RetailMusic = "option_retail_music";
-	private readonly string RemixedMusic = "option_remix_music";
+	private readonly string RetailStyle = "option_retail";
+	private readonly string ReignitedStyle = "option_reignited";
+	private readonly string HorizontalStyle = "option_horizontal";
+	private readonly string VerticalStyle = "option_vertical";
 	private readonly string FullscreenString = "option_fullscreen";
 	private readonly string CustomString = "option_custom";
 	private readonly string FullscreenNormalString = "option_normal_fullscreen";
@@ -516,7 +526,7 @@ public partial class Options : Menu
 		audioLabels[1].Text = SaveManager.Config.isBgmMuted ? MuteString : $"{SaveManager.Config.bgmVolume}%";
 		audioLabels[2].Text = SaveManager.Config.isSfxMuted ? MuteString : $"{SaveManager.Config.sfxVolume}%";
 		audioLabels[3].Text = SaveManager.Config.isVoiceMuted ? MuteString : $"{SaveManager.Config.voiceVolume}%";
-		audioLabels[4].Text = SaveManager.Config.useRetailMenuMusic ? RetailMusic : RemixedMusic;
+		audioLabels[4].Text = SaveManager.Config.useRetailMenuMusic ? RetailStyle : ReignitedStyle;
 
 		languageLabels[0].Text = SaveManager.Config.isSubtitleDisabled ? DisabledString : EnabledString;
 		languageLabels[1].Text = SaveManager.Config.isDialogDisabled ? DisabledString : EnabledString;
@@ -541,23 +551,36 @@ public partial class Options : Menu
 				break;
 		}
 
-		switch (SaveManager.Config.controllerStyle)
-		{
-			case SaveManager.ControllerStyle.Style1:
-				controlLabels[1].Text = "option_controller_style1";
-				break;
-			case SaveManager.ControllerStyle.Style2:
-				controlLabels[1].Text = "option_controller_style2";
-				break;
-		}
-
-		controlLabels[2].Text = $"{Mathf.RoundToInt(SaveManager.Config.deadZone * 100)}%";
-		controlLabels[3].Text = SaveManager.Config.useHoldBreakMode ? HoldString : ToggleString;
-		controlLabels[4].Text = SaveManager.Config.useStompJumpButtonMode ? StompString : AttackString;
-		controlLabels[5].Text = SaveManager.Config.useActionPrompts ? EnabledString : DisabledString;
+		controlLabels[1].Text = $"{Mathf.RoundToInt(SaveManager.Config.deadZone * 100)}%";
+		controlLabels[2].Text = SaveManager.Config.useHoldBreakMode ? HoldString : ToggleString;
+		controlLabels[3].Text = SaveManager.Config.useStompJumpButtonMode ? StompString : AttackString;
 
 		partyMappingLabels[0].Text = Tr(PlayerString).Replace("0", partyPlayerIndex.ToString());
 		partyMappingLabels[1].Text = partyMappingOptions[0].GetDevice();
+
+
+		// Update interface labels
+		switch (SaveManager.Config.hudStyle)
+		{
+			case SaveManager.HudStyle.Retail:
+				interfaceLabels[0].Text = RetailStyle;
+				break;
+			case SaveManager.HudStyle.Reignition:
+				interfaceLabels[0].Text = ReignitedStyle;
+				break;
+		}
+
+		switch (SaveManager.Config.buttonStyle)
+		{
+			case SaveManager.ButtonStyle.Style1:
+				interfaceLabels[1].Text = "option_style1";
+				break;
+			case SaveManager.ButtonStyle.Style2:
+				interfaceLabels[1].Text = "option_style2";
+				break;
+		}
+		interfaceLabels[2].Text = SaveManager.Config.isUsingHorizontalSoulGauge ? HorizontalStyle : VerticalStyle;
+		interfaceLabels[3].Text = SaveManager.Config.isActionPromptsEnabled ? EnabledString : DisabledString;
 	}
 
 	private string GetVoiceLanguageKey(SaveManager.VoiceLanguage voiceLanguage)
@@ -648,6 +671,9 @@ public partial class Options : Menu
 				break;
 			case Submenus.Control:
 				settingUpdated = SlideControlOption(direction);
+				break;
+			case Submenus.Interface:
+				settingUpdated = SlideInterfaceOption(direction);
 				break;
 			case Submenus.PartyMapping:
 				settingUpdated = SlidePartyMappingOption(direction);
@@ -937,31 +963,51 @@ public partial class Options : Menu
 		}
 		else if (VerticalSelection == 1)
 		{
-			int style = WrapSelection((int)SaveManager.Config.controllerStyle + direction, (int)SaveManager.ControllerStyle.Count);
-			SaveManager.Config.controllerStyle = (SaveManager.ControllerStyle)style;
-			return true;
-		}
-		else if (VerticalSelection == 2)
-		{
 			float deadZone = SaveManager.Config.deadZone;
 			deadZone = Mathf.Clamp(deadZone + (.1f * direction), .1f, .9f);
 			SaveManager.Config.deadZone = deadZone;
 			SaveManager.ApplyInputMap();
 			return true;
 		}
-		else if (VerticalSelection == 3)
+		else if (VerticalSelection == 2)
 		{
 			SaveManager.Config.useHoldBreakMode = !SaveManager.Config.useHoldBreakMode;
 			return true;
 		}
-		else if (VerticalSelection == 4)
+		else if (VerticalSelection == 3)
 		{
 			SaveManager.Config.useStompJumpButtonMode = !SaveManager.Config.useStompJumpButtonMode;
 			return true;
 		}
-		else if (VerticalSelection == 5)
+
+		return false;
+	}
+
+	private bool SlideInterfaceOption(int direction)
+	{
+		if (VerticalSelection == 0)
 		{
-			SaveManager.Config.useActionPrompts = !SaveManager.Config.useActionPrompts;
+			// TODO Add E3 HUD option
+			if (SaveManager.Config.hudStyle == SaveManager.HudStyle.Reignition)
+				SaveManager.Config.hudStyle = SaveManager.HudStyle.Retail;
+			else
+				SaveManager.Config.hudStyle = SaveManager.HudStyle.Reignition;
+			return true;
+		}
+		else if (VerticalSelection == 1)
+		{
+			int style = WrapSelection((int)SaveManager.Config.buttonStyle + direction, (int)SaveManager.ButtonStyle.Count);
+			SaveManager.Config.buttonStyle = (SaveManager.ButtonStyle)style;
+			return true;
+		}
+		else if (VerticalSelection == 2)
+		{
+			SaveManager.Config.isUsingHorizontalSoulGauge = !SaveManager.Config.isUsingHorizontalSoulGauge;
+			return true;
+		}
+		else if (VerticalSelection == 3)
+		{
+			SaveManager.Config.isActionPromptsEnabled = !SaveManager.Config.isActionPromptsEnabled;
 			return true;
 		}
 
@@ -1014,7 +1060,7 @@ public partial class Options : Menu
 
 	private void ConfirmOption()
 	{
-		if (VerticalSelection == 4)
+		if (VerticalSelection == 5)
 		{
 			currentSubmenu = Submenus.ResetSettings;
 			ShowResetMenu();
@@ -1070,28 +1116,32 @@ public partial class Options : Menu
 
 	private void ConfirmControlOption()
 	{
-		if (VerticalSelection >= 0 && VerticalSelection <= 5)
+		switch (VerticalSelection)
 		{
-			SlideControlOption(1);
-		}
-		else if (VerticalSelection == 6)
-		{
-			FlipBook(Submenus.Mapping, false, 0);
-		}
-		else if (VerticalSelection == 7)
-		{
-			FlipBook(Submenus.PartyMapping, false, 0);
-		}
-		else if (VerticalSelection == 8)
-		{
-			FlipBook(Submenus.Test, false, VerticalSelection);
-		}
-		else
-		{
-			currentSubmenu = Submenus.ResetControls;
-			ShowResetMenu();
+			case 4:
+				FlipBook(Submenus.Mapping, false, 0);
+				break;
+			case 5:
+				FlipBook(Submenus.PartyMapping, false, 0);
+				break;
+			case 6:
+				FlipBook(Submenus.Test, false, VerticalSelection);
+				break;
+			case 7:
+				currentSubmenu = Submenus.ResetControls;
+				ShowResetMenu();
+				break;
+			default:
+				SlideControlOption(1);
+				break;
 		}
 
+		ConfirmSFX();
+	}
+
+	private void ConfirmInterfaceOption()
+	{
+		SlideInterfaceOption(1);
 		ConfirmSFX();
 	}
 

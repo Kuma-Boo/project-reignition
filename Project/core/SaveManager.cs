@@ -81,7 +81,7 @@ public partial class SaveManager : Node
 		Count
 	}
 
-	public enum ControllerStyle
+	public enum ButtonStyle
 	{
 		Style1, // Standard controller theme
 		Style2, // White/Nintendo Wii controller theme
@@ -220,9 +220,6 @@ public partial class SaveManager : Node
 		public QualitySetting postProcessingQuality = QualitySetting.Medium;
 		public QualitySetting reflectionQuality = QualitySetting.High;
 
-		public HudStyle hudStyle = HudStyle.Retail;
-		public bool rotateSoulGauge = false;
-
 		// Audio
 		public bool isMasterMuted;
 		public int masterVolume = 30;
@@ -237,10 +234,8 @@ public partial class SaveManager : Node
 		// Controls
 		public float deadZone = .2f;
 		public ControllerType controllerType = ControllerType.Automatic;
-		public ControllerStyle controllerStyle = ControllerStyle.Style2;
 		public bool useHoldBreakMode = true;
 		public bool useStompJumpButtonMode;
-		public bool useActionPrompts = true;
 		public int[] partyModeDevices = [0, 0, 0, 0];
 		public Dictionary inputConfiguration = [];
 
@@ -249,6 +244,12 @@ public partial class SaveManager : Node
 		public bool isDialogDisabled;
 		public TextLanguage textLanguage = AutoDetectTextLocale();
 		public VoiceLanguage voiceLanguage = AutoDetectVoiceLocale();
+
+		// Interface
+		public HudStyle hudStyle = HudStyle.Retail;
+		public ButtonStyle buttonStyle = ButtonStyle.Style2;
+		public bool isUsingHorizontalSoulGauge;
+		public bool isActionPromptsEnabled = true;
 
 		/// <summary> Creates a dictionary based on config data. </summary>
 		public Dictionary ToDictionary()
@@ -274,8 +275,6 @@ public partial class SaveManager : Node
 				{ nameof(useMotionBlur), useMotionBlur },
 				{ nameof(useScreenShake), useScreenShake },
 				{ nameof(screenShake), screenShake },
-				{ nameof(hudStyle), (int)hudStyle },
-				{ nameof(rotateSoulGauge), (bool)rotateSoulGauge},
 
 				// Audio
 				{ nameof(isMasterMuted), isMasterMuted },
@@ -291,10 +290,8 @@ public partial class SaveManager : Node
 				// Controls
 				{ nameof(deadZone), deadZone },
 				{ nameof(controllerType), (int)controllerType },
-				{ nameof(controllerStyle), (int)controllerStyle},
 				{ nameof(useHoldBreakMode), useHoldBreakMode },
 				{ nameof(useStompJumpButtonMode), useStompJumpButtonMode },
-				{ nameof(useActionPrompts), useActionPrompts },
 				{ nameof(partyModeDevices), partyModeDevices },
 				{ nameof(inputConfiguration), inputConfiguration },
 
@@ -303,6 +300,12 @@ public partial class SaveManager : Node
 				{ nameof(isDialogDisabled), isDialogDisabled},
 				{ nameof(voiceLanguage), (int)voiceLanguage },
 				{ nameof(textLanguage), (int)textLanguage },
+
+				// Interface
+				{ nameof(hudStyle), (int)hudStyle },
+				{ nameof(buttonStyle), (int)buttonStyle },
+				{ nameof(isUsingHorizontalSoulGauge), (bool)isUsingHorizontalSoulGauge },
+				{ nameof(isActionPromptsEnabled), isActionPromptsEnabled },
 			};
 		}
 
@@ -345,8 +348,6 @@ public partial class SaveManager : Node
 				useScreenShake = (bool)var;
 			if (dictionary.TryGetValue(nameof(screenShake), out var))
 				screenShake = (int)var;
-			if (dictionary.TryGetValue(nameof(hudStyle), out var))
-				hudStyle = (HudStyle)(int)var;
 
 			// Audio
 			if (dictionary.TryGetValue(nameof(isMasterMuted), out var))
@@ -374,14 +375,10 @@ public partial class SaveManager : Node
 				deadZone = (float)var;
 			if (dictionary.TryGetValue(nameof(controllerType), out var))
 				controllerType = (ControllerType)(int)var;
-			if (dictionary.TryGetValue(nameof(controllerStyle), out var))
-				controllerStyle = (ControllerStyle)(int)var;
 			if (dictionary.TryGetValue(nameof(useHoldBreakMode), out var))
 				useHoldBreakMode = (bool)var;
 			if (dictionary.TryGetValue(nameof(useStompJumpButtonMode), out var))
 				useStompJumpButtonMode = (bool)var;
-			if (dictionary.TryGetValue(nameof(useActionPrompts), out var))
-				useActionPrompts = (bool)var;
 			if (dictionary.TryGetValue(nameof(partyModeDevices), out var))
 				partyModeDevices = (int[])var;
 			if (dictionary.TryGetValue(nameof(inputConfiguration), out var))
@@ -396,6 +393,16 @@ public partial class SaveManager : Node
 				voiceLanguage = (VoiceLanguage)(int)var;
 			if (dictionary.TryGetValue(nameof(textLanguage), out var))
 				textLanguage = (TextLanguage)(int)var;
+
+			// Interface
+			if (dictionary.TryGetValue(nameof(hudStyle), out var))
+				hudStyle = (HudStyle)(int)var;
+			if (dictionary.TryGetValue(nameof(buttonStyle), out var))
+				buttonStyle = (ButtonStyle)(int)var;
+			if (dictionary.TryGetValue(nameof(isUsingHorizontalSoulGauge), out var))
+				isUsingHorizontalSoulGauge = (bool)var;
+			if (dictionary.TryGetValue(nameof(isActionPromptsEnabled), out var))
+				isActionPromptsEnabled = (bool)var;
 		}
 	}
 
