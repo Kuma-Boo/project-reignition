@@ -38,10 +38,10 @@ public partial class Options : Menu
 				maxSelection = 4;
 				break;
 			case Submenus.Control:
-				maxSelection = 8;
+				maxSelection = 7;
 				break;
 			case Submenus.Interface:
-				maxSelection = 4;
+				maxSelection = 5;
 				break;
 			case Submenus.Mapping:
 				maxSelection = controlMappingOptions.Length;
@@ -532,32 +532,12 @@ public partial class Options : Menu
 		languageLabels[1].Text = SaveManager.Config.isDialogDisabled ? DisabledString : EnabledString;
 		languageLabels[3].Text = GetVoiceLanguageKey(SaveManager.Config.voiceLanguage);
 
-		switch (SaveManager.Config.controllerType)
-		{
-			case SaveManager.ControllerType.Automatic:
-				controlLabels[0].Text = "option_controller_auto";
-				break;
-			case SaveManager.ControllerType.PlayStation:
-				controlLabels[0].Text = "option_controller_ps";
-				break;
-			case SaveManager.ControllerType.Xbox:
-				controlLabels[0].Text = "option_controller_xbox";
-				break;
-			case SaveManager.ControllerType.Nintendo:
-				controlLabels[0].Text = "option_controller_nintendo";
-				break;
-			case SaveManager.ControllerType.Steam:
-				controlLabels[0].Text = "option_controller_steam";
-				break;
-		}
-
-		controlLabels[1].Text = $"{Mathf.RoundToInt(SaveManager.Config.deadZone * 100)}%";
-		controlLabels[2].Text = SaveManager.Config.useHoldBreakMode ? HoldString : ToggleString;
-		controlLabels[3].Text = SaveManager.Config.useStompJumpButtonMode ? StompString : AttackString;
+		controlLabels[0].Text = $"{Mathf.RoundToInt(SaveManager.Config.deadZone * 100)}%";
+		controlLabels[1].Text = SaveManager.Config.useHoldBreakMode ? HoldString : ToggleString;
+		controlLabels[2].Text = SaveManager.Config.useStompJumpButtonMode ? StompString : AttackString;
 
 		partyMappingLabels[0].Text = Tr(PlayerString).Replace("0", partyPlayerIndex.ToString());
 		partyMappingLabels[1].Text = partyMappingOptions[0].GetDevice();
-
 
 		// Update interface labels
 		switch (SaveManager.Config.hudStyle)
@@ -570,17 +550,37 @@ public partial class Options : Menu
 				break;
 		}
 
+		StringName buttonStyle = "option_controller_auto";
+		switch (SaveManager.Config.controllerType)
+		{
+			case SaveManager.ControllerType.PlayStation:
+				buttonStyle = "option_controller_ps";
+				break;
+			case SaveManager.ControllerType.Xbox:
+				buttonStyle = "option_controller_xbox";
+				break;
+			case SaveManager.ControllerType.Nintendo:
+				buttonStyle = "option_controller_nintendo";
+				break;
+			case SaveManager.ControllerType.Steam:
+				buttonStyle = "option_controller_steam";
+				break;
+		}
+		interfaceLabels[1].Text = buttonStyle;
+
 		switch (SaveManager.Config.buttonStyle)
 		{
 			case SaveManager.ButtonStyle.Style1:
-				interfaceLabels[1].Text = "option_style1";
+				buttonStyle = "option_style1";
 				break;
 			case SaveManager.ButtonStyle.Style2:
-				interfaceLabels[1].Text = "option_style2";
+				buttonStyle = "option_style2";
 				break;
 		}
-		interfaceLabels[2].Text = SaveManager.Config.isUsingHorizontalSoulGauge ? HorizontalStyle : VerticalStyle;
-		interfaceLabels[3].Text = SaveManager.Config.isActionPromptsEnabled ? EnabledString : DisabledString;
+		interfaceLabels[2].Text = buttonStyle;
+
+		interfaceLabels[3].Text = SaveManager.Config.isUsingHorizontalSoulGauge ? HorizontalStyle : VerticalStyle;
+		interfaceLabels[4].Text = SaveManager.Config.isActionPromptsEnabled ? EnabledString : DisabledString;
 	}
 
 	private string GetVoiceLanguageKey(SaveManager.VoiceLanguage voiceLanguage)
@@ -957,24 +957,18 @@ public partial class Options : Menu
 	{
 		if (VerticalSelection == 0)
 		{
-			int type = WrapSelection((int)SaveManager.Config.controllerType + direction, (int)SaveManager.ControllerType.Count);
-			SaveManager.Config.controllerType = (SaveManager.ControllerType)type;
-			return true;
-		}
-		else if (VerticalSelection == 1)
-		{
 			float deadZone = SaveManager.Config.deadZone;
 			deadZone = Mathf.Clamp(deadZone + (.1f * direction), .1f, .9f);
 			SaveManager.Config.deadZone = deadZone;
 			SaveManager.ApplyInputMap();
 			return true;
 		}
-		else if (VerticalSelection == 2)
+		else if (VerticalSelection == 1)
 		{
 			SaveManager.Config.useHoldBreakMode = !SaveManager.Config.useHoldBreakMode;
 			return true;
 		}
-		else if (VerticalSelection == 3)
+		else if (VerticalSelection == 2)
 		{
 			SaveManager.Config.useStompJumpButtonMode = !SaveManager.Config.useStompJumpButtonMode;
 			return true;
@@ -996,16 +990,22 @@ public partial class Options : Menu
 		}
 		else if (VerticalSelection == 1)
 		{
-			int style = WrapSelection((int)SaveManager.Config.buttonStyle + direction, (int)SaveManager.ButtonStyle.Count);
-			SaveManager.Config.buttonStyle = (SaveManager.ButtonStyle)style;
+			int type = WrapSelection((int)SaveManager.Config.controllerType + direction, (int)SaveManager.ControllerType.Count);
+			SaveManager.Config.controllerType = (SaveManager.ControllerType)type;
 			return true;
 		}
 		else if (VerticalSelection == 2)
 		{
-			SaveManager.Config.isUsingHorizontalSoulGauge = !SaveManager.Config.isUsingHorizontalSoulGauge;
+			int style = WrapSelection((int)SaveManager.Config.buttonStyle + direction, (int)SaveManager.ButtonStyle.Count);
+			SaveManager.Config.buttonStyle = (SaveManager.ButtonStyle)style;
 			return true;
 		}
 		else if (VerticalSelection == 3)
+		{
+			SaveManager.Config.isUsingHorizontalSoulGauge = !SaveManager.Config.isUsingHorizontalSoulGauge;
+			return true;
+		}
+		else if (VerticalSelection == 4)
 		{
 			SaveManager.Config.isActionPromptsEnabled = !SaveManager.Config.isActionPromptsEnabled;
 			return true;
@@ -1118,16 +1118,16 @@ public partial class Options : Menu
 	{
 		switch (VerticalSelection)
 		{
-			case 4:
+			case 3:
 				FlipBook(Submenus.Mapping, false, 0);
 				break;
-			case 5:
+			case 4:
 				FlipBook(Submenus.PartyMapping, false, 0);
 				break;
-			case 6:
+			case 5:
 				FlipBook(Submenus.Test, false, VerticalSelection);
 				break;
-			case 7:
+			case 6:
 				currentSubmenu = Submenus.ResetControls;
 				ShowResetMenu();
 				break;
