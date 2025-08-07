@@ -260,7 +260,7 @@ public partial class Options : Menu
 				if (!controlMappingOptions[VerticalSelection].IsReady) return;
 
 				CancelSFX();
-				FlipBook(Submenus.Control, true, 6);
+				FlipBook(Submenus.Control, true, 3);
 				break;
 			case Submenus.PartyMapping:
 				if (VerticalSelection >= ExtraPartyModeOptionCount &&
@@ -270,7 +270,7 @@ public partial class Options : Menu
 				}
 
 				CancelSFX();
-				FlipBook(Submenus.Control, true, 7);
+				FlipBook(Submenus.Control, true, 4);
 				break;
 			case Submenus.Test:
 				return;
