@@ -124,19 +124,12 @@ public partial class Options : Menu
 	{
 		UpdateCursor();
 
-		if ((Input.IsActionJustPressed("sys_pause") || (Input.IsActionJustPressed("ui_accept")) &&
-			!Input.IsActionJustPressed("toggle_fullscreen")))
-		{
+		if (Runtime.Instance.IsActionJustPressed("sys_pause", "ui_accept") && !Input.IsActionJustPressed("toggle_fullscreen"))
 			Select();
-		}
-		else if (Input.IsActionJustPressed("sys_clear") || Input.IsActionJustPressed("ui_text_delete"))
-		{
+		else if (Runtime.Instance.IsActionJustPressed("sys_clear", "ui_text_delete"))
 			DeleteMapping();
-		}
 		else
-		{
 			base.ProcessMenu();
-		}
 
 		if (isPlayerLocked)
 			CallDeferred(MethodName.UpdatePlayerPosition);

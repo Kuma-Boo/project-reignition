@@ -111,8 +111,7 @@ public partial class PauseMenu : Node
 			}
 		}
 
-		if ((Input.IsActionJustPressed("sys_pause") || (Input.IsActionJustPressed("ui_accept")) &&
-			!Input.IsActionJustPressed("toggle_fullscreen")))
+		if (Runtime.Instance.IsActionJustPressed("sys_pause", "ui_accept") && !Input.IsActionJustPressed("toggle_fullscreen"))
 		{
 			TogglePause();
 			return;
@@ -145,13 +144,13 @@ public partial class PauseMenu : Node
 
 	private void UpdateBuffers()
 	{
-		if (Input.IsActionJustPressed("sys_select") || Input.IsActionJustPressed("ui_select"))
+		if (Runtime.Instance.IsActionJustPressed("sys_select", "ui_select"))
 		{
 			isConfirmButtonBuffered = true;
 			isCancelButtonBuffered = false;
 		}
 
-		if (Input.IsActionJustPressed("sys_cancel") || Input.IsActionJustPressed("ui_cancel"))
+		if (Runtime.Instance.IsActionJustPressed("sys_cancel", "ui_cancel"))
 		{
 			isConfirmButtonBuffered = false;
 			isCancelButtonBuffered = true;

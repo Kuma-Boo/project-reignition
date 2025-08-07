@@ -125,13 +125,13 @@ public partial class Menu : Control
 	protected readonly float SelectionScrollingInterval = .1f;
 	protected virtual void ProcessMenu()
 	{
-		if (Input.IsActionJustPressed("sys_select") || Input.IsActionJustPressed("ui_select"))
+		if (Runtime.Instance.IsActionJustPressed("sys_select", "ui_select"))
 		{
 			Confirm();
 			return;
 		}
 
-		if (Input.IsActionJustPressed("sys_cancel") || Input.IsActionJustPressed("ui_cancel"))
+		if (Runtime.Instance.IsActionJustPressed("sys_cancel", "ui_cancel"))
 		{
 			Cancel();
 			return;

@@ -84,8 +84,7 @@ public partial class SkillPresetSelect : Menu
 	{
 		if (isEditingName)
 		{
-			if ((Input.IsActionJustPressed("sys_pause") || (Input.IsActionJustPressed("ui_accept")) &&
-				!Input.IsActionJustPressed("toggle_fullscreen")))
+			if (Runtime.Instance.IsActionJustPressed("sys_pause", "ui_accept") && !Input.IsActionJustPressed("toggle_fullscreen"))
 			{
 				Rename();
 				return;
@@ -99,11 +98,8 @@ public partial class SkillPresetSelect : Menu
 			}
 		}
 
-		if ((Input.IsActionJustPressed("sys_pause") || (Input.IsActionJustPressed("ui_accept")) &&
-			!Input.IsActionJustPressed("toggle_fullscreen")))
-		{
+		if (Runtime.Instance.IsActionJustPressed("sys_pause", "ui_accept") && !Input.IsActionJustPressed("toggle_fullscreen"))
 			Confirm();
-		}
 
 		base.ProcessMenu();
 	}

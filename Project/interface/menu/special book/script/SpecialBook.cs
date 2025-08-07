@@ -144,8 +144,7 @@ public partial class SpecialBook : Menu
 				sfxCategorySelect.Play();
 			}
 
-			if ((Input.IsActionJustPressed("sys_pause") || (Input.IsActionJustPressed("ui_accept")) &&
-				!Input.IsActionJustPressed("toggle_fullscreen")))
+			if (Runtime.Instance.IsActionJustPressed("sys_pause", "ui_accept") && !Input.IsActionJustPressed("toggle_fullscreen"))
 			{
 				if (GetUnlockedEntriesCount() > 1) // If we have more than one page unlocked, then play the slideshow
 				{

@@ -44,7 +44,7 @@ public partial class SaveSelect : Menu
 
 	protected override void ProcessMenu()
 	{
-		if (Input.IsActionJustPressed("sys_clear") || Input.IsActionJustPressed("ui_text_delete"))
+		if (Runtime.Instance.IsActionJustPressed("sys_clear", "ui_text_delete"))
 		{
 			if (isDeleteMenuActive)
 				CancelDeleteMenu();

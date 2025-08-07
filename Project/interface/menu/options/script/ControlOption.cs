@@ -155,14 +155,14 @@ public partial class ControlOption : Control
 			return null;
 
 		// Check for conflicting input mappings
-		foreach (StringName actionId in InputMap.GetActions())
+		foreach (StringName inputActionId in InputMap.GetActions())
 		{
-			if (!InputMap.ActionHasEvent(actionId, e) || !SaveManager.Config.inputConfiguration.ContainsKey(actionId))
+			if (!InputMap.ActionHasEvent(inputActionId, e) || !SaveManager.Config.inputConfiguration.ContainsKey(inputActionId))
 				continue;
 
 			// Only allow adventure mappings to conflict with each other (or the same controller).
 			// This way, a single player *can* configure all 4 players to a single controller (if they want to)
-			char lastChar = actionId.ToString()[^1];
+			char lastChar = inputActionId.ToString()[^1];
 			if (char.IsDigit(lastChar)) // actionId is for party mode
 			{
 				int controllerIndex = lastChar - '0';
@@ -176,8 +176,12 @@ public partial class ControlOption : Control
 				continue;
 			}
 
+			// System inputs can ONLY conflict with other system inputs
+			if (inputActionId.ToString().StartsWith("sys_") != inputId.ToString().StartsWith("sys_"))
+				continue;
+
 			// Store conflict for a swap later
-			return actionId;
+			return inputActionId;
 		}
 
 		return null;

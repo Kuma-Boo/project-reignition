@@ -25,10 +25,11 @@ namespace Project.Interface.Menus
 
 		protected override void ProcessMenu()
 		{
+
 			if (isCutsceneActive)
 			{
-				if (Input.IsActionJustPressed("sys_pause") || Input.IsActionJustPressed("ui_accept") ||
-					Input.IsActionJustPressed("sys_select") || Input.IsActionJustPressed("ui_select"))
+				if ((Runtime.Instance.IsActionJustPressed("sys_pause", "ui_accept") && !Input.IsActionJustPressed("toggle_fullscreen")) ||
+					Runtime.Instance.IsActionJustPressed("sys_select", "ui_select"))
 					FinishCutscene();
 			}
 			else if (Input.IsAnythingPressed()) //Change menu

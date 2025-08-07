@@ -251,6 +251,39 @@ public partial class Runtime : Node
 		e.Dispose();
 	}
 
+	/// <summary>
+	/// Checks whether an action has just been pressed, then checks the fallback if the actionId isn't mapped.
+	/// </summary>
+	/// <param name="actionId"> The primary inputId to use. </param>
+	/// <param name="builtInId"> The fallback used if actionId isn't assigned to anything. </param>
+	/// <returns></returns>
+	public bool IsActionJustPressed(StringName actionId, StringName builtInId)
+	{
+		return Input.IsActionJustPressed(actionId) ||
+			(Input.IsActionJustPressed(builtInId) && Runtime.Instance.IsActionUnmapped(actionId));
+	}
+
+	public bool IsActionUnmapped(StringName action)
+	{
+		if (!InputMap.HasAction(action))
+			return true;
+
+		Array<InputEvent> events = InputMap.ActionGetEvents(action);
+		foreach (InputEvent e in events)
+		{
+			if (IsUsingController)
+			{
+				if (e is InputEventJoypadButton || e is InputEventJoypadMotion) // Input has a mapping
+					return false;
+			}
+
+			if (e is InputEventKey) // Input has a mapping
+				return false;
+		}
+
+		return true;
+	}
+
 	public string GetKeyLabel(Key key)
 	{
 		string returnString = OS.GetKeycodeString(key).ToUpper();

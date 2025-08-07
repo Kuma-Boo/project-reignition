@@ -38,8 +38,7 @@ public partial class MainMenu : Menu
 
 	protected override void ProcessMenu()
 	{
-		if ((Input.IsActionJustPressed("sys_pause") || (Input.IsActionJustPressed("ui_accept")) &&
-			!Input.IsActionJustPressed("toggle_fullscreen")))
+		if (Runtime.Instance.IsActionJustPressed("sys_pause", "ui_accept") && !Input.IsActionJustPressed("toggle_fullscreen"))
 		{
 			if (isQuitMenuActive)
 			{
