@@ -1,8 +1,16 @@
-[gd_scene load_steps=7 format=3 uid="uid://bdpbe3up8hmmc"]
+[gd_scene load_steps=9 format=3 uid="uid://bdpbe3up8hmmc"]
 
 [ext_resource type="Script" uid="uid://col5hjihb3lqd" path="res://interface/boot/Boot.cs" id="1_c3660"]
 [ext_resource type="AudioStream" uid="uid://c2y53tq5h1b76" path="res://video/boot/logo.wav" id="2_81oeg"]
 [ext_resource type="Script" uid="uid://bjs225yvpdim2" path="res://video/VideoStreamFileLoadPlayer.cs" id="2_bf4bq"]
+
+[sub_resource type="Gradient" id="Gradient_cdouy"]
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_f2ffd"]
+gradient = SubResource("Gradient_cdouy")
+width = 1920
+height = 1080
 
 [sub_resource type="Animation" id="Animation_8b1cq"]
 length = 0.001
@@ -92,7 +100,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_c3660")
 
-[node name="Logo" type="Control" parent="."]
+[node name="Logo" type="TextureRect" parent="."]
 custom_minimum_size = Vector2(1920, 1080)
 layout_mode = 1
 anchors_preset = 15
@@ -100,8 +108,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = SubResource("GradientTexture2D_f2ffd")
+expand_mode = 5
 
 [node name="BG" type="ColorRect" parent="Logo"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
