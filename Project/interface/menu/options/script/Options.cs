@@ -739,7 +739,7 @@ public partial class Options : Menu
 		else if (VerticalSelection == 6)
 		{
 			SaveManager.Config.renderScale += direction * 10;
-			SaveManager.Config.renderScale = Mathf.Clamp(SaveManager.Config.renderScale, 50, 150);
+			SaveManager.Config.renderScale = Mathf.Clamp(SaveManager.Config.renderScale, 10, 150);
 		}
 		else if (VerticalSelection == 7)
 		{
