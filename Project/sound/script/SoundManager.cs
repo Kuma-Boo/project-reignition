@@ -1,5 +1,5 @@
 using Godot;
-using Godot.Collections;
+using System.Collections.Generic;
 using Project.Gameplay.Triggers;
 
 namespace Project.Core;
@@ -70,6 +70,9 @@ public partial class SoundManager : Node
 	private Timer delayTimer;
 	private int currentDialogIndex;
 	private DialogTrigger currentDialog;
+	private Queue<DialogTrigger> dialogQueue = [];
+	public void QueueDialog(DialogTrigger dialog) => dialogQueue.Enqueue(dialog);
+
 	public void PlayDialog(DialogTrigger dialog)
 	{
 		if (dialog.DialogCount == 0 || DebugManager.Instance.DisableDialog || SaveManager.Config.isDialogDisabled) return; // No dialog
@@ -110,6 +113,7 @@ public partial class SoundManager : Node
 	{
 		if (!IsSubtitlesActive) return;
 
+		dialogQueue.Clear();
 		delayTimer.Stop();
 		dialogChannel.Stop();
 
@@ -156,6 +160,9 @@ public partial class SoundManager : Node
 
 		if (dialogChannel.IsConnected(AudioStreamPlayer.SignalName.Finished, new Callable(this, MethodName.OnDialogFinished)))
 			dialogChannel.Disconnect(AudioStreamPlayer.SignalName.Finished, new Callable(this, MethodName.OnDialogFinished));
+
+		if (dialogQueue.Count != 0) // Start queued dialog if it exists
+			PlayDialog(dialogQueue.Dequeue());
 	}
 
 	private void UpdateDialog(bool processDelay)
@@ -305,7 +312,7 @@ public partial class SoundManager : Node
 
 	[Export]
 	private Node pearlSFX;
-	private readonly Array<AudioStreamPlayer> pearlSFXList = new();
+	private readonly List<AudioStreamPlayer> pearlSFXList = [];
 	public int PearlSoundEffectIndex { get; set; }
 	[Export]
 	private AudioStreamPlayer richPearlSFX;
