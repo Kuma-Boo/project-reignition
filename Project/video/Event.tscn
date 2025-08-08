@@ -1,22 +1,43 @@
-[gd_scene load_steps=3 format=3 uid="uid://ct1tmuno23lj2"]
+[gd_scene load_steps=4 format=3 uid="uid://ct1tmuno23lj2"]
 
 [ext_resource type="Script" uid="uid://bjn5rtskut21d" path="res://video/EventPlayer.cs" id="1"]
 [ext_resource type="Script" uid="uid://bjs225yvpdim2" path="res://video/VideoStreamFileLoadPlayer.cs" id="2_k3sn5"]
+[ext_resource type="Script" uid="uid://df7uyhsm3g1ji" path="res://video/EventResizer.cs" id="2_oo0l5"]
 
-[node name="Event" type="CanvasLayer" node_paths=PackedStringArray("audioPlayer", "videoPlayer")]
+[node name="Event" type="Control" node_paths=PackedStringArray("audioPlayer", "videoPlayer")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1")
 audioPlayer = NodePath("Audio")
-videoPlayer = NodePath("Video")
+videoPlayer = NodePath("Resizer/Video")
+
+[node name="Resizer" type="Control" parent="." node_paths=PackedStringArray("player")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_oo0l5")
+player = NodePath("Video")
+
+[node name="Video" type="VideoStreamPlayer" parent="Resizer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand = true
+script = ExtResource("2_k3sn5")
 
 [node name="Audio" type="AudioStreamPlayer" parent="."]
 autoplay = true
 
-[node name="Video" type="VideoStreamPlayer" parent="."]
-offset_right = 1920.0
-offset_bottom = 1080.0
-expand = true
-script = ExtResource("2_k3sn5")
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 
-[connection signal="finished" from="Video" to="." method="OnEventFinished"]
+[connection signal="finished" from="Resizer/Video" to="." method="OnEventFinished"]
