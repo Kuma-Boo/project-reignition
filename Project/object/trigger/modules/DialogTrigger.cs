@@ -9,10 +9,17 @@ namespace Project.Gameplay.Triggers;
 /// </summary>
 public partial class DialogTrigger : StageTriggerModule
 {
-	[Export]
-	public bool isOneShot = true;
-	[Export]
-	public bool allowRespawn;
+	[Export] public bool isOneShot = true;
+	[Export] public bool allowRespawn;
+
+	[Export] private PlaybackMode playbackType;
+	private enum PlaybackMode
+	{
+		Queue, // Queue dialog to play after the current dialog is finished
+		Always, // Always play dialog immediately
+		NoDialog, // Only play dialog when nothing else is playing
+	}
+
 	private bool isTriggered;
 
 	public override void Respawn()
@@ -26,8 +33,18 @@ public partial class DialogTrigger : StageTriggerModule
 		if (isTriggered)
 			return;
 
+		if (playbackType == PlaybackMode.NoDialog && SoundManager.instance.IsDialogActive)
+			return;
+
 		isTriggered = isOneShot;
-		SoundManager.instance.PlayDialog(this);
+
+		if (playbackType == PlaybackMode.Always || !SoundManager.instance.IsDialogActive)
+		{
+			SoundManager.instance.PlayDialog(this);
+			return;
+		}
+
+		SoundManager.instance.QueueDialog(this);
 	}
 
 	public override void Deactivate() => SoundManager.instance.CancelDialog();

@@ -13244,6 +13244,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("305")
 
 [node name="DialogTriggers" type="Node3D" parent="MainAct"]
+visible = false
 
 [node name="KingDialogTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("4_v6hfg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.135, 75, -26.21)
@@ -18790,6 +18791,11 @@ transform = Transform3D(-1.278e-08, -0.292372, 0.956305, 1, -4.37114e-08, 0, 4.1
 transform = Transform3D(0.292372, 0, 0.956305, 0, 1, 0, -0.956305, 0, 0.292372, -148.565, 12.5, -81.3752)
 travelBounds = Vector2(4.5, 5)
 
+[node name="Dialog" type="Node3D" parent="MainAct/Beach/FlyingPot"]
+script = ExtResource("5_ox8ed")
+delays = Array[float]([0.0, 1.0])
+textKeys = Array[String](["common_hint_pot_sh", "common_hint_pot_exit_sh"])
+
 [node name="GrindrailL1" parent="MainAct/Beach" instance=ExtResource("31_jdgj6")]
 transform = Transform3D(0.292372, 0, 0.956305, 0, 1, 0, -0.956305, 0, 0.292372, -151.966, 10.3, -71.9575)
 railModel = NodePath("")
@@ -21162,11 +21168,13 @@ shape = SubResource("65")
 [connection signal="area_entered" from="MainAct/Hallway/Switch/EventTrigger/Pillar1/Pillar1Root/PlatformTrigger" to="MainAct/Hallway/Switch/EventTrigger/Pillar1" method="OnEntered"]
 [connection signal="area_exited" from="MainAct/Hallway/Switch/EventTrigger/Pillar1/Pillar1Root/PlatformTrigger" to="MainAct/Hallway/Switch/EventTrigger/Pillar1" method="OnExited"]
 [connection signal="Defeated" from="MainAct/Hallway/Switch/EventTrigger/BlueMajin1" to="MainAct/Hallway/Switch/EventTrigger/EventTrigger" method="Activate"]
+[connection signal="PotEntered" from="MainAct/Beach/FlyingPot" to="MainAct/Beach/FlyingPot/Dialog" method="Activate"]
 [connection signal="Activated" from="MainAct/Sidle/SpearGroup2" to="MainAct/Sidle/ReverseStepCollision" method="Activate"]
 [connection signal="Respawned" from="MainAct/Sidle/SpearGroup2" to="MainAct/Sidle/ReverseStepCollision" method="Deactivate"]
 [connection signal="Shattered" from="MainAct/End/JarGroup3/JarM2" to="MainAct/End/JarGroup3/GreenMajin" method="Spawn"]
 
 [editable path="Static"]
+[editable path="Static/Collision"]
 [editable path="MainAct/Oasis/PillarCrateGroup/Crate1"]
 [editable path="MainAct/Oasis/PillarCrateGroup/Crate2"]
 [editable path="MainAct/Oasis/PillarCrateGroup/Crate3"]
