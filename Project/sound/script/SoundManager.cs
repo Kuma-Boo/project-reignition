@@ -133,7 +133,7 @@ public partial class SoundManager : Node
 		if (!currentDialog.randomize && currentDialogIndex < currentDialog.DialogCount) // Start next dialog line
 		{
 			if (!SaveManager.Config.isSubtitleDisabled)
-				subtitleAnimator.Play("deactivate-text");
+				subtitleAnimator.Play("deactivate");
 			CallDeferred(MethodName.UpdateDialog, true);
 		}
 		else
