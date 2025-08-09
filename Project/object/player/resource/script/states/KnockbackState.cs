@@ -15,6 +15,12 @@ public partial class KnockbackState : PlayerState
 	{
 		Player.Camera.SetLockonTarget(null);
 
+		if (Player.IsLockoutActive &&
+			Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnKnockback))
+		{
+			Player.RemoveLockoutData(Player.ActiveLockoutData);
+		}
+
 		if (Player.Skills.IsSpeedBreakActive) // Disable speedbreak
 			Player.Skills.ToggleSpeedBreak();
 

@@ -62,7 +62,7 @@ public partial class DashPanel : Area3D
 			movementAngle = 0,
 			speedRatio = normalizedSpeedRatio,
 			disableActionFlags = LockoutResource.ActionFlags.ActionButton + (int)LockoutResource.ActionFlags.Backflip,
-			resetFlags = LockoutResource.ResetFlags.OnJump,
+			resetFlags = LockoutResource.ResetFlags.OnJump + (int)LockoutResource.ResetFlags.OnKnockback,
 			overrideSpeed = true,
 			tractionMultiplier = -1,
 			frictionMultiplier = 0,
