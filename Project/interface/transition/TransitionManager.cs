@@ -146,7 +146,7 @@ public partial class TransitionManager : Node
 					await ToSignal(GetTree().CreateTimer(.1f), SceneTreeTimer.SignalName.Timeout); // Wait a bit
 				}
 
-				var scene = ResourceLoader.LoadThreadedGet(QueuedScene) as PackedScene;
+				PackedScene scene = ResourceLoader.LoadThreadedGet(QueuedScene) as PackedScene;
 				GetTree().ChangeSceneToPacked(scene);
 				GD.Print("Scene Changed.");
 				return;
