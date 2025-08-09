@@ -942,13 +942,13 @@ public partial class SandScorpion : Node3D
 	/// </summary>
 	public void OnHitboxEntered(Area3D a)
 	{
-		if (!a.IsInGroup("player")) return;
+		if (!a.IsInGroup("player detection")) return;
 		bossHitboxCounter++;
 	}
 
 	public void OnHitboxExited(Area3D a)
 	{
-		if (!a.IsInGroup("player")) return;
+		if (!a.IsInGroup("player detection")) return;
 		bossHitboxCounter--;
 	}
 
