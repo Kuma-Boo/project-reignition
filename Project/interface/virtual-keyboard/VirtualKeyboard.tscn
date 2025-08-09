@@ -1,0 +1,304 @@
+[gd_scene load_steps=15 format=3 uid="uid://4bb7xdw21hop"]
+
+[ext_resource type="PackedScene" uid="uid://ciex615slkaym" path="res://interface/virtual-keyboard/components/VirtualKey.tscn" id="1_mtbvy"]
+[ext_resource type="Theme" uid="uid://kjkgsaaexg5x" path="res://interface/virtual-keyboard/themes/light.tres" id="1_ttnf0"]
+[ext_resource type="Script" path="res://interface/virtual-keyboard/VirtualKeyboard.cs" id="2_j6k7w"]
+[ext_resource type="Texture2D" uid="uid://be5r7guwfskbf" path="res://resource/input sprites/options/button/button_x.png" id="3_b5qdd"]
+[ext_resource type="PackedScene" uid="uid://b1mmn3rx7ux87" path="res://interface/virtual-keyboard/components/VirtualShiftKey.tscn" id="3_q2o5g"]
+[ext_resource type="Texture2D" uid="uid://c25w7reduoo4k" path="res://resource/input sprites/options/button/button_menu.png" id="3_ynog1"]
+[ext_resource type="Texture2D" uid="uid://cjbbwrhpctqsp" path="res://resource/input sprites/options/button/button_b.png" id="4_1ku5v"]
+[ext_resource type="Texture2D" uid="uid://bw0ag8kwqnngo" path="res://resource/input sprites/options/shoulder/shoulder_lb.png" id="6_sjwyd"]
+[ext_resource type="Texture2D" uid="uid://bu5vd7la78pn2" path="res://resource/input sprites/options/shoulder/shoulder_rb.png" id="7_67r1g"]
+[ext_resource type="Texture2D" uid="uid://cnjsqlmcbh0n7" path="res://resource/input sprites/options/button/button_ls.png" id="8_1wgc1"]
+[ext_resource type="Texture2D" uid="uid://bt38yb843w5eq" path="res://resource/input sprites/options/button/button_y.png" id="9_tg2wc"]
+[ext_resource type="Texture2D" uid="uid://chcjxv1r5uopv" path="res://resource/input sprites/options/button/button_a.png" id="10_5op6j"]
+
+[sub_resource type="Animation" id="Animation_af2uh"]
+length = 0.25
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, -580), Vector2(0, -596)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_m8dlj"]
+_data = {
+"Animate": SubResource("Animation_af2uh")
+}
+
+[node name="VirtualKeyboard" type="Control"]
+process_priority = -100
+top_level = true
+layout_mode = 3
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_default_cursor_shape = 3
+theme = ExtResource("1_ttnf0")
+script = ExtResource("2_j6k7w")
+VirtualKeyScene = ExtResource("1_mtbvy")
+
+[node name="Animations" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+root_node = NodePath("../BottomAlign")
+libraries = {
+"": SubResource("AnimationLibrary_m8dlj")
+}
+
+[node name="BottomAlign" type="MarginContainer" parent="."]
+y_sort_enabled = true
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -596.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 0
+
+[node name="Panel" type="Panel" parent="BottomAlign"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="BottomAlign"]
+layout_mode = 2
+theme_override_constants/margin_left = 80
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 80
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BottomAlign/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BottomAlign/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BottomAlign/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Keys" type="GridContainer" parent="BottomAlign/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 11
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BottomAlign/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Shift" parent="BottomAlign/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("3_q2o5g")]
+layout_mode = 2
+script = null
+
+[node name="Symbols" type="Button" parent="BottomAlign/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(208.75, 0)
+layout_mode = 2
+theme_type_variation = &"ControlButton"
+text = "#+="
+
+[node name="Space" type="Button" parent="BottomAlign/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ControlButton"
+text = "Space"
+
+[node name="SubmitControlHint" type="TextureRect" parent="BottomAlign/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/Space"]
+self_modulate = Color(0.231373, 0.231373, 0.231373, 1)
+texture_filter = 6
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -104.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = 104.0
+grow_horizontal = 0
+scale = Vector2(0.25, 0.25)
+pivot_offset = Vector2(100, 0)
+texture = ExtResource("3_b5qdd")
+
+[node name="Commands" type="VBoxContainer" parent="BottomAlign/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(175, 0)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Backspace" type="Button" parent="BottomAlign/MarginContainer/VBoxContainer/HBoxContainer/Commands"]
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ControlButton"
+disabled = true
+text = "⌫"
+icon_alignment = 2
+vertical_icon_alignment = 0
+
+[node name="SubmitControlHint" type="TextureRect" parent="BottomAlign/MarginContainer/VBoxContainer/HBoxContainer/Commands/Backspace"]
+self_modulate = Color(0.231373, 0.231373, 0.231373, 1)
+texture_filter = 6
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -104.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = 104.0
+grow_horizontal = 0
+scale = Vector2(0.25, 0.25)
+pivot_offset = Vector2(100, 0)
+texture = ExtResource("4_1ku5v")
+
+[node name="Return" type="Button" parent="BottomAlign/MarginContainer/VBoxContainer/HBoxContainer/Commands"]
+custom_minimum_size = Vector2(0, 184)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ControlButton"
+text = "Return"
+
+[node name="Submit" type="Button" parent="BottomAlign/MarginContainer/VBoxContainer/HBoxContainer/Commands"]
+custom_minimum_size = Vector2(0, 184)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"PrimaryButton"
+text = "OK"
+
+[node name="SubmitControlHint" type="TextureRect" parent="BottomAlign/MarginContainer/VBoxContainer/HBoxContainer/Commands/Submit"]
+texture_filter = 6
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -104.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = 104.0
+grow_horizontal = 0
+scale = Vector2(0.25, 0.25)
+pivot_offset = Vector2(100, 0)
+texture = ExtResource("3_ynog1")
+
+[node name="MarginContainer" type="MarginContainer" parent="BottomAlign/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_right = 5
+
+[node name="Controls" type="HBoxContainer" parent="BottomAlign/MarginContainer/VBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Spacer" type="Control" parent="BottomAlign/MarginContainer/VBoxContainer/MarginContainer/Controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CursorLeft" type="HBoxContainer" parent="BottomAlign/MarginContainer/VBoxContainer/MarginContainer/Controls"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="BottomAlign/MarginContainer/VBoxContainer/MarginContainer/Controls/CursorLeft"]
+self_modulate = Color(0.231373, 0.231373, 0.231373, 1)
+texture_filter = 6
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("6_sjwyd")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="BottomAlign/MarginContainer/VBoxContainer/MarginContainer/Controls/CursorLeft"]
+layout_mode = 2
+text = "←"
+
+[node name="CursorRight" type="HBoxContainer" parent="BottomAlign/MarginContainer/VBoxContainer/MarginContainer/Controls"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="BottomAlign/MarginContainer/VBoxContainer/MarginContainer/Controls/CursorRight"]
+self_modulate = Color(0.231373, 0.231373, 0.231373, 1)
+texture_filter = 6
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("7_67r1g")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="BottomAlign/MarginContainer/VBoxContainer/MarginContainer/Controls/CursorRight"]
+layout_mode = 2
+text = "→"
+
+[node name="Shift" type="HBoxContainer" parent="BottomAlign/MarginContainer/VBoxContainer/MarginContainer/Controls"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="BottomAlign/MarginContainer/VBoxContainer/MarginContainer/Controls/Shift"]
+self_modulate = Color(0.231373, 0.231373, 0.231373, 1)
+texture_filter = 6
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("8_1wgc1")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="BottomAlign/MarginContainer/VBoxContainer/MarginContainer/Controls/Shift"]
+layout_mode = 2
+text = "Shift"
+
+[node name="Cancel" type="HBoxContainer" parent="BottomAlign/MarginContainer/VBoxContainer/MarginContainer/Controls"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="BottomAlign/MarginContainer/VBoxContainer/MarginContainer/Controls/Cancel"]
+self_modulate = Color(0.231373, 0.231373, 0.231373, 1)
+texture_filter = 6
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("9_tg2wc")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="BottomAlign/MarginContainer/VBoxContainer/MarginContainer/Controls/Cancel"]
+layout_mode = 2
+text = "Cancel"
+
+[node name="Select" type="HBoxContainer" parent="BottomAlign/MarginContainer/VBoxContainer/MarginContainer/Controls"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="BottomAlign/MarginContainer/VBoxContainer/MarginContainer/Controls/Select"]
+self_modulate = Color(0.231373, 0.231373, 0.231373, 1)
+texture_filter = 6
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("10_5op6j")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="BottomAlign/MarginContainer/VBoxContainer/MarginContainer/Controls/Select"]
+layout_mode = 2
+text = "Select"

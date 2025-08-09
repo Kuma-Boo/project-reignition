@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://b1mmn3rx7ux87"]
+
+[ext_resource type="Script" path="res://interface/virtual-keyboard/components/VirtualShiftKey.cs" id="1_8u8cp"]
+
+[sub_resource type="Gradient" id="Gradient_otfi3"]
+offsets = PackedFloat32Array(0.975, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_cdvwt"]
+gradient = SubResource("Gradient_otfi3")
+width = 24
+height = 24
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[node name="Shift" type="Button" node_paths=PackedStringArray("Indicator")]
+custom_minimum_size = Vector2(208.75, 0)
+theme_type_variation = &"ControlButton"
+text = "⇧"
+script = ExtResource("1_8u8cp")
+Indicator = NodePath("TextureRect")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 34.0
+offset_bottom = 34.0
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_cdvwt")
