@@ -115,8 +115,6 @@ public partial class PlayerCameraController : Node3D
 		}
 
 		CallDeferred(MethodName.UpdateGameplayCamera);
-		UpdateScreenShake();
-		UpdateMotionBlur();
 	}
 
 	public float ReversePathInfluence { get; set; }
@@ -354,6 +352,8 @@ public partial class PlayerCameraController : Node3D
 		UpdateTransitionTimer();
 		UpdateLockonTarget();
 		UpdateCameraBlends();
+		UpdateScreenShake();
+		UpdateMotionBlur();
 
 		if (IsOnScreen(Player.GlobalPosition) && !IsBehindCamera(Player.GlobalPosition))
 			RenderingServer.GlobalShaderParameterSet(ShaderPlayerScreenPosition, ConvertToScreenSpace(Player.CenterPosition) / Runtime.ScreenSize);
