@@ -19,8 +19,8 @@ public partial class CatapultState : PlayerState
 	/// <summary> How much to smooth launchPower changes. </summary>
 	private readonly float PowerAdjustmentSmoothing = .15f;
 
-	private readonly StringName LaunchAction = "action_launch";
-	private readonly StringName ExitAction = "action_exit";
+	private readonly string LaunchAction = "action_launch";
+	private readonly string ExitAction = "action_exit";
 
 	public override void EnterState()
 	{

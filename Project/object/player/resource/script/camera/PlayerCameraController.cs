@@ -35,7 +35,7 @@ public partial class PlayerCameraController : Node3D
 	[Export] private Node3D sampler;
 	private Basis previousSamplerBasis;
 
-	private readonly StringName ShaderPlayerScreenPosition = new("player_screen_position");
+	private readonly string ShaderPlayerScreenPosition = new("player_screen_position");
 
 	private PlayerController Player;
 	public void Initialize(PlayerController player)

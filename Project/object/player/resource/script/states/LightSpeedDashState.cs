@@ -21,7 +21,7 @@ public partial class LightSpeedDashState : PlayerState
 
 	public Node3D CurrentTarget { get; private set; }
 	private readonly Array<Node3D> targetList = [];
-	private readonly StringName LightDashNodeGroup = "light dashable";
+	private readonly string LightDashNodeGroup = "light dashable";
 	public Node3D GetNewTarget()
 	{
 		if (ValidateTarget(CurrentTarget)) // Already targeting something

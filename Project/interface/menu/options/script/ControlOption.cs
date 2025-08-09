@@ -350,7 +350,7 @@ public partial class ControlOption : Control
 		}
 	}
 
-	private readonly StringName DeviceString = "option_device_number";
+	private readonly string DeviceString = "option_device_number";
 	public string GetDevice()
 	{
 		string deviceString = "Unknown Gamepad";

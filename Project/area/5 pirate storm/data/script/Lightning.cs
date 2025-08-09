@@ -14,7 +14,7 @@ public partial class Lightning : Node3D
 	[Export] private float minLightningInterval = 5.0f;
 	[Export] private float maxLightningInterval = 10.0f;
 	private Timer timer;
-	private readonly StringName ShaderSecondaryEnvironmentFXParameter = "secondary_environment_fx_intensity";
+	private readonly string ShaderSecondaryEnvironmentFXParameter = "secondary_environment_fx_intensity";
 
 	public override void _Ready()
 	{

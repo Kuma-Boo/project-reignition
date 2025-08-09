@@ -59,23 +59,23 @@ public partial class FlowerMajin : Enemy
 	/// <summary> Returns true if the flower's stagger animation is active. </summary>
 	private bool IsStaggered => (bool)AnimationTree.Get(HitActive);
 
-	private readonly StringName StateTransition = "parameters/state_transition/transition_request";
-	private readonly StringName ShowState = "show";
-	private readonly StringName AggressiveState = "aggressive";
-	private readonly StringName PassiveState = "passive";
-	private readonly StringName HideState = "hide";
+	private readonly string StateTransition = "parameters/state_transition/transition_request";
+	private readonly string ShowState = "show";
+	private readonly string AggressiveState = "aggressive";
+	private readonly string PassiveState = "passive";
+	private readonly string HideState = "hide";
 
-	private readonly StringName AttackTrigger = "parameters/attack_trigger/request";
-	private readonly StringName HitTrigger = "parameters/hit_trigger/request";
-	private readonly StringName HitActive = "parameters/hit_trigger/active";
-	private readonly StringName HitTransition = "parameters/hit_transition/transition_request";
-	private readonly StringName StaggerState = "stagger";
-	private readonly StringName BoopState = "boop";
+	private readonly string AttackTrigger = "parameters/attack_trigger/request";
+	private readonly string HitTrigger = "parameters/hit_trigger/request";
+	private readonly string HitActive = "parameters/hit_trigger/active";
+	private readonly string HitTransition = "parameters/hit_transition/transition_request";
+	private readonly string StaggerState = "stagger";
+	private readonly string BoopState = "boop";
 
 	/// <summary> Reference to AnimationTree's defeat_transition node. Required to change transition fade. </summary>
-	private readonly StringName DefeatTransition = "parameters/defeat_transition/transition_request";
-	private readonly StringName EnabledConstant = "enabled";
-	private readonly StringName DisabledConstant = "disabled";
+	private readonly string DefeatTransition = "parameters/defeat_transition/transition_request";
+	private readonly string EnabledConstant = "enabled";
+	private readonly string DisabledConstant = "disabled";
 
 	protected override void SetUp()
 	{

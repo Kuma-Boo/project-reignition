@@ -12,7 +12,7 @@ namespace Project.Gameplay;
 public partial class PlanarReflectionRenderer : Node3D
 {
 	// All shaders that use reflections must have this parameter
-	public static readonly StringName ReflectionParameter = "reflection_texture";
+	public static readonly string ReflectionParameter = "reflection_texture";
 
 	[Export] private bool disableRenderering;
 	private bool checkpointRenderingStateDisabled;

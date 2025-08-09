@@ -52,11 +52,11 @@ public partial class PlayerAnimator : Node3D
 	private void SetLeadingFoot(bool value) => isLeadingWithRightFoot = value;
 
 	// For toggle transitions
-	private readonly StringName EnabledConstant = "enabled";
-	private readonly StringName DisabledConstant = "disabled";
+	private readonly string EnabledConstant = "enabled";
+	private readonly string DisabledConstant = "disabled";
 	// For directional transitions
-	private readonly StringName RightConstant = "right";
-	private readonly StringName LeftConstant = "left";
+	private readonly string RightConstant = "right";
+	private readonly string LeftConstant = "left";
 
 	/// <summary>
 	/// Called every frame. Only updates normal animations and visual rotation.
@@ -72,7 +72,7 @@ public partial class PlayerAnimator : Node3D
 	private AnimationNodeTransition oneShotTransition;
 	private AnimationNodeOneShot oneShotTrigger;
 	/// <summary> Animation index for countdown animation. </summary>
-	private readonly StringName CountdownAnimation = "countdown";
+	private readonly string CountdownAnimation = "countdown";
 
 	public void PlayCountdown()
 	{
@@ -83,12 +83,12 @@ public partial class PlayerAnimator : Node3D
 		oneShotTrigger.FadeOutTime = 0;
 	}
 
-	private readonly StringName OneshotTrigger = "parameters/oneshot_trigger/request";
-	private readonly StringName OneshotSeek = "parameters/oneshot_tree/oneshot_seek/current";
-	private readonly StringName OneshotActive = "parameters/oneshot_trigger/active";
-	private readonly StringName OneshotCurrent = "parameters/oneshot_tree/oneshot_transition/current_state";
-	private readonly StringName OneshotTransition = "parameters/oneshot_tree/oneshot_transition/transition_request";
-	public void PlayOneshotAnimation(StringName animation, float fadein = 0) // Play a specific one-shot animation
+	private readonly string OneshotTrigger = "parameters/oneshot_trigger/request";
+	private readonly string OneshotSeek = "parameters/oneshot_tree/oneshot_seek/current";
+	private readonly string OneshotActive = "parameters/oneshot_trigger/active";
+	private readonly string OneshotCurrent = "parameters/oneshot_tree/oneshot_transition/current_state";
+	private readonly string OneshotTransition = "parameters/oneshot_tree/oneshot_transition/transition_request";
+	public void PlayOneshotAnimation(string animation, float fadein = 0) // Play a specific one-shot animation
 	{
 		oneShotTrigger.FadeInTime = fadein;
 		animationTree.Set(OneshotTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
@@ -140,14 +140,14 @@ public partial class PlayerAnimator : Node3D
 	#endregion
 
 	#region States
-	private readonly StringName NormalState = "normal";
-	private readonly StringName DriftState = "drift";
-	private readonly StringName BalanceState = "balance";
-	private readonly StringName SidleState = "sidle";
-	private readonly StringName SpinState = "spin";
-	private readonly StringName GimmickState = "gimmick";
+	private readonly string NormalState = "normal";
+	private readonly string DriftState = "drift";
+	private readonly string BalanceState = "balance";
+	private readonly string SidleState = "sidle";
+	private readonly string SpinState = "spin";
+	private readonly string GimmickState = "gimmick";
 
-	private readonly StringName StateTransition = "parameters/state_transition/transition_request";
+	private readonly string StateTransition = "parameters/state_transition/transition_request";
 
 	public void ResetState(float xfadeTime = -1) // Reset any state, while optionally setting the xfade time
 	{
@@ -164,20 +164,20 @@ public partial class PlayerAnimator : Node3D
 	#endregion
 
 	#region Normal Animations
-	private readonly StringName IdleBlend = "parameters/ground_tree/idle_blend/blend_amount";
-	private readonly StringName ForwardSeek = "parameters/ground_tree/forward_seek/seek_request";
-	private readonly StringName BackwardSeek = "parameters/ground_tree/backward_seek/seek_request";
+	private readonly string IdleBlend = "parameters/ground_tree/idle_blend/blend_amount";
+	private readonly string ForwardSeek = "parameters/ground_tree/forward_seek/seek_request";
+	private readonly string BackwardSeek = "parameters/ground_tree/backward_seek/seek_request";
 
-	private readonly StringName GroundSpeed = "parameters/ground_tree/ground_speed/scale";
-	private readonly StringName GroundSeek = "parameters/ground_tree/ground_seek/seek_request";
-	private readonly StringName ForwardBlend = "parameters/ground_tree/forward_blend/blend_position";
+	private readonly string GroundSpeed = "parameters/ground_tree/ground_speed/scale";
+	private readonly string GroundSeek = "parameters/ground_tree/ground_seek/seek_request";
+	private readonly string ForwardBlend = "parameters/ground_tree/forward_blend/blend_position";
 
-	private readonly StringName TurnBlend = "parameters/ground_tree/turn_blend/blend_position";
-	private readonly StringName LandTrigger = "parameters/ground_tree/land_trigger/request";
-	private readonly StringName ReversePathTrigger = "parameters/ground_tree/reverse_path_trigger/request";
-	private readonly StringName ReversePathActive = "parameters/ground_tree/reverse_path_trigger/active";
+	private readonly string TurnBlend = "parameters/ground_tree/turn_blend/blend_position";
+	private readonly string LandTrigger = "parameters/ground_tree/land_trigger/request";
+	private readonly string ReversePathTrigger = "parameters/ground_tree/reverse_path_trigger/request";
+	private readonly string ReversePathActive = "parameters/ground_tree/reverse_path_trigger/active";
 
-	private readonly StringName SpeedBreakTrigger = "parameters/ground_tree/speedbreak_trigger/request";
+	private readonly string SpeedBreakTrigger = "parameters/ground_tree/speedbreak_trigger/request";
 
 	[Export]
 	private Curve movementAnimationSpeedCurve;
@@ -192,7 +192,7 @@ public partial class PlayerAnimator : Node3D
 	public const float RunRatio = .9f;
 
 	/// <summary> Forces the player's animation back to the grounded state. </summary>
-	private readonly StringName GroundTransition = "parameters/ground_transition/transition_request";
+	private readonly string GroundTransition = "parameters/ground_transition/transition_request";
 	public void SnapToGround()
 	{
 		groundTransition.XfadeTime = 0.0f;
@@ -361,11 +361,11 @@ public partial class PlayerAnimator : Node3D
 	public bool IsBrakeAnimationActive { get; private set; }
 	private AnimationNodeStateMachinePlayback BrakeStatePlayback => animationTree.Get(BrakePlayback).Obj as AnimationNodeStateMachinePlayback;
 
-	private readonly StringName BrakePlayback = "parameters/ground_tree/brake_state/playback";
-	private readonly StringName BrakeTrigger = "parameters/ground_tree/brake_trigger/request";
-	private readonly StringName BrakeActive = "parameters/ground_tree/brake_trigger/active";
-	private readonly StringName BrakeStartState = "-start";
-	private readonly StringName BrakeStopState = "-stop";
+	private readonly string BrakePlayback = "parameters/ground_tree/brake_state/playback";
+	private readonly string BrakeTrigger = "parameters/ground_tree/brake_trigger/request";
+	private readonly string BrakeActive = "parameters/ground_tree/brake_trigger/active";
+	private readonly string BrakeStartState = "-start";
+	private readonly string BrakeStopState = "-stop";
 	public void StartBrake()
 	{
 		isFacingRight = isLeadingWithRightFoot;
@@ -380,9 +380,9 @@ public partial class PlayerAnimator : Node3D
 		BrakeStatePlayback.Travel(isFacingRight ? "r" + BrakeStopState : "l" + BrakeStopState);
 	}
 
-	private readonly StringName QuickStepTrigger = "parameters/ground_tree/quick_step_trigger/request";
-	private readonly StringName QuickStepTransition = "parameters/ground_tree/quick_step_transition/transition_request";
-	private readonly StringName QuickStepSpeed = "parameters/ground_tree/quick_step_speed/scale";
+	private readonly string QuickStepTrigger = "parameters/ground_tree/quick_step_trigger/request";
+	private readonly string QuickStepTransition = "parameters/ground_tree/quick_step_transition/transition_request";
+	private readonly string QuickStepSpeed = "parameters/ground_tree/quick_step_speed/scale";
 	public void StartQuickStep(bool isSteppingRight)
 	{
 		animationTree.Set(QuickStepTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
@@ -391,9 +391,9 @@ public partial class PlayerAnimator : Node3D
 	}
 
 	private AnimationNodeStateMachinePlayback LightDashStatePlayback => animationTree.Get(LightDashPlayback).Obj as AnimationNodeStateMachinePlayback;
-	private readonly StringName LightDashPlayback = "parameters/air_tree/light_dash_state/playback";
-	private readonly StringName LightDashTrigger = "parameters/air_tree/light_dash_trigger/request";
-	private readonly StringName LightDashSpeed = "parameters/air_tree/light_dash_speed/scale";
+	private readonly string LightDashPlayback = "parameters/air_tree/light_dash_state/playback";
+	private readonly string LightDashTrigger = "parameters/air_tree/light_dash_trigger/request";
+	private readonly string LightDashSpeed = "parameters/air_tree/light_dash_speed/scale";
 	public void StartLightDashAnimation()
 	{
 		animationTree.Set(LightDashTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
@@ -439,12 +439,12 @@ public partial class PlayerAnimator : Node3D
 	}
 
 	public bool IsFallTransitionEnabled { get; set; }
-	private readonly StringName FallTrigger = "parameters/air_tree/fall_trigger/request";
-	private readonly StringName FallSpeed = "parameters/air_tree/fall_speed/scale";
-	private readonly StringName AirStateTransition = "parameters/air_tree/state_transition/transition_request";
-	private readonly StringName AccelJumpTrigger = "parameters/air_tree/jump_accel_trigger/request";
-	private readonly StringName FallState = "fall";
-	private void UpdateAirState(StringName state, bool enableFallTransition)
+	private readonly string FallTrigger = "parameters/air_tree/fall_trigger/request";
+	private readonly string FallSpeed = "parameters/air_tree/fall_speed/scale";
+	private readonly string AirStateTransition = "parameters/air_tree/state_transition/transition_request";
+	private readonly string AccelJumpTrigger = "parameters/air_tree/jump_accel_trigger/request";
+	private readonly string FallState = "fall";
+	private void UpdateAirState(string state, bool enableFallTransition)
 	{
 		IsFallTransitionEnabled = enableFallTransition;
 		animationTree.Set(AirStateTransition, state);
@@ -466,7 +466,7 @@ public partial class PlayerAnimator : Node3D
 		UpdateAirState("jump", true);
 	}
 
-	private readonly StringName AutoJumpTrigger = "parameters/air_tree/autojump_trigger/request";
+	private readonly string AutoJumpTrigger = "parameters/air_tree/autojump_trigger/request";
 	public void AutoJumpAnimation()
 	{
 		ResetState();
@@ -481,8 +481,8 @@ public partial class PlayerAnimator : Node3D
 	}
 	public void JumpDashAnimation() => UpdateAirState("launch", false);
 
-	private readonly StringName StompState = "stomp";
-	private readonly StringName StompTrigger = "parameters/air_tree/stomp_trigger/request";
+	private readonly string StompState = "stomp";
+	private readonly string StompTrigger = "parameters/air_tree/stomp_trigger/request";
 	public void StompAnimation(bool offensive)
 	{
 		if (offensive)
@@ -498,7 +498,7 @@ public partial class PlayerAnimator : Node3D
 		}
 	}
 
-	private readonly StringName BackflipTrigger = "parameters/air_tree/backflip_trigger/request";
+	private readonly string BackflipTrigger = "parameters/air_tree/backflip_trigger/request";
 	public void BackflipAnimation()
 	{
 		IsFallTransitionEnabled = false;
@@ -508,15 +508,15 @@ public partial class PlayerAnimator : Node3D
 		animationTree.Set(FallTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 	}
 
-	private readonly StringName SplashJumpTrigger = "parameters/air_tree/splash_jump_trigger/request";
+	private readonly string SplashJumpTrigger = "parameters/air_tree/splash_jump_trigger/request";
 	public void SplashJumpAnimation()
 	{
 		animationTree.Set(AirStateTransition, FallState);
 		animationTree.Set(SplashJumpTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
-	private readonly StringName BounceTransition = "parameters/air_tree/bounce_transition/transition_request";
-	private readonly StringName BounceTrigger = "parameters/air_tree/bounce_trigger/request";
+	private readonly string BounceTransition = "parameters/air_tree/bounce_transition/transition_request";
+	private readonly string BounceTrigger = "parameters/air_tree/bounce_trigger/request";
 	private const int BounceVariationCount = 4;
 	public void BounceTrick()
 	{
@@ -545,20 +545,20 @@ public partial class PlayerAnimator : Node3D
 	}
 
 	private AnimationNodeStateMachinePlayback CrouchStatePlayback => animationTree.Get(CrouchPlayback).Obj as AnimationNodeStateMachinePlayback;
-	private readonly StringName CrouchPlayback = "parameters/ground_tree/crouch_state/playback";
+	private readonly string CrouchPlayback = "parameters/ground_tree/crouch_state/playback";
 
-	private readonly StringName CrouchStateStart = "crouch-start";
-	private readonly StringName CrouchStateLoop = "crouch-loop";
-	private readonly StringName CrouchStateStop = "crouch-stop";
-	private readonly StringName ChargeStationaryStateStart = "charge-stationary-start";
-	private readonly StringName ChargeStationaryStateStop = "charge-stationary-stop";
+	private readonly string CrouchStateStart = "crouch-start";
+	private readonly string CrouchStateLoop = "crouch-loop";
+	private readonly string CrouchStateStop = "crouch-stop";
+	private readonly string ChargeStationaryStateStart = "charge-stationary-start";
+	private readonly string ChargeStationaryStateStop = "charge-stationary-stop";
 
-	private readonly StringName SlideStateStart = "slide-start";
-	private readonly StringName SlideStateStop = "slide-stop";
-	private readonly StringName ChargeSlideStateStart = "charge-slide-start";
-	private readonly StringName ChargeSlideStateStop = "charge-slide-stop";
-	private readonly StringName CrouchTransition = "parameters/ground_tree/crouch_transition/transition_request";
-	private readonly StringName CurrentCrouchState = "parameters/ground_tree/crouch_transition/current_state";
+	private readonly string SlideStateStart = "slide-start";
+	private readonly string SlideStateStop = "slide-stop";
+	private readonly string ChargeSlideStateStart = "charge-slide-start";
+	private readonly string ChargeSlideStateStop = "charge-slide-stop";
+	private readonly string CrouchTransition = "parameters/ground_tree/crouch_transition/transition_request";
+	private readonly string CurrentCrouchState = "parameters/ground_tree/crouch_transition/current_state";
 
 	public bool IsCrouchTransitionActive => CrouchStatePlayback.GetCurrentNode() == CrouchStateStart || CrouchStatePlayback.GetCurrentNode() == ChargeStationaryStateStart;
 	public bool IsSlideTransitionActive => CrouchStatePlayback.GetCurrentNode() == SlideStateStart || CrouchStatePlayback.GetCurrentNode() == ChargeSlideStateStart;
@@ -689,13 +689,13 @@ public partial class PlayerAnimator : Node3D
 	private AnimationNodeStateMachinePlayback DriftRightStatePlayback => animationTree.Get(DriftRightPlayback).Obj as AnimationNodeStateMachinePlayback;
 	private AnimationNodeStateMachinePlayback DriftLeftStatePlayback => animationTree.Get(DriftLeftPlayback).Obj as AnimationNodeStateMachinePlayback;
 
-	private readonly StringName DriftLeftPlayback = "parameters/drift_tree/left_state/playback";
-	private readonly StringName DriftRightPlayback = "parameters/drift_tree/right_state/playback";
+	private readonly string DriftLeftPlayback = "parameters/drift_tree/left_state/playback";
+	private readonly string DriftRightPlayback = "parameters/drift_tree/right_state/playback";
 
-	private readonly StringName DriftDirectionTransition = "parameters/drift_tree/direction_transition/transition_request";
-	private readonly StringName DriftStartState = "drift-start";
-	private readonly StringName DriftLaunchState = "drift-launch";
-	private readonly StringName DriftFailState = "drift-fail";
+	private readonly string DriftDirectionTransition = "parameters/drift_tree/direction_transition/transition_request";
+	private readonly string DriftStartState = "drift-start";
+	private readonly string DriftLaunchState = "drift-launch";
+	private readonly string DriftFailState = "drift-fail";
 
 	public void StartDrift(bool isDriftFacingRight)
 	{
@@ -725,30 +725,30 @@ public partial class PlayerAnimator : Node3D
 	#region Grinding and Balancing Animations
 	/// <summary> Reference to the balance state's StateMachinePlayback </summary>
 	private AnimationNodeStateMachinePlayback BalanceStatePlayback => animationTree.Get(BalancePlayback).Obj as AnimationNodeStateMachinePlayback;
-	private readonly StringName BalancePlayback = "parameters/balance_tree/balance_state/playback";
+	private readonly string BalancePlayback = "parameters/balance_tree/balance_state/playback";
 
 	/// <summary> Reference to the balance state's StateMachinePlayback </summary>
 	private AnimationNodeStateMachinePlayback GrindStepStatePlayback => animationTree.Get(GrindstepPlayback).Obj as AnimationNodeStateMachinePlayback;
-	private readonly StringName GrindstepPlayback = "parameters/balance_tree/grindstep_state/playback";
+	private readonly string GrindstepPlayback = "parameters/balance_tree/grindstep_state/playback";
 
 	/// <summary> Is the shuffling animation currently active? </summary>
 	public bool IsBalanceShuffleActive { get; private set; }
 
-	private readonly StringName ShuffleRight = "balance-right-shuffle";
-	private readonly StringName ShuffleLeft = "balance-left-shuffle";
-	private readonly StringName BalanceRight = "balance_right_blend";
-	private readonly StringName BalanceLeft = "balance_left_blend";
-	private readonly StringName BalanceStaggerLeft = "balance_left_stagger";
-	private readonly StringName BalanceStaggerRight = "balance_right_stagger";
+	private readonly string ShuffleRight = "balance-right-shuffle";
+	private readonly string ShuffleLeft = "balance-left-shuffle";
+	private readonly string BalanceRight = "balance_right_blend";
+	private readonly string BalanceLeft = "balance_left_blend";
+	private readonly string BalanceStaggerLeft = "balance_left_stagger";
+	private readonly string BalanceStaggerRight = "balance_right_stagger";
 
-	private readonly StringName BalanceRightLean = "parameters/balance_tree/balance_state/balance_right_blend/blend_position";
-	private readonly StringName BalanceLeftLean = "parameters/balance_tree/balance_state/balance_left_blend/blend_position";
+	private readonly string BalanceRightLean = "parameters/balance_tree/balance_state/balance_right_blend/blend_position";
+	private readonly string BalanceLeftLean = "parameters/balance_tree/balance_state/balance_left_blend/blend_position";
 
-	private readonly StringName BalanceCrouchAdd = "parameters/balance_tree/crouch_add/add_amount";
-	private readonly StringName BalanceDirectionTransition = "parameters/balance_tree/direction_transition/transition_request";
+	private readonly string BalanceCrouchAdd = "parameters/balance_tree/crouch_add/add_amount";
+	private readonly string BalanceDirectionTransition = "parameters/balance_tree/direction_transition/transition_request";
 
-	private readonly StringName BalanceTrickTrigger = "parameters/balance_tree/trick_trigger/request";
-	private readonly StringName BalanceTrickTransition = "parameters/balance_tree/trick_transition/transition_request";
+	private readonly string BalanceTrickTrigger = "parameters/balance_tree/trick_trigger/request";
+	private readonly string BalanceTrickTransition = "parameters/balance_tree/trick_transition/transition_request";
 
 	public void StartBalancing()
 	{
@@ -775,13 +775,13 @@ public partial class PlayerAnimator : Node3D
 
 	public void StartBalanceStagger() => BalanceStatePlayback.Travel(isFacingRight ? BalanceStaggerRight : BalanceStaggerLeft, true);
 
-	public void StartBalanceTrick(StringName trickName)
+	public void StartBalanceTrick(string trickName)
 	{
 		animationTree.Set(BalanceTrickTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		animationTree.Set(BalanceTrickTransition, trickName);
 	}
 
-	private readonly StringName BalanceGrindstepTrigger = "parameters/balance_tree/grindstep_trigger/request";
+	private readonly string BalanceGrindstepTrigger = "parameters/balance_tree/grindstep_trigger/request";
 	/// <summary> How many variations of the grindstep animation are there? </summary>
 	private readonly int GrindstepVariationCount = 3;
 	public void StartGrindStep()
@@ -806,7 +806,7 @@ public partial class PlayerAnimator : Node3D
 	{
 		if (IsBalanceShuffleActive)
 		{
-			StringName currentNode = BalanceStatePlayback.GetCurrentNode();
+			string currentNode = BalanceStatePlayback.GetCurrentNode();
 			if ((isFacingRight && currentNode == BalanceRight) ||
 				(!isFacingRight && currentNode == BalanceLeft))
 			{
@@ -822,8 +822,8 @@ public partial class PlayerAnimator : Node3D
 		animationTree.Set(BalanceLeftLean, -balanceRatio);
 	}
 
-	private readonly StringName BalanceSpeed = "parameters/balance_tree/balance_speed/scale";
-	private readonly StringName BalanceWindBlend = "parameters/balance_tree/wind_blend/blend_position";
+	private readonly string BalanceSpeed = "parameters/balance_tree/balance_speed/scale";
+	private readonly string BalanceWindBlend = "parameters/balance_tree/wind_blend/blend_position";
 	public void UpdateBalanceSpeed(float speedRatio, float overrideWindBlend = -1)
 	{
 		animationTree.Set(BalanceSpeed, speedRatio + .8f);
@@ -839,18 +839,18 @@ public partial class PlayerAnimator : Node3D
 	private AnimationNodeStateMachinePlayback SidleLeftStatePlayback => animationTree.Get(SidleLeftPlayback).Obj as AnimationNodeStateMachinePlayback;
 
 	// Get sidle states
-	private readonly StringName SidleRightPlayback = "parameters/sidle_tree/sidle_right_state/playback";
-	private readonly StringName SidleLeftPlayback = "parameters/sidle_tree/sidle_left_state/playback";
+	private readonly string SidleRightPlayback = "parameters/sidle_tree/sidle_right_state/playback";
+	private readonly string SidleLeftPlayback = "parameters/sidle_tree/sidle_left_state/playback";
 
-	private readonly StringName SidleLoopState = "sidle-loop";
-	private readonly StringName SidleDamateState = "sidle-damage-loop";
-	private readonly StringName SidleHangState = "sidle-hang-loop";
-	private readonly StringName SidleHangFallState = "sidle-hang-fall";
-	private readonly StringName SidleFallState = "sidle-fall";
+	private readonly string SidleLoopState = "sidle-loop";
+	private readonly string SidleDamateState = "sidle-damage-loop";
+	private readonly string SidleHangState = "sidle-hang-loop";
+	private readonly string SidleHangFallState = "sidle-hang-fall";
+	private readonly string SidleFallState = "sidle-fall";
 
-	private readonly StringName SidleSpeed = "parameters/sidle_tree/sidle_speed/scale";
-	private readonly StringName SidleSeek = "parameters/sidle_tree/sidle_seek/seek_request";
-	private readonly StringName SidleDirectionTransition = "parameters/sidle_tree/direction_transition/transition_request";
+	private readonly string SidleSpeed = "parameters/sidle_tree/sidle_speed/scale";
+	private readonly string SidleSeek = "parameters/sidle_tree/sidle_seek/seek_request";
+	private readonly string SidleDirectionTransition = "parameters/sidle_tree/direction_transition/transition_request";
 
 	public void StartSidle(bool isSidleFacingRight)
 	{
@@ -894,11 +894,11 @@ public partial class PlayerAnimator : Node3D
 	#endregion
 
 	#region Hurt
-	private readonly StringName HurtTrigger = "parameters/hurt_trigger/request";
-	private readonly StringName HurtBackwardState = "hurt-backward-start";
-	private readonly StringName HurtForwardStartState = "hurt-forward-start";
-	private readonly StringName HurtForwardStopState = "hurt-forward-stop";
-	private readonly StringName HurtPlayback = "parameters/hurt_state/playback";
+	private readonly string HurtTrigger = "parameters/hurt_trigger/request";
+	private readonly string HurtBackwardState = "hurt-backward-start";
+	private readonly string HurtForwardStartState = "hurt-forward-start";
+	private readonly string HurtForwardStopState = "hurt-forward-stop";
+	private readonly string HurtPlayback = "parameters/hurt_state/playback";
 	private AnimationNodeStateMachinePlayback HurtStatePlayback => animationTree.Get(HurtPlayback).Obj as AnimationNodeStateMachinePlayback;
 
 	public void StartHurt(bool forwardLaunch)
@@ -917,7 +917,7 @@ public partial class PlayerAnimator : Node3D
 	#endregion
 
 	#region Spin
-	private readonly StringName SpinSpeed = "parameters/spin_speed/scale";
+	private readonly string SpinSpeed = "parameters/spin_speed/scale";
 	public void StartSpin(float speed = 1.0f)
 	{
 		SetSpinSpeed(speed);
@@ -930,14 +930,14 @@ public partial class PlayerAnimator : Node3D
 	#endregion
 
 	#region Gimmicks
-	private readonly StringName GimmickTransition = "parameters/gimmick_tree/state_transition/transition_request";
+	private readonly string GimmickTransition = "parameters/gimmick_tree/state_transition/transition_request";
 
-	private readonly StringName IvyState = "ivy";
-	private readonly StringName IvyBlend = "parameters/gimmick_tree/ivy_blend/blend_position";
-	private readonly StringName IvyStartTrigger = "parameters/gimmick_tree/ivy_start_trigger/request";
-	private readonly StringName IvySwingTrigger = "parameters/gimmick_tree/ivy_swing_trigger/request";
-	private readonly StringName IvyStartActive = "parameters/gimmick_tree/ivy_start_trigger/active";
-	private readonly StringName IvySwingActive = "parameters/gimmick_tree/ivy_swing_trigger/active";
+	private readonly string IvyState = "ivy";
+	private readonly string IvyBlend = "parameters/gimmick_tree/ivy_blend/blend_position";
+	private readonly string IvyStartTrigger = "parameters/gimmick_tree/ivy_start_trigger/request";
+	private readonly string IvySwingTrigger = "parameters/gimmick_tree/ivy_swing_trigger/request";
+	private readonly string IvyStartActive = "parameters/gimmick_tree/ivy_start_trigger/active";
+	private readonly string IvySwingActive = "parameters/gimmick_tree/ivy_swing_trigger/active";
 
 	public bool IsIvyStartActive => (bool)animationTree.Get(IvyStartActive);
 	public bool IsIvySwingActive => (bool)animationTree.Get(IvySwingActive);
@@ -954,11 +954,11 @@ public partial class PlayerAnimator : Node3D
 
 	public void SetIvyBlend(float ratio) => animationTree.Set(IvyBlend, ratio);
 
-	private readonly StringName ZiplineState = "zipline";
-	private readonly StringName ZiplineBlend = "parameters/gimmick_tree/zipline_blend/blend_position";
-	private readonly StringName ZiplineDirection = "parameters/gimmick_tree/zipline_direction/transition_request";
-	private readonly StringName ZiplineTapTrigger = "parameters/gimmick_tree/zipline_tap_trigger/request";
-	private readonly StringName ZiplineTapActive = "parameters/gimmick_tree/zipline_tap_trigger/active";
+	private readonly string ZiplineState = "zipline";
+	private readonly string ZiplineBlend = "parameters/gimmick_tree/zipline_blend/blend_position";
+	private readonly string ZiplineDirection = "parameters/gimmick_tree/zipline_direction/transition_request";
+	private readonly string ZiplineTapTrigger = "parameters/gimmick_tree/zipline_tap_trigger/request";
+	private readonly string ZiplineTapActive = "parameters/gimmick_tree/zipline_tap_trigger/active";
 	public void StartZipline()
 	{
 		SetStateXfade(.2f);
@@ -978,7 +978,7 @@ public partial class PlayerAnimator : Node3D
 
 	public void CancelZiplineTap() => animationTree.Set(ZiplineTapTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
 
-	private readonly StringName HornState = "horn";
+	private readonly string HornState = "horn";
 	public void StartBemothHorn()
 	{
 		SetStateXfade(.2f);
@@ -1001,8 +1001,8 @@ public partial class PlayerAnimator : Node3D
 		eventAnimationPlayer.Play("petrify-shake");
 	}
 
-	private readonly StringName PetrifyState = "petrify";
-	private readonly StringName PetrifyStopTrigger = "parameters/gimmick_tree/petrify_stop_trigger/request";
+	private readonly string PetrifyState = "petrify";
+	private readonly string PetrifyStopTrigger = "parameters/gimmick_tree/petrify_stop_trigger/request";
 	public void StopPetrify()
 	{
 		animationTree.Set(GimmickTransition, PetrifyState);
@@ -1013,10 +1013,10 @@ public partial class PlayerAnimator : Node3D
 		eventAnimationPlayer.Advance(0.0);
 	}
 
-	private readonly StringName LeverState = "lever";
+	private readonly string LeverState = "lever";
 	private AnimationNodeStateMachinePlayback LeverStatePlayback => animationTree.Get(LeverPlayback).Obj as AnimationNodeStateMachinePlayback;
 
-	private readonly StringName LeverPlayback = "parameters/gimmick_tree/lever_state/playback";
+	private readonly string LeverPlayback = "parameters/gimmick_tree/lever_state/playback";
 	public void StartLever(bool isRightLever)
 	{
 		SetStateXfade(0.2f);
@@ -1029,7 +1029,7 @@ public partial class PlayerAnimator : Node3D
 	#endregion
 
 	// Shaders
-	private readonly StringName ShaderPlayerPositionParameter = "player_position";
+	private readonly string ShaderPlayerPositionParameter = "player_position";
 	private void UpdateShaderVariables()
 	{
 		// Update player position for shaders

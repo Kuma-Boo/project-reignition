@@ -21,7 +21,7 @@ public partial class ZiplineState : PlayerState
 
 	private bool isPromptShown;
 	/// <summary> Localization key for swinging. </summary>
-	private readonly StringName SwingAction = "action_swing";
+	private readonly string SwingAction = "action_swing";
 	private float animationVelocity;
 	/// <summary> How much to smooth out Sonic's zipline animation. </summary>
 	private readonly float AnimationSmoothing = 2f;

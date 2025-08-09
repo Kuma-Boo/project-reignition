@@ -62,7 +62,7 @@ public partial class Runtime : Node
 
 	private float shaderTime;
 	private const float ShaderTimeRollover = 3600f;
-	private readonly StringName ShaderTimeParameter = "time";
+	private readonly string ShaderTimeParameter = "time";
 
 	private void UpdateShaderTime()
 	{

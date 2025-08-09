@@ -55,17 +55,17 @@ public partial class PauseMenu : Node
 	private Submenu submenu;
 	private StageSettings Stage => StageSettings.Instance;
 
-	private readonly StringName SelectionTransition = "parameters/selection/transition_request";
-	private readonly StringName ConfirmTransition = "parameters/confirm/transition_request";
-	private readonly StringName ConfirmEnabledTransition = "parameters/confirm_enabled/transition_request";
-	private readonly StringName StateRequest = "parameters/state/transition_request";
-	private readonly StringName ShowTrigger = "parameters/show_trigger/request";
+	private readonly string SelectionTransition = "parameters/selection/transition_request";
+	private readonly string ConfirmTransition = "parameters/confirm/transition_request";
+	private readonly string ConfirmEnabledTransition = "parameters/confirm_enabled/transition_request";
+	private readonly string StateRequest = "parameters/state/transition_request";
+	private readonly string ShowTrigger = "parameters/show_trigger/request";
 
-	private readonly StringName StatusShowTrigger = "parameters/status_show_trigger/request";
-	private readonly StringName StatusHideTrigger = "parameters/status_hide_trigger/request";
-	private readonly StringName StatusSelectionTransition = "parameters/status_selection/transition_request";
-	private readonly StringName ValueSelectionTransition = "parameters/value_selection/transition_request";
-	private readonly StringName SubmenuParameter = "parameters/submenu_transition/transition_request";
+	private readonly string StatusShowTrigger = "parameters/status_show_trigger/request";
+	private readonly string StatusHideTrigger = "parameters/status_hide_trigger/request";
+	private readonly string StatusSelectionTransition = "parameters/status_selection/transition_request";
+	private readonly string ValueSelectionTransition = "parameters/value_selection/transition_request";
+	private readonly string SubmenuParameter = "parameters/submenu_transition/transition_request";
 
 	private bool isConfirmButtonBuffered;
 	private bool isCancelButtonBuffered;

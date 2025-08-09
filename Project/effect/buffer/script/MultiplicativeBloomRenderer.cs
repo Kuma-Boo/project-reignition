@@ -18,8 +18,8 @@ public partial class MultiplicativeBloomRenderer : Node
 	private Callable UpdatePositionCallable => new(this, MethodName.UpdatePosition);
 	private Callable ApplyTextureCallable => new(this, MethodName.ApplyTexture);
 
-	private readonly StringName BloomTexture = "bloom_texture";
-	private readonly StringName ObjectTexture = "object_texture";
+	private readonly string BloomTexture = "bloom_texture";
+	private readonly string ObjectTexture = "object_texture";
 
 	public override void _Ready()
 	{

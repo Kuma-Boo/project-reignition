@@ -143,23 +143,23 @@ public partial class DinoTrio : PathFollow3D
 
 	[Export]
 	private AnimationTree animationTree;
-	private readonly StringName EnabledConstant = "enabled";
-	private readonly StringName DisabledConstant = "disabled";
+	private readonly string EnabledConstant = "enabled";
+	private readonly string DisabledConstant = "disabled";
 
-	private readonly StringName IdleSeekParameter = "parameters/idle_seek/seek_request";
-	private readonly StringName FidgetTrigger = "parameters/fidget_trigger/request";
-	private readonly StringName FidgetTransition = "parameters/fidget/transition_request";
-	private readonly StringName PawFidgetAnimation = "paw";
-	private readonly StringName ShakeFidgetAnimation = "shake";
+	private readonly string IdleSeekParameter = "parameters/idle_seek/seek_request";
+	private readonly string FidgetTrigger = "parameters/fidget_trigger/request";
+	private readonly string FidgetTransition = "parameters/fidget/transition_request";
+	private readonly string PawFidgetAnimation = "paw";
+	private readonly string ShakeFidgetAnimation = "shake";
 
-	private readonly StringName MovingTransition = "parameters/movement_transition/current_state";
-	private readonly StringName MovingTransitionRequest = "parameters/movement_transition/transition_request";
+	private readonly string MovingTransition = "parameters/movement_transition/current_state";
+	private readonly string MovingTransitionRequest = "parameters/movement_transition/transition_request";
 
-	private readonly StringName MovementBlendParameter = "parameters/movement_blend/blend_position";
-	private readonly StringName MovementSpeedParameter = "parameters/movement_speed/scale";
-	private readonly StringName MovementSeekParameter = "parameters/movement_seek/seek_request";
+	private readonly string MovementBlendParameter = "parameters/movement_blend/blend_position";
+	private readonly string MovementSpeedParameter = "parameters/movement_speed/scale";
+	private readonly string MovementSeekParameter = "parameters/movement_seek/seek_request";
 
-	private readonly StringName AttackTrigger = "parameters/attack_trigger/request";
+	private readonly string AttackTrigger = "parameters/attack_trigger/request";
 	private void UpdateAnimations()
 	{
 		string movingState = (string)animationTree.Get(MovingTransition);

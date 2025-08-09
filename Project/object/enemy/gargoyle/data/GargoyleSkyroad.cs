@@ -32,10 +32,10 @@ public partial class GargoyleSkyroad : PathFollow3D
 	private readonly float SpeedSmoothing = 5f;
 	private readonly float BaseMovementSpeed = 20f;
 	private readonly float FastMovementSpeed = 40f;
-	private readonly StringName FlapSpeedParameter = "parameters/flap_speed/scale";
-	private readonly StringName FlapTransitionParameter = "parameters/flap_transition/transition_request";
-	private readonly StringName EnabledState = "enabled";
-	private readonly StringName DisabledState = "disabled";
+	private readonly string FlapSpeedParameter = "parameters/flap_speed/scale";
+	private readonly string FlapTransitionParameter = "parameters/flap_transition/transition_request";
+	private readonly string EnabledState = "enabled";
+	private readonly string DisabledState = "disabled";
 
 	private readonly float PositionSmoothing = 0.2f;
 	private readonly float MinDistanceToPlayer = 3.0f;

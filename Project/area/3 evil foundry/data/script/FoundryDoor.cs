@@ -80,10 +80,10 @@ public partial class FoundryDoor : Node3D
 	private bool isForceClosedActivated;
 	private bool isInteractingWithPlayer;
 
-	private readonly StringName SpikeTransition = "parameters/spike_transition/transition_request";
-	private readonly StringName StateTransition = "parameters/state_transition/transition_request";
-	private readonly StringName StateSeek = "parameters/state_seek/seek_request";
-	private readonly StringName DoorSpeed = "parameters/state_speed/scale";
+	private readonly string SpikeTransition = "parameters/spike_transition/transition_request";
+	private readonly string StateTransition = "parameters/state_transition/transition_request";
+	private readonly string StateSeek = "parameters/state_seek/seek_request";
+	private readonly string DoorSpeed = "parameters/state_speed/scale";
 
 	public override void _Ready()
 	{

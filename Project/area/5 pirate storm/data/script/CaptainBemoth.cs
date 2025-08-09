@@ -62,9 +62,9 @@ public partial class CaptainBemoth : PathFollow3D
 		StageSettings.Instance.LevelStarted += StartIntroduction;
 	}
 
-	private readonly StringName IntroCutsceneID = "ps_boss_intro";
-	private readonly StringName DefeatCutsceneID = "ps_boss_defeat";
-	private readonly StringName IntroTrigger = "parameters/intro_trigger/request";
+	private readonly string IntroCutsceneID = "ps_boss_intro";
+	private readonly string DefeatCutsceneID = "ps_boss_defeat";
+	private readonly string IntroTrigger = "parameters/intro_trigger/request";
 	private void StartIntroduction()
 	{
 		Player.Deactivate();
@@ -107,8 +107,8 @@ public partial class CaptainBemoth : PathFollow3D
 		attackTimer = ShortAttackInterval;
 	}
 
-	private readonly StringName DefeatTrigger = "parameters/defeat_trigger/request";
-	private readonly StringName DefeatSeek = "parameters/defeat_seek/seek_request";
+	private readonly string DefeatTrigger = "parameters/defeat_trigger/request";
+	private readonly string DefeatSeek = "parameters/defeat_seek/seek_request";
 	private void DefeatBoss()
 	{
 		TransitionManager.StartTransition(new()
@@ -254,8 +254,8 @@ public partial class CaptainBemoth : PathFollow3D
 
 	private bool IsOpen => ((StringName)animator.Get(CloseState)).Equals("enabled");
 	private bool IsClosed => ((StringName)animator.Get(CloseState)).Equals("disabled");
-	private readonly StringName CloseState = "parameters/close_transition/current_state";
-	private readonly StringName CloseTransition = "parameters/close_transition/transition_request";
+	private readonly string CloseState = "parameters/close_transition/current_state";
+	private readonly string CloseTransition = "parameters/close_transition/transition_request";
 	private void Open() => animator.Set(CloseTransition, "open");
 	private void Close() => animator.Set(CloseTransition, "close");
 
@@ -395,10 +395,10 @@ public partial class CaptainBemoth : PathFollow3D
 			horn.CallDeferred(CaptainBemothHorn.MethodName.DisableLockon);
 	}
 
-	private readonly StringName HornDamageTrigger = "parameters/horn_damage_trigger/request";
+	private readonly string HornDamageTrigger = "parameters/horn_damage_trigger/request";
 	private void TakeHornDamage() => animator.Set(HornDamageTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 
-	private readonly StringName DamageTrigger = "parameters/damage_trigger/request";
+	private readonly string DamageTrigger = "parameters/damage_trigger/request";
 	private void TakeDamage()
 	{
 		hintDialogIndex = hintDialogs.Length; // Disable hint dialogs. The player figured it out
@@ -490,7 +490,7 @@ public partial class CaptainBemoth : PathFollow3D
 		StartBombAttack();
 	}
 
-	private readonly StringName BombTrigger = "parameters/bomb_trigger/request";
+	private readonly string BombTrigger = "parameters/bomb_trigger/request";
 	private void StartBombAttack()
 	{
 		bombAttackCounter++;
@@ -523,9 +523,9 @@ public partial class CaptainBemoth : PathFollow3D
 
 	private int waveAttackCounter;
 	/// <summary> Direction of the wave attack. </summary>
-	private readonly StringName WaveTransition = "parameters/wave_transition/transition_request";
+	private readonly string WaveTransition = "parameters/wave_transition/transition_request";
 	/// <summary> Activation of the wave attack. </summary>
-	private readonly StringName WaveTrigger = "parameters/wave_trigger/request";
+	private readonly string WaveTrigger = "parameters/wave_trigger/request";
 	private readonly int FinalWaveAttackCounter = 3;
 	private void EnterWaveAttackState()
 	{
@@ -648,7 +648,7 @@ public partial class CaptainBemoth : PathFollow3D
 	private readonly float ShockAttackLongDelay = 4f;
 	private readonly float ShockAttackShortDelay = .5f;
 	private readonly float ShockAttackChargeLength = 5f;
-	private readonly StringName ShockTrigger = "parameters/shock_trigger/request";
+	private readonly string ShockTrigger = "parameters/shock_trigger/request";
 	private void EnterShockAttackState()
 	{
 		CancelBombAttacks();

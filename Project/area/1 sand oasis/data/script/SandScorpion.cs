@@ -76,16 +76,16 @@ public partial class SandScorpion : Node3D
 	/// <summary> Extra animator that manages stuff like damage flashing, hitboxes, etc. </summary>
 	[Export] private AnimationPlayer eventAnimator;
 
-	private readonly StringName IntroCutsceneID = "so_boss_intro";
-	private readonly StringName DefeatCutsceneID = "so_boss_defeat";
+	private readonly string IntroCutsceneID = "so_boss_intro";
+	private readonly string DefeatCutsceneID = "so_boss_defeat";
 
-	private readonly StringName DisabledState = "disabled";
-	private readonly StringName EnabledState = "enabled";
-	private readonly StringName IntroParameter = "parameters/intro_trigger/request";
-	private readonly StringName DamageParameter = "parameters/damage_trigger/request";
-	private readonly StringName DefeatParameter = "parameters/defeat_trigger/request";
-	private readonly StringName DefeatSeekParameter = "parameters/defeat_seek/seek_request";
-	private readonly StringName PhaseTwoDamageParameter = "parameters/phase_two_damage_trigger/request";
+	private readonly string DisabledState = "disabled";
+	private readonly string EnabledState = "enabled";
+	private readonly string IntroParameter = "parameters/intro_trigger/request";
+	private readonly string DamageParameter = "parameters/damage_trigger/request";
+	private readonly string DefeatParameter = "parameters/defeat_trigger/request";
+	private readonly string DefeatSeekParameter = "parameters/defeat_seek/seek_request";
+	private readonly string PhaseTwoDamageParameter = "parameters/phase_two_damage_trigger/request";
 
 	public override void _Ready()
 	{
@@ -292,8 +292,8 @@ public partial class SandScorpion : Node3D
 	private float moveSpeedVelocity;
 
 	private float movementBlend;
-	private readonly StringName MoveSpeedParameter = "parameters/movespeed/scale";
-	private readonly StringName MovementBlendParameter = "parameters/movement_blend/blend_amount";
+	private readonly string MoveSpeedParameter = "parameters/movespeed/scale";
+	private readonly string MovementBlendParameter = "parameters/movement_blend/blend_amount";
 
 	/// <summary> Current distance to the player. </summary>
 	private float currentDistance;
@@ -422,8 +422,8 @@ public partial class SandScorpion : Node3D
 	private float phaseTwoBlend;
 	private float phaseTwoBlendVelocity;
 	private readonly float PhaseTwoBlendSmoothing = 30.0f;
-	private readonly StringName PhaseTwoParameter = "parameters/phase_two_add/add_amount";
-	private readonly StringName TailPhaseTwoTransitionParameter = "parameters/phase_two/transition_request";
+	private readonly string PhaseTwoParameter = "parameters/phase_two_add/add_amount";
+	private readonly string TailPhaseTwoTransitionParameter = "parameters/phase_two/transition_request";
 
 	private void UpdatePhase()
 	{
@@ -587,8 +587,8 @@ public partial class SandScorpion : Node3D
 	}
 
 	private float lightAttackTrackingVelocity;
-	private readonly StringName LightAttackParameter = "parameters/light_attack_trigger/request";
-	private readonly StringName LightAttackPositionParameter = "parameters/light_attack_blend/blend_amount";
+	private readonly string LightAttackParameter = "parameters/light_attack_trigger/request";
+	private readonly string LightAttackPositionParameter = "parameters/light_attack_blend/blend_amount";
 	private void StartLightAttack()
 	{
 		// Play hint
@@ -637,11 +637,11 @@ public partial class SandScorpion : Node3D
 
 	private bool IsHeavyAttackActive => attackState != AttackState.Inactive && attackCounter == 0;
 
-	private readonly StringName HeavyStrikeState = "strike";
-	private readonly StringName HeavyLoopState = "loop";
-	private readonly StringName HeavyRecoveryState = "recovery";
-	private readonly StringName HeavyAttackParameter = "parameters/heavy_attack_transition/transition_request";
-	private readonly StringName HeavyAttackTriggerParameter = "parameters/heavy_attack_trigger/request";
+	private readonly string HeavyStrikeState = "strike";
+	private readonly string HeavyLoopState = "loop";
+	private readonly string HeavyRecoveryState = "recovery";
+	private readonly string HeavyAttackParameter = "parameters/heavy_attack_transition/transition_request";
+	private readonly string HeavyAttackTriggerParameter = "parameters/heavy_attack_trigger/request";
 
 	private void StartHeavyAttack()
 	{
@@ -804,9 +804,9 @@ public partial class SandScorpion : Node3D
 		flyingEyeTarget += Player.PathFollower.ForwardAxis * FlyingEyeRadius;
 	}
 
-	private readonly StringName EyeBiteState = "bite";
-	private readonly StringName EyeRetreatState = "retreat";
-	private readonly StringName EyeParameter = "parameters/eye_transition/transition_request";
+	private readonly string EyeBiteState = "bite";
+	private readonly string EyeRetreatState = "retreat";
+	private readonly string EyeParameter = "parameters/eye_transition/transition_request";
 	private void StartEyeAttack()
 	{
 		attackState = AttackState.Strike;

@@ -53,17 +53,17 @@ public partial class SkeletonMajin : Enemy
 	private readonly float ImmortalRespawnTime = 1.5f;
 
 	private AnimationNodeStateMachinePlayback AnimationState => AnimationTree.Get(AnimationPlayback).Obj as AnimationNodeStateMachinePlayback;
-	private readonly StringName AnimationPlayback = "parameters/playback";
-	private readonly StringName SpawnAnimation = "spawn";
-	private readonly StringName OverheadAnimation = "overhead";
-	private readonly StringName IdleAnimation = "idle";
-	private readonly StringName WalkAnimation = "walk";
-	private readonly StringName AttackStartAnimation = "attack-start";
-	private readonly StringName AttackStopAnimation = "attack-stop";
-	private readonly StringName ShatterResetAnimation = "shatter-reset";
-	private readonly StringName ResetAnimation = "RESET";
-	private readonly StringName DefeatAnimation = "defeat";
-	private readonly StringName DamageAnimation = "damage";
+	private readonly string AnimationPlayback = "parameters/playback";
+	private readonly string SpawnAnimation = "spawn";
+	private readonly string OverheadAnimation = "overhead";
+	private readonly string IdleAnimation = "idle";
+	private readonly string WalkAnimation = "walk";
+	private readonly string AttackStartAnimation = "attack-start";
+	private readonly string AttackStopAnimation = "attack-stop";
+	private readonly string ShatterResetAnimation = "shatter-reset";
+	private readonly string ResetAnimation = "RESET";
+	private readonly string DefeatAnimation = "defeat";
+	private readonly string DamageAnimation = "damage";
 
 	protected override void SetUp()
 	{

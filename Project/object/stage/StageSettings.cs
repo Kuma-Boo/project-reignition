@@ -15,7 +15,7 @@ public partial class StageSettings : Node3D
 	public static void RegisterPlayer(PlayerController player) => Player = player;
 
 	public bool IsControlTest => Data.LevelID == OptionsLevelId;
-	private readonly StringName OptionsLevelId = "options";
+	private readonly string OptionsLevelId = "options";
 
 	public override void _EnterTree()
 	{
@@ -544,7 +544,7 @@ public partial class StageSettings : Node3D
 	private float targetEnvironmentFxFactor;
 	private float environmentFxVelocity;
 	private float environmentFxSmoothing;
-	private readonly StringName ShaderEnvironmentFXParameter = "environment_fx_intensity";
+	private readonly string ShaderEnvironmentFXParameter = "environment_fx_intensity";
 	public void SetEnvironmentFxFactor(float value, float smoothing)
 	{
 		targetEnvironmentFxFactor = Mathf.Clamp(value, 0f, 1f);

@@ -21,8 +21,8 @@ public partial class IvyState : PlayerState
 	public void UpdateHighSpeedEntry() => isHighSpeedEntry = Player.IsJumpDashOrHomingAttack ||
 		Player.MoveSpeed > Player.Stats.baseGroundSpeed * .5f;
 
-	private readonly StringName JumpAction = "action_jump";
-	private readonly StringName SwingAction = "action_swing";
+	private readonly string JumpAction = "action_jump";
+	private readonly string SwingAction = "action_swing";
 
 	public override void EnterState()
 	{

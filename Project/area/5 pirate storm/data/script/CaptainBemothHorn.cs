@@ -36,10 +36,10 @@ public partial class CaptainBemothHorn : Node3D
 	private readonly float JoltLength = 0.4f;
 	private readonly float PopSpeed = 20f;
 
-	private readonly StringName JoltTrigger = "parameters/jolt_trigger/request";
-	private readonly StringName JoltBlend = "parameters/jolt_blend/blend_amount";
-	private readonly StringName PullBlend = "parameters/pull_blend/blend_amount";
-	private readonly StringName PopTransition = "parameters/pop_transition/transition_request";
+	private readonly string JoltTrigger = "parameters/jolt_trigger/request";
+	private readonly string JoltBlend = "parameters/jolt_blend/blend_amount";
+	private readonly string PullBlend = "parameters/pull_blend/blend_amount";
+	private readonly string PopTransition = "parameters/pop_transition/transition_request";
 
 	public override void _Ready()
 	{

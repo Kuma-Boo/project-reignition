@@ -43,15 +43,15 @@ public partial class ThornSpring : Launcher
 
 	[Export]
 	private AnimationPlayer animator;
-	private readonly StringName resetKey = "RESET";
+	private readonly string resetKey = "RESET";
 	/// <summary> Animation name for a single, full rotation. </summary>
-	private readonly StringName fullKey = "full";
+	private readonly string fullKey = "full";
 	/// <summary> First half of the thorn spring's animation. </summary>
-	private readonly StringName halfKey = "half";
+	private readonly string halfKey = "half";
 	/// <summary> Second half of the thorn spring's animation and time break activation. </summary>
-	private readonly StringName enableKey = "enable";
+	private readonly string enableKey = "enable";
 	/// <summary> Time Break thorn springs' looping animation. </summary>
-	private readonly StringName timeBreakKey = "loop";
+	private readonly string timeBreakKey = "loop";
 	/// <summary> Animator timescale for Time Break springs when Time Break isn't active. </summary>
 	private const float TimeBreakLoopTimeScale = 4f;
 	/// <summary> Flag to pause timebreak rotation so the player doesn't get hurt. </summary>

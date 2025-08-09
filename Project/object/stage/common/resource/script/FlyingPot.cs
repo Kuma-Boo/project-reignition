@@ -27,12 +27,12 @@ public partial class FlyingPot : Node3D
 	[Export] private AudioStreamPlayer exitSFX;
 	private CameraTrigger cameraTrigger;
 
-	private readonly StringName EnterTrigger = "parameters/enter_trigger/request";
-	private readonly StringName FallTransition = "parameters/fall_transition/transition_request";
-	private readonly StringName FlapTrigger = "parameters/flap_trigger/request";
-	private readonly StringName FlapSpeed = "parameters/flap_speed/scale";
-	private readonly StringName EnabledState = "enabled";
-	private readonly StringName DisabledState = "disabled";
+	private readonly string EnterTrigger = "parameters/enter_trigger/request";
+	private readonly string FallTransition = "parameters/fall_transition/transition_request";
+	private readonly string FlapTrigger = "parameters/flap_trigger/request";
+	private readonly string FlapSpeed = "parameters/flap_speed/scale";
+	private readonly string EnabledState = "enabled";
+	private readonly string DisabledState = "disabled";
 
 	private bool isSleeping;
 	private bool isOnFloor;

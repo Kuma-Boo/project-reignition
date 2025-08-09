@@ -10,15 +10,15 @@ public partial class DinoRex : Node3D
 	private Node3D root;
 	[Export]
 	private AnimationTree animationTree;
-	private readonly StringName AttackTrigger = "parameters/attack_trigger/request";
-	private readonly StringName AttackTransition = "parameters/attack_transition/transition_request";
-	private readonly StringName StepTrigger = "parameters/step_trigger/request";
-	private readonly StringName StepTransition = "parameters/step_transition/transition_request";
-	private readonly StringName LowerBiteState = "lower_bite";
-	private readonly StringName TailAttackState = "tail_attack";
-	private readonly StringName UpperBiteState = "upper_bite";
-	private readonly StringName LeftState = "left";
-	private readonly StringName RightState = "right";
+	private readonly string AttackTrigger = "parameters/attack_trigger/request";
+	private readonly string AttackTransition = "parameters/attack_transition/transition_request";
+	private readonly string StepTrigger = "parameters/step_trigger/request";
+	private readonly string StepTransition = "parameters/step_transition/transition_request";
+	private readonly string LowerBiteState = "lower_bite";
+	private readonly string TailAttackState = "tail_attack";
+	private readonly string UpperBiteState = "upper_bite";
+	private readonly string LeftState = "left";
+	private readonly string RightState = "right";
 
 	/// <summary> Is the dino currently in the middle of an attack animation? </summary>
 	private bool isAttacking;

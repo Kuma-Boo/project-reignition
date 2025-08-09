@@ -8,8 +8,8 @@ namespace Project.Gameplay
 	{
 		//KNOWN BUG: Viewports are unable to render HDR images, so depth texture gets corrupted
 		public static ViewportTexture DepthTexture { get; private set; }
-		public static readonly StringName DEPTH_PARAMETER = "depth_texture"; //All shaders that use depth must have this parameter
-		public static readonly StringName FAR_CLIP_PARAMETER = "far_clip_distance";
+		public static readonly string DEPTH_PARAMETER = "depth_texture"; //All shaders that use depth must have this parameter
+		public static readonly string FAR_CLIP_PARAMETER = "far_clip_distance";
 
 		[Export]
 		private Camera3D depthCamera; //Used to get the depth texture to determine whether the sun is occluded

@@ -19,8 +19,8 @@ public partial class FlyingPotState : PlayerState
 	private const float FlapInterval = .5f; // How long is a single flap?
 	private const float FlapAccelerationLength = .4f; // How long does a flap accelerate?
 
-	private readonly StringName AscendAction = "action_ascend";
-	private readonly StringName ExitAction = "action_exit";
+	private readonly string AscendAction = "action_ascend";
+	private readonly string ExitAction = "action_exit";
 
 	public override void EnterState()
 	{

@@ -316,20 +316,20 @@ public partial class Majin : Enemy
 	private const float StaggerLength = 1.2f;
 
 	// Animation parameters
-	private readonly StringName IdleState = "idle";
-	private readonly StringName SpinState = "spin";
-	private readonly StringName FireState = "fire";
-	private readonly StringName StateRequestParameter = "parameters/state_transition/transition_request";
+	private readonly string IdleState = "idle";
+	private readonly string SpinState = "spin";
+	private readonly string FireState = "fire";
+	private readonly string StateRequestParameter = "parameters/state_transition/transition_request";
 
-	private readonly StringName EnabledState = "enabled";
-	private readonly StringName DisabledState = "disabled";
-	private readonly StringName MoveTransition = "parameters/move_transition/transition_request";
-	private readonly StringName MoveBlend = "parameters/move_blend/blend_position";
-	private readonly StringName SpawnTrigger = "parameters/spawn_trigger/request";
-	private readonly StringName DespawnTrigger = "parameters/despawn_trigger/request";
-	private readonly StringName HitTransition = "parameters/hit_transition/transition_request";
-	private readonly StringName StaggerState = "stagger";
-	private readonly StringName BoopState = "boop";
+	private readonly string EnabledState = "enabled";
+	private readonly string DisabledState = "disabled";
+	private readonly string MoveTransition = "parameters/move_transition/transition_request";
+	private readonly string MoveBlend = "parameters/move_blend/blend_position";
+	private readonly string SpawnTrigger = "parameters/spawn_trigger/request";
+	private readonly string DespawnTrigger = "parameters/despawn_trigger/request";
+	private readonly string HitTransition = "parameters/hit_transition/transition_request";
+	private readonly string StaggerState = "stagger";
+	private readonly string BoopState = "boop";
 
 	private const float MovementTransitionLength = .4f;
 
@@ -642,19 +642,19 @@ public partial class Majin : Enemy
 	private int fidgetIndex; // Index of the current fidget animation.
 	private float fidgetTimer; // Keeps track of how long it's been since the last fidget
 
-	private readonly StringName[] FidgetAnimations = [
+	private readonly string[] FidgetAnimations = [
 			"flip",
 			"fight",
 			"survey",
 		];
 
-	private readonly StringName HitTrigger = "parameters/hit_trigger/request";
-	private readonly StringName DefeatTransitionParameter = "parameters/defeat_transition/transition_request";
+	private readonly string HitTrigger = "parameters/hit_trigger/request";
+	private readonly string DefeatTransitionParameter = "parameters/defeat_transition/transition_request";
 
-	private readonly StringName IdleFactorParameter = "parameters/idle_movement_factor/add_amount";
-	private readonly StringName FidgetTransition = "parameters/fidget_transition/transition_request"; // Sets the fidget animation
-	private readonly StringName FidgetTrigger = "parameters/fidget_trigger/request"; // Currently fidgeting? Set StringName
-	private readonly StringName FidgetTriggerState = "parameters/fidget_trigger/active"; // Get StringName
+	private readonly string IdleFactorParameter = "parameters/idle_movement_factor/add_amount";
+	private readonly string FidgetTransition = "parameters/fidget_transition/transition_request"; // Sets the fidget animation
+	private readonly string FidgetTrigger = "parameters/fidget_trigger/request"; // Currently fidgeting? Set StringName
+	private readonly string FidgetTriggerState = "parameters/fidget_trigger/active"; // Get StringName
 	private const float FidgetFrequency = 3f; // How often to fidget
 
 	/// <summary> Updates fidgets and idle movement. </summary>

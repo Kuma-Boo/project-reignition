@@ -56,7 +56,7 @@ public partial class Options : Menu
 	}
 
 	private Callable FullscreenToggleCallable => new(this, MethodName.ToggleFullscreen);
-	public static readonly StringName MenuParameter = "menu_texture";
+	public static readonly string MenuParameter = "menu_texture";
 
 	private Submenus currentSubmenu = Submenus.Options;
 	private enum Submenus

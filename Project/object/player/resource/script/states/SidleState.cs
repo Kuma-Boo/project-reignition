@@ -48,7 +48,7 @@ public partial class SidleState : PlayerState
 	/// <summary> How long does the recovery take? </summary>
 	private const float RecoveryLength = .84f;
 
-	private readonly StringName JumpAction = "action_jump";
+	private readonly string JumpAction = "action_jump";
 
 	public override void EnterState()
 	{

@@ -46,14 +46,14 @@ public partial class Menu : Control
 	[Export]
 	protected AnimationPlayer animator;
 
-	protected readonly StringName ConfirmAnimation = "confirm";
-	protected readonly StringName CancelAnimation = "cancel";
-	protected readonly StringName ShowAnimation = "show";
-	protected readonly StringName HideAnimation = "hide";
-	protected readonly StringName ScrollUpAnimation = "scroll-up";
-	protected readonly StringName ScrollDownAnimation = "scroll-down";
-	protected readonly StringName ScrollLeftAnimation = "scroll-up";
-	protected readonly StringName ScrollRightAnimation = "scroll-down";
+	protected readonly string ConfirmAnimation = "confirm";
+	protected readonly string CancelAnimation = "cancel";
+	protected readonly string ShowAnimation = "show";
+	protected readonly string HideAnimation = "hide";
+	protected readonly string ScrollUpAnimation = "scroll-up";
+	protected readonly string ScrollDownAnimation = "scroll-down";
+	protected readonly string ScrollLeftAnimation = "scroll-up";
+	protected readonly string ScrollRightAnimation = "scroll-down";
 
 	protected int HorizontalSelection { get; set; }
 	protected int VerticalSelection { get; set; }

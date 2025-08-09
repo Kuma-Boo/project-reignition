@@ -9,8 +9,8 @@ public partial class DinoPtero : Node3D
 	[Export]
 	private AnimationPlayer animator;
 
-	private readonly StringName FlapAnimation = "flap";
-	private readonly StringName GlideAnimation = "glide";
+	private readonly string FlapAnimation = "flap";
+	private readonly string GlideAnimation = "glide";
 
 	public override void _Ready()
 	{

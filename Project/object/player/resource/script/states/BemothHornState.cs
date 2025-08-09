@@ -26,8 +26,8 @@ public partial class BemothHornState : PlayerState
 	/// <summary> Used to mimmick the "optimal speedrun strat" in the original game. </summary>
 	private float pullChargeTimer;
 	private readonly float OptimalPullChargeTiming = .4f;
-	private readonly StringName JumpAction = "action_jump";
-	private readonly StringName PullAction = "action_pull";
+	private readonly string JumpAction = "action_jump";
+	private readonly string PullAction = "action_pull";
 
 	public override void EnterState()
 	{

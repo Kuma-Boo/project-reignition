@@ -30,8 +30,8 @@ namespace Project
 		private PlayerCameraController Camera => StageSettings.Player.Camera;
 		private Callable UpdateSunCallable => new(this, MethodName.UpdateSun);
 
-		private readonly StringName SHADER_GLOBAL_SUN_OCCLUSION = "sun_occlusion";
-		private readonly StringName SHADER_GLOBAL_SUN_MOVEMENT = "sun_movement";
+		private readonly string SHADER_GLOBAL_SUN_OCCLUSION = "sun_occlusion";
+		private readonly string SHADER_GLOBAL_SUN_MOVEMENT = "sun_movement";
 
 		public override void _Ready()
 		{

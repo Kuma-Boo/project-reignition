@@ -71,21 +71,21 @@ public partial class SlimeMajin : Enemy
 
 	private AnimationNodeStateMachinePlayback SpawnStatePlayback => AnimationTree.Get(SpawnPlayback).Obj as AnimationNodeStateMachinePlayback;
 	private AnimationNodeStateMachinePlayback ShockStatePlayback => AnimationTree.Get(ShockPlayback).Obj as AnimationNodeStateMachinePlayback;
-	private readonly StringName SpawnStartAnimation = "spawn-start";
-	private readonly StringName SpawnEndAnimation = "spawn-end";
+	private readonly string SpawnStartAnimation = "spawn-start";
+	private readonly string SpawnEndAnimation = "spawn-end";
 
-	private readonly StringName MoveTrigger = "parameters/move_trigger/request";
-	private readonly StringName MoveTriggerActive = "parameters/move_trigger/active";
-	private readonly StringName ShockTrigger = "parameters/shock_trigger/request";
-	private readonly StringName ShockWarnState = "shock-warn";
-	private readonly StringName ShockStartState = "shock-start";
-	private readonly StringName ShockLoopState = "shock";
-	private readonly StringName ShockEndState = "shock-end";
-	private readonly StringName SpitTrigger = "parameters/spit_trigger/request";
-	private readonly StringName SpawnTrigger = "parameters/spawn_trigger/request";
-	private readonly StringName SpawnPlayback = "parameters/spawn_state/playback";
-	private readonly StringName ShockPlayback = "parameters/shock_state/playback";
-	private readonly StringName StateTransition = "parameters/state_transition/transition_request";
+	private readonly string MoveTrigger = "parameters/move_trigger/request";
+	private readonly string MoveTriggerActive = "parameters/move_trigger/active";
+	private readonly string ShockTrigger = "parameters/shock_trigger/request";
+	private readonly string ShockWarnState = "shock-warn";
+	private readonly string ShockStartState = "shock-start";
+	private readonly string ShockLoopState = "shock";
+	private readonly string ShockEndState = "shock-end";
+	private readonly string SpitTrigger = "parameters/spit_trigger/request";
+	private readonly string SpawnTrigger = "parameters/spawn_trigger/request";
+	private readonly string SpawnPlayback = "parameters/spawn_state/playback";
+	private readonly string ShockPlayback = "parameters/shock_state/playback";
+	private readonly string StateTransition = "parameters/state_transition/transition_request";
 
 	protected override void SetUp()
 	{

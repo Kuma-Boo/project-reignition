@@ -28,16 +28,16 @@ public partial class PlayerEffect : Node3D
 			isFadingRailSFX = SoundManager.FadeAudioPlayer(grindrailSfx);
 	}
 
-	public readonly StringName JumpSfx = "jump";
-	public readonly StringName JumpDashSfx = "jump dash";
-	public readonly StringName BrakeSfx = "brake";
-	public readonly StringName SlideSfx = "slide";
-	public readonly StringName SplashSfx = "splash";
-	public readonly StringName SidleSfx = "sidle";
-	public readonly StringName StompSfx = "stomp";
-	public readonly StringName WindSfx = "wind";
-	public readonly StringName FireSfx = "fire";
-	public readonly StringName DarkSfx = "dark";
+	public readonly string JumpSfx = "jump";
+	public readonly string JumpDashSfx = "jump dash";
+	public readonly string BrakeSfx = "brake";
+	public readonly string SlideSfx = "slide";
+	public readonly string SplashSfx = "splash";
+	public readonly string SidleSfx = "sidle";
+	public readonly string StompSfx = "stomp";
+	public readonly string WindSfx = "wind";
+	public readonly string FireSfx = "fire";
+	public readonly string DarkSfx = "dark";
 
 	#region Actions
 	// Actions (Jumping, sliding, etc)

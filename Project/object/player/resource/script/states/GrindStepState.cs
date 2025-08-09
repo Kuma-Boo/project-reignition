@@ -17,7 +17,7 @@ public partial class GrindStepState : PlayerState
 	[Export]
 	private float GrindStepSpeed = 28.0f;
 
-	private readonly StringName StompAction = "action_stomp";
+	private readonly string StompAction = "action_stomp";
 
 	public override void EnterState()
 	{

@@ -8,9 +8,9 @@ public partial class Spring : Launcher
 	[Export] private bool startHidden;
 	[Export] private AnimationPlayer animator;
 
-	private readonly StringName LaunchAnim = "launch";
-	private readonly StringName ShowAnim = "show";
-	private readonly StringName HideAnim = "hide";
+	private readonly string LaunchAnim = "launch";
+	private readonly string ShowAnim = "show";
+	private readonly string HideAnim = "hide";
 
 	protected override void SetUp()
 	{

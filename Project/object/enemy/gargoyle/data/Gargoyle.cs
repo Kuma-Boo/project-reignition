@@ -50,27 +50,27 @@ public partial class Gargoyle : Enemy
 	public void EnableActionTimer() => isActionTimerPaused = false;
 
 	private AnimationNodeStateMachinePlayback MovementStatePlayback => AnimationTree.Get(MovementPlaybackParameter).Obj as AnimationNodeStateMachinePlayback;
-	private readonly StringName MovementPlaybackParameter = "parameters/movement_state/playback";
-	private readonly StringName InitialMovementState = "RESET";
-	private readonly StringName IdleState = "idle";
-	private readonly StringName SkyroadState = "skyroad";
+	private readonly string MovementPlaybackParameter = "parameters/movement_state/playback";
+	private readonly string InitialMovementState = "RESET";
+	private readonly string IdleState = "idle";
+	private readonly string SkyroadState = "skyroad";
 
 	private AnimationNodeStateMachinePlayback BlockStatePlayback => AnimationTree.Get(BlockPlaybackParameter).Obj as AnimationNodeStateMachinePlayback;
-	private readonly StringName BlockPlaybackParameter = "parameters/block_state/playback";
-	private readonly StringName BlockStartState = "block-start";
-	private readonly StringName BlockStunState = "block-stun";
-	private readonly StringName BlockEndState = "block-end";
+	private readonly string BlockPlaybackParameter = "parameters/block_state/playback";
+	private readonly string BlockStartState = "block-start";
+	private readonly string BlockStunState = "block-stun";
+	private readonly string BlockEndState = "block-end";
 
-	private readonly StringName SpawnTrigger = "parameters/spawn_trigger/request";
-	private readonly StringName ActionTrigger = "parameters/action_trigger/request";
-	private readonly StringName ActionTransition = "parameters/action_transition/transition_request";
-	private readonly StringName PetrifyState = "petrify";
-	private readonly StringName SlashState = "slash";
-	private readonly StringName BlockState = "block";
+	private readonly string SpawnTrigger = "parameters/spawn_trigger/request";
+	private readonly string ActionTrigger = "parameters/action_trigger/request";
+	private readonly string ActionTransition = "parameters/action_transition/transition_request";
+	private readonly string PetrifyState = "petrify";
+	private readonly string SlashState = "slash";
+	private readonly string BlockState = "block";
 
-	private readonly StringName DamageTrigger = "parameters/damage_trigger/request";
-	private readonly StringName DamageDirectionTransition = "parameters/damage_direction_transition/transition_request";
-	private readonly StringName DefeatTransition = "parameters/defeat_transition/transition_request";
+	private readonly string DamageTrigger = "parameters/damage_trigger/request";
+	private readonly string DamageDirectionTransition = "parameters/damage_direction_transition/transition_request";
+	private readonly string DefeatTransition = "parameters/defeat_transition/transition_request";
 
 	protected override void SetUp()
 	{

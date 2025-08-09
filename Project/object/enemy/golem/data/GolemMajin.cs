@@ -27,11 +27,11 @@ public partial class GolemMajin : Enemy
 	private const float WalkSpeed = 2f;
 	private const float DefaultCameraShakeDistance = 20;
 
-	private readonly StringName ThrowTrigger = "parameters/throw_trigger/request";
-	private readonly StringName StateTransition = "parameters/state_transition/transition_request";
-	private readonly StringName DefeatTransition = "parameters/defeat_transition/transition_request";
-	private readonly StringName EnabledConstant = "enabled";
-	private readonly StringName DisabledConstant = "disabled";
+	private readonly string ThrowTrigger = "parameters/throw_trigger/request";
+	private readonly string StateTransition = "parameters/state_transition/transition_request";
+	private readonly string DefeatTransition = "parameters/defeat_transition/transition_request";
+	private readonly string EnabledConstant = "enabled";
+	private readonly string DisabledConstant = "disabled";
 
 	protected override void SetUp()
 	{

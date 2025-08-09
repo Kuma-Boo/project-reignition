@@ -46,9 +46,9 @@ public partial class EventTrigger : StageTriggerModule
 	}
 	[Export] private bool respawnToEnd = true;
 
-	private readonly StringName ResetAnimation = "RESET";
-	private readonly StringName EventAnimation = "event";
-	private readonly StringName DeactivateEventAnimation = "event-deactivate";
+	private readonly string ResetAnimation = "RESET";
+	private readonly string EventAnimation = "event";
+	private readonly string DeactivateEventAnimation = "event-deactivate";
 
 	[Export(PropertyHint.Range, "0.1,10,0.1,or_greater")] private float activationSpeedScale = 1f;
 	[Export(PropertyHint.Range, "0.1,10,0.1,or_greater")] private float deactivationSpeedScale = 1f;

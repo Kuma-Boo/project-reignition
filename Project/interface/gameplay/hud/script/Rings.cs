@@ -33,12 +33,12 @@ public partial class Rings : Control
 	}
 
 	private const string RingLabelFormat = "000";
-	private readonly StringName EnabledParameter = "enabled";
-	private readonly StringName DisabledParameter = "disabled";
+	private readonly string EnabledParameter = "enabled";
+	private readonly string DisabledParameter = "disabled";
 
-	private readonly StringName RingGainParameter = "parameters/gain_trigger/request";
-	private readonly StringName RingLossParameter = "parameters/loss_trigger/request";
-	private readonly StringName RinglessParameter = "parameters/ringless_transition/transition_request";
+	private readonly string RingGainParameter = "parameters/gain_trigger/request";
+	private readonly string RingLossParameter = "parameters/loss_trigger/request";
+	private readonly string RinglessParameter = "parameters/ringless_transition/transition_request";
 
 	public void InitializeRings()
 	{

@@ -169,8 +169,8 @@ public partial class IfritGolem : Node3D
 		EnterIdle();
 	}
 
-	private readonly StringName IntroCutsceneID = "ef_boss_intro";
-	private readonly StringName DefeatCutsceneID = "ef_boss_defeat";
+	private readonly string IntroCutsceneID = "ef_boss_intro";
+	private readonly string DefeatCutsceneID = "ef_boss_defeat";
 
 	public override void _PhysicsProcess(double _)
 	{
@@ -231,7 +231,7 @@ public partial class IfritGolem : Node3D
 			bone.OnBonePoseUpdate(bone.BoneIdx);
 	}
 
-	private readonly StringName IntroTrigger = "parameters/intro_trigger/request";
+	private readonly string IntroTrigger = "parameters/intro_trigger/request";
 	private void StartIntroduction()
 	{
 		Player.Deactivate();
@@ -304,10 +304,10 @@ public partial class IfritGolem : Node3D
 	}
 
 	private AnimationNodeStateMachinePlayback NormalStatePlayback => AnimationTree.Get(NormalPlayback).Obj as AnimationNodeStateMachinePlayback;
-	private readonly StringName NormalPlayback = "parameters/normal_state/playback";
-	private readonly StringName StepLeftAnimation = "step-l";
-	private readonly StringName StepRightAnimation = "step-r";
-	private readonly StringName IdleAnimation = "idle";
+	private readonly string NormalPlayback = "parameters/normal_state/playback";
+	private readonly string StepLeftAnimation = "step-l";
+	private readonly string StepRightAnimation = "step-r";
+	private readonly string IdleAnimation = "idle";
 	private void EnterStep()
 	{
 		ExitIdle();
@@ -357,12 +357,12 @@ public partial class IfritGolem : Node3D
 	[Signal] public delegate void LavaLaunchEndedEventHandler();
 
 	private AnimationNodeStateMachinePlayback HitstunStatePlayback => AnimationTree.Get(HitstunPlayback).Obj as AnimationNodeStateMachinePlayback;
-	private readonly StringName HitstunPlayback = "parameters/hitstun_state/playback";
-	private readonly StringName HitstunTrigger = "parameters/hitstun_trigger/request";
-	private readonly StringName HitstunLeftAnimation = "hitstun-l";
-	private readonly StringName HitstunRightAnimation = "hitstun-r";
-	private readonly StringName DamageAnimation = "damage";
-	private readonly StringName RecoveryAnimation = "recovery";
+	private readonly string HitstunPlayback = "parameters/hitstun_state/playback";
+	private readonly string HitstunTrigger = "parameters/hitstun_trigger/request";
+	private readonly string HitstunLeftAnimation = "hitstun-l";
+	private readonly string HitstunRightAnimation = "hitstun-r";
+	private readonly string DamageAnimation = "damage";
+	private readonly string RecoveryAnimation = "recovery";
 	private void EnterHitstun(bool isRightHand)
 	{
 		// Update sectors
@@ -654,7 +654,7 @@ public partial class IfritGolem : Node3D
 		SetInteractionProcessed();
 	}
 
-	private readonly StringName DefeatTrigger = "parameters/defeat_trigger/request";
+	private readonly string DefeatTrigger = "parameters/defeat_trigger/request";
 	private void DefeatBoss()
 	{
 		TransitionManager.StartTransition(new()
@@ -680,7 +680,7 @@ public partial class IfritGolem : Node3D
 		TransitionManager.FinishTransition();
 	}
 
-	private readonly StringName DefeatSeek = "parameters/defeat_seek/seek_request";
+	private readonly string DefeatSeek = "parameters/defeat_seek/seek_request";
 	private void FinishDefeat()
 	{
 		EventAnimator.Play("finish-defeat");
@@ -699,7 +699,7 @@ public partial class IfritGolem : Node3D
 	private float headRotationRatio;
 	private float targetHeadRotationRatio;
 	private float headRotationVelocity;
-	private readonly StringName HeadBlend = "parameters/head_blend/blend_amount";
+	private readonly string HeadBlend = "parameters/head_blend/blend_amount";
 	private readonly float MaxHeadRotation = Mathf.Pi / 4f;
 	private readonly float HeadSmoothing = 0.1f;
 	private readonly float LaserForwardLeadMultiplier = 60.0f;
@@ -960,7 +960,7 @@ public partial class IfritGolem : Node3D
 		tank.GetParent().RemoveChild(tank);
 	}
 
-	private readonly StringName ShutterTreeParameter = "parameters/shutter_tree/";
+	private readonly string ShutterTreeParameter = "parameters/shutter_tree/";
 	private StringName GetShutterTrigger(bool isRightHand, int tankIndex)
 	{
 		int initialDigit = tankIndex;
@@ -1013,10 +1013,10 @@ public partial class IfritGolem : Node3D
 	}
 
 	private AnimationNodeStateMachinePlayback SpecialStatePlayback => AnimationTree.Get(SpecialPlayback).Obj as AnimationNodeStateMachinePlayback;
-	private readonly StringName SpecialPlayback = "parameters/special_state/playback";
-	private readonly StringName SpecialAttackTrigger = "parameters/special_trigger/request";
-	private readonly StringName SpecialAttackStartAnimation = "special-attack-start";
-	private readonly StringName SpecialAttackStopAnimation = "special-attack-stop";
+	private readonly string SpecialPlayback = "parameters/special_state/playback";
+	private readonly string SpecialAttackTrigger = "parameters/special_trigger/request";
+	private readonly string SpecialAttackStartAnimation = "special-attack-start";
+	private readonly string SpecialAttackStopAnimation = "special-attack-stop";
 	private void StartSpecialAttack()
 	{
 		SpecialStatePlayback.Start(SpecialAttackStartAnimation);

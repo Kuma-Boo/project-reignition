@@ -952,7 +952,7 @@ public partial class SaveManager : Node
 		/// <summary> Dictionaries for each individual level's data. </summary>
 		public Dictionary<StringName, Dictionary> levelData = [];
 
-		private readonly StringName FireSoulKey = "fire_soul";
+		private readonly string FireSoulKey = "fire_soul";
 		/// <summary> Returns whether a particular fire soul has been collected or not. </summary>
 		public bool IsFireSoulCollected(StringName levelID, int index)
 		{
@@ -977,7 +977,7 @@ public partial class SaveManager : Node
 			GetLevelData(levelID).Add(key, collected);
 		}
 
-		private readonly StringName RankKey = "rank";
+		private readonly string RankKey = "rank";
 		/// <summary> Gets the save value for the player's best rank. </summary>
 		public int GetRank(StringName levelID)
 		{
@@ -1007,7 +1007,7 @@ public partial class SaveManager : Node
 			GetLevelData(levelID).Add(RankKey, rank);
 		}
 
-		private readonly StringName ScoreKey = "high_score";
+		private readonly string ScoreKey = "high_score";
 		/// <summary> Gets the save value for the player's high score. </summary>
 		public int GetHighScore(StringName levelID)
 		{
@@ -1032,7 +1032,7 @@ public partial class SaveManager : Node
 			GetLevelData(levelID).Add(ScoreKey, score);
 		}
 
-		private readonly StringName TimeKey = "best_time";
+		private readonly string TimeKey = "best_time";
 		/// <summary> Gets the save value for the player's best rank. </summary>
 		public float GetBestTime(StringName levelID)
 		{
@@ -1061,7 +1061,7 @@ public partial class SaveManager : Node
 			GetLevelData(levelID).Add(TimeKey, time);
 		}
 
-		private readonly StringName StatusKey = "clear_status";
+		private readonly string StatusKey = "clear_status";
 		/// <summary> Returns the clear state of a level. </summary>
 		public LevelStatus GetClearStatus(StringName levelID)
 		{
