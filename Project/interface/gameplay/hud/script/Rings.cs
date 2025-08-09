@@ -26,12 +26,6 @@ public partial class Rings : Control
 	[Export]
 	private Sprite2D hudDecalShort;
 
-	public void CollectFireSoul()
-	{
-		fireSoulAnimator.Play("firesoul");
-		fireSoulAnimator.Seek(0.0, true);
-	}
-
 	private const string RingLabelFormat = "000";
 	private readonly string EnabledParameter = "enabled";
 	private readonly string DisabledParameter = "disabled";

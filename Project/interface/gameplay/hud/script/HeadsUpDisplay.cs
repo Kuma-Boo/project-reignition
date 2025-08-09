@@ -13,16 +13,8 @@ public partial class HeadsUpDisplay : Control
 
 	public override void _EnterTree() => Instance = this;
 
-	[Export]
-	private Control hudRetail;
-	[Export]
-	private Control hudReignition;
-	[Export]
-	private Control hudE3;
-
 	public override void _Ready()
 	{
-		//SaveManager.Config.hudStyle = SaveManager.HudStyle.Retail; //for debugging
 		switch (SaveManager.Config.hudStyle)
 		{
 			case SaveManager.HudStyle.Retail:
@@ -45,12 +37,13 @@ public partial class HeadsUpDisplay : Control
 				break;
 		}
 
-		InitializeRankPreviewer();
-		InitializeRings();
-		InitializeObjectives();
+		score.InitializeRankPreviewer();
+		rings.InitializeRings();
+		objectives.InitializeObjectives();
 		InitializeSoulGauge();
-		InitializeRace();
+		race.InitializeRace();
 		InitializePrompts();
+
 		if (Stage != null) // Decouple from level settings
 		{
 			Stage.Connect(nameof(StageSettings.RingChanged), new Callable(this, MethodName.UpdateRingCount));
@@ -58,28 +51,18 @@ public partial class HeadsUpDisplay : Control
 			Stage.Connect(nameof(StageSettings.ScoreChanged), new Callable(this, MethodName.UpdateScore));
 			Stage.Connect(nameof(StageSettings.LevelCompleted), new Callable(this, MethodName.OnLevelCompleted)); // Hide interface
 		}
-
-
-
 	}
 
 	#region Rings
-	[Export] Rings rings;
-	[Export]
-	private Rings ringsReignition;
+	[Export] private Rings rings;
+	[Export] private Rings ringsReignition;
+	[Export] private AnimationPlayer fireSoulAnimator;
 
 	public void CollectFireSoul()
 	{
-		rings.CollectFireSoul();
+		fireSoulAnimator.Play("firesoul");
+		fireSoulAnimator.Seek(0.0, true);
 	}
-
-	private void InitializeRings()
-	{
-		// Initialize ring counter
-
-		rings.InitializeRings();
-	}
-
 
 	private void UpdateRingCount(int amount, bool disableAnimations)
 	{
@@ -89,94 +72,57 @@ public partial class HeadsUpDisplay : Control
 	#endregion
 
 	#region Time and Score
-
-	[Export]
-	private Score score;
-	[Export]
-	private Score scoreReignition;
-	private void InitializeRankPreviewer() => score.InitializeRankPreviewer();
+	[Export] private Score score;
+	[Export] private Score scoreReignition;
 
 	private void UpdateTime() => score.UpdateTime();
-
 	private void UpdateScore() => score.UpdateScore();
-
-
 	#endregion
 
 	#region Objectives
-
-	[Export]
-	private Objectives objectives;
-	[Export]
-	private Objectives objectivesReignition;
-	private void InitializeObjectives() => objectives.InitializeObjectives();
-
+	[Export] private Objectives objectives;
+	[Export] private Objectives objectivesReignition;
 
 	private void UpdateObjective() => objectives.UpdateObjective();
 
-
 	public void PlayObjectiveAnimation(StringName animation) => objectives.PlayObjectiveAnimation(animation, 0);
-
-
 	public void PlayObjectiveAnimation(StringName animation, int index) => objectives.PlayObjectiveAnimation(animation, index);
-
 	#endregion
 
 	#region Soul Gauge
-
-	[Export]
-	private SoulGauge soulGaugeVert;
-
-	[Export]
-	private SoulGauge soulGaugeHori;
-
-
+	[Export] private SoulGauge soulGaugeVertical;
+	[Export] private SoulGauge soulGaugeHorizontal;
 	private void InitializeSoulGauge()
 	{
-		soulGaugeVert.Visible = false;
-		soulGaugeHori.Visible = false;
+		soulGaugeVertical.Visible = false;
+		soulGaugeHorizontal.Visible = false;
 
-		if (!SaveManager.Config.isUsingHorizontalSoulGauge)
+		if (SaveManager.Config.isUsingHorizontalSoulGauge)
 		{
-			soulGaugeVert.Visible = true;
-			soulGaugeVert.InitializeSoulGauge();
+			soulGaugeHorizontal.Visible = true;
+			soulGaugeHorizontal.InitializeSoulGauge();
 		}
 		else
 		{
-			soulGaugeHori.Visible = true;
-			soulGaugeHori.InitializeSoulGauge();
+			soulGaugeVertical.Visible = true;
+			soulGaugeVertical.InitializeSoulGauge();
 		}
 	}
 
-	public SoulGauge GetCurrentSoulGauge()
-	{
-		if (soulGaugeVert.Visible)
-			return soulGaugeVert;
-		else
-			return soulGaugeHori;
-	}
-
+	public SoulGauge ActiveSoulGauge => soulGaugeVertical.Visible ? soulGaugeVertical : soulGaugeHorizontal;
 	#endregion
 
 	#region Race
-
-	[Export]
-	private Race race;
-	private void InitializeRace() => race.InitializeRace();
-
+	[Export] private Race race;
 	public void UpdateRace(float playerRatio, float uhuRatio) => race.UpdateRace(playerRatio, uhuRatio);
-
 	#endregion
 
 	#region Prompts
-	[Signal]
-	public delegate void InputPromptsChangedEventHandler();
+	[Signal] public delegate void InputPromptsChangedEventHandler();
 
 	[ExportGroup("Prompts")]
-	[Export]
-	private Interface.NavigationButton[] buttons;
-	[Export]
-	private AnimationPlayer promptAnimator;
+	[Export] private Interface.NavigationButton[] buttons;
+	[Export] private AnimationPlayer promptAnimator;
 	private void InitializePrompts()
 	{
 		for (int i = 0; i < buttons.Length; i++)
