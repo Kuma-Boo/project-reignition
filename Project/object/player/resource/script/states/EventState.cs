@@ -25,6 +25,7 @@ public partial class EventState : PlayerState
 			return;
 
 		BGMPlayer.SetStageMusicVolume(-80f); // Mute BGM
+		HeadsUpDisplay.Instance.Visible = false;
 
 		Player.StartExternal(this, Trigger.PlayerStandin, Trigger.CharacterPositionSmoothing);
 		Player.Controller.ResetJumpBuffer();
@@ -40,6 +41,7 @@ public partial class EventState : PlayerState
 		if (Trigger.PlayerStandin != null)
 		{
 			BGMPlayer.SetStageMusicVolume(0f); // Unmute BGM
+			HeadsUpDisplay.Instance.Visible = !DebugManager.Instance.DisableHUD;
 
 			Player.MoveSpeed = Trigger.NormalizeExitMoveSpeed ? Player.Stats.GroundSettings.Speed * Trigger.CharacterExitMoveSpeed : Trigger.CharacterExitMoveSpeed;
 			Player.VerticalSpeed = Trigger.CharacterExitVerticalSpeed;
