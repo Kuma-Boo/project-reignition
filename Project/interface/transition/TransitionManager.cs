@@ -138,21 +138,20 @@ public partial class TransitionManager : Node
 		}
 		else
 		{
-			/* TODO Godot v4.5 Fix asynchronous loading
 			if (CurrentTransitionData.loadAsynchronously)
 			{
 				GD.Print(ResourceLoader.LoadThreadedRequest(QueuedScene));
 				while (ResourceLoader.LoadThreadedGetStatus(QueuedScene) == ResourceLoader.ThreadLoadStatus.InProgress) // Still loading
 				{
-					GD.PrintT("Loading Scene...", );
+					GD.Print("Loading level.");
 					await ToSignal(GetTree().CreateTimer(.1f), SceneTreeTimer.SignalName.Timeout); // Wait a bit
 				}
 
 				var scene = ResourceLoader.LoadThreadedGet(QueuedScene) as PackedScene;
 				GetTree().ChangeSceneToPacked(scene);
 				GD.Print("Scene Changed.");
+				return;
 			}
-			*/
 
 			GetTree().ChangeSceneToFile(QueuedScene);
 		}

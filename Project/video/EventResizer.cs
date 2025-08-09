@@ -8,7 +8,7 @@ public partial class EventResizer : Control
 
 	public override void _Ready()
 	{
-		ResizeVideoPlayer();
+		CallDeferred(MethodName.ResizeVideoPlayer);
 		Resized += ResizeVideoPlayer;
 	}
 
@@ -16,12 +16,12 @@ public partial class EventResizer : Control
 	{
 		if (Size.X > baseSize.X)
 		{
-			player.Size = baseSize;
+			player.SetDeferred("size", baseSize);
 			player.Position = Vector2.Right * (Size.X - baseSize.X) * 0.5f;
 			return;
 		}
 
-		player.Size = (baseSize * Size.X / baseSize.X).Ceil();
+		player.SetDeferred("size", (baseSize * Size.X / baseSize.X).Ceil());
 		player.Position = Vector2.Right * (player.Size.X - Size.X) + Vector2.Down * (Size.Y - player.Size.Y);
 		player.Position *= 0.5f;
 	}
