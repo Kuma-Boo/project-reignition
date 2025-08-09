@@ -6,7 +6,6 @@ namespace Project.Gameplay.Triggers;
 public partial class ItemCycleTrigger : StageTriggerModule
 {
 	private bool ignoreCheckpoint; // Is the player moving backward through the level (ignore checkpoints)?
-	private bool itemCycleRespawnEnabled = true; // Respawn items when cycling?
 	private bool isCycleFlagSet; // Should we trigger an item switch?
 	private int itemCycleIndex; // Active item set
 

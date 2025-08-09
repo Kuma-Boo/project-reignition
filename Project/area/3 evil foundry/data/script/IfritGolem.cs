@@ -31,6 +31,7 @@ public partial class IfritGolem : Node3D
 	private Node3D LaserBeam { get; set; }
 	[Export(PropertyHint.NodeType, "Node3D")] private NodePath laserVFXRoot;
 	private Node3D LaserVFXRoot { get; set; }
+	[Export] private CameraTrigger cutsceneCamera;
 
 	[Export] private CameraSettingsResource bounceCameraSettings;
 	[Export] private CameraSettingsResource transitionCameraSettings;
@@ -234,6 +235,7 @@ public partial class IfritGolem : Node3D
 	private readonly string IntroTrigger = "parameters/intro_trigger/request";
 	private void StartIntroduction()
 	{
+		cutsceneCamera.Activate();
 		Player.Deactivate();
 		AnimationTree.Set(IntroTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
@@ -256,6 +258,7 @@ public partial class IfritGolem : Node3D
 	private void StartBattle()
 	{
 		TransitionManager.instance.TransitionProcess -= StartBattle;
+		cutsceneCamera.Deactivate();
 		EventAnimator.Play("finish-intro");
 		EventAnimator.Advance(0.0);
 		AnimationTree.Set(IntroTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
@@ -667,6 +670,8 @@ public partial class IfritGolem : Node3D
 		Root.Rotation = Vector3.Zero;
 		ExitHitstun();
 
+		cutsceneCamera.previousSettings = bounceCameraSettings;
+		cutsceneCamera.Activate();
 		Player.Deactivate();
 		Player.AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
 
@@ -683,6 +688,7 @@ public partial class IfritGolem : Node3D
 	private readonly string DefeatSeek = "parameters/defeat_seek/seek_request";
 	private void FinishDefeat()
 	{
+		cutsceneCamera.Deactivate();
 		EventAnimator.Play("finish-defeat");
 		EventAnimator.Advance(0.0);
 		AnimationTree.Active = false;
@@ -1083,6 +1089,14 @@ public partial class IfritGolem : Node3D
 		specialAttackIntervalCounter = SpecialAttackInterval;
 		SpecialStatePlayback.Travel(SpecialAttackStopAnimation);
 	}
+
+	private void PlayScreenShake(float magnitude)
+	{
+		StageSettings.Player.Camera.StartCameraShake(new()
+		{
+			magnitude = Vector3.One.RemoveDepth() * magnitude,
+		});
+	}
 	#endregion
 
 	#region Signals
@@ -1129,7 +1143,7 @@ public partial class IfritGolem : Node3D
 
 	private void OnLavaEntered(Area3D a)
 	{
-		if (!a.IsInGroup("player"))
+		if (!a.IsInGroup("player detection"))
 			return;
 
 		isLavaInteractingWithPlayer = true;
@@ -1137,7 +1151,7 @@ public partial class IfritGolem : Node3D
 
 	private void OnLavaExited(Area3D a)
 	{
-		if (!a.IsInGroup("player"))
+		if (!a.IsInGroup("player detection"))
 			return;
 
 		isLavaInteractingWithPlayer = false;
