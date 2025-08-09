@@ -125,7 +125,7 @@ public partial class CaptainBemoth : PathFollow3D
 
 		BonusManager.instance.QueueBonus(new(BonusType.Boss, 8000));
 		Interface.PauseMenu.AllowPausing = false;
-		HeadsUpDisplay.Instance.Visible = false;
+		HeadsUpDisplay.Instance.SetVisibility(false);
 		currentState = BemothState.Defeated;
 
 		TransitionManager.FinishTransition();

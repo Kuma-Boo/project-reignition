@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://chn7ckbhlrr2g"]
+[gd_scene load_steps=27 format=3 uid="uid://chn7ckbhlrr2g"]
 
 [ext_resource type="Script" uid="uid://bp3jrebic5b1y" path="res://interface/gameplay/hud/script/HeadsUpDisplay.cs" id="1_x1dw0"]
 [ext_resource type="PackedScene" path="res://interface/gameplay/hud/RingsReignition.tscn" id="2_kp8ou"]
@@ -251,7 +251,97 @@ _data = {
 &"show": SubResource("Animation_rfoup")
 }
 
-[node name="HeadsUpDisplay" type="Control" node_paths=PackedStringArray("rings", "ringsReignition", "fireSoulAnimator", "score", "scoreReignition", "objectives", "objectivesReignition", "soulGaugeVertical", "soulGaugeHorizontal", "race", "buttons", "promptAnimator")]
+[sub_resource type="Animation" id="Animation_642kh"]
+resource_name = "hide"
+length = 0.16667001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.16666669),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.16667001),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_850l0"]
+resource_name = "show"
+length = 0.33333668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.33333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_72k1f"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_aj5lk"]
+_data = {
+&"RESET": SubResource("Animation_72k1f"),
+&"hide": SubResource("Animation_642kh"),
+&"show": SubResource("Animation_850l0")
+}
+
+[node name="HeadsUpDisplay" type="Control" node_paths=PackedStringArray("rings", "ringsReignition", "fireSoulAnimator", "score", "scoreReignition", "objectives", "objectivesReignition", "soulGaugeVertical", "soulGaugeHorizontal", "race", "buttons", "promptAnimator", "visibilityAnimator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -271,6 +361,7 @@ soulGaugeHorizontal = NodePath("SoulGaugeHorizontal")
 race = NodePath("Race")
 buttons = [NodePath("ButtonPrompts/Action"), NodePath("ButtonPrompts/Jump")]
 promptAnimator = NodePath("ButtonPrompts/AnimationPlayer")
+visibilityAnimator = NodePath("AnimationPlayer")
 
 [node name="Rings" parent="." instance=ExtResource("6_o76on")]
 visible = false
@@ -426,5 +517,10 @@ libraries = {
 &"": SubResource("AnimationLibrary_lenaq")
 }
 autoplay = "init"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_aj5lk")
+}
 
 [editable path="Bonuses/Bonus1"]

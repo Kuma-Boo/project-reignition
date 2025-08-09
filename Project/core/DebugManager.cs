@@ -390,7 +390,7 @@ public partial class DebugManager : Control
 		DisableHUD = enabled;
 
 		if (!IsInstanceValid(HeadsUpDisplay.Instance)) return;
-		HeadsUpDisplay.Instance.Visible = !enabled;
+		HeadsUpDisplay.Instance.SetVisibility(!enabled);
 	}
 
 	public bool DisableReticle { get; private set; }

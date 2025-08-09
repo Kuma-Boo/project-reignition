@@ -11,6 +11,8 @@ public partial class HeadsUpDisplay : Control
 	public static HeadsUpDisplay Instance;
 	private StageSettings Stage => StageSettings.Instance;
 
+	[Export] private AnimationPlayer visibilityAnimator;
+
 	public override void _EnterTree() => Instance = this;
 
 	public override void _Ready()
@@ -159,11 +161,19 @@ public partial class HeadsUpDisplay : Control
 	#endregion
 
 	public void OnLevelCompleted() => SetVisibility(false); // Ignore parameter
-	public void SetVisibility(bool value)
+
+	public void SetVisibility(bool value) => SetVisibility(value, false);
+	public void SetVisibility(bool value, bool playFadeAnimation)
 	{
 		if (OS.IsDebugBuild() && DebugManager.Instance.DisableHUD)
 		{
 			Visible = false;
+			return;
+		}
+
+		if (playFadeAnimation)
+		{
+			visibilityAnimator.Play(value ? "show" : "hide");
 			return;
 		}
 

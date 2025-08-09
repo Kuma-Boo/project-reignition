@@ -1197,7 +1197,7 @@ public partial class PlayerController : CharacterBody3D
 		if (Stage.IsControlTest)
 			return;
 
-		HeadsUpDisplay.Instance.Visible = true;
+		HeadsUpDisplay.Instance.SetVisibility(true);
 		Interface.PauseMenu.AllowPausing = true;
 	}
 
@@ -1214,7 +1214,7 @@ public partial class PlayerController : CharacterBody3D
 		if (Stage.IsControlTest)
 			return;
 
-		HeadsUpDisplay.Instance.Visible = false;
+		HeadsUpDisplay.Instance.SetVisibility(false);
 		Interface.PauseMenu.AllowPausing = false;
 	}
 	#endregion
