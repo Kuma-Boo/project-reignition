@@ -1,10 +1,11 @@
-[gd_scene load_steps=61 format=3 uid="uid://b4bdc5vtf52m6"]
+[gd_scene load_steps=63 format=3 uid="uid://b4bdc5vtf52m6"]
 
 [ext_resource type="PackedScene" uid="uid://slvtrs84m8s0" path="res://area/6 skeleton dome/act 3/Static.tscn" id="1_7mhht"]
 [ext_resource type="Resource" uid="uid://cxmfjdvam8ucj" path="res://resource/level data/skeleton dome/Act3Bone.tres" id="2_ftyvr"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_mh17e"]
-[ext_resource type="PackedScene" uid="uid://bgqkl6m4c27kk" path="res://area/6 skeleton dome/object/obstacle/Warp.tscn" id="3_6sudf"]
+[ext_resource type="PackedScene" path="res://area/6 skeleton dome/object/obstacle/Warp.tscn" id="3_6sudf"]
 [ext_resource type="PackedScene" uid="uid://dypfstf220mvi" path="res://area/6 skeleton dome/object/obstacle/WarpExit.tscn" id="4_46mj5"]
+[ext_resource type="Script" uid="uid://bitgnn108jmaa" path="res://object/trigger/modules/DialogTrigger.cs" id="5_coxly"]
 [ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="5_phq0i"]
 [ext_resource type="Resource" uid="uid://dthe1vju4bxlo" path="res://area/6 skeleton dome/act 3/camera/ArenaCam.tres" id="6_7mqa4"]
 [ext_resource type="Resource" uid="uid://lqk5skomobcb" path="res://area/6 skeleton dome/act 3/camera/BoneWarpCam.tres" id="6_q5r1r"]
@@ -36,7 +37,7 @@
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="28_pvpxi"]
 [ext_resource type="PackedScene" uid="uid://bbgtmxw55soah" path="res://object/stage/destructable/Stone.tscn" id="29_m5a1p"]
 [ext_resource type="PackedScene" uid="uid://2h6xrqn3jp6l" path="res://object/stage/destructable/Cage.tscn" id="30_wv35e"]
-[ext_resource type="PackedScene" path="res://area/6 skeleton dome/object/special/Hand.tscn" id="31_wv35e"]
+[ext_resource type="PackedScene" uid="uid://cnpbnknx7gq3e" path="res://area/6 skeleton dome/object/special/Hand.tscn" id="31_wv35e"]
 [ext_resource type="PackedScene" uid="uid://nso0vvogx8g0" path="res://area/6 skeleton dome/object/platform/PlatformSpiralLarge.tscn" id="32_v31tp"]
 [ext_resource type="PackedScene" uid="uid://di8tdo65qjkbe" path="res://object/enemy/majin/data/skeleton dome/BlueMajin.tscn" id="33_48ldw"]
 [ext_resource type="PackedScene" uid="uid://csaug6ajhbtce" path="res://object/enemy/majin/data/skeleton dome/RedMajin.tscn" id="33_n0wyt"]
@@ -53,6 +54,9 @@
 [ext_resource type="PackedScene" uid="uid://153wwjnd7nv6" path="res://object/stage/common/FlyingPot.tscn" id="44_jbw0i"]
 [ext_resource type="Resource" uid="uid://evjrl7hxybu4" path="res://area/6 skeleton dome/act 3/camera/FlyingPotCam1.tres" id="50_qgy35"]
 [ext_resource type="Resource" uid="uid://b1bwl6m0cwwdg" path="res://area/6 skeleton dome/act 3/camera/FlyingPotCam2.tres" id="51_q5r1r"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trb6j"]
+size = Vector3(40, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0bgs1"]
 size = Vector3(30, 30, 5)
@@ -236,6 +240,34 @@ disableObjectiveAutocompletion = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1150, 0.000195503, -1125)
 
 [node name="CharacterSpawn" parent="BoneAct/SpawnPosition" instance=ExtResource("2_mh17e")]
+
+[node name="Dialog" type="Node3D" parent="BoneAct"]
+
+[node name="Body" parent="BoneAct/Dialog" instance=ExtResource("39_qgy35")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1150, 0, -1116)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="BoneAct/Dialog/Body" node_paths=PackedStringArray("randomizedDialogTriggers")]
+script = ExtResource("5_coxly")
+textKeys = Array[String](["ske_body_so", "ske_body_sh"])
+randomizedDialogTriggers = []
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BoneAct/Dialog/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_trb6j")
+
+[node name="Hand" parent="BoneAct/Dialog" instance=ExtResource("39_qgy35")]
+transform = Transform3D(-0.76604444, 0, -0.64278764, 0, 1, 0, 0.64278764, 0, -0.76604444, 949.8468, 0, -958.87146)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="BoneAct/Dialog/Hand" node_paths=PackedStringArray("randomizedDialogTriggers")]
+script = ExtResource("5_coxly")
+textKeys = Array[String](["ske_hand_sh"])
+randomizedDialogTriggers = []
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BoneAct/Dialog/Hand"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_trb6j")
 
 [node name="BoneWarpCamera" type="Node3D" parent="BoneAct"]
 script = ExtResource("5_phq0i")
@@ -982,13 +1014,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -24.8)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -34.3)
 
 [node name="ItemBoxFlying" parent="BoneAct/TreasureHall/ItemBoxGroup1/ItemBox4" instance=ExtResource("17_c2bi5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.8959999, 0)
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="BoneAct/TreasureHall/ItemBoxGroup1/ItemBox4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8959999, 0)
 script = ExtResource("18_oboek")
 smoothPausing = true
 root = NodePath("../ItemBoxFlying")
@@ -1061,13 +1093,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -69.4)
 [node name="ItemBox1" type="Node3D" parent="BoneAct/TreasureHall/ItemBoxGroup2"]
 
 [node name="ItemBoxFlying" parent="BoneAct/TreasureHall/ItemBoxGroup2/ItemBox1" instance=ExtResource("17_c2bi5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8959999, 0)
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="BoneAct/TreasureHall/ItemBoxGroup2/ItemBox1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8959999, 0)
 script = ExtResource("18_oboek")
 root = NodePath("../ItemBoxFlying")
 animator = NodePath("")
@@ -1133,13 +1165,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.70001)
 
 [node name="ItemBoxFlying" parent="BoneAct/TreasureHall/ItemBoxGroup2/ItemBox2" instance=ExtResource("17_c2bi5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.8959999, 0)
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="BoneAct/TreasureHall/ItemBoxGroup2/ItemBox2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.8959999, 0)
 script = ExtResource("18_oboek")
 root = NodePath("../ItemBoxFlying")
 animator = NodePath("")
@@ -1206,13 +1238,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.7)
 
 [node name="ItemBoxFlying" parent="BoneAct/TreasureHall/ItemBoxGroup2/ItemBox3" instance=ExtResource("17_c2bi5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.8959999, 0)
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="BoneAct/TreasureHall/ItemBoxGroup2/ItemBox3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.8959999, 0)
 script = ExtResource("18_oboek")
 root = NodePath("../ItemBoxFlying")
 animator = NodePath("")
@@ -1303,7 +1335,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65, 0, 0)
 curve = ExtResource("27_ih6gw")
 
 [node name="Hand" parent="BoneAct/Arena/ArenaPath" instance=ExtResource("31_wv35e")]
-transform = Transform3D(-0.900271, 0, -0.435316, 0, 1, 0, 0.435316, 0, -0.900271, -123.553, 0, 28.2493)
+transform = Transform3D(-0.9002711, 0, -0.43531567, 0, 1, 0, 0.43531567, 0, -0.9002711, -123.55293, 0, 28.24935)
 progress = 175.0
 use_model_front = true
 
@@ -1877,7 +1909,7 @@ visible = false
 disabled = true
 
 [node name="Root" parent="BoneAct/Arena/SwitchGroup5/Sickle3" index="1"]
-transform = Transform3D(0.766044, 0.642787, 0, -0.642787, 0.766044, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(0.7660439, 0.6427871, 0, -0.6427871, 0.7660439, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="SickleHead" parent="BoneAct/Arena/SwitchGroup5/Sickle3/Root" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -13.3, 0)
