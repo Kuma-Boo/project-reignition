@@ -64,9 +64,13 @@ public partial class LaunchState : PlayerState
 			Player.Animator.SnapRotation(Player.MovementAngle);
 		}
 
-		if (Settings.IsJump && Settings.InitialVerticalVelocity > 0) // Play jump effects
+		if (Settings.IsJump) // Play jump effects
 		{
-			Player.Animator.AutoJumpAnimation();
+			if (Settings.InitialVerticalVelocity > 0)
+				Player.Animator.AutoJumpAnimation();
+			else
+				Player.Animator.IsFallTransitionEnabled = true;
+
 			Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
 		}
 
