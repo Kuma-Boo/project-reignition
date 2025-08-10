@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=3 uid="uid://c6qp0p2qw34ud"]
+[gd_scene load_steps=88 format=3 uid="uid://c6qp0p2qw34ud"]
 
 [ext_resource type="PackedScene" uid="uid://d1rcieilh21gs" path="res://area/6 skeleton dome/act 1/Static.tscn" id="1_6irkq"]
 [ext_resource type="Resource" uid="uid://dirda3nyrainp" path="res://resource/level data/skeleton dome/Act1Main.tres" id="2_3jkye"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://b1daf70kelhld" path="res://area/6 skeleton dome/object/platform/PlatformCavernLarge.tscn" id="5_5f5sv"]
 [ext_resource type="PackedScene" uid="uid://ctkxmjdylid4k" path="res://object/enemy/majin/data/skeleton dome/GreenMajin.tscn" id="5_danjg"]
 [ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_p0cpw"]
+[ext_resource type="Script" uid="uid://bitgnn108jmaa" path="res://object/trigger/modules/DialogTrigger.cs" id="5_xf5qh"]
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="6_21sva"]
 [ext_resource type="PackedScene" uid="uid://153wwjnd7nv6" path="res://object/stage/common/FlyingPot.tscn" id="6_86hu3"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_i636b"]
@@ -458,6 +459,150 @@ transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 779.875,
 "Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/InteriorUnload"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_pbtmc")
+
+[node name="DialogTriggers" type="Node3D" parent="MainAct"]
+
+[node name="Snow" parent="MainAct/DialogTriggers" instance=ExtResource("3_jp0k2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1999999, 0, -10)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/Snow" node_paths=PackedStringArray("randomizedDialogTriggers")]
+script = ExtResource("5_xf5qh")
+textKeys = Array[String](["ske_snow_so", "ske_snow_sh"])
+randomizedDialogTriggers = []
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/Snow"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_pbtmc")
+
+[node name="Bones" parent="MainAct/DialogTriggers" instance=ExtResource("3_jp0k2")]
+transform = Transform3D(0.9789992, 0, 0.20386389, 0, 1, 0, -0.20386389, 0, 0.9789992, -24.191599, 2.9, -155.91846)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/Bones" node_paths=PackedStringArray("randomizedDialogTriggers")]
+script = ExtResource("5_xf5qh")
+textKeys = Array[String](["ske_bones_so", "ske_bones_sh"])
+randomizedDialogTriggers = []
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/Bones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_pbtmc")
+
+[node name="Femur" parent="MainAct/DialogTriggers" instance=ExtResource("3_jp0k2")]
+transform = Transform3D(0.80111796, 0, 0.5985064, 0, 1, 0, -0.5985064, 0, 0.80111796, -17.986984, -1.8000002, -548.7642)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/Femur" node_paths=PackedStringArray("randomizedDialogTriggers")]
+script = ExtResource("5_xf5qh")
+textKeys = Array[String](["ske_femur_so", "ske_femur_sh"])
+randomizedDialogTriggers = []
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/Femur"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_pbtmc")
+
+[node name="Top" parent="MainAct/DialogTriggers" instance=ExtResource("3_jp0k2")]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -8.463, 0, -640.005)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/Top" node_paths=PackedStringArray("randomizedDialogTriggers")]
+script = ExtResource("5_xf5qh")
+textKeys = Array[String](["ske_top_sh", "ske_top_so"])
+randomizedDialogTriggers = []
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/Top"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_pbtmc")
+
+[node name="Fall" parent="MainAct/DialogTriggers" instance=ExtResource("3_jp0k2")]
+transform = Transform3D(-4.3711385e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, -4.3711385e-08, 219.53699, 0, -900.005)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/Fall" node_paths=PackedStringArray("randomizedDialogTriggers")]
+script = ExtResource("5_xf5qh")
+textKeys = Array[String](["ske_fall2_sh", "ske_fall2_so"])
+randomizedDialogTriggers = []
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/Fall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_pbtmc")
+
+[node name="Sword" parent="MainAct/DialogTriggers" instance=ExtResource("3_jp0k2")]
+transform = Transform3D(-4.3711385e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, -4.3711385e-08, 600.537, 20, -1129.005)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/Sword" node_paths=PackedStringArray("randomizedDialogTriggers")]
+script = ExtResource("5_xf5qh")
+textKeys = Array[String](["ske_sword_sh", "ske_sword_so"])
+randomizedDialogTriggers = []
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/Sword"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_pbtmc")
+
+[node name="Eyes" parent="MainAct/DialogTriggers" instance=ExtResource("3_jp0k2")]
+transform = Transform3D(-0.99999994, 0, 8.742277e-08, 0, 1, 0, -8.742277e-08, 0, -0.99999994, 700, 0, -600)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/Eyes" node_paths=PackedStringArray("randomizedDialogTriggers")]
+script = ExtResource("5_xf5qh")
+textKeys = Array[String](["ske_eyes_sh", "ske_eyes_so"])
+randomizedDialogTriggers = []
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/Eyes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_pbtmc")
+
+[node name="Treasure" parent="MainAct/DialogTriggers" instance=ExtResource("3_jp0k2")]
+transform = Transform3D(-0.99999994, 0, 8.742277e-08, 0, 1, 0, -8.742277e-08, 0, -0.99999994, 1100, 0, -493.99994)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/Treasure" node_paths=PackedStringArray("randomizedDialogTriggers")]
+script = ExtResource("5_xf5qh")
+textKeys = Array[String](["ske_treasure1_sh"])
+randomizedDialogTriggers = [NodePath("Dialog2")]
+
+[node name="Dialog2" type="Node3D" parent="MainAct/DialogTriggers/Treasure/Dialog" node_paths=PackedStringArray("randomizedDialogTriggers")]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, 0)
+script = ExtResource("5_xf5qh")
+textKeys = Array[String](["ske_treasure2_sh", "ske_treasure2_so"])
+randomizedDialogTriggers = []
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/Treasure"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_pbtmc")
+
+[node name="Tomb" parent="MainAct/DialogTriggers" instance=ExtResource("3_jp0k2")]
+transform = Transform3D(1.3113416e-07, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, 1.3113416e-07, 937, 0, -1000)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/Tomb" node_paths=PackedStringArray("randomizedDialogTriggers")]
+script = ExtResource("5_xf5qh")
+textKeys = Array[String](["ske_tomb_so", "ske_tomb_sh"])
+randomizedDialogTriggers = []
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/Tomb"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_pbtmc")
+
+[node name="End" parent="MainAct/DialogTriggers" instance=ExtResource("3_jp0k2")]
+transform = Transform3D(-0.99999994, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -0.99999994, 1150, 0, -1100)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/End" node_paths=PackedStringArray("randomizedDialogTriggers")]
+script = ExtResource("5_xf5qh")
+textKeys = Array[String](["ske_king1_sh"])
+randomizedDialogTriggers = [NodePath("Dialog2")]
+
+[node name="Dialog2" type="Node3D" parent="MainAct/DialogTriggers/End/Dialog" node_paths=PackedStringArray("randomizedDialogTriggers")]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, 0)
+script = ExtResource("5_xf5qh")
+textKeys = Array[String](["ske_king2_sh", "ske_king2_so"])
+randomizedDialogTriggers = []
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/End"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_pbtmc")
 
@@ -4163,12 +4308,12 @@ chainLength = 4
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -0.0994873, 2, -1.5)
 
 [node name="ItemBoxFlying" parent="MainAct/Spiral/TopRow/PlatformGroup3/ItemBoxGroup" instance=ExtResource("15_hvsse")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8959999, 0)
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 100
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/Spiral/TopRow/PlatformGroup3/ItemBoxGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8959999, 0)
 script = ExtResource("46_xxog8")
 root = NodePath("../ItemBoxFlying")
 animator = NodePath("")
@@ -5284,13 +5429,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -24.8)
 [node name="ItemBox1" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1"]
 
 [node name="ItemBoxFlying" parent="MainAct/HallT/ItemBoxGroup1/ItemBox1" instance=ExtResource("15_hvsse")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.8959999, 0)
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.8959999, 0)
 script = ExtResource("46_xxog8")
 smoothPausing = true
 root = NodePath("../ItemBoxFlying")
@@ -5359,13 +5504,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.40002)
 
 [node name="ItemBoxFlying" parent="MainAct/HallT/ItemBoxGroup1/ItemBox2" instance=ExtResource("15_hvsse")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.8959999, 0)
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8959999, 0)
 script = ExtResource("46_xxog8")
 smoothPausing = true
 root = NodePath("../ItemBoxFlying")
@@ -5433,13 +5578,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.9)
 
 [node name="ItemBoxFlying" parent="MainAct/HallT/ItemBoxGroup1/ItemBox3" instance=ExtResource("15_hvsse")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.8959999, 0)
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.8959999, 0)
 script = ExtResource("46_xxog8")
 smoothPausing = true
 root = NodePath("../ItemBoxFlying")
@@ -5508,13 +5653,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -34.3)
 
 [node name="ItemBoxFlying" parent="MainAct/HallT/ItemBoxGroup1/ItemBox4" instance=ExtResource("15_hvsse")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.8959999, 0)
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup1/ItemBox4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8959999, 0)
 script = ExtResource("46_xxog8")
 smoothPausing = true
 root = NodePath("../ItemBoxFlying")
@@ -5587,13 +5732,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -69.4)
 [node name="ItemBox1" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2"]
 
 [node name="ItemBoxFlying" parent="MainAct/HallT/ItemBoxGroup2/ItemBox1" instance=ExtResource("15_hvsse")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8959999, 0)
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8959999, 0)
 script = ExtResource("46_xxog8")
 root = NodePath("../ItemBoxFlying")
 animator = NodePath("")
@@ -5659,13 +5804,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.70001)
 
 [node name="ItemBoxFlying" parent="MainAct/HallT/ItemBoxGroup2/ItemBox2" instance=ExtResource("15_hvsse")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.8959999, 0)
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.8959999, 0)
 script = ExtResource("46_xxog8")
 root = NodePath("../ItemBoxFlying")
 animator = NodePath("")
@@ -5732,13 +5877,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.7)
 
 [node name="ItemBoxFlying" parent="MainAct/HallT/ItemBoxGroup2/ItemBox3" instance=ExtResource("15_hvsse")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.8959999, 0)
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 1.2
 "Spawn Settings/Travel Height" = 2.5
 
 [node name="HorizontalMovement" type="Node3D" parent="MainAct/HallT/ItemBoxGroup2/ItemBox3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.896, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.8959999, 0)
 script = ExtResource("46_xxog8")
 root = NodePath("../ItemBoxFlying")
 animator = NodePath("")
