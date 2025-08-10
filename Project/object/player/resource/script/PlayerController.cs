@@ -102,6 +102,7 @@ public partial class PlayerController : CharacterBody3D
 
 		// Calculate slope influence
 		SlopeRatio = PathFollower.ForwardAxis.Dot(Vector3.Up);
+		SlopeRatio *= ExtensionMethods.DotAngle(MovementAngle, ExtensionMethods.CalculateForwardAngle(PathFollower.Forward()));
 		if (Mathf.Abs(SlopeRatio) <= SlopeThreshold) return;
 
 		SlopeRatio = Mathf.Lerp(-Stats.slopeInfluence, Stats.slopeInfluence, (SlopeRatio * .5f) + .5f);

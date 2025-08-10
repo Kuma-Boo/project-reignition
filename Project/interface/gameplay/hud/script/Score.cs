@@ -69,7 +69,6 @@ public partial class Score : Control
 	private void StartRankUpTween(int rankDirection)
 	{
 		rankUpSFX.Play();
-		GD.Print(CurrentRank + rankDirection);
 		transitionRank.Texture = rankTextures[CurrentRank + rankDirection];
 		transitionRank.Position = Vector2.Up * 256;
 		rankTween = CreateTween().SetParallel();
