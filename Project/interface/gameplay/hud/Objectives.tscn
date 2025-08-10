@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://b1hpdmcpkpjbg"]
+[gd_scene load_steps=43 format=3 uid="uid://b005oiw1u2ygf"]
 
 [ext_resource type="Texture2D" uid="uid://q2red5fhpctn" path="res://interface/gameplay/hud/texture/objective/enemy.png" id="1_baim8"]
 [ext_resource type="Script" uid="uid://c05jt6xoey6uv" path="res://interface/gameplay/hud/script/Objectives.cs" id="1_m1rpe"]
@@ -15,9 +15,9 @@
 [ext_resource type="Texture2D" uid="uid://vjbphryyw45" path="res://interface/gameplay/hud/texture/objective/jar.png" id="12_mb0f2"]
 [ext_resource type="Texture2D" uid="uid://bwnbix3fo601c" path="res://interface/gameplay/hud/texture/objective/majin egg.png" id="13_4vqnv"]
 [ext_resource type="Texture2D" uid="uid://b7jrgeml1pi83" path="res://interface/gameplay/hud/texture/objective/ring chain.png" id="14_bkjs6"]
-[ext_resource type="FontFile" uid="uid://metby7j5vbho" path="res://interface/font/bitmap fonts/HUD Numbers.fnt" id="15_ipiok"]
 [ext_resource type="AudioStream" uid="uid://dk0nbt6u6r65r" path="res://sound/sfx/system/objective.wav" id="16_7ogxs"]
-[ext_resource type="FontFile" uid="uid://ufthq2l6f21q" path="res://interface/font/otf/HUD.otf" id="16_vky5u"]
+[ext_resource type="FontFile" uid="uid://cjn5owdvvkfrb" path="res://interface/font/bitmap fonts/Experience.fnt" id="16_m1rpe"]
+[ext_resource type="Texture2D" uid="uid://jvsk1vt7171o" path="res://interface/gameplay/hud/texture/hud_decal.png" id="18_vky5u"]
 
 [sub_resource type="Animation" id="Animation_egvi3"]
 length = 0.001
@@ -831,158 +831,509 @@ _data = {
 &"ring_chain": SubResource("Animation_iq5js")
 }
 
-[node name="Objectives" type="Control" node_paths=PackedStringArray("objectiveRoot", "objectiveSprite", "objectiveValue", "objectiveMaxValue", "objectiveAnimators", "objectiveSfx")]
+[sub_resource type="Animation" id="Animation_f4u8t"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ObjectivesDecal:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Data:layout_mode")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Data:offset_left")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-576.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Data:offset_top")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [208.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Data:offset_right")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-128.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Data:offset_bottom")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [304.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Data:anchor_left")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Data:anchor_right")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Data/Text/Value:theme_override_font_sizes/font_size")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [64]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Data/Text/MaxValue:theme_override_font_sizes/font_size")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [64]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Data/Text/Divider:theme_override_font_sizes/font_size")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [64]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Data/ObjectiveSprites:scale")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Data/Text:position")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(255.99988, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_vky5u"]
+resource_name = "reignited"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ObjectivesDecal:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Data:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 112)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Control:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1920, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Data:layout_mode")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Data:offset_left")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-128.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Data:offset_top")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [208.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Data:offset_right")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [320.0]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Data:offset_bottom")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [304.0]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Data/Text/Value:theme_override_font_sizes/font_size")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [64]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Data/Text/MaxValue:theme_override_font_sizes/font_size")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [64]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Data/Text/Divider:theme_override_font_sizes/font_size")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [64]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Data/ObjectiveSprites:scale")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.7, 0.7)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Data/Text:position")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(240, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_f4u8t"]
+_data = {
+&"RESET": SubResource("Animation_f4u8t"),
+&"reignited": SubResource("Animation_vky5u")
+}
+
+[node name="Objectives" type="Control" node_paths=PackedStringArray("styleAnimator", "objectiveSprite", "objectiveValue", "objectiveMaxValue", "objectiveAnimators", "objectiveSfx")]
 layout_mode = 3
-anchors_preset = 0
-offset_left = 1504.0
-offset_top = 192.0
-offset_right = 1792.0
-offset_bottom = 320.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_m1rpe")
-objectiveRoot = NodePath(".")
-objectiveSprite = NodePath("ObjectiveSprites/ObjectiveRoot4/Sprite")
-objectiveValue = NodePath("Value")
-objectiveMaxValue = NodePath("MaxValue")
-objectiveAnimators = [NodePath("ObjectiveSprites/ObjectiveRoot4/Sprite/AnimationPlayer"), NodePath("ObjectiveSprites/ObjectiveRoot3/Sprite/AnimationPlayer"), NodePath("ObjectiveSprites/ObjectiveRoot2/Sprite/AnimationPlayer"), NodePath("ObjectiveSprites/ObjectiveRoot1/Sprite/AnimationPlayer")]
-objectiveSfx = NodePath("Sfx")
+styleAnimator = NodePath("StyleAnimationPlayer")
+objectiveSprite = NodePath("Data/ObjectiveSprites/ObjectiveRoot4/Sprite")
+objectiveValue = NodePath("Data/Text/Value")
+objectiveMaxValue = NodePath("Data/Text/MaxValue")
+objectiveAnimators = [NodePath("Data/ObjectiveSprites/ObjectiveRoot4/Sprite/AnimationPlayer"), NodePath("Data/ObjectiveSprites/ObjectiveRoot3/Sprite/AnimationPlayer"), NodePath("Data/ObjectiveSprites/ObjectiveRoot2/Sprite/AnimationPlayer"), NodePath("Data/ObjectiveSprites/ObjectiveRoot1/Sprite/AnimationPlayer")]
+objectiveSfx = NodePath("Data/Sfx")
 
-[node name="ObjectiveSprites" type="Control" parent="."]
-anchors_preset = 0
-offset_left = -160.0
-offset_top = 16.0
-offset_right = 96.0
-offset_bottom = 112.0
+[node name="ObjectivesDecal" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(0, 112)
+texture = ExtResource("18_vky5u")
+centered = false
+flip_h = true
+region_enabled = true
+region_rect = Rect2(125, 168, 577, 100)
 
-[node name="ObjectiveRoot4" type="Control" parent="ObjectiveSprites"]
-custom_minimum_size = Vector2(96, 96)
+[node name="Control" type="Control" parent="."]
 anchors_preset = 0
-offset_left = 52.0
-offset_right = 148.0
+offset_left = 1920.0
+offset_right = 1920.0
+
+[node name="Data" type="Control" parent="."]
+layout_mode = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -576.0
+offset_top = 208.0
+offset_right = -128.0
+offset_bottom = 304.0
+
+[node name="ObjectiveSprites" type="HBoxContainer" parent="Data"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -448.0
+offset_right = -192.0
 offset_bottom = 96.0
+pivot_offset = Vector2(256, 48)
+theme_override_constants/separation = -48
+alignment = 2
 
-[node name="Sprite" type="TextureRect" parent="ObjectiveSprites/ObjectiveRoot4"]
+[node name="ObjectiveRoot4" type="Control" parent="Data/ObjectiveSprites"]
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
-offset_right = 96.0
-offset_bottom = 96.0
-pivot_offset = Vector2(48, 82)
-texture = ExtResource("1_baim8")
-expand_mode = 1
-stretch_mode = 5
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ObjectiveSprites/ObjectiveRoot4/Sprite"]
-libraries = {
-&"": SubResource("AnimationLibrary_lw1hn")
-}
-autoplay = "hide"
-
-[node name="ObjectiveRoot3" type="Control" parent="ObjectiveSprites"]
+[node name="Sprite" type="TextureRect" parent="Data/ObjectiveSprites/ObjectiveRoot4"]
 custom_minimum_size = Vector2(96, 96)
-anchors_preset = 0
-offset_left = 88.0
-offset_right = 128.0
-offset_bottom = 40.0
-
-[node name="Sprite" type="TextureRect" parent="ObjectiveSprites/ObjectiveRoot3"]
-custom_minimum_size = Vector2(96, 96)
-layout_mode = 2
-offset_right = 96.0
-offset_bottom = 96.0
-pivot_offset = Vector2(48, 82)
-texture = ExtResource("1_baim8")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ObjectiveSprites/ObjectiveRoot3/Sprite"]
-libraries = {
-&"": SubResource("AnimationLibrary_lw1hn")
-}
-autoplay = "hide"
-
-[node name="ObjectiveRoot2" type="Control" parent="ObjectiveSprites"]
-custom_minimum_size = Vector2(96, 96)
-anchors_preset = 0
-offset_left = 124.0
-offset_right = 164.0
-offset_bottom = 40.0
-
-[node name="Sprite" type="TextureRect" parent="ObjectiveSprites/ObjectiveRoot2"]
-custom_minimum_size = Vector2(96, 96)
-layout_mode = 2
-offset_right = 96.0
-offset_bottom = 96.0
-pivot_offset = Vector2(48, 82)
-texture = ExtResource("1_baim8")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ObjectiveSprites/ObjectiveRoot2/Sprite"]
-libraries = {
-&"": SubResource("AnimationLibrary_lw1hn")
-}
-autoplay = "hide"
-
-[node name="ObjectiveRoot1" type="Control" parent="ObjectiveSprites"]
-custom_minimum_size = Vector2(96, 96)
-anchors_preset = 0
-offset_left = 160.0
-offset_right = 200.0
-offset_bottom = 40.0
-
-[node name="Sprite" type="TextureRect" parent="ObjectiveSprites/ObjectiveRoot1"]
-custom_minimum_size = Vector2(96, 96)
-layout_mode = 2
-offset_right = 96.0
-offset_bottom = 96.0
-pivot_offset = Vector2(48, 82)
-texture = ExtResource("1_baim8")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ObjectiveSprites/ObjectiveRoot1/Sprite"]
-libraries = {
-&"": SubResource("AnimationLibrary_lw1hn")
-}
-
-[node name="Value" type="Label" parent="."]
 layout_mode = 0
-offset_left = 16.0
-offset_top = 40.0
-offset_right = 212.0
-offset_bottom = 107.0
+offset_right = 96.0
+offset_bottom = 96.0
+pivot_offset = Vector2(48, 82)
+texture = ExtResource("1_baim8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Data/ObjectiveSprites/ObjectiveRoot4/Sprite"]
+libraries = {
+&"": SubResource("AnimationLibrary_lw1hn")
+}
+autoplay = "hide"
+
+[node name="ObjectiveRoot3" type="Control" parent="Data/ObjectiveSprites"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+
+[node name="Sprite" type="TextureRect" parent="Data/ObjectiveSprites/ObjectiveRoot3"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 0
+offset_right = 96.0
+offset_bottom = 96.0
+pivot_offset = Vector2(48, 82)
+texture = ExtResource("1_baim8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Data/ObjectiveSprites/ObjectiveRoot3/Sprite"]
+libraries = {
+&"": SubResource("AnimationLibrary_lw1hn")
+}
+autoplay = "hide"
+
+[node name="ObjectiveRoot2" type="Control" parent="Data/ObjectiveSprites"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+
+[node name="Sprite" type="TextureRect" parent="Data/ObjectiveSprites/ObjectiveRoot2"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 0
+offset_right = 96.0
+offset_bottom = 96.0
+pivot_offset = Vector2(48, 82)
+texture = ExtResource("1_baim8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Data/ObjectiveSprites/ObjectiveRoot2/Sprite"]
+libraries = {
+&"": SubResource("AnimationLibrary_lw1hn")
+}
+autoplay = "hide"
+
+[node name="ObjectiveRoot1" type="Control" parent="Data/ObjectiveSprites"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+
+[node name="Sprite" type="TextureRect" parent="Data/ObjectiveSprites/ObjectiveRoot1"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 0
+offset_right = 96.0
+offset_bottom = 96.0
+pivot_offset = Vector2(48, 82)
+texture = ExtResource("1_baim8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Data/ObjectiveSprites/ObjectiveRoot1/Sprite"]
+libraries = {
+&"": SubResource("AnimationLibrary_lw1hn")
+}
+
+[node name="Text" type="Control" parent="Data"]
+layout_mode = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -192.00012
+offset_bottom = 96.0
+
+[node name="Value" type="Label" parent="Data/Text"]
+layout_mode = 0
+offset_top = 8.0
+offset_right = 96.00012
+offset_bottom = 108.0
 scale = Vector2(0.8, 0.8)
-theme_override_fonts/font = ExtResource("16_vky5u")
-theme_override_font_sizes/font_size = 45
+theme_override_fonts/font = ExtResource("16_m1rpe")
+theme_override_font_sizes/font_size = 64
 text = "00"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="MaxValue" type="Label" parent="."]
+[node name="MaxValue" type="Label" parent="Data/Text"]
 layout_mode = 0
-offset_left = 200.0
-offset_top = 40.0
-offset_right = 392.0
-offset_bottom = 107.0
+offset_left = 104.00012
+offset_top = 8.0
+offset_right = 296.00012
+offset_bottom = 107.296875
 scale = Vector2(0.8, 0.8)
-theme_override_fonts/font = ExtResource("16_vky5u")
-theme_override_font_sizes/font_size = 45
+theme_override_fonts/font = ExtResource("16_m1rpe")
+theme_override_font_sizes/font_size = 64
 text = "22"
 vertical_alignment = 1
 
-[node name="Divider" type="Label" parent="."]
+[node name="Divider" type="Label" parent="Data/Text"]
 layout_mode = 0
-offset_left = 168.0
-offset_top = 40.0
-offset_right = 216.0
-offset_bottom = 107.0
+offset_left = 72.00012
+offset_top = 8.0
+offset_right = 120.00012
+offset_bottom = 108.0
 scale = Vector2(0.8, 0.8)
-theme_override_fonts/font = ExtResource("15_ipiok")
+theme_override_fonts/font = ExtResource("16_m1rpe")
 theme_override_font_sizes/font_size = 64
 text = "/"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Sfx" type="AudioStreamPlayer" parent="."]
+[node name="Sfx" type="AudioStreamPlayer" parent="Data"]
 process_mode = 1
 stream = ExtResource("16_7ogxs")
 bus = &"GAME SFX"
+
+[node name="StyleAnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_f4u8t")
+}

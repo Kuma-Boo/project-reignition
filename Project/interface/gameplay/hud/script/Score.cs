@@ -5,70 +5,39 @@ namespace Project.Gameplay;
 
 public partial class Score : Control
 {
-
 	private StageSettings Stage => StageSettings.Instance;
 
-	[ExportGroup("Time & Score")]
-	[Export]
-	private Control rankPreviewerRoot;
-	[Export]
-	private TextureRect mainRank;
-	[Export]
-	private TextureRect transitionRank;
-	[Export]
-	private Texture2D[] rankTextures;
-	[Export]
-	private AudioStreamPlayer rankUpSFX;
-	[Export]
-	private AudioStreamPlayer rankDownSFX;
-	private int CurrentRank { get; set; }
+	[Export] private AnimationPlayer styleAnimator;
+	[Export] private TextureRect mainRank;
+	[Export] private TextureRect transitionRank;
+	[Export] private Texture2D[] rankTextures;
+	[Export] private AudioStreamPlayer rankUpSFX;
+	[Export] private AudioStreamPlayer rankDownSFX;
+
+	private bool isRankPreviewShown;
 	private Tween rankTween;
-	[Export]
-	private bool enableHudDecal;
-	[Export]
-	private Sprite2D hudDecalScore;
-	[Export]
-	private Sprite2D hudDecalScoreNoRank;
-	[Export]
-	private Sprite2D hudDecalTime;
+	private int CurrentRank { get; set; }
 
 	public void InitializeRankPreviewer()
 	{
-
-		if (hudDecalScore != null && hudDecalScoreNoRank != null)
+		switch (SaveManager.Config.hudStyle)
 		{
-			GD.Print("Score hud decal is true");
-			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.RankPreview))
-			{
-				GD.Print("Setting rank decal visibility");
-				hudDecalScore.Visible = true;
-				hudDecalScoreNoRank.Visible = false;
-			}
-			else
-			{
-				GD.Print("Setting score decal visibility");
-				hudDecalScore.Visible = false;
-				hudDecalScoreNoRank.Visible = true;
-			}
+			case SaveManager.HudStyle.Reignition:
+				styleAnimator.Play("reignited");
+				styleAnimator.Advance(0.0);
+				break;
 		}
 
-
-		rankPreviewerRoot.Visible = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.RankPreview);
-		if (!rankPreviewerRoot.Visible)
-			return;
+		isRankPreviewShown = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.RankPreview);
+		styleAnimator.Play(isRankPreviewShown ? "show-rank-preview" : "hide-rank-preview");
 
 		CurrentRank = Mathf.Max(0, Stage.CalculateRank(true));
 		mainRank.Texture = rankTextures[CurrentRank];
-
-
-
-
-
 	}
 
 	private void UpdateRankPreviewer()
 	{
-		if (!rankPreviewerRoot.Visible)
+		if (!isRankPreviewShown)
 			return;
 
 		int rank = Stage.CalculateRank(true);
@@ -100,6 +69,7 @@ public partial class Score : Control
 	private void StartRankUpTween(int rankDirection)
 	{
 		rankUpSFX.Play();
+		GD.Print(CurrentRank + rankDirection);
 		transitionRank.Texture = rankTextures[CurrentRank + rankDirection];
 		transitionRank.Position = Vector2.Up * 256;
 		rankTween = CreateTween().SetParallel();
@@ -117,8 +87,7 @@ public partial class Score : Control
 
 	private void CompleteRankDownTween() => rankTween.Kill();
 
-	[Export]
-	private Label time;
+	[Export] private Label time;
 	public void UpdateTime()
 	{
 		UpdateRankPreviewer(); // Update rank every frame
@@ -133,7 +102,6 @@ public partial class Score : Control
 		time.Text = Stage.DisplayTime;
 	}
 
-	[Export]
-	private Label score;
+	[Export] private Label score;
 	public void UpdateScore() => score.Text = Stage.DisplayScore;
 }

@@ -5,26 +5,15 @@ namespace Project.Gameplay;
 
 public partial class Rings : Control
 {
+	[Signal] private delegate void RingChainFinishedEventHandler();
+
 	private StageSettings Stage => StageSettings.Instance;
-	[ExportGroup("Rings")]
-	[Export]
-	private Label ringLabel;
-	[Export]
-	private Label maxRingLabel;
-	[Export]
-	private Label ringLossLabel;
-	[Export]
-	private Sprite2D ringDividerSprite;
-	[Export]
-	private AnimationTree ringAnimator;
-	[Export]
-	private AnimationPlayer fireSoulAnimator;
-	[Export]
-	private bool enableHudDecal;
-	[Export]
-	private Sprite2D hudDecal;
-	[Export]
-	private Sprite2D hudDecalShort;
+
+	[Export] private AnimationPlayer styleAnimator;
+	[Export] private Label ringLabel;
+	[Export] private Label maxRingLabel;
+	[Export] private Label ringLossLabel;
+	[Export] private AnimationTree ringAnimator;
 
 	private const string RingLabelFormat = "000";
 	private readonly string EnabledParameter = "enabled";
@@ -33,40 +22,29 @@ public partial class Rings : Control
 	private readonly string RingGainParameter = "parameters/gain_trigger/request";
 	private readonly string RingLossParameter = "parameters/loss_trigger/request";
 	private readonly string RinglessParameter = "parameters/ringless_transition/transition_request";
+	private readonly string RingGrowParameter = "parameters/grow_blend/add_amount";
 
 	public void InitializeRings()
 	{
 		// Initialize ring counter
-		if (Stage != null)
+
+		switch (SaveManager.Config.hudStyle)
 		{
-
-			if (hudDecal != null && hudDecalShort != null)
-			{
-				GD.Print("Ring hud decale is true");
-				if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Ring && Stage.Data.MissionObjectiveCount != 0)
-				{
-					GD.Print("Setting ring mission decal visibility");
-					hudDecal.Visible = true;
-					hudDecalShort.Visible = false;
-				}
-				else
-				{
-					GD.Print("Setting ring decal visibility");
-					hudDecal.Visible = false;
-					hudDecalShort.Visible = true;
-				}
-
-			}
-
-			maxRingLabel.Visible = ringDividerSprite.Visible = Stage.Data.MissionType == LevelDataResource.MissionTypes.Ring &&
-				Stage.Data.MissionObjectiveCount != 0; // Show/Hide max ring count
-			if (maxRingLabel.Visible)
-				maxRingLabel.Text = Stage.Data.MissionObjectiveCount.ToString(RingLabelFormat);
-
-			ringAnimator.Active = true;
-			UpdateRingCount(Stage.CurrentRingCount, true);
-
+			case SaveManager.HudStyle.Reignition:
+				styleAnimator.Play("reignited");
+				styleAnimator.Advance(0.0);
+				break;
 		}
+
+		// Show/Hide max ring count
+		bool isRingLimited = Stage.Data.MissionType == LevelDataResource.MissionTypes.Ring && Stage.Data.MissionObjectiveCount != 0;
+		styleAnimator.Play(isRingLimited ? "ring-limit" : "ring-no-limit");
+
+		if (isRingLimited)
+			maxRingLabel.Text = Stage.Data.MissionObjectiveCount.ToString(RingLabelFormat);
+
+		ringAnimator.Active = true;
+		UpdateRingCount(Stage.CurrentRingCount, true);
 	}
 
 	public void UpdateRingCount(int amount, bool disableAnimations)

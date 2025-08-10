@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://df0glfg6jnspd"]
+[gd_scene load_steps=15 format=3 uid="uid://cyb3n4vhis4y2"]
 
 [ext_resource type="Script" uid="uid://d3bwpan3sifbl" path="res://interface/gameplay/hud/script/Score.cs" id="1_njxm6"]
 [ext_resource type="Texture2D" uid="uid://clnr8mw5xvxn1" path="res://interface/menu/level select/texture/no medal.png" id="2_njxm6"]
@@ -6,75 +6,459 @@
 [ext_resource type="Texture2D" uid="uid://bongvk7uwqsco" path="res://interface/menu/level select/texture/gold.png" id="3_dhir1"]
 [ext_resource type="Texture2D" uid="uid://cbnh0am0av0ts" path="res://interface/menu/level select/texture/silver.png" id="3_kmwi2"]
 [ext_resource type="AudioStream" uid="uid://c2ntlq8k605f0" path="res://sound/sfx/system/SYSTEM_57.wav" id="4_scb50"]
+[ext_resource type="Texture2D" uid="uid://jvsk1vt7171o" path="res://interface/gameplay/hud/texture/hud_decal.png" id="5_0brr0"]
 [ext_resource type="AudioStream" uid="uid://dnehqc85xb54p" path="res://sound/sfx/system/SYSTEM_58.wav" id="5_kmwi2"]
-[ext_resource type="FontFile" uid="uid://ufthq2l6f21q" path="res://interface/font/otf/HUDBeveledFontV6.otf" id="5_scb50"]
+[ext_resource type="FontFile" uid="uid://cjn5owdvvkfrb" path="res://interface/font/bitmap fonts/Experience.fnt" id="6_kmwi2"]
 
-[node name="Score" type="Control" node_paths=PackedStringArray("rankPreviewerRoot", "mainRank", "transitionRank", "rankUpSFX", "rankDownSFX", "time", "score")]
+[sub_resource type="Animation" id="Animation_kmwi2"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Data/Score:theme_override_font_sizes/font_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [80]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Data/Time:theme_override_font_sizes/font_size")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [80]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Data/ReignitedDecals:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("RankAnchor/Rank:size")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(128, 128)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("RankAnchor/Rank:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1336, 64)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Data/Score:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -8)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Data/Time:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 56)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Data/ReignitedDecals/TimeDecal:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-216, 160)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("RankAnchor/Rank:visible")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Data/ReignitedDecals/ScoreDecal:visible")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Data/ReignitedDecals/ScoreDecalNoRank:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_xv34o"]
+resource_name = "hide-rank-preview"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RankAnchor/Rank:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Data/ReignitedDecals/ScoreDecal:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Data/ReignitedDecals/ScoreDecalNoRank:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_0brr0"]
+resource_name = "reignited"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Data/ReignitedDecals:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RankAnchor/Rank:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1496, 48)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("RankAnchor/Rank:size")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(72, 72)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Data/Score:theme_override_font_sizes/font_size")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [64]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Data/Score:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(104, -24)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Data/Time:theme_override_font_sizes/font_size")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [64]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Data/Time:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(104, 56)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Data/ReignitedDecals/TimeDecal:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-216, 160)]
+}
+
+[sub_resource type="Animation" id="Animation_scb50"]
+resource_name = "show-rank-preview"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RankAnchor/Rank:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Data/ReignitedDecals/ScoreDecal:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Data/ReignitedDecals/ScoreDecalNoRank:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xv34o"]
+_data = {
+&"RESET": SubResource("Animation_kmwi2"),
+&"hide-rank-preview": SubResource("Animation_xv34o"),
+&"reignited": SubResource("Animation_0brr0"),
+&"show-rank-preview": SubResource("Animation_scb50")
+}
+
+[node name="Score" type="Control" node_paths=PackedStringArray("styleAnimator", "mainRank", "transitionRank", "rankUpSFX", "rankDownSFX", "time", "score")]
 layout_mode = 3
-anchors_preset = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_njxm6")
+styleAnimator = NodePath("StyleAnimationPlayer")
+mainRank = NodePath("RankAnchor/Rank/MainRank")
+transitionRank = NodePath("RankAnchor/Rank/TransitionRank")
+rankTextures = Array[Texture2D]([ExtResource("2_njxm6"), ExtResource("2_scb50"), ExtResource("3_kmwi2"), ExtResource("3_dhir1")])
+rankUpSFX = NodePath("RankAnchor/Rank/RankUp")
+rankDownSFX = NodePath("RankAnchor/Rank/RankDown")
+time = NodePath("Data/Time")
+score = NodePath("Data/Score")
+
+[node name="Data" type="Control" parent="."]
+layout_mode = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -512.0
+offset_left = -448.0
 offset_top = 64.0
-offset_right = -128.0
-offset_bottom = 192.0
-grow_horizontal = 0
-script = ExtResource("1_njxm6")
-rankPreviewerRoot = NodePath("Rank")
-mainRank = NodePath("Rank/MainRank")
-transitionRank = NodePath("Rank/TransitionRank")
-rankTextures = Array[Texture2D]([ExtResource("3_dhir1"), ExtResource("2_scb50"), ExtResource("3_kmwi2")])
-rankUpSFX = NodePath("Rank/RankUp")
-rankDownSFX = NodePath("Rank/RankDown")
-time = NodePath("Time")
-score = NodePath("Score")
+offset_right = -448.0
+offset_bottom = 64.0
 
-[node name="Score" type="Label" parent="."]
+[node name="ReignitedDecals" type="Control" parent="Data"]
+visible = false
+layout_mode = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 448.0
+offset_top = -64.0
+offset_right = 448.0
+offset_bottom = -64.0
+
+[node name="TimeDecal" type="Sprite2D" parent="Data/ReignitedDecals"]
+position = Vector2(-216, 160)
+texture = ExtResource("5_0brr0")
+region_enabled = true
+region_rect = Rect2(125, 168, 577, 100)
+
+[node name="ScoreDecal" type="Sprite2D" parent="Data/ReignitedDecals"]
+position = Vector2(-272, 84)
+texture = ExtResource("5_0brr0")
+region_enabled = true
+region_rect = Rect2(14, 33, 688, 120)
+
+[node name="ScoreDecalNoRank" type="Sprite2D" parent="Data/ReignitedDecals"]
+visible = false
+position = Vector2(-216, 84)
+texture = ExtResource("5_0brr0")
+region_enabled = true
+region_rect = Rect2(125, 168, 577, 100)
+
+[node name="Score" type="Label" parent="Data"]
 layout_mode = 0
-offset_right = 384.0
-offset_bottom = 67.0
-theme_override_fonts/font = ExtResource("5_scb50")
-theme_override_font_sizes/font_size = 45
+offset_top = -8.0
+offset_right = 360.0
+offset_bottom = 72.0
+theme_override_fonts/font = ExtResource("6_kmwi2")
+theme_override_font_sizes/font_size = 80
 text = "00000000"
 vertical_alignment = 1
 
-[node name="Time" type="Label" parent="."]
+[node name="Time" type="Label" parent="Data"]
 layout_mode = 0
-offset_top = 67.0
-offset_right = 384.0
-offset_bottom = 134.0
-theme_override_fonts/font = ExtResource("5_scb50")
-theme_override_font_sizes/font_size = 45
+offset_top = 56.0
+offset_right = 360.0
+offset_bottom = 136.0
+theme_override_fonts/font = ExtResource("6_kmwi2")
+theme_override_font_sizes/font_size = 80
 text = "00:00.00"
 vertical_alignment = 1
 
-[node name="Rank" type="Control" parent="."]
-anchors_preset = 0
-offset_left = -128.0
-offset_right = -128.0
-scale = Vector2(2, 2)
+[node name="RankAnchor" type="Control" parent="."]
+layout_mode = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -1920.0
+offset_bottom = 1080.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="MainRank" type="TextureRect" parent="Rank"]
-layout_mode = 0
-offset_right = 64.0
-offset_bottom = 64.0
+[node name="Rank" type="Control" parent="RankAnchor"]
+layout_mode = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -584.0
+offset_top = 64.0
+offset_right = -456.0
+offset_bottom = 192.0
+
+[node name="MainRank" type="TextureRect" parent="RankAnchor/Rank"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("2_njxm6")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TransitionRank" type="TextureRect" parent="Rank"]
+[node name="TransitionRank" type="TextureRect" parent="RankAnchor/Rank"]
 self_modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-offset_right = 64.0
-offset_bottom = 64.0
-texture = ExtResource("3_dhir1")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_njxm6")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="RankUp" type="AudioStreamPlayer" parent="Rank"]
+[node name="RankUp" type="AudioStreamPlayer" parent="RankAnchor/Rank"]
 stream = ExtResource("4_scb50")
 bus = &"SFX"
 
-[node name="RankDown" type="AudioStreamPlayer" parent="Rank"]
+[node name="RankDown" type="AudioStreamPlayer" parent="RankAnchor/Rank"]
 stream = ExtResource("5_kmwi2")
 bus = &"SFX"
+
+[node name="StyleAnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_xv34o")
+}

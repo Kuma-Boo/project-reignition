@@ -17,28 +17,6 @@ public partial class HeadsUpDisplay : Control
 
 	public override void _Ready()
 	{
-		switch (SaveManager.Config.hudStyle)
-		{
-			case SaveManager.HudStyle.Retail:
-				score.Visible = true;
-				objectives.Visible = true;
-				rings.Visible = true;
-				break;
-			case SaveManager.HudStyle.Reignition:
-				scoreReignition.Visible = true;
-				objectivesReignition.Visible = true;
-				ringsReignition.Visible = true;
-
-				score = scoreReignition;
-				objectives = objectivesReignition;
-				rings = ringsReignition;
-				break;
-			case SaveManager.HudStyle.E3:
-				//TODO:
-				//Make E3 hud
-				break;
-		}
-
 		score.InitializeRankPreviewer();
 		rings.InitializeRings();
 		objectives.InitializeObjectives();
@@ -57,7 +35,6 @@ public partial class HeadsUpDisplay : Control
 
 	#region Rings
 	[Export] private Rings rings;
-	[Export] private Rings ringsReignition;
 	[Export] private AnimationPlayer fireSoulAnimator;
 
 	public void CollectFireSoul()
@@ -75,7 +52,6 @@ public partial class HeadsUpDisplay : Control
 
 	#region Time and Score
 	[Export] private Score score;
-	[Export] private Score scoreReignition;
 
 	private void UpdateTime() => score.UpdateTime();
 	private void UpdateScore() => score.UpdateScore();

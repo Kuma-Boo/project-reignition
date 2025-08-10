@@ -1,20 +1,20 @@
-[gd_scene load_steps=25 format=3 uid="uid://fu7502ow8bh2"]
+[gd_scene load_steps=33 format=3 uid="uid://cxesh1nxgvrsv"]
 
-[ext_resource type="Script" path="res://interface/gameplay/hud/script/Rings.cs" id="1_st3yc"]
-[ext_resource type="Texture2D" uid="uid://cmibj4ckksnci" path="res://interface/gameplay/hud/texture/ring_atlas_hd.png" id="2_nobfg"]
+[ext_resource type="Script" uid="uid://b5j8fb7ptmifs" path="res://interface/gameplay/hud/script/Rings.cs" id="1_st3yc"]
+[ext_resource type="Texture2D" uid="uid://jvsk1vt7171o" path="res://interface/gameplay/hud/texture/hud_decal.png" id="2_0nlx6"]
+[ext_resource type="Texture2D" uid="uid://dlyp2y2l5p5er" path="res://interface/gameplay/hud/texture/ring_atlas.png" id="2_8kof8"]
 [ext_resource type="Script" uid="uid://cvdq5k05y8o4e" path="res://addons/custom_nodes/script/Sprite2DPlus.cs" id="2_st3yc"]
-[ext_resource type="FontFile" uid="uid://metby7j5vbho" path="res://interface/font/bitmap fonts/HUD Numbers.fnt" id="3_srpfp"]
-[ext_resource type="FontFile" uid="uid://ufthq2l6f21q" path="res://interface/font/otf/HUD.otf" id="4_nobfg"]
+[ext_resource type="FontFile" uid="uid://cjn5owdvvkfrb" path="res://interface/font/bitmap fonts/Experience.fnt" id="4_8kof8"]
 [ext_resource type="Texture2D" uid="uid://hjdee6dcqgs1" path="res://interface/gameplay/hud/texture/soul gauge/sprite atlas.png" id="4_vrhy3"]
 [ext_resource type="Texture2D" uid="uid://be22jije73ycj" path="res://interface/gameplay/hud/texture/soul gauge/sprite_atlas_hd.png" id="5_0nlx6"]
 [ext_resource type="AudioStream" uid="uid://crk7fy6bd8job" path="res://sound/sfx/objects/ring loss.wav" id="5_ek5lp"]
 
-[sub_resource type="Animation" id="2"]
+[sub_resource type="Animation" id="Animation_ohqol"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Current:scale")
+tracks/0/path = NodePath("Data/Current:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -26,7 +26,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Loss/LossAmount:modulate")
+tracks/1/path = NodePath("Data/Loss/LossAmount:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -38,7 +38,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Loss/LossAmount:position")
+tracks/2/path = NodePath("Data/Loss/LossAmount:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -50,7 +50,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Current/CurrentAmount:modulate")
+tracks/3/path = NodePath("Data/Current/CurrentAmount:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -62,7 +62,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Current:position")
+tracks/4/path = NodePath("Data/Current:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -74,7 +74,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Current/Ring:timeScale")
+tracks/5/path = NodePath("Data/Current/Ring:timeScale")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -86,7 +86,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Current/Ring:loopMode")
+tracks/6/path = NodePath("Data/Current/Ring:loopMode")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -98,7 +98,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Current/Ring:playing")
+tracks/7/path = NodePath("Data/Current/Ring:playing")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -110,7 +110,7 @@ tracks/7/keys = {
 tracks/8/type = "bezier"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Loss/RingsRoot/Ring1:position:x")
+tracks/8/path = NodePath("Data/Loss/RingsRoot/Ring1:position:x")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -121,7 +121,7 @@ tracks/8/keys = {
 tracks/9/type = "bezier"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("Loss/RingsRoot/Ring1:position:y")
+tracks/9/path = NodePath("Data/Loss/RingsRoot/Ring1:position:y")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -132,7 +132,7 @@ tracks/9/keys = {
 tracks/10/type = "bezier"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("Loss/RingsRoot/Ring2:position:x")
+tracks/10/path = NodePath("Data/Loss/RingsRoot/Ring2:position:x")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -143,7 +143,7 @@ tracks/10/keys = {
 tracks/11/type = "bezier"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("Loss/RingsRoot/Ring2:position:y")
+tracks/11/path = NodePath("Data/Loss/RingsRoot/Ring2:position:y")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -154,7 +154,7 @@ tracks/11/keys = {
 tracks/12/type = "bezier"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("Loss/RingsRoot/Ring3:position:x")
+tracks/12/path = NodePath("Data/Loss/RingsRoot/Ring3:position:x")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -165,7 +165,7 @@ tracks/12/keys = {
 tracks/13/type = "bezier"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("Loss/RingsRoot/Ring3:position:y")
+tracks/13/path = NodePath("Data/Loss/RingsRoot/Ring3:position:y")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
@@ -176,7 +176,7 @@ tracks/13/keys = {
 tracks/14/type = "bezier"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("Loss/RingsRoot/Ring4:position:x")
+tracks/14/path = NodePath("Data/Loss/RingsRoot/Ring4:position:x")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
@@ -187,7 +187,7 @@ tracks/14/keys = {
 tracks/15/type = "bezier"
 tracks/15/imported = false
 tracks/15/enabled = true
-tracks/15/path = NodePath("Loss/RingsRoot/Ring4:position:y")
+tracks/15/path = NodePath("Data/Loss/RingsRoot/Ring4:position:y")
 tracks/15/interp = 1
 tracks/15/loop_wrap = true
 tracks/15/keys = {
@@ -198,7 +198,7 @@ tracks/15/keys = {
 tracks/16/type = "bezier"
 tracks/16/imported = false
 tracks/16/enabled = true
-tracks/16/path = NodePath("Loss/RingsRoot/Ring5:position:x")
+tracks/16/path = NodePath("Data/Loss/RingsRoot/Ring5:position:x")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
@@ -209,7 +209,7 @@ tracks/16/keys = {
 tracks/17/type = "bezier"
 tracks/17/imported = false
 tracks/17/enabled = true
-tracks/17/path = NodePath("Loss/RingsRoot/Ring5:position:y")
+tracks/17/path = NodePath("Data/Loss/RingsRoot/Ring5:position:y")
 tracks/17/interp = 1
 tracks/17/loop_wrap = true
 tracks/17/keys = {
@@ -220,7 +220,7 @@ tracks/17/keys = {
 tracks/18/type = "bezier"
 tracks/18/imported = false
 tracks/18/enabled = true
-tracks/18/path = NodePath("Loss/RingsRoot/Ring6:position:x")
+tracks/18/path = NodePath("Data/Loss/RingsRoot/Ring6:position:x")
 tracks/18/interp = 1
 tracks/18/loop_wrap = true
 tracks/18/keys = {
@@ -231,7 +231,7 @@ tracks/18/keys = {
 tracks/19/type = "bezier"
 tracks/19/imported = false
 tracks/19/enabled = true
-tracks/19/path = NodePath("Loss/RingsRoot/Ring6:position:y")
+tracks/19/path = NodePath("Data/Loss/RingsRoot/Ring6:position:y")
 tracks/19/interp = 1
 tracks/19/loop_wrap = true
 tracks/19/keys = {
@@ -242,7 +242,7 @@ tracks/19/keys = {
 tracks/20/type = "bezier"
 tracks/20/imported = false
 tracks/20/enabled = true
-tracks/20/path = NodePath("Loss/RingsRoot/Ring7:position:x")
+tracks/20/path = NodePath("Data/Loss/RingsRoot/Ring7:position:x")
 tracks/20/interp = 1
 tracks/20/loop_wrap = true
 tracks/20/keys = {
@@ -253,7 +253,7 @@ tracks/20/keys = {
 tracks/21/type = "bezier"
 tracks/21/imported = false
 tracks/21/enabled = true
-tracks/21/path = NodePath("Loss/RingsRoot/Ring7:position:y")
+tracks/21/path = NodePath("Data/Loss/RingsRoot/Ring7:position:y")
 tracks/21/interp = 1
 tracks/21/loop_wrap = true
 tracks/21/keys = {
@@ -264,7 +264,7 @@ tracks/21/keys = {
 tracks/22/type = "bezier"
 tracks/22/imported = false
 tracks/22/enabled = true
-tracks/22/path = NodePath("Loss/RingsRoot/Ring8:position:x")
+tracks/22/path = NodePath("Data/Loss/RingsRoot/Ring8:position:x")
 tracks/22/interp = 1
 tracks/22/loop_wrap = true
 tracks/22/keys = {
@@ -275,7 +275,7 @@ tracks/22/keys = {
 tracks/23/type = "bezier"
 tracks/23/imported = false
 tracks/23/enabled = true
-tracks/23/path = NodePath("Loss/RingsRoot/Ring8:position:y")
+tracks/23/path = NodePath("Data/Loss/RingsRoot/Ring8:position:y")
 tracks/23/interp = 1
 tracks/23/loop_wrap = true
 tracks/23/keys = {
@@ -286,7 +286,7 @@ tracks/23/keys = {
 tracks/24/type = "bezier"
 tracks/24/imported = false
 tracks/24/enabled = true
-tracks/24/path = NodePath("Loss/RingsRoot/Ring9:position:x")
+tracks/24/path = NodePath("Data/Loss/RingsRoot/Ring9:position:x")
 tracks/24/interp = 1
 tracks/24/loop_wrap = true
 tracks/24/keys = {
@@ -297,7 +297,7 @@ tracks/24/keys = {
 tracks/25/type = "bezier"
 tracks/25/imported = false
 tracks/25/enabled = true
-tracks/25/path = NodePath("Loss/RingsRoot/Ring9:position:y")
+tracks/25/path = NodePath("Data/Loss/RingsRoot/Ring9:position:y")
 tracks/25/interp = 1
 tracks/25/loop_wrap = true
 tracks/25/keys = {
@@ -308,7 +308,7 @@ tracks/25/keys = {
 tracks/26/type = "bezier"
 tracks/26/imported = false
 tracks/26/enabled = true
-tracks/26/path = NodePath("Loss/RingsRoot/Ring10:position:x")
+tracks/26/path = NodePath("Data/Loss/RingsRoot/Ring10:position:x")
 tracks/26/interp = 1
 tracks/26/loop_wrap = true
 tracks/26/keys = {
@@ -319,7 +319,7 @@ tracks/26/keys = {
 tracks/27/type = "bezier"
 tracks/27/imported = false
 tracks/27/enabled = true
-tracks/27/path = NodePath("Loss/RingsRoot/Ring10:position:y")
+tracks/27/path = NodePath("Data/Loss/RingsRoot/Ring10:position:y")
 tracks/27/interp = 1
 tracks/27/loop_wrap = true
 tracks/27/keys = {
@@ -330,7 +330,7 @@ tracks/27/keys = {
 tracks/28/type = "value"
 tracks/28/imported = false
 tracks/28/enabled = true
-tracks/28/path = NodePath("Loss/RingsRoot:modulate")
+tracks/28/path = NodePath("Data/Loss/RingsRoot:modulate")
 tracks/28/interp = 1
 tracks/28/loop_wrap = true
 tracks/28/keys = {
@@ -342,7 +342,7 @@ tracks/28/keys = {
 tracks/29/type = "value"
 tracks/29/imported = false
 tracks/29/enabled = true
-tracks/29/path = NodePath("Loss/RingsRoot:process_mode")
+tracks/29/path = NodePath("Data/Loss/RingsRoot:process_mode")
 tracks/29/interp = 1
 tracks/29/loop_wrap = true
 tracks/29/keys = {
@@ -354,7 +354,7 @@ tracks/29/keys = {
 tracks/30/type = "value"
 tracks/30/imported = false
 tracks/30/enabled = true
-tracks/30/path = NodePath("Current/Chain/Fill:scale")
+tracks/30/path = NodePath("Data/Current/Chain/Fill:scale")
 tracks/30/interp = 1
 tracks/30/loop_wrap = true
 tracks/30/keys = {
@@ -366,7 +366,7 @@ tracks/30/keys = {
 tracks/31/type = "value"
 tracks/31/imported = false
 tracks/31/enabled = true
-tracks/31/path = NodePath("Current/Chain/Fill:color")
+tracks/31/path = NodePath("Data/Current/Chain/Fill:color")
 tracks/31/interp = 1
 tracks/31/loop_wrap = true
 tracks/31/keys = {
@@ -378,7 +378,7 @@ tracks/31/keys = {
 tracks/32/type = "value"
 tracks/32/imported = false
 tracks/32/enabled = true
-tracks/32/path = NodePath("Current/Chain:modulate")
+tracks/32/path = NodePath("Data/Current/Chain:modulate")
 tracks/32/interp = 1
 tracks/32/loop_wrap = true
 tracks/32/keys = {
@@ -388,128 +388,116 @@ tracks/32/keys = {
 "values": [Color(1, 1, 1, 0)]
 }
 
-[sub_resource type="Animation" id="1"]
+[sub_resource type="Animation" id="Animation_520uh"]
 resource_name = "collect"
 length = 2.33333
 step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Current:scale")
+tracks/0/path = NodePath("Data/Current/CurrentAmount:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0833333, 0.166667),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(1.5, 1.5), Vector2(1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Current/CurrentAmount:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
 }
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Current/Ring:timeScale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Data/Current/Ring:timeScale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
 "times": PackedFloat32Array(0, 2),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [5.0, 1.0]
 }
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Current/Ring:loopMode")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Data/Current/Ring:loopMode")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
 "times": PackedFloat32Array(0, 2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [1, 2]
 }
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Current/Ring:playing")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Data/Current/Ring:playing")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
 }
-tracks/5/type = "method"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("../Bonuses")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(2.33333),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"FinishRingChain"
-}]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("Current/Chain/Fill:scale")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Data/Current/Chain/Fill:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
 "times": PackedFloat32Array(0, 2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(1, 0)]
 }
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("Current/Chain/Fill:color")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Data/Current/Chain/Fill:color")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
 "times": PackedFloat32Array(0, 0.0666667, 0.333333),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(0, 1, 0, 1), Color(1, 1, 1, 1), Color(0, 1, 0, 1)]
 }
-tracks/8/type = "value"
-tracks/8/imported = false
-tracks/8/enabled = true
-tracks/8/path = NodePath("Current/Chain:modulate")
-tracks/8/interp = 1
-tracks/8/loop_wrap = true
-tracks/8/keys = {
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Data/Current/Chain:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
 "times": PackedFloat32Array(0, 2, 2.33333),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath(".")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(2.3333333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"RingChainFinished"],
+"method": &"emit_signal"
+}]
+}
 
-[sub_resource type="Animation" id="46"]
+[sub_resource type="Animation" id="Animation_e41kc"]
 resource_name = "damage"
 step = 0.0416667
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Current:position")
+tracks/0/path = NodePath("Data/Current:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -521,7 +509,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Loss/LossAmount:modulate")
+tracks/1/path = NodePath("Data/Loss/LossAmount:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -533,7 +521,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Loss/LossAmount:position")
+tracks/2/path = NodePath("Data/Loss/LossAmount:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -545,7 +533,7 @@ tracks/2/keys = {
 tracks/3/type = "method"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Loss/RingLossSFX")
+tracks/3/path = NodePath("Data/Loss/RingLossSFX")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -559,7 +547,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Current/Ring:playing")
+tracks/4/path = NodePath("Data/Current/Ring:playing")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -571,7 +559,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Current/Ring:timeScale")
+tracks/5/path = NodePath("Data/Current/Ring:timeScale")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -583,7 +571,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Current/Ring:loopMode")
+tracks/6/path = NodePath("Data/Current/Ring:loopMode")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -595,7 +583,7 @@ tracks/6/keys = {
 tracks/7/type = "bezier"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Loss/RingsRoot/Ring1:position:x")
+tracks/7/path = NodePath("Data/Loss/RingsRoot/Ring1:position:x")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -606,7 +594,7 @@ tracks/7/keys = {
 tracks/8/type = "bezier"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Loss/RingsRoot/Ring1:position:y")
+tracks/8/path = NodePath("Data/Loss/RingsRoot/Ring1:position:y")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -617,7 +605,7 @@ tracks/8/keys = {
 tracks/9/type = "bezier"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("Loss/RingsRoot/Ring2:position:x")
+tracks/9/path = NodePath("Data/Loss/RingsRoot/Ring2:position:x")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -628,7 +616,7 @@ tracks/9/keys = {
 tracks/10/type = "bezier"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("Loss/RingsRoot/Ring2:position:y")
+tracks/10/path = NodePath("Data/Loss/RingsRoot/Ring2:position:y")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -639,7 +627,7 @@ tracks/10/keys = {
 tracks/11/type = "bezier"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("Loss/RingsRoot/Ring3:position:x")
+tracks/11/path = NodePath("Data/Loss/RingsRoot/Ring3:position:x")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -650,7 +638,7 @@ tracks/11/keys = {
 tracks/12/type = "bezier"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("Loss/RingsRoot/Ring3:position:y")
+tracks/12/path = NodePath("Data/Loss/RingsRoot/Ring3:position:y")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -661,7 +649,7 @@ tracks/12/keys = {
 tracks/13/type = "bezier"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("Loss/RingsRoot/Ring4:position:x")
+tracks/13/path = NodePath("Data/Loss/RingsRoot/Ring4:position:x")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
@@ -672,7 +660,7 @@ tracks/13/keys = {
 tracks/14/type = "bezier"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("Loss/RingsRoot/Ring4:position:y")
+tracks/14/path = NodePath("Data/Loss/RingsRoot/Ring4:position:y")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
@@ -683,7 +671,7 @@ tracks/14/keys = {
 tracks/15/type = "bezier"
 tracks/15/imported = false
 tracks/15/enabled = true
-tracks/15/path = NodePath("Loss/RingsRoot/Ring5:position:x")
+tracks/15/path = NodePath("Data/Loss/RingsRoot/Ring5:position:x")
 tracks/15/interp = 1
 tracks/15/loop_wrap = true
 tracks/15/keys = {
@@ -694,7 +682,7 @@ tracks/15/keys = {
 tracks/16/type = "bezier"
 tracks/16/imported = false
 tracks/16/enabled = true
-tracks/16/path = NodePath("Loss/RingsRoot/Ring5:position:y")
+tracks/16/path = NodePath("Data/Loss/RingsRoot/Ring5:position:y")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
@@ -705,7 +693,7 @@ tracks/16/keys = {
 tracks/17/type = "bezier"
 tracks/17/imported = false
 tracks/17/enabled = true
-tracks/17/path = NodePath("Loss/RingsRoot/Ring6:position:x")
+tracks/17/path = NodePath("Data/Loss/RingsRoot/Ring6:position:x")
 tracks/17/interp = 1
 tracks/17/loop_wrap = true
 tracks/17/keys = {
@@ -716,7 +704,7 @@ tracks/17/keys = {
 tracks/18/type = "bezier"
 tracks/18/imported = false
 tracks/18/enabled = true
-tracks/18/path = NodePath("Loss/RingsRoot/Ring6:position:y")
+tracks/18/path = NodePath("Data/Loss/RingsRoot/Ring6:position:y")
 tracks/18/interp = 1
 tracks/18/loop_wrap = true
 tracks/18/keys = {
@@ -727,7 +715,7 @@ tracks/18/keys = {
 tracks/19/type = "bezier"
 tracks/19/imported = false
 tracks/19/enabled = true
-tracks/19/path = NodePath("Loss/RingsRoot/Ring7:position:x")
+tracks/19/path = NodePath("Data/Loss/RingsRoot/Ring7:position:x")
 tracks/19/interp = 1
 tracks/19/loop_wrap = true
 tracks/19/keys = {
@@ -738,7 +726,7 @@ tracks/19/keys = {
 tracks/20/type = "bezier"
 tracks/20/imported = false
 tracks/20/enabled = true
-tracks/20/path = NodePath("Loss/RingsRoot/Ring7:position:y")
+tracks/20/path = NodePath("Data/Loss/RingsRoot/Ring7:position:y")
 tracks/20/interp = 1
 tracks/20/loop_wrap = true
 tracks/20/keys = {
@@ -749,7 +737,7 @@ tracks/20/keys = {
 tracks/21/type = "bezier"
 tracks/21/imported = false
 tracks/21/enabled = true
-tracks/21/path = NodePath("Loss/RingsRoot/Ring8:position:x")
+tracks/21/path = NodePath("Data/Loss/RingsRoot/Ring8:position:x")
 tracks/21/interp = 1
 tracks/21/loop_wrap = true
 tracks/21/keys = {
@@ -760,7 +748,7 @@ tracks/21/keys = {
 tracks/22/type = "bezier"
 tracks/22/imported = false
 tracks/22/enabled = true
-tracks/22/path = NodePath("Loss/RingsRoot/Ring8:position:y")
+tracks/22/path = NodePath("Data/Loss/RingsRoot/Ring8:position:y")
 tracks/22/interp = 1
 tracks/22/loop_wrap = true
 tracks/22/keys = {
@@ -771,7 +759,7 @@ tracks/22/keys = {
 tracks/23/type = "bezier"
 tracks/23/imported = false
 tracks/23/enabled = true
-tracks/23/path = NodePath("Loss/RingsRoot/Ring9:position:x")
+tracks/23/path = NodePath("Data/Loss/RingsRoot/Ring9:position:x")
 tracks/23/interp = 1
 tracks/23/loop_wrap = true
 tracks/23/keys = {
@@ -782,7 +770,7 @@ tracks/23/keys = {
 tracks/24/type = "bezier"
 tracks/24/imported = false
 tracks/24/enabled = true
-tracks/24/path = NodePath("Loss/RingsRoot/Ring9:position:y")
+tracks/24/path = NodePath("Data/Loss/RingsRoot/Ring9:position:y")
 tracks/24/interp = 1
 tracks/24/loop_wrap = true
 tracks/24/keys = {
@@ -793,7 +781,7 @@ tracks/24/keys = {
 tracks/25/type = "bezier"
 tracks/25/imported = false
 tracks/25/enabled = true
-tracks/25/path = NodePath("Loss/RingsRoot/Ring10:position:x")
+tracks/25/path = NodePath("Data/Loss/RingsRoot/Ring10:position:x")
 tracks/25/interp = 1
 tracks/25/loop_wrap = true
 tracks/25/keys = {
@@ -804,7 +792,7 @@ tracks/25/keys = {
 tracks/26/type = "bezier"
 tracks/26/imported = false
 tracks/26/enabled = true
-tracks/26/path = NodePath("Loss/RingsRoot/Ring10:position:y")
+tracks/26/path = NodePath("Data/Loss/RingsRoot/Ring10:position:y")
 tracks/26/interp = 1
 tracks/26/loop_wrap = true
 tracks/26/keys = {
@@ -815,7 +803,7 @@ tracks/26/keys = {
 tracks/27/type = "value"
 tracks/27/imported = false
 tracks/27/enabled = true
-tracks/27/path = NodePath("Loss/RingsRoot:modulate")
+tracks/27/path = NodePath("Data/Loss/RingsRoot:modulate")
 tracks/27/interp = 1
 tracks/27/loop_wrap = true
 tracks/27/keys = {
@@ -827,7 +815,7 @@ tracks/27/keys = {
 tracks/28/type = "value"
 tracks/28/imported = false
 tracks/28/enabled = true
-tracks/28/path = NodePath("Loss/RingsRoot:process_mode")
+tracks/28/path = NodePath("Data/Loss/RingsRoot:process_mode")
 tracks/28/interp = 1
 tracks/28/loop_wrap = true
 tracks/28/keys = {
@@ -837,13 +825,30 @@ tracks/28/keys = {
 "values": [0, 4]
 }
 
-[sub_resource type="Animation" id="Animation_dq8eb"]
+[sub_resource type="Animation" id="Animation_8kof8"]
+resource_name = "grow"
+length = 0.5
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Data/Current:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0833333, 0.166667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.5, 1.5), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_15kfe"]
 resource_name = "ring"
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Current/CurrentAmount:modulate")
+tracks/0/path = NodePath("Data/Current/CurrentAmount:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -853,13 +858,13 @@ tracks/0/keys = {
 "values": [Color(1, 1, 1, 1)]
 }
 
-[sub_resource type="Animation" id="Animation_kv36n"]
+[sub_resource type="Animation" id="Animation_2r0v6"]
 resource_name = "ringless"
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Current/CurrentAmount:modulate")
+tracks/0/path = NodePath("Data/Current/CurrentAmount:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -869,19 +874,25 @@ tracks/0/keys = {
 "values": [Color(1, 0, 0, 1), Color(1, 0, 0, 0.588235), Color(1, 0, 0, 1)]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_kw3qf"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vxa82"]
 _data = {
-&"RESET": SubResource("2"),
-&"collect": SubResource("1"),
-&"damage": SubResource("46"),
-&"ring": SubResource("Animation_dq8eb"),
-&"ringless": SubResource("Animation_kv36n")
+&"RESET": SubResource("Animation_ohqol"),
+&"collect": SubResource("Animation_520uh"),
+&"damage": SubResource("Animation_e41kc"),
+&"grow": SubResource("Animation_8kof8"),
+&"ring": SubResource("Animation_15kfe"),
+&"ringless": SubResource("Animation_2r0v6")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rarei"]
 animation = &"collect"
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_jee8d"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8kof8"]
+animation = &"grow"
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_0nlx6"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_n0dnn"]
 animation = &"RESET"
@@ -894,10 +905,10 @@ animation = &"damage"
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_nrpip"]
 animation = &"ring"
 
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_ml7me"]
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_akfrn"]
 animation = &"ringless"
-
-[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_ml7me"]
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_8ld87"]
 xfade_time = 0.05
@@ -911,95 +922,592 @@ input_1/break_loop_at_end = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_06lyc"]
-nodes/gain-anim/node = SubResource("AnimationNodeAnimation_rarei")
-nodes/gain-anim/position = Vector2(-480, 96)
+graph_offset = Vector2(-989.7538, -78.881714)
+nodes/gain_anim/node = SubResource("AnimationNodeAnimation_rarei")
+nodes/gain_anim/position = Vector2(-980, 140)
 nodes/gain_trigger/node = SubResource("AnimationNodeOneShot_jee8d")
-nodes/gain_trigger/position = Vector2(-304, 0)
-nodes/hold-anim/node = SubResource("AnimationNodeAnimation_n0dnn")
-nodes/hold-anim/position = Vector2(-480, -16)
+nodes/gain_trigger/position = Vector2(-600, -60)
+nodes/hold_anim/node = SubResource("AnimationNodeAnimation_n0dnn")
+nodes/hold_anim/position = Vector2(-980, -80)
 nodes/loss-anim/node = SubResource("AnimationNodeAnimation_1ry72")
-nodes/loss-anim/position = Vector2(-304, 224)
+nodes/loss-anim/position = Vector2(-600, 240)
 nodes/loss_trigger/node = SubResource("AnimationNodeOneShot_wda3x")
-nodes/loss_trigger/position = Vector2(-96, 96)
-nodes/ring-anim/node = SubResource("AnimationNodeAnimation_nrpip")
-nodes/ring-anim/position = Vector2(-480, 464)
-nodes/ringless-anim/node = SubResource("AnimationNodeAnimation_akfrn")
-nodes/ringless-anim/position = Vector2(-480, 352)
+nodes/loss_trigger/position = Vector2(-380, 40)
+nodes/ring_anim/node = SubResource("AnimationNodeAnimation_nrpip")
+nodes/ring_anim/position = Vector2(-680, 680)
+nodes/ringless_anim/node = SubResource("AnimationNodeAnimation_akfrn")
+nodes/ringless_anim/position = Vector2(-680, 480)
 nodes/ringless_add/node = SubResource("AnimationNodeAdd2_ml7me")
 nodes/ringless_add/position = Vector2(80, 144)
 nodes/ringless_transition/node = SubResource("AnimationNodeTransition_8ld87")
-nodes/ringless_transition/position = Vector2(-160, 352)
-node_connections = [&"gain_trigger", 0, &"hold-anim", &"gain_trigger", 1, &"gain-anim", &"loss_trigger", 0, &"gain_trigger", &"loss_trigger", 1, &"loss-anim", &"output", 0, &"ringless_add", &"ringless_add", 0, &"loss_trigger", &"ringless_add", 1, &"ringless_transition", &"ringless_transition", 0, &"ringless-anim", &"ringless_transition", 1, &"ring-anim"]
+nodes/ringless_transition/position = Vector2(-360, 480)
+nodes/grow_blend/node = SubResource("AnimationNodeAdd2_0nlx6")
+nodes/grow_blend/position = Vector2(-761.22845, 94.18572)
+nodes/grow_anim/node = SubResource("AnimationNodeAnimation_8kof8")
+nodes/grow_anim/position = Vector2(-980, 320)
+node_connections = [&"output", 0, &"ringless_add", &"gain_trigger", 0, &"hold_anim", &"gain_trigger", 1, &"grow_blend", &"loss_trigger", 0, &"gain_trigger", &"loss_trigger", 1, &"loss-anim", &"ringless_add", 0, &"loss_trigger", &"ringless_add", 1, &"ringless_transition", &"ringless_transition", 0, &"ringless_anim", &"ringless_transition", 1, &"ring_anim", &"grow_blend", 0, &"gain_anim", &"grow_blend", 1, &"grow_anim"]
 
-[node name="Rings" type="Control" node_paths=PackedStringArray("ringLabel", "maxRingLabel", "ringLossLabel", "ringDividerSprite", "ringAnimator", "fireSoulAnimator")]
+[sub_resource type="Animation" id="Animation_gd3a8"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Data/Current/RingMax:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Data/Current/Divider:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Data/Current/Ring:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-136, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Data/Current/Ring:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.9, 0.9)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Data/Loss:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(50, 64)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Data/Current/CurrentAmount:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-100, -64)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Data/Current/CurrentAmount:theme_override_font_sizes/font_size")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [90]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Data/Current/RingMax:theme_override_font_sizes/font_size")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [90]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Data/Current/RingMax:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(108.99999, -64)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Data/Current/Decals:visible")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Data/Current/Decals/LimitedDecal:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Data/Current/Decals/UnlimitedDecal:visible")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Data/Current/Divider:scale")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.3, 0.3)]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Data/Current/Divider:position")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(92, -1.6)]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Data:position")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(131, 64)]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Data/Current/Chain:position")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-210, 0)]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Data/Current/Chain:scale")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2, 2)]
+}
+
+[sub_resource type="Animation" id="Animation_0nlx6"]
+resource_name = "reignited"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Data/Current/Decals:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Data/Current/Ring:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-190, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Data/Current/Ring:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.7, 0.7)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Data/Current/CurrentAmount:theme_override_font_sizes/font_size")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [64]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Data/Current/RingMax:theme_override_font_sizes/font_size")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [64]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Data/Current/Divider:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.22, 0.22)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Data/Current/CurrentAmount:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-219, -64)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Data/Current/RingMax:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-19.000008, -64)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Data/Current/Divider:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-30, -1.6)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Data:position")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(131, 24)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Data/Current/Chain:scale")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Data/Current/Chain:position")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-240, -3)]
+}
+
+[sub_resource type="Animation" id="Animation_6wgbg"]
+resource_name = "ring-limit"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Data/Current/RingMax:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Data/Current/Divider:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0009999999),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Data/Current/Decals/LimitedDecal:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Data/Current/Decals/UnlimitedDecal:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_5mdrf"]
+resource_name = "ring-no-limit"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Data/Current/RingMax:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Data/Current/Divider:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Data/Current/Decals/UnlimitedDecal:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Data/Current/Decals/LimitedDecal:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6wgbg"]
+_data = {
+&"RESET": SubResource("Animation_gd3a8"),
+&"reignited": SubResource("Animation_0nlx6"),
+&"ring-limit": SubResource("Animation_6wgbg"),
+&"ring-no-limit": SubResource("Animation_5mdrf")
+}
+
+[node name="Rings" type="Control" node_paths=PackedStringArray("styleAnimator", "ringLabel", "maxRingLabel", "ringLossLabel", "ringAnimator")]
 layout_mode = 3
-anchors_preset = 0
-offset_left = 176.0
-offset_top = 64.0
-offset_right = 592.0
-offset_bottom = 192.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_st3yc")
-ringLabel = NodePath("Current/CurrentAmount")
-maxRingLabel = NodePath("Current/RingMax")
-ringLossLabel = NodePath("Loss/LossAmount")
-ringDividerSprite = NodePath("Current/Divider")
-ringAnimator = NodePath("AnimationTree")
-fireSoulAnimator = NodePath("AnimationPlayer")
+styleAnimator = NodePath("StyleAnimationPlayer")
+ringLabel = NodePath("Data/Current/CurrentAmount")
+maxRingLabel = NodePath("Data/Current/RingMax")
+ringLossLabel = NodePath("Data/Loss/LossAmount")
+ringAnimator = NodePath("Data/AnimationTree")
 
-[node name="Current" type="Control" parent="."]
+[node name="Data" type="Control" parent="."]
+layout_mode = 1
+offset_left = 131.0
+offset_top = 64.0
+offset_right = 547.0
+offset_bottom = 192.0
+
+[node name="Current" type="Control" parent="Data"]
 anchors_preset = 0
 offset_left = 184.0
 offset_top = 64.0
 offset_right = 184.0
 offset_bottom = 64.0
 
-[node name="Ring" type="Sprite2D" parent="Current"]
+[node name="Decals" type="Node2D" parent="Data/Current"]
+visible = false
+position = Vector2(-315, -2.8571472)
+
+[node name="LimitedDecal" type="Sprite2D" parent="Data/Current/Decals"]
+visible = false
+position = Vector2(0, -60)
+texture = ExtResource("2_0nlx6")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 283, 548, 120)
+
+[node name="UnlimitedDecal" type="Sprite2D" parent="Data/Current/Decals"]
+position = Vector2(0, -60)
+texture = ExtResource("2_0nlx6")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 419, 407, 120)
+
+[node name="Ring" type="Sprite2D" parent="Data/Current"]
 position = Vector2(-136, 0)
-scale = Vector2(1.8, 1.8)
-texture = ExtResource("2_nobfg")
+scale = Vector2(0.9, 0.9)
+texture = ExtResource("2_8kof8")
+offset = Vector2(0, -2)
 hframes = 8
 script = ExtResource("2_st3yc")
 loopMode = 1
 
-[node name="CurrentAmount" type="Label" parent="Current"]
+[node name="CurrentAmount" type="Label" parent="Data/Current"]
 layout_mode = 0
-offset_left = -88.0
-offset_top = -41.6
-offset_right = 56.0
-offset_bottom = 25.4
-scale = Vector2(1.2, 1.2)
-theme_override_fonts/font = ExtResource("4_nobfg")
-theme_override_font_sizes/font_size = 45
+offset_left = -100.0
+offset_top = -64.0
+offset_right = 68.0
+offset_bottom = 56.0
+theme_override_fonts/font = ExtResource("4_8kof8")
+theme_override_font_sizes/font_size = 90
 text = "000"
+horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="RingMax" type="Label" parent="Current"]
+[node name="RingMax" type="Label" parent="Data/Current"]
 layout_mode = 0
-offset_left = 128.0
-offset_top = -16.0
-offset_right = 288.0
+offset_left = 108.99999
+offset_top = -64.0
+offset_right = 269.0
 offset_bottom = 56.0
-scale = Vector2(0.85, 0.85)
-theme_override_fonts/font = ExtResource("4_nobfg")
-theme_override_font_sizes/font_size = 45
+theme_override_fonts/font = ExtResource("4_8kof8")
+theme_override_font_sizes/font_size = 90
 text = "100"
 vertical_alignment = 1
 
-[node name="Divider" type="Sprite2D" parent="Current"]
-position = Vector2(110.4, -1.6)
+[node name="Divider" type="Sprite2D" parent="Data/Current"]
+position = Vector2(92, -1.6)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("5_0nlx6")
 region_enabled = true
 region_rect = Rect2(370, 520, 188, 303)
 
-[node name="Chain" type="CanvasGroup" parent="Current"]
+[node name="Chain" type="CanvasGroup" parent="Data/Current"]
 modulate = Color(1, 1, 1, 0)
-position = Vector2(-211.428, 0)
+position = Vector2(-210, 0)
 scale = Vector2(2, 2)
 
-[node name="Background" type="ColorRect" parent="Current/Chain"]
+[node name="Background" type="ColorRect" parent="Data/Current/Chain"]
 show_behind_parent = true
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 5.0
@@ -1011,9 +1519,9 @@ grow_vertical = 2
 rotation = 3.14159
 color = Color(1, 0, 0, 1)
 
-[node name="Fill" type="ColorRect" parent="Current/Chain"]
+[node name="Fill" type="ColorRect" parent="Data/Current/Chain"]
 show_behind_parent = true
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 5.0
@@ -1025,148 +1533,140 @@ grow_vertical = 2
 rotation = 3.14159
 color = Color(0, 1, 0, 1)
 
-[node name="Chain" type="Sprite2D" parent="Current/Chain"]
+[node name="Chain" type="Sprite2D" parent="Data/Current/Chain"]
 use_parent_material = true
 texture = ExtResource("4_vrhy3")
 region_enabled = true
 region_rect = Rect2(172, 276, 28, 60)
 
-[node name="Loss" type="Control" parent="."]
+[node name="Loss" type="Control" parent="Data"]
 anchors_preset = 0
-offset_left = 48.0
+offset_left = 50.0
 offset_top = 64.0
-offset_right = 48.0
+offset_right = 50.0
 offset_bottom = 64.0
 
-[node name="LossAmount" type="Label" parent="Loss"]
+[node name="LossAmount" type="Label" parent="Data/Loss"]
 modulate = Color(1, 1, 1, 0)
 self_modulate = Color(1, 0, 0, 1)
 layout_mode = 0
 offset_left = -136.0
 offset_top = -64.0
-offset_right = 8.00171
-offset_bottom = 3.0
-scale = Vector2(0.85, 0.85)
-theme_override_fonts/font = ExtResource("3_srpfp")
-theme_override_font_sizes/font_size = 64
+offset_right = 8.001709
+theme_override_fonts/font = ExtResource("4_8kof8")
+theme_override_font_sizes/font_size = 60
 text = "-20"
-vertical_alignment = 1
 
-[node name="RingLossSFX" type="AudioStreamPlayer" parent="Loss"]
+[node name="RingLossSFX" type="AudioStreamPlayer" parent="Data/Loss"]
 stream = ExtResource("5_ek5lp")
 bus = &"SFX"
 
-[node name="RingsRoot" type="Node2D" parent="Loss"]
+[node name="RingsRoot" type="Node2D" parent="Data/Loss"]
 process_mode = 4
 modulate = Color(1, 1, 1, 0)
 
-[node name="Ring1" type="Sprite2D" parent="Loss/RingsRoot"]
+[node name="Ring1" type="Sprite2D" parent="Data/Loss/RingsRoot"]
 rotation = 0.460767
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_nobfg")
+texture = ExtResource("2_8kof8")
 hframes = 8
-frame = 3
+frame = 6
 script = ExtResource("2_st3yc")
 playing = true
 loopMode = 1
 timeScale = 0.2
 
-[node name="Ring2" type="Sprite2D" parent="Loss/RingsRoot"]
+[node name="Ring2" type="Sprite2D" parent="Data/Loss/RingsRoot"]
 rotation = 0.523598
-scale = Vector2(1.375, 1.5)
-texture = ExtResource("2_nobfg")
+texture = ExtResource("2_8kof8")
 hframes = 8
-frame = 1
+frame = 2
 script = ExtResource("2_st3yc")
 playing = true
 loopMode = 1
 
-[node name="Ring3" type="Sprite2D" parent="Loss/RingsRoot"]
+[node name="Ring3" type="Sprite2D" parent="Data/Loss/RingsRoot"]
 rotation = 0.236989
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_nobfg")
+texture = ExtResource("2_8kof8")
 hframes = 8
-frame = 1
+frame = 2
 script = ExtResource("2_st3yc")
 playing = true
 loopMode = 1
 
-[node name="Ring4" type="Sprite2D" parent="Loss/RingsRoot"]
+[node name="Ring4" type="Sprite2D" parent="Data/Loss/RingsRoot"]
 rotation = -0.953518
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_nobfg")
+texture = ExtResource("2_8kof8")
 hframes = 8
-frame = 1
+frame = 2
 script = ExtResource("2_st3yc")
 playing = true
 loopMode = 1
 
-[node name="Ring5" type="Sprite2D" parent="Loss/RingsRoot"]
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_nobfg")
+[node name="Ring5" type="Sprite2D" parent="Data/Loss/RingsRoot"]
+texture = ExtResource("2_8kof8")
 hframes = 8
-frame = 1
+frame = 2
 script = ExtResource("2_st3yc")
 playing = true
 loopMode = 1
 
-[node name="Ring6" type="Sprite2D" parent="Loss/RingsRoot"]
+[node name="Ring6" type="Sprite2D" parent="Data/Loss/RingsRoot"]
 rotation = -0.332001
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_nobfg")
+texture = ExtResource("2_8kof8")
 hframes = 8
-frame = 1
+frame = 2
 script = ExtResource("2_st3yc")
 playing = true
 loopMode = 1
 
-[node name="Ring7" type="Sprite2D" parent="Loss/RingsRoot"]
+[node name="Ring7" type="Sprite2D" parent="Data/Loss/RingsRoot"]
 rotation = -0.388323
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_nobfg")
+texture = ExtResource("2_8kof8")
 hframes = 8
-frame = 1
+frame = 2
 script = ExtResource("2_st3yc")
 playing = true
 loopMode = 1
 
-[node name="Ring8" type="Sprite2D" parent="Loss/RingsRoot"]
+[node name="Ring8" type="Sprite2D" parent="Data/Loss/RingsRoot"]
 rotation = -0.457046
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_nobfg")
+texture = ExtResource("2_8kof8")
 hframes = 8
-frame = 1
+frame = 2
 script = ExtResource("2_st3yc")
 playing = true
 loopMode = 1
 
-[node name="Ring9" type="Sprite2D" parent="Loss/RingsRoot"]
+[node name="Ring9" type="Sprite2D" parent="Data/Loss/RingsRoot"]
 rotation = -0.533923
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_nobfg")
+texture = ExtResource("2_8kof8")
 hframes = 8
-frame = 1
+frame = 2
 script = ExtResource("2_st3yc")
 playing = true
 loopMode = 1
 
-[node name="Ring10" type="Sprite2D" parent="Loss/RingsRoot"]
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_nobfg")
+[node name="Ring10" type="Sprite2D" parent="Data/Loss/RingsRoot"]
+texture = ExtResource("2_8kof8")
 hframes = 8
-frame = 1
+frame = 2
 script = ExtResource("2_st3yc")
 playing = true
 loopMode = 1
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Data"]
+root_node = NodePath("../..")
 libraries = {
-&"": SubResource("AnimationLibrary_kw3qf")
+&"": SubResource("AnimationLibrary_vxa82")
 }
 
-[node name="AnimationTree" type="AnimationTree" parent="."]
+[node name="AnimationTree" type="AnimationTree" parent="Data"]
 active = false
 deterministic = false
+root_node = NodePath("../..")
+libraries = {
+&"": SubResource("AnimationLibrary_vxa82")
+}
 tree_root = SubResource("AnimationNodeBlendTree_06lyc")
 anim_player = NodePath("../AnimationPlayer")
 parameters/gain_trigger/active = false
@@ -1179,3 +1679,9 @@ parameters/ringless_add/add_amount = 1.0
 parameters/ringless_transition/current_state = "disabled"
 parameters/ringless_transition/transition_request = ""
 parameters/ringless_transition/current_index = 1
+parameters/grow_blend/add_amount = 0.0
+
+[node name="StyleAnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_6wgbg")
+}
