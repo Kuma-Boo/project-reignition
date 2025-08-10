@@ -363,6 +363,9 @@ public partial class PlatformTrigger : Node3D
 		if (collision == null || (Node3D)collision.GetCollider() != parentCollider) // Player is not on the platform
 			return false;
 
+		if (Player.GroundHit.collidedObject != parentCollider)
+			return false;
+
 		if (!enableGroundSnapping) // Update ground snapping
 		{
 			if (Player.IsOnGround)
