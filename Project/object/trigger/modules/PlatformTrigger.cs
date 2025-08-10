@@ -349,11 +349,7 @@ public partial class PlatformTrigger : Node3D
 		if (enableGroundSnapping)
 		{
 			float positionDelta = floorCalculationRoot.GlobalPosition.Y - Player.GlobalPosition.Y;
-
-			if (positionDelta > 0) // Move up via translation to avoid clipping into objects
-				Player.GlobalTranslate(Vector3.Up * Position);
-			else // Move downwards using physics system to avoid clipping through the floor
-				Player.MoveAndCollide(Vector3.Up * positionDelta);
+			Player.GlobalTranslate(Vector3.Up * positionDelta);
 		}
 	}
 
