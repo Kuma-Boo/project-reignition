@@ -101,6 +101,12 @@ public partial class TransitionManager : Node
 		instance.CurrentTransitionData = data;
 		instance.missionDescriptionRoot.Visible = data.showMissionDescription;
 
+		if (data.loadAsynchronously) // Start loading immediately
+		{
+			GD.Print("Async loading started.");
+			ResourceLoader.LoadThreadedRequest(instance.QueuedScene);
+		}
+
 		if (data.inSpeed == 0 && data.outSpeed == 0)
 		{
 			instance.StartCut(); // Cut transition
@@ -140,15 +146,14 @@ public partial class TransitionManager : Node
 		{
 			if (CurrentTransitionData.loadAsynchronously)
 			{
-				GD.Print(ResourceLoader.LoadThreadedRequest(QueuedScene));
-				while (ResourceLoader.LoadThreadedGetStatus(QueuedScene) == ResourceLoader.ThreadLoadStatus.InProgress) // Still loading
-				{
-					await ToSignal(GetTree().CreateTimer(.1f), SceneTreeTimer.SignalName.Timeout); // Wait a bit
-				}
+				ulong loadTime = Time.GetTicksMsec();
+				while (ResourceLoader.LoadThreadedGetStatus(QueuedScene) == ResourceLoader.ThreadLoadStatus.InProgress)
+					await ToSignal(GetTree().CreateTimer(.1f), SceneTreeTimer.SignalName.Timeout); // Still loading; wait a bit
 
 				PackedScene scene = ResourceLoader.LoadThreadedGet(QueuedScene) as PackedScene;
 				GetTree().ChangeSceneToPacked(scene);
-				GD.Print("Scene Changed.");
+				loadTime = Time.GetTicksMsec() - loadTime;
+				GD.Print($"Scene loaded in {loadTime} milliseconds.");
 				return;
 			}
 
@@ -164,6 +169,30 @@ public partial class TransitionManager : Node
 
 		if (!CurrentTransitionData.disableAutoTransition)
 			FinishFade();
+	}
+
+	private readonly string commonResourcesScenePath = "res://object/CommonResources.tscn";
+	private bool isLoadingCommonResources;
+	/// <summary>
+	/// Attempts to reduce load times by loading common objects before-hand. Called on boot.
+	/// </summary>
+	public async void LoadCommonResources()
+	{
+		Error err = ResourceLoader.LoadThreadedRequest(commonResourcesScenePath);
+		if (err != Error.Ok)
+		{
+			GD.PrintErr("Couldn't load common resources!");
+			return;
+		}
+
+		GD.Print("Loading Common Resources.");
+		isLoadingCommonResources = true;
+
+		while (ResourceLoader.LoadThreadedGetStatus(commonResourcesScenePath) == ResourceLoader.ThreadLoadStatus.InProgress) // Still loading
+			await ToSignal(GetTree().CreateTimer(.1f), SceneTreeTimer.SignalName.Timeout); // Wait a bit
+
+		GD.Print("Common Resources Loaded.");
+		isLoadingCommonResources = false;
 	}
 
 	public void UpdateLoadingText(StringName localizationKey, int currentProgress = 0, int maxProgress = 0)
