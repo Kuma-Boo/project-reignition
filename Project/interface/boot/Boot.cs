@@ -5,6 +5,8 @@ namespace Project.Interface;
 
 public partial class Boot : Node
 {
+	public override void _Ready() => TransitionManager.instance.LoadCommonResources();
+
 	private void StartTitleTransition()
 	{
 		TransitionManager.QueueSceneChange("res://interface/menu/Menu.tscn");
