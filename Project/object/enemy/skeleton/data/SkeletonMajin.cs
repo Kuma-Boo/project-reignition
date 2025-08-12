@@ -94,10 +94,7 @@ public partial class SkeletonMajin : Enemy
 		SetHitboxStatus(false);
 
 		if (SpawnMode == SpawnModes.Always)
-		{
-			Spawn();
 			return;
-		}
 
 		AnimationState.Start(ShatterResetAnimation);
 	}
@@ -128,7 +125,8 @@ public partial class SkeletonMajin : Enemy
 	{
 		wasSpawned = true;
 
-		if (IsActive || !IsInRange) return; // Already spawned
+		if (IsActive)
+			return; // Already spawned
 
 		IsActive = true;
 		movementSpeed = 0;
