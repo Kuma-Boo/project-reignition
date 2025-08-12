@@ -2,8 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://bd2vgdlj4fx6i" path="res://area/6 skeleton dome/object/model/platform/PlatformCavernFalling.gltf" id="1_irr62"]
 [ext_resource type="Script" uid="uid://bdlofqc6xiigo" path="res://object/trigger/modules/PlatformTrigger.cs" id="1_mm11p"]
-[ext_resource type="AudioStream" uid="uid://bfwo0mnlgif6e" path="res://sound/sfx/stage/skeleton dome/bone shatter.wav" id="3_wipsy"]
-[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="4_etiwa"]
+[ext_resource type="AudioStream" uid="uid://b27q7c7iee8li" path="res://sound/sfx/stage/skeleton dome/solid platform.wav" id="3_wipsy"]
+[ext_resource type="AudioStream" uid="uid://bfwo0mnlgif6e" path="res://sound/sfx/stage/skeleton dome/bone shatter.wav" id="4_wipsy"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_p4jqh"]
 size = Vector3(1, 1, 2)
@@ -146,11 +146,11 @@ tracks/5/path = NodePath("Root/Fall")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(0.033333335),
 "transitions": PackedFloat32Array(1),
 "values": [{
-"args": [],
-"method": &"PlayInGroup"
+"args": [0.0],
+"method": &"play"
 }]
 }
 
@@ -170,6 +170,20 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(0, 0, 0.0872665), Vector3(0, 0, -0.0872665), Vector3(0, 0, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/Shake")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_p0p5m"]
@@ -212,15 +226,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Root/StaticBody3D"]
 shape = SubResource("BoxShape3D_lp7au")
 
-[node name="Fall" type="AudioStreamPlayer3D" parent="Root"]
+[node name="Shake" type="AudioStreamPlayer3D" parent="Root"]
 stream = ExtResource("3_wipsy")
-max_db = -3.0
-max_distance = 20.0
+attenuation_model = 3
+max_db = -6.0
+max_distance = 100.0
+max_polyphony = 2
 bus = &"GAME SFX"
 attenuation_filter_cutoff_hz = 20500.0
-script = ExtResource("4_etiwa")
-groupKey = &"bone shatter"
-audioLengthOverride = 1.5
+
+[node name="Fall" type="AudioStreamPlayer3D" parent="Root"]
+stream = ExtResource("4_wipsy")
+max_db = -3.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 callback_mode_process = 0

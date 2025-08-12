@@ -20,6 +20,7 @@ public partial class GroupAudioStreamPlayer3D : AudioStreamPlayer3D
 		AddChild(timer);
 	}
 
+	public void PlayInGroup(Area3D _) => PlayInGroup();
 	public void PlayInGroup()
 	{
 		// Don't play multiple sounds at the same time--prevent sudden volume spikes
