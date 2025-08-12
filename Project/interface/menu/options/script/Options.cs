@@ -938,7 +938,8 @@ public partial class Options : Menu
 
 		if (VerticalSelection == 3)
 		{
-			int lang = WrapSelection((int)SaveManager.Config.voiceLanguage + direction, (int)SaveManager.VoiceLanguage.Count);
+			// TODO Re-enable spanish Voice over
+			int lang = WrapSelection((int)SaveManager.Config.voiceLanguage + direction, (int)SaveManager.VoiceLanguage.Spanish);
 			SaveManager.Config.voiceLanguage = (SaveManager.VoiceLanguage)lang;
 			return true;
 		}
