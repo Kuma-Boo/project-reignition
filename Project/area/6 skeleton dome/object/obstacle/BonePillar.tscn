@@ -1,8 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://c2etn7ijwk0bg"]
+[gd_scene load_steps=10 format=3 uid="uid://bilqmq7mc0jrm"]
 
 [ext_resource type="PackedScene" uid="uid://cx5ae5f5xwvye" path="res://area/6 skeleton dome/object/model/obstacle/BonePillar.gltf" id="1_k853j"]
 [ext_resource type="Script" uid="uid://coiui4qvdxbqe" path="res://object/trigger/modules/EventTrigger.cs" id="1_ly7g6"]
 [ext_resource type="PackedScene" uid="uid://wnnthoykndrj" path="res://effect/particle/Lantern.tscn" id="3_e8k6d"]
+[ext_resource type="AudioStream" uid="uid://bf31h37vsfkec" path="res://sound/sfx/stage/skeleton dome/flame burst.wav" id="4_e8k6d"]
+[ext_resource type="AudioStream" uid="uid://45nugutyp4ph" path="res://sound/sfx/stage/skeleton dome/flame loop.wav" id="5_jlr81"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mfkgu"]
 height = 20.0
@@ -28,6 +30,18 @@ tracks/1/path = NodePath("Lantern:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Loop:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -74,6 +88,32 @@ tracks/2/keys = {
 "method": &"restart"
 }]
 }
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Burst")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Loop:playing")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_0sdba"]
 _data = {
@@ -103,6 +143,25 @@ transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 20, 0)
 visible = false
 cast_shadow = 0
 emitting = false
+
+[node name="Burst" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
+stream = ExtResource("4_e8k6d")
+attenuation_model = 3
+unit_size = 20.0
+max_db = -3.0
+max_distance = 50.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="Loop" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
+stream = ExtResource("5_jlr81")
+unit_size = 20.0
+max_db = -6.0
+max_distance = 20.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
