@@ -1,4 +1,4 @@
-[gd_scene load_steps=98 format=3 uid="uid://d1rcieilh21gs"]
+[gd_scene load_steps=99 format=3 uid="uid://d1rcieilh21gs"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_0tght"]
 [ext_resource type="Curve3D" uid="uid://m68asxsb3okb" path="res://area/6 skeleton dome/act 1/environment/path/ExteriorPath.tres" id="1_h00gj"]
@@ -43,6 +43,7 @@
 [ext_resource type="PackedScene" uid="uid://cry4fy5icucbc" path="res://object/trigger/state trigger/SidleTrigger.tscn" id="16_0ldoj"]
 [ext_resource type="PackedScene" uid="uid://bp53tgvmd31jj" path="res://area/6 skeleton dome/act 1/environment/13HallTreasure.tscn" id="16_1seix"]
 [ext_resource type="Resource" uid="uid://dknaoyb6l7bmr" path="res://area/6 skeleton dome/act 1/camera/FieldUpperPathCam.tres" id="16_u35fa"]
+[ext_resource type="Resource" uid="uid://s3ls5ifkhv6e" path="res://area/6 skeleton dome/act 1/camera/HallJumpTransitionCam.tres" id="17_3bann"]
 [ext_resource type="PackedScene" uid="uid://wnhqambb5iaa" path="res://area/6 skeleton dome/act 1/environment/14Arena.tscn" id="17_b8rpm"]
 [ext_resource type="Resource" uid="uid://bmgolvymt25i8" path="res://area/6 skeleton dome/act 1/camera/CavernBCam.tres" id="17_c3wha"]
 [ext_resource type="PackedScene" uid="uid://cd53n0epyrvql" path="res://area/6 skeleton dome/act 1/environment/15Hall.tscn" id="18_sulau"]
@@ -754,12 +755,25 @@ transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 539.093, 3
 transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, 7.63901, -12, -5.89294)
 script = ExtResource("7_pc1yy")
 path = NodePath("../../../../Path/SpiralPath")
+affectCamera = false
 
 [node name="Jump" type="Node3D" parent="Trigger/Object/JumpTrigger"]
 transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, 7.63907, -12, -5.89294)
 script = ExtResource("9_br8t5")
 jumpHeight = 5.0
 autoAlign = true
+
+[node name="CameraPath" type="Node3D" parent="Trigger/Object/JumpTrigger/Jump" node_paths=PackedStringArray("path")]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, 0)
+script = ExtResource("7_pc1yy")
+path = NodePath("../../../../../Path/SpiralPath")
+affectPlayer = false
+
+[node name="Camera" type="Node3D" parent="Trigger/Object/JumpTrigger"]
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, 0, 0, 0)
+script = ExtResource("8_ka6po")
+settings = ExtResource("17_3bann")
+previousSettings = ExtResource("2_g7phu")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/JumpTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -1741,6 +1755,8 @@ environment = SubResource("Environment_w7cdv")
 [connection signal="Deactivated" from="Trigger/Object/Automation" to="Trigger/Camera/CavernB" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/JumpTrigger" to="Collision/OneWayWall" method="Deactivate"]
 [connection signal="JumpFinished" from="Trigger/Object/JumpTrigger/Jump" to="Collision/OneWayWall" method="Activate"]
+[connection signal="JumpFinished" from="Trigger/Object/JumpTrigger/Jump" to="Trigger/Object/JumpTrigger/Camera" method="Deactivate"]
+[connection signal="JumpFinished" from="Trigger/Object/JumpTrigger/Jump" to="Trigger/Object/JumpTrigger/Jump/CameraPath" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Path" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Camera" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Path" method="Deactivate"]
