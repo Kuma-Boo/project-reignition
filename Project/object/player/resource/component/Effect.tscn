@@ -1,4 +1,4 @@
-[gd_scene load_steps=243 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=247 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" uid="uid://b1jbgylbmqgrv" path="res://object/player/resource/script/PlayerEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -43,6 +43,7 @@
 [ext_resource type="Texture2D" uid="uid://cq2moh8cttu1r" path="res://effect/particle/texture/ember blue.png" id="33_q8rgh"]
 [ext_resource type="Shader" uid="uid://bf4qu1y7iievw" path="res://effect/shader/particle/AnimatedAddNonbillboard.gdshader" id="34_fub5g"]
 [ext_resource type="Texture2D" uid="uid://cn2jkjpa6m0ut" path="res://object/stage/common/resource/model/texture/goal flame detail atlas.png" id="34_ss1rs"]
+[ext_resource type="Material" uid="uid://weym4dxlabsq" path="res://effect/particle/material/environment/Snow Dust.tres" id="35_k45g7"]
 [ext_resource type="ArrayMesh" uid="uid://dvnvynbtfcbe6" path="res://area/4 levitated ruin/object/model/special/SonicStoneParticle.res" id="38_o21sv"]
 
 [sub_resource type="Curve" id="Curve_4rxi1"]
@@ -726,15 +727,15 @@ particle_flag_align_y = true
 emission_shape = 6
 emission_ring_axis = Vector3(0, 1, 0)
 emission_ring_height = 0.0
-emission_ring_radius = 1.0
-emission_ring_inner_radius = 1.0
+emission_ring_radius = 0.5
+emission_ring_inner_radius = 0.5
 emission_ring_cone_angle = 90.0
 angle_max = 360.0
 direction = Vector3(0, 1, 0)
 spread = 20.0
-initial_velocity_min = 3.0
-initial_velocity_max = 5.0
-gravity = Vector3(0, -9.81, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 4.0
+gravity = Vector3(0, -20, 0)
 scale_max = 2.0
 scale_curve = SubResource("CurveXYZTexture_rsg5h")
 color_ramp = SubResource("GradientTexture1D_cw16b")
@@ -830,6 +831,28 @@ color_ramp = SubResource("GradientTexture1D_ps0tr")
 
 [sub_resource type="QuadMesh" id="QuadMesh_eevac"]
 material = ExtResource("10_xhcyf")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8do38"]
+lifetime_randomness = 0.5
+particle_flag_align_y = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 0.5
+emission_ring_inner_radius = 0.5
+emission_ring_cone_angle = 90.0
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 20.0
+initial_velocity_min = 2.0
+initial_velocity_max = 4.0
+scale_min = 0.5
+scale_curve = SubResource("CurveXYZTexture_rsg5h")
+color = Color(1.8247963, 1.8247963, 1.8247963, 1)
+color_ramp = SubResource("GradientTexture1D_cw16b")
+
+[sub_resource type="QuadMesh" id="QuadMesh_8do38"]
+material = ExtResource("35_k45g7")
 
 [sub_resource type="Gradient" id="Gradient_4b6sr"]
 interpolation_mode = 2
@@ -1075,6 +1098,25 @@ scale_min = 0.2
 scale_max = 0.5
 scale_curve = SubResource("CurveTexture_rmfbt")
 color = Color(1, 1, 0.784314, 1)
+color_ramp = SubResource("GradientTexture1D_45lpk")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ldqlj"]
+lifetime_randomness = 0.4
+angle_min = -180.0
+angle_max = 180.0
+inherit_velocity_ratio = 0.2
+direction = Vector3(0, 1, 0)
+spread = 80.0
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+damping_min = 4.0
+damping_max = 8.0
+attractor_interaction_enabled = false
+scale_min = 0.39999998
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_rmfbt")
+color = Color(1.8247963, 1.8247963, 1.8247963, 1)
 color_ramp = SubResource("GradientTexture1D_45lpk")
 
 [sub_resource type="Curve" id="Curve_8eyf3"]
@@ -1539,8 +1581,8 @@ petrifyParticle = NodePath("VFX/PetrifyFX")
 materialSFXLibrary = ExtResource("5_h4i1s")
 footstepChannel = NodePath("SFX/FootstepChannel")
 landingChannel = NodePath("SFX/LandingChannel")
-landingParticles = [NodePath("VFX/LandingFX/LandingDust"), NodePath("VFX/LandingFX/LandingSand"), NodePath("VFX/LandingFX/LandingGrass"), null, null, null, NodePath("VFX/LandingFX/LandingWater"), null, NodePath("VFX/LandingFX/LandingWet"), NodePath("VFX/LandingFX/LandingWet")]
-stepEmitters = [NodePath("VFX/StepFX/PavementStep"), NodePath("VFX/StepFX/SandStep"), NodePath("VFX/StepFX/GrassStep"), null, null, null, NodePath("VFX/StepFX/WaterStep"), null, NodePath("VFX/StepFX/WetStep"), NodePath("VFX/StepFX/WetStep")]
+landingParticles = [NodePath("VFX/LandingFX/LandingDust"), NodePath("VFX/LandingFX/LandingSand"), NodePath("VFX/LandingFX/LandingGrass"), null, NodePath("VFX/LandingFX/LandingSnow"), null, NodePath("VFX/LandingFX/LandingWater"), null, NodePath("VFX/LandingFX/LandingWet"), NodePath("VFX/LandingFX/LandingWet")]
+stepEmitters = [NodePath("VFX/StepFX/PavementStep"), NodePath("VFX/StepFX/SandStep"), NodePath("VFX/StepFX/GrassStep"), null, NodePath("VFX/StepFX/SnowStep"), null, NodePath("VFX/StepFX/WaterStep"), null, NodePath("VFX/StepFX/WetStep"), NodePath("VFX/StepFX/WetStep")]
 footprintDecal = ExtResource("4_8hf43")
 waterStep = NodePath("VFX/StepFX/WaterStepRing")
 voiceLibrary = ExtResource("33_pyanb")
@@ -1553,18 +1595,17 @@ bus = &"VOICE"
 
 [node name="LandingChannel" type="AudioStreamPlayer3D" parent="SFX"]
 process_mode = 1
-volume_db = 3.0
+attenuation_model = 3
 unit_size = 20.0
-max_db = 0.0
+max_db = -3.0
 max_distance = 100.0
 bus = &"GAME SFX"
 attenuation_filter_cutoff_hz = 20500.0
 
 [node name="FootstepChannel" type="AudioStreamPlayer3D" parent="SFX"]
 process_mode = 1
-volume_db = -3.0
 unit_size = 20.0
-max_db = 0.0
+max_db = -3.0
 max_distance = 100.0
 bus = &"GAME SFX"
 attenuation_filter_cutoff_hz = 20500.0
@@ -1676,7 +1717,7 @@ layer = 32
 material = ExtResource("9_on86l")
 
 [node name="SpinMesh" type="MeshInstance3D" parent="VFX/ActionFX"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.5, 0)
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0.5, 0)
 layers = 32
 material_override = ExtResource("11_lk1sb")
 transparency = 1.0
@@ -2017,6 +2058,41 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_dh0gg")
 draw_pass_1 = SubResource("QuadMesh_eevac")
 
+[node name="LandingSnow" type="GPUParticles3D" parent="VFX/LandingFX" node_paths=PackedStringArray("subSystems")]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+emitting = false
+lifetime = 0.5
+one_shot = true
+speed_scale = 0.8
+explosiveness = 1.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_8do38")
+draw_pass_1 = SubResource("QuadMesh_8do38")
+script = ExtResource("21_nenuf")
+subSystems = [NodePath("Dust")]
+
+[node name="Dust" type="GPUParticles3D" parent="VFX/LandingFX/LandingSnow"]
+layers = 32
+transparency = 0.8
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+emitting = false
+lifetime = 0.5
+one_shot = true
+speed_scale = 0.8
+explosiveness = 1.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_r6jjp")
+draw_pass_1 = SubResource("QuadMesh_eevac")
+
 [node name="LandingGrass" type="GPUParticles3D" parent="VFX/LandingFX"]
 layers = 32
 cast_shadow = 0
@@ -2115,6 +2191,30 @@ fixed_fps = 0
 interpolate = false
 process_material = SubResource("ParticleProcessMaterial_q7wh5")
 draw_pass_1 = SubResource("QuadMesh_qvron")
+
+[node name="SnowStep" type="GPUParticles3D" parent="VFX/StepFX" node_paths=PackedStringArray("subSystems")]
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+amount = 16
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_ldqlj")
+draw_pass_1 = SubResource("QuadMesh_8do38")
+script = ExtResource("21_nenuf")
+subSystems = [NodePath("Dust")]
+
+[node name="Dust" type="GPUParticles3D" parent="VFX/StepFX/SnowStep"]
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+lifetime = 0.4
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_k03e6")
+draw_pass_1 = SubResource("QuadMesh_gwbmp")
 
 [node name="GrassStep" type="GPUParticles3D" parent="VFX/StepFX"]
 layers = 32
