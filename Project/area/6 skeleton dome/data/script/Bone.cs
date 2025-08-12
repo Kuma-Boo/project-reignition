@@ -15,6 +15,7 @@ public partial class Bone : Node3D
 
 	[Export] private Area3D area;
 	[Export] private Node3D root;
+	[Export] private AudioStreamPlayer3D sfx;
 	[Export] private GroupGpuParticles3D warpParticleGroup;
 
 	private StageSettings Stage => StageSettings.Instance;
@@ -43,6 +44,8 @@ public partial class Bone : Node3D
 
 		warpParticleGroup.StopGroup();
 		warpParticleGroup.Visible = false;
+		sfx.VolumeLinear = 1f;
+		sfx.Play();
 
 		ProcessMode = ProcessModeEnum.Inherit;
 		EmitSignal(SignalName.Respawned);
@@ -105,6 +108,7 @@ public partial class Bone : Node3D
 		tween.TweenProperty(this, "rotation", Rotation + Vector3.Up * Mathf.Tau, 1f).FromCurrent();
 		tween.TweenProperty(root, "position", root.Position + Vector3.Forward * 5f, 1f).FromCurrent();
 		tween.TweenProperty(this, "scale", Vector3.One * 0.001f, 1f).FromCurrent();
+		tween.TweenProperty(sfx, "volume_linear", 0f, 1f).FromCurrent();
 
 		if (Stage.CurrentObjectiveCount == Stage.Data.MissionObjectiveCount)
 		{
@@ -121,6 +125,7 @@ public partial class Bone : Node3D
 
 	private void Despawn()
 	{
+		sfx.Stop();
 		spawnData.Respawn(this);
 		Visible = false;
 		ProcessMode = ProcessModeEnum.Disabled;

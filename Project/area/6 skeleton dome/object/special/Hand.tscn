@@ -1,19 +1,21 @@
-[gd_scene load_steps=4 format=3 uid="uid://cnpbnknx7gq3e"]
+[gd_scene load_steps=5 format=3 uid="uid://cnpbnknx7gq3e"]
 
 [ext_resource type="Script" uid="uid://dc77cj6rjn5pd" path="res://area/6 skeleton dome/data/script/Hand.cs" id="1_sm1mw"]
 [ext_resource type="PackedScene" uid="uid://cpjd1ivwvokm3" path="res://area/6 skeleton dome/object/model/special/Hand.gltf" id="2_lv83r"]
+[ext_resource type="AudioStream" uid="uid://cy2i86wlkxqpt" path="res://sound/sfx/stage/skeleton dome/hand.wav" id="3_lv83r"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_f4mbo"]
 
-[node name="Hand" type="PathFollow3D" node_paths=PackedStringArray("animator", "root")]
+[node name="Hand" type="PathFollow3D" node_paths=PackedStringArray("animator", "root", "laughSFX")]
 script = ExtResource("1_sm1mw")
 animator = NodePath("Hand/AnimationPlayer")
 root = NodePath("RootAttachment/Lockon")
+laughSFX = NodePath("SFX")
 
 [node name="Hand" parent="." instance=ExtResource("2_lv83r")]
 
 [node name="RootAttachment" type="BoneAttachment3D" parent="."]
-transform = Transform3D(0.891341, 0.379336, 0.248226, -0.272504, 0.0107486, 0.962095, 0.362289, -0.925197, 0.112951, 0.246307, 3, -0.181152)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
 bone_name = "root"
 bone_idx = 0
 use_external_skeleton = true
@@ -26,6 +28,15 @@ collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RootAttachment/Lockon"]
 shape = SubResource("SphereShape3D_f4mbo")
+
+[node name="SFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_lv83r")
+attenuation_model = 3
+max_db = -3.0
+max_distance = 20.0
+max_polyphony = 3
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
 
 [connection signal="area_entered" from="RootAttachment/Lockon" to="." method="OnEntered"]
 

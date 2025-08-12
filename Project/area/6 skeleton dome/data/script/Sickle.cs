@@ -10,34 +10,26 @@ namespace Project.Gameplay.Hazards;
 public partial class Sickle : Node3D
 {
 	[ExportGroup("Swing Settings")]
-	[Export(PropertyHint.Range, "0,90,5")]
-	private float rotationAmount;
-	[Export(PropertyHint.Range, "0,10,.1")]
-	private float cycleLength = 2;
-	[Export(PropertyHint.Range, "0,1,.1")]
-	private float currentRatio = .5f;
-	[Export]
-	private bool isSwingingRight;
-	[Export]
-	private bool enableSparkParticles = true;
+	[Export(PropertyHint.Range, "0,90,5")] private float rotationAmount;
+	[Export(PropertyHint.Range, "0,10,.1")] private float cycleLength = 2;
+	[Export(PropertyHint.Range, "0,1,.1")] private float currentRatio = .5f;
+	[Export] private bool isSwingingRight;
+	[Export] private bool enableSparkParticles = true;
 
 	[ExportGroup("Editor")]
 	[ExportToolButton("Regenerate Sickle")]
 	public Callable GenerateSickleGroup => Callable.From(GenerateSickle);
-	[Export]
-	private NodePath root;
+	[Export] private NodePath root;
 	private Node3D rootNode;
-	[Export]
-	private NodePath head;
+	[Export] private NodePath head;
 	private Node3D headNode;
-	[Export]
-	private GpuParticles3D sparkParticles;
+	[Export] private GpuParticles3D sparkParticles;
+	[Export] private AudioStreamPlayer3D directionChangeSfx;
+	[Export] private AudioStreamPlayer3D lowPointSfx;
 	/// <summary> Were sparks emitted this rotation? </summary>
 	private bool emittedSparks;
-	[Export]
-	private PackedScene chainScene;
-	[Export(PropertyHint.Range, "0,32")]
-	private int chainLength;
+	[Export] private PackedScene chainScene;
+	[Export(PropertyHint.Range, "0,32")] private int chainLength;
 
 	/// <summary> Length of each independant chain segment. </summary>
 	private readonly float ChainSegmentLength = 1.2f;
@@ -67,15 +59,21 @@ public partial class Sickle : Node3D
 		{
 			emittedSparks = false;
 			isSwingingRight = !isSwingingRight;
+			directionChangeSfx.Play();
 		}
 
-		if (enableSparkParticles && !emittedSparks)
+		if (!emittedSparks)
 		{
 			if (Mathf.Abs(rootNode.Rotation.Z) < Mathf.Pi * .05f &&
 			Mathf.Sign(targetRatio - .5f) != Mathf.Sign(currentRatio - .5f))
 			{
-				sparkParticles.Rotation = Vector3.Up * Mathf.Pi * targetRatio;
-				sparkParticles.Restart();
+				if (enableSparkParticles)
+				{
+					sparkParticles.Rotation = Vector3.Up * Mathf.Pi * targetRatio;
+					sparkParticles.Restart();
+				}
+
+				lowPointSfx.Play();
 				emittedSparks = true;
 			}
 		}

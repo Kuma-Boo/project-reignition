@@ -1,7 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://cfejcc3m08i2r"]
+[gd_scene load_steps=11 format=3 uid="uid://cfejcc3m08i2r"]
 
 [ext_resource type="PackedScene" uid="uid://bd2vgdlj4fx6i" path="res://area/6 skeleton dome/object/model/platform/PlatformCavernFalling.gltf" id="1_irr62"]
 [ext_resource type="Script" uid="uid://bdlofqc6xiigo" path="res://object/trigger/modules/PlatformTrigger.cs" id="1_mm11p"]
+[ext_resource type="AudioStream" uid="uid://bfwo0mnlgif6e" path="res://sound/sfx/stage/skeleton dome/bone shatter.wav" id="3_wipsy"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="4_etiwa"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_p4jqh"]
 size = Vector3(1, 1, 2)
@@ -137,6 +139,20 @@ tracks/4/keys = {
 "update": 1,
 "values": [false, true, false]
 }
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Root/Fall")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"PlayInGroup"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_hi8l2"]
 resource_name = "shake"
@@ -195,6 +211,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Root/StaticBody3D"]
 shape = SubResource("BoxShape3D_lp7au")
+
+[node name="Fall" type="AudioStreamPlayer3D" parent="Root"]
+stream = ExtResource("3_wipsy")
+max_db = -3.0
+max_distance = 20.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("4_etiwa")
+groupKey = &"bone shatter"
+audioLengthOverride = 1.5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 callback_mode_process = 0

@@ -10,13 +10,14 @@ namespace Project.Gameplay.Objects;
 /// </summary>
 public partial class FallingStar : Node3D
 {
-	private Vector3 spawnPosition;
+	[Signal] private delegate void RestartedEventHandler();
 
 	[Export] private float lifetime;
 	[Export] private float travelDistance;
 	[Export] private float delay;
 	[Export] private GroupGpuParticles3D particles;
 
+	private Vector3 spawnPosition;
 	private float currentLifetime;
 	private readonly float FadeoutLength = 1f;
 
@@ -65,5 +66,6 @@ public partial class FallingStar : Node3D
 		currentLifetime = 0f;
 		GlobalPosition = spawnPosition;
 		particles.SetEmitting(true);
+		EmitSignal(SignalName.Restarted);
 	}
 }

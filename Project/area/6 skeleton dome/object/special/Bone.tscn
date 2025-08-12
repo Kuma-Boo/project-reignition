@@ -1,10 +1,11 @@
-[gd_scene load_steps=22 format=3 uid="uid://mlaecfbmxihk"]
+[gd_scene load_steps=23 format=3 uid="uid://mlaecfbmxihk"]
 
 [ext_resource type="PackedScene" uid="uid://bxq56vewfoodk" path="res://area/6 skeleton dome/object/model/special/Bone.gltf" id="1_3jkna"]
 [ext_resource type="Script" uid="uid://hofqefwd2eym" path="res://area/6 skeleton dome/data/script/Bone.cs" id="1_dl4pl"]
 [ext_resource type="Material" uid="uid://bef3nf037vgw8" path="res://object/stage/common/resource/model/material/Flying Pot Shine.tres" id="2_0hift"]
-[ext_resource type="PackedScene" uid="uid://ohu3dilki5ib" path="res://area/6 skeleton dome/object/WarpVfx.tscn" id="4_dqaqq"]
+[ext_resource type="PackedScene" path="res://area/6 skeleton dome/object/WarpVfx.tscn" id="4_dqaqq"]
 [ext_resource type="Material" uid="uid://ca62uiedbfw5x" path="res://effect/particle/material/Ember Blue.tres" id="4_g2ar6"]
+[ext_resource type="AudioStream" uid="uid://cwmbrplfgnrjb" path="res://sound/sfx/stage/skeleton dome/bone spin.wav" id="6_qdqox"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0hift"]
 height = 5.0
@@ -120,10 +121,11 @@ _data = {
 &"loop": SubResource("Animation_dqaqq")
 }
 
-[node name="Bone" type="Node3D" node_paths=PackedStringArray("area", "root", "warpParticleGroup")]
+[node name="Bone" type="Node3D" node_paths=PackedStringArray("area", "root", "sfx", "warpParticleGroup")]
 script = ExtResource("1_dl4pl")
 area = NodePath("BoneRoot/Trigger")
 root = NodePath("BoneRoot")
+sfx = NodePath("SFX")
 warpParticleGroup = NodePath("WarpVFX")
 
 [node name="BoneRoot" parent="." instance=ExtResource("1_3jkna")]
@@ -168,6 +170,13 @@ emitting = false
 
 [node name="Letters" parent="WarpVFX" index="0"]
 emitting = false
+
+[node name="SFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("6_qdqox")
+max_db = -3.0
+max_distance = 20.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

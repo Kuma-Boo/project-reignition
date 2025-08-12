@@ -14,6 +14,7 @@ public partial class Hand : PathFollow3D
 	[Export] private AnimationPlayer animator;
 	[Export] private Node3D root;
 	[Export] private bool isActive;
+	[Export] private AudioStreamPlayer3D laughSFX;
 
 	private PlayerController Player => StageSettings.Player;
 	private bool isGrabbingPlayer;
@@ -22,6 +23,7 @@ public partial class Hand : PathFollow3D
 	public override void _Ready()
 	{
 		initialProgress = Progress;
+		Player.Damaged += OnPlayerDamaged;
 		StageSettings.Instance.Respawned += Respawn;
 		Respawn();
 
@@ -50,6 +52,8 @@ public partial class Hand : PathFollow3D
 		isActive = false;
 		ProcessMode = ProcessModeEnum.Disabled;
 	}
+
+	private void OnPlayerDamaged() => laughSFX.Play();
 
 	public override void _PhysicsProcess(double _)
 	{

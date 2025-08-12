@@ -1,8 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://dmuj7wvvp56uk"]
+[gd_scene load_steps=10 format=3 uid="uid://dmuj7wvvp56uk"]
 
 [ext_resource type="Script" uid="uid://bj7jhdknn12cl" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_v75fs"]
 [ext_resource type="PackedScene" uid="uid://ca6w7ysr7jb52" path="res://area/6 skeleton dome/object/model/destructable/Ribcage.gltf" id="2_dh1ke"]
 [ext_resource type="PackedScene" uid="uid://b5ipaawceltfm" path="res://area/6 skeleton dome/object/model/destructable/RibcagePieces.gltf" id="3_gwtx7"]
+[ext_resource type="AudioStream" uid="uid://bfwo0mnlgif6e" path="res://sound/sfx/stage/skeleton dome/bone shatter.wav" id="4_cnxdc"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="5_1hh5j"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_2dhly"]
 radius = 1.0
@@ -75,6 +77,20 @@ tracks/2/keys = {
 "update": 1,
 "values": [0]
 }
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Shatter")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"PlayInGroup"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rd8ot"]
 _data = {
@@ -111,6 +127,17 @@ shape = SubResource("CylinderShape3D_2dhly")
 
 [node name="RibcagePieces" parent="." instance=ExtResource("3_gwtx7")]
 visible = false
+
+[node name="Shatter" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_cnxdc")
+attenuation_model = 3
+max_db = -3.0
+max_distance = 20.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("5_1hh5j")
+groupKey = &"bone shatter"
+audioLengthOverride = 1.5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

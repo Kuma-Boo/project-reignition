@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://d21ummt57uq4a"]
+[gd_scene load_steps=13 format=3 uid="uid://d21ummt57uq4a"]
 
 [ext_resource type="PackedScene" uid="uid://ck54rrm4x5ped" path="res://area/6 skeleton dome/object/model/obstacle/SickleBase.gltf" id="1_ffr4p"]
 [ext_resource type="Script" uid="uid://bkpdie76godlf" path="res://area/6 skeleton dome/data/script/Sickle.cs" id="1_uaaaq"]
@@ -6,6 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://cabdisubyyw42" path="res://area/6 skeleton dome/object/model/obstacle/SickleChain.gltf" id="2_drsr8"]
 [ext_resource type="Script" uid="uid://pnh70abopq8e" path="res://object/stage/common/resource/script/Hazard.cs" id="4_j2r0i"]
 [ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="6_lwuu3"]
+[ext_resource type="AudioStream" uid="uid://ukv3uft2ktko" path="res://sound/sfx/stage/skeleton dome/sickle direction change.wav" id="7_pory6"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="8_x4sua"]
+[ext_resource type="AudioStream" uid="uid://b67tc52ovp5fw" path="res://sound/sfx/stage/skeleton dome/sickle whoosh.wav" id="9_m70st"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_y3xwk"]
 size = Vector3(3, 2, 0.5)
@@ -21,13 +24,15 @@ material = ExtResource("6_lwuu3")
 size = Vector2(0.1, 3)
 center_offset = Vector3(0, 1.5, 0)
 
-[node name="Sickle" type="Node3D" node_paths=PackedStringArray("sparkParticles")]
+[node name="Sickle" type="Node3D" node_paths=PackedStringArray("sparkParticles", "directionChangeSfx", "lowPointSfx")]
 script = ExtResource("1_uaaaq")
 rotationAmount = 30.0
 isSwingingRight = true
 root = NodePath("Root")
 head = NodePath("Root/SickleHead")
 sparkParticles = NodePath("Root/SickleHead/Sparks")
+directionChangeSfx = NodePath("Root/SickleHead/DirectionChangeSFX")
+lowPointSfx = NodePath("Root/SickleHead/WhooshSFX")
 chainScene = ExtResource("2_drsr8")
 chainLength = 1
 
@@ -65,6 +70,30 @@ visibility_aabb = AABB(-7, -4, -2, 14, 8, 4)
 transform_align = 2
 process_material = SubResource("ParticleProcessMaterial_fbngt")
 draw_pass_1 = SubResource("QuadMesh_2myjr")
+
+[node name="DirectionChangeSFX" type="AudioStreamPlayer3D" parent="Root/SickleHead"]
+stream = ExtResource("7_pory6")
+attenuation_model = 3
+max_db = -3.0
+max_distance = 20.0
+max_polyphony = 2
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("8_x4sua")
+groupKey = &"bone shatter"
+audioLengthOverride = 1.5
+
+[node name="WhooshSFX" type="AudioStreamPlayer3D" parent="Root/SickleHead"]
+stream = ExtResource("9_m70st")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 30.0
+max_polyphony = 2
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("8_x4sua")
+groupKey = &"bone shatter"
+audioLengthOverride = 1.5
 
 [connection signal="area_entered" from="Root/SickleHead/Hitbox" to="Root/SickleHead/Hitbox" method="OnEntered"]
 [connection signal="area_exited" from="Root/SickleHead/Hitbox" to="Root/SickleHead/Hitbox" method="OnExited"]

@@ -1,9 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://bqhcoks73ujwv"]
+[gd_scene load_steps=15 format=3 uid="uid://bqhcoks73ujwv"]
 
 [ext_resource type="Script" uid="uid://2snd2fxcrc3s" path="res://area/6 skeleton dome/data/script/FallingStar.cs" id="1_hadv5"]
 [ext_resource type="Material" uid="uid://2uyghhoj7ydh" path="res://object/player/resource/effect/material/Aegis Dust.tres" id="1_mkiai"]
 [ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="2_ahw6t"]
 [ext_resource type="Material" uid="uid://bvpcekopblbht" path="res://object/player/resource/effect/material/Crest Wind Spark.tres" id="4_m4bdr"]
+[ext_resource type="AudioStream" uid="uid://8q48y1x00y8e" path="res://sound/sfx/stage/skeleton dome/spiral spirit.wav" id="5_m4bdr"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="6_3mis8"]
 
 [sub_resource type="Curve" id="Curve_hadv5"]
 _data = [Vector2(0, 0), 0.0, 24.8463, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -55,7 +57,6 @@ material = ExtResource("4_m4bdr")
 script = ExtResource("1_hadv5")
 lifetime = 8.0
 travelDistance = 100.0
-delay = null
 particles = NodePath("Base")
 
 [node name="Base" type="GPUParticles3D" parent="." node_paths=PackedStringArray("subSystems")]
@@ -85,3 +86,19 @@ interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_kv2rj")
 draw_pass_1 = SubResource("QuadMesh_pdbca")
+
+[node name="SFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("5_m4bdr")
+attenuation_model = 3
+unit_size = 20.0
+max_db = -6.0
+max_distance = 200.0
+bus = &"GAME SFX"
+script = ExtResource("6_3mis8")
+groupKey = &"falling star"
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 5.0
+
+[connection signal="Restarted" from="." to="Timer" method="start" binds= [0.0]]
+[connection signal="timeout" from="Timer" to="SFX" method="play" binds= [0.0]]

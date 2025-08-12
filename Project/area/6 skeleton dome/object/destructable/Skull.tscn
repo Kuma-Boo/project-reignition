@@ -1,8 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://cra2x0w3qbcxv"]
+[gd_scene load_steps=12 format=3 uid="uid://cra2x0w3qbcxv"]
 
 [ext_resource type="Script" uid="uid://bj7jhdknn12cl" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_3vi3t"]
 [ext_resource type="PackedScene" uid="uid://ddqpbpt4nebvh" path="res://area/6 skeleton dome/object/model/destructable/Skull.gltf" id="2_64ltn"]
 [ext_resource type="PackedScene" uid="uid://bgfnfvoem5dks" path="res://area/6 skeleton dome/object/model/destructable/SkullPieces.gltf" id="3_vl65g"]
+[ext_resource type="AudioStream" uid="uid://bfwo0mnlgif6e" path="res://sound/sfx/stage/skeleton dome/bone shatter.wav" id="4_70vy5"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="5_qoh3c"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_lp6gg"]
 radius = 0.9
@@ -131,6 +133,20 @@ tracks/3/keys = {
 "method": &"Despawn"
 }]
 }
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Shatter")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"PlayInGroup"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_nj5im"]
 _data = {
@@ -167,6 +183,17 @@ shape = SubResource("SphereShape3D_mhxvr")
 
 [node name="SkullPieces" parent="." instance=ExtResource("3_vl65g")]
 visible = false
+
+[node name="Shatter" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_70vy5")
+attenuation_model = 3
+max_db = -3.0
+max_distance = 20.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("5_qoh3c")
+groupKey = &"bone shatter"
+audioLengthOverride = 1.5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
