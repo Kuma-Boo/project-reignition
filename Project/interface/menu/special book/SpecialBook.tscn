@@ -1284,7 +1284,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_4b6ew")
 
-[node name="Book" type="Control" parent="Clip" node_paths=PackedStringArray("tabs", "windows", "thumbnails", "chapterName", "chapterLabel", "textboxTitle", "previewDescription", "previewImage", "previewNumber", "fullImage", "navigationAnimator", "navZoom", "navPlay", "sfxOpen", "sfxSelect", "sfxCancel", "sfxConfirm", "sfxCategorySelect", "randomAnimator", "animator")]
+[node name="Book" type="Control" parent="Clip" node_paths=PackedStringArray("tabs", "windows", "thumbnails", "chapterName", "chapterLabel", "textboxTitle", "previewDescription", "previewImage", "previewNumber", "fullImage", "navigationAnimator", "navZoom", "navPlay", "audioPlayer", "sfxOpen", "sfxSelect", "sfxCancel", "sfxConfirm", "sfxCategorySelect", "randomAnimator", "animator")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1305,6 +1305,7 @@ fullImage = NodePath("FullView/FullImage")
 navigationAnimator = NodePath("NavButtonsFull/NavigationAnimationPlayer")
 navZoom = NodePath("NavigationButtonsBook/Zoom")
 navPlay = NodePath("NavigationButtonsBook/Play")
+audioPlayer = NodePath("../../MusicPlayer")
 sfxOpen = NodePath("../../SFX/Open")
 sfxSelect = NodePath("../../SFX/Select")
 sfxCancel = NodePath("../../SFX/Cancel")
@@ -1900,6 +1901,11 @@ bus = &"SFX"
 [node name="CategorySelect" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("40_4b6ew")
 bus = &"SFX"
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("35_ior2v")
+bus = &"BGM"
+parameters/looping = false
 
 [node name="BGM" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("35_ior2v")
