@@ -1,299 +1,177 @@
 using Godot;
 using Godot.Collections;
 using Project.Core;
+using Project.Gameplay;
 
 namespace Project.Interface.Menus;
 
-[GlobalClass]
+[Tool]
 public partial class SpecialBookPage : Resource
 {
-
-	[Export] public string name;
-
-	/// <summary> Has the player unlocked this page?. </summary>
-	public bool Unlocked { get; set; }
-
-	/// <summary> Unlock via clearing a stage. </summary>
-	[Export] public bool unlockClear;
-
-	/// <summary> Unlock via getting gold in a stage. </summary>
-	[Export] public bool unlockGold;
-
-	/// <summary> Unlock by getting a certain number of Silver Medals. </summary>
-	[Export] public bool unlockSilver;
-
-	/// <summary> Unlock by getting all Medals of a type in a stage. </summary>
-	[Export] public bool unlockAllStage;
-
-	/// <summary> Which world for the All Stages condition, Clear condition, and Gold Medal condition. </summary>
-	[Export] public SaveManager.WorldEnum unlockWorld;
-
-	/// <summary> Stage number used for determining unlocks. </summary>
-	[Export] public int unlockStageNumber;
-
-	/// <summary> Amount of Silver Medals needed to unlock this stage. </summary>
-	[Export] public int unlockSilverMedalRequirement;
-
-	/// <summary> The image used to preview this page in the description view. </summary>
-	[Export] public Texture2D previewImage;
-
-	/// <summary> The image used in the full-image view. </summary>
-	[Export] public Texture2D fullImage;
-
-	/// <summary> The music track to be played. </summary>
-	[Export] public AudioStream track;
-
-	/// <summary> The video file to be played. </summary>
-	[Export(PropertyHint.File)]
-	public string videoFilePath;
-
-	/// <summary> The region preview for page in the list. </summary>
-	[Export] public Rect2 previewImageRegion;
-
-	public int NumStages(SaveManager.WorldEnum world)
+	#region Editor
+	public override Array<Dictionary> _GetPropertyList()
 	{
-		int num = 0;
-		for (int i = 1; i < 30; i++)
-		{
-			if (string.IsNullOrEmpty(StageUnlock(world, i)))
-				return num;
+		Array<Dictionary> properties = [];
 
-			num++;
+		properties.Add(ExtensionMethods.CreateCategory("Basic Settings"));
+		properties.Add(ExtensionMethods.CreateProperty("Localization Key", Variant.Type.String));
+		properties.Add(ExtensionMethods.CreateProperty("Page Type", Variant.Type.Int, PropertyHint.Enum, ExtensionMethods.EnumToString(PageType)));
+		switch (PageType)
+		{
+			case PageTypeEnum.Music:
+				properties.Add(ExtensionMethods.CreateProperty("Audio Stream", Variant.Type.String, PropertyHint.FilePath, "*.mp3,*.wav"));
+				break;
+			case PageTypeEnum.Video:
+				properties.Add(ExtensionMethods.CreateProperty("Event Path", Variant.Type.String, PropertyHint.FilePath, "*.tscn"));
+				break;
 		}
 
-		return num;
+
+		properties.Add(ExtensionMethods.CreateCategory("Unlock Settings"));
+		properties.Add(ExtensionMethods.CreateProperty("Unlock Type", Variant.Type.Int, PropertyHint.Enum, ExtensionMethods.EnumToString(UnlockType)));
+		if (UnlockType == UnlockTypeEnum.BigCameo || UnlockType == UnlockTypeEnum.SpecificLevel)
+			properties.Add(ExtensionMethods.CreateProperty("Level Resource", Variant.Type.Object, PropertyHint.ResourceType, "LevelDataResource"));
+
+		if (UnlockType == UnlockTypeEnum.SpecificWorld)
+			properties.Add(ExtensionMethods.CreateProperty("World", Variant.Type.Int, PropertyHint.Enum, ExtensionMethods.EnumToString(World)));
+
+		if (UnlockType == UnlockTypeEnum.MedalCount || UnlockType == UnlockTypeEnum.SpecificLevel || UnlockType == UnlockTypeEnum.SpecificWorld)
+			properties.Add(ExtensionMethods.CreateProperty("Rank Requirement", Variant.Type.Int, PropertyHint.Enum, ExtensionMethods.EnumToString(Rank)));
+
+		if (UnlockType == UnlockTypeEnum.MedalCount)
+			properties.Add(ExtensionMethods.CreateProperty("Medal Count", Variant.Type.Int, PropertyHint.Range, "0,1,or_greater"));
+
+		return properties;
 	}
 
-	public string StageUnlock(SaveManager.WorldEnum world, int stageNum)
+	public override bool _Set(StringName property, Variant value)
 	{
-		switch (world)
+		switch ((string)property)
 		{
-			case SaveManager.WorldEnum.SandOasis:
-				switch (stageNum)
-				{
-					case 1:
-						return "so_a1_main";
-					case 2:
-						return "so_a1_deathless";
-					case 3:
-						return "so_a1_race";
-					case 4:
-						return "so_a1_pearless";
-					case 5:
-						return "so_a2_jarless";
-					case 6:
-						return "so_a2_deathless";
-					case 7:
-						return "so_a2_timed";
-					case 8:
-						return "so_a2_perfect";
-					case 9:
-						return "so_a3_jar";
-					case 10:
-						return "so_a3_ring";
-					case 11:
-						return "so_a3_rampage";
-					case 12:
-						return "so_a3_chain";
-					case 13:
-						return "so_boss";
-					default:
-						return string.Empty;
-				}
-			case SaveManager.WorldEnum.DinosaurJungle:
-				switch (unlockStageNumber)
-				{
-					case 1:
-						return "dj_a1_main";
-					case 2:
-						return "dj_a1_deathless";
-					case 3:
-						return "dj_a1_ring";
-					case 4:
-						return "dj_a1_perfect";
-					case 5:
-						return "dj_a2_rampage";
-					case 6:
-						return "dj_a2_stealth";
-					case 7:
-						return "dj_a2_race";
-					case 8:
-						return "dj_a2_chain";
-					case 9:
-						return "dj_a3_majin_egg";
-					case 10:
-						return "dj_a3_dino_egg";
-					case 11:
-						return "dj_a3_ring";
-					case 12:
-						return "dj_a3_pearless";
-					default:
-						return string.Empty;
-				}
-			case SaveManager.WorldEnum.EvilFoundry:
-				switch (unlockStageNumber)
-				{
-					case 1:
-						return "ef_a1_main";
-					case 2:
-						return "ef_a1_deathless";
-					case 3:
-						return "ef_a1_ringless";
-					case 4:
-						return "ef_a1_race";
-					case 5:
-						return "ef_a2_time";
-					case 6:
-						return "ef_a2_stealth";
-					case 7:
-						return "ef_a2_ringless";
-					case 8:
-						return "ef_a2_perfect";
-					case 9:
-						return "ef_a3_rampage";
-					case 10:
-						return "ef_a3_ring";
-					case 11:
-						return "ef_a3_perfect";
-					case 12:
-						return "ef_a3_chain";
-					case 13:
-						return "ef_boss";
-					default:
-						return string.Empty;
+			case "Localization Key":
+				LocalizationKey = (string)value;
+				break;
+			case "Page Type":
+				PageType = (PageTypeEnum)(int)value;
+				NotifyPropertyListChanged();
+				break;
+			case "Audio Stream":
+				AudioStreamPath = (string)value;
+				break;
+			case "Event Path":
+				VideoEventPath = (string)value;
+				break;
 
-				}
-			case SaveManager.WorldEnum.LevitatedRuin:
-				switch (unlockStageNumber)
-				{
-					case 1:
-						return "lr_a1_main";
-					case 2:
-						return "lr_a1_rampage";
-					case 3:
-						return "lr_a1_race";
-					case 4:
-						return "lr_a1_perfect";
-					case 5:
-						return "lr_a2_cage";
-					case 6:
-						return "lr_a2_deathless";
-					case 7:
-						return "lr_a2_ringless";
-					case 8:
-						return "lr_a2_perfect";
-					case 9:
-						return "lr_a3_rampage";
-					case 10:
-						return "lr_a3_time";
-					case 11:
-						return "lr_a3_ring";
-					case 12:
-						return "lr_a3_pearless";
-					default:
-						return string.Empty;
-				}
 
-			case SaveManager.WorldEnum.PirateStorm:
-				switch (unlockStageNumber)
-				{
-					case 1:
-						return "ps_a1_main";
-					case 2:
-						return "ps_a1_race";
-					case 3:
-						return "ps_a1_ring";
-					case 4:
-						return "ps_a1_pearless";
-					case 5:
-						return "ps_a2_rampage";
-					case 6:
-						return "ps_a2_ringless";
-					case 7:
-						return "ps_a2_time";
-					case 8:
-						return "ps_a2_chain";
-					case 9:
-						return "ps_a3_deathless";
-					case 10:
-						return "ps_a3_stealth";
-					case 11:
-						return "ps_a3_ring";
-					case 12:
-						return "ps_a3_perfect";
-					case 13:
-						return "ps_boss";
-					default:
-						return string.Empty;
-				}
-			case SaveManager.WorldEnum.SkeletonDome:
-				switch (unlockStageNumber)
-				{
-					case 1:
-						return "sd_a1_main";
-					case 2:
-						return "sd_a1_race";
-					case 3:
-						return "sd_a1_ringless";
-					case 4:
-						return "sd_a1_pearless";
-					case 5:
-						return "sd_a2_rampage";
-					case 6:
-						return "sd_a2_deathless";
-					case 7:
-						return "sd_a2_time";
-					case 8:
-						return "sd_a2_pearless";
-					case 9:
-						return "sd_a3_bones";
-					case 10:
-						return "sd_a3_rampage";
-					case 11:
-						return "sd_a3_ring";
-					case 12:
-						return "sd_a3_chain";
-					default:
-						return string.Empty;
-				}
-			case SaveManager.WorldEnum.NightPalace:
-				switch (unlockStageNumber)
-				{
-					case 1:
-						return "np_a1_main";
-					case 2:
-						return "np_a1_race";
-					case 3:
-						return "np_a1_ringless";
-					case 4:
-						return "np_a1_pearless";
-					case 5:
-						return "np_a2_rampage";
-					case 6:
-						return "np_a2_stealth";
-					case 7:
-						return "np_a2_ring";
-					case 8:
-						return "np_a2_chain";
-					case 9:
-						return "np_a3_deathless";
-					case 10:
-						return "np_a3_ringless";
-					case 11:
-						return "np_a3_time";
-					case 12:
-						return "np_a3_perfect";
-					case 13:
-						return "np_boss";
-					case 14:
-						return "np_last";
-					default:
-						return string.Empty;
-				}
+			case "Unlock Type":
+				UnlockType = (UnlockTypeEnum)(int)value;
+				NotifyPropertyListChanged();
+				break;
+			case "Level Resource":
+				LevelData = (LevelDataResource)value;
+				break;
+			case "World":
+				World = (SaveManager.WorldEnum)(int)value;
+				break;
+			case "Rank Requirement":
+				Rank = (RankEnum)(int)value;
+				break;
+			case "Medal Count":
+				MedalCount = (int)value;
+				break;
+
+
+			default:
+				return false;
 		}
 
-		return string.Empty;
+		return true;
 	}
 
-	public string StageUnlock() => StageUnlock(unlockWorld, unlockStageNumber);
+	public override Variant _Get(StringName property)
+	{
+		switch ((string)property)
+		{
+			case "Localization Key":
+				return LocalizationKey;
+			case "Page Type":
+				return (int)PageType;
+			case "Audio Stream":
+				return AudioStreamPath;
+			case "Event Path":
+				return VideoEventPath;
+
+			case "Unlock Type":
+				return (int)UnlockType;
+			case "Level Resource":
+				return LevelData;
+			case "World":
+				return (int)World;
+			case "Rank Requirement":
+				return (int)Rank;
+			case "Medal Count":
+				return MedalCount;
+		}
+
+		return base._Get(property);
+	}
+	#endregion
+
+	/// <summary> Specifies what type of media this page is. </summary>
+	public PageTypeEnum PageType { get; private set; }
+	public enum PageTypeEnum
+	{
+		Image,
+		Music,
+		Video,
+	}
+
+	/// <summary> The localization key. </summary>
+	public string LocalizationKey { get; private set; }
+
+	/// <summary> Path to the audio stream. </summary>
+	public string AudioStreamPath { get; private set; }
+	/// <summary> Path to the video's cutscene event. </summary>
+	public string VideoEventPath { get; private set; }
+
+	public UnlockTypeEnum UnlockType { get; private set; }
+	public enum UnlockTypeEnum
+	{
+		MedalCount,
+		SpecificLevel,
+		SpecificWorld,
+		BigCameo,
+	}
+
+	/// <summary> Determines what kind of completion is needed for an unlock type. </summary>
+	public RankEnum Rank { get; private set; }
+	public enum RankEnum
+	{
+		Gold,
+		Silver,
+		Bronze,
+		Completed
+	}
+
+	/// <summary> Determines how many medals are needed for unlock requirements to be met. </summary>
+	public int MedalCount { get; private set; }
+
+	public LevelDataResource LevelData { get; private set; }
+	public SaveManager.WorldEnum World { get; private set; }
+
+	/// <summary> Calculates whether this page should be unlocked or not. </summary>
+	public bool IsUnlocked()
+	{
+		return false;
+	}
+
+	public string GetLocalizedTitleKey => $"spb_title_{LocalizationKey}";
+	public string GetLocalizedDescriptionKey => $"spb_desc_{LocalizationKey}";
+
+	/// <summary> Constructs a localized string that describes the unlock requirements. </summary>
+	public string GetLocalizedUnlockRequirements()
+	{
+		string localizedString = string.Empty;
+		return localizedString;
+	}
 }

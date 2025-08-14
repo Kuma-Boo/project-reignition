@@ -435,7 +435,6 @@ public partial class SaveManager : Node
 		return VoiceLanguage.English;
 	}
 
-
 	/// <summary> Attempts to load config data from file. </summary>
 	public static void LoadConfig()
 	{
@@ -1331,14 +1330,91 @@ public partial class SaveManager : Node
 			return data;
 		}
 	}
+	#endregion
+
+	#region Shared Game Data
+	public static SharedGameData SharedData = new();
+	private const string SharedFileName = "shared.cfg";
 
 	public class SharedGameData
 	{
 		/// <summary> Total amount of time the game has been on, in seconds. </summary>
 		public float playTime;
-
+		/// <summary> Dictionaries for each individual level's data. </summary>
+		public Dictionary<StringName, Dictionary> levelData = [];
 		/// <summary> List of big cameos unlocked. </summary>
 		public Array<string> bigCameos = [];
+
+		/// <summary> Highest number of fire souls ever collected. </summary>
+		public int FireSoulCount { get; private set; }
+		/// <summary> Highest number of gold medals ever collected. </summary>
+		public int GoldMedalCount { get; private set; }
+		/// <summary> Highest number of silver medals ever collected. </summary>
+		public int SilverMedalCount { get; private set; }
+		/// <summary> Highest number of bronze medals ever collected. </summary>
+		public int BronzeMedalCount { get; private set; }
+
+
+		/// <summary> Creates a dictionary based on GameData. </summary>
+		public Dictionary ToDictionary()
+		{
+			return new()
+			{
+				// WorldEnum data
+				{ nameof(playTime), Mathf.RoundToInt(playTime) },
+				{ nameof(levelData), (Dictionary)levelData },
+				{ nameof(bigCameos), bigCameos }
+			};
+		}
+
+		/// <summary> Sets GameData based on dictionary. </summary>
+		public void FromDictionary(Dictionary dictionary)
+		{
+			if (dictionary.TryGetValue(nameof(playTime), out Variant var))
+				playTime = (float)var;
+
+			if (dictionary.TryGetValue(nameof(levelData), out var))
+				levelData = (Dictionary<StringName, Dictionary>)var;
+		}
+	}
+
+
+	/// <summary> Attempts to load config data from file. </summary>
+	public static void LoadSharedData()
+	{
+		string dataFile = SaveDirectory.PathJoin(SharedFileName);
+		FileAccess file = FileAccess.Open(dataFile, FileAccess.ModeFlags.Read);
+
+		try
+		{
+			if (file.GetError() == Error.Ok)
+			{
+				// Attempt to load.
+				Dictionary d = (Dictionary)Json.ParseString(file.GetAsText());
+				SharedData.FromDictionary(d);
+				file.Close();
+			}
+		}
+		catch // Load Default settings
+		{
+			SharedData = new();
+		}
+	}
+
+	/// <summary> Attempts to save shared data to file. </summary>
+	public static void SaveSharedData()
+	{
+		if (!DirAccess.DirExistsAbsolute(SaveDirectory))
+			DirAccess.MakeDirRecursiveAbsolute(SaveDirectory);
+
+		string dataFile = SaveDirectory.PathJoin(SharedFileName);
+		FileAccess file = FileAccess.Open(dataFile, FileAccess.ModeFlags.Write);
+		file.StoreString(Json.Stringify(SharedData.ToDictionary(), "\t"));
+		file.Close();
+
+		file = FileAccess.Open(SaveLocationFile, FileAccess.ModeFlags.Write);
+		file.StoreString(SaveDirectory);
+		file.Close();
 	}
 	#endregion
 }

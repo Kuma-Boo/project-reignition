@@ -174,7 +174,7 @@ public partial class SpecialBook : Menu
 
 	protected override void Confirm()
 	{
-		SpecialBookPage thisPage = GetPage(tabSelection, pageSelection);
+		OldBookPage thisPage = GetPage(tabSelection, pageSelection);
 
 		if (menuFocus == MenuFocus.Chapter)
 		{
@@ -426,19 +426,19 @@ public partial class SpecialBook : Menu
 		do
 		{
 			seekRandom = WrapSelection(seekRandom + 1, randomPages.Count);
-		} while (!IsValid((SpecialBookPage)randomPages[seekRandom], menuFocus));
+		} while (!IsValid((OldBookPage)randomPages[seekRandom], menuFocus));
 
-		tabSelection = GetChapterFromPage((SpecialBookPage)randomPages[seekRandom]);
-		pageSelection = GetSelectionFromPage((SpecialBookPage)randomPages[seekRandom]);
+		tabSelection = GetChapterFromPage((OldBookPage)randomPages[seekRandom]);
+		pageSelection = GetSelectionFromPage((OldBookPage)randomPages[seekRandom]);
 
 		tabs[tabSelection].Select();
 		windows[pageSelection].Select();
 
 		LoadChapter();
-		LoadPage((SpecialBookPage)randomPages[seekRandom]);
+		LoadPage((OldBookPage)randomPages[seekRandom]);
 	}
 
-	private int GetSelectionFromPage(SpecialBookPage page)
+	private int GetSelectionFromPage(OldBookPage page)
 	{
 		foreach (SpecialBookTab tab in tabs)
 		{
@@ -452,11 +452,11 @@ public partial class SpecialBook : Menu
 		return 0;
 	}
 
-	private int GetChapterFromPage(SpecialBookPage page)
+	private int GetChapterFromPage(OldBookPage page)
 	{
 		for (int i = 0; i < tabs.Length; i++)
 		{
-			foreach (SpecialBookPage p in tabs[i].PageResources)
+			foreach (OldBookPage p in tabs[i].PageResources)
 			{
 				if (page == p)
 					return i;
@@ -473,7 +473,7 @@ public partial class SpecialBook : Menu
 			// Populate the random page list
 			foreach (SpecialBookTab tab in tabs)
 			{
-				foreach (SpecialBookPage page in tab.PageResources)
+				foreach (OldBookPage page in tab.PageResources)
 					randomPages.Add(page);
 			}
 		}
@@ -485,7 +485,7 @@ public partial class SpecialBook : Menu
 	/// Checks if we can view a page.
 	/// </summary>
 	/// <returns> Returns true if the page is viewable. </returns>
-	private bool IsValid(SpecialBookPage page, MenuFocus focus)
+	private bool IsValid(OldBookPage page, MenuFocus focus)
 	{
 		if (!page.Unlocked)
 			return false;
@@ -508,7 +508,7 @@ public partial class SpecialBook : Menu
 
 		foreach (SpecialBookTab tab in tabs)
 		{
-			foreach (SpecialBookPage page in tab.PageResources)
+			foreach (OldBookPage page in tab.PageResources)
 			{
 				// Revert page to locked and unlock based on save data
 				page.Unlocked = false;
@@ -591,7 +591,7 @@ public partial class SpecialBook : Menu
 		}
 	}
 
-	private SpecialBookPage GetPage(int chapter, int page) => tabs[chapter].PageResources[page];
+	private OldBookPage GetPage(int chapter, int page) => tabs[chapter].PageResources[page];
 
 	/// <summary> Loads a chapter based on the current chapterSelection. </summary>
 	private void LoadChapter()
@@ -613,7 +613,7 @@ public partial class SpecialBook : Menu
 		}
 	}
 
-	private void LoadPage(SpecialBookPage page)
+	private void LoadPage(OldBookPage page)
 	{
 		menuMemory[MemoryKeys.SpecialBook] = (15 * tabSelection) + pageSelection;
 		if (page.fullImage != null)
@@ -647,7 +647,7 @@ public partial class SpecialBook : Menu
 		}
 	}
 
-	private string LoadHint(SpecialBookPage page)
+	private string LoadHint(OldBookPage page)
 	{
 		if (page.unlockSilver)
 			return Tr("spb_hint_silvermedal").Replace("XX", page.unlockSilverMedalRequirement.ToString());
@@ -692,7 +692,7 @@ public partial class SpecialBook : Menu
 		{
 			for (int j = 0; j < windows.Length; j++)
 			{
-				SpecialBookPage bookPage = GetPage(i, j);
+				OldBookPage bookPage = GetPage(i, j);
 				if (bookPage.Unlocked == true && IsValid(bookPage, MenuFocus.Image))
 					num++;
 			}
