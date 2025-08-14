@@ -9,9 +9,11 @@ public partial class SpecialBook : Menu
 	private int tabSelection;
 	private int pageSelection;
 
+	private SpecialBookPage GetActivePage => tabs[tabSelection].PageResources[pageSelection];
+
 	/// <summary> Keeps track of the entry the player is currently focusing on. </summary>
-	private MenuFocus menuFocus;
-	private enum MenuFocus
+	private MenuStatusEnum menuStatus;
+	private enum MenuStatusEnum
 	{
 		Chapter,
 		Page,
@@ -39,7 +41,7 @@ public partial class SpecialBook : Menu
 
 	[Export] private NavigationButton navZoom;
 	[Export] private NavigationButton navPlay;
-	[Export] private BGMPlayer player;
+	[Export] private BGMPlayer audioPlayer;
 
 	[Export] private AudioStreamPlayer sfxOpen;
 	[Export] private AudioStreamPlayer sfxSelect;
@@ -52,6 +54,8 @@ public partial class SpecialBook : Menu
 	private int seekRandom;
 	private readonly Array randomPages = [];
 
+	private string currentResourceLoading;
+
 	protected override void SetUp()
 	{
 		foreach (SpecialBookWindow window in windows)
@@ -61,15 +65,13 @@ public partial class SpecialBook : Menu
 	public override void ShowMenu()
 	{
 		menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.SpecialBook;
-		LoadSaveData();
+		PlayBgm();
 
 		// Update selections based on memory
 		tabSelection = menuMemory[MemoryKeys.SpecialBook] / windows.Length;
 		pageSelection = menuMemory[MemoryKeys.SpecialBook] % windows.Length;
 
-		// Select the tab and load the chapter's data
-		LoadChapter();
-		PlayBgm();
+		LoadChapterData();
 
 		if (menuMemory[MemoryKeys.SpecialBook] != 0)
 		{
@@ -78,10 +80,10 @@ public partial class SpecialBook : Menu
 			windows[pageSelection].Select();
 			chapterName.Visible = false;
 			textboxTitle.Visible = true;
-			LoadPage(GetPage(tabSelection, pageSelection));
+			LoadPageData();
 
 			// Open description
-			menuFocus = MenuFocus.Description;
+			menuStatus = MenuStatusEnum.Description;
 			animator.Play("show_description");
 			animator.Advance(animator.CurrentAnimationLength);
 			return;
@@ -106,20 +108,29 @@ public partial class SpecialBook : Menu
 
 	protected override void ProcessMenu()
 	{
-		if (menuFocus == MenuFocus.Chapter || menuFocus == MenuFocus.Page) // Change chapter by using the bumpers
+		if (!string.IsNullOrEmpty(currentResourceLoading))
+		{
+			if (ResourceLoader.LoadThreadedGetStatus(currentResourceLoading) == ResourceLoader.ThreadLoadStatus.InProgress)
+				return; // Still loading...
+
+			ApplyLoadedResource();
+			return;
+		}
+
+		if (menuStatus == MenuStatusEnum.Chapter || menuStatus == MenuStatusEnum.Page) // Change chapter by using the bumpers
 		{
 			if (Input.IsActionJustPressed("button_step_left"))
 			{
 				tabs[tabSelection].Deselect();
 				tabSelection = WrapSelection(tabSelection - 1, 16);
 
-				if (menuFocus == MenuFocus.Chapter)
+				if (menuStatus == MenuStatusEnum.Chapter)
 					tabs[tabSelection].Select();
 				else
 					tabs[tabSelection].SelectNoGlow();
 
-				LoadChapter();
-				LoadPage(GetPage(tabSelection, pageSelection));
+				LoadChapterData();
+				LoadPageData();
 
 				sfxCategorySelect.Play();
 			}
@@ -129,13 +140,13 @@ public partial class SpecialBook : Menu
 				tabs[tabSelection].Deselect();
 				tabSelection = WrapSelection(tabSelection + 1, 16);
 
-				if (menuFocus == MenuFocus.Chapter)
+				if (menuStatus == MenuStatusEnum.Chapter)
 					tabs[tabSelection].Select();
 				else
 					tabs[tabSelection].SelectNoGlow();
 
-				LoadChapter();
-				LoadPage(GetPage(tabSelection, pageSelection));
+				LoadChapterData();
+				LoadPageData();
 
 				sfxCategorySelect.Play();
 			}
@@ -147,7 +158,7 @@ public partial class SpecialBook : Menu
 					RandomizeList();
 					playRandom = true;
 					seekRandom = 0;
-					menuFocus = MenuFocus.Image;
+					menuStatus = MenuStatusEnum.Image;
 					randomPages.Shuffle();
 					animator.Play("show_playrandom");
 					randomAnimator.Play("playrandom");
@@ -161,12 +172,15 @@ public partial class SpecialBook : Menu
 		base.ProcessMenu();
 	}
 
+	private void ApplyLoadedResource()
+	{
+		Resource resource = ResourceLoader.LoadThreadedGet(currentResourceLoading);
+		currentResourceLoading = string.Empty;
+	}
+
 	protected override void UpdateSelection()
 	{
 		Vector2I input = new(Mathf.Sign(Input.GetAxis("ui_left", "ui_right")), Mathf.Sign(Input.GetAxis("ui_up", "ui_down")));
-
-		if (input == Vector2I.Zero)
-			return;
 
 		StartSelectionTimer();
 		MenuControls(input);
@@ -174,76 +188,74 @@ public partial class SpecialBook : Menu
 
 	protected override void Confirm()
 	{
-		OldBookPage thisPage = GetPage(tabSelection, pageSelection);
+		SpecialBookPage page = GetActivePage;
 
-		if (menuFocus == MenuFocus.Chapter)
+		if (menuStatus == MenuStatusEnum.Chapter)
 		{
 			MenuControls(new Vector2I(0, 1));
 			sfxSelect.Play();
 			return;
 		}
 
-		if (menuFocus == MenuFocus.Page)
+		if (menuStatus == MenuStatusEnum.Page)
 		{
-			if (GetPage(tabSelection, pageSelection).Unlocked)
+			if (page.IsUnlocked())
 			{
 				animator.Play("show_description");
-				menuFocus = MenuFocus.Description;
+				menuStatus = MenuStatusEnum.Description;
 				sfxConfirm.Play();
 			}
 
 			return;
 		}
 
-		if (menuFocus == MenuFocus.Description)
+		if (menuStatus == MenuStatusEnum.Description)
 		{
-			if (GetPage(tabSelection, pageSelection).Unlocked)
+			if (page.IsUnlocked())
 			{
-				if (thisPage.fullImage != null) // If this is an image
+				switch (page.PageType)
 				{
-					menuFocus = MenuFocus.Image;
-					animator.Play("show_fullimage");
+					case SpecialBookPage.PageTypeEnum.Image:
+						menuStatus = MenuStatusEnum.Image;
+						animator.Play("show_fullimage");
 
-					isNavigationVisible = true;
-					navigationAnimator.Play("RESET");
+						isNavigationVisible = true;
+						navigationAnimator.Play("RESET");
 
-					sfxOpen.Play();
-					StartSelectionTimer();
-					return;
-				}
+						sfxOpen.Play();
+						StartSelectionTimer();
+						return;
+					case SpecialBookPage.PageTypeEnum.Music:
+						// TODO Improve audio controls or actually have the bgm loop.
+						bgm.Stop();
 
-				if (!string.IsNullOrEmpty(thisPage.videoFilePath))
-				{
-					/*
-					TODO Allow users to play videos once cutscenes have been added to the game. 
-					bgm.Stop();
-					menuFocus = MenuFocus.Video;
+						// TODO Load audio asyncronously
+						audioPlayer.Stream = ResourceLoader.Load<AudioStream>(page.AudioStreamPath);
+						audioPlayer.loopEndPosition = (float)audioPlayer.Stream.GetLength() - 1f;
+						audioPlayer.Play();
+						return;
+					case SpecialBookPage.PageTypeEnum.Video:
+						/*
+						TODO Allow users to play videos once cutscenes have been added to the game. 
+						bgm.Stop();
+						menuFocus = MenuFocus.Video;
 
-					TransitionManager.QueueSceneChange(thisPage.videoFilePath);
-					TransitionManager.StartTransition(new()
-					{
-						color = Colors.Black,
-						inSpeed = .5f,
-					});
-					
-					*/
-					return;
-				}
+						TransitionManager.QueueSceneChange(thisPage.videoFilePath);
+						TransitionManager.StartTransition(new()
+						{
+							color = Colors.Black,
+							inSpeed = .5f,
+						});
 
-				if (thisPage.track != null)
-				{
-					// TODO Improve audio controls or actually have the bgm loop.
-					bgm.Stop();
-					player.Stream = thisPage.track;
-					player.loopEndPosition = (float)player.Stream.GetLength() - 1f;
-					player.Play();
+						*/
+						return;
 				}
 			}
 
 			return;
 		}
 
-		if (menuFocus == MenuFocus.Image)
+		if (menuStatus == MenuStatusEnum.Image)
 		{
 			isNavigationVisible = !isNavigationVisible;
 			navigationAnimator.Play(isNavigationVisible ? "show" : "hide");
@@ -252,7 +264,7 @@ public partial class SpecialBook : Menu
 
 	protected override void Cancel()
 	{
-		if (menuFocus == MenuFocus.Chapter)
+		if (menuStatus == MenuStatusEnum.Chapter)
 		{
 			// Reset menu memory
 			menuMemory[MemoryKeys.SpecialBook] = 0;
@@ -262,36 +274,36 @@ public partial class SpecialBook : Menu
 			return;
 		}
 
-		if (menuFocus == MenuFocus.Page)
+		if (menuStatus == MenuStatusEnum.Page)
 		{
 			tabs[tabSelection].SelectNoMove();
 			windows[pageSelection].Deselect();
-			menuFocus = MenuFocus.Chapter;
+			menuStatus = MenuStatusEnum.Chapter;
 
 			chapterName.Visible = true;
 			textboxTitle.Visible = false;
 			sfxCategorySelect.Play();
 		}
 
-		if (menuFocus == MenuFocus.Description)
+		if (menuStatus == MenuStatusEnum.Description)
 		{
 			animator.Play("hide_description");
-			menuFocus = MenuFocus.Page;
+			menuStatus = MenuStatusEnum.Page;
 			sfxCancel.Play();
 		}
 
-		if (menuFocus == MenuFocus.Image)
+		if (menuStatus == MenuStatusEnum.Image)
 		{
 			if (!playRandom)
 			{
 				animator.Play("hide_fullimage");
-				menuFocus = MenuFocus.Description;
+				menuStatus = MenuStatusEnum.Description;
 			}
 			else
 			{
 				animator.Play("hide_playrandom");
 				randomAnimator.Stop();
-				menuFocus = MenuFocus.Page;
+				menuStatus = MenuStatusEnum.Page;
 				playRandom = false;
 				tabs[tabSelection].DeselectNoGlow();
 				windows[pageSelection].Select();
@@ -303,19 +315,19 @@ public partial class SpecialBook : Menu
 
 	private void MenuControls(Vector2I input)
 	{
-		if (menuFocus == MenuFocus.Chapter)
+		if (menuStatus == MenuStatusEnum.Chapter)
 		{
 			ProcessChapterSelection(input);
 			return;
 		}
 
-		if (menuFocus == MenuFocus.Page)
+		if (menuStatus == MenuStatusEnum.Page)
 		{
 			ProcessPageSelection(input);
 			return;
 		}
 
-		if (menuFocus == MenuFocus.Description || menuFocus == MenuFocus.Image)
+		if (menuStatus == MenuStatusEnum.Description || menuStatus == MenuStatusEnum.Image)
 		{
 			if (input.X == 0 || playRandom)
 				return;
@@ -333,7 +345,7 @@ public partial class SpecialBook : Menu
 					sfxOpen.Play();
 				}
 
-			} while (!IsValid(GetPage(tabSelection, pageSelection), menuFocus)); // Skips over every page we don't have unlocked. If we're on the full view, skips over movies and music too
+			} while (!IsValid(GetActivePage, menuStatus)); // Skips over every page we don't have unlocked. If we're on the full view, skips over movies and music too
 
 			if (ogChapter != tabSelection)
 			{
@@ -347,8 +359,8 @@ public partial class SpecialBook : Menu
 				sfxCancel.Play();
 
 			windows[pageSelection].Select();
-			LoadChapter();
-			LoadPage(GetPage(tabSelection, pageSelection));
+			LoadChapterData();
+			LoadPageData();
 		}
 	}
 
@@ -360,7 +372,7 @@ public partial class SpecialBook : Menu
 			tabSelection = WrapSelection(tabSelection + (int)input.X, 16);
 			tabs[tabSelection].Select();
 
-			LoadChapter();
+			LoadChapterData();
 			sfxCategorySelect.Play();
 			return;
 		}
@@ -368,13 +380,13 @@ public partial class SpecialBook : Menu
 		if (input.Y > 0) // Move down to the pages
 		{
 			tabs[tabSelection].DeselectNoGlow();
-			menuFocus = MenuFocus.Page;
+			menuStatus = MenuStatusEnum.Page;
 			pageSelection = 0;
 			windows[pageSelection].Select();
 			chapterName.Visible = false;
 			textboxTitle.Visible = true;
 
-			LoadPage(GetPage(tabSelection, pageSelection));
+			LoadPageData();
 			sfxSelect.Play();
 		}
 	}
@@ -393,7 +405,7 @@ public partial class SpecialBook : Menu
 				pageSelection = WrapSelection(pageSelection + input.X, 14, 10);
 
 			windows[pageSelection].Select();
-			LoadPage(GetPage(tabSelection, pageSelection));
+			LoadPageData();
 
 			sfxSelect.Play();
 		}
@@ -404,7 +416,7 @@ public partial class SpecialBook : Menu
 			if (input.Y < 0 && pageSelection <= 4) // If we are going up on the first row
 			{
 				tabs[tabSelection].SelectNoMove();
-				menuFocus = MenuFocus.Chapter;
+				menuStatus = MenuStatusEnum.Chapter;
 				chapterName.Visible = true;
 				textboxTitle.Visible = false;
 				sfxCategorySelect.Play();
@@ -413,7 +425,7 @@ public partial class SpecialBook : Menu
 
 			pageSelection = WrapSelection(pageSelection + (5 * input.Y), 14, pageSelection - 10); // Wraps the selection vertically
 			windows[pageSelection].Select();
-			LoadPage(GetPage(tabSelection, pageSelection));
+			LoadPageData();
 
 			sfxSelect.Play();
 		}
@@ -426,19 +438,19 @@ public partial class SpecialBook : Menu
 		do
 		{
 			seekRandom = WrapSelection(seekRandom + 1, randomPages.Count);
-		} while (!IsValid((OldBookPage)randomPages[seekRandom], menuFocus));
+		} while (!IsValid((SpecialBookPage)randomPages[seekRandom], menuStatus));
 
-		tabSelection = GetChapterFromPage((OldBookPage)randomPages[seekRandom]);
-		pageSelection = GetSelectionFromPage((OldBookPage)randomPages[seekRandom]);
+		tabSelection = GetChapterFromPage((SpecialBookPage)randomPages[seekRandom]);
+		pageSelection = GetSelectionFromPage((SpecialBookPage)randomPages[seekRandom]);
 
 		tabs[tabSelection].Select();
 		windows[pageSelection].Select();
 
-		LoadChapter();
-		LoadPage((OldBookPage)randomPages[seekRandom]);
+		LoadChapterData();
+		LoadPageData((SpecialBookPage)randomPages[seekRandom]);
 	}
 
-	private int GetSelectionFromPage(OldBookPage page)
+	private int GetSelectionFromPage(SpecialBookPage page)
 	{
 		foreach (SpecialBookTab tab in tabs)
 		{
@@ -452,11 +464,11 @@ public partial class SpecialBook : Menu
 		return 0;
 	}
 
-	private int GetChapterFromPage(OldBookPage page)
+	private int GetChapterFromPage(SpecialBookPage page)
 	{
 		for (int i = 0; i < tabs.Length; i++)
 		{
-			foreach (OldBookPage p in tabs[i].PageResources)
+			foreach (SpecialBookPage p in tabs[i].PageResources)
 			{
 				if (page == p)
 					return i;
@@ -473,7 +485,7 @@ public partial class SpecialBook : Menu
 			// Populate the random page list
 			foreach (SpecialBookTab tab in tabs)
 			{
-				foreach (OldBookPage page in tab.PageResources)
+				foreach (SpecialBookPage page in tab.PageResources)
 					randomPages.Add(page);
 			}
 		}
@@ -485,116 +497,22 @@ public partial class SpecialBook : Menu
 	/// Checks if we can view a page.
 	/// </summary>
 	/// <returns> Returns true if the page is viewable. </returns>
-	private bool IsValid(OldBookPage page, MenuFocus focus)
+	private bool IsValid(SpecialBookPage page, MenuStatusEnum focus)
 	{
-		if (!page.Unlocked)
+		if (!page.IsUnlocked())
 			return false;
 
-		if (focus == MenuFocus.Page || focus == MenuFocus.Description)
-		{
+		if (focus == MenuStatusEnum.Page || focus == MenuStatusEnum.Description)
 			return true;
-		}
-		else if (focus == MenuFocus.Image)
-		{
-			if (page.fullImage != null) // If this is an image, then we can view it
-				return true;
-		}
+
+		if (focus == MenuStatusEnum.Image && page.PageType == SpecialBookPage.PageTypeEnum.Image) // If this is an image, then we can view it
+			return true;
+
 		return false;
 	}
 
-	private void LoadSaveData()
-	{
-		SaveManager.LoadGameData();
-
-		foreach (SpecialBookTab tab in tabs)
-		{
-			foreach (OldBookPage page in tab.PageResources)
-			{
-				// Revert page to locked and unlock based on save data
-				page.Unlocked = false;
-
-				if (page.unlockClear)
-				{
-					foreach (SaveManager.GameData data in SaveManager.GameSaveSlots)
-					{
-						if (data.GetRank((StringName)page.StageUnlock()) > 0) // If we have at least a bronze medal
-						{
-							page.Unlocked = true;
-							break;
-						}
-					}
-				}
-
-				if (page.unlockGold)
-				{
-					foreach (SaveManager.GameData data in SaveManager.GameSaveSlots)
-					{
-						if (data.GetRank((StringName)page.StageUnlock()) > 2) // If we have a gold medal
-						{
-							page.Unlocked = true;
-							break;
-						}
-					}
-				}
-
-				if (page.unlockSilver)
-				{
-					int silver = 0;
-					for (int world = 0; world < 8; world++)
-					{
-						for (int level = 1; level < 30; level++) // Iterate through each level in each world
-						{
-							foreach (SaveManager.GameData data in SaveManager.GameSaveSlots) // Search each save file for that level
-							{
-								if (page.StageUnlock((SaveManager.WorldEnum)world, level) != "")
-								{
-									if (data.GetRank((StringName)page.StageUnlock((SaveManager.WorldEnum)world, level)) > 1) // If we ahve a silver medal, add one to the counter, and stop searching saves
-									{
-										silver++;
-										break;
-									}
-								}
-							}
-							if (silver >= page.unlockSilverMedalRequirement)
-								break;
-						}
-						if (silver >= page.unlockSilverMedalRequirement)
-						{
-							page.Unlocked = true;
-							break;
-						}
-					}
-				}
-
-				if (page.unlockAllStage)
-				{
-					int gold = 0;
-					for (int level = 1; level < page.NumStages(page.unlockWorld) + 1; level++) // Go through each level
-					{
-						foreach (SaveManager.GameData data in SaveManager.GameSaveSlots) // Search each save file for that level
-						{
-							if (data.GetRank((StringName)page.StageUnlock(page.unlockWorld, level)) == 3) // If we have a gold medal, add one to the counter, and stop searching saves
-							{
-								gold++;
-								break;
-							}
-						}
-						if (gold == page.NumStages(page.unlockWorld))
-						{
-							page.Unlocked = true;
-							break;
-						}
-
-					}
-				}
-			}
-		}
-	}
-
-	private OldBookPage GetPage(int chapter, int page) => tabs[chapter].PageResources[page];
-
 	/// <summary> Loads a chapter based on the current chapterSelection. </summary>
-	private void LoadChapter()
+	private void LoadChapterData()
 	{
 		SpecialBookTab tab = tabs[tabSelection];
 		chapterLabel.Text = Tr("spb_chapter") + " " + (tabSelection + 1);
@@ -603,7 +521,7 @@ public partial class SpecialBook : Menu
 		// Load preview images
 		for (int i = 0; i < tab.PageResources.Length; i++)
 		{
-			if (tab.PageResources[i] != null && tab.PageResources[i].Unlocked)
+			if (tab.PageResources[i] != null && tab.PageResources[i].IsUnlocked())
 			{
 				thumbnails[i].Texture = tab.PageThumbnail;
 				continue;
@@ -613,27 +531,30 @@ public partial class SpecialBook : Menu
 		}
 	}
 
-	private void LoadPage(OldBookPage page)
+	private void LoadPageData(SpecialBookPage page = null)
 	{
+		if (page == null)
+			page = GetActivePage;
+
 		menuMemory[MemoryKeys.SpecialBook] = (15 * tabSelection) + pageSelection;
-		if (page.fullImage != null)
+		switch (page.PageType)
 		{
-			navZoom.Visible = true;
-			navPlay.Visible = false;
-		}
-		else if (page.track != null)
-		{
-			navZoom.Visible = false;
-			navPlay.Visible = true;
-		}
-		else if (!string.IsNullOrEmpty(page.videoFilePath))
-		{
-			// TODO Delete this block and combine the condition to the previous block with an OR to show the prompt for cutscenes
-			navZoom.Visible = false;
-			navPlay.Visible = false;
+			case SpecialBookPage.PageTypeEnum.Image:
+				navZoom.Visible = true;
+				navPlay.Visible = false;
+				break;
+			case SpecialBookPage.PageTypeEnum.Music:
+				navZoom.Visible = false;
+				navPlay.Visible = true;
+				break;
+			case SpecialBookPage.PageTypeEnum.Video:
+				navZoom.Visible = false;
+				navPlay.Visible = false;
+				break;
 		}
 
-		if (page.Unlocked)
+		/*
+		if (page.IsUnlocked())
 		{
 			textboxTitle.Text = chapterName.Text + "\n" + Tr(page.name);
 			previewDescription.Text = Tr(page.name.Replace("title", "desc"));
@@ -647,7 +568,7 @@ public partial class SpecialBook : Menu
 		}
 	}
 
-	private string LoadHint(OldBookPage page)
+	private string LoadHint(SpecialBookPage page)
 	{
 		if (page.unlockSilver)
 			return Tr("spb_hint_silvermedal").Replace("XX", page.unlockSilverMedalRequirement.ToString());
@@ -662,6 +583,7 @@ public partial class SpecialBook : Menu
 			return Tr("spb_hint_allmission_" + AbbreviateWorld(page.unlockWorld));
 
 		return "???";
+		*/
 	}
 
 	private string AbbreviateWorld(SaveManager.WorldEnum world)
@@ -692,22 +614,12 @@ public partial class SpecialBook : Menu
 		{
 			for (int j = 0; j < windows.Length; j++)
 			{
-				OldBookPage bookPage = GetPage(i, j);
-				if (bookPage.Unlocked == true && IsValid(bookPage, MenuFocus.Image))
+				SpecialBookPage bookPage = tabs[i].PageResources[j];
+				if (bookPage.IsUnlocked() && bookPage.PageType == SpecialBookPage.PageTypeEnum.Image)
 					num++;
 			}
 		}
 
 		return num;
-	}
-
-	/// <summary> A debug method that unlocks all the pages for testing. </summary>
-	private void UnlockAll()
-	{
-		for (int i = 0; i < tabs.Length; i++)
-		{
-			for (int j = 0; j < windows.Length; j++)
-				GetPage(i, j).Unlocked = true;
-		}
 	}
 }

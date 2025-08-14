@@ -165,9 +165,6 @@ public partial class SpecialBookPage : Resource
 		return false;
 	}
 
-	public string GetLocalizedTitleKey => $"spb_title_{LocalizationKey}";
-	public string GetLocalizedDescriptionKey => $"spb_desc_{LocalizationKey}";
-
 	/// <summary> Constructs a localized string that describes the unlock requirements. </summary>
 	public string GetLocalizedUnlockRequirements()
 	{

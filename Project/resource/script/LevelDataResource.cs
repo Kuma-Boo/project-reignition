@@ -33,6 +33,7 @@ public partial class LevelDataResource : Resource
 		Array<Dictionary> properties =
 		[
 			ExtensionMethods.CreateProperty("Level ID", Variant.Type.StringName),
+			ExtensionMethods.CreateProperty("Level Index", Variant.Type.Int),
 			ExtensionMethods.CreateProperty("Level Path", Variant.Type.String),
 			ExtensionMethods.CreateProperty("Story Event Index", Variant.Type.Int, PropertyHint.Range, "-1,31"),
 			ExtensionMethods.CreateProperty("First Clear Bonus", Variant.Type.Int, PropertyHint.Range, "0,10000"),
@@ -78,6 +79,8 @@ public partial class LevelDataResource : Resource
 		{
 			case "Level ID":
 				return LevelID;
+			case "Level Index":
+				return LevelIndex;
 			case "Level Path":
 				return LevelPath;
 			case "Story Event Index":
@@ -134,6 +137,9 @@ public partial class LevelDataResource : Resource
 		{
 			case "Level ID":
 				LevelID = (StringName)value;
+				break;
+			case "Level Index":
+				LevelIndex = (int)value;
 				break;
 			case "Level Path":
 				LevelPath = (string)value;
@@ -214,6 +220,8 @@ public partial class LevelDataResource : Resource
 
 	/// <summary> Level's id - used for save data. </summary>
 	public StringName LevelID { get; private set; }
+	/// <summary> The index of the level in the mission select screen. Used by the Special Book. </summary>
+	public int LevelIndex { get; private set; }
 	/// <summary> Path to the level's scene. </summary>
 	public string LevelPath { get; private set; }
 	/// <summary> Story event index to play after completing the stage. Set to -1 if no story event is meant to be played. </summary>

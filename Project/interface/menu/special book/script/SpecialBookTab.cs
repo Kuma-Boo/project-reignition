@@ -26,7 +26,7 @@ public partial class SpecialBookTab : Control
 	/// <summary> The thumbnail used to preview this chapter's pages. </summary>
 	[Export] public Texture2D PageThumbnail { get; private set; }
 	/// <summary> An array of all the pages associated with this chapter. </summary>
-	[Export] public OldBookPage[] PageResources { get; private set; }
+	[Export] public SpecialBookPage[] PageResources { get; private set; }
 	/// <summary> Path containing all this chapter's textures. </summary>
 	[Export(PropertyHint.Dir)] private string pageTexturePath;
 
