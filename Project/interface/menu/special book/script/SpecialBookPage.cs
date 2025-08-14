@@ -2,7 +2,7 @@ using Godot;
 using Project.Core;
 
 [GlobalClass]
-public partial class BookPage : Resource
+public partial class SpecialBookPage : Resource
 {
 	[Export] public string name;
 

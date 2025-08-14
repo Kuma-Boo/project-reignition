@@ -15,27 +15,36 @@ public partial class SpecialBookTab : Control
 		Diary
 	};
 
+	[ExportGroup("Tab Settings")]
 	[Export] public ChapterType chapterType;
+	[Export] private Texture2D[] unselectedTextures;
+	[Export] private Texture2D[] selectedTextures;
 	[Export] private TextureRect tabTextureRect;
-	[Export] private Texture2D[] tabs;
-	[Export] private Texture2D[] tabsSelected;
-	[Export] private AnimationPlayer tabAnimator;
+	[Export] private AnimationPlayer animator;
+
+	[ExportGroup("Page Settings")]
+	/// <summary> The thumbnail used to preview this chapter's pages. </summary>
+	[Export] public Texture2D PageThumbnail { get; private set; }
+	/// <summary> An array of all the pages associated with this chapter. </summary>
+	[Export] public SpecialBookPage[] PageResources { get; private set; }
+	/// <summary> Path containing all this chapter's textures. </summary>
+	[Export(PropertyHint.Dir)] private string pageTexturePath;
 
 	public void ChangeTabImage(bool isSelected)
 	{
-		tabTextureRect.Texture = isSelected ? tabsSelected[(int)chapterType] : tabs[(int)chapterType];
+		tabTextureRect.Texture = isSelected ? selectedTextures[(int)chapterType] : unselectedTextures[(int)chapterType];
 	}
 
-	public void Select() => tabAnimator.Play("select");
+	public void Select() => animator.Play("select");
 
-	public void SelectNoGlow() => tabAnimator.Play("select_noglow");
+	public void SelectNoGlow() => animator.Play("select_noglow");
 
-	public void SelectNoSFX() => tabAnimator.Play("select_nosfx");
+	public void SelectNoSFX() => animator.Play("select_nosfx");
 
-	public void SelectNoMove() => tabAnimator.Play("select_nomove");
+	public void SelectNoMove() => animator.Play("select_nomove");
 
-	public void Deselect() => tabAnimator.Play("deselect");
+	public void Deselect() => animator.Play("deselect");
 
-	public void DeselectNoGlow() => tabAnimator.Play("hide_glow");
+	public void DeselectNoGlow() => animator.Play("hide_glow");
 
 }
