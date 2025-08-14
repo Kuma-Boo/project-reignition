@@ -1,9 +1,13 @@
 using Godot;
+using Godot.Collections;
 using Project.Core;
+
+namespace Project.Interface.Menus;
 
 [GlobalClass]
 public partial class SpecialBookPage : Resource
 {
+
 	[Export] public string name;
 
 	/// <summary> Has the player unlocked this page?. </summary>

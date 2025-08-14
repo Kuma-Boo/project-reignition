@@ -1331,5 +1331,14 @@ public partial class SaveManager : Node
 			return data;
 		}
 	}
+
+	public class SharedGameData
+	{
+		/// <summary> Total amount of time the game has been on, in seconds. </summary>
+		public float playTime;
+
+		/// <summary> List of big cameos unlocked. </summary>
+		public Array<string> bigCameos = [];
+	}
 	#endregion
 }
