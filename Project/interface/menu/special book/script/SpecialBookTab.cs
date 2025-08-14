@@ -15,18 +15,16 @@ public partial class SpecialBookTab : Control
 		Diary
 	};
 
-	[Export] public ChapterType thisChapterType;
-	[Export] private TextureRect thisTab;
+	[Export] public ChapterType chapterType;
+	[Export] private TextureRect tabTextureRect;
 	[Export] private Texture2D[] tabs;
 	[Export] private Texture2D[] tabsSelected;
 	[Export] private AnimationPlayer tabAnimator;
 
 	public void ChangeTabImage(bool isSelected)
 	{
-		thisTab.Texture = isSelected ? tabsSelected[(int)thisChapterType] : tabs[(int)thisChapterType];
+		tabTextureRect.Texture = isSelected ? tabsSelected[(int)chapterType] : tabs[(int)chapterType];
 	}
-
-	public void ChangeTab() => tabAnimator.Play("show_tab");
 
 	public void Select() => tabAnimator.Play("select");
 

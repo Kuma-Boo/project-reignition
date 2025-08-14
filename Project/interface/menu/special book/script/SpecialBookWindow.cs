@@ -2,19 +2,19 @@ using Godot;
 
 namespace Project.Interface.Menus;
 
-public partial class SpecialBookWindow : Control
+public partial class SpecialBookWindow : NinePatchRect
 {
 	[Export] private Label numberLabel;
 	[Export] private AnimationPlayer windowAnimator;
-	[Export] private AnimationPlayer windowAnimator2;
+	[Export] private TextureRect textureRect;
+	private Texture questionTexture;
 
-	public override void _Ready()
+	public void Initialize()
 	{
-		// Update the page's number
-		numberLabel.Text = (GetIndex() + 1).ToString();
+		questionTexture = textureRect.Texture;
+		numberLabel.Text = (GetIndex() + 1).ToString(); // Update the page's number
 	}
 
-	public void Glow() => windowAnimator2.Play("glow");
 	public void Select() => windowAnimator.Play("select");
 	public void Deselect() => windowAnimator.Play("RESET");
 }

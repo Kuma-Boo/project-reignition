@@ -427,7 +427,7 @@ tracks/4/keys = {
 
 [sub_resource type="Animation" id="Animation_xi0dd"]
 resource_name = "show_tab"
-length = 0.1
+length = 0.001
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -504,7 +504,7 @@ _data = {
 &"glow": SubResource("Animation_it8bj")
 }
 
-[node name="SpecialBookTab" type="Control" node_paths=PackedStringArray("thisTab", "tabAnimator")]
+[node name="SpecialBookTab" type="Control" node_paths=PackedStringArray("tabTextureRect", "tabAnimator")]
 custom_minimum_size = Vector2(70, 160)
 layout_mode = 3
 anchor_top = -0.014
@@ -517,7 +517,7 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.8, 0.8)
 script = ExtResource("1_5f7dq")
-thisTab = NodePath("Tab")
+tabTextureRect = NodePath("Tab")
 tabs = Array[Texture]([ExtResource("5_fevaw"), ExtResource("6_it8bj"), ExtResource("7_it8bj"), ExtResource("3_x0vye"), ExtResource("8_it8bj"), ExtResource("9_it8bj"), ExtResource("4_it8bj")])
 tabsSelected = Array[Texture]([ExtResource("11_r4vcw"), ExtResource("12_exvd4"), ExtResource("13_o8hte"), ExtResource("9_qagm4"), ExtResource("14_46chu"), ExtResource("15_g8c53"), ExtResource("10_mu2et")])
 tabAnimator = NodePath("AnimationPlayer")
@@ -534,16 +534,17 @@ stretch_mode = 4
 
 [node name="Glow" type="Sprite2D" parent="Tab"]
 visible = false
-modulate = Color(0.698373, 1, 0.813158, 0.764706)
+modulate = Color(0.49192783, 1, 0.70510334, 0.764706)
 z_index = -1
 position = Vector2(34.9375, 81.25)
-scale = Vector2(1.23776, 1.23776)
+scale = Vector2(1.1084536, 1.1084536)
 texture = ExtResource("2_it8bj")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_5f7dq")
 }
+autoplay = "show_tab"
 
 [node name="AnimationPlayer2" type="AnimationPlayer" parent="."]
 libraries = {

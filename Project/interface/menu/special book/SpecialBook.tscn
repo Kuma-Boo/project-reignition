@@ -1,8 +1,11 @@
-[gd_scene load_steps=57 format=3 uid="uid://cfxpl43xw0rn6"]
+[gd_scene load_steps=59 format=3 uid="uid://cfxpl43xw0rn6"]
 
 [ext_resource type="Script" uid="uid://cvy63h3pgw1qv" path="res://interface/menu/special book/script/SpecialBook.cs" id="1_b5eh1"]
+[ext_resource type="Script" uid="uid://v0xr7h3y4olt" path="res://interface/menu/MenuAspectController.cs" id="1_wuupq"]
 [ext_resource type="Resource" uid="uid://c8780f2wj6f5c" path="res://resource/special book/Chapters/Chapter1.tres" id="2_6b0v7"]
 [ext_resource type="PackedScene" uid="uid://du2vludpypmy3" path="res://interface/menu/special book/SpecialBookTab.tscn" id="2_33lvu"]
+[ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/texture/background.png" id="2_jftlp"]
+[ext_resource type="Texture2D" uid="uid://k8exixourkta" path="res://interface/menu/main/texture/char.png" id="3_4b6ew"]
 [ext_resource type="PackedScene" uid="uid://bwqgjo2ywq68m" path="res://interface/menu/special book/SpecialBookWindow.tscn" id="3_5sbsj"]
 [ext_resource type="Resource" uid="uid://ly0we2b1ocv7" path="res://resource/special book/Chapters/Chapter2.tres" id="3_sqodb"]
 [ext_resource type="Resource" uid="uid://bbhdfqo1vdy2b" path="res://resource/special book/Chapters/Chapter3.tres" id="4_m7bbf"]
@@ -24,21 +27,20 @@
 [ext_resource type="Resource" uid="uid://cy8j4bo7fpacn" path="res://resource/special book/Chapters/Chapter13.tres" id="14_4b6ew"]
 [ext_resource type="Resource" uid="uid://1e4vk10mtpid" path="res://resource/special book/Chapters/Chapter14.tres" id="15_mfyml"]
 [ext_resource type="Resource" uid="uid://c2jigdei60fh2" path="res://resource/special book/Chapters/Chapter15.tres" id="16_5mj2i"]
-[ext_resource type="Texture2D" uid="uid://baednxmvl8scr" path="res://interface/menu/special book/texture/book objects/background.png" id="17_gni62"]
 [ext_resource type="Resource" uid="uid://bbvsrb8un6kyg" path="res://resource/special book/Chapters/Chapter16.tres" id="17_ynjut"]
 [ext_resource type="Texture2D" uid="uid://csj3l57u3u4vk" path="res://interface/menu/special book/texture/book objects/page.png" id="18_oi1fa"]
-[ext_resource type="Texture2D" uid="uid://d2wv7ibj4uhbt" path="res://interface/menu/special book/texture/book objects/separation_mask.png" id="19_gni62"]
+[ext_resource type="Texture2D" uid="uid://d2wv7ibj4uhbt" path="res://interface/menu/special book/texture/book objects/mask.png" id="19_gni62"]
 [ext_resource type="FontFile" uid="uid://d1bvfghhgreq7" path="res://interface/font/otf/Rodin DB.otf" id="20_w41nb"]
 [ext_resource type="LabelSettings" uid="uid://bqrydgixkulbv" path="res://interface/font/NavigationFont.tres" id="21_sqodb"]
 [ext_resource type="LabelSettings" uid="uid://d2esxoalpgwjg" path="res://interface/font/MenuText.tres" id="30_m7bbf"]
 [ext_resource type="Texture2D" uid="uid://cq02cwtfpyp4e" path="res://interface/menu/special book/texture/chapter 2/C2_14Preview.png" id="31_ior2v"]
-[ext_resource type="Texture2D" uid="uid://ptwaihnc347f" path="res://interface/menu/special book/texture/chapter 1/C1_03.png" id="32_1hqjm"]
 [ext_resource type="PackedScene" uid="uid://crwawg2ivy3xd" path="res://interface/menu/NavigationButton.tscn" id="35_6o01v"]
 [ext_resource type="AudioStream" uid="uid://crv7bkfoihdpv" path="res://sound/ost/bonus disc/Slideshow Special Book.mp3" id="35_ior2v"]
 [ext_resource type="AudioStream" uid="uid://d3o0o85sotlrf" path="res://sound/sfx/system/special book cancel.wav" id="37_ildlb"]
 [ext_resource type="AudioStream" uid="uid://pl5vnbme4wmg" path="res://sound/sfx/system/special book select.wav" id="38_wuupq"]
 [ext_resource type="AudioStream" uid="uid://ysuyyr6346w6" path="res://sound/sfx/system/special book confirm.wav" id="39_jftlp"]
 [ext_resource type="AudioStream" uid="uid://dt50f72s1ukxq" path="res://sound/sfx/system/special book category select.wav" id="40_4b6ew"]
+[ext_resource type="Texture2D" uid="uid://rgqw6y2ng844" path="res://interface/menu/special book/texture/chapter 1/C1_01.png" id="40_jftlp"]
 
 [sub_resource type="Animation" id="Animation_cyesu"]
 resource_name = "RESET"
@@ -69,7 +71,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Book/Pages:modulate")
+tracks/2/path = NodePath("Book/Windows:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -153,7 +155,6 @@ tracks/8/keys = {
 
 [sub_resource type="Animation" id="Animation_ior2v"]
 resource_name = "hide"
-length = 2.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -210,7 +211,7 @@ tracks/3/keys = {
 tracks/4/type = "method"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("MusicPlayer")
+tracks/4/path = NodePath("../../BGM")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -224,7 +225,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Book/Pages:modulate")
+tracks/5/path = NodePath("Book/Windows:modulate")
 tracks/5/interp = 2
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -251,7 +252,7 @@ resource_name = "hide_description"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Book/Pages:modulate")
+tracks/0/path = NodePath("Book/Windows:modulate")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -411,7 +412,7 @@ resource_name = "hide_playrandom"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Book/Pages:modulate")
+tracks/0/path = NodePath("Book/Windows:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -533,7 +534,7 @@ tracks/2/keys = {
 tracks/3/type = "method"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("SFX/Open")
+tracks/3/path = NodePath("../../SFX/Open")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -559,7 +560,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Book/Pages:modulate")
+tracks/5/path = NodePath("Book/Windows:modulate")
 tracks/5/interp = 2
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -587,7 +588,7 @@ length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Book/Pages:modulate")
+tracks/0/path = NodePath("Book/Windows:modulate")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -747,7 +748,7 @@ resource_name = "show_playrandom"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Book/Pages:modulate")
+tracks/0/path = NodePath("Book/Windows:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -980,8 +981,43 @@ _data = {
 &"show": SubResource("Animation_mfyml")
 }
 
-[node name="SpecialBook" type="Control" node_paths=PackedStringArray("tabs", "pages", "previewImages", "chapterName", "chapterLabel", "textboxTitle", "previewDescription", "previewImage", "previewNumber", "fullImage", "navigationAnimator", "navZoom", "navPlay", "player", "sfxOpen", "sfxSelect", "sfxCancel", "sfxConfirm", "sfxCategorySelect", "randomAnimator", "bgm", "animator")]
-layout_mode = 3
+[node name="SpecialBook" type="AspectRatioContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+ratio = 1.7778
+stretch_mode = 1
+alignment_horizontal = 0
+script = ExtResource("1_wuupq")
+
+[node name="Clip" type="ColorRect" parent="."]
+clip_children = 1
+layout_mode = 2
+
+[node name="Background" type="TextureRect" parent="Clip"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_jftlp")
+expand_mode = 2
+stretch_mode = 6
+
+[node name="Char" type="TextureRect" parent="Clip"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_4b6ew")
+
+[node name="Book" type="Control" parent="Clip" node_paths=PackedStringArray("tabs", "windows", "previewImages", "chapterName", "chapterLabel", "textboxTitle", "previewDescription", "previewImage", "previewNumber", "fullImage", "navigationAnimator", "navZoom", "navPlay", "player", "sfxOpen", "sfxSelect", "sfxCancel", "sfxConfirm", "sfxCategorySelect", "randomAnimator", "animator")]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -989,8 +1025,8 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_b5eh1")
 tabs = [NodePath("Book/Tabs/History"), NodePath("Book/Tabs/Illustration1"), NodePath("Book/Tabs/Illustration2"), NodePath("Book/Tabs/Illustration3"), NodePath("Book/Tabs/Illustration4"), NodePath("Book/Tabs/Illustration5"), NodePath("Book/Tabs/Illustration6"), NodePath("Book/Tabs/Movie1"), NodePath("Book/Tabs/Movie2"), NodePath("Book/Tabs/Development"), NodePath("Book/Tabs/Music1"), NodePath("Book/Tabs/Music2"), NodePath("Book/Tabs/Music3"), NodePath("Book/Tabs/Achievement1"), NodePath("Book/Tabs/Achievement2"), NodePath("Book/Tabs/Diary")]
-pages = [NodePath("Book/Pages/SpecialBookWindow1"), NodePath("Book/Pages/SpecialBookWindow2"), NodePath("Book/Pages/SpecialBookWindow3"), NodePath("Book/Pages/SpecialBookWindow4"), NodePath("Book/Pages/SpecialBookWindow5"), NodePath("Book/Pages/SpecialBookWindow6"), NodePath("Book/Pages/SpecialBookWindow7"), NodePath("Book/Pages/SpecialBookWindow8"), NodePath("Book/Pages/SpecialBookWindow9"), NodePath("Book/Pages/SpecialBookWindow10"), NodePath("Book/Pages/SpecialBookWindow11"), NodePath("Book/Pages/SpecialBookWindow12"), NodePath("Book/Pages/SpecialBookWindow13"), NodePath("Book/Pages/SpecialBookWindow14"), NodePath("Book/Pages/SpecialBookWindow15")]
-previewImages = [NodePath("Book/Pages/SpecialBookWindow1/Preview1"), NodePath("Book/Pages/SpecialBookWindow2/Preview2"), NodePath("Book/Pages/SpecialBookWindow3/Preview3"), NodePath("Book/Pages/SpecialBookWindow4/Preview4"), NodePath("Book/Pages/SpecialBookWindow5/Preview5"), NodePath("Book/Pages/SpecialBookWindow6/Preview6"), NodePath("Book/Pages/SpecialBookWindow7/Preview7"), NodePath("Book/Pages/SpecialBookWindow8/Preview8"), NodePath("Book/Pages/SpecialBookWindow9/Preview9"), NodePath("Book/Pages/SpecialBookWindow10/Preview10"), NodePath("Book/Pages/SpecialBookWindow11/Preview11"), NodePath("Book/Pages/SpecialBookWindow12/Preview12"), NodePath("Book/Pages/SpecialBookWindow13/Preview13"), NodePath("Book/Pages/SpecialBookWindow14/Preview14"), NodePath("Book/Pages/SpecialBookWindow15/Preview15")]
+windows = [NodePath("Book/Windows/SpecialBookWindow1"), NodePath("Book/Windows/SpecialBookWindow2"), NodePath("Book/Windows/SpecialBookWindow3"), NodePath("Book/Windows/SpecialBookWindow4"), NodePath("Book/Windows/SpecialBookWindow5"), NodePath("Book/Windows/SpecialBookWindow6"), NodePath("Book/Windows/SpecialBookWindow7"), NodePath("Book/Windows/SpecialBookWindow8"), NodePath("Book/Windows/SpecialBookWindow9"), NodePath("Book/Windows/SpecialBookWindow10"), NodePath("Book/Windows/SpecialBookWindow11"), NodePath("Book/Windows/SpecialBookWindow12"), NodePath("Book/Windows/SpecialBookWindow13"), NodePath("Book/Windows/SpecialBookWindow14"), NodePath("Book/Windows/SpecialBookWindow15")]
+previewImages = [NodePath("Book/Windows/SpecialBookWindow1/Preview1"), NodePath("Book/Windows/SpecialBookWindow2/Preview2"), NodePath("Book/Windows/SpecialBookWindow3/Preview3"), NodePath("Book/Windows/SpecialBookWindow4/Preview4"), NodePath("Book/Windows/SpecialBookWindow5/Preview5"), NodePath("Book/Windows/SpecialBookWindow6/Preview6"), NodePath("Book/Windows/SpecialBookWindow7/Preview7"), NodePath("Book/Windows/SpecialBookWindow8/Preview8"), NodePath("Book/Windows/SpecialBookWindow9/Preview9"), NodePath("Book/Windows/SpecialBookWindow10/Preview10"), NodePath("Book/Windows/SpecialBookWindow11/Preview11"), NodePath("Book/Windows/SpecialBookWindow12/Preview12"), NodePath("Book/Windows/SpecialBookWindow13/Preview13"), NodePath("Book/Windows/SpecialBookWindow14/Preview14"), NodePath("Book/Windows/SpecialBookWindow15/Preview15")]
 chapters = Array[Object]([ExtResource("2_6b0v7"), ExtResource("3_sqodb"), ExtResource("4_m7bbf"), ExtResource("5_fil6e"), ExtResource("6_1hqjm"), ExtResource("7_6o01v"), ExtResource("8_ior2v"), ExtResource("9_wy6kt"), ExtResource("10_pk3ru"), ExtResource("11_ildlb"), ExtResource("12_wuupq"), ExtResource("13_jftlp"), ExtResource("14_4b6ew"), ExtResource("15_mfyml"), ExtResource("16_5mj2i"), ExtResource("17_ynjut")])
 chapterName = NodePath("Book/Textbox/ChapterLabel")
 chapterLabel = NodePath("Book/ChapterLabel")
@@ -1002,34 +1038,30 @@ fullImage = NodePath("FullView/FullImage")
 navigationAnimator = NodePath("NavButtonsFull/NavigationAnimationPlayer")
 navZoom = NodePath("NavigationButtonsBook/Zoom")
 navPlay = NodePath("NavigationButtonsBook/Play")
-player = NodePath("MusicPlayer")
-sfxOpen = NodePath("SFX/Open")
-sfxSelect = NodePath("SFX/Select")
-sfxCancel = NodePath("SFX/Cancel")
-sfxConfirm = NodePath("SFX/Confirm")
-sfxCategorySelect = NodePath("SFX/CategorySelect")
+player = NodePath("../../BGM")
+sfxOpen = NodePath("../../SFX/Open")
+sfxSelect = NodePath("../../SFX/Select")
+sfxCancel = NodePath("../../SFX/Cancel")
+sfxConfirm = NodePath("../../SFX/Confirm")
+sfxCategorySelect = NodePath("../../SFX/CategorySelect")
 randomAnimator = NodePath("RandomAnimationPlayer")
-bgm = NodePath("SpecialBookBGM")
 animator = NodePath("AnimationPlayer")
 isProcessing = true
 
-[node name="Background" type="TextureRect" parent="."]
-layout_mode = 0
-offset_right = 1920.0
-offset_bottom = 1080.0
-texture = ExtResource("17_gni62")
-
-[node name="Book" type="TextureRect" parent="."]
+[node name="Book" type="TextureRect" parent="Clip/Book"]
 z_index = 1
-layout_mode = 0
-offset_left = 252.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -708.0
 offset_top = 177.0
-offset_right = 1584.0
+offset_right = 624.0
 offset_bottom = 1003.0
 texture = ExtResource("18_oi1fa")
 stretch_mode = 4
 
-[node name="Mask" type="TextureRect" parent="Book"]
+[node name="Mask" type="TextureRect" parent="Clip/Book/Book"]
 z_index = -1
 layout_mode = 0
 offset_left = -74.0
@@ -1038,7 +1070,7 @@ offset_right = 1414.0
 offset_bottom = 896.0
 texture = ExtResource("19_gni62")
 
-[node name="ChapterLabel" type="Label" parent="Book"]
+[node name="ChapterLabel" type="Label" parent="Clip/Book/Book"]
 layout_mode = 0
 offset_left = 201.0
 offset_top = 36.0
@@ -1054,7 +1086,7 @@ label_settings = ExtResource("21_sqodb")
 vertical_alignment = 1
 uppercase = true
 
-[node name="Pages" type="GridContainer" parent="Book"]
+[node name="Windows" type="GridContainer" parent="Clip/Book/Book"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_left = 196.0
@@ -1065,142 +1097,142 @@ theme_override_constants/h_separation = 23
 theme_override_constants/v_separation = 23
 columns = 5
 
-[node name="SpecialBookWindow1" parent="Book/Pages" instance=ExtResource("3_5sbsj")]
+[node name="SpecialBookWindow1" parent="Clip/Book/Book/Windows" instance=ExtResource("3_5sbsj")]
 layout_mode = 2
 
-[node name="Preview1" type="Sprite2D" parent="Book/Pages/SpecialBookWindow1"]
+[node name="Preview1" type="Sprite2D" parent="Clip/Book/Book/Windows/SpecialBookWindow1"]
 position = Vector2(93, 62)
 scale = Vector2(2.1, 2.1)
 region_enabled = true
 region_rect = Rect2(0, 0, 77, 47)
 
-[node name="SpecialBookWindow2" parent="Book/Pages" instance=ExtResource("3_5sbsj")]
+[node name="SpecialBookWindow2" parent="Clip/Book/Book/Windows" instance=ExtResource("3_5sbsj")]
 layout_mode = 2
 
-[node name="Preview2" type="Sprite2D" parent="Book/Pages/SpecialBookWindow2"]
+[node name="Preview2" type="Sprite2D" parent="Clip/Book/Book/Windows/SpecialBookWindow2"]
 position = Vector2(93, 62)
 scale = Vector2(2.1, 2.1)
 region_enabled = true
 region_rect = Rect2(96, 0, 77, 47)
 
-[node name="SpecialBookWindow3" parent="Book/Pages" instance=ExtResource("3_5sbsj")]
+[node name="SpecialBookWindow3" parent="Clip/Book/Book/Windows" instance=ExtResource("3_5sbsj")]
 layout_mode = 2
 
-[node name="Preview3" type="Sprite2D" parent="Book/Pages/SpecialBookWindow3"]
+[node name="Preview3" type="Sprite2D" parent="Clip/Book/Book/Windows/SpecialBookWindow3"]
 position = Vector2(93, 62)
 scale = Vector2(2.1, 2.1)
 region_enabled = true
 region_rect = Rect2(192, 0, 77, 47)
 
-[node name="SpecialBookWindow4" parent="Book/Pages" instance=ExtResource("3_5sbsj")]
+[node name="SpecialBookWindow4" parent="Clip/Book/Book/Windows" instance=ExtResource("3_5sbsj")]
 layout_mode = 2
 
-[node name="Preview4" type="Sprite2D" parent="Book/Pages/SpecialBookWindow4"]
+[node name="Preview4" type="Sprite2D" parent="Clip/Book/Book/Windows/SpecialBookWindow4"]
 position = Vector2(93, 62)
 scale = Vector2(2.1, 2.1)
 region_enabled = true
 region_rect = Rect2(288, 0, 77, 47)
 
-[node name="SpecialBookWindow5" parent="Book/Pages" instance=ExtResource("3_5sbsj")]
+[node name="SpecialBookWindow5" parent="Clip/Book/Book/Windows" instance=ExtResource("3_5sbsj")]
 layout_mode = 2
 
-[node name="Preview5" type="Sprite2D" parent="Book/Pages/SpecialBookWindow5"]
+[node name="Preview5" type="Sprite2D" parent="Clip/Book/Book/Windows/SpecialBookWindow5"]
 position = Vector2(93, 62)
 scale = Vector2(2.1, 2.1)
 region_enabled = true
 region_rect = Rect2(384, 0, 77, 47)
 
-[node name="SpecialBookWindow6" parent="Book/Pages" instance=ExtResource("3_5sbsj")]
+[node name="SpecialBookWindow6" parent="Clip/Book/Book/Windows" instance=ExtResource("3_5sbsj")]
 layout_mode = 2
 
-[node name="Preview6" type="Sprite2D" parent="Book/Pages/SpecialBookWindow6"]
+[node name="Preview6" type="Sprite2D" parent="Clip/Book/Book/Windows/SpecialBookWindow6"]
 position = Vector2(93, 62)
 scale = Vector2(2.1, 2.1)
 region_enabled = true
 region_rect = Rect2(0, 72, 77, 47)
 
-[node name="SpecialBookWindow7" parent="Book/Pages" instance=ExtResource("3_5sbsj")]
+[node name="SpecialBookWindow7" parent="Clip/Book/Book/Windows" instance=ExtResource("3_5sbsj")]
 layout_mode = 2
 
-[node name="Preview7" type="Sprite2D" parent="Book/Pages/SpecialBookWindow7"]
+[node name="Preview7" type="Sprite2D" parent="Clip/Book/Book/Windows/SpecialBookWindow7"]
 position = Vector2(93, 62)
 scale = Vector2(2.1, 2.1)
 region_enabled = true
 region_rect = Rect2(96, 72, 77, 47)
 
-[node name="SpecialBookWindow8" parent="Book/Pages" instance=ExtResource("3_5sbsj")]
+[node name="SpecialBookWindow8" parent="Clip/Book/Book/Windows" instance=ExtResource("3_5sbsj")]
 layout_mode = 2
 
-[node name="Preview8" type="Sprite2D" parent="Book/Pages/SpecialBookWindow8"]
+[node name="Preview8" type="Sprite2D" parent="Clip/Book/Book/Windows/SpecialBookWindow8"]
 position = Vector2(93, 62)
 scale = Vector2(2.1, 2.1)
 region_enabled = true
 region_rect = Rect2(192, 72, 77, 47)
 
-[node name="SpecialBookWindow9" parent="Book/Pages" instance=ExtResource("3_5sbsj")]
+[node name="SpecialBookWindow9" parent="Clip/Book/Book/Windows" instance=ExtResource("3_5sbsj")]
 layout_mode = 2
 
-[node name="Preview9" type="Sprite2D" parent="Book/Pages/SpecialBookWindow9"]
+[node name="Preview9" type="Sprite2D" parent="Clip/Book/Book/Windows/SpecialBookWindow9"]
 position = Vector2(93, 62)
 scale = Vector2(2.1, 2.1)
 region_enabled = true
 region_rect = Rect2(288, 72, 77, 47)
 
-[node name="SpecialBookWindow10" parent="Book/Pages" instance=ExtResource("3_5sbsj")]
+[node name="SpecialBookWindow10" parent="Clip/Book/Book/Windows" instance=ExtResource("3_5sbsj")]
 layout_mode = 2
 
-[node name="Preview10" type="Sprite2D" parent="Book/Pages/SpecialBookWindow10"]
+[node name="Preview10" type="Sprite2D" parent="Clip/Book/Book/Windows/SpecialBookWindow10"]
 position = Vector2(93, 62)
 scale = Vector2(2.1, 2.1)
 region_enabled = true
 region_rect = Rect2(384, 72, 77, 47)
 
-[node name="SpecialBookWindow11" parent="Book/Pages" instance=ExtResource("3_5sbsj")]
+[node name="SpecialBookWindow11" parent="Clip/Book/Book/Windows" instance=ExtResource("3_5sbsj")]
 layout_mode = 2
 
-[node name="Preview11" type="Sprite2D" parent="Book/Pages/SpecialBookWindow11"]
+[node name="Preview11" type="Sprite2D" parent="Clip/Book/Book/Windows/SpecialBookWindow11"]
 position = Vector2(93, 62)
 scale = Vector2(2.1, 2.1)
 region_enabled = true
 region_rect = Rect2(0, 144, 77, 47)
 
-[node name="SpecialBookWindow12" parent="Book/Pages" instance=ExtResource("3_5sbsj")]
+[node name="SpecialBookWindow12" parent="Clip/Book/Book/Windows" instance=ExtResource("3_5sbsj")]
 layout_mode = 2
 
-[node name="Preview12" type="Sprite2D" parent="Book/Pages/SpecialBookWindow12"]
+[node name="Preview12" type="Sprite2D" parent="Clip/Book/Book/Windows/SpecialBookWindow12"]
 position = Vector2(93, 62)
 scale = Vector2(2.1, 2.1)
 region_enabled = true
 region_rect = Rect2(96, 144, 77, 47)
 
-[node name="SpecialBookWindow13" parent="Book/Pages" instance=ExtResource("3_5sbsj")]
+[node name="SpecialBookWindow13" parent="Clip/Book/Book/Windows" instance=ExtResource("3_5sbsj")]
 layout_mode = 2
 
-[node name="Preview13" type="Sprite2D" parent="Book/Pages/SpecialBookWindow13"]
+[node name="Preview13" type="Sprite2D" parent="Clip/Book/Book/Windows/SpecialBookWindow13"]
 position = Vector2(93, 62)
 scale = Vector2(2.1, 2.1)
 region_enabled = true
 region_rect = Rect2(192, 144, 77, 47)
 
-[node name="SpecialBookWindow14" parent="Book/Pages" instance=ExtResource("3_5sbsj")]
+[node name="SpecialBookWindow14" parent="Clip/Book/Book/Windows" instance=ExtResource("3_5sbsj")]
 layout_mode = 2
 
-[node name="Preview14" type="Sprite2D" parent="Book/Pages/SpecialBookWindow14"]
+[node name="Preview14" type="Sprite2D" parent="Clip/Book/Book/Windows/SpecialBookWindow14"]
 position = Vector2(93, 62)
 scale = Vector2(2.1, 2.1)
 region_enabled = true
 region_rect = Rect2(288, 144, 77, 47)
 
-[node name="SpecialBookWindow15" parent="Book/Pages" instance=ExtResource("3_5sbsj")]
+[node name="SpecialBookWindow15" parent="Clip/Book/Book/Windows" instance=ExtResource("3_5sbsj")]
 layout_mode = 2
 
-[node name="Preview15" type="Sprite2D" parent="Book/Pages/SpecialBookWindow15"]
+[node name="Preview15" type="Sprite2D" parent="Clip/Book/Book/Windows/SpecialBookWindow15"]
 position = Vector2(93, 62)
 scale = Vector2(2.1, 2.1)
 region_enabled = true
 region_rect = Rect2(384, 144, 77, 47)
 
-[node name="Tabs" type="HBoxContainer" parent="Book"]
+[node name="Tabs" type="HBoxContainer" parent="Clip/Book/Book"]
 z_index = -1
 layout_mode = 0
 offset_left = 92.0
@@ -1209,76 +1241,77 @@ offset_right = 1277.0
 offset_bottom = -74.0
 theme_override_constants/separation = 5
 
-[node name="History" parent="Book/Tabs" instance=ExtResource("2_33lvu")]
+[node name="History" parent="Clip/Book/Book/Tabs" instance=ExtResource("2_33lvu")]
 layout_mode = 2
 
-[node name="Illustration1" parent="Book/Tabs" instance=ExtResource("2_33lvu")]
+[node name="Illustration1" parent="Clip/Book/Book/Tabs" instance=ExtResource("2_33lvu")]
 layout_mode = 2
-thisChapterType = 1
+chapterType = 1
 
-[node name="Illustration2" parent="Book/Tabs" instance=ExtResource("2_33lvu")]
+[node name="Illustration2" parent="Clip/Book/Book/Tabs" instance=ExtResource("2_33lvu")]
 layout_mode = 2
-thisChapterType = 1
+chapterType = 1
 
-[node name="Illustration3" parent="Book/Tabs" instance=ExtResource("2_33lvu")]
+[node name="Illustration3" parent="Clip/Book/Book/Tabs" instance=ExtResource("2_33lvu")]
 layout_mode = 2
-thisChapterType = 1
+chapterType = 1
 
-[node name="Illustration4" parent="Book/Tabs" instance=ExtResource("2_33lvu")]
+[node name="Illustration4" parent="Clip/Book/Book/Tabs" instance=ExtResource("2_33lvu")]
 layout_mode = 2
-thisChapterType = 1
+chapterType = 1
 
-[node name="Illustration5" parent="Book/Tabs" instance=ExtResource("2_33lvu")]
+[node name="Illustration5" parent="Clip/Book/Book/Tabs" instance=ExtResource("2_33lvu")]
 layout_mode = 2
-thisChapterType = 1
+chapterType = 1
 
-[node name="Illustration6" parent="Book/Tabs" instance=ExtResource("2_33lvu")]
+[node name="Illustration6" parent="Clip/Book/Book/Tabs" instance=ExtResource("2_33lvu")]
 layout_mode = 2
-thisChapterType = 1
+chapterType = 1
 
-[node name="Movie1" parent="Book/Tabs" instance=ExtResource("2_33lvu")]
+[node name="Movie1" parent="Clip/Book/Book/Tabs" instance=ExtResource("2_33lvu")]
 layout_mode = 2
-thisChapterType = 2
+chapterType = 2
 
-[node name="Movie2" parent="Book/Tabs" instance=ExtResource("2_33lvu")]
+[node name="Movie2" parent="Clip/Book/Book/Tabs" instance=ExtResource("2_33lvu")]
 layout_mode = 2
-thisChapterType = 2
+chapterType = 2
 
-[node name="Development" parent="Book/Tabs" instance=ExtResource("2_33lvu")]
+[node name="Development" parent="Clip/Book/Book/Tabs" instance=ExtResource("2_33lvu")]
 layout_mode = 2
-thisChapterType = 3
+chapterType = 3
 
-[node name="Music1" parent="Book/Tabs" instance=ExtResource("2_33lvu")]
+[node name="Music1" parent="Clip/Book/Book/Tabs" instance=ExtResource("2_33lvu")]
 layout_mode = 2
-thisChapterType = 4
+chapterType = 4
 
-[node name="Music2" parent="Book/Tabs" instance=ExtResource("2_33lvu")]
+[node name="Music2" parent="Clip/Book/Book/Tabs" instance=ExtResource("2_33lvu")]
 layout_mode = 2
-thisChapterType = 4
+chapterType = 4
 
-[node name="Music3" parent="Book/Tabs" instance=ExtResource("2_33lvu")]
+[node name="Music3" parent="Clip/Book/Book/Tabs" instance=ExtResource("2_33lvu")]
 layout_mode = 2
-thisChapterType = 4
+chapterType = 4
 
-[node name="Achievement1" parent="Book/Tabs" instance=ExtResource("2_33lvu")]
+[node name="Achievement1" parent="Clip/Book/Book/Tabs" instance=ExtResource("2_33lvu")]
 layout_mode = 2
-thisChapterType = 5
+chapterType = 5
 
-[node name="Achievement2" parent="Book/Tabs" instance=ExtResource("2_33lvu")]
+[node name="Achievement2" parent="Clip/Book/Book/Tabs" instance=ExtResource("2_33lvu")]
 layout_mode = 2
-thisChapterType = 5
+chapterType = 5
 
-[node name="Diary" parent="Book/Tabs" instance=ExtResource("2_33lvu")]
+[node name="Diary" parent="Clip/Book/Book/Tabs" instance=ExtResource("2_33lvu")]
 layout_mode = 2
-thisChapterType = 6
+chapterType = 6
 
-[node name="Textbox" type="Node2D" parent="Book"]
+[node name="Textbox" type="Node2D" parent="Clip/Book/Book"]
 modulate = Color(1, 1, 1, 0)
 position = Vector2(595, 644)
 scale = Vector2(2.3, 2.3)
 
-[node name="Left" type="TextureRect" parent="Book/Textbox"]
+[node name="Left" type="TextureRect" parent="Clip/Book/Book/Textbox"]
 modulate = Color(0.117647, 0.117647, 0.117647, 0.701961)
+anchors_preset = -1
 offset_left = -176.522
 offset_top = -34.8261
 offset_right = -136.522
@@ -1286,8 +1319,9 @@ offset_bottom = 34.1739
 texture = ExtResource("9_f7tqs")
 stretch_mode = 4
 
-[node name="Middle" type="TextureRect" parent="Book/Textbox"]
+[node name="Middle" type="TextureRect" parent="Clip/Book/Book/Textbox"]
 modulate = Color(0.117647, 0.117647, 0.117647, 0.701961)
+anchors_preset = -1
 offset_left = -168.0
 offset_top = -35.0
 offset_right = -137.0
@@ -1296,8 +1330,9 @@ scale = Vector2(14, 0.996)
 texture = ExtResource("9_cyesu")
 stretch_mode = 4
 
-[node name="Right" type="TextureRect" parent="Book/Textbox"]
+[node name="Right" type="TextureRect" parent="Clip/Book/Book/Textbox"]
 modulate = Color(0.117647, 0.117647, 0.117647, 0.701961)
+anchors_preset = -1
 offset_left = 266.087
 offset_top = -34.8264
 offset_right = 306.087
@@ -1306,7 +1341,8 @@ texture = ExtResource("9_f7tqs")
 stretch_mode = 4
 flip_h = true
 
-[node name="ChapterLabel" type="Label" parent="Book/Textbox"]
+[node name="ChapterLabel" type="Label" parent="Clip/Book/Book/Textbox"]
+anchors_preset = -1
 offset_left = -130.0
 offset_top = -30.0
 offset_right = 862.0
@@ -1324,8 +1360,9 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="DescriptionLabel" type="Label" parent="Book/Textbox"]
+[node name="DescriptionLabel" type="Label" parent="Clip/Book/Book/Textbox"]
 visible = false
+anchors_preset = -1
 offset_left = -171.0
 offset_top = -30.0
 offset_right = 1054.0
@@ -1343,13 +1380,13 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="Preview" type="Control" parent="Book"]
+[node name="Preview" type="Control" parent="Clip/Book/Book"]
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Description" type="Label" parent="Book/Preview"]
+[node name="Description" type="Label" parent="Clip/Book/Book/Preview"]
 layout_mode = 0
 offset_left = 201.0
 offset_top = 116.0
@@ -1367,7 +1404,7 @@ Description Text"
 label_settings = ExtResource("30_m7bbf")
 autowrap_mode = 3
 
-[node name="Number" type="Label" parent="Book/Preview"]
+[node name="Number" type="Label" parent="Clip/Book/Book/Preview"]
 layout_mode = 0
 offset_left = 1067.0
 offset_top = 681.0
@@ -1385,7 +1422,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="Image" type="TextureRect" parent="Book/Preview"]
+[node name="Image" type="TextureRect" parent="Clip/Book/Book/Preview"]
 layout_mode = 0
 offset_left = 652.0
 offset_top = 102.0
@@ -1395,50 +1432,7 @@ texture = ExtResource("31_ior2v")
 expand_mode = 1
 stretch_mode = 4
 
-[node name="FullView" type="Control" parent="."]
-modulate = Color(1, 1, 1, 0)
-anchors_preset = 0
-offset_left = 252.0
-offset_top = 177.0
-offset_right = 292.0
-offset_bottom = 217.0
-
-[node name="FullImage" type="TextureRect" parent="FullView"]
-layout_mode = 0
-offset_left = -252.0
-offset_top = -177.0
-offset_right = 1670.0
-offset_bottom = 905.0
-texture = ExtResource("32_1hqjm")
-stretch_mode = 6
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-deterministic = true
-libraries = {
-&"": SubResource("AnimationLibrary_yxyel")
-}
-
-[node name="RandomAnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_4b6ew")
-}
-
-[node name="SpecialBookBGM" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("35_ior2v")
-bus = &"BGM"
-parameters/looping = false
-script = ExtResource("11_llt0s")
-loopStartPosition = 112.559
-loopEndPosition = 289.763
-
-[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("35_ior2v")
-bus = &"BGM"
-parameters/looping = false
-script = ExtResource("11_llt0s")
-loopEndPosition = 50.0
-
-[node name="NavButtonsFull" type="Control" parent="."]
+[node name="FullView" type="Control" parent="Clip/Book"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
@@ -1447,7 +1441,40 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Middle" type="TextureRect" parent="NavButtonsFull"]
+[node name="FullImage" type="TextureRect" parent="Clip/Book/FullView"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -960.01196
+offset_right = 959.98804
+offset_bottom = 1080.0
+pivot_offset = Vector2(960, 540)
+texture = ExtResource("40_jftlp")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Clip/Book"]
+deterministic = true
+libraries = {
+&"": SubResource("AnimationLibrary_yxyel")
+}
+
+[node name="RandomAnimationPlayer" type="AnimationPlayer" parent="Clip/Book"]
+libraries = {
+&"": SubResource("AnimationLibrary_4b6ew")
+}
+
+[node name="NavButtonsFull" type="Control" parent="Clip/Book"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Middle" type="TextureRect" parent="Clip/Book/NavButtonsFull"]
 modulate = Color(0.117647, 0.117647, 0.117647, 0.701961)
 layout_mode = 0
 offset_left = -53.0
@@ -1458,7 +1485,7 @@ scale = Vector2(61.88, 0.996)
 texture = ExtResource("9_cyesu")
 stretch_mode = 4
 
-[node name="NavigationButtonsFull" type="HBoxContainer" parent="NavButtonsFull"]
+[node name="NavigationButtonsFull" type="HBoxContainer" parent="Clip/Book/NavButtonsFull"]
 z_index = 1
 layout_mode = 0
 offset_left = 384.0
@@ -1468,25 +1495,25 @@ offset_bottom = 1051.0
 theme_override_constants/separation = 64
 alignment = 2
 
-[node name="Back" parent="NavButtonsFull/NavigationButtonsFull" instance=ExtResource("35_6o01v")]
+[node name="Back" parent="Clip/Book/NavButtonsFull/NavigationButtonsFull" instance=ExtResource("35_6o01v")]
 layout_mode = 2
 ActionKey = &"sys_back"
 inputKey = &"sys_cancel"
 fallbackKey = &"ui_cancel"
 
-[node name="Hide" parent="NavButtonsFull/NavigationButtonsFull" instance=ExtResource("35_6o01v")]
+[node name="Hide" parent="Clip/Book/NavButtonsFull/NavigationButtonsFull" instance=ExtResource("35_6o01v")]
 layout_mode = 2
 ActionKey = &"spb_controls_hide"
 inputKey = &"sys_select"
 fallbackKey = &"ui_select"
 
-[node name="NavigationAnimationPlayer" type="AnimationPlayer" parent="NavButtonsFull"]
+[node name="NavigationAnimationPlayer" type="AnimationPlayer" parent="Clip/Book/NavButtonsFull"]
 root_node = NodePath("../..")
 libraries = {
 &"": SubResource("AnimationLibrary_wuupq")
 }
 
-[node name="NavigationButtonsMain" type="HBoxContainer" parent="."]
+[node name="NavigationButtonsMain" type="HBoxContainer" parent="Clip/Book"]
 modulate = Color(1, 1, 1, 0)
 z_index = 1
 layout_mode = 0
@@ -1497,25 +1524,25 @@ offset_bottom = 1051.0
 theme_override_constants/separation = 64
 alignment = 1
 
-[node name="PlayRandom" parent="NavigationButtonsMain" instance=ExtResource("35_6o01v")]
+[node name="PlayRandom" parent="Clip/Book/NavigationButtonsMain" instance=ExtResource("35_6o01v")]
 layout_mode = 2
 ActionKey = &"spb_controls_random"
 inputKey = &"sys_pause"
 fallbackKey = &"ui_accept"
 
-[node name="Back" parent="NavigationButtonsMain" instance=ExtResource("35_6o01v")]
+[node name="Back" parent="Clip/Book/NavigationButtonsMain" instance=ExtResource("35_6o01v")]
 layout_mode = 2
 ActionKey = &"sys_back"
 inputKey = &"sys_cancel"
 fallbackKey = &"ui_cancel"
 
-[node name="Select" parent="NavigationButtonsMain" instance=ExtResource("35_6o01v")]
+[node name="Select" parent="Clip/Book/NavigationButtonsMain" instance=ExtResource("35_6o01v")]
 layout_mode = 2
 ActionKey = &"sys_select"
 inputKey = &"sys_select"
 fallbackKey = &"ui_select"
 
-[node name="NavigationButtonsBook" type="HBoxContainer" parent="."]
+[node name="NavigationButtonsBook" type="HBoxContainer" parent="Clip/Book"]
 modulate = Color(1, 1, 1, 0)
 z_index = 1
 layout_mode = 0
@@ -1526,19 +1553,19 @@ offset_bottom = 1051.0
 theme_override_constants/separation = 64
 alignment = 2
 
-[node name="Back" parent="NavigationButtonsBook" instance=ExtResource("35_6o01v")]
+[node name="Back" parent="Clip/Book/NavigationButtonsBook" instance=ExtResource("35_6o01v")]
 layout_mode = 2
 ActionKey = &"sys_back"
 inputKey = &"sys_cancel"
 fallbackKey = &"ui_cancel"
 
-[node name="Zoom" parent="NavigationButtonsBook" instance=ExtResource("35_6o01v")]
+[node name="Zoom" parent="Clip/Book/NavigationButtonsBook" instance=ExtResource("35_6o01v")]
 layout_mode = 2
 ActionKey = &"spb_controls_zoom"
 inputKey = &"sys_select"
 fallbackKey = &"ui_select"
 
-[node name="Play" parent="NavigationButtonsBook" instance=ExtResource("35_6o01v")]
+[node name="Play" parent="Clip/Book/NavigationButtonsBook" instance=ExtResource("35_6o01v")]
 visible = false
 layout_mode = 2
 ActionKey = &"spb_controls_play"
@@ -1566,3 +1593,10 @@ bus = &"SFX"
 [node name="CategorySelect" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("40_4b6ew")
 bus = &"SFX"
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("35_ior2v")
+bus = &"BGM"
+parameters/looping = false
+script = ExtResource("11_llt0s")
+loopEndPosition = 50.0

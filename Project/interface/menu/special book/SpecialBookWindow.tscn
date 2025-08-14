@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bwqgjo2ywq68m"]
+[gd_scene load_steps=11 format=3 uid="uid://bwqgjo2ywq68m"]
 
 [ext_resource type="Script" uid="uid://cmksigg2bddki" path="res://interface/menu/special book/script/SpecialBookWindow.cs" id="1_a31tl"]
 [ext_resource type="Texture2D" uid="uid://qys1j7pgsm0p" path="res://interface/menu/special book/texture/book objects/frame.png" id="2_i5uf0"]
@@ -10,6 +10,7 @@
 
 [sub_resource type="Animation" id="Animation_6gyq1"]
 resource_name = "RESET"
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -25,6 +26,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_a31tl"]
 resource_name = "select"
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -37,6 +39,30 @@ tracks/0/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Glow:modulate")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0.478431, 1, 0.698039, 0.764706), Color(0.796078, 1, 0.866667, 0.764706), Color(0.478431, 1, 0.698039, 0.764706)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Glow:scale")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.8, 0.8), Vector2(0.9, 0.9), Vector2(0.8, 0.8)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_a31tl"]
 _data = {
@@ -44,89 +70,54 @@ _data = {
 &"select": SubResource("Animation_a31tl")
 }
 
-[sub_resource type="Animation" id="Animation_i5uf0"]
-length = 0.001
-
-[sub_resource type="Animation" id="Animation_xnwnq"]
-resource_name = "glow"
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Glow:modulate")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(0.478431, 1, 0.698039, 0.764706), Color(0.796078, 1, 0.866667, 0.764706), Color(0.478431, 1, 0.698039, 0.764706)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Glow:scale")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(0.8, 0.8), Vector2(0.9, 0.9), Vector2(0.8, 0.8)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_n5mwb"]
-_data = {
-&"RESET": SubResource("Animation_i5uf0"),
-&"glow": SubResource("Animation_xnwnq")
-}
-
-[node name="SpecialBookWindow" type="Control" node_paths=PackedStringArray("numberLabel", "windowAnimator", "windowAnimator2")]
+[node name="SpecialBookWindow" type="NinePatchRect" node_paths=PackedStringArray("numberLabel", "windowAnimator", "textureRect")]
 custom_minimum_size = Vector2(186, 124)
-layout_mode = 3
+anchors_preset = -1
 anchor_right = 0.097
 anchor_bottom = 0.115
-offset_right = -0.240005
-offset_bottom = -0.200005
+offset_right = -0.2400055
+offset_bottom = -0.20000458
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("2_i5uf0")
+patch_margin_left = 20
+patch_margin_top = 30
+patch_margin_right = 23
+patch_margin_bottom = 25
 script = ExtResource("1_a31tl")
 numberLabel = NodePath("NumberFrame/NumberLabel")
 windowAnimator = NodePath("AnimationPlayer")
-windowAnimator2 = NodePath("AnimationPlayer2")
+textureRect = NodePath("PreviewTexture")
 
-[node name="Frame" type="TextureRect" parent="."]
-layout_mode = 0
-offset_right = 233.0
-offset_bottom = 155.0
-scale = Vector2(0.8, 0.8)
-texture = ExtResource("2_i5uf0")
-stretch_mode = 4
-
-[node name="Questionmark" type="TextureRect" parent="."]
-layout_mode = 0
-offset_left = 78.0
-offset_top = 29.0
-offset_right = 118.0
-offset_bottom = 117.0
-scale = Vector2(0.8, 0.8)
+[node name="PreviewTexture" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("3_i5uf0")
 stretch_mode = 3
 
 [node name="Glow" type="Sprite2D" parent="."]
 visible = false
-modulate = Color(0.559409, 1, 0.741028, 0.764706)
+modulate = Color(0.478431, 1, 0.698039, 0.764706)
 position = Vector2(94, 62)
-scale = Vector2(0.825493, 0.825493)
+scale = Vector2(0.8, 0.8)
 texture = ExtResource("4_i5uf0")
 
 [node name="NumberFrame" type="TextureRect" parent="."]
 z_index = 1
-layout_mode = 0
-offset_left = 118.0
-offset_top = 76.0
-offset_right = 176.0
-offset_bottom = 116.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -48.0
+offset_right = -10.0
+offset_bottom = -8.0
 texture = ExtResource("6_l6bkd")
 stretch_mode = 4
 
@@ -151,9 +142,4 @@ autowrap_mode = 2
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_a31tl")
-}
-
-[node name="AnimationPlayer2" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_n5mwb")
 }
