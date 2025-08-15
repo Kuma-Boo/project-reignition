@@ -54,7 +54,11 @@ public partial class SpecialBook : Menu
 		audioPlayer.Finished += PlayBgm;
 
 		foreach (SpecialBookTab tab in tabs)
+		{
+			tab.PreviewTextureLoaded += OnPreviewTextureLoaded;
+			tab.FullTextureLoaded += OnFullTextureLoaded;
 			tab.Initialize();
+		}
 
 		foreach (SpecialBookWindow window in windows)
 			window.Initialize();
@@ -127,10 +131,10 @@ public partial class SpecialBook : Menu
 		if (menuState == MenuStateEnum.Chapter || menuState == MenuStateEnum.Page) // Change chapter by using the bumpers
 		{
 			if (Input.IsActionJustPressed("button_step_left"))
-				ProcessTabSelection(Vector2I.Left, true);
+				ProcessTabSelection(Vector2I.Left, menuState == MenuStateEnum.Page);
 
 			if (Input.IsActionJustPressed("button_step_right"))
-				ProcessTabSelection(Vector2I.Right, true);
+				ProcessTabSelection(Vector2I.Right, menuState == MenuStateEnum.Page);
 
 			if (Runtime.Instance.IsActionJustPressed("sys_pause", "ui_accept") && !Input.IsActionJustPressed("toggle_fullscreen"))
 				StartSlideshow();
@@ -226,7 +230,6 @@ public partial class SpecialBook : Menu
 		{
 			animator.Play("hide-entry");
 			menuState = MenuStateEnum.Page;
-			sfxCancel.Play();
 		}
 
 		if (menuState == MenuStateEnum.Image)
@@ -244,8 +247,6 @@ public partial class SpecialBook : Menu
 				tabs[tabSelection].DeselectNoGlow();
 				windows[pageSelection].Select();
 			}
-
-			sfxCancel.Play();
 		}
 	}
 
@@ -339,20 +340,29 @@ public partial class SpecialBook : Menu
 
 			LoadChapterData();
 			sfxCategorySelect.Play();
-			return;
+
+			if (!autoSelect)
+				return;
 		}
 
 		if (input.Y > 0 || autoSelect) // Move down to the pages
 		{
 			tabs[tabSelection].DeselectNoGlow();
-			menuState = MenuStateEnum.Page;
-			pageSelection = 0;
-			windows[pageSelection].Select();
+
+			if (menuState != MenuStateEnum.Page)
+			{
+				menuState = MenuStateEnum.Page;
+				pageSelection = 0;
+				windows[pageSelection].Select();
+			}
+
 			chapterName.Visible = false;
 			textboxTitle.Visible = true;
 
 			LoadPageData();
-			sfxSelect.Play();
+
+			if (!autoSelect)
+				sfxSelect.Play();
 		}
 	}
 
@@ -500,14 +510,31 @@ public partial class SpecialBook : Menu
 			string pageKey = $"spb_title_ch{tabSelection + 1}_{pageSelection + 1}";
 			textboxTitle.Text = chapterName.Text + "\n" + Tr(pageKey);
 			previewDescription.Text = Tr(pageKey.Replace("title", "desc"));
-			previewTextureRect.Texture = tabs[tabSelection].GetPreviewTexture(pageSelection);
 			previewNumber.Text = "-" + ((15 * tabSelection) + pageSelection + 1).ToString("D3") + "-";
+
+			previewTextureRect.Texture = tabs[tabSelection].GetPreviewTexture(pageSelection);
 			fullTextureRect.Texture = tabs[tabSelection].GetFullTexture(pageSelection);
 		}
 		else
 		{
 			textboxTitle.Text = page.GetLocalizedUnlockRequirements();
 		}
+	}
+
+	private void OnPreviewTextureLoaded(int tabIndex, int pageIndex)
+	{
+		if (pageIndex != pageSelection || tabIndex != tabSelection)
+			return;
+
+		previewTextureRect.Texture = tabs[tabSelection].GetPreviewTexture(pageSelection);
+	}
+
+	private void OnFullTextureLoaded(int tabIndex, int pageIndex)
+	{
+		if (pageIndex != pageSelection || tabIndex != tabSelection)
+			return;
+
+		fullTextureRect.Texture = tabs[tabSelection].GetFullTexture(pageSelection);
 	}
 
 	/// <summary>

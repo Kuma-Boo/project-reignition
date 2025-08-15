@@ -5,6 +5,9 @@ namespace Project.Interface.Menus;
 
 public partial class SpecialBookTab : Control
 {
+	[Signal] public delegate void PreviewTextureLoadedEventHandler(int tabIndex, int pageIndex);
+	[Signal] public delegate void FullTextureLoadedEventHandler(int tabIndex, int pageIndex);
+
 	public enum ChapterType
 	{
 		History,
@@ -59,9 +62,15 @@ public partial class SpecialBookTab : Control
 
 		Resource texture = ResourceLoader.LoadThreadedGet(currentAsyncFilePath);
 		if (isLoadingFullImages)
+		{
 			fullTextures[asyncLoadIndex] = texture as Texture2D;
+			EmitSignal(SignalName.FullTextureLoaded, GetIndex(), asyncLoadIndex);
+		}
 		else
+		{
 			previewTextures[asyncLoadIndex] = texture as Texture2D;
+			EmitSignal(SignalName.PreviewTextureLoaded, GetIndex(), asyncLoadIndex);
+		}
 
 		IncrementLoadIndex();
 	}
@@ -101,7 +110,7 @@ public partial class SpecialBookTab : Control
 
 		if (FileAccess.FileExists(currentAsyncFilePath))
 		{
-			Error error = ResourceLoader.LoadThreadedRequest(currentAsyncFilePath, "Texture2D", false, ResourceLoader.CacheMode.Ignore);
+			Error error = ResourceLoader.LoadThreadedRequest(currentAsyncFilePath, "Texture2D");
 
 			if (error != Error.Ok)
 				IncrementLoadIndex();
