@@ -1,4 +1,5 @@
 using Godot;
+using System.Collections.Generic;
 
 namespace Project.Interface.Menus;
 
@@ -29,11 +30,90 @@ public partial class SpecialBookTab : Control
 	[Export] public SpecialBookPage[] PageResources { get; private set; }
 	/// <summary> Path containing all this chapter's textures. </summary>
 	[Export(PropertyHint.Dir)] private string pageTexturePath;
+	[Export] private Texture2D musicPreviewTexture;
 
-	public void ChangeTabImage(bool isSelected)
+	private int asyncLoadIndex = -1;
+	private string currentAsyncFilePath;
+	private bool isLoadingFullImages;
+	private Texture2D[] previewTextures;
+	private Texture2D[] fullTextures;
+
+	public void Initialize()
 	{
-		tabTextureRect.Texture = isSelected ? selectedTextures[(int)chapterType] : unselectedTextures[(int)chapterType];
+		previewTextures = new Texture2D[PageResources.Length];
+		fullTextures = new Texture2D[PageResources.Length];
+
+		if (string.IsNullOrEmpty(pageTexturePath))
+			return;
+
+		IncrementLoadIndex();
 	}
+
+	public override void _Process(double _)
+	{
+		if (asyncLoadIndex == -1)
+			return;
+
+		if (ResourceLoader.LoadThreadedGetStatus(currentAsyncFilePath) == ResourceLoader.ThreadLoadStatus.InProgress)
+			return;
+
+		Resource texture = ResourceLoader.LoadThreadedGet(currentAsyncFilePath);
+		if (isLoadingFullImages)
+			fullTextures[asyncLoadIndex] = texture as Texture2D;
+		else
+			previewTextures[asyncLoadIndex] = texture as Texture2D;
+
+		IncrementLoadIndex();
+	}
+
+	private void IncrementLoadIndex()
+	{
+		asyncLoadIndex++;
+		if (asyncLoadIndex >= PageResources.Length)
+		{
+			if (isLoadingFullImages) // Finished loading textures
+			{
+				asyncLoadIndex = -1;
+				return;
+			}
+
+			asyncLoadIndex = 0; // Start loading full images
+			isLoadingFullImages = true;
+		}
+
+		if (PageResources[asyncLoadIndex].PageType == SpecialBookPage.PageTypeEnum.Music ||
+			PageResources[asyncLoadIndex].PageType == SpecialBookPage.PageTypeEnum.Achievement) // Nothing to load for music or achievements
+		{
+			IncrementLoadIndex();
+			return;
+		}
+
+		if (isLoadingFullImages &&
+			PageResources[asyncLoadIndex].PageType == SpecialBookPage.PageTypeEnum.Video)
+		{
+			// Videos don't have full images
+			IncrementLoadIndex();
+			return;
+		}
+
+		currentAsyncFilePath = pageTexturePath + $"/{(asyncLoadIndex + 1).ToString("00")}";
+		currentAsyncFilePath += isLoadingFullImages ? ".png" : "P.png";
+
+		if (FileAccess.FileExists(currentAsyncFilePath))
+		{
+			Error error = ResourceLoader.LoadThreadedRequest(currentAsyncFilePath, "Texture2D", false, ResourceLoader.CacheMode.Ignore);
+
+			if (error != Error.Ok)
+				IncrementLoadIndex();
+		}
+		else
+		{
+			GD.PushWarning($"Could not find {currentAsyncFilePath}.");
+		}
+	}
+
+	public void ChangeTabImage(bool isSelected) =>
+		tabTextureRect.Texture = isSelected ? selectedTextures[(int)chapterType] : unselectedTextures[(int)chapterType];
 
 	public void Select() => animator.Play("select");
 
@@ -47,4 +127,13 @@ public partial class SpecialBookTab : Control
 
 	public void DeselectNoGlow() => animator.Play("hide_glow");
 
+	public Texture2D GetPreviewTexture(int pageIndex)
+	{
+		if (PageResources[pageIndex].PageType == SpecialBookPage.PageTypeEnum.Music)
+			return musicPreviewTexture;
+
+		return previewTextures[pageIndex];
+	}
+
+	public Texture2D GetFullTexture(int pageIndex) => fullTextures[pageIndex];
 }

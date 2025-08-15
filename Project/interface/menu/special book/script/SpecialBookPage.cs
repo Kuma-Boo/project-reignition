@@ -14,7 +14,6 @@ public partial class SpecialBookPage : Resource
 		Array<Dictionary> properties = [];
 
 		properties.Add(ExtensionMethods.CreateCategory("Basic Settings"));
-		properties.Add(ExtensionMethods.CreateProperty("Localization Key", Variant.Type.String));
 		properties.Add(ExtensionMethods.CreateProperty("Page Type", Variant.Type.Int, PropertyHint.Enum, ExtensionMethods.EnumToString(PageType)));
 		switch (PageType)
 		{
@@ -48,9 +47,6 @@ public partial class SpecialBookPage : Resource
 	{
 		switch ((string)property)
 		{
-			case "Localization Key":
-				LocalizationKey = (string)value;
-				break;
 			case "Page Type":
 				PageType = (PageTypeEnum)(int)value;
 				NotifyPropertyListChanged();
@@ -61,7 +57,6 @@ public partial class SpecialBookPage : Resource
 			case "Event Path":
 				VideoEventPath = (string)value;
 				break;
-
 
 			case "Unlock Type":
 				UnlockType = (UnlockTypeEnum)(int)value;
@@ -92,8 +87,6 @@ public partial class SpecialBookPage : Resource
 	{
 		switch ((string)property)
 		{
-			case "Localization Key":
-				return LocalizationKey;
 			case "Page Type":
 				return (int)PageType;
 			case "Audio Stream":
@@ -124,10 +117,8 @@ public partial class SpecialBookPage : Resource
 		Image,
 		Music,
 		Video,
+		Achievement,
 	}
-
-	/// <summary> The localization key. </summary>
-	public string LocalizationKey { get; private set; }
 
 	/// <summary> Path to the audio stream. </summary>
 	public string AudioStreamPath { get; private set; }
@@ -159,16 +150,76 @@ public partial class SpecialBookPage : Resource
 	public LevelDataResource LevelData { get; private set; }
 	public SaveManager.WorldEnum World { get; private set; }
 
+	// TODO Set these up
+	public Texture2D FullTexture { get; private set; }
+	public Texture2D PreviewTexture { get; private set; }
+
 	/// <summary> Calculates whether this page should be unlocked or not. </summary>
 	public bool IsUnlocked()
 	{
-		return false;
+		// TODO Test for unlockables
+		return true;
 	}
 
 	/// <summary> Constructs a localized string that describes the unlock requirements. </summary>
 	public string GetLocalizedUnlockRequirements()
 	{
-		string localizedString = string.Empty;
+		string localizedString = "???";
+		int number = 0;
+
+		// NOTE: This switch statement only covers the retail game. Add more conditions as needed.
+		switch (UnlockType)
+		{
+			case UnlockTypeEnum.MedalCount:
+				localizedString = Tr("spb_hint_silver");
+				number = MedalCount;
+				break;
+			case UnlockTypeEnum.SpecificLevel:
+				localizedString = Tr(Rank == RankEnum.Completed ? "spb_hint_complete" : "spb_hint_gold");
+				number = LevelData.LevelIndex;
+				break;
+			case UnlockTypeEnum.SpecificWorld:
+				localizedString = Tr("spb_hint_all_gold");
+				break;
+			case UnlockTypeEnum.BigCameo:
+				localizedString = Tr("spb_hint_big");
+				break;
+		}
+
+		localizedString = localizedString.Replace("[NUMBER]", number.ToString());
+		localizedString = localizedString.Replace("[AREA]", AbbreviateWorld());
+
 		return localizedString;
+	}
+
+	private string AbbreviateWorld()
+	{
+		if (UnlockType == UnlockTypeEnum.SpecificWorld)
+			return World switch
+			{
+				SaveManager.WorldEnum.LostPrologue => "lost_prolouge",
+				SaveManager.WorldEnum.SandOasis => "sand_oasis",
+				SaveManager.WorldEnum.DinosaurJungle => "dinosaur_jungle",
+				SaveManager.WorldEnum.EvilFoundry => "evil_foundry",
+				SaveManager.WorldEnum.LevitatedRuin => "levitated_ruin",
+				SaveManager.WorldEnum.PirateStorm => "pirate_storm",
+				SaveManager.WorldEnum.SkeletonDome => "skeleton_dome",
+				SaveManager.WorldEnum.NightPalace => "night_palace",
+				_ => string.Empty,
+			};
+
+		string worldKey = LevelData.LevelID.ToString().Split('_')[0];
+		return worldKey switch
+		{
+			"lp" => "lost_prolouge",
+			"so" => "sand_oasis",
+			"dj" => "dinosaur_jungle",
+			"ef" => "evil_foundry",
+			"lr" => "levitated_ruin",
+			"ps" => "pirate_storm",
+			"sd" => "skeleton_dome",
+			"np" => "night_palace",
+			_ => string.Empty,
+		};
 	}
 }
