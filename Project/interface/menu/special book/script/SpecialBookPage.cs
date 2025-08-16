@@ -225,6 +225,9 @@ public partial class SpecialBookPage : Resource
 		string localizedString = "???";
 		int number = 0;
 
+		if (PageType == PageTypeEnum.Achievement)
+			return localizedString;
+
 		// NOTE: This switch statement only covers the retail game. Add more conditions as needed.
 		switch (UnlockType)
 		{
@@ -240,9 +243,12 @@ public partial class SpecialBookPage : Resource
 				localizedString = Tr("spb_hint_all_gold");
 				break;
 			case UnlockTypeEnum.BigCameo:
+				return localizedString;
+				/* TODO uncomment this after Big has been implemented
 				localizedString = Tr("spb_hint_big");
 				number = LevelData.LevelIndex;
 				break;
+				*/
 		}
 
 		localizedString = localizedString.Replace("[NUMBER]", number.ToString());

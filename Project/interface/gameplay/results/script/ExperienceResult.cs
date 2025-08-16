@@ -35,6 +35,7 @@ public partial class ExperienceResult : Control
 	private readonly string IncreaseAnimation = "increase";
 	private readonly string LevelUpAnimation = "level-up";
 	private readonly string ShowLevelUpAnimation = "show-level-up";
+	private readonly string SuperPlayerAchievementName = "super player";
 
 	private bool isFadingBgm;
 	private bool isProcessing;
@@ -267,7 +268,12 @@ public partial class ExperienceResult : Control
 		expLabel.Text = $"{ExtensionMethods.FormatMenuNumber(previousLevelupRequirement)}/{ExtensionMethods.FormatMenuNumber(previousLevelupRequirement)}";
 
 		if (animator.CurrentAnimation != ShowLevelUpAnimation)
+		{
 			animator.Play(LevelUpAnimation);
+
+			if (SaveManager.ActiveGameData.level == MaxLevel)
+				AchievementManager.Instance.UnlockAchievement(SuperPlayerAchievementName);
+		}
 	}
 
 	private void StartExperienceResults()
@@ -331,6 +337,9 @@ public partial class ExperienceResult : Control
 		bgm.Play();
 		isProcessing = true;
 		animator.Play("show");
+
+		if (SaveManager.ActiveGameData.level == MaxLevel) // Old save compatability
+			AchievementManager.Instance.UnlockAchievement(SuperPlayerAchievementName);
 	}
 
 	private void FinishMenu()

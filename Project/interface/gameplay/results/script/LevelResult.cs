@@ -137,35 +137,6 @@ public partial class LevelResult : Control
 
 		animator.Advance(0.0);
 		animator.Play(isStageCleared ? "success-start" : "fail-start");
-
-		// Update unlock notifications
-		if (isStageCleared)
-		{
-			if (Stage.Data.UnlockWorld != SaveManager.WorldEnum.LostPrologue &&
-				!SaveManager.ActiveGameData.IsWorldUnlocked(Stage.Data.UnlockWorld))
-			{
-				SaveManager.ActiveGameData.UnlockWorld(Stage.Data.UnlockWorld);
-				NotificationMenu.AddNotification(NotificationMenu.NotificationType.World, $"unlock_{Stage.Data.UnlockWorld.ToString().ToSnakeCase()}");
-			}
-
-			foreach (var stage in Stage.Data.UnlockStage)
-			{
-				if (SaveManager.ActiveGameData.IsStageUnlocked(stage.LevelID))
-					continue;
-
-				SaveManager.ActiveGameData.UnlockStage(stage.LevelID);
-				NotificationMenu.AddNotification(NotificationMenu.NotificationType.Mission, "unlock_mission");
-			}
-
-			// Only write these when the stage is a success
-			SaveManager.ActiveGameData.LevelData.SetHighScore(Stage.Data.LevelID, Stage.TotalScore);
-			SaveManager.ActiveGameData.LevelData.SetBestTime(Stage.Data.LevelID, Stage.CurrentTime);
-		}
-
-		// Write common data to save file
-		SaveManager.ActiveGameData.LevelData.SetRank(Stage.Data.LevelID, rank);
-		SaveManager.ActiveGameData.LevelData.SetClearStatus(Stage.Data.LevelID,
-			isStageCleared ? SaveManager.LevelSaveData.LevelStatus.Cleared : SaveManager.LevelSaveData.LevelStatus.Attempted);
 	}
 
 	public void SetInputProcessing(bool value) => isProcessing = value;

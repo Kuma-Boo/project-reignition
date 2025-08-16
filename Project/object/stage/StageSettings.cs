@@ -1,6 +1,7 @@
 using Godot;
 using Godot.Collections;
 using Project.Core;
+using Project.Interface;
 
 namespace Project.Gameplay;
 
@@ -15,7 +16,33 @@ public partial class StageSettings : Node3D
 	public static void RegisterPlayer(PlayerController player) => Player = player;
 
 	public bool IsControlTest => Data.LevelID == OptionsLevelId;
+
 	private readonly string OptionsLevelId = "options";
+	private readonly string ErazorLevelId = "np_boss";
+	private readonly string LastBossLevelId = "np_last";
+
+	private readonly string[] SkillQuintiAchievementRequirement = {
+		"lp_a1_main",
+		"so_a1_main",
+		"dj_a1_main",
+		"ef_a1_main",
+		"lr_a1_main",
+		"ps_a1_main",
+		"sd_a1_main",
+		"np_a1_main",
+	};
+
+	private readonly int SkillSaverAchievementRequirement = 30;
+	private readonly int SkillMasterAchievementRequirement = 20;
+	private readonly int RebellionAchievementRequirement = 25;
+	private readonly StringName SkillSaverAchievementName = "skill saver";
+	private readonly StringName SkillQuintiAchievementName = "skill quinti";
+	private readonly StringName FireMasterAchievementName = "flame master";
+	private readonly StringName WindMasterAchievementName = "wind master";
+	private readonly StringName DarkMasterAchievementName = "dark master";
+	private readonly StringName HeroAchievementName = "hero";
+	private readonly StringName TrueHeroAchievementName = "true hero";
+	private readonly StringName RebellionAchievementName = "rebellion";
 
 	public override void _EnterTree()
 	{
@@ -66,10 +93,7 @@ public partial class StageSettings : Node3D
 		SetEnvironmentFxFactor(environmentFxFactor, 0);
 	}
 
-	public override void _ExitTree()
-	{
-		EmitSignal(SignalName.Unloaded);
-	}
+	public override void _ExitTree() => EmitSignal(SignalName.Unloaded);
 
 	public void UpdatePostProcessingStatus()
 	{
@@ -463,14 +487,10 @@ public partial class StageSettings : Node3D
 	#endregion
 
 	#region Level Completion
-	[Signal]
-	public delegate void LevelCompletedEventHandler(); // Called when the level is completed
-	[Signal]
-	public delegate void LevelFailedEventHandler(); // Called when the level is failed
-	[Signal]
-	public delegate void LevelSuccessEventHandler(); // Called when the level is successfully finished
-	[Signal]
-	public delegate void LevelDemoStartedEventHandler(); // Called when the level demo starts
+	[Signal] public delegate void LevelCompletedEventHandler(); // Called when the level is completed
+	[Signal] public delegate void LevelFailedEventHandler(); // Called when the level is failed
+	[Signal] public delegate void LevelSuccessEventHandler(); // Called when the level is successfully finished
+	[Signal] public delegate void LevelDemoStartedEventHandler(); // Called when the level demo starts
 
 	public enum LevelStateEnum
 	{
@@ -500,9 +520,105 @@ public partial class StageSettings : Node3D
 
 		// Recalculate technical bonus
 		CalculateTechnicalBonus();
+		UpdateSaveData();
+		ProcessAchievements();
 
 		EmitSignal(SignalName.LevelCompleted);
 		EmitSignal(wasSuccessful ? SignalName.LevelSuccess : SignalName.LevelFailed);
+	}
+
+	private void ProcessAchievements()
+	{
+		if (Data.LevelID == ErazorLevelId)
+		{
+			AchievementManager.Instance.UnlockAchievement(HeroAchievementName);
+
+			if (SaveManager.ActiveGameData.level < RebellionAchievementRequirement)
+				AchievementManager.Instance.UnlockAchievement(RebellionAchievementName);
+		}
+		else if (Data.LevelID == LastBossLevelId)
+		{
+			AchievementManager.Instance.UnlockAchievement(TrueHeroAchievementName);
+		}
+
+		if (SaveManager.ActiveSkillRing.TotalCost <= 100)
+		{
+			SaveManager.SharedData.MinimalSkillCount = (int)Mathf.MoveToward(SaveManager.SharedData.MinimalSkillCount, int.MaxValue, 1);
+
+			if (SaveManager.SharedData.MinimalSkillCount >= SkillSaverAchievementRequirement)
+				AchievementManager.Instance.UnlockAchievement(SkillSaverAchievementName);
+		}
+
+		if (SaveManager.ActiveSkillRing.AreSkillsSingleElement(SkillResource.SkillElement.Fire))
+		{
+			SaveManager.SharedData.FireOnlyCount = (int)Mathf.MoveToward(SaveManager.SharedData.FireOnlyCount, int.MaxValue, 1);
+
+			if (SaveManager.SharedData.FireOnlyCount >= SkillMasterAchievementRequirement)
+				AchievementManager.Instance.UnlockAchievement(FireMasterAchievementName);
+		}
+		else if (SaveManager.ActiveSkillRing.AreSkillsSingleElement(SkillResource.SkillElement.Wind))
+		{
+			SaveManager.SharedData.WindOnlyCount = (int)Mathf.MoveToward(SaveManager.SharedData.WindOnlyCount, int.MaxValue, 1);
+
+			if (SaveManager.SharedData.WindOnlyCount >= SkillMasterAchievementRequirement)
+				AchievementManager.Instance.UnlockAchievement(WindMasterAchievementName);
+		}
+		else if (SaveManager.ActiveSkillRing.AreSkillsSingleElement(SkillResource.SkillElement.Dark))
+		{
+			SaveManager.SharedData.DarkOnlyCount = (int)Mathf.MoveToward(SaveManager.SharedData.DarkOnlyCount, int.MaxValue, 1);
+
+			if (SaveManager.SharedData.DarkOnlyCount >= SkillMasterAchievementRequirement)
+				AchievementManager.Instance.UnlockAchievement(DarkMasterAchievementName);
+		}
+
+		for (int i = 0; i < SkillQuintiAchievementRequirement.Length; i++)
+		{
+			if (!SaveManager.SharedData.LevelData.GetSkillessGold(SkillQuintiAchievementRequirement[i]))
+				return;
+		}
+
+		AchievementManager.Instance.UnlockAchievement(SkillQuintiAchievementName);
+	}
+
+	private void UpdateSaveData()
+	{
+		bool isStageCleared = LevelState == LevelStateEnum.Success;
+		int rank = CalculateRank();
+
+		// Write common data to save file
+		SaveManager.ActiveGameData.LevelData.SetRank(Data.LevelID, rank);
+		SaveManager.ActiveGameData.LevelData.SetClearStatus(Data.LevelID,
+			isStageCleared ? SaveManager.LevelSaveData.LevelStatus.Cleared : SaveManager.LevelSaveData.LevelStatus.Attempted);
+
+		if (rank == 3 && SaveManager.ActiveSkillRing.TotalCost == 0)
+			SaveManager.ActiveGameData.LevelData.SetSkillessGold(Data.LevelID, true);
+
+		// Update unlock notifications
+		if (!isStageCleared)
+			return;
+
+		if (Data.UnlockWorld != SaveManager.WorldEnum.LostPrologue &&
+			!SaveManager.ActiveGameData.IsWorldUnlocked(Data.UnlockWorld))
+		{
+			SaveManager.ActiveGameData.UnlockWorld(Data.UnlockWorld);
+			NotificationMenu.AddNotification(NotificationMenu.NotificationType.World, $"unlock_{Data.UnlockWorld.ToString().ToSnakeCase()}");
+		}
+
+		foreach (var stage in Data.UnlockStage)
+		{
+			if (SaveManager.ActiveGameData.IsStageUnlocked(stage.LevelID))
+				continue;
+
+			SaveManager.ActiveGameData.UnlockStage(stage.LevelID);
+			NotificationMenu.AddNotification(NotificationMenu.NotificationType.Mission, "unlock_mission");
+		}
+
+		// Only write these when the stage is a success
+		SaveManager.ActiveGameData.LevelData.SetHighScore(Data.LevelID, TotalScore);
+		SaveManager.ActiveGameData.LevelData.SetBestTime(Data.LevelID, CurrentTime);
+
+		SaveManager.SharedData.LevelData.SetHighScore(Data.LevelID, TotalScore);
+		SaveManager.SharedData.LevelData.SetBestTime(Data.LevelID, CurrentTime);
 	}
 
 	/// <summary> Camera demo that gets enabled after the level is cleared. </summary>

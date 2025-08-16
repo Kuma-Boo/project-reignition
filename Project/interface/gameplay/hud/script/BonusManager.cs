@@ -10,6 +10,9 @@ public partial class BonusManager : VBoxContainer
 	private StageSettings Stage => StageSettings.Instance;
 	private PlayerController Player => StageSettings.Player;
 
+	private readonly int RingChainAchievementRequirement = 200;
+	private readonly StringName RingChainAchievementName = "chain striker";
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -98,7 +101,13 @@ public partial class BonusManager : VBoxContainer
 	private void FinishRingChain(bool forceFinish)
 	{
 		if (ringChain >= 10)
+		{
 			QueueBonus(new(BonusType.Ring, ringChain));
+
+			SaveManager.SharedData.RingChainCount = (int)Mathf.MoveToward(SaveManager.SharedData.RingChainCount, int.MaxValue, 1);
+			if (SaveManager.SharedData.RingChainCount >= RingChainAchievementRequirement)
+				AchievementManager.Instance.UnlockAchievement(RingChainAchievementName);
+		}
 
 		ringChain = 0; // Reset ring chain
 

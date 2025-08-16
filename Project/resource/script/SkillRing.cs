@@ -215,6 +215,26 @@ public class SkillRing
 		return SaveManager.ActiveGameData.LevelData.FireSoulCount >= skill.FireSoulRequirement;
 	}
 
+	public bool AreSkillsSingleElement(SkillResource.SkillElement element)
+	{
+		bool hasValidSkill = false;
+
+		foreach (SkillKey key in EquippedSkills)
+		{
+			SkillResource skill = Runtime.Instance.SkillList.GetSkill(key);
+			if (skill.Element == element)
+			{
+				hasValidSkill = true;
+				continue;
+			}
+
+			if (skill.Element != SkillResource.SkillElement.Config)
+				return false;
+		}
+
+		return hasValidSkill;
+	}
+
 	/// <summary> Updates a skill ring to match the active game data. </summary>
 	public void LoadFromActiveData()
 	{

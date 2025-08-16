@@ -1397,6 +1397,29 @@ public partial class SaveManager : Node
 			GetLevelData(levelID).Add(RankKey, rank);
 		}
 
+		private readonly string SkillessGoldKey = "skilless_gold";
+		public bool GetSkillessGold(StringName levelId)
+		{
+			if (GetLevelData(levelId).TryGetValue(SkillessGoldKey, out Variant passed))
+				return (bool)passed;
+
+			return false;
+		}
+
+		public void SetSkillessGold(StringName levelId, bool passed)
+		{
+			if (!IsSharedLevelSaveData)
+				SharedData.LevelData.SetSkillessGold(levelId, passed);
+
+			if (GetSkillessGold(levelId))
+				return;
+
+			if (GetLevelData(levelId).ContainsKey(SkillessGoldKey))
+				GetLevelData(levelId)[SkillessGoldKey] = true;
+
+			GetLevelData(levelId).Add(SkillessGoldKey, passed);
+		}
+
 		private readonly string ScoreKey = "high_score";
 		/// <summary> Gets the save value for the player's high score. </summary>
 		public int GetHighScore(StringName levelID)

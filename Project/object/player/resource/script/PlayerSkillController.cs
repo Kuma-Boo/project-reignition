@@ -307,6 +307,10 @@ public partial class PlayerSkillController : Node3D
 		speedBreakAnimator.Advance(0);
 	}
 
+	private readonly float TimeBreakAchievementRequirement = 300f;
+	private readonly StringName TimeBreakAchievementName = "time controller";
+	private ulong previousTimeBreakTime;
+
 	private float breakDrainTimer;
 	private const float TimeBreakSoulDrainInterval = 3f / 60f; // Drain 1 point every x frames
 	private const float SpeedBreakSoulDrainInterval = 1.8f / 60f; // Drain 1 point every x frames
@@ -325,6 +329,12 @@ public partial class PlayerSkillController : Node3D
 				(!SaveManager.Config.useHoldBreakMode && Input.IsActionJustPressed("button_timebreak"));
 			if (IsSoulGaugeEmpty || disablingTimeBreak) // Cancel time break?
 				ToggleTimeBreak();
+
+			float timePassed = (Time.GetTicksMsec() - previousTimeBreakTime) * 0.001f;
+			previousTimeBreakTime = Time.GetTicksMsec();
+			SaveManager.SharedData.TimeBreakTime = Mathf.MoveToward(SaveManager.SharedData.TimeBreakTime, float.MaxValue, timePassed);
+			if (SaveManager.SharedData.TimeBreakTime >= TimeBreakAchievementRequirement)
+				AchievementManager.Instance.UnlockAchievement(TimeBreakAchievementName);
 
 			return;
 		}
@@ -426,6 +436,9 @@ public partial class PlayerSkillController : Node3D
 			timeBreakSFX.VolumeDb = heartbeatSFX.VolumeDb = 0f;
 			timeBreakSFX.Play();
 			heartbeatSFX.Play();
+
+			previousTimeBreakTime = Time.GetTicksMsec();
+
 			EmitSignal(SignalName.TimeBreakStarted);
 		}
 		else
@@ -441,6 +454,9 @@ public partial class PlayerSkillController : Node3D
 			EmitSignal(SignalName.TimeBreakStopped);
 		}
 	}
+
+	private readonly int SpeedBreakAchievementRequirement = 50;
+	private readonly StringName SpeedBreakAchievementName = "extreme speedster";
 
 	public void ToggleSpeedBreak()
 	{
@@ -465,6 +481,11 @@ public partial class PlayerSkillController : Node3D
 			Player.AttackState = PlayerController.AttackStates.OneShot;
 			Player.Camera.RequestMotionBlur();
 			Player.Animator.StartMotionBlur();
+
+			SaveManager.SharedData.SpeedBreakActivationCount = (int)Mathf.MoveToward(SaveManager.SharedData.SpeedBreakActivationCount, int.MaxValue, 1);
+			if (SaveManager.SharedData.SpeedBreakActivationCount >= SpeedBreakAchievementRequirement)
+				AchievementManager.Instance.UnlockAchievement(SpeedBreakAchievementName);
+
 			EmitSignal(SignalName.SpeedBreakStarted);
 		}
 		else

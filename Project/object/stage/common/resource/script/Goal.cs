@@ -3,7 +3,7 @@ using Godot;
 namespace Project.Gameplay.Objects;
 
 /// <summary>
-/// Simply calls LevelSettings.FinishLevel() when triggered.
+/// Simply calls StageSettings.FinishLevel() when triggered.
 /// </summary>
 public partial class Goal : Area3D
 {
