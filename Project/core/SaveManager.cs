@@ -1514,19 +1514,11 @@ public partial class SaveManager : Node
 			BronzeMedalCount = 0;
 			FireSoulCount = 0;
 
-			if (IsSharedLevelSaveData)
-				return;
-
-			// Update runtime data based on save data, and retro-actively update SharedData as needed
+			// Update runtime data based on save data
 			StringName[] keys = data.Keys.ToArray();
 			for (int i = 0; i < keys.Length; i++)
 			{
 				UpdateMedals(GetRank(keys[i]));
-
-				SharedData.LevelData.SetRank(keys[i], GetRank(keys[i]));
-				SharedData.LevelData.SetClearStatus(keys[i], GetClearStatus(keys[i]));
-				SharedData.LevelData.SetBestTime(keys[i], GetBestTime(keys[i]));
-				SharedData.LevelData.SetHighScore(keys[i], GetHighScore(keys[i]));
 
 				for (int j = 1; j < 4; j++) // Check fire souls
 				{
@@ -1534,7 +1526,22 @@ public partial class SaveManager : Node
 						continue;
 
 					IncrementFireSoulCounter();
+				}
+			}
 
+			if (IsSharedLevelSaveData)
+				return;
+
+			// Retro-actively update SharedData as needed
+			for (int i = 0; i < keys.Length; i++)
+			{
+				SharedData.LevelData.SetRank(keys[i], GetRank(keys[i]));
+				SharedData.LevelData.SetClearStatus(keys[i], GetClearStatus(keys[i]));
+				SharedData.LevelData.SetBestTime(keys[i], GetBestTime(keys[i]));
+				SharedData.LevelData.SetHighScore(keys[i], GetHighScore(keys[i]));
+
+				for (int j = 1; j < 4; j++) // Check fire souls
+				{
 					if (!SharedData.LevelData.IsFireSoulCollected(keys[i], j))
 						SharedData.LevelData.SetFireSoulCollected(keys[i], j);
 				}
