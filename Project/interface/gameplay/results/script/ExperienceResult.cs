@@ -293,6 +293,29 @@ public partial class ExperienceResult : Control
 			return;
 		}
 
+		CalculateTargetExp();
+		if (targetExp == startingExp)
+		{
+			// No EXP was gained; continue to notifications
+			NotificationManager.Instance.StartNotifications();
+			return;
+		}
+
+		RedrawData();
+
+		// Fade to black
+		TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.InitializeMenu), (uint)ConnectFlags.OneShot);
+		TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionFinish, new Callable(this, MethodName.ShowMenu), (uint)ConnectFlags.OneShot);
+		TransitionManager.StartTransition(new()
+		{
+			color = Colors.Black,
+			inSpeed = .1f,
+			outSpeed = .1f
+		});
+	}
+
+	private void CalculateTargetExp()
+	{
 		levelupRequirement = CalculateLevelUpRequirement(SaveManager.ActiveGameData.level);
 		previousLevelupRequirement = CalculateLevelUpRequirement(SaveManager.ActiveGameData.level - 1);
 
@@ -313,24 +336,6 @@ public partial class ExperienceResult : Control
 		if (useAccumulatedExp) // Add EXP from previous runs
 			targetExp += AccumulatedExp;
 		accumulatedLabel.GetParent<Control>().Visible = useAccumulatedExp;
-
-		if (targetExp == startingExp) // No EXP was gained
-		{
-			NotificationManager.Instance.StartNotifications();
-			return;
-		}
-
-		RedrawData();
-
-		// Fade to black
-		TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.InitializeMenu), (uint)ConnectFlags.OneShot);
-		TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionFinish, new Callable(this, MethodName.ShowMenu), (uint)ConnectFlags.OneShot);
-		TransitionManager.StartTransition(new()
-		{
-			color = Colors.Black,
-			inSpeed = .1f,
-			outSpeed = .1f
-		});
 	}
 
 	private void InitializeMenu()
@@ -354,7 +359,6 @@ public partial class ExperienceResult : Control
 		if (isFadingBgm)
 			return;
 
-		// Emit a signal; Transition is handled by NotificationMenu.cs
 		isFadingBgm = true;
 		NotificationManager.Instance.StartNotifications();
 	}
