@@ -178,9 +178,24 @@ public partial class SpecialBookPage : Resource
 	public LevelDataResource LevelData { get; private set; }
 	public WorldDataResource WorldData { get; private set; }
 
+	/// <summary> Is this page unimplemented? </summary>
+	private bool IsInvalid()
+	{
+		if (PageType == PageTypeEnum.Music && string.IsNullOrEmpty(AudioStreamPath))
+			return true;
+
+		if (PageType == PageTypeEnum.Video && string.IsNullOrEmpty(VideoEventPath))
+			return true;
+
+		return false;
+	}
+
 	/// <summary> Calculates whether this page should be unlocked or not. </summary>
 	public bool IsUnlocked()
 	{
+		if (IsInvalid())
+			return false;
+
 		if (PageType == PageTypeEnum.Achievement)
 			return SaveManager.SharedData.achievements.Contains(AchievementName);
 
@@ -233,6 +248,9 @@ public partial class SpecialBookPage : Resource
 	{
 		string localizedString = "???";
 		int number = 0;
+
+		if (IsInvalid())
+			return localizedString;
 
 		if (PageType == PageTypeEnum.Achievement)
 			return localizedString;
