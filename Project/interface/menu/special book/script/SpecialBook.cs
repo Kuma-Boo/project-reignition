@@ -189,6 +189,7 @@ public partial class SpecialBook : Menu
 				audioPlayer.Play();
 				break;
 			case SpecialBookPage.PageTypeEnum.Video:
+				/* TODO Enable these after cutscenes are added
 				bgm.Stop();
 
 				TransitionManager.QueueSceneChange(page.VideoEventPath);
@@ -199,6 +200,7 @@ public partial class SpecialBook : Menu
 				});
 
 				DisableProcessing();
+				*/
 				break;
 		}
 	}

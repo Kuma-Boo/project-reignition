@@ -39,7 +39,7 @@ public partial class SpecialBookPage : Resource
 			properties.Add(ExtensionMethods.CreateProperty("Level Resource", Variant.Type.Object, PropertyHint.ResourceType, "LevelDataResource"));
 
 		if (UnlockType == UnlockTypeEnum.SpecificWorld)
-			properties.Add(ExtensionMethods.CreateProperty("World", Variant.Type.Int, PropertyHint.Enum, ExtensionMethods.EnumToString(World)));
+			properties.Add(ExtensionMethods.CreateProperty("World Resource", Variant.Type.Object, PropertyHint.ResourceType, "WorldDataResource"));
 
 		if (UnlockType == UnlockTypeEnum.MedalCount || UnlockType == UnlockTypeEnum.SpecificLevel || UnlockType == UnlockTypeEnum.SpecificWorld)
 			properties.Add(ExtensionMethods.CreateProperty("Rank Requirement", Variant.Type.Int, PropertyHint.Enum, ExtensionMethods.EnumToString(Rank)));
@@ -83,7 +83,7 @@ public partial class SpecialBookPage : Resource
 				LevelData = (LevelDataResource)value;
 				break;
 			case "World":
-				World = (SaveManager.WorldEnum)(int)value;
+				WorldData = (WorldDataResource)value;
 				break;
 			case "Rank Requirement":
 				Rank = (RankEnum)(int)value;
@@ -122,7 +122,7 @@ public partial class SpecialBookPage : Resource
 			case "Level Resource":
 				return LevelData;
 			case "World":
-				return (int)World;
+				return WorldData;
 			case "Rank Requirement":
 				return (int)Rank;
 			case "Medal Count":
@@ -176,7 +176,7 @@ public partial class SpecialBookPage : Resource
 	public int MedalCount { get; private set; }
 
 	public LevelDataResource LevelData { get; private set; }
-	public SaveManager.WorldEnum World { get; private set; }
+	public WorldDataResource WorldData { get; private set; }
 
 	/// <summary> Calculates whether this page should be unlocked or not. </summary>
 	public bool IsUnlocked()
@@ -213,7 +213,16 @@ public partial class SpecialBookPage : Resource
 
 		if (UnlockType == UnlockTypeEnum.SpecificWorld)
 		{
+			if (WorldData == null)
+				GD.PushError("No World Data!");
 
+			for (int i = 0; i < WorldData.Levels.Length; i++)
+			{
+				if (SaveManager.SharedData.LevelData.GetRank(WorldData.Levels[i].LevelID) != 3)
+					return false;
+			}
+
+			return true;
 		}
 
 		return false;
@@ -260,18 +269,7 @@ public partial class SpecialBookPage : Resource
 	private string AbbreviateWorld()
 	{
 		if (UnlockType == UnlockTypeEnum.SpecificWorld)
-			return World switch
-			{
-				SaveManager.WorldEnum.LostPrologue => "lost_prologue",
-				SaveManager.WorldEnum.SandOasis => "sand_oasis",
-				SaveManager.WorldEnum.DinosaurJungle => "dinosaur_jungle",
-				SaveManager.WorldEnum.EvilFoundry => "evil_foundry",
-				SaveManager.WorldEnum.LevitatedRuin => "levitated_ruin",
-				SaveManager.WorldEnum.PirateStorm => "pirate_storm",
-				SaveManager.WorldEnum.SkeletonDome => "skeleton_dome",
-				SaveManager.WorldEnum.NightPalace => "night_palace",
-				_ => string.Empty,
-			};
+			return WorldData.WorldKey;
 
 		if (LevelData == null)
 			return string.Empty;
