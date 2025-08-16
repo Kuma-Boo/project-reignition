@@ -10,8 +10,6 @@ public partial class ExperienceResult : Control
 	/// <summary> Amount of exp accumulated from repeat playthroughs of a level. </summary>
 	public static int AccumulatedExp { get; private set; }
 
-	[Signal] public delegate void FinishedEventHandler();
-
 	[Export] private Control expFill;
 	[Export] private Label expLabel;
 	[Export] private Label scoreLabel;
@@ -282,7 +280,16 @@ public partial class ExperienceResult : Control
 		{
 			// Player is restarting a level -- accumulate exp and skip experience screen
 			AccumulatedExp += Stage.TotalScore + Stage.CurrentEXP;
-			EmitSignal(SignalName.Finished);
+
+			TransitionManager.QueueSceneChange(string.Empty);
+			TransitionManager.StartTransition(new()
+			{
+				inSpeed = 0.2f,
+				outSpeed = 0.5f,
+				color = Colors.Black,
+				disableAutoTransition = true
+			});
+
 			return;
 		}
 
@@ -309,7 +316,7 @@ public partial class ExperienceResult : Control
 
 		if (targetExp == startingExp) // No EXP was gained
 		{
-			EmitSignal(SignalName.Finished);
+			NotificationManager.Instance.StartNotifications();
 			return;
 		}
 
@@ -349,6 +356,6 @@ public partial class ExperienceResult : Control
 
 		// Emit a signal; Transition is handled by NotificationMenu.cs
 		isFadingBgm = true;
-		EmitSignal(SignalName.Finished);
+		NotificationManager.Instance.StartNotifications();
 	}
 }

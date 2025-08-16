@@ -37,7 +37,7 @@ public partial class EventPlayer : Node
 		if (worldRing != SaveManager.WorldEnum.LostPrologue && !SaveManager.ActiveGameData.IsWorldRingObtained(worldRing))
 		{
 			SaveManager.ActiveGameData.UnlockWorldRing(worldRing);
-			NotificationMenu.AddNotification(NotificationMenu.NotificationType.WorldRing, $"unlock_ring_{worldRing.ToString().ToSnakeCase()}");
+			NotificationManager.Instance.AddNotification(NotificationManager.NotificationType.WorldRing, $"unlock_ring_{worldRing.ToString().ToSnakeCase()}");
 		}
 	}
 

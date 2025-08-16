@@ -593,25 +593,10 @@ public partial class StageSettings : Node3D
 		if (rank == 3 && SaveManager.ActiveSkillRing.TotalCost == 0)
 			SaveManager.ActiveGameData.LevelData.SetSkillessGold(Data.LevelID, true);
 
-		// Update unlock notifications
 		if (!isStageCleared)
 			return;
 
-		if (Data.UnlockWorld != SaveManager.WorldEnum.LostPrologue &&
-			!SaveManager.ActiveGameData.IsWorldUnlocked(Data.UnlockWorld))
-		{
-			SaveManager.ActiveGameData.UnlockWorld(Data.UnlockWorld);
-			NotificationMenu.AddNotification(NotificationMenu.NotificationType.World, $"unlock_{Data.UnlockWorld.ToString().ToSnakeCase()}");
-		}
-
-		foreach (var stage in Data.UnlockStage)
-		{
-			if (SaveManager.ActiveGameData.IsStageUnlocked(stage.LevelID))
-				continue;
-
-			SaveManager.ActiveGameData.UnlockStage(stage.LevelID);
-			NotificationMenu.AddNotification(NotificationMenu.NotificationType.Mission, "unlock_mission");
-		}
+		UpdateUnlockNotifications();
 
 		// Only write these when the stage is a success
 		SaveManager.ActiveGameData.LevelData.SetHighScore(Data.LevelID, TotalScore);
@@ -619,6 +604,35 @@ public partial class StageSettings : Node3D
 
 		SaveManager.SharedData.LevelData.SetHighScore(Data.LevelID, TotalScore);
 		SaveManager.SharedData.LevelData.SetBestTime(Data.LevelID, CurrentTime);
+	}
+
+	private void UpdateUnlockNotifications()
+	{
+		// It's redundant saying that a new world AND a new mission is unlocked, so we'll just do one or the other.
+		if (Data.UnlockWorld != SaveManager.WorldEnum.LostPrologue &&
+			!SaveManager.ActiveGameData.IsWorldUnlocked(Data.UnlockWorld))
+		{
+			SaveManager.ActiveGameData.UnlockWorld(Data.UnlockWorld);
+			StringName descriptionString = Tr($"unlock_world").Replace("[AREA]", Tr(Data.UnlockWorld.ToString().ToSnakeCase()));
+			NotificationManager.Instance.AddNotification(NotificationManager.NotificationType.World, descriptionString);
+			return;
+		}
+
+		int missionsUnlocked = 0;
+		foreach (LevelDataResource stage in Data.UnlockStage)
+		{
+			if (SaveManager.ActiveGameData.IsStageUnlocked(stage.LevelID))
+				continue;
+
+			SaveManager.ActiveGameData.UnlockStage(stage.LevelID);
+			missionsUnlocked++;
+		}
+
+		if (missionsUnlocked == 0)
+			return;
+
+		NotificationManager.Instance.AddNotification(NotificationManager.NotificationType.Mission,
+			missionsUnlocked > 1 ? "unlock_mission_multiple" : "unlock_mission");
 	}
 
 	/// <summary> Camera demo that gets enabled after the level is cleared. </summary>
