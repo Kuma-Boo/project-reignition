@@ -188,9 +188,9 @@ public partial class SpecialBookPage : Resource
 		{
 			return Rank switch
 			{
-				RankEnum.Gold => SaveManager.SharedData.LevelData.GoldMedalCount > MedalCount,
-				RankEnum.Silver => SaveManager.SharedData.LevelData.SilverMedalCount > MedalCount,
-				RankEnum.Bronze => SaveManager.SharedData.LevelData.BronzeMedalCount > MedalCount,
+				RankEnum.Gold => SaveManager.SharedData.LevelData.GoldMedalCount >= MedalCount,
+				RankEnum.Silver => SaveManager.SharedData.LevelData.SilverMedalCount >= MedalCount,
+				RankEnum.Bronze => SaveManager.SharedData.LevelData.BronzeMedalCount >= MedalCount,
 				_ => false,
 			};
 		}
@@ -200,9 +200,15 @@ public partial class SpecialBookPage : Resource
 
 		if (UnlockType == UnlockTypeEnum.SpecificLevel)
 		{
+			if (SaveManager.SharedData.LevelData.GetClearStatus(LevelData.LevelID) != SaveManager.LevelSaveData.LevelStatus.Cleared)
+				return false;
+
+			if (Rank == RankEnum.Completed)
+				return true;
+
 			int currentRank = SaveManager.SharedData.LevelData.GetRank(LevelData.LevelID);
 			int targetRank = 3 - (int)Rank; // Convert from RankEnum to save format
-			return targetRank >= currentRank;
+			return targetRank <= currentRank;
 		}
 
 		if (UnlockType == UnlockTypeEnum.SpecificWorld)
@@ -260,6 +266,9 @@ public partial class SpecialBookPage : Resource
 				SaveManager.WorldEnum.NightPalace => "night_palace",
 				_ => string.Empty,
 			};
+
+		if (LevelData == null)
+			return string.Empty;
 
 		string worldKey = LevelData.LevelID.ToString().Split('_')[0];
 		return worldKey switch

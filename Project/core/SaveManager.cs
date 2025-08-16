@@ -10,8 +10,7 @@ public partial class SaveManager : Node
 {
 	public static SaveManager Instance;
 
-	[Signal]
-	public delegate void ConfigAppliedEventHandler();
+	[Signal] public delegate void ConfigAppliedEventHandler();
 
 	private static string SaveDirectory;
 	private static string SaveLocationFile => OS.GetExecutablePath().GetBaseDir() + "/saveLocation.txt";
@@ -23,8 +22,10 @@ public partial class SaveManager : Node
 		CacheInitialInputMap();
 		SaveDirectory = ProjectSettings.GlobalizePath(GetSaveDirectory());
 		MenuData = GameData.CreateDefaultData(); // Create a default game data object for the menu
+		SharedData = SharedGameData.CreateDefaultData();
 
 		LoadConfig();
+		LoadSharedData();
 
 		if (OS.IsDebugBuild()) // Editor build, use custom configuration
 		{
@@ -1134,8 +1135,6 @@ public partial class SaveManager : Node
 				levelData = new()
 			};
 
-			data.levelData.associatedGameData = data;
-
 			// TODO Replace this with the tutorial key
 			data.UnlockStage("so_a1_main");
 			data.UnlockWorld(WorldEnum.LostPrologue);
@@ -1154,7 +1153,7 @@ public partial class SaveManager : Node
 	#endregion
 
 	#region Shared Game Data
-	public static SharedGameData SharedData = new();
+	public static SharedGameData SharedData;
 	private const string SharedFileName = "shared.sav";
 
 	public class SharedGameData
@@ -1255,6 +1254,14 @@ public partial class SaveManager : Node
 			if (dictionary.TryGetValue(nameof(DarkOnlyCount), out var))
 				DarkOnlyCount = (int)var;
 		}
+
+		public static SharedGameData CreateDefaultData()
+		{
+			SharedGameData data = new();
+			// Prevent shared LevelData from infinitely setting values 
+			data.LevelData.IsSharedLevelSaveData = true;
+			return data;
+		}
 	}
 
 	/// <summary> Attempts to load config data from file. </summary>
@@ -1275,7 +1282,7 @@ public partial class SaveManager : Node
 		}
 		catch // Load Default settings
 		{
-			SharedData = new();
+			SharedData = SharedGameData.CreateDefaultData();
 		}
 	}
 
@@ -1300,7 +1307,9 @@ public partial class SaveManager : Node
 	{
 		/// <summary> Dictionaries for each individual level's data. </summary>
 		private Dictionary<StringName, Dictionary> data = [];
-		public GameData associatedGameData;
+
+		/// <summary> Should this LevelSaveData update SharedData.LevelSaveData? </summary>
+		public bool IsSharedLevelSaveData { get; set; }
 
 		/// <summary> Total number of fire souls the player collected. </summary>
 		public int FireSoulCount { get; private set; }
@@ -1320,7 +1329,10 @@ public partial class SaveManager : Node
 			if (rank >= 1 && oldRank < 1)
 				BronzeMedalCount++;
 
-
+			if (IsSharedLevelSaveData)
+			{
+				GD.Print(SilverMedalCount);
+			}
 		}
 
 		private void IncrementFireSoulCounter()
@@ -1343,6 +1355,9 @@ public partial class SaveManager : Node
 		/// <summary> Sets the save value for whether a particular fire soul is collected or not. </summary>
 		public void SetFireSoulCollected(StringName levelID, int index)
 		{
+			if (!IsSharedLevelSaveData)
+				SharedData.LevelData.SetFireSoulCollected(levelID, index);
+
 			StringName key = FireSoulKey + index.ToString();
 			if (GetLevelData(levelID).ContainsKey(key))
 			{
@@ -1370,6 +1385,9 @@ public partial class SaveManager : Node
 		/// <summary> Sets the save value for the player's best rank. Ignores lower ranks. </summary>
 		public void SetRank(StringName levelID, int rank)
 		{
+			if (!IsSharedLevelSaveData)
+				SharedData.LevelData.SetRank(levelID, rank);
+
 			// Discard lower ranks
 			if (rank <= GetRank(levelID)) return;
 
@@ -1397,6 +1415,9 @@ public partial class SaveManager : Node
 		/// <summary> Sets the save value for the player's high score. Ignores lower scores. </summary>
 		public void SetHighScore(StringName levelID, int score)
 		{
+			if (!IsSharedLevelSaveData)
+				SharedData.LevelData.SetHighScore(levelID, score);
+
 			// Discard lower scores
 			if (score <= GetHighScore(levelID)) return;
 
@@ -1422,6 +1443,9 @@ public partial class SaveManager : Node
 		/// <summary> Sets the value for the player's best time. Ignores slower times. </summary>
 		public void SetBestTime(StringName levelID, float time)
 		{
+			if (!IsSharedLevelSaveData)
+				SharedData.LevelData.SetBestTime(levelID, time);
+
 			// Discard lower scores
 			if (!Mathf.IsZeroApprox(GetBestTime(levelID)) &&
 				time > GetBestTime(levelID))
@@ -1451,6 +1475,9 @@ public partial class SaveManager : Node
 		/// <summary> Sets the clear state of a level. </summary>
 		public void SetClearStatus(StringName levelID, LevelStatus clearStatus)
 		{
+			if (!IsSharedLevelSaveData)
+				SharedData.LevelData.SetClearStatus(levelID, clearStatus);
+
 			// Return early if the level has already been cleared
 			if (GetClearStatus(levelID) == LevelStatus.Cleared)
 				return;
@@ -1485,6 +1512,12 @@ public partial class SaveManager : Node
 		public void FromDictionary(Dictionary<StringName, Dictionary> newData)
 		{
 			data = newData;
+
+			// Reset counters before re-counting
+			GoldMedalCount = 0;
+			SilverMedalCount = 0;
+			BronzeMedalCount = 0;
+			FireSoulCount = 0;
 
 			// Update runtime data based on save data
 			StringName[] keys = data.Keys.ToArray();
