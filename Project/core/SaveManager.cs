@@ -25,7 +25,7 @@ public partial class SaveManager : Node
 		SharedData = SharedGameData.CreateDefaultData();
 
 		LoadConfig();
-		LoadSharedData();
+		LoadGameData();
 
 		if (OS.IsDebugBuild()) // Editor build, use custom configuration
 		{
@@ -1328,11 +1328,6 @@ public partial class SaveManager : Node
 				SilverMedalCount++;
 			if (rank >= 1 && oldRank < 1)
 				BronzeMedalCount++;
-
-			if (IsSharedLevelSaveData)
-			{
-				GD.Print(SilverMedalCount);
-			}
 		}
 
 		private void IncrementFireSoulCounter()
@@ -1519,16 +1514,29 @@ public partial class SaveManager : Node
 			BronzeMedalCount = 0;
 			FireSoulCount = 0;
 
-			// Update runtime data based on save data
+			if (IsSharedLevelSaveData)
+				return;
+
+			// Update runtime data based on save data, and retro-actively update SharedData as needed
 			StringName[] keys = data.Keys.ToArray();
 			for (int i = 0; i < keys.Length; i++)
 			{
 				UpdateMedals(GetRank(keys[i]));
 
+				SharedData.LevelData.SetRank(keys[i], GetRank(keys[i]));
+				SharedData.LevelData.SetClearStatus(keys[i], GetClearStatus(keys[i]));
+				SharedData.LevelData.SetBestTime(keys[i], GetBestTime(keys[i]));
+				SharedData.LevelData.SetHighScore(keys[i], GetHighScore(keys[i]));
+
 				for (int j = 1; j < 4; j++) // Check fire souls
 				{
-					if (IsFireSoulCollected(keys[i], j))
-						IncrementFireSoulCounter();
+					if (!IsFireSoulCollected(keys[i], j))
+						continue;
+
+					IncrementFireSoulCounter();
+
+					if (!SharedData.LevelData.IsFireSoulCollected(keys[i], j))
+						SharedData.LevelData.SetFireSoulCollected(keys[i], j);
 				}
 			}
 		}
