@@ -903,6 +903,7 @@ public partial class PlayerAnimator : Node3D
 
 	public void StartHurt(bool forwardLaunch)
 	{
+		IsFallTransitionEnabled = false;
 		HurtStatePlayback.Start(forwardLaunch ? HurtForwardStartState : HurtBackwardState);
 		animationTree.Set(HurtTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
