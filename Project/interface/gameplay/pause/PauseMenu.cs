@@ -274,9 +274,9 @@ public partial class PauseMenu : Node
 		// Status menu
 		values[0].Text = SaveManager.ActiveGameData.level.ToString("00");
 		values[1].Text = "×" + Stage.CurrentRingCount.ToString("000") + "/999";
-		values[2].Text = ExtensionMethods.FormatMenuNumber(SaveManager.ActiveGameData.GetHighScore(Stage.Data.LevelID));
+		values[2].Text = ExtensionMethods.FormatMenuNumber(SaveManager.ActiveGameData.LevelData.GetHighScore(Stage.Data.LevelID));
 		values[3].Text = ExtensionMethods.FormatMenuNumber(Stage.TotalScore);
-		values[4].Text = ExtensionMethods.FormatTime(SaveManager.ActiveGameData.GetBestTime(Stage.Data.LevelID));
+		values[4].Text = ExtensionMethods.FormatTime(SaveManager.ActiveGameData.LevelData.GetBestTime(Stage.Data.LevelID));
 		values[5].Text = Stage.DisplayTime;
 		values[6].Text = ExtensionMethods.FormatMenuNumber(Stage.CurrentEXP);
 		values[7].Text = ExtensionMethods.FormatMenuNumber(SaveManager.ActiveGameData.exp);
@@ -291,7 +291,7 @@ public partial class PauseMenu : Node
 		{
 			for (int i = 0; i < fireSoulRects.Length; i++)
 			{
-				bool isSaveCollected = SaveManager.ActiveGameData.IsFireSoulCollected(Stage.Data.LevelID, i + 1);
+				bool isSaveCollected = SaveManager.ActiveGameData.LevelData.IsFireSoulCollected(Stage.Data.LevelID, i + 1);
 				bool isCheckpointCollected = StageSettings.Instance.fireSoulCheckpoints[i];
 
 				fireSoulRects[i].Texture = (isSaveCollected || isCheckpointCollected) ? fireSoulSprite : noFireSoulSprite;
@@ -299,7 +299,7 @@ public partial class PauseMenu : Node
 			}
 		}
 
-		int rank = SaveManager.ActiveGameData.GetRankClamped(Stage.Data.LevelID);
+		int rank = SaveManager.ActiveGameData.LevelData.GetRankClamped(Stage.Data.LevelID);
 		rankRect.Texture = rankSprites[rank];
 	}
 

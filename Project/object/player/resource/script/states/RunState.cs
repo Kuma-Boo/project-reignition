@@ -131,10 +131,10 @@ public partial class RunState : PlayerState
 		Player.Effect.IsEmittingStepDust = true;
 		ProcessBrakeAnimation();
 
-		SaveManager.SharedData.runDistance = Mathf.MoveToward(SaveManager.SharedData.runDistance, float.MaxValue,
+		SaveManager.SharedData.RunDistance = Mathf.MoveToward(SaveManager.SharedData.RunDistance, float.MaxValue,
 			Player.MoveSpeed * PhysicsManager.physicsDelta);
 
-		if (SaveManager.SharedData.runDistance >= RunAchievementRequirement)
+		if (SaveManager.SharedData.RunDistance >= RunAchievementRequirement)
 			AchievementManager.Instance.UnlockAchievement(RunAchievementName);
 
 		return null;

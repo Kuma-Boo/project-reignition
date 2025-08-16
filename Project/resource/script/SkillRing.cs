@@ -194,25 +194,25 @@ public class SkillRing
 		// Check stage and medal requirements
 		if (skill.StageRequirement?.IsEmpty == false) // Check required stage
 		{
-			if (!SaveManager.ActiveGameData.levelData.ContainsKey(skill.StageRequirement))
+			if (SaveManager.ActiveGameData.LevelData.GetClearStatus(skill.StageRequirement) != SaveManager.LevelSaveData.LevelStatus.Cleared)
 				return false; // Player didn't finish the required stage
 
-			if (SaveManager.ActiveGameData.GetRank(skill.StageRequirement) < skill.MedalRequirement)
+			if (SaveManager.ActiveGameData.LevelData.GetRank(skill.StageRequirement) < skill.MedalRequirement)
 				return false; // Best rank is too low
 		}
 		else
 		{
 			// Check global medal requirements
-			if (skill.MedalRequirement == 3 && SaveManager.ActiveGameData.GoldMedalCount < skill.MedalRequirementCount)
+			if (skill.MedalRequirement == 3 && SaveManager.ActiveGameData.LevelData.GoldMedalCount < skill.MedalRequirementCount)
 				return false;
-			if (skill.MedalRequirement == 2 && SaveManager.ActiveGameData.SilverMedalCount < skill.MedalRequirementCount)
+			if (skill.MedalRequirement == 2 && SaveManager.ActiveGameData.LevelData.SilverMedalCount < skill.MedalRequirementCount)
 				return false;
-			if (skill.MedalRequirement == 1 && SaveManager.ActiveGameData.BronzeMedalCount < skill.MedalRequirementCount)
+			if (skill.MedalRequirement == 1 && SaveManager.ActiveGameData.LevelData.BronzeMedalCount < skill.MedalRequirementCount)
 				return false;
 		}
 
 		// Finish with fire soul requirements
-		return SaveManager.ActiveGameData.FireSoulCount >= skill.FireSoulRequirement;
+		return SaveManager.ActiveGameData.LevelData.FireSoulCount >= skill.FireSoulRequirement;
 	}
 
 	/// <summary> Updates a skill ring to match the active game data. </summary>

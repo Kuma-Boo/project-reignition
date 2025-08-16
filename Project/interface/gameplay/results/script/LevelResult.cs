@@ -158,13 +158,14 @@ public partial class LevelResult : Control
 			}
 
 			// Only write these when the stage is a success
-			SaveManager.ActiveGameData.SetHighScore(Stage.Data.LevelID, Stage.TotalScore);
-			SaveManager.ActiveGameData.SetBestTime(Stage.Data.LevelID, Stage.CurrentTime);
+			SaveManager.ActiveGameData.LevelData.SetHighScore(Stage.Data.LevelID, Stage.TotalScore);
+			SaveManager.ActiveGameData.LevelData.SetBestTime(Stage.Data.LevelID, Stage.CurrentTime);
 		}
 
 		// Write common data to save file
-		SaveManager.ActiveGameData.SetRank(Stage.Data.LevelID, rank);
-		SaveManager.ActiveGameData.SetClearStatus(Stage.Data.LevelID, isStageCleared ? SaveManager.GameData.LevelStatus.Cleared : SaveManager.GameData.LevelStatus.Attempted);
+		SaveManager.ActiveGameData.LevelData.SetRank(Stage.Data.LevelID, rank);
+		SaveManager.ActiveGameData.LevelData.SetClearStatus(Stage.Data.LevelID,
+			isStageCleared ? SaveManager.LevelSaveData.LevelStatus.Cleared : SaveManager.LevelSaveData.LevelStatus.Attempted);
 	}
 
 	public void SetInputProcessing(bool value) => isProcessing = value;

@@ -36,7 +36,7 @@ public partial class LevelSelect : Menu
 			{
 				levelOption.UpdateLevelData();
 
-				if (levelOption.IsUnlocked && levelOption.ClearState == Core.SaveManager.GameData.LevelStatus.New)
+				if (levelOption.IsUnlocked && levelOption.ClearState == Core.SaveManager.LevelSaveData.LevelStatus.New)
 					return true;
 			}
 		}

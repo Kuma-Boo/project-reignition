@@ -181,8 +181,6 @@ public partial class SpecialBookPage : Resource
 	/// <summary> Calculates whether this page should be unlocked or not. </summary>
 	public bool IsUnlocked()
 	{
-		return true;
-
 		if (PageType == PageTypeEnum.Achievement)
 			return SaveManager.SharedData.achievements.Contains(AchievementName);
 
@@ -190,9 +188,9 @@ public partial class SpecialBookPage : Resource
 		{
 			return Rank switch
 			{
-				RankEnum.Gold => SaveManager.SharedData.GoldMedalCount > MedalCount,
-				RankEnum.Silver => SaveManager.SharedData.SilverMedalCount > MedalCount,
-				RankEnum.Bronze => SaveManager.SharedData.BronzeMedalCount > MedalCount,
+				RankEnum.Gold => SaveManager.SharedData.LevelData.GoldMedalCount > MedalCount,
+				RankEnum.Silver => SaveManager.SharedData.LevelData.SilverMedalCount > MedalCount,
+				RankEnum.Bronze => SaveManager.SharedData.LevelData.BronzeMedalCount > MedalCount,
 				_ => false,
 			};
 		}
@@ -202,7 +200,9 @@ public partial class SpecialBookPage : Resource
 
 		if (UnlockType == UnlockTypeEnum.SpecificLevel)
 		{
-
+			int currentRank = SaveManager.SharedData.LevelData.GetRank(LevelData.LevelID);
+			int targetRank = 3 - (int)Rank; // Convert from RankEnum to save format
+			return targetRank >= currentRank;
 		}
 
 		if (UnlockType == UnlockTypeEnum.SpecificWorld)
@@ -235,6 +235,7 @@ public partial class SpecialBookPage : Resource
 				break;
 			case UnlockTypeEnum.BigCameo:
 				localizedString = Tr("spb_hint_big");
+				number = LevelData.LevelIndex;
 				break;
 		}
 
@@ -249,7 +250,7 @@ public partial class SpecialBookPage : Resource
 		if (UnlockType == UnlockTypeEnum.SpecificWorld)
 			return World switch
 			{
-				SaveManager.WorldEnum.LostPrologue => "lost_prolouge",
+				SaveManager.WorldEnum.LostPrologue => "lost_prologue",
 				SaveManager.WorldEnum.SandOasis => "sand_oasis",
 				SaveManager.WorldEnum.DinosaurJungle => "dinosaur_jungle",
 				SaveManager.WorldEnum.EvilFoundry => "evil_foundry",
@@ -263,7 +264,7 @@ public partial class SpecialBookPage : Resource
 		string worldKey = LevelData.LevelID.ToString().Split('_')[0];
 		return worldKey switch
 		{
-			"lp" => "lost_prolouge",
+			"lp" => "lost_prologue",
 			"so" => "sand_oasis",
 			"dj" => "dinosaur_jungle",
 			"ef" => "evil_foundry",

@@ -43,7 +43,7 @@ public partial class LevelOption : Control
 			return SaveManager.ActiveGameData.IsStageUnlocked(data.LevelID);
 		}
 	}
-	public SaveManager.GameData.LevelStatus ClearState { get; private set; }
+	public SaveManager.LevelSaveData.LevelStatus ClearState { get; private set; }
 
 
 	public string GetDescription() => IsUnlocked ? data.MissionDescriptionKey : "mission_description_locked";
@@ -75,17 +75,17 @@ public partial class LevelOption : Control
 	{
 		if (IsUnlocked)
 		{
-			ClearState = SaveManager.ActiveGameData.GetClearStatus(data.LevelID);
+			ClearState = SaveManager.ActiveGameData.LevelData.GetClearStatus(data.LevelID);
 			switch (ClearState)
 			{
-				case SaveManager.GameData.LevelStatus.New:
+				case SaveManager.LevelSaveData.LevelStatus.New:
 					EmitSignal(SignalName.NewLevel);
 					animator.Play(NewAnimation);
 					break;
-				case SaveManager.GameData.LevelStatus.Attempted:
+				case SaveManager.LevelSaveData.LevelStatus.Attempted:
 					animator.Play(AttemptAnimation);
 					break;
-				case SaveManager.GameData.LevelStatus.Cleared:
+				case SaveManager.LevelSaveData.LevelStatus.Cleared:
 					animator.Play(ClearAnimation);
 					animator.AnimationSetNext(ShowAnimation, ClearAnimation + LoopAnimation);
 					break;
@@ -101,12 +101,12 @@ public partial class LevelOption : Control
 		{
 			for (int i = 0; i < fireSoulRects.Length; i++)
 			{
-				bool isCollected = SaveManager.ActiveGameData.IsFireSoulCollected(data.LevelID, i + 1);
+				bool isCollected = SaveManager.ActiveGameData.LevelData.IsFireSoulCollected(data.LevelID, i + 1);
 				fireSoulRects[i].Texture = isCollected ? fireSoulSprite : noFireSoulSprite;
 			}
 		}
 
-		switch (SaveManager.ActiveGameData.GetRankClamped(data.LevelID))
+		switch (SaveManager.ActiveGameData.LevelData.GetRankClamped(data.LevelID))
 		{
 			case 1:
 				animator.Play(BronzeAnimation);

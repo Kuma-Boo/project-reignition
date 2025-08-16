@@ -106,8 +106,8 @@ namespace Project.Gameplay.Objects
 				}
 			}
 
-			SaveManager.SharedData.ringCount = (int)Mathf.MoveToward(SaveManager.SharedData.ringCount, int.MaxValue, isRichRing ? 20 : 1);
-			if (SaveManager.SharedData.ringCount >= RingAchievementRequirement)
+			SaveManager.SharedData.RingCount = (int)Mathf.MoveToward(SaveManager.SharedData.RingCount, int.MaxValue, isRichRing ? 20 : 1);
+			if (SaveManager.SharedData.RingCount >= RingAchievementRequirement)
 				AchievementManager.Instance.UnlockAchievement(RingAchievementName);
 
 			BonusManager.instance.AddRingChain();

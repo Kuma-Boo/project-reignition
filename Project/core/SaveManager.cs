@@ -893,14 +893,8 @@ public partial class SaveManager : Node
 
 		public Array<SkillKey> equippedSkills;
 		public Dictionary<SkillKey, int> equippedAugments;
-		/// <summary> Total number of fire souls the player collected. </summary>
-		public int FireSoulCount { get; private set; }
-		/// <summary> Total number of gold medals the player has collected. </summary>
-		public int GoldMedalCount { get; private set; }
-		/// <summary> Total number of silver medals the player has collected. </summary>
-		public int SilverMedalCount { get; private set; }
-		/// <summary> Total number of bronze medals the player has collected. </summary>
-		public int BronzeMedalCount { get; private set; }
+		public LevelSaveData LevelData => levelData;
+		private LevelSaveData levelData = new();
 
 		/// <summary> Calculates the player's soul gauge size based on the player's level. </summary>
 		public int CalculateMaxSoulPower()
@@ -950,167 +944,6 @@ public partial class SaveManager : Node
 				UnlockWorld((WorldEnum)i);
 		}
 
-		#region Level Data
-		/// <summary> Dictionaries for each individual level's data. </summary>
-		public Dictionary<StringName, Dictionary> levelData = [];
-
-		private readonly string FireSoulKey = "fire_soul";
-		/// <summary> Returns whether a particular fire soul has been collected or not. </summary>
-		public bool IsFireSoulCollected(StringName levelID, int index)
-		{
-			StringName key = FireSoulKey + index.ToString();
-			if (GetLevelData(levelID).TryGetValue(key, out Variant collected))
-				return (bool)collected;
-
-			return false;
-		}
-
-		/// <summary> Sets the save value for whether a particular fire soul is collected or not. </summary>
-		public void SetFireSoulCollected(StringName levelID, int index, bool collected)
-		{
-			StringName key = FireSoulKey + index.ToString();
-			if (GetLevelData(levelID).ContainsKey(key))
-			{
-				GetLevelData(levelID)[key] = collected;
-				return;
-			}
-
-			FireSoulCount++;
-			GetLevelData(levelID).Add(key, collected);
-		}
-
-		private readonly string RankKey = "rank";
-		/// <summary> Gets the save value for the player's best rank. </summary>
-		public int GetRank(StringName levelID)
-		{
-			if (GetLevelData(levelID).TryGetValue(RankKey, out Variant rank))
-				return (int)rank;
-
-			return -1; // No recorded rank; Return -1 to avoid getting confused with "no medal"
-		}
-
-		/// <summary> Gets the save value for the player's best rank, clamped so unplayed stages count as 0. </summary>
-		public int GetRankClamped(StringName levelID) => Mathf.Clamp(GetRank(levelID), 0, 3);
-
-		/// <summary> Sets the save value for the player's best rank. Ignores lower ranks. </summary>
-		public void SetRank(StringName levelID, int rank)
-		{
-			// Discard lower ranks
-			if (rank <= ActiveGameData.GetRank(levelID)) return;
-
-			if (GetLevelData(levelID).ContainsKey(RankKey))
-			{
-				UpdateMedals(rank, (int)GetLevelData(levelID)[RankKey]);
-				GetLevelData(levelID)[RankKey] = rank;
-				return;
-			}
-
-			UpdateMedals(rank);
-			GetLevelData(levelID).Add(RankKey, rank);
-		}
-
-		private readonly string ScoreKey = "high_score";
-		/// <summary> Gets the save value for the player's high score. </summary>
-		public int GetHighScore(StringName levelID)
-		{
-			if (GetLevelData(levelID).TryGetValue(ScoreKey, out Variant score))
-				return (int)score;
-
-			return 0; // No score recorded
-		}
-
-		/// <summary> Sets the save value for the player's high score. Ignores lower scores. </summary>
-		public void SetHighScore(StringName levelID, int score)
-		{
-			// Discard lower scores
-			if (score <= ActiveGameData.GetHighScore(levelID)) return;
-
-			if (GetLevelData(levelID).ContainsKey(ScoreKey))
-			{
-				GetLevelData(levelID)[ScoreKey] = score;
-				return;
-			}
-
-			GetLevelData(levelID).Add(ScoreKey, score);
-		}
-
-		private readonly string TimeKey = "best_time";
-		/// <summary> Gets the save value for the player's best rank. </summary>
-		public float GetBestTime(StringName levelID)
-		{
-			if (GetLevelData(levelID).TryGetValue(TimeKey, out Variant time))
-				return (float)time;
-
-			return 0; // No time recorded
-		}
-
-		/// <summary> Sets the value for the player's best time. Ignores slower times. </summary>
-		public void SetBestTime(StringName levelID, float time)
-		{
-			// Discard lower scores
-			if (!Mathf.IsZeroApprox(ActiveGameData.GetBestTime(levelID)) &&
-				time > ActiveGameData.GetBestTime(levelID))
-			{
-				return;
-			}
-
-			if (GetLevelData(levelID).ContainsKey(TimeKey))
-			{
-				GetLevelData(levelID)[TimeKey] = time;
-				return;
-			}
-
-			GetLevelData(levelID).Add(TimeKey, time);
-		}
-
-		private readonly string StatusKey = "clear_status";
-		/// <summary> Returns the clear state of a level. </summary>
-		public LevelStatus GetClearStatus(StringName levelID)
-		{
-			if (GetLevelData(levelID).TryGetValue(StatusKey, out Variant status))
-				return (LevelStatus)(int)status;
-
-			return LevelStatus.New;
-		}
-
-		/// <summary> Sets the clear state of a level. </summary>
-		public void SetClearStatus(StringName levelID, LevelStatus clearStatus)
-		{
-			if (SharedData.GetLevelData(levelID).ContainsKey(StatusKey))
-			{
-
-			}
-
-			// Return early if the level has already been cleared
-			if (ActiveGameData.GetClearStatus(levelID) == LevelStatus.Cleared)
-				return;
-
-			if (GetLevelData(levelID).ContainsKey(StatusKey))
-			{
-				GetLevelData(levelID)[StatusKey] = (int)clearStatus;
-				return;
-			}
-
-			GetLevelData(levelID).Add(StatusKey, (int)clearStatus);
-		}
-
-		public enum LevelStatus
-		{
-			New, // Player has never touched the level
-			Attempted, // Player played the level, but never cleared it
-			Cleared, // Player has cleared the level
-		}
-
-		/// <summary> Returns the dictionary of a particular level. </summary>
-		public Dictionary GetLevelData(StringName levelID)
-		{
-			if (!levelData.ContainsKey(levelID)) // Create new level data if it's missing
-				levelData.Add(levelID, []);
-
-			return levelData[levelID];
-		}
-		#endregion
-
 		public bool CanSkipCutscene(StringName cutsceneId) => skippableCutscenes.Contains(cutsceneId) || OS.IsDebugBuild();
 		public void AllowSkippingCutscene(StringName cutsceneId)
 		{
@@ -1139,7 +972,7 @@ public partial class SaveManager : Node
 				{ nameof(worldRingsCollected), worldRingsCollected },
 				{ nameof(stagesUnlocked), stagesUnlocked },
 				{ nameof(skippableCutscenes), skippableCutscenes },
-				{ nameof(levelData), (Dictionary)levelData },
+				{ nameof(levelData), levelData.ToDictionary() },
 
 				// Player stats
 				{ nameof(level), level },
@@ -1189,7 +1022,7 @@ public partial class SaveManager : Node
 				skippableCutscenes = (Array<string>)var;
 
 			if (dictionary.TryGetValue(nameof(levelData), out var))
-				levelData = (Dictionary<StringName, Dictionary>)var;
+				levelData.FromDictionary((Dictionary<StringName, Dictionary>)var);
 
 			if (dictionary.TryGetValue(nameof(level), out var))
 				level = (int)var;
@@ -1225,19 +1058,6 @@ public partial class SaveManager : Node
 				presetSkillAugments.Resize(presetAugments.Count);
 				for (int i = 0; i < presetSkillAugments.Count; i++)
 					presetSkillAugments[i] = LoadAugments(presetAugments[i]);
-			}
-
-			// Update runtime data based on save data
-			StringName[] keys = levelData.Keys.ToArray();
-			for (int i = 0; i < keys.Length; i++)
-			{
-				UpdateMedals(GetRank(keys[i]));
-
-				for (int j = 1; j < 4; j++) // Check fire souls
-				{
-					if (IsFireSoulCollected(keys[i], j))
-						FireSoulCount++;
-				}
 			}
 		}
 
@@ -1294,16 +1114,6 @@ public partial class SaveManager : Node
 			return augmentDictionary;
 		}
 
-		private void UpdateMedals(int rank, int oldRank = 0)
-		{
-			if (rank >= 3 && oldRank < 3)
-				GoldMedalCount++;
-			if (rank >= 2 && oldRank < 2)
-				SilverMedalCount++;
-			if (rank >= 1 && oldRank < 1)
-				BronzeMedalCount++;
-		}
-
 		/// <summary> Creates a new GameData object that contains default values. </summary>
 		public static GameData CreateDefaultData()
 		{
@@ -1320,8 +1130,11 @@ public partial class SaveManager : Node
 				equippedSkills = [],
 				equippedAugments = [],
 				level = 0,
-				lastPlayedWorld = WorldEnum.LostPrologue
+				lastPlayedWorld = WorldEnum.LostPrologue,
+				levelData = new()
 			};
+
+			data.levelData.associatedGameData = data;
 
 			// TODO Replace this with the tutorial key
 			data.UnlockStage("so_a1_main");
@@ -1347,74 +1160,100 @@ public partial class SaveManager : Node
 	public class SharedGameData
 	{
 		/// <summary> Total amount of time the game has been on, in seconds. </summary>
-		public float playTime;
+		public float PlayTime { get; set; }
 		/// <summary> Total amount of distance ran. </summary>
-		public float runDistance;
+		public float RunDistance { get; set; }
 		/// <summary> Total amount of distance grinded. </summary>
-		public float grindDistance;
+		public float GrindDistance { get; set; }
 		/// <summary> Total number of enemies busted. </summary>
-		public int enemyCount;
+		public int EnemyCount { get; set; }
 		/// <summary> Total number of rings collected. </summary>
-		public int ringCount;
+		public int RingCount { get; set; }
 		/// <summary> Total number of rings collected. </summary>
-		public int ringChainCount;
+		public int RingChainCount { get; set; }
 		/// <summary> Total number of times SpeedBreak was activated. </summary>
-		public int speedBreakActivations;
+		public int SpeedBreakActivationCount { get; set; }
 		/// <summary> Total number of seconds TimeBreak was active. </summary>
-		public float timeBreakTime;
+		public float TimeBreakTime { get; set; }
 
 		// Skills
-		public int minimalSkillCount;
-		public int fireOnlyCount;
-		public int windOnlyCount;
-		public int darkOnlyCount;
+		public int MinimalSkillCount { get; set; }
+		public int FireOnlyCount { get; set; }
+		public int WindOnlyCount { get; set; }
+		public int DarkOnlyCount { get; set; }
 
 		/// <summary> Dictionaries for each individual level's data. </summary>
-		public Dictionary<StringName, Dictionary> levelData = [];
+		public LevelSaveData LevelData => levelData;
+		private LevelSaveData levelData = new();
 		/// <summary> List of big cameos unlocked. </summary>
 		public Array<string> bigCameos = [];
-
 		/// <summary> List of achievements unlocked. </summary>
 		public Array<string> achievements = [];
-
-		/// <summary> Highest number of fire souls ever collected. </summary>
-		public int FireSoulCount { get; private set; }
-		/// <summary> Highest number of gold medals ever collected. </summary>
-		public int GoldMedalCount { get; private set; }
-		/// <summary> Highest number of silver medals ever collected. </summary>
-		public int SilverMedalCount { get; private set; }
-		/// <summary> Highest number of bronze medals ever collected. </summary>
-		public int BronzeMedalCount { get; private set; }
-
-		/// <summary> Returns the dictionary of a particular level. </summary>
-		public Dictionary GetLevelData(StringName levelID)
-		{
-			if (!levelData.ContainsKey(levelID)) // Create new level data if it's missing
-				levelData.Add(levelID, []);
-
-			return levelData[levelID];
-		}
 
 		/// <summary> Creates a dictionary based on GameData. </summary>
 		public Dictionary ToDictionary()
 		{
 			return new()
 			{
-				// WorldEnum data
-				{ nameof(playTime), Mathf.RoundToInt(playTime) },
-				{ nameof(levelData), (Dictionary)levelData },
-				{ nameof(bigCameos), bigCameos }
+				{ nameof(PlayTime), Mathf.RoundToInt(PlayTime) },
+				{ nameof(RunDistance), RunDistance },
+				{ nameof(GrindDistance), GrindDistance },
+				{ nameof(EnemyCount), EnemyCount },
+				{ nameof(RingCount), RingCount },
+				{ nameof(RingChainCount), RingChainCount },
+				{ nameof(SpeedBreakActivationCount), SpeedBreakActivationCount },
+				{ nameof(TimeBreakTime), TimeBreakTime },
+
+				{ nameof(MinimalSkillCount), MinimalSkillCount },
+				{ nameof(FireOnlyCount), FireOnlyCount },
+				{ nameof(WindOnlyCount), WindOnlyCount },
+				{ nameof(DarkOnlyCount), DarkOnlyCount },
+
+				{ nameof(LevelData), LevelData.ToDictionary() },
+				{ nameof(bigCameos), bigCameos },
+				{ nameof(achievements), achievements }
 			};
 		}
 
 		/// <summary> Sets GameData based on dictionary. </summary>
 		public void FromDictionary(Dictionary dictionary)
 		{
-			if (dictionary.TryGetValue(nameof(playTime), out Variant var))
-				playTime = (float)var;
+			if (dictionary.TryGetValue(nameof(PlayTime), out Variant var))
+				PlayTime = (float)var;
+			if (dictionary.TryGetValue(nameof(RunDistance), out var))
+				RunDistance = (float)var;
+			if (dictionary.TryGetValue(nameof(GrindDistance), out var))
+				GrindDistance = (float)var;
+			if (dictionary.TryGetValue(nameof(EnemyCount), out var))
+				EnemyCount = (int)var;
+			if (dictionary.TryGetValue(nameof(RingCount), out var))
+				RingCount = (int)var;
+			if (dictionary.TryGetValue(nameof(RingChainCount), out var))
+				RingChainCount = (int)var;
+			if (dictionary.TryGetValue(nameof(SpeedBreakActivationCount), out var))
+				SpeedBreakActivationCount = (int)var;
+			if (dictionary.TryGetValue(nameof(TimeBreakTime), out var))
+				TimeBreakTime = (float)var;
 
-			if (dictionary.TryGetValue(nameof(levelData), out var))
-				levelData = (Dictionary<StringName, Dictionary>)var;
+			if (dictionary.TryGetValue(nameof(MinimalSkillCount), out var))
+				MinimalSkillCount = (int)var;
+			if (dictionary.TryGetValue(nameof(FireOnlyCount), out var))
+				FireOnlyCount = (int)var;
+			if (dictionary.TryGetValue(nameof(WindOnlyCount), out var))
+				WindOnlyCount = (int)var;
+			if (dictionary.TryGetValue(nameof(DarkOnlyCount), out var))
+				DarkOnlyCount = (int)var;
+
+			if (dictionary.TryGetValue(nameof(LevelData), out var))
+				LevelData.FromDictionary((Dictionary<StringName, Dictionary>)var);
+			if (dictionary.TryGetValue(nameof(bigCameos), out var))
+				bigCameos = (Array<string>)var;
+			if (dictionary.TryGetValue(nameof(achievements), out var))
+				achievements = (Array<string>)var;
+
+
+			if (dictionary.TryGetValue(nameof(DarkOnlyCount), out var))
+				DarkOnlyCount = (int)var;
 		}
 	}
 
@@ -1456,4 +1295,209 @@ public partial class SaveManager : Node
 		file.Close();
 	}
 	#endregion
+
+	public class LevelSaveData
+	{
+		/// <summary> Dictionaries for each individual level's data. </summary>
+		private Dictionary<StringName, Dictionary> data = [];
+		public GameData associatedGameData;
+
+		/// <summary> Total number of fire souls the player collected. </summary>
+		public int FireSoulCount { get; private set; }
+		/// <summary> Total number of gold medals the player has collected. </summary>
+		public int GoldMedalCount { get; private set; }
+		/// <summary> Total number of silver medals the player has collected. </summary>
+		public int SilverMedalCount { get; private set; }
+		/// <summary> Total number of bronze medals the player has collected. </summary>
+		public int BronzeMedalCount { get; private set; }
+
+		private void UpdateMedals(int rank, int oldRank = 0)
+		{
+			if (rank >= 3 && oldRank < 3)
+				GoldMedalCount++;
+			if (rank >= 2 && oldRank < 2)
+				SilverMedalCount++;
+			if (rank >= 1 && oldRank < 1)
+				BronzeMedalCount++;
+
+
+		}
+
+		private void IncrementFireSoulCounter()
+		{
+			FireSoulCount++;
+			// TODO Check soul collector achievement
+		}
+
+		private readonly string FireSoulKey = "fire_soul";
+		/// <summary> Returns whether a particular fire soul has been collected or not. </summary>
+		public bool IsFireSoulCollected(StringName levelID, int index)
+		{
+			StringName key = FireSoulKey + index.ToString();
+			if (GetLevelData(levelID).TryGetValue(key, out Variant collected))
+				return (bool)collected;
+
+			return false;
+		}
+
+		/// <summary> Sets the save value for whether a particular fire soul is collected or not. </summary>
+		public void SetFireSoulCollected(StringName levelID, int index)
+		{
+			StringName key = FireSoulKey + index.ToString();
+			if (GetLevelData(levelID).ContainsKey(key))
+			{
+				GetLevelData(levelID)[key] = true;
+				return;
+			}
+
+			IncrementFireSoulCounter();
+			GetLevelData(levelID).Add(key, true);
+		}
+
+		private readonly string RankKey = "rank";
+		/// <summary> Gets the save value for the player's best rank. </summary>
+		public int GetRank(StringName levelID)
+		{
+			if (GetLevelData(levelID).TryGetValue(RankKey, out Variant rank))
+				return (int)rank;
+
+			return -1; // No recorded rank; Return -1 to avoid getting confused with "no medal"
+		}
+
+		/// <summary> Gets the save value for the player's best rank, clamped so unplayed stages count as 0. </summary>
+		public int GetRankClamped(StringName levelID) => Mathf.Clamp(GetRank(levelID), 0, 3);
+
+		/// <summary> Sets the save value for the player's best rank. Ignores lower ranks. </summary>
+		public void SetRank(StringName levelID, int rank)
+		{
+			// Discard lower ranks
+			if (rank <= GetRank(levelID)) return;
+
+			if (GetLevelData(levelID).ContainsKey(RankKey))
+			{
+				UpdateMedals(rank, (int)GetLevelData(levelID)[RankKey]);
+				GetLevelData(levelID)[RankKey] = rank;
+				return;
+			}
+
+			UpdateMedals(rank);
+			GetLevelData(levelID).Add(RankKey, rank);
+		}
+
+		private readonly string ScoreKey = "high_score";
+		/// <summary> Gets the save value for the player's high score. </summary>
+		public int GetHighScore(StringName levelID)
+		{
+			if (GetLevelData(levelID).TryGetValue(ScoreKey, out Variant score))
+				return (int)score;
+
+			return 0; // No score recorded
+		}
+
+		/// <summary> Sets the save value for the player's high score. Ignores lower scores. </summary>
+		public void SetHighScore(StringName levelID, int score)
+		{
+			// Discard lower scores
+			if (score <= GetHighScore(levelID)) return;
+
+			if (GetLevelData(levelID).ContainsKey(ScoreKey))
+			{
+				GetLevelData(levelID)[ScoreKey] = score;
+				return;
+			}
+
+			GetLevelData(levelID).Add(ScoreKey, score);
+		}
+
+		private readonly string TimeKey = "best_time";
+		/// <summary> Gets the save value for the player's best rank. </summary>
+		public float GetBestTime(StringName levelID)
+		{
+			if (GetLevelData(levelID).TryGetValue(TimeKey, out Variant time))
+				return (float)time;
+
+			return 0; // No time recorded
+		}
+
+		/// <summary> Sets the value for the player's best time. Ignores slower times. </summary>
+		public void SetBestTime(StringName levelID, float time)
+		{
+			// Discard lower scores
+			if (!Mathf.IsZeroApprox(GetBestTime(levelID)) &&
+				time > GetBestTime(levelID))
+			{
+				return;
+			}
+
+			if (GetLevelData(levelID).ContainsKey(TimeKey))
+			{
+				GetLevelData(levelID)[TimeKey] = time;
+				return;
+			}
+
+			GetLevelData(levelID).Add(TimeKey, time);
+		}
+
+		private readonly string StatusKey = "clear_status";
+		/// <summary> Returns the clear state of a level. </summary>
+		public LevelStatus GetClearStatus(StringName levelID)
+		{
+			if (GetLevelData(levelID).TryGetValue(StatusKey, out Variant status))
+				return (LevelStatus)(int)status;
+
+			return LevelStatus.New;
+		}
+
+		/// <summary> Sets the clear state of a level. </summary>
+		public void SetClearStatus(StringName levelID, LevelStatus clearStatus)
+		{
+			// Return early if the level has already been cleared
+			if (GetClearStatus(levelID) == LevelStatus.Cleared)
+				return;
+
+			if (GetLevelData(levelID).ContainsKey(StatusKey))
+			{
+				GetLevelData(levelID)[StatusKey] = (int)clearStatus;
+				return;
+			}
+
+			GetLevelData(levelID).Add(StatusKey, (int)clearStatus);
+		}
+
+		public enum LevelStatus
+		{
+			New, // Player has never touched the level
+			Attempted, // Player played the level, but never cleared it
+			Cleared, // Player has cleared the level
+		}
+
+		/// <summary> Returns the dictionary of a particular level. </summary>
+		public Dictionary GetLevelData(StringName levelID)
+		{
+			if (!data.ContainsKey(levelID)) // Create new level data if it's missing
+				data.Add(levelID, []);
+
+			return data[levelID];
+		}
+
+		public Dictionary ToDictionary() => (Dictionary)data;
+
+		public void FromDictionary(Dictionary<StringName, Dictionary> newData)
+		{
+			data = newData;
+
+			// Update runtime data based on save data
+			StringName[] keys = data.Keys.ToArray();
+			for (int i = 0; i < keys.Length; i++)
+			{
+				UpdateMedals(GetRank(keys[i]));
+
+				for (int j = 1; j < 4; j++) // Check fire souls
+				{
+					if (IsFireSoulCollected(keys[i], j))
+						IncrementFireSoulCounter();
+				}
+			}
+		}
+	}
 }

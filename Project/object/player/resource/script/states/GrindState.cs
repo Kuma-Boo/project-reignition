@@ -131,9 +131,9 @@ public partial class GrindState : PlayerState
 		if (isGrindCompleted || movementDelta <= 0) // Disconnect from the rail
 			return fallState;
 
-		SaveManager.SharedData.grindDistance = Mathf.MoveToward(SaveManager.SharedData.grindDistance, float.MaxValue,
+		SaveManager.SharedData.GrindDistance = Mathf.MoveToward(SaveManager.SharedData.GrindDistance, float.MaxValue,
 			Player.MoveSpeed * PhysicsManager.physicsDelta);
-		if (SaveManager.SharedData.runDistance >= GrindAchievementRequirement)
+		if (SaveManager.SharedData.RunDistance >= GrindAchievementRequirement)
 			AchievementManager.Instance.UnlockAchievement(GrindAchievementName);
 
 		return null;

@@ -28,10 +28,10 @@ public partial class Runtime : Node
 	{
 		UpdateShaderTime();
 
-		SaveManager.SharedData.playTime = Mathf.MoveToward(SaveManager.SharedData.playTime,
+		SaveManager.SharedData.PlayTime = Mathf.MoveToward(SaveManager.SharedData.PlayTime,
 			SaveManager.MaxPlayTime, PhysicsManager.normalDelta);
 
-		if (SaveManager.SharedData.playTime >= AchievementTimeRequirement)
+		if (SaveManager.SharedData.PlayTime >= AchievementTimeRequirement)
 			AchievementManager.Instance.UnlockAchievement(AchievementTimeKey);
 
 		if (SaveManager.ActiveSaveSlotIndex == -1)

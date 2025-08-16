@@ -22,7 +22,7 @@ public partial class FireSoul : Pickup
 		base.SetUp();
 
 		// Check save data
-		isCollectedInSaveFile = SaveManager.ActiveGameData.IsFireSoulCollected(Stage.Data.LevelID, fireSoulIndex);
+		isCollectedInSaveFile = SaveManager.ActiveGameData.LevelData.IsFireSoulCollected(Stage.Data.LevelID, fireSoulIndex);
 		if (isCollectedInSaveFile)
 		{
 			Despawn();
@@ -115,7 +115,7 @@ public partial class FireSoul : Pickup
 	public override void Unload()
 	{
 		if (isCollected && Stage.LevelState == StageSettings.LevelStateEnum.Success) // Write save data
-			SaveManager.ActiveGameData.SetFireSoulCollected(Stage.Data.LevelID, fireSoulIndex, true);
+			SaveManager.ActiveGameData.LevelData.SetFireSoulCollected(Stage.Data.LevelID, fireSoulIndex);
 
 		base.Unload();
 	}

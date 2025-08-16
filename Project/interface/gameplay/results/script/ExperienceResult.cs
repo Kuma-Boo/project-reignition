@@ -88,7 +88,7 @@ public partial class ExperienceResult : Control
 		SaveManager.ActiveGameData.level = CalculateLevel(SaveManager.ActiveGameData.exp); // Update from old save data, just in case
 		SaveManager.ActiveGameData.level = Mathf.Min(SaveManager.ActiveGameData.level, MaxLevel);
 		useMissionExp = Stage.LevelState == StageSettings.LevelStateEnum.Success &&
-			SaveManager.ActiveGameData.GetClearStatus(Stage.Data.LevelID) != SaveManager.GameData.LevelStatus.Cleared;
+			SaveManager.ActiveGameData.LevelData.GetClearStatus(Stage.Data.LevelID) != SaveManager.LevelSaveData.LevelStatus.Cleared;
 		useAccumulatedExp = AccumulatedExp != 0;
 	}
 

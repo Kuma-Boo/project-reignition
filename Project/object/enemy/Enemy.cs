@@ -215,8 +215,8 @@ public partial class Enemy : Node3D
 
 		CheckLightSpeedAttack();
 
-		SaveManager.SharedData.enemyCount = (int)Mathf.MoveToward(SaveManager.SharedData.enemyCount, int.MaxValue, 1);
-		if (SaveManager.SharedData.enemyCount >= EnemyAchievementRequirement)
+		SaveManager.SharedData.EnemyCount = (int)Mathf.MoveToward(SaveManager.SharedData.EnemyCount, int.MaxValue, 1);
+		if (SaveManager.SharedData.EnemyCount >= EnemyAchievementRequirement)
 			AchievementManager.Instance.UnlockAchievement(EnemyAchievementName);
 
 		BonusManager.instance.AddEnemyChain();
