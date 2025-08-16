@@ -26,6 +26,9 @@ public partial class GrindState : PlayerState
 	private readonly string ShuffleAction = "action_shuffle";
 	private readonly string GrindStepAction = "action_grindstep";
 
+	private readonly float GrindAchievementRequirement = 30000;
+	private readonly StringName GrindAchievementName = "grind performer";
+
 	public override void EnterState()
 	{
 		currentCharge = 0;
@@ -127,6 +130,11 @@ public partial class GrindState : PlayerState
 
 		if (isGrindCompleted || movementDelta <= 0) // Disconnect from the rail
 			return fallState;
+
+		SaveManager.SharedData.grindDistance = Mathf.MoveToward(SaveManager.SharedData.grindDistance, float.MaxValue,
+			Player.MoveSpeed * PhysicsManager.physicsDelta);
+		if (SaveManager.SharedData.runDistance >= GrindAchievementRequirement)
+			AchievementManager.Instance.UnlockAchievement(GrindAchievementName);
 
 		return null;
 	}

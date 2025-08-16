@@ -21,6 +21,9 @@ namespace Project.Gameplay.Objects
 		private float collectionRange;
 		private readonly float CollectionSpeed = 10.0f;
 
+		private readonly int RingAchievementRequirement = 10000;
+		private readonly StringName RingAchievementName = "ring getter";
+
 		protected override void SetUp()
 		{
 			Animator = GetNodeOrNull<AnimationPlayer>(animator);
@@ -102,6 +105,10 @@ namespace Project.Gameplay.Objects
 					Stage.UpdateRingCount(1, StageSettings.MathModeEnum.Add);
 				}
 			}
+
+			SaveManager.SharedData.ringCount = (int)Mathf.MoveToward(SaveManager.SharedData.ringCount, int.MaxValue, isRichRing ? 20 : 1);
+			if (SaveManager.SharedData.ringCount >= RingAchievementRequirement)
+				AchievementManager.Instance.UnlockAchievement(RingAchievementName);
 
 			BonusManager.instance.AddRingChain();
 			Animator.Play("collect");

@@ -23,8 +23,15 @@ public partial class SpecialBookPage : Resource
 			case PageTypeEnum.Video:
 				properties.Add(ExtensionMethods.CreateProperty("Event Path", Variant.Type.String, PropertyHint.FilePath, "*.tscn"));
 				break;
+			case PageTypeEnum.Achievement:
+				properties.Add(ExtensionMethods.CreateProperty("Achievement Key", Variant.Type.StringName));
+				properties.Add(ExtensionMethods.CreateProperty("Achievement Name", Variant.Type.StringName));
+				properties.Add(ExtensionMethods.CreateProperty("Achievement Type", Variant.Type.Int, PropertyHint.Range, "1, 5"));
+				break;
 		}
 
+		if (PageType == PageTypeEnum.Achievement) // Achievements are unlocked through unique means
+			return properties;
 
 		properties.Add(ExtensionMethods.CreateCategory("Unlock Settings"));
 		properties.Add(ExtensionMethods.CreateProperty("Unlock Type", Variant.Type.Int, PropertyHint.Enum, ExtensionMethods.EnumToString(UnlockType)));
@@ -58,6 +65,16 @@ public partial class SpecialBookPage : Resource
 				VideoEventPath = (string)value;
 				break;
 
+			case "Achievement Key":
+				AchievementKey = (StringName)value;
+				break;
+			case "Achievement Name":
+				AchievementName = (StringName)value;
+				break;
+			case "Achievement Type":
+				AchievementType = (int)value;
+				break;
+
 			case "Unlock Type":
 				UnlockType = (UnlockTypeEnum)(int)value;
 				NotifyPropertyListChanged();
@@ -74,7 +91,6 @@ public partial class SpecialBookPage : Resource
 			case "Medal Count":
 				MedalCount = (int)value;
 				break;
-
 
 			default:
 				return false;
@@ -93,6 +109,13 @@ public partial class SpecialBookPage : Resource
 				return AudioStreamPath;
 			case "Event Path":
 				return VideoEventPath;
+
+			case "Achievement Key":
+				return AchievementKey;
+			case "Achievement Name":
+				return AchievementName;
+			case "Achievement Type":
+				return AchievementType;
 
 			case "Unlock Type":
 				return (int)UnlockType;
@@ -125,6 +148,10 @@ public partial class SpecialBookPage : Resource
 	/// <summary> Path to the video's cutscene event. </summary>
 	public string VideoEventPath { get; private set; }
 
+	public string AchievementKey { get; private set; }
+	public string AchievementName { get; private set; }
+	public int AchievementType { get; private set; }
+
 	public UnlockTypeEnum UnlockType { get; private set; }
 	public enum UnlockTypeEnum
 	{
@@ -132,6 +159,7 @@ public partial class SpecialBookPage : Resource
 		SpecificLevel,
 		SpecificWorld,
 		BigCameo,
+		Key,
 	}
 
 	/// <summary> Determines what kind of completion is needed for an unlock type. </summary>
@@ -154,6 +182,9 @@ public partial class SpecialBookPage : Resource
 	public bool IsUnlocked()
 	{
 		return true;
+
+		if (PageType == PageTypeEnum.Achievement)
+			return SaveManager.SharedData.achievements.Contains(AchievementName);
 
 		if (UnlockType == UnlockTypeEnum.MedalCount)
 		{

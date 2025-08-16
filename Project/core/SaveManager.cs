@@ -795,6 +795,7 @@ public partial class SaveManager : Node
 	/// <summary> Saves active game data to a file. </summary>
 	public static void SaveGameData()
 	{
+		SaveSharedData();
 		if (ActiveSaveSlotIndex == -1) return; // Invalid save slot
 
 		// Write save data to a file.
@@ -812,6 +813,8 @@ public partial class SaveManager : Node
 	/// <summary> Preloads game data so it can be displayed on menus. </summary>
 	public static void LoadGameData()
 	{
+		LoadSharedData();
+
 		for (int i = 0; i < GameSaveSlots.Length; i++)
 		{
 			GameSaveSlots[i] = GameData.CreateDefaultData();
@@ -839,7 +842,7 @@ public partial class SaveManager : Node
 		}
 	}
 
-	//<summary> Frees game data at the given index
+	/// <summary> Frees game data at the given index
 	public static void ResetSaveData(int index, bool asEmptyFile)
 	{
 		GameSaveSlots[index] = GameData.CreateDefaultData();
@@ -848,7 +851,7 @@ public partial class SaveManager : Node
 			GameSaveSlots[index].level = 1;
 	}
 
-	// <summary> Deletes a save file at the given index
+	/// <summary> Deletes a save file at the given index
 	public static void DeleteSaveData(int index)
 	{
 		string saveFile = index.ToString("00");
@@ -1073,6 +1076,11 @@ public partial class SaveManager : Node
 		/// <summary> Sets the clear state of a level. </summary>
 		public void SetClearStatus(StringName levelID, LevelStatus clearStatus)
 		{
+			if (SharedData.GetLevelData(levelID).ContainsKey(StatusKey))
+			{
+
+			}
+
 			// Return early if the level has already been cleared
 			if (ActiveGameData.GetClearStatus(levelID) == LevelStatus.Cleared)
 				return;
@@ -1334,16 +1342,40 @@ public partial class SaveManager : Node
 
 	#region Shared Game Data
 	public static SharedGameData SharedData = new();
-	private const string SharedFileName = "shared.cfg";
+	private const string SharedFileName = "shared.sav";
 
 	public class SharedGameData
 	{
 		/// <summary> Total amount of time the game has been on, in seconds. </summary>
 		public float playTime;
+		/// <summary> Total amount of distance ran. </summary>
+		public float runDistance;
+		/// <summary> Total amount of distance grinded. </summary>
+		public float grindDistance;
+		/// <summary> Total number of enemies busted. </summary>
+		public int enemyCount;
+		/// <summary> Total number of rings collected. </summary>
+		public int ringCount;
+		/// <summary> Total number of rings collected. </summary>
+		public int ringChainCount;
+		/// <summary> Total number of times SpeedBreak was activated. </summary>
+		public int speedBreakActivations;
+		/// <summary> Total number of seconds TimeBreak was active. </summary>
+		public float timeBreakTime;
+
+		// Skills
+		public int minimalSkillCount;
+		public int fireOnlyCount;
+		public int windOnlyCount;
+		public int darkOnlyCount;
+
 		/// <summary> Dictionaries for each individual level's data. </summary>
 		public Dictionary<StringName, Dictionary> levelData = [];
 		/// <summary> List of big cameos unlocked. </summary>
 		public Array<string> bigCameos = [];
+
+		/// <summary> List of achievements unlocked. </summary>
+		public Array<string> achievements = [];
 
 		/// <summary> Highest number of fire souls ever collected. </summary>
 		public int FireSoulCount { get; private set; }
@@ -1354,6 +1386,14 @@ public partial class SaveManager : Node
 		/// <summary> Highest number of bronze medals ever collected. </summary>
 		public int BronzeMedalCount { get; private set; }
 
+		/// <summary> Returns the dictionary of a particular level. </summary>
+		public Dictionary GetLevelData(StringName levelID)
+		{
+			if (!levelData.ContainsKey(levelID)) // Create new level data if it's missing
+				levelData.Add(levelID, []);
+
+			return levelData[levelID];
+		}
 
 		/// <summary> Creates a dictionary based on GameData. </summary>
 		public Dictionary ToDictionary()
@@ -1377,7 +1417,6 @@ public partial class SaveManager : Node
 				levelData = (Dictionary<StringName, Dictionary>)var;
 		}
 	}
-
 
 	/// <summary> Attempts to load config data from file. </summary>
 	public static void LoadSharedData()

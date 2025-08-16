@@ -21,6 +21,8 @@ public partial class SpecialBookTab : Control
 
 	[ExportGroup("Tab Settings")]
 	[Export] public ChapterType chapterType;
+	[Export] private Texture2D musicPreviewTexture;
+	[Export] private Texture2D[] achievementTextures;
 	[Export] private Texture2D[] unselectedTextures;
 	[Export] private Texture2D[] selectedTextures;
 	[Export] private TextureRect tabTextureRect;
@@ -33,7 +35,6 @@ public partial class SpecialBookTab : Control
 	[Export] public SpecialBookPage[] PageResources { get; private set; }
 	/// <summary> Path containing all this chapter's textures. </summary>
 	[Export(PropertyHint.Dir)] private string pageTexturePath;
-	[Export] private Texture2D musicPreviewTexture;
 
 	private int asyncLoadIndex = -1;
 	private string currentAsyncFilePath;
@@ -140,6 +141,9 @@ public partial class SpecialBookTab : Control
 	{
 		if (PageResources[pageIndex].PageType == SpecialBookPage.PageTypeEnum.Music)
 			return musicPreviewTexture;
+
+		if (PageResources[pageIndex].PageType == SpecialBookPage.PageTypeEnum.Achievement)
+			return achievementTextures[PageResources[pageIndex].AchievementType - 1];
 
 		return previewTextures[pageIndex];
 	}

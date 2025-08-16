@@ -73,6 +73,9 @@ public partial class Enemy : Node3D
 	protected bool IsSpeedbreakDefeat { get; private set; }
 	protected bool IsLightSpeedAttackValid { get; private set; }
 
+	private readonly int EnemyAchievementRequirement = 1000;
+	private readonly StringName EnemyAchievementName = "genie buster";
+
 	public override void _Ready() => SetUp();
 	protected virtual void SetUp()
 	{
@@ -211,6 +214,10 @@ public partial class Enemy : Node3D
 		Player.Lockon.ResetLockonTarget();
 
 		CheckLightSpeedAttack();
+
+		SaveManager.SharedData.enemyCount = (int)Mathf.MoveToward(SaveManager.SharedData.enemyCount, int.MaxValue, 1);
+		if (SaveManager.SharedData.enemyCount >= EnemyAchievementRequirement)
+			AchievementManager.Instance.UnlockAchievement(EnemyAchievementName);
 
 		BonusManager.instance.AddEnemyChain();
 		StageSettings.Instance.UpdateScore(50 * maxHealth, StageSettings.MathModeEnum.Add); // Add points based on max health

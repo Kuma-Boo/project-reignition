@@ -499,9 +499,31 @@ public partial class SpecialBook : Menu
 			return;
 		}
 
-		string pageKey = $"spb_title_ch{tabSelection + 1}_{pageSelection + 1}";
-		textboxTitle.Text = chapterName.Text + "\n" + Tr(pageKey);
-		previewDescription.Text = Tr(pageKey.Replace("title", "desc"));
+		// Translate keys
+		string titleKey = $"spb_title_ch{tabSelection + 1}_{pageSelection + 1}";
+		string descriptionKey = $"spb_desc_ch{tabSelection + 1}_{pageSelection + 1}";
+
+		string titleText = Tr(titleKey);
+		string descriptionText = Tr(descriptionKey);
+
+		// Check for blank translations
+		if (titleText == titleKey)
+			titleText = string.Empty;
+		if (descriptionText == descriptionKey)
+			descriptionText = string.Empty;
+
+		if (tabs[tabSelection].chapterType != SpecialBookTab.ChapterType.History)
+		{
+			// History is weird and requires using description data as-is for proper formatting
+			descriptionText = $"{titleText}\n" + descriptionText;
+
+			if (GetActivePage.PageType == SpecialBookPage.PageTypeEnum.Music)
+				descriptionText = Tr("spb_bgm") + $"\n{descriptionText}";
+		}
+
+
+		textboxTitle.Text = chapterName.Text + "\n" + titleText;
+		previewDescription.Text = descriptionText;
 		previewNumber.Text = "-" + ((tabs[tabSelection].PageResources.Length * tabSelection) + pageSelection + 1).ToString("D3") + "-";
 
 		previewTextureRect.Texture = tabs[tabSelection].GetPreviewTexture(pageSelection);

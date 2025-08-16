@@ -30,6 +30,9 @@ public partial class RunState : PlayerState
 	/// <summary> Minimum speed needed to finish the braking animation. </summary>
 	private readonly float BrakeDeadzone = 5f;
 
+	private readonly int RunAchievementRequirement = 500000;
+	private readonly StringName RunAchievementName = "world traveler";
+
 	public override void EnterState()
 	{
 		turningVelocity = 0;
@@ -127,6 +130,13 @@ public partial class RunState : PlayerState
 		Player.Animator.RunAnimation();
 		Player.Effect.IsEmittingStepDust = true;
 		ProcessBrakeAnimation();
+
+		SaveManager.SharedData.runDistance = Mathf.MoveToward(SaveManager.SharedData.runDistance, float.MaxValue,
+			Player.MoveSpeed * PhysicsManager.physicsDelta);
+
+		if (SaveManager.SharedData.runDistance >= RunAchievementRequirement)
+			AchievementManager.Instance.UnlockAchievement(RunAchievementName);
+
 		return null;
 	}
 

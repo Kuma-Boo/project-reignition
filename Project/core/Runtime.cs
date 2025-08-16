@@ -12,6 +12,9 @@ public partial class Runtime : Node
 	public static readonly Vector2I ScreenSize = new(1920, 1080); // Working resolution is 1080p
 	public static readonly Vector2I HalfScreenSize = (Vector2I)((Vector2)ScreenSize * .5f);
 
+	private readonly StringName AchievementTimeKey = "bookworm";
+	private readonly float AchievementTimeRequirement = 360f * 24f;
+
 	public override void _EnterTree()
 	{
 		Instance = this;
@@ -24,6 +27,12 @@ public partial class Runtime : Node
 	public override void _Process(double _)
 	{
 		UpdateShaderTime();
+
+		SaveManager.SharedData.playTime = Mathf.MoveToward(SaveManager.SharedData.playTime,
+			SaveManager.MaxPlayTime, PhysicsManager.normalDelta);
+
+		if (SaveManager.SharedData.playTime >= AchievementTimeRequirement)
+			AchievementManager.Instance.UnlockAchievement(AchievementTimeKey);
 
 		if (SaveManager.ActiveSaveSlotIndex == -1)
 			return;
