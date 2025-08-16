@@ -68,7 +68,7 @@ public partial class SpecialBook : Menu
 		{
 			foreach (SpecialBookPage page in tab.PageResources)
 			{
-				if (page.IsUnlocked())
+				if (page.IsUnlocked() && page.PageType == SpecialBookPage.PageTypeEnum.Image)
 					slideshowPages.Add(page);
 			}
 		}
@@ -263,7 +263,7 @@ public partial class SpecialBook : Menu
 
 	private void StartSlideshow()
 	{
-		if (GetUnlockedEntriesCount() <= 1) // Not enough entries for a slideshow
+		if (slideshowPages.Count <= 1) // Not enough entries for a slideshow
 			return;
 
 		for (int i = 0; i < slideshowPages.Count; i++) // Randomize the pages
@@ -305,10 +305,10 @@ public partial class SpecialBook : Menu
 		do
 		{
 			pageSelection += input.X;
-			if (pageSelection > 14 || pageSelection < 0)
+			if (pageSelection >= tabs[currentTab].PageResources.Length || pageSelection < 0)
 			{
-				pageSelection = WrapSelection(pageSelection, 15);
-				tabSelection = WrapSelection(tabSelection + input.X, 16);
+				pageSelection = WrapSelection(pageSelection, tabs[currentTab].PageResources.Length);
+				tabSelection = WrapSelection(tabSelection + input.X, tabs.Length);
 				sfxOpen.Play();
 			}
 
@@ -410,47 +410,34 @@ public partial class SpecialBook : Menu
 	{
 		tabs[tabSelection].Deselect();
 		windows[pageSelection].Deselect();
+
+		SpecialBookPage page;
+
 		do
 		{
 			slideshowIndex = WrapSelection(slideshowIndex + 1, slideshowPages.Count);
-		} while (!CanSelectPage((SpecialBookPage)slideshowPages[slideshowIndex]));
+			page = slideshowPages[slideshowIndex];
+		} while (!CanSelectPage(page));
 
-		tabSelection = GetChapterFromPage((SpecialBookPage)slideshowPages[slideshowIndex]);
-		pageSelection = GetSelectionFromPage((SpecialBookPage)slideshowPages[slideshowIndex]);
+		// Sync selections
+		for (int i = 0; i < tabs.Length; i++)
+		{
+			for (int j = 0; j < tabs[i].PageResources.Length; j++)
+			{
+				if (tabs[i].PageResources[j] != page)
+					continue;
+
+				tabSelection = i;
+				pageSelection = j;
+				break;
+			}
+		}
 
 		tabs[tabSelection].Select();
 		windows[pageSelection].Select();
 
 		LoadChapterData();
-		LoadPageData((SpecialBookPage)slideshowPages[slideshowIndex]);
-	}
-
-	private int GetSelectionFromPage(SpecialBookPage page)
-	{
-		foreach (SpecialBookTab tab in tabs)
-		{
-			for (int i = 0; i < tab.PageResources.Length; i++)
-			{
-				if (page == tab.PageResources[i])
-					return i;
-			}
-		}
-
-		return 0;
-	}
-
-	private int GetChapterFromPage(SpecialBookPage page)
-	{
-		for (int i = 0; i < tabs.Length; i++)
-		{
-			foreach (SpecialBookPage p in tabs[i].PageResources)
-			{
-				if (page == p)
-					return i;
-			}
-		}
-
-		return 0;
+		LoadPageData();
 	}
 
 	/// <summary> Checks if we can view a page. </summary>
@@ -460,8 +447,8 @@ public partial class SpecialBook : Menu
 		if (!page.IsUnlocked())
 			return false;
 
-		// We can view any page (except achievements) when we're not inspecting an image closely
-		if (menuState != MenuStateEnum.Image && page.PageType != SpecialBookPage.PageTypeEnum.Achievement)
+		// We can view any page when we're not inspecting an image closely
+		if (menuState != MenuStateEnum.Image)
 			return true;
 
 		// Otherwise, we can only switch to other images 
@@ -493,10 +480,11 @@ public partial class SpecialBook : Menu
 		if (page == null)
 			page = GetActivePage;
 
-		menuMemory[MemoryKeys.SpecialBook] = (15 * tabSelection) + pageSelection;
+		menuMemory[MemoryKeys.SpecialBook] = (tabs[tabSelection].PageResources.Length * tabSelection) + pageSelection;
 		switch (page.PageType)
 		{
 			case SpecialBookPage.PageTypeEnum.Image:
+			case SpecialBookPage.PageTypeEnum.Achievement:
 				navigationAnimator.Play("image");
 				break;
 			case SpecialBookPage.PageTypeEnum.Music:
@@ -505,20 +493,19 @@ public partial class SpecialBook : Menu
 				break;
 		}
 
-		if (page.IsUnlocked())
-		{
-			string pageKey = $"spb_title_ch{tabSelection + 1}_{pageSelection + 1}";
-			textboxTitle.Text = chapterName.Text + "\n" + Tr(pageKey);
-			previewDescription.Text = Tr(pageKey.Replace("title", "desc"));
-			previewNumber.Text = "-" + ((15 * tabSelection) + pageSelection + 1).ToString("D3") + "-";
-
-			previewTextureRect.Texture = tabs[tabSelection].GetPreviewTexture(pageSelection);
-			fullTextureRect.Texture = tabs[tabSelection].GetFullTexture(pageSelection);
-		}
-		else
+		if (!page.IsUnlocked())
 		{
 			textboxTitle.Text = page.GetLocalizedUnlockRequirements();
+			return;
 		}
+
+		string pageKey = $"spb_title_ch{tabSelection + 1}_{pageSelection + 1}";
+		textboxTitle.Text = chapterName.Text + "\n" + Tr(pageKey);
+		previewDescription.Text = Tr(pageKey.Replace("title", "desc"));
+		previewNumber.Text = "-" + ((tabs[tabSelection].PageResources.Length * tabSelection) + pageSelection + 1).ToString("D3") + "-";
+
+		previewTextureRect.Texture = tabs[tabSelection].GetPreviewTexture(pageSelection);
+		fullTextureRect.Texture = tabs[tabSelection].GetFullTexture(pageSelection);
 	}
 
 	private void OnPreviewTextureLoaded(int tabIndex, int pageIndex)
@@ -535,26 +522,5 @@ public partial class SpecialBook : Menu
 			return;
 
 		fullTextureRect.Texture = tabs[tabSelection].GetFullTexture(pageSelection);
-	}
-
-	/// <summary>
-	/// Checks the number of entries the players have unlocked.
-	/// </summary>
-	/// <returns> The number of entries unlocked. </returns>
-	private int GetUnlockedEntriesCount()
-	{
-		int num = 0;
-
-		for (int i = 0; i < tabs.Length; i++)
-		{
-			for (int j = 0; j < windows.Length; j++)
-			{
-				SpecialBookPage bookPage = tabs[i].PageResources[j];
-				if (bookPage.IsUnlocked() && bookPage.PageType == SpecialBookPage.PageTypeEnum.Image)
-					num++;
-			}
-		}
-
-		return num;
 	}
 }

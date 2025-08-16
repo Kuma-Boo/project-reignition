@@ -150,15 +150,36 @@ public partial class SpecialBookPage : Resource
 	public LevelDataResource LevelData { get; private set; }
 	public SaveManager.WorldEnum World { get; private set; }
 
-	// TODO Set these up
-	public Texture2D FullTexture { get; private set; }
-	public Texture2D PreviewTexture { get; private set; }
-
 	/// <summary> Calculates whether this page should be unlocked or not. </summary>
 	public bool IsUnlocked()
 	{
-		// TODO Test for unlockables
 		return true;
+
+		if (UnlockType == UnlockTypeEnum.MedalCount)
+		{
+			return Rank switch
+			{
+				RankEnum.Gold => SaveManager.SharedData.GoldMedalCount > MedalCount,
+				RankEnum.Silver => SaveManager.SharedData.SilverMedalCount > MedalCount,
+				RankEnum.Bronze => SaveManager.SharedData.BronzeMedalCount > MedalCount,
+				_ => false,
+			};
+		}
+
+		if (UnlockType == UnlockTypeEnum.BigCameo)
+			return SaveManager.SharedData.bigCameos.Contains(LevelData.LevelID);
+
+		if (UnlockType == UnlockTypeEnum.SpecificLevel)
+		{
+
+		}
+
+		if (UnlockType == UnlockTypeEnum.SpecificWorld)
+		{
+
+		}
+
+		return false;
 	}
 
 	/// <summary> Constructs a localized string that describes the unlock requirements. </summary>
@@ -187,7 +208,7 @@ public partial class SpecialBookPage : Resource
 		}
 
 		localizedString = localizedString.Replace("[NUMBER]", number.ToString());
-		localizedString = localizedString.Replace("[AREA]", AbbreviateWorld());
+		localizedString = localizedString.Replace("[AREA]", Tr(AbbreviateWorld()));
 
 		return localizedString;
 	}
