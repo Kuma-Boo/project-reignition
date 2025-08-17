@@ -204,7 +204,7 @@ public partial class RunState : PlayerState
 		if (!Player.Animator.IsBrakeAnimationActive)
 			return;
 
-		if (Player.MoveSpeed > BrakeDeadzone && !StageSettings.Instance.IsLevelIngame)
+		if (Player.MoveSpeed > BrakeDeadzone && StageSettings.Instance.IsLevelIngame)
 			return;
 
 		Player.Animator.StopBrake();
