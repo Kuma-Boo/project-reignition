@@ -835,6 +835,33 @@ _data = {
 [sub_resource type="BoxShape3D" id="BoxShape3D_ly3wh"]
 size = Vector3(30, 20, 5)
 
+[sub_resource type="Animation" id="Animation_u21n1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Spear:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(13, 22.5167, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Spear:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
 [sub_resource type="Animation" id="Animation_wo6sg"]
 resource_name = "event"
 step = 0.0333333
@@ -891,37 +918,10 @@ tracks/3/keys = {
 }]
 }
 
-[sub_resource type="Animation" id="Animation_u21n1"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Spear:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(13, 22.5167, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Spear:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_88v55"]
 _data = {
-"RESET": SubResource("Animation_u21n1"),
-"event": SubResource("Animation_wo6sg")
+&"RESET": SubResource("Animation_u21n1"),
+&"event": SubResource("Animation_wo6sg")
 }
 
 [sub_resource type="Curve" id="Curve_c3fnw"]
@@ -1008,7 +1008,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("1_dm4pv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 289.42, -103, -479.572)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 visible = false
@@ -1235,22 +1234,32 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 
 [node name="SidleFooting1" parent="MainAct/Sidle/SidleGroup1/Footing" instance=ExtResource("5_6dn8w")]
 "Falling Platform Settings/Shake Length" = 1.5
+"Falling Platform Settings/Fall Speed" = 1.0
+"Floating Platform Settings/Enabled" = false
 
 [node name="SidleFooting2" parent="MainAct/Sidle/SidleGroup1/Footing" instance=ExtResource("5_6dn8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
 "Falling Platform Settings/Shake Length" = 0.5
+"Falling Platform Settings/Fall Speed" = 1.0
+"Floating Platform Settings/Enabled" = false
 
 [node name="SidleFooting3" parent="MainAct/Sidle/SidleGroup1/Footing" instance=ExtResource("5_6dn8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 "Falling Platform Settings/Shake Length" = 0.5
+"Falling Platform Settings/Fall Speed" = 1.0
+"Floating Platform Settings/Enabled" = false
 
 [node name="SidleFooting4" parent="MainAct/Sidle/SidleGroup1/Footing" instance=ExtResource("5_6dn8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
 "Falling Platform Settings/Shake Length" = 0.5
+"Falling Platform Settings/Fall Speed" = 1.0
+"Floating Platform Settings/Enabled" = false
 
 [node name="SidleFooting5" parent="MainAct/Sidle/SidleGroup1/Footing" instance=ExtResource("5_6dn8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
 "Falling Platform Settings/Shake Length" = 0.5
+"Falling Platform Settings/Fall Speed" = 1.0
+"Floating Platform Settings/Enabled" = false
 
 [node name="SidleGroup2" type="Node3D" parent="MainAct/Sidle"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
@@ -1260,62 +1269,77 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
 
 [node name="SidleFooting1" parent="MainAct/Sidle/SidleGroup2/Footing" instance=ExtResource("5_6dn8w")]
 "Falling Platform Settings/Shake Length" = 2.0
+"Falling Platform Settings/Fall Speed" = 1.0
+"Floating Platform Settings/Enabled" = false
 
 [node name="SidleFooting2" parent="MainAct/Sidle/SidleGroup2/Footing" instance=ExtResource("5_6dn8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -9)
 "Falling Platform Settings/Shake Length" = 3.0
+"Falling Platform Settings/Fall Speed" = 1.0
+"Floating Platform Settings/Enabled" = false
 
 [node name="SidleFooting3" parent="MainAct/Sidle/SidleGroup2/Footing" instance=ExtResource("5_6dn8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -12)
 "Falling Platform Settings/Enabled" = false
+"Floating Platform Settings/Enabled" = false
 
 [node name="SidleFooting4" parent="MainAct/Sidle/SidleGroup2/Footing" instance=ExtResource("5_6dn8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -15)
 "Falling Platform Settings/Shake Length" = 2.0
+"Falling Platform Settings/Fall Speed" = 1.0
+"Floating Platform Settings/Enabled" = false
 
 [node name="SidleFooting5" parent="MainAct/Sidle/SidleGroup2/Footing" instance=ExtResource("5_6dn8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -18)
 "Falling Platform Settings/Shake Length" = 2.0
+"Falling Platform Settings/Fall Speed" = 1.0
+"Floating Platform Settings/Enabled" = false
 
 [node name="SidleFooting6" parent="MainAct/Sidle/SidleGroup2/Footing" instance=ExtResource("5_6dn8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -21)
 "Falling Platform Settings/Shake Length" = 2.0
+"Falling Platform Settings/Fall Speed" = 1.0
+"Floating Platform Settings/Enabled" = false
 
 [node name="SidleFooting7" parent="MainAct/Sidle/SidleGroup2/Footing" instance=ExtResource("5_6dn8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
 "Falling Platform Settings/Shake Length" = 2.0
+"Falling Platform Settings/Fall Speed" = 1.0
+"Floating Platform Settings/Enabled" = false
 
 [node name="ItemBox" parent="MainAct/Sidle/SidleGroup2" instance=ExtResource("6_pusyw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 9.8)
 "Spawn Settings/Pickup Parent" = NodePath("RichRing")
-"Spawn Settings/Travel Time" = 0.5
 
 [node name="RichRing" parent="MainAct/Sidle/SidleGroup2/ItemBox" instance=ExtResource("7_fjkar")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -5)
 
 [node name="SpikePanel1" parent="MainAct/Sidle/SidleGroup2" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.100006, 0.8, -4)
+stateLengths = PackedFloat32Array(2, 0.4, 0.4)
+"Start Paused" = false
 "State Lengths/inactive" = 2.0
 "State Lengths/warning" = 0.4
 "State Lengths/active" = 0.4
-stateLengths = [2.0, 0.4, 0.4]
 
 [node name="SpikeGroup1" type="Node3D" parent="MainAct/Sidle/SidleGroup2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.97501, 0, -15)
 
 [node name="SpikePanel1" parent="MainAct/Sidle/SidleGroup2/SpikeGroup1" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, 0.75)
+stateLengths = PackedFloat32Array(3, 0.4, 1)
+"Start Paused" = false
 "State Lengths/inactive" = 3.0
 "State Lengths/warning" = 0.4
 "State Lengths/active" = 1.0
-stateLengths = [3.0, 0.4, 1.0]
 
 [node name="SpikePanel2" parent="MainAct/Sidle/SidleGroup2/SpikeGroup1" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, -0.75)
+stateLengths = PackedFloat32Array(3, 0.4, 1)
+"Start Paused" = false
 "State Lengths/inactive" = 3.0
 "State Lengths/warning" = 0.4
 "State Lengths/active" = 1.0
-stateLengths = [3.0, 0.4, 1.0]
 
 [node name="FootholdRight" parent="MainAct/Sidle/SidleGroup2/SpikeGroup1" instance=ExtResource("14_7wfyl")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.5, -0.5, 1.6)
@@ -1340,34 +1364,38 @@ shape = SubResource("BoxShape3D_lcjye")
 
 [node name="SpikePanel2" parent="MainAct/Sidle/SidleGroup2" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 3.10001, 0.8, -24)
+stateLengths = PackedFloat32Array(1.8, 1, 0.2)
+"Start Paused" = false
 "State Lengths/inactive" = 1.8
 "State Lengths/warning" = 1.0
 "State Lengths/active" = 0.2
-stateLengths = [1.8, 1.0, 0.2]
 
 [node name="SpikeGroup2" type="Node3D" parent="MainAct/Sidle/SidleGroup2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0249939, 0, -33)
 
 [node name="SpikePanel1" parent="MainAct/Sidle/SidleGroup2/SpikeGroup2" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, 1.5)
+stateLengths = PackedFloat32Array(1, 0.8, 0.6)
+"Start Paused" = false
 "State Lengths/inactive" = 1.0
 "State Lengths/warning" = 0.8
 "State Lengths/active" = 0.6
-stateLengths = [1.0, 0.8, 0.6]
 
 [node name="SpikePanel2" parent="MainAct/Sidle/SidleGroup2/SpikeGroup2" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, 0)
+stateLengths = PackedFloat32Array(1, 0.8, 0.6)
+"Start Paused" = false
 "State Lengths/inactive" = 1.0
 "State Lengths/warning" = 0.8
 "State Lengths/active" = 0.6
-stateLengths = [1.0, 0.8, 0.6]
 
 [node name="SpikePanel3" parent="MainAct/Sidle/SidleGroup2/SpikeGroup2" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, -1.5)
+stateLengths = PackedFloat32Array(1, 0.8, 0.6)
+"Start Paused" = false
 "State Lengths/inactive" = 1.0
 "State Lengths/warning" = 0.8
 "State Lengths/active" = 0.6
-stateLengths = [1.0, 0.8, 0.6]
 
 [node name="SidleGroup3" type="Node3D" parent="MainAct/Sidle"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -54)
@@ -1377,26 +1405,37 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
 
 [node name="SidleFooting1" parent="MainAct/Sidle/SidleGroup3/Footing" instance=ExtResource("5_6dn8w")]
 "Falling Platform Settings/Shake Length" = 2.0
+"Falling Platform Settings/Fall Speed" = 1.0
+"Floating Platform Settings/Enabled" = false
 
 [node name="SidleFooting2" parent="MainAct/Sidle/SidleGroup3/Footing" instance=ExtResource("5_6dn8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
 "Falling Platform Settings/Enabled" = false
+"Floating Platform Settings/Enabled" = false
 
 [node name="SidleFooting3" parent="MainAct/Sidle/SidleGroup3/Footing" instance=ExtResource("5_6dn8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 "Falling Platform Settings/Shake Length" = 2.0
+"Falling Platform Settings/Fall Speed" = 1.0
+"Floating Platform Settings/Enabled" = false
 
 [node name="SidleFooting4" parent="MainAct/Sidle/SidleGroup3/Footing" instance=ExtResource("5_6dn8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
 "Falling Platform Settings/Shake Length" = 2.0
+"Falling Platform Settings/Fall Speed" = 1.0
+"Floating Platform Settings/Enabled" = false
 
 [node name="SidleFooting5" parent="MainAct/Sidle/SidleGroup3/Footing" instance=ExtResource("5_6dn8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
 "Falling Platform Settings/Shake Length" = 2.0
+"Falling Platform Settings/Fall Speed" = 1.0
+"Floating Platform Settings/Enabled" = false
 
 [node name="SidleFooting6" parent="MainAct/Sidle/SidleGroup3/Footing" instance=ExtResource("5_6dn8w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
 "Falling Platform Settings/Shake Length" = 2.0
+"Falling Platform Settings/Fall Speed" = 1.0
+"Floating Platform Settings/Enabled" = false
 
 [node name="ItemBox1" parent="MainAct/Sidle/SidleGroup3" instance=ExtResource("6_pusyw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.40001, 0.5, 8.3)
@@ -1413,10 +1452,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 
 [node name="SpikePanel" parent="MainAct/Sidle/SidleGroup3/SpikeGroup1" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, 0)
+stateLengths = PackedFloat32Array(0.6, 0.4, 3)
+"Start Paused" = false
 "State Lengths/inactive" = 0.6
 "State Lengths/warning" = 0.4
 "State Lengths/active" = 3.0
-stateLengths = [0.6, 0.4, 3.0]
 
 [node name="FootholdRight2" parent="MainAct/Sidle/SidleGroup3/SpikeGroup1" instance=ExtResource("14_7wfyl")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.5, -0.5, 1)
@@ -1441,52 +1481,58 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.5)
 
 [node name="SpikePanel1" parent="MainAct/Sidle/SidleGroup3/SpikeGroup2" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, 0.75)
+stateLengths = PackedFloat32Array(2, 1, 1.5)
+"Start Paused" = false
 "State Lengths/inactive" = 2.0
 "State Lengths/warning" = 1.0
 "State Lengths/active" = 1.5
-stateLengths = [2.0, 1.0, 1.5]
 
 [node name="SpikePanel2" parent="MainAct/Sidle/SidleGroup3/SpikeGroup2" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, -0.75)
+stateLengths = PackedFloat32Array(2, 1, 1.5)
+"Start Paused" = false
 "Start Time" = -0.5
 "State Lengths/inactive" = 2.0
 "State Lengths/warning" = 1.0
 "State Lengths/active" = 1.5
-stateLengths = [2.0, 1.0, 1.5]
 
 [node name="SpikeGroup3" type="Node3D" parent="MainAct/Sidle/SidleGroup3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.5)
 
 [node name="SpikePanel1" parent="MainAct/Sidle/SidleGroup3/SpikeGroup3" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, 2.25)
+stateLengths = PackedFloat32Array(2, 1, 1.5)
+"Start Paused" = false
 "Start Time" = 1.0
 "State Lengths/inactive" = 2.0
 "State Lengths/warning" = 1.0
 "State Lengths/active" = 1.5
-stateLengths = [2.0, 1.0, 1.5]
 
 [node name="SpikePanel2" parent="MainAct/Sidle/SidleGroup3/SpikeGroup3" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, 0.75)
+stateLengths = PackedFloat32Array(2, 1, 1.5)
+"Start Paused" = false
 "Start Time" = 0.5
 "State Lengths/inactive" = 2.0
 "State Lengths/warning" = 1.0
 "State Lengths/active" = 1.5
-stateLengths = [2.0, 1.0, 1.5]
 
 [node name="SpikePanel3" parent="MainAct/Sidle/SidleGroup3/SpikeGroup3" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, -0.75)
+stateLengths = PackedFloat32Array(2, 1, 1.5)
+"Start Paused" = false
 "State Lengths/inactive" = 2.0
 "State Lengths/warning" = 1.0
 "State Lengths/active" = 1.5
-stateLengths = [2.0, 1.0, 1.5]
 
 [node name="SpikePanel4" parent="MainAct/Sidle/SidleGroup3/SpikeGroup3" instance=ExtResource("12_f2vdf")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.125, 0.8, -2.25)
+stateLengths = PackedFloat32Array(2, 1, 1.5)
+"Start Paused" = false
 "Start Time" = -0.5
 "State Lengths/inactive" = 2.0
 "State Lengths/warning" = 1.0
 "State Lengths/active" = 1.5
-stateLengths = [2.0, 1.0, 1.5]
 
 [node name="Hall" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 154.1, 0.01, -245.6)
@@ -1542,6 +1588,8 @@ transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 
 "Spawn Settings/Spawn Out Offset" = Vector3(-2, 0, -2)
 "Attack Settings/Flame Active Time" = 3.0
 "Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 rangeOverride = 20
 
 [node name="GreenMajin4" parent="MainAct/Hall/MajinGroup1" instance=ExtResource("18_wuv3v")]
@@ -1556,17 +1604,17 @@ rangeOverride = 10
 [node name="ItemBox1" parent="MainAct/Hall" instance=ExtResource("6_pusyw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.1, 0.5, -32)
 "Spawn Settings/Pickup Parent" = NodePath("RichRing")
-"Spawn Settings/Travel Time" = 0.5
 
 [node name="RichRing" parent="MainAct/Hall/ItemBox1" instance=ExtResource("7_fjkar")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.5, -1.5)
 
 [node name="Event" type="Node3D" parent="MainAct/Hall/ItemBox1" node_paths=PackedStringArray("animator")]
 script = ExtResource("33_o2ldu")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="SpikeBallPhysics1" parent="MainAct/Hall/ItemBox1/Event" instance=ExtResource("23_281oh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.675, 20, -0.399994)
@@ -1578,7 +1626,7 @@ MaxLifetime = 10.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Hall/ItemBox1/Event"]
 libraries = {
-"": SubResource("AnimationLibrary_gukr6")
+&"": SubResource("AnimationLibrary_gukr6")
 }
 
 [node name="ItemBox2" parent="MainAct/Hall" instance=ExtResource("6_pusyw")]
@@ -1588,10 +1636,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79, 5.5, -35.5)
 
 [node name="Event" type="Node3D" parent="MainAct/Hall/ItemBox2" node_paths=PackedStringArray("animator")]
 script = ExtResource("33_o2ldu")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="SpikeBallPhysics1" parent="MainAct/Hall/ItemBox2/Event" instance=ExtResource("23_281oh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.675, 20, 3.3)
@@ -1603,7 +1652,7 @@ MaxLifetime = 10.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Hall/ItemBox2/Event"]
 libraries = {
-"": SubResource("AnimationLibrary_n34xa")
+&"": SubResource("AnimationLibrary_n34xa")
 }
 
 [node name="ItemBox3" parent="MainAct/Hall" instance=ExtResource("6_pusyw")]
@@ -1613,10 +1662,11 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -81, 5
 
 [node name="Event" type="Node3D" parent="MainAct/Hall/ItemBox3" node_paths=PackedStringArray("animator")]
 script = ExtResource("33_o2ldu")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="SpikeBallPhysics" parent="MainAct/Hall/ItemBox3/Event" instance=ExtResource("23_281oh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 25, 0.6)
@@ -1624,7 +1674,7 @@ MaxLifetime = 10.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Hall/ItemBox3/Event"]
 libraries = {
-"": SubResource("AnimationLibrary_j83vd")
+&"": SubResource("AnimationLibrary_j83vd")
 }
 
 [node name="MajinGroup2" type="Node3D" parent="MainAct/Hall"]
@@ -1657,6 +1707,8 @@ transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -40, 0, -1
 "Rotation Settings/Rotation Time" = 0.8
 "Attack Settings/Flame Active Time" = 3.0
 "Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 rangeOverride = 25
 
 [node name="GreenMajin1" parent="MainAct/Hall/MajinGroup2" instance=ExtResource("18_wuv3v")]
@@ -1687,8 +1739,10 @@ rangeOverride = 10
 
 [node name="Grindrail1" parent="MainAct/Hall" instance=ExtResource("20_kogq7")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -155, 5.3, -101)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="SpikeBall1" parent="MainAct/Hall" instance=ExtResource("21_3irg0")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -157.934, 6.2, -98)
@@ -1702,8 +1756,10 @@ Movement/Distance = 20.0
 
 [node name="Grindrail2" parent="MainAct/Hall" instance=ExtResource("20_kogq7")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -178, 5.3, -98)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="RedMajin" parent="MainAct/Hall/Grindrail2" instance=ExtResource("19_3ua6y")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -1)
@@ -1716,6 +1772,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -1)
 "Rotation Settings/Rotation Time" = 0.5
 "Attack Settings/Flame Active Time" = 3.0
 "Attack Settings/Flame Inactive Time" = 0.8
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 
 [node name="JumpPanel" parent="MainAct/Hall" instance=ExtResource("12_8tixp")]
 transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, -215.42, 5, -97.885)
@@ -1725,7 +1783,6 @@ Distance = 36.0
 
 [node name="Camera" type="Node3D" parent="MainAct/Hall/JumpPanel"]
 script = ExtResource("29_uohue")
-transitionTime = 0.5
 settings = ExtResource("28_ru4gh")
 
 [node name="Tower" type="Node3D" parent="MainAct"]
@@ -1740,20 +1797,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 [node name="SpikeBall1" parent="MainAct/Tower/BallGroup1" instance=ExtResource("21_3irg0")]
 
 [node name="SpikeBall2" parent="MainAct/Tower/BallGroup1" instance=ExtResource("21_3irg0")]
+animatorSpeedScale = 0.8
 Movement/Mode = 2
 "Movement/Cycle Length" = 4.0
 "Movement/Horizontal Size" = 0.0
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 4.0
-animatorSpeedScale = 0.8
 
 [node name="SpikeBall3" parent="MainAct/Tower/BallGroup1" instance=ExtResource("21_3irg0")]
+animatorSpeedScale = 0.8
 Movement/Mode = 2
 "Movement/Cycle Length" = -3.0
 "Movement/Horizontal Size" = 0.0
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 9.0
-animatorSpeedScale = 0.8
 
 [node name="SpikeBall4" parent="MainAct/Tower/BallGroup1" instance=ExtResource("21_3irg0")]
 Movement/Mode = 2
@@ -1774,6 +1831,8 @@ transform = Transform3D(-1, 0, -8.9407e-08, 0, 1, 0, 8.9407e-08, 0, -1, -3.86252
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.5, 18)
 "Attack Settings/Flame Active Time" = 2.5
 "Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 
 [node name="GreenMajin" parent="MainAct/Tower/MajinGroup1" instance=ExtResource("18_wuv3v")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 3, 18)
@@ -1782,6 +1841,8 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 3, 
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 5.5, 18)
 "Attack Settings/Flame Active Time" = 2.5
 "Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 
 [node name="EnemyStone" parent="MainAct/Tower/MajinGroup1" instance=ExtResource("23_f4mat")]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 1.5, 28.5)
@@ -1907,6 +1968,8 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4, 21
 "Rotation Settings/Rotation Time" = 1.0
 "Attack Settings/Flame Active Time" = 3.0
 "Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 SpawnMode = 1
 
 [node name="InvisibleGrindrail1" parent="MainAct/Tower" instance=ExtResource("25_t50ri")]
@@ -1930,10 +1993,11 @@ OneShot = true
 process_mode = 4
 visible = false
 script = ExtResource("33_o2ldu")
+animator = NodePath("../AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("../AnimationPlayer")
 
 [node name="SpikeBallPhysics1" parent="MainAct/Tower/BallGroup2/Event" instance=ExtResource("23_281oh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.87196, 10.9555, -38.3501)
@@ -1996,7 +2060,7 @@ shape = SubResource("BoxShape3D_mow5f")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Tower/BallGroup2"]
 libraries = {
-"": SubResource("AnimationLibrary_iugqw")
+&"": SubResource("AnimationLibrary_iugqw")
 }
 
 [node name="ItemBox1" parent="MainAct/Tower" instance=ExtResource("6_pusyw")]
@@ -2021,6 +2085,8 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -118, 
 [node name="RedMajin" parent="MainAct/Tower/MajinGroup3" instance=ExtResource("19_3ua6y")]
 "Attack Settings/Flame Active Time" = 6.0
 "Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 rangeOverride = 30
 
 [node name="GreenMajin1" parent="MainAct/Tower/MajinGroup3" instance=ExtResource("18_wuv3v")]
@@ -2081,6 +2147,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -8)
 "Rotation Settings/Rotation Time" = 1.5
 "Attack Settings/Flame Active Time" = 3.0
 "Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 rangeOverride = 15
 
 [node name="Rings1" type="Node3D" parent="MainAct/Interior"]
@@ -2185,16 +2253,16 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 335, -
 "Exit Mode" = 2
 
 [node name="CameraReference" type="Camera3D" parent="MainAct/Ending/HallStretchTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.05176e-05, 20, -30)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0517578e-05, 20, -30)
 
-[node name="Camera" type="Node3D" parent="MainAct/Ending/HallStretchTrigger/CameraReference" node_paths=PackedStringArray("followObject")]
+[node name="Camera" type="Node3D" parent="MainAct/Ending/HallStretchTrigger/CameraReference"]
 script = ExtResource("29_uohue")
-UpdateEveryFrame = true
 settings = ExtResource("32_q4oj0")
-followObject = NodePath("..")
+UpdateEveryFrame = true
 
 [node name="HallStretchEvent" parent="MainAct/Ending/HallStretchTrigger" instance=ExtResource("31_uuqrt")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 490, 104, 335)
+"Trigger Settings/Animation Blending" = 0.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Ending/HallStretchTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -2203,10 +2271,11 @@ shape = SubResource("BoxShape3D_mow5f")
 [node name="Gate1" type="Node3D" parent="MainAct/Ending" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 409.242, -97.125, -489.866)
 script = ExtResource("33_o2ldu")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Teleport" parent="MainAct/Ending/Gate1" node_paths=PackedStringArray("warpTarget") instance=ExtResource("33_j541v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
@@ -2214,19 +2283,21 @@ warpTarget = NodePath("../../../../Static/Trigger/Checkpoint/SpaceACheckpoint/Ch
 
 [node name="Gate" parent="MainAct/Ending/Gate1" instance=ExtResource("33_kvbsj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 0)
+"Trigger Settings/Animation Blending" = 0.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Ending/Gate1"]
 libraries = {
-"": SubResource("AnimationLibrary_1we6n")
+&"": SubResource("AnimationLibrary_1we6n")
 }
 
 [node name="Gate2" type="Node3D" parent="MainAct/Ending" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 482.192, -97.125, -489.866)
 script = ExtResource("33_o2ldu")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Teleport" parent="MainAct/Ending/Gate2" node_paths=PackedStringArray("warpTarget") instance=ExtResource("33_j541v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
@@ -2234,19 +2305,21 @@ warpTarget = NodePath("../../../../Static/Trigger/Checkpoint/SpaceBCheckpoint/Ch
 
 [node name="Gate" parent="MainAct/Ending/Gate2" instance=ExtResource("33_kvbsj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 0)
+"Trigger Settings/Animation Blending" = 0.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Ending/Gate2"]
 libraries = {
-"": SubResource("AnimationLibrary_1we6n")
+&"": SubResource("AnimationLibrary_1we6n")
 }
 
 [node name="Gate3" type="Node3D" parent="MainAct/Ending" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 563.192, -97.125, -489.866)
 script = ExtResource("33_o2ldu")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Teleport" parent="MainAct/Ending/Gate3" node_paths=PackedStringArray("warpTarget") instance=ExtResource("33_j541v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
@@ -2254,10 +2327,11 @@ warpTarget = NodePath("../../../../Static/Trigger/Checkpoint/SpaceCCheckpoint/Ch
 
 [node name="Gate" parent="MainAct/Ending/Gate3" instance=ExtResource("33_kvbsj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 0)
+"Trigger Settings/Animation Blending" = 0.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Ending/Gate3"]
 libraries = {
-"": SubResource("AnimationLibrary_1we6n")
+&"": SubResource("AnimationLibrary_1we6n")
 }
 
 [node name="Goal" parent="MainAct/Ending" instance=ExtResource("36_vtvks")]
@@ -2280,10 +2354,11 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 15.2, 
 [node name="Event" type="Node3D" parent="MainAct/SpaceA/Spear1" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 25)
 script = ExtResource("33_o2ldu")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Spear" parent="MainAct/SpaceA/Spear1/Event" instance=ExtResource("37_627rn")]
 transform = Transform3D(0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0, 1, 13, 22.5167, 0)
@@ -2299,7 +2374,7 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.0999
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/SpaceA/Spear1/Event"]
 libraries = {
-"": SubResource("AnimationLibrary_88v55")
+&"": SubResource("AnimationLibrary_88v55")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/SpaceA/Spear1"]
@@ -2507,6 +2582,8 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 3.0999
 "Rotation Settings/Rotation Time" = 0.8
 "Attack Settings/Flame Active Time" = 3.0
 "Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 
 [node name="RedMajin2" parent="MainAct/SpaceA/MajinGroup" instance=ExtResource("19_3ua6y")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -3.10004, 0, 40.3)
@@ -2514,6 +2591,8 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -3.100
 "Rotation Settings/Rotation Time" = -1.0
 "Attack Settings/Flame Active Time" = 2.0
 "Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 
 [node name="GreenMajin" parent="MainAct/SpaceA/MajinGroup" instance=ExtResource("18_wuv3v")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 0, 46)
@@ -2529,6 +2608,7 @@ Amount = 22
 Shape = 2
 Path = NodePath("../../../../Static/Path/SpaceAAutomationPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 1.0
 "Horizontal Offset" = null
@@ -2608,6 +2688,7 @@ Amount = 22
 Shape = 2
 Path = NodePath("../../../../Static/Path/SpaceAAutomationPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 1.0
 "Horizontal Offset" = null
@@ -2687,6 +2768,7 @@ Amount = 30
 Shape = 2
 Path = NodePath("../../../../Static/Path/SpaceAAutomationPath")
 "Path Progress Offset" = 0.0
+"Reverse Path" = false
 "Disable Path Y" = false
 Spacing = 1.0
 "Horizontal Offset" = null
@@ -3452,6 +3534,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -71)
 "Rotation Settings/Rotation Time" = 0.6
 "Attack Settings/Flame Active Time" = 5.0
 "Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 
 [node name="SpacePanelGroup5" type="Node3D" parent="MainAct/SpaceB"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -56, -20.25, 195.775)
@@ -4110,21 +4194,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -39.2)
 
 [node name="SpringEvent" type="Node3D" parent="MainAct/GasRoom/GasA/SwitchGroup/Switch" node_paths=PackedStringArray("animator")]
 script = ExtResource("33_o2ldu")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Spring" parent="MainAct/GasRoom/GasA/SwitchGroup/Switch/SpringEvent" instance=ExtResource("42_m3821")]
 process_mode = 4
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, -12.1801)
 visible = false
 FinalHeight = 15.0
-voiceKey = &""
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/GasRoom/GasA/SwitchGroup/Switch/SpringEvent"]
 libraries = {
-"": SubResource("AnimationLibrary_vv2vf")
+&"": SubResource("AnimationLibrary_vv2vf")
 }
 
 [node name="RichRingGroup8" type="Node3D" parent="MainAct/GasRoom/GasA"]
@@ -4244,26 +4328,28 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 147.2,
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 2.0
 
-[node name="HorizontalMovement" type="Node3D" parent="MainAct/GasRoom/GasA/ItemBoxGroup1" node_paths=PackedStringArray("Root")]
+[node name="HorizontalMovement" type="Node3D" parent="MainAct/GasRoom/GasA/ItemBoxGroup1"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2, 0, 0)
 script = ExtResource("44_dyala")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 2.5
 "Movement/Starting Offset" = 0.0
 Movement/Distance = 4.0
 Movement/Angle = 0.0
 "Vertical Orientation" = false
-Root = NodePath("../VerticalMovement")
 
-[node name="VerticalMovement" type="Node3D" parent="MainAct/GasRoom/GasA/ItemBoxGroup1" node_paths=PackedStringArray("Root")]
+[node name="VerticalMovement" type="Node3D" parent="MainAct/GasRoom/GasA/ItemBoxGroup1"]
 script = ExtResource("44_dyala")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 1.0
 "Movement/Starting Offset" = 0.0
 Movement/Distance = 1.5
 Movement/Angle = 0.0
 "Vertical Orientation" = true
-Root = NodePath("../ItemBoxFlying")
 
 [node name="PickupParent" type="Node3D" parent="MainAct/GasRoom/GasA/ItemBoxGroup1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, -2.2, -19)
@@ -4297,26 +4383,28 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 149.2,
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 2.0
 
-[node name="HorizontalMovement" type="Node3D" parent="MainAct/GasRoom/GasA/ItemBoxGroup2" node_paths=PackedStringArray("Root")]
+[node name="HorizontalMovement" type="Node3D" parent="MainAct/GasRoom/GasA/ItemBoxGroup2"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2, 0, 0)
 script = ExtResource("44_dyala")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 2.5
 "Movement/Starting Offset" = 0.1
 Movement/Distance = 4.0
 Movement/Angle = 0.0
 "Vertical Orientation" = false
-Root = NodePath("../VerticalMovement")
 
-[node name="VerticalMovement" type="Node3D" parent="MainAct/GasRoom/GasA/ItemBoxGroup2" node_paths=PackedStringArray("Root")]
+[node name="VerticalMovement" type="Node3D" parent="MainAct/GasRoom/GasA/ItemBoxGroup2"]
 script = ExtResource("44_dyala")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 1.0
 "Movement/Starting Offset" = 0.1
 Movement/Distance = 1.5
 Movement/Angle = 0.0
 "Vertical Orientation" = true
-Root = NodePath("../ItemBoxFlying")
 
 [node name="PickupParent" type="Node3D" parent="MainAct/GasRoom/GasA/ItemBoxGroup2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, -2.2, -17)
@@ -4350,26 +4438,28 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 151.2,
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 2.0
 
-[node name="HorizontalMovement" type="Node3D" parent="MainAct/GasRoom/GasA/ItemBoxGroup3" node_paths=PackedStringArray("Root")]
+[node name="HorizontalMovement" type="Node3D" parent="MainAct/GasRoom/GasA/ItemBoxGroup3"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2, 0, 0)
 script = ExtResource("44_dyala")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 2.5
 "Movement/Starting Offset" = 0.2
 Movement/Distance = 4.0
 Movement/Angle = 0.0
 "Vertical Orientation" = false
-Root = NodePath("../VerticalMovement")
 
-[node name="VerticalMovement" type="Node3D" parent="MainAct/GasRoom/GasA/ItemBoxGroup3" node_paths=PackedStringArray("Root")]
+[node name="VerticalMovement" type="Node3D" parent="MainAct/GasRoom/GasA/ItemBoxGroup3"]
 script = ExtResource("44_dyala")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 1.0
 "Movement/Starting Offset" = 0.2
 Movement/Distance = 1.5
 Movement/Angle = 0.0
 "Vertical Orientation" = true
-Root = NodePath("../ItemBoxFlying")
 
 [node name="PickupParent" type="Node3D" parent="MainAct/GasRoom/GasA/ItemBoxGroup3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, -2.2, -15)
@@ -4403,26 +4493,28 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 153.2,
 "Spawn Settings/Pickup Parent" = NodePath("../PickupParent")
 "Spawn Settings/Travel Time" = 2.0
 
-[node name="HorizontalMovement" type="Node3D" parent="MainAct/GasRoom/GasA/ItemBoxGroup4" node_paths=PackedStringArray("Root")]
+[node name="HorizontalMovement" type="Node3D" parent="MainAct/GasRoom/GasA/ItemBoxGroup4"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2, 0, 0)
 script = ExtResource("44_dyala")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 2.5
 "Movement/Starting Offset" = 0.3
 Movement/Distance = 4.0
 Movement/Angle = 0.0
 "Vertical Orientation" = false
-Root = NodePath("../VerticalMovement")
 
-[node name="VerticalMovement" type="Node3D" parent="MainAct/GasRoom/GasA/ItemBoxGroup4" node_paths=PackedStringArray("Root")]
+[node name="VerticalMovement" type="Node3D" parent="MainAct/GasRoom/GasA/ItemBoxGroup4"]
 script = ExtResource("44_dyala")
+root = NodePath("")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 1.0
 "Movement/Starting Offset" = 0.3
 Movement/Distance = 1.5
 Movement/Angle = 0.0
 "Vertical Orientation" = true
-Root = NodePath("../ItemBoxFlying")
 
 [node name="PickupParent" type="Node3D" parent="MainAct/GasRoom/GasA/ItemBoxGroup4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -2.2, -13)

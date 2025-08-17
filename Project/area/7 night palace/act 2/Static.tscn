@@ -8,7 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_jkftw"]
 [ext_resource type="PackedScene" uid="uid://d4ivgn14opv12" path="res://area/7 night palace/data/skybox/SpaceSkybox.tscn" id="4_0qu5p"]
 [ext_resource type="Script" uid="uid://bvmyay4bo83qu" path="res://object/trigger/modules/DeathTrigger.cs" id="4_o2jba"]
-[ext_resource type="Environment" uid="uid://qjcvqav7rmjr" path="res://area/7 night palace/data/EnvironmentSpace.tres" id="8_6epym"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4glpy"]
 size = Vector3(686, 13.2, 502)
@@ -34,6 +33,21 @@ size = Vector3(120, 10, 30)
 [sub_resource type="BoxShape3D" id="BoxShape3D_5st8l"]
 size = Vector3(70, 10, 60)
 
+[sub_resource type="Environment" id="Environment_38hsq"]
+ambient_light_source = 2
+ambient_light_color = Color(0.341176, 0.411765, 0.521569, 1)
+ambient_light_sky_contribution = 0.2
+tonemap_mode = 2
+tonemap_exposure = 1.2
+tonemap_white = 1.2
+glow_enabled = true
+glow_normalized = true
+glow_bloom = 0.1
+glow_blend_mode = 0
+glow_hdr_threshold = 1.5
+volumetric_fog_density = 0.01
+adjustment_enabled = true
+
 [node name="Static" type="Node3D"]
 script = ExtResource("1_6j01u")
 pathParent = NodePath("Path")
@@ -50,15 +64,16 @@ Environment = NodePath("WorldEnvironment")
 
 [node name="MainLight" type="DirectionalLight3D" parent="Visuals/Lights"]
 transform = Transform3D(-0.984808, 3.00452e-09, -0.173648, 0.17318, 0.0733427, -0.982156, 0.0127358, -0.997307, -0.0722284, 0, 0, 0)
+layers = 1024
 light_color = Color(0.901961, 1, 1, 1)
 light_energy = 1.4
 light_cull_mask = 4293918727
 
 [node name="EnvironmentLight" type="DirectionalLight3D" parent="Visuals/Lights"]
 transform = Transform3D(-0.984808, -2.27712e-08, 0.173648, 0.173648, -1.29142e-07, 0.984808, 7.64274e-15, 1, 1.31134e-07, 0, 0, 0)
-layers = 6
+layers = 1024
 light_color = Color(0.92549, 0.882353, 0.752941, 1)
-light_energy = 0.4
+light_energy = 0.6
 light_cull_mask = 4293918727
 
 [node name="Collision" parent="." instance=ExtResource("3_1m48j")]
@@ -115,4 +130,4 @@ curve = ExtResource("2_gnax0")
 bus = &"BGM"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource("8_6epym")
+environment = SubResource("Environment_38hsq")
