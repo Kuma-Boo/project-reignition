@@ -1099,7 +1099,9 @@ public partial class SandScorpion : Node3D
 			lTailAnimationTree.Set(HeavyAttackParameter, HeavyLoopState);
 
 		// Disable hurtboxes so the player can't just bounce on the same eye infinitely
-		eventAnimator.Play(hitFarEye ? "disable-hurtbox-01" : "disable-hurtbox-02");
+		string hitboxAnimation = hitFarEye ? "disable-hurtbox-01" : "disable-hurtbox-02";
+		hitboxAnimation = (attackSide == 1 ? "r-" : "l-") + hitboxAnimation;
+		eventAnimator.CallDeferred("play", hitboxAnimation, -1, -1, false);
 	}
 	#endregion
 }
