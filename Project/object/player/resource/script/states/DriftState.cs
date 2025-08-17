@@ -6,18 +6,12 @@ namespace Project.Gameplay;
 
 public partial class DriftState : PlayerState
 {
-	[Export]
-	private PlayerState idleState;
-	[Export]
-	private PlayerState runState;
-	[Export]
-	private PlayerState crouchState;
-	[Export]
-	private PlayerState slideState;
-	[Export]
-	private PlayerState jumpState;
-	[Export]
-	private LockoutResource LockoutSettings { get; set; }
+	[Export] private PlayerState idleState;
+	[Export] private PlayerState runState;
+	[Export] private PlayerState crouchState;
+	[Export] private PlayerState slideState;
+	[Export] private PlayerState jumpState;
+	[Export] private LockoutResource LockoutSettings { get; set; }
 
 	public DriftTrigger Trigger { get; set; }
 
@@ -161,6 +155,10 @@ public partial class DriftState : PlayerState
 		// Process drift
 		float positionSmoothing = Player.Skills.IsSpeedBreakActive ? SpeedBreakDriftSmoothing : DriftSmoothing;
 		Player.GlobalPosition = Player.GlobalPosition.SmoothDamp(targetPosition, ref driftVelocity, positionSmoothing, entrySpeed);
+		RaycastHit hit = Player.CastRay(Player.GlobalPosition + Vector3.Up * 2f, Vector3.Down * 5f, Runtime.Instance.environmentMask);
+		if (hit && hit.collidedObject.IsInGroup("floor"))
+			Player.GlobalPosition = hit.point;
+
 		Player.UpDirection = Player.PathFollower.Up(); // Use pathfollower's up direction when drifting
 		Player.UpdateExternalControl(true);
 		Player.UpdateOrientation();
