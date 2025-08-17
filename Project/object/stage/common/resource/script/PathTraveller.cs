@@ -22,6 +22,7 @@ public partial class PathTraveller : Node3D
 	[Export] protected float MaxSpeed { get; private set; }
 	/// <summary> How fast to turn. </summary>
 	[Export] protected float TurnSpeed { get; private set; }
+	[Export] private float turnSmoothing = 20f;
 
 	/// <summary> Allow object to move vertically? </summary>
 	[Export] private bool isVerticalMovementDisabled;
@@ -69,7 +70,6 @@ public partial class PathTraveller : Node3D
 	/// <summary> At what distance should inputs start being smoothed? </summary>
 	private readonly float CollisionSmoothingDistance = 1f;
 	private readonly float SpeedSmoothing = 25f;
-	private readonly float TurnSmoothing = 20f;
 
 	protected PlayerController Player => StageSettings.Player;
 
@@ -187,7 +187,7 @@ public partial class PathTraveller : Node3D
 		if (isSmoothingVertical)
 			inputVector.Y *= 1.0f - ((Mathf.Abs(PathFollower.VOffset) - VerticalTurnSmoothing) / (Bounds.Y - VerticalTurnSmoothing));
 
-		CurrentTurnAmount = CurrentTurnAmount.SmoothDamp(inputVector, ref turnVelocity, TurnSmoothing * PhysicsManager.physicsDelta);
+		CurrentTurnAmount = CurrentTurnAmount.SmoothDamp(inputVector, ref turnVelocity, turnSmoothing * PhysicsManager.physicsDelta);
 		Accelerate();
 	}
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=3 uid="uid://c58uuw11dgeta"]
+[gd_scene load_steps=77 format=3 uid="uid://c58uuw11dgeta"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
 [ext_resource type="Resource" uid="uid://beyea7f0e70sm" path="res://resource/level data/night palace/Act1Main.tres" id="2_wwd1j"]
@@ -48,6 +48,30 @@
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mow5f"]
 size = Vector3(20, 20, 5)
+
+[sub_resource type="Curve" id="Curve_didft"]
+_limits = [-2.0, 0.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, -6.9747505, 0, 0, Vector2(0.5, -2), 0.0, 0.0, 0, 0, Vector2(1, 0), 9.3945465, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_t3u0p"]
+_data = [Vector2(0, 0), 0.0, 3.6928961, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -4.4125896, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_uu756"]
+_limits = [0.0, 4.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 34.621918, 0, 0, Vector2(0.15399611, 4), 0.0, 0.0, 0, 0, Vector2(0.38011694, 0), 0.0, 0.0, 0, 0, Vector2(0.57699805, 4), 0.0, 0.0, 0, 0, Vector2(0.8050682, 0), 0.0, 0.0, 0, 0, Vector2(1, 4), 0.0, 0.0, 0, 0]
+point_count = 6
+
+[sub_resource type="Curve" id="Curve_pvb6h"]
+_limits = [0.0, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_8m7cr"]
+_limits = [-2.0, 0.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, -2.0, 0, 1, Vector2(1, -2), -2.0, 0.0, 1, 0]
+point_count = 2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lcjye"]
 size = Vector3(2, 10, 4)
@@ -1001,6 +1025,11 @@ _data = {
 Data = ExtResource("2_wwd1j")
 InitialCameraSettings = ExtResource("3_mltpg")
 
+[node name="PathFollow3D" type="PathFollow3D" parent="Static/Path/CarpetPath" index="1"]
+transform = Transform3D(-0.2521832, 0.053226985, -0.96619284, 0.20650445, 0.978407, -1.4900873e-08, 0.9453415, -0.19952835, -0.25774553, 362.98892, -101.71995, -11.366906)
+progress = 820.0
+h_offset = 4.0
+
 [node name="MainAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="MainAct"]
@@ -1008,6 +1037,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("1_dm4pv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -148, 10, -472)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 visible = false
@@ -1120,6 +1150,623 @@ transform = Transform3D(5.96046e-08, 0, -1, 0, 1, 0, 1, 0, 5.96046e-08, -145.529
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
+[node name="Carpet" type="Node3D" parent="MainAct"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -148, 10, -481.85)
+script = ExtResource("4_kcdaq")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="Rings1" type="Node3D" parent="MainAct/Carpet"]
+transform = Transform3D(-1, 0, 8.742279e-08, 0, 1, 0, -8.742279e-08, 0, -1, 0, -3, 27.838013)
+script = ExtResource("4_nmhcr")
+Source = ExtResource("5_guij8")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../Static/Path/CarpetPath")
+"Path Progress Offset" = 0.0
+"Reverse Path" = false
+"Disable Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Carpet/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.2888184e-05)
+
+[node name="Child02" parent="MainAct/Carpet/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.9999924)
+
+[node name="Child03" parent="MainAct/Carpet/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.9999619)
+
+[node name="Child04" parent="MainAct/Carpet/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.999962)
+
+[node name="Child05" parent="MainAct/Carpet/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.9999466)
+
+[node name="Child06" parent="MainAct/Carpet/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.999977)
+
+[node name="Child07" parent="MainAct/Carpet/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.999931)
+
+[node name="Child08" parent="MainAct/Carpet/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.999992)
+
+[node name="Child09" parent="MainAct/Carpet/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.007385254, 0, -15.9999695)
+
+[node name="Child10" parent="MainAct/Carpet/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.07623291, 0, -17.998665)
+
+[node name="Rings2" type="Node3D" parent="MainAct/Carpet"]
+transform = Transform3D(-0.11520229, 0, -0.9933411, 0, 1, 0, 0.9933411, 0, -0.11520229, 30.26944, -5.02, 78.0775)
+script = ExtResource("4_nmhcr")
+Source = ExtResource("5_guij8")
+Amount = 7
+Shape = 2
+Path = NodePath("../../../Static/Path/CarpetPath")
+"Path Progress Offset" = 0.0
+"Reverse Path" = false
+"Disable Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Carpet/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -7.450581e-09, 0, 1, 0, 7.450581e-09, 0, 1, 0, 0, -0.0014038086)
+
+[node name="Child02" parent="MainAct/Carpet/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -7.450581e-09, 0, 1, 0, 7.450581e-09, 0, 1, -0.027374268, 0, -2.0789185)
+
+[node name="Child03" parent="MainAct/Carpet/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -7.450581e-09, 0, 1, 0, 7.450581e-09, 0, 1, -0.10586548, 0, -4.148163)
+
+[node name="Child04" parent="MainAct/Carpet/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -7.450581e-09, 0, 1, 0, 7.450581e-09, 0, 1, -0.23060608, 0, -6.208954)
+
+[node name="Child05" parent="MainAct/Carpet/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -7.450581e-09, 0, 1, 0, 7.450581e-09, 0, 1, -0.39735413, 0, -8.261383)
+
+[node name="Child06" parent="MainAct/Carpet/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -7.450581e-09, 0, 1, 0, 7.450581e-09, 0, 1, -0.6023865, 0, -10.30545)
+
+[node name="Child07" parent="MainAct/Carpet/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -7.450581e-09, 0, 1, 0, 7.450581e-09, 0, 1, -0.8206177, -0.00948143, -12.259338)
+
+[node name="Rings3" type="Node3D" parent="MainAct/Carpet"]
+transform = Transform3D(-0.05692603, 0.011286481, -0.9983128, -0.008572192, 0.9998933, 0.011793122, 0.99834013, 0.009229093, -0.056823213, 45.76242, -3.5190997, 72.79278)
+script = ExtResource("4_nmhcr")
+Source = ExtResource("5_guij8")
+Amount = 7
+Shape = 2
+Path = NodePath("../../../Static/Path/CarpetPath")
+"Path Progress Offset" = 0.0
+"Reverse Path" = false
+"Disable Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Carpet/Rings3" instance=ExtResource("5_guij8")]
+transform = Transform3D(1.0000001, 1.1641532e-10, -3.7252903e-09, -2.3283064e-10, 1.0000001, 9.313226e-10, 0, -9.313226e-10, 1.0000001, 0, 0, 0.002380371)
+
+[node name="Child02" parent="MainAct/Carpet/Rings3" instance=ExtResource("5_guij8")]
+transform = Transform3D(1.0000001, 1.1641532e-10, -3.7252903e-09, -2.3283064e-10, 1.0000001, 9.313226e-10, 0, -9.313226e-10, 1.0000001, 0.029335022, 0.008036613, -2.0823975)
+
+[node name="Child03" parent="MainAct/Carpet/Rings3" instance=ExtResource("5_guij8")]
+transform = Transform3D(1.0000001, 1.1641532e-10, -3.7252903e-09, -2.3283064e-10, 1.0000001, 9.313226e-10, 0, -9.313226e-10, 1.0000001, 0.11883545, 0.00532341, -4.168396)
+
+[node name="Child04" parent="MainAct/Carpet/Rings3" instance=ExtResource("5_guij8")]
+transform = Transform3D(1.0000001, 1.1641532e-10, -3.7252903e-09, -2.3283064e-10, 1.0000001, 9.313226e-10, 0, -9.313226e-10, 1.0000001, 0.27070618, -0.008275986, -6.253784)
+
+[node name="Child05" parent="MainAct/Carpet/Rings3" instance=ExtResource("5_guij8")]
+transform = Transform3D(1.0000001, 1.1641532e-10, -3.7252903e-09, -2.3283064e-10, 1.0000001, 9.313226e-10, 0, -9.313226e-10, 1.0000001, 0.4870987, -0.032884598, -8.336609)
+
+[node name="Child06" parent="MainAct/Carpet/Rings3" instance=ExtResource("5_guij8")]
+transform = Transform3D(1.0000001, 1.1641532e-10, -3.7252903e-09, -2.3283064e-10, 1.0000001, 9.313226e-10, 0, -9.313226e-10, 1.0000001, 0.77027893, -0.06860161, -10.414673)
+
+[node name="Child07" parent="MainAct/Carpet/Rings3" instance=ExtResource("5_guij8")]
+transform = Transform3D(1.0000001, 1.1641532e-10, -3.7252903e-09, -2.3283064e-10, 1.0000001, 9.313226e-10, 0, -9.313226e-10, 1.0000001, 1.1225204, -0.11550903, -12.485413)
+
+[node name="Pearls1" type="Node3D" parent="MainAct/Carpet"]
+transform = Transform3D(-0.7581663, -0.11562011, 0.6417229, -0.08812069, 0.99328953, 0.074851826, -0.6460737, 0.00020107489, -0.76327, 74.50961, -13.0150585, 145.37752)
+script = ExtResource("4_nmhcr")
+Source = ExtResource("38_cjtko")
+Amount = 13
+Shape = 2
+Path = NodePath("../../../Static/Path/CarpetPath")
+"Path Progress Offset" = 0.0
+"Reverse Path" = false
+"Disable Path Y" = false
+Spacing = 3.0
+"Horizontal Offset" = SubResource("Curve_didft")
+"Vertical Offset" = SubResource("Curve_t3u0p")
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Carpet/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, -2.9802322e-08, -7.450581e-09, 1.0000001, 7.450581e-09, 0, 0, 1, 0, -7.6293945e-06, 9.1552734e-05)
+
+[node name="Child02" parent="MainAct/Carpet/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, -2.9802322e-08, -7.450581e-09, 1.0000001, 7.450581e-09, 0, 0, 1, 0.561676, 0.27879333, -3.0039978)
+
+[node name="Child03" parent="MainAct/Carpet/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, -2.9802322e-08, -7.450581e-09, 1.0000001, 7.450581e-09, 0, 0, 1, 1.0536804, 0.5191345, -6.000519)
+
+[node name="Child04" parent="MainAct/Carpet/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, -2.9802322e-08, -7.450581e-09, 1.0000001, 7.450581e-09, 0, 0, 1, 1.4482422, 0.7130661, -8.996063)
+
+[node name="Child05" parent="MainAct/Carpet/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, -2.9802322e-08, -7.450581e-09, 1.0000001, 7.450581e-09, 0, 0, 1, 1.71698, 0.8519592, -11.994537)
+
+[node name="Child06" parent="MainAct/Carpet/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, -2.9802322e-08, -7.450581e-09, 1.0000001, 7.450581e-09, 0, 0, 1, 1.829834, 0.9262085, -14.996002)
+
+[node name="Child07" parent="MainAct/Carpet/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, -2.9802322e-08, -7.450581e-09, 1.0000001, 7.450581e-09, 0, 0, 1, 1.754364, 0.92497253, -17.995026)
+
+[node name="Child08" parent="MainAct/Carpet/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, -2.9802322e-08, -7.450581e-09, 1.0000001, 7.450581e-09, 0, 0, 1, 1.486908, 0.8472214, -20.981506)
+
+[node name="Child09" parent="MainAct/Carpet/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, -2.9802322e-08, -7.450581e-09, 1.0000001, 7.450581e-09, 0, 0, 1, 1.0153809, 0.68984985, -23.938171)
+
+[node name="Child10" parent="MainAct/Carpet/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, -2.9802322e-08, -7.450581e-09, 1.0000001, 7.450581e-09, 0, 0, 1, 0.2887268, 0.43546295, -26.830048)
+
+[node name="Child11" parent="MainAct/Carpet/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, -2.9802322e-08, -7.450581e-09, 1.0000001, 7.450581e-09, 0, 0, 1, -0.74679565, 0.063194275, -29.594849)
+
+[node name="Child12" parent="MainAct/Carpet/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, -2.9802322e-08, -7.450581e-09, 1.0000001, 7.450581e-09, 0, 0, 1, -2.1380615, -0.45153046, -32.12567)
+
+[node name="Child13" parent="MainAct/Carpet/Pearls1" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, -2.9802322e-08, -7.450581e-09, 1.0000001, 7.450581e-09, 0, 0, 1, -3.8987122, -1.1346512, -34.255157)
+
+[node name="Pearls2" type="Node3D" parent="MainAct/Carpet"]
+transform = Transform3D(-0.97984123, -0.04175704, 0.19533394, -0.018745353, 0.99280596, 0.11820428, -0.19886535, 0.11216019, -0.97358394, 51.970062, -15.863325, 177.57867)
+script = ExtResource("4_nmhcr")
+Source = ExtResource("38_cjtko")
+Amount = 13
+Shape = 2
+Path = NodePath("../../../Static/Path/CarpetPath")
+"Path Progress Offset" = 0.0
+"Reverse Path" = false
+"Disable Path Y" = false
+Spacing = 3.0
+"Horizontal Offset" = SubResource("Curve_t3u0p")
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Carpet/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 1.4901161e-08, 0, 1, -4.656613e-09, 0, 4.656613e-09, 1, -6.1035156e-05, -1.9073486e-06, 0.00034332275)
+
+[node name="Child02" parent="MainAct/Carpet/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 1.4901161e-08, 0, 1, -4.656613e-09, 0, 4.656613e-09, 1, -0.22143555, -0.012870789, -2.9665222)
+
+[node name="Child03" parent="MainAct/Carpet/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 1.4901161e-08, 0, 1, -4.656613e-09, 0, 4.656613e-09, 1, -0.26153564, -0.01379776, -5.948036)
+
+[node name="Child04" parent="MainAct/Carpet/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 1.4901161e-08, 0, 1, -4.656613e-09, 0, 4.656613e-09, 1, -0.10760498, -0.006980896, -8.931885)
+
+[node name="Child05" parent="MainAct/Carpet/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 1.4901161e-08, 0, 1, -4.656613e-09, 0, 4.656613e-09, 1, 0.25286865, 0.00258255, -11.902924)
+
+[node name="Child06" parent="MainAct/Carpet/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 1.4901161e-08, 0, 1, -4.656613e-09, 0, 4.656613e-09, 1, 0.83135986, 0.009000778, -14.843254)
+
+[node name="Child07" parent="MainAct/Carpet/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 1.4901161e-08, 0, 1, -4.656613e-09, 0, 4.656613e-09, 1, 1.6382446, 0.0054073334, -17.731426)
+
+[node name="Child08" parent="MainAct/Carpet/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 1.4901161e-08, 0, 1, -4.656613e-09, 0, 4.656613e-09, 1, 2.6726074, -0.014532089, -20.546124)
+
+[node name="Child09" parent="MainAct/Carpet/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 1.4901161e-08, 0, 1, -4.656613e-09, 0, 4.656613e-09, 1, 3.9327393, -0.05740547, -23.264267)
+
+[node name="Child10" parent="MainAct/Carpet/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 1.4901161e-08, 0, 1, -4.656613e-09, 0, 4.656613e-09, 1, 5.4226685, -0.13204002, -25.856113)
+
+[node name="Child11" parent="MainAct/Carpet/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 1.4901161e-08, 0, 1, -4.656613e-09, 0, 4.656613e-09, 1, 7.1419067, -0.24831963, -28.288754)
+
+[node name="Child12" parent="MainAct/Carpet/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 1.4901161e-08, 0, 1, -4.656613e-09, 0, 4.656613e-09, 1, 9.083069, -0.4170208, -30.526337)
+
+[node name="Child13" parent="MainAct/Carpet/Pearls2" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 1.4901161e-08, 0, 1, -4.656613e-09, 0, 4.656613e-09, 1, 11.230713, -0.6495552, -32.531685)
+
+[node name="SpikeBall1" parent="MainAct/Carpet" instance=ExtResource("21_3irg0")]
+transform = Transform3D(-0.24283506, 0.069617495, 0.9675642, -0.6907011, 0.687932, -0.2228507, -0.68113244, -0.7224163, -0.11897132, 32.640717, -20.444199, 211.57312)
+Movement/Mode = 0
+
+[node name="SpikeBall2" parent="MainAct/Carpet" instance=ExtResource("21_3irg0")]
+transform = Transform3D(0.41283077, -0.1581624, 0.89696115, -0.085226774, 0.97376055, 0.21093515, -0.90679425, -0.16352642, 0.38852903, 1.5267639, -25.908972, 214.66476)
+Movement/Mode = 0
+
+[node name="PearlRing" type="Node3D" parent="MainAct/Carpet/SpikeBall2"]
+script = ExtResource("4_nmhcr")
+Source = ExtResource("38_cjtko")
+Amount = 13
+Shape = 1
+Orientation = 0
+"Ring Size" = 2.5
+"Ring Ratio" = 1.0
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Carpet/SpikeBall2/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 0)
+
+[node name="Child02" parent="MainAct/Carpet/SpikeBall2/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.21364, 0, 1.161808)
+
+[node name="Child03" parent="MainAct/Carpet/SpikeBall2/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4201618, 0, 2.0574598)
+
+[node name="Child04" parent="MainAct/Carpet/SpikeBall2/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.30134144, 0, 2.4817724)
+
+[node name="Child05" parent="MainAct/Carpet/SpikeBall2/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8865124, 0, 2.3375406)
+
+[node name="Child06" parent="MainAct/Carpet/SpikeBall2/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.871277, 0, 1.6578066)
+
+[node name="Child07" parent="MainAct/Carpet/SpikeBall2/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4273548, 0, 0.59828866)
+
+[node name="Child08" parent="MainAct/Carpet/SpikeBall2/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4273543, 0, -0.5982896)
+
+[node name="Child09" parent="MainAct/Carpet/SpikeBall2/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8712766, 0, -1.6578069)
+
+[node name="Child10" parent="MainAct/Carpet/SpikeBall2/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8865115, 0, -2.337541)
+
+[node name="Child11" parent="MainAct/Carpet/SpikeBall2/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.30134186, 0, -2.4817722)
+
+[node name="Child12" parent="MainAct/Carpet/SpikeBall2/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4201624, 0, -2.0574594)
+
+[node name="Child13" parent="MainAct/Carpet/SpikeBall2/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2136407, 0, -1.161807)
+
+[node name="SpikeBall3" parent="MainAct/Carpet" instance=ExtResource("21_3irg0")]
+transform = Transform3D(0.7811483, 0.39345282, -0.484704, -0.33463502, 0.91930306, 0.20694692, 0.5270219, 0.0005427247, 0.849827, -5.5780334, -38.652424, 170.47571)
+Movement/Mode = 0
+
+[node name="PearlRing" type="Node3D" parent="MainAct/Carpet/SpikeBall3"]
+script = ExtResource("4_nmhcr")
+Source = ExtResource("38_cjtko")
+Amount = 13
+Shape = 1
+Orientation = 0
+"Ring Size" = 2.5
+"Ring Ratio" = 1.0
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Carpet/SpikeBall3/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 0)
+
+[node name="Child02" parent="MainAct/Carpet/SpikeBall3/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.21364, 0, 1.161808)
+
+[node name="Child03" parent="MainAct/Carpet/SpikeBall3/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4201618, 0, 2.0574598)
+
+[node name="Child04" parent="MainAct/Carpet/SpikeBall3/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.30134144, 0, 2.4817724)
+
+[node name="Child05" parent="MainAct/Carpet/SpikeBall3/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8865124, 0, 2.3375406)
+
+[node name="Child06" parent="MainAct/Carpet/SpikeBall3/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.871277, 0, 1.6578066)
+
+[node name="Child07" parent="MainAct/Carpet/SpikeBall3/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4273548, 0, 0.59828866)
+
+[node name="Child08" parent="MainAct/Carpet/SpikeBall3/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4273543, 0, -0.5982896)
+
+[node name="Child09" parent="MainAct/Carpet/SpikeBall3/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8712766, 0, -1.6578069)
+
+[node name="Child10" parent="MainAct/Carpet/SpikeBall3/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8865115, 0, -2.337541)
+
+[node name="Child11" parent="MainAct/Carpet/SpikeBall3/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.30134186, 0, -2.4817722)
+
+[node name="Child12" parent="MainAct/Carpet/SpikeBall3/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4201624, 0, -2.0574594)
+
+[node name="Child13" parent="MainAct/Carpet/SpikeBall3/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2136407, 0, -1.161807)
+
+[node name="SpikeBall4" parent="MainAct/Carpet" instance=ExtResource("21_3irg0")]
+transform = Transform3D(-0.23657016, 0.18078609, -0.9546298, -0.2864853, 0.9258334, 0.24633981, 0.92837685, 0.3317686, -0.16724262, 26.071686, -45.942173, 153.64714)
+Movement/Mode = 0
+
+[node name="PearlRing" type="Node3D" parent="MainAct/Carpet/SpikeBall4"]
+script = ExtResource("4_nmhcr")
+Source = ExtResource("38_cjtko")
+Amount = 13
+Shape = 1
+Orientation = 0
+"Ring Size" = 2.5
+"Ring Ratio" = 1.0
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Carpet/SpikeBall4/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 0)
+
+[node name="Child02" parent="MainAct/Carpet/SpikeBall4/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.21364, 0, 1.161808)
+
+[node name="Child03" parent="MainAct/Carpet/SpikeBall4/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4201618, 0, 2.0574598)
+
+[node name="Child04" parent="MainAct/Carpet/SpikeBall4/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.30134144, 0, 2.4817724)
+
+[node name="Child05" parent="MainAct/Carpet/SpikeBall4/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8865124, 0, 2.3375406)
+
+[node name="Child06" parent="MainAct/Carpet/SpikeBall4/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.871277, 0, 1.6578066)
+
+[node name="Child07" parent="MainAct/Carpet/SpikeBall4/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4273548, 0, 0.59828866)
+
+[node name="Child08" parent="MainAct/Carpet/SpikeBall4/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4273543, 0, -0.5982896)
+
+[node name="Child09" parent="MainAct/Carpet/SpikeBall4/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8712766, 0, -1.6578069)
+
+[node name="Child10" parent="MainAct/Carpet/SpikeBall4/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8865115, 0, -2.337541)
+
+[node name="Child11" parent="MainAct/Carpet/SpikeBall4/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.30134186, 0, -2.4817722)
+
+[node name="Child12" parent="MainAct/Carpet/SpikeBall4/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4201624, 0, -2.0574594)
+
+[node name="Child13" parent="MainAct/Carpet/SpikeBall4/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2136407, 0, -1.161807)
+
+[node name="SpikeBall5" parent="MainAct/Carpet" instance=ExtResource("21_3irg0")]
+transform = Transform3D(-1.6353598, -0.036209214, -1.1507124, -0.25154445, 1.9619036, 0.29576182, 1.1234481, 0.38656944, -1.6088252, 48.772003, -52.087574, 164.87598)
+Movement/Mode = 0
+
+[node name="SpikeBall6" parent="MainAct/Carpet" instance=ExtResource("21_3irg0")]
+transform = Transform3D(-1.8084848, -0.074717686, -0.8506676, -0.18534203, 1.9791346, 0.22020057, 0.83357334, 0.27794912, -1.796611, 46.02072, -50.429085, 172.55206)
+Movement/Mode = 0
+
+[node name="SpikeBall7" parent="MainAct/Carpet" instance=ExtResource("21_3irg0")]
+transform = Transform3D(-1.9998395, 0, 0.016105132, 0, 1.9999017, 0, -0.016104644, 0, -1.9999002, 50.741425, -51.93169, 190.55551)
+Movement/Mode = 0
+
+[node name="Rings5" type="Node3D" parent="MainAct/Carpet"]
+transform = Transform3D(-0.99997425, 0, -0.0013467257, 0, 0.9999743, 0, 0.0013467052, 0, -0.9999894, 51.69748, -54.9317, 210.56253)
+script = ExtResource("4_nmhcr")
+Source = ExtResource("5_guij8")
+Amount = 20
+Shape = 2
+Path = NodePath("../../../Static/Path/CarpetPath")
+"Path Progress Offset" = 0.0
+"Reverse Path" = false
+"Disable Path Y" = false
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = SubResource("Curve_uu756")
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Carpet/Rings5" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -1.1641532e-10, 0, 1, 0, 1.1641532e-10, 0, 1, 0, 0, 0)
+
+[node name="Child02" parent="MainAct/Carpet/Rings5" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -1.1641532e-10, 0, 1, 0, 1.1641532e-10, 0, 1, -0.0015869141, 1.871872, -3.9998016)
+
+[node name="Child03" parent="MainAct/Carpet/Rings5" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -1.1641532e-10, 0, 1, 0, 1.1641532e-10, 0, 1, -0.00592041, 3.4168625, -7.999611)
+
+[node name="Child04" parent="MainAct/Carpet/Rings5" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -1.1641532e-10, 0, 1, 0, 1.1641532e-10, 0, 1, -0.012390137, 3.9965782, -11.999275)
+
+[node name="Child05" parent="MainAct/Carpet/Rings5" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -1.1641532e-10, 0, 1, 0, 1.1641532e-10, 0, 1, -0.020385742, 3.3750877, -15.999023)
+
+[node name="Child06" parent="MainAct/Carpet/Rings5" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -1.1641532e-10, 0, 1, 0, 1.1641532e-10, 0, 1, -0.029663086, 2.1034622, -19.99868)
+
+[node name="Child07" parent="MainAct/Carpet/Rings5" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -1.1641532e-10, 0, 1, 0, 1.1641532e-10, 0, 1, -0.039794922, 0.7870064, -23.998535)
+
+[node name="Child08" parent="MainAct/Carpet/Rings5" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -1.1641532e-10, 0, 1, 0, 1.1641532e-10, 0, 1, -0.05041504, 0.03099823, -27.998352)
+
+[node name="Child09" parent="MainAct/Carpet/Rings5" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -1.1641532e-10, 0, 1, 0, 1.1641532e-10, 0, 1, -0.06109619, 0.44687653, -31.998116)
+
+[node name="Child10" parent="MainAct/Carpet/Rings5" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -1.1641532e-10, 0, 1, 0, 1.1641532e-10, 0, 1, -0.07171631, 1.8516617, -35.997856)
+
+[node name="Child11" parent="MainAct/Carpet/Rings5" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -1.1641532e-10, 0, 1, 0, 1.1641532e-10, 0, 1, -0.081726074, 3.3413467, -39.99769)
+
+[node name="Child12" parent="MainAct/Carpet/Rings5" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -1.1641532e-10, 0, 1, 0, 1.1641532e-10, 0, 1, -0.09094238, 3.9992332, -43.99749)
+
+[node name="Child13" parent="MainAct/Carpet/Rings5" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -1.1641532e-10, 0, 1, 0, 1.1641532e-10, 0, 1, -0.09887695, 3.4224663, -47.9973)
+
+[node name="Child14" parent="MainAct/Carpet/Rings5" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -1.1641532e-10, 0, 1, 0, 1.1641532e-10, 0, 1, -0.105163574, 2.179329, -51.997078)
+
+[node name="Child15" parent="MainAct/Carpet/Rings5" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -1.1641532e-10, 0, 1, 0, 1.1641532e-10, 0, 1, -0.109313965, 0.8597183, -55.996758)
+
+[node name="Child16" parent="MainAct/Carpet/Rings5" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -1.1641532e-10, 0, 1, 0, 1.1641532e-10, 0, 1, -0.11065674, 0.053554535, -59.9965)
+
+[node name="Child17" parent="MainAct/Carpet/Rings5" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -1.1641532e-10, 0, 1, 0, 1.1641532e-10, 0, 1, -0.10839844, 0.37834167, -63.995987)
+
+[node name="Child18" parent="MainAct/Carpet/Rings5" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -1.1641532e-10, 0, 1, 0, 1.1641532e-10, 0, 1, -0.101623535, 1.7605515, -67.99562)
+
+[node name="Child19" parent="MainAct/Carpet/Rings5" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -1.1641532e-10, 0, 1, 0, 1.1641532e-10, 0, 1, -0.08898926, 3.2827492, -71.995316)
+
+[node name="Child20" parent="MainAct/Carpet/Rings5" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, -1.1641532e-10, 0, 1, 0, 1.1641532e-10, 0, 1, -0.068359375, 4.000107, -75.9949)
+
+[node name="Rings6" type="Node3D" parent="MainAct/Carpet"]
+transform = Transform3D(0.17572457, 0.4163942, -0.89202285, 0.30519238, 0.83842033, 0.45150775, 0.9359074, -0.35158414, 0.020251576, 80.32083, -68.52272, 358.83557)
+script = ExtResource("4_nmhcr")
+Source = ExtResource("5_guij8")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../Static/Path/CarpetPath")
+"Path Progress Offset" = 0.0
+"Reverse Path" = false
+"Disable Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = SubResource("Curve_pvb6h")
+"Vertical Offset" = SubResource("Curve_8m7cr")
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Carpet/Rings6" instance=ExtResource("5_guij8")]
+transform = Transform3D(0.99999994, -1.4901161e-08, -1.4901161e-08, 7.450581e-09, 0.99999994, 0, -1.4901161e-08, -2.9802322e-08, 1, -3.0517578e-05, -1.5258789e-05, -0.008300781)
+
+[node name="Child02" parent="MainAct/Carpet/Rings6" instance=ExtResource("5_guij8")]
+transform = Transform3D(0.99999994, -1.4901161e-08, -1.4901161e-08, 7.450581e-09, 0.99999994, 0, -1.4901161e-08, -2.9802322e-08, 1, -0.1798706, -0.11830139, -2.1445313)
+
+[node name="Child03" parent="MainAct/Carpet/Rings6" instance=ExtResource("5_guij8")]
+transform = Transform3D(0.99999994, -1.4901161e-08, -1.4901161e-08, 7.450581e-09, 0.99999994, 0, -1.4901161e-08, -2.9802322e-08, 1, -0.49645996, -0.1846466, -4.265442)
+
+[node name="Child04" parent="MainAct/Carpet/Rings6" instance=ExtResource("5_guij8")]
+transform = Transform3D(0.99999994, -1.4901161e-08, -1.4901161e-08, 7.450581e-09, 0.99999994, 0, -1.4901161e-08, -2.9802322e-08, 1, -0.9490051, -0.20197296, -6.36084)
+
+[node name="Child05" parent="MainAct/Carpet/Rings6" instance=ExtResource("5_guij8")]
+transform = Transform3D(0.99999994, -1.4901161e-08, -1.4901161e-08, 7.450581e-09, 0.99999994, 0, -1.4901161e-08, -2.9802322e-08, 1, -1.5356445, -0.17378235, -8.420959)
+
+[node name="Child06" parent="MainAct/Carpet/Rings6" instance=ExtResource("5_guij8")]
+transform = Transform3D(0.99999994, -1.4901161e-08, -1.4901161e-08, 7.450581e-09, 0.99999994, 0, -1.4901161e-08, -2.9802322e-08, 1, -2.2528992, -0.1040802, -10.436707)
+
+[node name="Child07" parent="MainAct/Carpet/Rings6" instance=ExtResource("5_guij8")]
+transform = Transform3D(0.99999994, -1.4901161e-08, -1.4901161e-08, 7.450581e-09, 0.99999994, 0, -1.4901161e-08, -2.9802322e-08, 1, -3.0968018, 0.0028381348, -12.399353)
+
+[node name="Child08" parent="MainAct/Carpet/Rings6" instance=ExtResource("5_guij8")]
+transform = Transform3D(0.99999994, -1.4901161e-08, -1.4901161e-08, 7.450581e-09, 0.99999994, 0, -1.4901161e-08, -2.9802322e-08, 1, -4.062561, 0.14253235, -14.301392)
+
+[node name="Child09" parent="MainAct/Carpet/Rings6" instance=ExtResource("5_guij8")]
+transform = Transform3D(0.99999994, -1.4901161e-08, -1.4901161e-08, 7.450581e-09, 0.99999994, 0, -1.4901161e-08, -2.9802322e-08, 1, -5.1447754, 0.310318, -16.136047)
+
+[node name="Child10" parent="MainAct/Carpet/Rings6" instance=ExtResource("5_guij8")]
+transform = Transform3D(0.99999994, -1.4901161e-08, -1.4901161e-08, 7.450581e-09, 0.99999994, 0, -1.4901161e-08, -2.9802322e-08, 1, -6.3378296, 0.5014801, -17.89685)
+
+[node name="Rings7" type="Node3D" parent="MainAct/Carpet"]
+transform = Transform3D(0.86004573, -0.12615135, -0.49432522, 0.32230145, 0.8854232, 0.3348035, 0.39545634, -0.44727382, 0.8021989, 98.56973, -79.85823, 344.6272)
+script = ExtResource("4_nmhcr")
+Source = ExtResource("5_guij8")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../Static/Path/CarpetPath")
+"Path Progress Offset" = 0.0
+"Reverse Path" = false
+"Disable Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = SubResource("Curve_8m7cr")
+"Vertical Offset" = SubResource("Curve_pvb6h")
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Carpet/Rings7" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, -1.4901161e-08, 0, 7.450581e-09, 1, -2.9802322e-08, 2.9802322e-08, 7.450581e-09, 1, 0, 0, 0.0012207031)
+
+[node name="Child02" parent="MainAct/Carpet/Rings7" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, -1.4901161e-08, 0, 7.450581e-09, 1, -2.9802322e-08, 2.9802322e-08, 7.450581e-09, 1, 0.16625977, 0.12454224, -1.9516296)
+
+[node name="Child03" parent="MainAct/Carpet/Rings7" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, -1.4901161e-08, 0, 7.450581e-09, 1, -2.9802322e-08, 2.9802322e-08, 7.450581e-09, 1, 0.21936035, 0.31814575, -3.914093)
+
+[node name="Child04" parent="MainAct/Carpet/Rings7" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, -1.4901161e-08, 0, 7.450581e-09, 1, -2.9802322e-08, 2.9802322e-08, 7.450581e-09, 1, 0.15771484, 0.5776367, -5.8775177)
+
+[node name="Child05" parent="MainAct/Carpet/Rings7" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, -1.4901161e-08, 0, 7.450581e-09, 1, -2.9802322e-08, 2.9802322e-08, 7.450581e-09, 1, -0.019897461, 0.8998108, -7.83342)
+
+[node name="Child06" parent="MainAct/Carpet/Rings7" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, -1.4901161e-08, 0, 7.450581e-09, 1, -2.9802322e-08, 2.9802322e-08, 7.450581e-09, 1, -0.31427002, 1.2813721, -9.773315)
+
+[node name="Child07" parent="MainAct/Carpet/Rings7" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, -1.4901161e-08, 0, 7.450581e-09, 1, -2.9802322e-08, 2.9802322e-08, 7.450581e-09, 1, -0.7258911, 1.7190552, -11.689133)
+
+[node name="Child08" parent="MainAct/Carpet/Rings7" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, -1.4901161e-08, 0, 7.450581e-09, 1, -2.9802322e-08, 2.9802322e-08, 7.450581e-09, 1, -1.2542114, 2.2092438, -13.572449)
+
+[node name="Child09" parent="MainAct/Carpet/Rings7" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, -1.4901161e-08, 0, 7.450581e-09, 1, -2.9802322e-08, 2.9802322e-08, 7.450581e-09, 1, -1.8986816, 2.748413, -15.415283)
+
+[node name="Child10" parent="MainAct/Carpet/Rings7" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, -1.4901161e-08, 0, 7.450581e-09, 1, -2.9802322e-08, 2.9802322e-08, 7.450581e-09, 1, -2.6618042, 3.3328857, -17.216888)
+
+[node name="SpikeBall8" parent="MainAct/Carpet" instance=ExtResource("21_3irg0")]
+transform = Transform3D(1.4486339, -0.25107712, 1.3558177, -0.32586777, 1.8484572, 0.6905033, -1.3397896, -0.72106194, 1.2980176, 97.532074, -90.61779, 307.5585)
+Movement/Mode = 0
+
+[node name="SpikeBall9" parent="MainAct/Carpet" instance=ExtResource("21_3irg0")]
+transform = Transform3D(1.4486339, -0.25107712, 1.3558174, -0.32586768, 1.848457, 0.69050324, -1.3397896, -0.7210619, 1.2980174, 93.615875, -93.425804, 313.0984)
+Movement/Mode = 0
+
+[node name="SpikeBall10" parent="MainAct/Carpet" instance=ExtResource("21_3irg0")]
+transform = Transform3D(0.22179237, -0.5655427, 1.9054763, -0.33141372, 1.8799102, 0.5965489, -1.959779, -0.3819109, 0.114765815, 81.035, -99.75869, 306.7618)
+Movement/Mode = 0
+
+[node name="SpikeBall11" parent="MainAct/Carpet" instance=ExtResource("21_3irg0")]
+transform = Transform3D(-0.21732333, -0.55919313, 1.9078634, -0.33530968, 1.9020128, 0.5193004, -1.9596124, -0.26343867, -0.3004419, 73.90018, -98.931404, 302.95428)
+Movement/Mode = 0
+
+[node name="RedMajin1" parent="MainAct/Carpet" instance=ExtResource("19_3ua6y")]
+transform = Transform3D(-0.9185553, 0.018102765, 0.3947775, 0.019699633, 0.99976826, 0, -0.39469105, 0.0077785114, -0.9187564, 25.376642, -106.21656, 354.54733)
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+
+[node name="RedMajin2" parent="MainAct/Carpet" instance=ExtResource("19_3ua6y")]
+transform = Transform3D(-0.96633315, 0, 0.25712782, 0, 0.9999624, 0, -0.25712138, 0, -0.9663574, 9.822144, -108.23983, 376.62506)
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+
+[node name="RedMajin3" parent="MainAct/Carpet" instance=ExtResource("19_3ua6y")]
+transform = Transform3D(-0.999954, 0, -0.0017452847, 0, 0.9999624, 0, 0.0017452101, 0, -0.99997914, 5.1908875, -106.23991, 403.04352)
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+
+[node name="RedMajin4" parent="MainAct/Carpet" instance=ExtResource("19_3ua6y")]
+transform = Transform3D(-0.9999555, 0, 8.74211e-08, 0, 0.9999624, 0, -8.74189e-08, 0, -0.9999806, 12.00354, -106.23991, 408.0019)
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+
+[node name="RedMajin5" parent="MainAct/Carpet" instance=ExtResource("19_3ua6y")]
+transform = Transform3D(-0.9999555, 0, 8.74211e-08, 0, 0.9999624, 0, -8.74189e-08, 0, -0.9999806, 8.490997, -109.51992, 414.627)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+
 [node name="Start" type="Node3D" parent="MainAct"]
 script = ExtResource("4_kcdaq")
 startEnabled = true
@@ -1222,7 +1869,6 @@ transform = Transform3D(0.573576, 0, 0.819152, 0, 1, 0, -0.819152, 0, 0.573576, 
 
 [node name="Sidle" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 160, 0, -160)
-visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -1536,7 +2182,6 @@ stateLengths = PackedFloat32Array(2, 1, 1.5)
 
 [node name="Hall" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 154.1, 0.01, -245.6)
-visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -1787,7 +2432,6 @@ settings = ExtResource("28_ru4gh")
 
 [node name="Tower" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -112.8, -10, -320.3)
-visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -2111,7 +2755,6 @@ rangeOverride = 30
 
 [node name="Interior" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -195, 2, -502.3)
-visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -2235,14 +2878,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
 [node name="Child08" parent="MainAct/Interior/Rings3" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
 
-[node name="Carpet" type="Node3D" parent="MainAct"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -148, 10, -481.85)
-visible = false
-script = ExtResource("4_kcdaq")
-saveVisibilityOnCheckpoint = true
-
 [node name="Ending" type="Node3D" parent="MainAct"]
-visible = false
 script = ExtResource("4_kcdaq")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
@@ -2873,7 +3509,6 @@ warpTarget = NodePath("../../../Static/Trigger/Checkpoint/GasCheckpoint/Checkpoi
 
 [node name="SpaceB" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 787.3, 0, -460)
-visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -3573,7 +4208,6 @@ warpTarget = NodePath("../../../Static/Trigger/Checkpoint/GasCheckpoint/Checkpoi
 
 [node name="SpaceC" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 788, 0, -300)
-visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -4563,6 +5197,8 @@ saveVisibilityOnCheckpoint = true
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 206, 0, 0)
 warpTarget = NodePath("../../../Ending/Gate3")
 
+[connection signal="Activated" from="Static/Carpet/StartTrigger" to="Static/Collision/Collision/CarpetWallOneWay" method="Deactivate"]
+[connection signal="JumpFinished" from="Static/Carpet/EndTrigger/JumpTrigger" to="Static/Collision/Collision/CarpetWallOneWay" method="Activate"]
 [connection signal="Activated" from="MainAct/CullingMap/SidleL" to="MainAct/Sidle" method="Activate"]
 [connection signal="Deactivated" from="MainAct/CullingMap/SidleL" to="MainAct/Sidle" method="Deactivate"]
 [connection signal="Activated" from="MainAct/CullingMap/StartU" to="MainAct/Start" method="Deactivate"]
@@ -4688,4 +5324,6 @@ warpTarget = NodePath("../../../Ending/Gate3")
 [connection signal="Teleport" from="MainAct/GasRoom/GasC/Hourglass" to="MainAct/Ending/Gate3" method="Activate"]
 [connection signal="Teleport" from="MainAct/GasRoom/GasC/Hourglass" to="MainAct/GasRoom/GasC" method="Deactivate"]
 
+[editable path="Static"]
+[editable path="Static/Collision/Collision"]
 [editable path="MainAct/Ending/HallStretchTrigger/HallStretchEvent"]
