@@ -1,4 +1,4 @@
-[gd_scene load_steps=75 format=3 uid="uid://ctfcgpodfhnp0"]
+[gd_scene load_steps=77 format=3 uid="uid://ctfcgpodfhnp0"]
 
 [ext_resource type="PackedScene" uid="uid://u5so6ulpdpsk" path="res://area/7 night palace/act 1/environment/01Start.tscn" id="1_c3xql"]
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_siayx"]
@@ -19,7 +19,6 @@
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="9_ew8l8"]
 [ext_resource type="PackedScene" uid="uid://dkft1rtv6qnuv" path="res://area/7 night palace/act 1/environment/collision/Collision.tscn" id="9_oaikh"]
 [ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="10_7ghp2"]
-[ext_resource type="Environment" uid="uid://bv5yu2mslecue" path="res://area/7 night palace/data/Environment.tres" id="10_jp8di"]
 [ext_resource type="Resource" uid="uid://c7o1qpd6n8dgj" path="res://area/7 night palace/act 1/camera/SidleCam.tres" id="10_pw8g3"]
 [ext_resource type="Script" uid="uid://bvmyay4bo83qu" path="res://object/trigger/modules/DeathTrigger.cs" id="10_tmf6t"]
 [ext_resource type="Curve3D" uid="uid://chfrjhr8vu4n6" path="res://area/7 night palace/act 1/environment/path/MainPath1.tres" id="11_ji1lh"]
@@ -129,6 +128,34 @@ size = Vector3(150, 5, 100)
 [sub_resource type="BoxShape3D" id="BoxShape3D_pd5lb"]
 size = Vector3(20, 20, 5)
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_kamdx"]
+sky_top_color = Color(0, 0, 0.109804, 1)
+sky_horizon_color = Color(0, 0, 0.109804, 1)
+ground_bottom_color = Color(0, 0, 0.109804, 1)
+ground_horizon_color = Color(0, 0, 0.109804, 1)
+
+[sub_resource type="Sky" id="Sky_e8t8m"]
+sky_material = SubResource("ProceduralSkyMaterial_kamdx")
+
+[sub_resource type="Environment" id="Environment_7ubvh"]
+background_color = Color(0, 0, 0.109804, 1)
+sky = SubResource("Sky_e8t8m")
+ambient_light_source = 3
+ambient_light_color = Color(0.470588, 0.54902, 0.54902, 1)
+ambient_light_sky_contribution = 0.2
+reflected_light_source = 2
+tonemap_mode = 2
+tonemap_exposure = 1.2
+tonemap_white = 1.4
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 1.5
+glow_bloom = 0.01
+glow_blend_mode = 1
+glow_hdr_threshold = 1.2
+volumetric_fog_density = 0.01
+adjustment_enabled = true
+
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
 script = ExtResource("1_siayx")
 pathParent = NodePath("Path")
@@ -146,7 +173,6 @@ visible = false
 [node name="NPSpaceC" parent="Collision" instance=ExtResource("31_8lu1i")]
 
 [node name="Trigger" type="Node3D" parent="."]
-visible = false
 
 [node name="Checkpoint" type="Node3D" parent="Trigger"]
 
@@ -395,14 +421,15 @@ path = NodePath("../../../../../Path/MainPath1")
 
 [node name="SidleActivation" type="Node3D" parent="Trigger/Object/Sidle/SidleTrigger1" node_paths=PackedStringArray("animator")]
 script = ExtResource("5_jhy1v")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Trigger/Object/Sidle/SidleTrigger1/SidleActivation"]
 libraries = {
-"": SubResource("AnimationLibrary_ymt3h")
+&"": SubResource("AnimationLibrary_ymt3h")
 }
 
 [node name="SidleTrigger2" parent="Trigger/Object/Sidle" instance=ExtResource("6_i1wsq")]
@@ -536,7 +563,6 @@ transform = Transform3D(-0.819152, 0, 0.573577, 0, 1, 0, -0.573577, 0, -0.819152
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/SidleStart"]
 script = ExtResource("10_7ghp2")
-transitionTime = 0.5
 settings = ExtResource("17_mmiee")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/SidleStart"]
@@ -550,7 +576,6 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 160.04
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/Sidle1"]
 script = ExtResource("10_7ghp2")
-transitionTime = 0.5
 settings = ExtResource("10_pw8g3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Sidle1"]
@@ -564,7 +589,6 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 160.04
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/SidleHall1"]
 script = ExtResource("10_7ghp2")
-transitionTime = 0.5
 settings = ExtResource("13_ckvlo")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/SidleHall1"]
@@ -578,7 +602,6 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 160.04
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/Sidle2"]
 script = ExtResource("10_7ghp2")
-transitionTime = 0.5
 settings = ExtResource("10_pw8g3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Sidle2"]
@@ -592,7 +615,6 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 160.04
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/SidleHall2"]
 script = ExtResource("10_7ghp2")
-transitionTime = 0.5
 settings = ExtResource("13_ckvlo")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/SidleHall2"]
@@ -606,7 +628,6 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 160.04
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/Sidle3"]
 script = ExtResource("10_7ghp2")
-transitionTime = 0.5
 settings = ExtResource("10_pw8g3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Sidle3"]
@@ -620,7 +641,6 @@ transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/Hall1"]
 script = ExtResource("10_7ghp2")
-transitionTime = 0.5
 settings = ExtResource("20_3f6kn")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Hall1"]
@@ -634,7 +654,6 @@ transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -93.6707, -9.99888, -320.352
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/Tower"]
 script = ExtResource("10_7ghp2")
-transitionTime = 0.5
 settings = ExtResource("21_fl2ra")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Tower"]
@@ -648,7 +667,6 @@ transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -131.192, -9.99888, -320.4)
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/Hall2"]
 script = ExtResource("10_7ghp2")
-transitionTime = 0.5
 settings = ExtResource("20_3f6kn")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Hall2"]
@@ -662,7 +680,6 @@ transform = Transform3D(-1, 0, 4.37114e-08, 0, 1, 0, -4.37114e-08, 0, -1, -193.9
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/InteriorEntrance"]
 script = ExtResource("10_7ghp2")
-transitionTime = 0.5
 settings = ExtResource("23_hvi5b")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/InteriorEntrance"]
@@ -676,7 +693,6 @@ transform = Transform3D(-1, 0, 4.37114e-08, 0, 1, 0, -4.37114e-08, 0, -1, -195.0
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/Interior"]
 script = ExtResource("10_7ghp2")
-transitionTime = 0.5
 settings = ExtResource("24_c3npn")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Interior"]
@@ -690,7 +706,6 @@ transform = Transform3D(8.74228e-08, 0, 1, 0, 1, 0, -1, 0, 8.74228e-08, 282.485,
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/End"]
 script = ExtResource("10_7ghp2")
-transitionTime = 0.5
 settings = ExtResource("25_sawgh")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/End"]
@@ -975,7 +990,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
 [node name="MainSection" type="Node3D" parent="Visuals"]
-visible = false
 script = ExtResource("9_ew8l8")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
@@ -984,17 +998,16 @@ isStageVisuals = true
 [node name="Moonlight" type="DirectionalLight3D" parent="Visuals/MainSection"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1, -4.37114e-08)
 layers = 1024
-light_color = Color(0.94902, 1, 1, 1)
-light_energy = 1.2
-light_cull_mask = 4293918723
-shadow_enabled = true
-directional_shadow_blend_splits = true
-directional_shadow_max_distance = 50.0
+light_color = Color(0.89196163, 0.94861287, 0.988012, 1)
+light_energy = 0.8
+light_cull_mask = 4293918727
 
 [node name="BounceLight" type="DirectionalLight3D" parent="Visuals/MainSection"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1, -4.37114e-08)
 layers = 1024
-light_cull_mask = 4293918787
+light_color = Color(0.77848464, 1, 1, 1)
+light_energy = 0.8
+light_cull_mask = 4293918791
 
 [node name="01Start" parent="Visuals/MainSection" instance=ExtResource("1_c3xql")]
 startEnabled = true
@@ -1014,6 +1027,7 @@ startEnabled = true
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
 
 [node name="SpaceSection" type="Node3D" parent="Visuals"]
+visible = false
 script = ExtResource("9_ew8l8")
 saveVisibilityOnCheckpoint = true
 isStageVisuals = true
@@ -1062,7 +1076,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -140.162, 6.48, -481.848)
 curve = ExtResource("16_qmphs")
 
 [node name="CarpetPathFollower" type="PathFollow3D" parent="Path/CarpetPath"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+transform = Transform3D(4.371139e-08, 0, 1, 0, 1, 0, -1, 0, 4.371139e-08, 0, 0, 0)
 use_model_front = true
 loop = false
 
@@ -1119,7 +1133,6 @@ pathFollower = NodePath("../../Path/CarpetPath/CarpetPathFollower")
 
 [node name="Camera" type="Node3D" parent="Carpet/Carpet"]
 script = ExtResource("10_7ghp2")
-transitionTime = 0.5
 settings = ExtResource("53_51kfd")
 
 [node name="Path" type="Node3D" parent="Carpet/Carpet" node_paths=PackedStringArray("path")]
@@ -1141,7 +1154,7 @@ shape = SubResource("BoxShape3D_pd5lb")
 bus = &"BGM"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource("10_jp8di")
+environment = SubResource("Environment_7ubvh")
 
 [node name="PrimaryReflectionRenderer" parent="." instance=ExtResource("27_lklb2")]
 reflectionMaterials = [ExtResource("46_3fvhm")]

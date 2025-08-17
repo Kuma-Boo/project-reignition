@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://b6tymj1vanl66"]
+[gd_scene load_steps=22 format=3 uid="uid://b6tymj1vanl66"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_fvbu3"]
 [ext_resource type="Resource" uid="uid://du86d7lfu3g3t" path="res://resource/level data/night palace/Boss.tres" id="2_wdw6t"]
@@ -10,7 +10,6 @@
 [ext_resource type="PackedScene" uid="uid://tdw4f3w4e2vb" path="res://area/7 night palace/boss/environment/NPBossLOD.tscn" id="5_h1u78"]
 [ext_resource type="PackedScene" uid="uid://bu03uey4xyy57" path="res://area/7 night palace/boss/environment/model/NPBossLOD.gltf" id="6_wn7b0"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="7_xov83"]
-[ext_resource type="Environment" uid="uid://bv5yu2mslecue" path="res://area/7 night palace/data/Environment.tres" id="8_metfr"]
 [ext_resource type="PackedScene" uid="uid://1mlq23jb6byp" path="res://area/7 night palace/data/skybox/Skybox.tscn" id="9_aohgx"]
 [ext_resource type="PackedScene" uid="uid://b0q8m6sooyjll" path="res://area/7 night palace/boss/environment/collision/Collision.tscn" id="9_tnd5i"]
 [ext_resource type="Curve3D" path="res://area/7 night palace/boss/environment/path/MainPath.tres" id="10_7yaqk"]
@@ -21,6 +20,34 @@
 
 [sub_resource type="BoxShape3D" id="10"]
 size = Vector3(16, 28, 2)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_kamdx"]
+sky_top_color = Color(0, 0, 0.109804, 1)
+sky_horizon_color = Color(0, 0, 0.109804, 1)
+ground_bottom_color = Color(0, 0, 0.109804, 1)
+ground_horizon_color = Color(0, 0, 0.109804, 1)
+
+[sub_resource type="Sky" id="Sky_e8t8m"]
+sky_material = SubResource("ProceduralSkyMaterial_kamdx")
+
+[sub_resource type="Environment" id="Environment_gk03j"]
+background_color = Color(0, 0, 0.109804, 1)
+sky = SubResource("Sky_e8t8m")
+ambient_light_source = 3
+ambient_light_color = Color(0.470588, 0.54902, 0.54902, 1)
+ambient_light_sky_contribution = 0.2
+reflected_light_source = 2
+tonemap_mode = 2
+tonemap_exposure = 1.2
+tonemap_white = 1.4
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 1.5
+glow_bloom = 0.01
+glow_blend_mode = 1
+glow_hdr_threshold = 1.2
+volumetric_fog_density = 0.01
+adjustment_enabled = true
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
 script = ExtResource("1_fvbu3")
@@ -160,10 +187,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
 reflectionMaterials = [ExtResource("16_gcw3n")]
 
 [node name="BGM" parent="." instance=ExtResource("11_s0jtr")]
-bus = &"BGM"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource("8_metfr")
+environment = SubResource("Environment_gk03j")
 
 [connection signal="RespawnItemBundle" from="Visuals/InfiniteHall" to="Visuals/InfiniteHall/ItemBundle/RichRing" method="Respawn"]
 [connection signal="RespawnItemBundle" from="Visuals/InfiniteHall" to="Visuals/InfiniteHall/ItemBundle/Rings/Ring1" method="Respawn"]
