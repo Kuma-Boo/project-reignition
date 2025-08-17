@@ -135,7 +135,7 @@ public partial class SpecialBookTab : Control
 
 	public void Deselect() => animator.Play("deselect");
 
-	public void DeselectNoGlow() => animator.Play("hide_glow");
+	public void HideGlow() => animator.Play("hide_glow");
 
 	public Texture2D GetPreviewTexture(int pageIndex)
 	{

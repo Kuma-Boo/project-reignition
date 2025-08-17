@@ -246,7 +246,7 @@ public partial class SpecialBook : Menu
 				animator.Play("hide-random");
 				menuState = MenuStateEnum.Page;
 				isPlayingSlideshow = false;
-				tabs[tabSelection].DeselectNoGlow();
+				tabs[tabSelection].HideGlow();
 				windows[pageSelection].Select();
 			}
 		}
@@ -349,7 +349,10 @@ public partial class SpecialBook : Menu
 
 		if (input.Y > 0 || autoSelect) // Move down to the pages
 		{
-			tabs[tabSelection].DeselectNoGlow();
+			if (autoSelect)
+				tabs[tabSelection].SelectNoGlow();
+			else
+				tabs[tabSelection].HideGlow();
 
 			if (menuState != MenuStateEnum.Page)
 			{
@@ -364,7 +367,9 @@ public partial class SpecialBook : Menu
 			LoadPageData();
 
 			if (!autoSelect)
+			{
 				sfxSelect.Play();
+			}
 		}
 	}
 
