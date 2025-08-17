@@ -69,6 +69,8 @@ public partial class NotificationManager : Control
 
 	public void StartNotifications()
 	{
+		animator.Play("init");
+		animator.Advance(0.0);
 		ProcessMode = ProcessModeEnum.Inherit;
 
 		// Loop through save data keys to see if their unlock status has changed
