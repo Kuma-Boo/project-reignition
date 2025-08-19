@@ -61,6 +61,7 @@ public partial class PlayerInputController : Node
 	public Vector2 NonZeroInputAxis { get; private set; }
 	public float InputHorizontal { get; private set; }
 	public float InputVertical { get; private set; }
+	public Vector2 CameraAxis { get; private set; }
 
 	/// <summary> Minimum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
 	private readonly float MinBackStepAngle = Mathf.Pi * .6f;
@@ -79,6 +80,8 @@ public partial class PlayerInputController : Node
 		InputVertical = Input.GetAxis("move_up", "move_down");
 		if (!InputAxis.IsZeroApprox())
 			NonZeroInputAxis = InputAxis;
+
+		CameraAxis = Input.GetVector("camera_left", "camera_right", "camera_up", "camera_down", DeadZone);
 
 		UpdateJumpBuffer();
 		UpdateActionBuffer();
