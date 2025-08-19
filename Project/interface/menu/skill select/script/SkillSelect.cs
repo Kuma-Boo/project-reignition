@@ -484,6 +484,7 @@ public partial class SkillSelect : Menu
 
 	private void ScrollSelection(int targetSelection)
 	{
+		int initialSelection = VerticalSelection;
 		scrollAmount += targetSelection - VerticalSelection;
 		VerticalSelection = targetSelection;
 		UpdateScrollAmount(0);
@@ -505,6 +506,9 @@ public partial class SkillSelect : Menu
 				cursorPosition--;
 			}
 		}
+
+		if (VerticalSelection != initialSelection)
+			MoveCursor();
 	}
 
 	private string GetSkillName(int index)
