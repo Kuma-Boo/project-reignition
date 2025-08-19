@@ -67,6 +67,12 @@ public partial class NotificationManager : Control
 			ShowUnlock();
 	}
 
+	public void Reset()
+	{
+		animator.Play("RESET");
+		animator.Advance(0.0);
+	}
+
 	public void StartNotifications()
 	{
 		animator.Play("init");
@@ -183,7 +189,7 @@ public partial class NotificationManager : Control
 		{
 			if (page.PageType == Menus.SpecialBookPage.PageTypeEnum.Achievement)
 				continue; // Don't count achievements
-			if (page.IsUnlocked())
+			if (!page.IsUnlocked())
 				continue;
 
 			count++;
