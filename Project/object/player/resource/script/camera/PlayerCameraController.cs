@@ -363,48 +363,31 @@ public partial class PlayerCameraController : Node3D
 			SnapFlag = false;
 	}
 
-	private bool isResettingCamera;
 	private float inputCameraDistance;
 	private Vector2 cameraLookaroundRotation;
 	private Vector2 cameraLookaroundVelocity;
-	private readonly float InputCameraSmoothing = 5f;
-	private readonly float InputCameraSpeed = 20f;
-	private readonly float MinLookaroundPitch = -Mathf.Pi * 0.3f;
+	private readonly float InputCameraSmoothing = 10f;
+	private readonly float MaxLookaroundPitch = Mathf.Pi * 0.3f;
 	private readonly float MaxLookaroundYaw = Mathf.Pi * 0.1f;
 	private readonly float MaxInputCameraDistance = 2f;
 	private void UpdateInputCameraAngle()
 	{
-		if (Input.IsActionPressed("camera_reset"))
-			isResettingCamera = true;
+		Vector2 targetRotation = targetRotation = Vector2.Zero;
 
-		Vector2 targetRotation = cameraLookaroundRotation;
-		targetRotation.X = 0f;
-
-		if (StageSettings.Instance.IsControlTest && Player.IsLaunching)
+		if (!Player.Controller.CameraAxis.IsZeroApprox() && !StageSettings.Instance.IsControlTest || !Player.IsLaunching)
 		{
-			// Fix resetting in controls menu
-			isResettingCamera = true;
-		}
-		else if (!Player.Controller.CameraAxis.IsZeroApprox())
-		{
-			isResettingCamera = false;
-
 			if (Mathf.Abs(Player.Controller.CameraAxis.X) > Mathf.Abs(Player.Controller.CameraAxis.Y))
 			{
 				targetRotation.X = -Player.Controller.CameraAxis.X * MaxLookaroundYaw;
 			}
 			else
 			{
-				targetRotation.Y -= Player.Controller.CameraAxis.Y * InputCameraSpeed * PhysicsManager.physicsDelta;
-				targetRotation.Y = Mathf.Clamp(targetRotation.Y, MinLookaroundPitch, 0f);
+				targetRotation.Y = -Player.Controller.CameraAxis.Y * MaxLookaroundPitch;
 			}
 		}
 
-		if (isResettingCamera)
-			targetRotation = Vector2.Zero;
-
 		cameraLookaroundRotation = cameraLookaroundRotation.SmoothDamp(targetRotation, ref cameraLookaroundVelocity, InputCameraSmoothing * PhysicsManager.physicsDelta);
-		inputCameraDistance = Mathf.SmoothStep(0f, 1f, Mathf.Max(cameraLookaroundRotation.Y / MinLookaroundPitch, 0f)) * MaxInputCameraDistance;
+		inputCameraDistance = Mathf.SmoothStep(0f, 1f, Mathf.Max(cameraLookaroundRotation.Y / -MaxLookaroundPitch, 0f)) * MaxInputCameraDistance;
 	}
 
 	private void UpdateCameraBlends()
@@ -492,10 +475,11 @@ public partial class PlayerCameraController : Node3D
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Up, data.secondaryYawTracking);
 
 		// Reduce lookaround influence as we move further from the player
-		float lookaroundPitch = cameraLookaroundRotation.Y * Mathf.Min(defaultSettings.distance / distance, 1f);
+		float lookaroundPitch = cameraLookaroundRotation.Y;
 		float lookaroundYaw = cameraLookaroundRotation.X;
 		float fovLookaroundInfluence = fov / DefaultFov;
-		lookaroundPitch *= fovLookaroundInfluence;
+		float lookaroundDistanceInfluence = Mathf.Min(defaultSettings.distance / distance, 1f);
+		lookaroundPitch *= fovLookaroundInfluence * lookaroundDistanceInfluence;
 		lookaroundYaw *= fovLookaroundInfluence;
 
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, lookaroundPitch);
@@ -508,6 +492,8 @@ public partial class PlayerCameraController : Node3D
 		cameraTransform.Origin = AddTrackingOffset(cameraTransform.Origin, data);
 		cameraTransform.Origin += cameraTransform.Basis.X * viewportOffset.X;
 		cameraTransform.Origin += cameraTransform.Basis.Y * viewportOffset.Y;
+
+		viewportOffset.Y += inputCameraDistance * lookaroundDistanceInfluence;
 
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, CalculateLockonAngle(cameraTransform.Origin, lockonPitchReferenceAngle));
 
