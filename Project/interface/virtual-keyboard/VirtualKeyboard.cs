@@ -84,6 +84,7 @@ public partial class VirtualKeyboard : CanvasLayer
 		{
 			var node = VirtualKeyScene.Instantiate<VirtualKey>();
 			node.Key = key;
+			node.ParentKeyboard = this;
 			node.Connect(VirtualKey.SignalName.VirtualKeyPress, Callable.From<char>(HandleKeypress));
 			_keys.AddChild(node);
 		}
