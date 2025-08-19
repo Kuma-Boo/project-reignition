@@ -124,6 +124,25 @@ public partial class SkillSelect : Menu
 			return;
 		}
 
+
+		if (!IsEditingAugment)
+		{
+			// Quick scrolling
+			if (Input.IsActionJustPressed("button_step_left"))
+			{
+				int targetSelection = Mathf.Max(VerticalSelection - PageSize, 0);
+				ScrollSelection(targetSelection);
+				return;
+			}
+
+			if (Input.IsActionJustPressed("button_step_right"))
+			{
+				int targetSelection = Mathf.Min(VerticalSelection + PageSize, visualSkillOptionList.Count - 1);
+				ScrollSelection(targetSelection);
+				return;
+			}
+		}
+
 		if (Runtime.Instance.IsActionJustPressed("sys_sort", "ui_focus_next") && !IsEditingAugment)
 		{
 			if (isDescendingSort || currentSortType >= SortEnum.Wind)
@@ -226,7 +245,7 @@ public partial class SkillSelect : Menu
 		description.Text = SelectedSkill.Skill.DescriptionKey;
 	}
 
-	private void UpdateScrollAmount(int inputSign)
+	private void UpdateScrollAmount(int amount)
 	{
 		int listSize = visualSkillOptionList.Count;
 		if (IsEditingAugment)
@@ -244,10 +263,10 @@ public partial class SkillSelect : Menu
 			// Update scroll
 			if (VerticalSelection == 0 || VerticalSelection == listSize - 1)
 				cursorPosition = scrollAmount = VerticalSelection;
-			else if ((inputSign < 0 && cursorPosition == 1) || (inputSign > 0 && cursorPosition == 6))
-				scrollAmount += inputSign;
+			else if ((amount < 0 && cursorPosition == 1) || (amount > 0 && cursorPosition == 6))
+				scrollAmount += amount;
 			else
-				cursorPosition += inputSign;
+				cursorPosition += amount;
 
 			scrollAmount = Mathf.Clamp(scrollAmount, 0, listSize - PageSize);
 			scrollRatio = (float)VerticalSelection / (listSize - 1);
@@ -460,12 +479,32 @@ public partial class SkillSelect : Menu
 
 		// Maintain selection
 		int targetSelection = visualSkillOptionList.IndexOf(currentSkill);
+		ScrollSelection(targetSelection);
+	}
+
+	private void ScrollSelection(int targetSelection)
+	{
 		scrollAmount += targetSelection - VerticalSelection;
 		VerticalSelection = targetSelection;
 		UpdateScrollAmount(0);
 
 		// Reupdate cursor since clamping is applied in UpdateScrollAmount()
 		cursorPosition = VerticalSelection - scrollAmount;
+
+		if (VerticalSelection != 0 && VerticalSelection != visualSkillOptionList.Count - 1)
+		{
+			// Ensure cursor doesn't get stuck on the edges of the list
+			if (cursorPosition == 0) // Top of the list
+			{
+				VerticalSelection++;
+				cursorPosition++;
+			}
+			else if (cursorPosition == PageSize - 1)
+			{
+				VerticalSelection--;
+				cursorPosition--;
+			}
+		}
 	}
 
 	private string GetSkillName(int index)
