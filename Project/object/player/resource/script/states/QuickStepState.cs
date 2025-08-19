@@ -58,7 +58,11 @@ public partial class QuickStepState : PlayerState
 			return null;
 
 		if (!Player.IsOnGround)
+		{
+			Player.Velocity = Player.PathFollower.Right() * currentSpeed;
+			Player.MoveAndSlide(); // Force player off the ledge
 			return fallState;
+		}
 
 		if (!Player.Skills.IsSpeedBreakActive && Mathf.IsZeroApprox(Player.MoveSpeed))
 			return idleState;
