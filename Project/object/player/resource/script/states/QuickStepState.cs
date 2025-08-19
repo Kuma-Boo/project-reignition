@@ -24,6 +24,7 @@ public partial class QuickStepState : PlayerState
 	private float currentStepLength;
 	private readonly float StepLength = 0.3f;
 	private readonly float InterruptLength = 0.2f;
+	private readonly float FallPreventionLength = 0.1f;
 	public bool IsSteppingRight { get; set; }
 
 	public override void EnterState()
@@ -61,6 +62,17 @@ public partial class QuickStepState : PlayerState
 
 		if (!Player.Skills.IsSpeedBreakActive && Mathf.IsZeroApprox(Player.MoveSpeed))
 			return idleState;
+
+		if (currentStepLength <= FallPreventionLength)
+			return null;
+
+		// Prevent player from flying off the ground if they're "close enough" to the grind step ending
+		Vector3 groundCheckPosition = Player.CenterPosition;
+		groundCheckPosition += Player.PathFollower.Right() * (currentSpeed * PhysicsManager.physicsDelta + Mathf.Sign(currentSpeed) * Player.CollisionSize.X);
+		RaycastHit groundCheck = Player.CastRay(groundCheckPosition, -Player.UpDirection * Player.CollisionSize.Y * 2f, Runtime.Instance.environmentMask);
+		DebugManager.DrawRay(groundCheckPosition, -Player.UpDirection * Player.CollisionSize.Y * 2f, groundCheck ? Colors.Red : Colors.Pink);
+		if (!groundCheck || !groundCheck.collidedObject.IsInGroup("floor"))
+			currentStepLength = StepLength;
 
 		if (currentStepLength >= InterruptLength)
 		{
