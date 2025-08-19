@@ -67,15 +67,9 @@ public partial class NotificationManager : Control
 			ShowUnlock();
 	}
 
-	public void Reset()
-	{
-		animator.Play("RESET");
-		animator.Advance(0.0);
-	}
-
 	public void StartNotifications()
 	{
-		animator.Play("init");
+		animator.Play("RESET");
 		animator.Advance(0.0);
 		ProcessMode = ProcessModeEnum.Inherit;
 
@@ -94,7 +88,8 @@ public partial class NotificationManager : Control
 			startingUnlockedPageCount = unlockedPageCount;
 		}
 
-		NotificationList.Sort(new NotificationData.Sorter());
+		if (NotificationList.Count != 0)
+			NotificationList.Sort(new NotificationData.Sorter());
 
 		// Connect transition signal
 		TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.InitializeMenu), (uint)ConnectFlags.OneShot);
