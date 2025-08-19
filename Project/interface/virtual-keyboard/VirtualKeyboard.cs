@@ -2,7 +2,7 @@ using Godot;
 
 namespace Project.Interface.VirtualKeyboard;
 
-public partial class VirtualKeyboard : Control
+public partial class VirtualKeyboard : CanvasLayer
 {
 	[Signal]
 	public delegate void SubmittedEventHandler();
@@ -99,13 +99,13 @@ public partial class VirtualKeyboard : Control
 		_inputTarget = target as LineEdit;
 		MoveToBottom();
 		Show();
-		_animations.Play("animation");
+		_animations.Play("Animate");
 	}
 	public void HideKeyboard()
 	{
 		if (!_visible) return;
 		_visible = false;
-		_animations.PlayBackwards("animation");
+		_animations.PlayBackwards("Animate");
 		Hide();
 	}
 	public void ToggleKeyboard()
@@ -141,13 +141,11 @@ public partial class VirtualKeyboard : Control
 	#endregion
 	private void HandleKeypress(char character)
 	{
-		if (_inputTarget is LineEdit lineEdit)
+		_inputTarget.Text += character.ToString();
+		_inputTarget.CaretColumn = _inputTarget.Text.Length;
+		if (_keySet == KeySet.Upper)
 		{
-			lineEdit.Text += character.ToString();
-			if (_keySet == KeySet.Upper)
-			{
-				UpdateKeySetState(KeySet.Lower);
-			}
+			UpdateKeySetState(KeySet.Lower);
 		}
 	}
 	public void HandleSpaceKey()
