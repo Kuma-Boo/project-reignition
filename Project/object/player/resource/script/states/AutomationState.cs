@@ -6,8 +6,8 @@ namespace Project.Gameplay;
 
 public partial class AutomationState : PlayerState
 {
-	[Export]
-	private PlayerState runState;
+	[Export] private PlayerState runState;
+	[Export] private PlayerState slideState;
 
 	public AutomationTrigger Automation { get; set; }
 	private Path3D initialPath;
@@ -72,7 +72,18 @@ public partial class AutomationState : PlayerState
 		Player.Effect.IsEmittingStepDust = true;
 
 		if (Player.PathFollower.ActivePath != initialPath || Automation.IsFinished)
+		{
+			// Buffer slide; Used in Night Palace Act 1
+			if ((SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) && Player.Controller.IsJumpBufferActive) ||
+				Player.Controller.IsActionBufferActive)
+			{
+				Player.Controller.ResetJumpBuffer();
+				Player.Controller.ResetActionBuffer();
+				return slideState;
+			}
+
 			return runState;
+		}
 
 		return null;
 	}
