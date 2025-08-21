@@ -7,8 +7,7 @@ namespace Project.Gameplay.Triggers
 	/// </summary>
 	public partial class LockoutTrigger : StageTriggerModule
 	{
-		[Export]
-		public LockoutResource lockoutData;
+		[Export] public LockoutResource lockoutData;
 
 		public override void Activate()
 		{
