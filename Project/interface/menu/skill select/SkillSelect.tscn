@@ -43,7 +43,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_u2gll"]
 resource_name = "hide"
-length = 0.3
+length = 0.16667001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -51,7 +51,7 @@ tracks/0/path = NodePath(".:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.3),
+"times": PackedFloat32Array(0, 0.06666667, 0.16666667),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(1, 2), Vector2(1, 0)]
@@ -76,8 +76,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_g47ve"]
 resource_name = "show"
-length = 0.3
-step = 0.05
+length = 0.16667001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -85,21 +84,10 @@ tracks/0/path = NodePath(".:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.3),
+"times": PackedFloat32Array(0, 0.06666667, 0.16666667),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector2(1, 0), Vector2(1, 2), Vector2(1, 1)]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../../..")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
-"values": []
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_gc54t"]
@@ -874,17 +862,17 @@ tracks/0/path = NodePath(".")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.28, 0.2997, 0.5),
+"times": PackedFloat32Array(0, 0.16666667, 0.28, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "values": [{
 "args": [],
 "method": &"DisableProcessing"
 }, {
 "args": [],
-"method": &"EnableProcessing"
+"method": &"SnapCursor"
 }, {
 "args": [],
-"method": &"SnapCursor"
+"method": &"EnableProcessing"
 }, {
 "args": [],
 "method": &"EnableProcessing"
@@ -897,7 +885,7 @@ tracks/1/path = NodePath("Content/CursorOrigin/Cursor/AnimationPlayer")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.333333, 0.500003),
+"times": PackedFloat32Array(0, 0.16666667, 0.33333665),
 "transitions": PackedFloat32Array(1, 1, 1),
 "values": [{
 "args": ["hide", -1, 1.0, false],
@@ -935,17 +923,17 @@ tracks/0/path = NodePath(".")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.28, 0.2997),
+"times": PackedFloat32Array(0, 0.16666667, 0.28),
 "transitions": PackedFloat32Array(1, 1, 1),
 "values": [{
 "args": [],
 "method": &"DisableProcessing"
 }, {
 "args": [],
-"method": &"EnableProcessing"
+"method": &"SnapCursor"
 }, {
 "args": [],
-"method": &"SnapCursor"
+"method": &"EnableProcessing"
 }]
 }
 tracks/1/type = "method"
@@ -955,7 +943,7 @@ tracks/1/path = NodePath("Content/CursorOrigin/Cursor/AnimationPlayer")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.333333, 0.500003),
+"times": PackedFloat32Array(0, 0.16666335, 0.33333334),
 "transitions": PackedFloat32Array(1, 1, 1),
 "values": [{
 "args": ["hide", -1, 1.0, false],
@@ -1300,12 +1288,9 @@ tracks/2/path = NodePath("Content/CursorOrigin/Cursor/AnimationPlayer")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.0333333, 0.2),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.16666667),
+"transitions": PackedFloat32Array(1, 1),
 "values": [{
-"args": [0.0, false, false],
-"method": &"seek"
-}, {
 "args": ["show", -1, 1.0, false],
 "method": &"play"
 }, {
@@ -1617,7 +1602,6 @@ animator = NodePath("AnimationPlayer")
 
 [node name="Content" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
@@ -1671,6 +1655,7 @@ metadata/_edit_lock_ = true
 scale = Vector2(1, 1e-05)
 
 [node name="Cursor" type="NinePatchRect" parent="Content/CursorOrigin/Cursor"]
+anchors_preset = -1
 offset_left = -560.0
 offset_top = -64.0
 offset_right = 552.0
@@ -1685,12 +1670,11 @@ patch_margin_bottom = 64
 libraries = {
 &"": SubResource("AnimationLibrary_gc54t")
 }
-blend_times = [&"show", &"loop", 0.1]
+next/show = &"loop"
 
 [node name="Header" type="Control" parent="Content"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
-anchors_preset = 10
 anchor_right = 1.0
 offset_top = 48.0
 offset_bottom = 128.0
@@ -1747,7 +1731,7 @@ label_settings = ExtResource("6_4a5gt")
 vertical_alignment = 1
 
 [node name="SortingMethodLabel" type="Label" parent="Content/Header"]
-layout_mode = 2
+layout_mode = 0
 offset_left = 112.0
 offset_top = 90.0
 offset_right = 816.0
@@ -1788,7 +1772,7 @@ metadata/_edit_group_ = true
 
 [node name="Options" type="VBoxContainer" parent="Content/Clip"]
 layout_mode = 1
-anchors_preset = 10
+anchors_preset = -1
 anchor_right = 1.0
 offset_top = -3.0
 offset_bottom = 880.0
@@ -1862,7 +1846,6 @@ bus = &"SFX"
 
 [node name="Description" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -1875,6 +1858,7 @@ grow_vertical = 0
 
 [node name="Description" parent="Description" instance=ExtResource("3_ud304")]
 layout_mode = 1
+anchors_preset = -1
 offset_left = 0.0
 offset_top = 0.0
 offset_right = 1152.0
@@ -1955,7 +1939,7 @@ region_enabled = true
 region_rect = Rect2(367, 0, 140, 60)
 
 [node name="Background" type="NinePatchRect" parent="AlertMenu/Menu/Parent/Window"]
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -488.0
@@ -2005,7 +1989,6 @@ region_enabled = true
 region_rect = Rect2(367, 0, 140, 60)
 
 [node name="Text" type="Control" parent="AlertMenu/Menu/Parent"]
-layout_mode = 3
 anchors_preset = 0
 
 [node name="Options" type="HBoxContainer" parent="AlertMenu/Menu/Parent/Text"]

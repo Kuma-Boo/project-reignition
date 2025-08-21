@@ -714,7 +714,7 @@ public partial class PlayerController : CharacterBody3D
 	[Export] private QuickStepState quickStepState;
 	public bool IsQuickStepValid => !IsAutomationActive &&
 				!(IsLockoutActive && ActiveLockoutData.recenterPlayer) &&
-				Stats.GroundSettings.GetSpeedRatioClamped(MoveSpeed) > .5f;
+				Stats.GroundSettings.GetSpeedRatioClamped(MoveSpeed) > .2f;
 	public void StartQuickStep(bool isSteppingRight)
 	{
 		quickStepState.IsSteppingRight = isSteppingRight;

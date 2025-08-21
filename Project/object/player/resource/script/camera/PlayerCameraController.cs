@@ -349,6 +349,7 @@ public partial class PlayerCameraController : Node3D
 
 	private void UpdateGameplayCamera()
 	{
+		UpdateInputCameraAngle();
 		UpdateTransitionTimer();
 		UpdateLockonTarget();
 		UpdateCameraBlends();
@@ -360,6 +361,33 @@ public partial class PlayerCameraController : Node3D
 
 		if (SnapFlag) // Reset flag after camera was updated
 			SnapFlag = false;
+	}
+
+	private float inputCameraDistance;
+	private Vector2 cameraLookaroundRotation;
+	private Vector2 cameraLookaroundVelocity;
+	private readonly float InputCameraSmoothing = 10f;
+	private readonly float MaxLookaroundPitch = Mathf.Pi * 0.3f;
+	private readonly float MaxLookaroundYaw = Mathf.Pi * 0.1f;
+	private readonly float MaxInputCameraDistance = 2f;
+	private void UpdateInputCameraAngle()
+	{
+		Vector2 targetRotation = targetRotation = Vector2.Zero;
+
+		if (!Player.Controller.CameraAxis.IsZeroApprox() && !StageSettings.Instance.IsControlTest || !Player.IsLaunching)
+		{
+			if (Mathf.Abs(Player.Controller.CameraAxis.X) > Mathf.Abs(Player.Controller.CameraAxis.Y))
+			{
+				targetRotation.X = -Player.Controller.CameraAxis.X * MaxLookaroundYaw;
+			}
+			else
+			{
+				targetRotation.Y = -Player.Controller.CameraAxis.Y * MaxLookaroundPitch;
+			}
+		}
+
+		cameraLookaroundRotation = cameraLookaroundRotation.SmoothDamp(targetRotation, ref cameraLookaroundVelocity, InputCameraSmoothing * PhysicsManager.physicsDelta);
+		inputCameraDistance = Mathf.SmoothStep(0f, 1f, Mathf.Max(cameraLookaroundRotation.Y / -MaxLookaroundPitch, 0f)) * MaxInputCameraDistance;
 	}
 
 	private void UpdateCameraBlends()
@@ -446,11 +474,26 @@ public partial class PlayerCameraController : Node3D
 		// Apply secondary yaw tracking
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Up, data.secondaryYawTracking);
 
+		// Reduce lookaround influence as we move further from the player
+		float lookaroundPitch = cameraLookaroundRotation.Y;
+		float lookaroundYaw = cameraLookaroundRotation.X;
+		float fovLookaroundInfluence = fov / DefaultFov;
+		float lookaroundDistanceInfluence = Mathf.Min(defaultSettings.distance / distance, 1f);
+		lookaroundPitch *= fovLookaroundInfluence * lookaroundDistanceInfluence;
+		lookaroundYaw *= fovLookaroundInfluence;
+
+		cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, lookaroundPitch);
+		cameraTransform = cameraTransform.RotatedLocal(Vector3.Up, lookaroundYaw);
+
+		cameraTransform.Origin += cameraTransform.Basis.Z.Rotated(cameraTransform.Basis.X, lookaroundPitch) * inputCameraDistance;
+
 		// Update cameraTransform origin
 		viewportOffset.Y = Mathf.Lerp(viewportOffset.Y, 0, lockonBlend);
 		cameraTransform.Origin = AddTrackingOffset(cameraTransform.Origin, data);
 		cameraTransform.Origin += cameraTransform.Basis.X * viewportOffset.X;
 		cameraTransform.Origin += cameraTransform.Basis.Y * viewportOffset.Y;
+
+		viewportOffset.Y += inputCameraDistance * lookaroundDistanceInfluence;
 
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, CalculateLockonAngle(cameraTransform.Origin, lockonPitchReferenceAngle));
 

@@ -172,7 +172,6 @@ public partial class ControlOption : Control
 			}
 			else if (IsPartyModeMapping)
 			{
-				// actionId is for adventure mode
 				continue;
 			}
 
