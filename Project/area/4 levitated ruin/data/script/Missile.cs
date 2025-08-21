@@ -10,6 +10,7 @@ public partial class Missile : Node3D
 	[Signal] public delegate void ActivatedEventHandler();
 	[Signal] public delegate void ExplodedEventHandler();
 	[Signal] public delegate void DisabledEventHandler();
+	[Signal] public delegate void ObjectHitEventHandler();
 
 	public bool DisableAutoRespawn { get; set; }
 
@@ -53,6 +54,11 @@ public partial class Missile : Node3D
 
 		animator.Play("RESET");
 		animator.Advance(0.0);
+		if (animator.HasAnimation("init"))
+		{
+			animator.Play("init");
+			animator.Advance(0.0);
+		}
 
 		if (hitbox != null)
 			SetHitboxState(disableHitboxes);
@@ -113,4 +119,7 @@ public partial class Missile : Node3D
 		ProcessMode = ProcessModeEnum.Disabled;
 		EmitSignal(SignalName.Disabled);
 	}
+
+	public void OnObjectEntered(Node3D _) => EmitSignal(SignalName.ObjectHit);
+	public void OnObjectAreaEntered(Area3D _) => EmitSignal(SignalName.ObjectHit);
 }

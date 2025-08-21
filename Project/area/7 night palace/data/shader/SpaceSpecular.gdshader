@@ -7,5 +7,5 @@ const float INTENSITY = .5;
 void fragment()
 {
 	float dotProd = 1.0 - dot(VIEW, NORMAL) + bias;
-	ALBEDO = vec3(clamp(dotProd, 0, 1) + .02) * INTENSITY;
+	ALBEDO = vec3(clamp(dotProd, 0, 1) + .02) * INTENSITY * COLOR.rgb;
 }
