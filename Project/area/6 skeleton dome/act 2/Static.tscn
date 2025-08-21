@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://c5ajp56pbyegl"]
+[gd_scene load_steps=27 format=3 uid="uid://c5ajp56pbyegl"]
 
 [ext_resource type="PackedScene" uid="uid://h5au062rx8gk" path="res://area/6 skeleton dome/act 2/environment/collision/Collision.tscn" id="1_1kj50"]
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_51dmr"]
@@ -16,6 +16,8 @@
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="11_3sixc"]
 [ext_resource type="Script" uid="uid://bssd28yqn1cxg" path="res://object/trigger/modules/PathTrigger.cs" id="11_wvn78"]
 [ext_resource type="Resource" uid="uid://wo8gnu7agnfs" path="res://area/6 skeleton dome/act 2/camera/ArenaEntranceTransitionCam.tres" id="12_jg7jf"]
+[ext_resource type="AudioStream" uid="uid://to3lp0f1hrhf" path="res://sound/ost/bonus disc/Skeleton Dome Act 2.mp3" id="17_f3q4i"]
+[ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="18_i6wy5"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2rmnc"]
 size = Vector3(20, 20, 5)
@@ -550,6 +552,14 @@ cull_mask = 1086
 libraries = {
 &"": SubResource("AnimationLibrary_sr5u3")
 }
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("17_f3q4i")
+bus = &"BGM"
+script = ExtResource("18_i6wy5")
+loopStartPosition = 9.5
+loopEndPosition = 157.15
+isStageMusic = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_fiacw")
