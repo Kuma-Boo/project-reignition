@@ -349,7 +349,7 @@ public partial class PlayerCameraController : Node3D
 
 	private void UpdateGameplayCamera()
 	{
-		UpdateInputCameraAngle();
+		UpdateLookaroundCameraAngle();
 		UpdateTransitionTimer();
 		UpdateLockonTarget();
 		UpdateCameraBlends();
@@ -370,24 +370,24 @@ public partial class PlayerCameraController : Node3D
 	private readonly float MaxLookaroundPitch = Mathf.Pi * 0.3f;
 	private readonly float MaxLookaroundYaw = Mathf.Pi * 0.1f;
 	private readonly float MaxInputCameraDistance = 2f;
-	private void UpdateInputCameraAngle()
+	private void UpdateLookaroundCameraAngle()
 	{
-		Vector2 targetRotation = targetRotation = Vector2.Zero;
-
-		if (!Player.Controller.CameraAxis.IsZeroApprox() && !StageSettings.Instance.IsControlTest || !Player.IsLaunching)
-		{
-			if (Mathf.Abs(Player.Controller.CameraAxis.X) > Mathf.Abs(Player.Controller.CameraAxis.Y))
-			{
-				targetRotation.X = -Player.Controller.CameraAxis.X * MaxLookaroundYaw;
-			}
-			else
-			{
-				targetRotation.Y = -Player.Controller.CameraAxis.Y * MaxLookaroundPitch;
-			}
-		}
-
-		cameraLookaroundRotation = cameraLookaroundRotation.SmoothDamp(targetRotation, ref cameraLookaroundVelocity, InputCameraSmoothing * PhysicsManager.physicsDelta);
+		cameraLookaroundRotation = cameraLookaroundRotation.SmoothDamp(GetLookaroundCameraInput(), ref cameraLookaroundVelocity, InputCameraSmoothing * PhysicsManager.physicsDelta);
 		inputCameraDistance = Mathf.SmoothStep(0f, 1f, Mathf.Max(cameraLookaroundRotation.Y / -MaxLookaroundPitch, 0f)) * MaxInputCameraDistance;
+	}
+
+	private Vector2 GetLookaroundCameraInput()
+	{
+		if (Player.Controller.CameraAxis.IsZeroApprox() || isFreeCamActive)
+			return Vector2.Zero;
+
+		if (StageSettings.Instance.IsControlTest && Player.IsLaunching)
+			return Vector2.Zero;
+
+		if (Mathf.Abs(Player.Controller.CameraAxis.X) > Mathf.Abs(Player.Controller.CameraAxis.Y))
+			return Vector2.Left * Player.Controller.CameraAxis.X * MaxLookaroundYaw;
+
+		return Vector2.Up * Player.Controller.CameraAxis.Y * MaxLookaroundPitch;
 	}
 
 	private void UpdateCameraBlends()
