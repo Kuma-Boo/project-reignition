@@ -143,9 +143,9 @@ tracks/4/path = NodePath("Root/AnimatableBody3D/CollisionShape3D:disabled")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.0999, 2.06667),
+"times": PackedFloat32Array(0, 0.0999, 2.2333333),
 "transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
+"update": 0,
 "values": [false, true, false]
 }
 tracks/5/type = "value"
@@ -155,10 +155,24 @@ tracks/5/path = NodePath("Root/PlatformTrigger/CollisionShape3D:disabled")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.0999, 2.23333),
+"times": PackedFloat32Array(0, 0.0999, 2.2333333),
 "transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
+"update": 0,
 "values": [false, true, false]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath(".")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(1.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"ResetShakeTimer"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_2yb40"]
@@ -246,13 +260,15 @@ _data = {
 &"shake": SubResource("Animation_2yb40")
 }
 
-[node name="SidleFooting" type="Node3D" node_paths=PackedStringArray("parentCollider", "fallingPlatformAnimator")]
+[node name="SidleFooting" type="Node3D" node_paths=PackedStringArray("parentCollider")]
 script = ExtResource("1_lvjt2")
+parentCollider = NodePath("Root/AnimatableBody3D")
 "Falling Platform Settings/Enabled" = true
 "Falling Platform Settings/Animator" = NodePath("AnimationPlayer")
 "Falling Platform Settings/Auto Shake" = true
 "Falling Platform Settings/Shake Length" = 1.0
-parentCollider = NodePath("Root/AnimatableBody3D")
+"Falling Platform Settings/Fall Speed" = 1.0
+"Floating Platform Settings/Enabled" = false
 
 [node name="Root" type="Node3D" parent="."]
 
@@ -268,14 +284,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
 shape = SubResource("BoxShape3D_yx42l")
 
 [node name="AnimatableBody3D" type="AnimatableBody3D" parent="Root" groups=["floor"]]
+sync_to_physics = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Root/AnimatableBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 shape = SubResource("BoxShape3D_lk7m2")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+callback_mode_process = 0
 libraries = {
-"": SubResource("AnimationLibrary_2svow")
+&"": SubResource("AnimationLibrary_2svow")
 }
 
 [connection signal="area_entered" from="Root/PlatformTrigger" to="." method="OnEntered"]

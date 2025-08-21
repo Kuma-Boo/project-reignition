@@ -383,12 +383,19 @@ public partial class PlatformTrigger : Node3D
 		return Player.IsOnGround;
 	}
 
+	private void ResetShakeTimer() => shakeTimer = 0;
+
 	public void OnEntered(Area3D a)
 	{
 		if (!a.IsInGroup("player detection")) return;
+
 		isInteractingWithPlayer = true;
 		enableGroundSnapping = false; // Prevent initial snapping
 		floatingEntranceImpact = Mathf.Max(-Player.VerticalSpeed, 0);
+
+		if (Player.IsSidling) // Process interaction instantly when sidling
+			ProcessInteraction();
+
 		ProcessPlatform();
 	}
 

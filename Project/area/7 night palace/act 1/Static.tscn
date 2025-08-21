@@ -32,7 +32,7 @@
 [ext_resource type="Resource" uid="uid://dotssii44tooi" path="res://area/7 night palace/act 1/camera/SpaceAAutomationCam.tres" id="16_wlhs5"]
 [ext_resource type="Curve3D" uid="uid://cmkw2yow867db" path="res://area/7 night palace/act 1/environment/path/WallRun1.tres" id="17_4n7m5"]
 [ext_resource type="Resource" uid="uid://qs2jw2eruiy7" path="res://area/7 night palace/act 1/camera/SidleStartCam.tres" id="17_mmiee"]
-[ext_resource type="Curve3D" uid="uid://bsnpkefxehx8g" path="res://area/7 night palace/act 1/environment/path/WallRun2.tres" id="18_6scab"]
+[ext_resource type="Curve3D" uid="uid://cuu0flpi3eujt" path="res://area/7 night palace/act 1/environment/path/WallRun2.tres" id="18_6scab"]
 [ext_resource type="PackedScene" uid="uid://d4ivgn14opv12" path="res://area/7 night palace/data/skybox/SpaceSkybox.tscn" id="19_grfne"]
 [ext_resource type="Resource" uid="uid://rlt4iyu1l7tg" path="res://area/7 night palace/act 1/camera/HallCam.tres" id="20_3f6kn"]
 [ext_resource type="Resource" uid="uid://b0sptyvrcousm" path="res://area/7 night palace/act 1/camera/TowerCam.tres" id="21_fl2ra"]
@@ -180,19 +180,23 @@ visible = false
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 159.984, 0, -119.25)
 "Enter Mode" = 0
 
-[node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoint/SidleCheckpoint"]
+[node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoint/SidleCheckpoint" node_paths=PackedStringArray("PlayerPath", "CameraPath")]
 script = ExtResource("8_irx0t")
+PlayerPath = NodePath("../../../../Path/MainPath1")
+CameraPath = NodePath("../../../../Path/MainPath1")
+CameraSettings = ExtResource("17_mmiee")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoint/SidleCheckpoint"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
 [node name="SidleHallCheckpoint" parent="Trigger/Checkpoint" instance=ExtResource("4_d1bik")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 159.984, 0, -195.25)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 159.8, 0, -195.25)
 "Enter Mode" = 0
 
 [node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoint/SidleHallCheckpoint"]
 script = ExtResource("8_irx0t")
+CameraSettings = ExtResource("13_ckvlo")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoint/SidleHallCheckpoint"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -204,6 +208,7 @@ transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107
 
 [node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoint/HallCheckpoint"]
 script = ExtResource("8_irx0t")
+CameraSettings = ExtResource("20_3f6kn")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoint/HallCheckpoint"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -215,6 +220,7 @@ transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -90.9526, -9.99889, -320.33)
 
 [node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoint/TowerCheckpoint"]
 script = ExtResource("8_irx0t")
+CameraSettings = ExtResource("20_3f6kn")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoint/TowerCheckpoint"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -635,7 +641,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
 [node name="Hall1" parent="Trigger/Camera" instance=ExtResource("4_d1bik")]
-transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 159.151, 0, -242.067)
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 158.37318, 0, -242.13773)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
@@ -648,7 +654,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
 [node name="Tower" parent="Trigger/Camera" instance=ExtResource("4_d1bik")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -93.6707, -9.99888, -320.352)
+transform = Transform3D(1.4901161e-08, 0, -0.9999999, 0, 1, 0, 0.9999999, 0, 1.4901161e-08, -95, -10, -320.3)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
@@ -895,6 +901,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
 [node name="Visuals" type="Node3D" parent="."]
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
 
 [node name="CullingMap" type="Node3D" parent="Visuals"]
 visible = false
@@ -1023,7 +1031,6 @@ startEnabled = true
 [node name="05Carpet" parent="Visuals/MainSection" instance=ExtResource("6_067x7")]
 
 [node name="06Ending" parent="Visuals/MainSection" instance=ExtResource("7_xctaf")]
-startEnabled = true
 
 [node name="Skybox" parent="Visuals/MainSection" instance=ExtResource("3_dbu0p")]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
@@ -1148,6 +1155,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.10059, -106, 425)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, 12)
 script = ExtResource("51_r4h1y")
 jumpHeight = 2.0
+autoAlign = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Carpet/EndTrigger"]
 shape = SubResource("BoxShape3D_pd5lb")
