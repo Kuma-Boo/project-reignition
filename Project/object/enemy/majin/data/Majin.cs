@@ -222,6 +222,9 @@ public partial class Majin : Enemy
 	private AnimationNodeStateMachinePlayback spinState;
 	private AnimationNodeStateMachinePlayback fireState;
 
+	private Vector3 hitBoxVelocity;
+	private readonly float HitboxPositionSmoothing = 5f;
+
 	/// <summary> True when either the majin is spawning in, or despawning out from a spawn interval. </summary>
 	private bool isSpawning;
 	private float currentTravelRatio;
@@ -484,8 +487,7 @@ public partial class Majin : Enemy
 		if (Engine.IsEditorHint()) return; // In Editor
 
 		// Update hitbox transforms manually to avoid JoltPhysics scaling errors
-		HitboxRoot.GlobalPosition = HitboxAttachment.GlobalPosition;
-		HitboxRoot.GlobalRotation = HitboxAttachment.GlobalRotation;
+		HitboxRoot.Position = HitboxRoot.Position.SmoothDamp(HitboxAttachment.Position, ref hitBoxVelocity, HitboxPositionSmoothing * PhysicsManager.physicsDelta);
 
 		if (SpawnIntervalEnabled)
 			UpdateSpawnInterval();
@@ -866,6 +868,8 @@ public partial class Majin : Enemy
 		isSpawning = false;
 		isFinishedTraveling = true;
 		SetHitboxStatus(true);
+		HitboxRoot.GlobalPosition = HitboxAttachment.GlobalPosition;
+		hitBoxVelocity = Vector3.Zero;
 
 		if (SpawnTravelEnabled && attackType != AttackTypes.Wander)
 		{
