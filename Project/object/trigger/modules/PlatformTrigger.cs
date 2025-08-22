@@ -226,7 +226,7 @@ public partial class PlatformTrigger : Node3D
 		ProcessFallingPlatform();
 		ProcessFloatingPlatform();
 
-		if (floorCalculationRoot != null)
+		if (floorCalculationRoot != null && StageSettings.Instance.IsLevelIngame)
 			CallDeferred(MethodName.SyncPlayerMovement);
 	}
 
@@ -317,6 +317,13 @@ public partial class PlatformTrigger : Node3D
 			return;
 		}
 
+		bool isOnPlatform = IsPlayerOnPlatform();
+		if (isOnPlatform)
+		{
+			playerInfluence = 1f; // Set player influence to 1 for when we leave
+			previousPosition = floorCalculationRoot.GlobalPosition;
+		}
+
 		if ((!Player.IsOnGround && Player.Velocity.Y >= 0) || !isInteractingWithPlayer)
 		{
 			Vector3 delta = floorCalculationRoot.GlobalPosition - previousPosition;
@@ -340,13 +347,7 @@ public partial class PlatformTrigger : Node3D
 			return;
 		}
 
-		if (IsPlayerOnPlatform())
-		{
-			playerInfluence = 1f; // Set player influence to 1 for when we leave
-			previousPosition = floorCalculationRoot.GlobalPosition;
-		}
-
-		if (enableGroundSnapping)
+		if (enableGroundSnapping && isOnPlatform)
 		{
 			float positionDelta = floorCalculationRoot.GlobalPosition.Y - Player.GlobalPosition.Y;
 			Player.GlobalTranslate(Vector3.Up * positionDelta);

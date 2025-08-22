@@ -38,7 +38,7 @@ public partial class GargoyleSkyroad : PathFollow3D
 	private readonly string DisabledState = "disabled";
 
 	private readonly float PositionSmoothing = 0.2f;
-	private readonly float MinDistanceToPlayer = 3.0f;
+	private readonly float MinDistanceToPlayer = 2.0f;
 
 	public override void _Ready()
 	{
@@ -61,6 +61,7 @@ public partial class GargoyleSkyroad : PathFollow3D
 		traveledDistance = 0;
 		activeRoad.SetPathRatio(0.0f);
 		speedBlend = 0.0f;
+		isFastSpeed = true;
 
 		Visible = false;
 		ProcessMode = ProcessModeEnum.Disabled;
@@ -76,23 +77,28 @@ public partial class GargoyleSkyroad : PathFollow3D
 
 		float pathDelta = CalculateMovementDelta();
 		ProcessSlipstream(pathDelta);
-
-		if (pathDelta < MinDistanceToPlayer)
-		{
-			// Ensure we're a set distance away from the player
+		if (pathDelta < MinDistanceToPlayer && Player.PathFollower.ActivePath == CurrentPath) // Ensure we're a set distance away from the player
 			Progress = Player.PathFollower.Progress + MinDistanceToPlayer;
-
-			if (!isFastSpeed && Player.Skills.IsSpeedBreakActive)
-				ToggleFastSpeed();
-		}
 
 		// Move gargoyle along the path
 		float movementDelta = CalculateMoveSpeed(pathDelta) * PhysicsManager.physicsDelta;
+		float targetProgress = Progress - movementDelta;
 		Progress += movementDelta;
 
 		activeRoad.SetPathRatio((traveledDistance + Progress) / totalDistance); // Update visuals
 		if (Mathf.IsEqualApprox(ProgressRatio, 1.0f))
-			IncrementPathIndex();
+			IncrementPathIndex(targetProgress - Progress);
+
+		UpdateAnimations();
+	}
+
+	private void UpdateAnimations()
+	{
+		bool isFlappingFast = isFastSpeed || (isSlipstreamActive && Player.Skills.IsSpeedBreakActive);
+
+		animationTree.Set(FlapTransitionParameter, isFlappingFast ? EnabledState : DisabledState);
+		if (isFlappingFast) // Update flapping speed
+			animationTree.Set(FlapSpeedParameter, 1.5f + (speedBlend * .2f));
 	}
 
 	private float CalculateMovementDelta()
@@ -115,18 +121,18 @@ public partial class GargoyleSkyroad : PathFollow3D
 		}
 
 		speedBlend = Mathf.MoveToward(speedBlend, isFastSpeed ? 1.0f : 0.0f, SpeedSmoothing * PhysicsManager.physicsDelta);
-		if (isFastSpeed) // Update flapping speed
-			animationTree.Set(FlapSpeedParameter, 1f + (speedBlend * .5f));
-
 		return Mathf.Lerp(BaseMovementSpeed, FastMovementSpeed, speedBlend) + (Player.Stats.GroundSettings.Speed - Player.Stats.baseGroundSpeed);
 	}
 
 	private bool CanToggleSpeed(float pathDelta)
 	{
+		if (isSlipstreamActive)
+			return false;
+
 		if (!Mathf.IsZeroApprox(speedTimer))
 			return false;
 
-		// Prevent gargoyle from flying ahead too far
+		// Prevent gargoyle from entering fast speed when flying ahead too far
 		if (!isFastSpeed && pathDelta > MinDistanceToPlayer * 5f)
 			return false;
 
@@ -136,14 +142,11 @@ public partial class GargoyleSkyroad : PathFollow3D
 	private void ToggleFastSpeed()
 	{
 		isFastSpeed = !isFastSpeed;
-		slipstreamTimer = SlipstreamInterval;
 
 		if (isFastSpeed)
 			speedTimer = Runtime.randomNumberGenerator.RandfRange(1f, 2f);
 		else
 			speedTimer = Runtime.randomNumberGenerator.RandfRange(3f, 5f);
-
-		animationTree.Set(FlapTransitionParameter, isFastSpeed ? EnabledState : DisabledState);
 	}
 
 	/// <summary>
@@ -151,45 +154,74 @@ public partial class GargoyleSkyroad : PathFollow3D
 	/// Increases player speed when near Gargyole to make skyroads less boring.
 	/// </summary>
 	private bool isSlipstreamActive;
+	private int slipstreamsTriggered;
 	private float slipstreamTimer;
 	private readonly float SlipstreamInterval = 1f;
 	private readonly float SlipstreamMultiplier = 2f;
 	private readonly float SlipstreamRange = 3f;
+	/// <summary> How many boosts should occur before the gargoyle flies away. </summary>
+	private readonly int MaxSlipstreamCount = 4;
 	private void ProcessSlipstream(float pathDelta)
 	{
-		if (pathDelta > MinDistanceToPlayer + SlipstreamRange)
+		if (pathDelta > MinDistanceToPlayer + SlipstreamRange) // Out of range
 		{
-			isSlipstreamActive = false;
+			StopSlipstream();
 			return;
 		}
 
-		if (!isSlipstreamActive)
+		if (isSlipstreamActive)
 		{
 			if (Player.Skills.IsSpeedBreakActive)
-				isSlipstreamActive = true;
-			else if (!isFastSpeed) // Start flying away instantly
-				speedTimer = 0f;
+				return;
+
+			slipstreamTimer = Mathf.MoveToward(slipstreamTimer, 0, PhysicsManager.physicsDelta);
+			if (Mathf.IsZeroApprox(slipstreamTimer))
+				ApplySlipstream();
 
 			return;
 		}
 
-		slipstreamTimer = Mathf.MoveToward(slipstreamTimer, 0, PhysicsManager.physicsDelta);
-
-		if (!Mathf.IsZeroApprox(slipstreamTimer))
+		if (isFastSpeed)
 			return;
 
-		Slipstream();
+		if (Player.Skills.IsSpeedBreakActive)
+		{
+			StartSlipstream();
+			return;
+		}
+
+		if (!isFastSpeed)
+			ToggleFastSpeed(); // Too close and not performing a slipstream; start flying away instantly
 	}
 
-	private void Slipstream()
+	private void StartSlipstream()
+	{
+		isSlipstreamActive = true;
+		slipstreamTimer = 0f;
+		slipstreamsTriggered = 0;
+	}
+
+	private void StopSlipstream()
+	{
+		isSlipstreamActive = false;
+	}
+
+	private void ApplySlipstream()
 	{
 		slipstreamTimer = SlipstreamInterval;
 		Player.MoveSpeed = Mathf.Max(Player.MoveSpeed, Player.Stats.GroundSettings.Speed * SlipstreamMultiplier);
 		Player.Effect.PlayWindFX();
 		Player.Effect.PlayWindCrestFX();
+		slipstreamsTriggered++;
+
+		if (slipstreamsTriggered >= MaxSlipstreamCount) // Make the number of slipstreams consistent
+		{
+			StopSlipstream();
+			ToggleFastSpeed();
+		}
 	}
 
-	public void IncrementPathIndex()
+	private void IncrementPathIndex(float remainingProgress)
 	{
 		traveledDistance += CurrentPath.Curve.GetBakedLength(); // Add the current path's length to traveled distance
 
@@ -201,6 +233,7 @@ public partial class GargoyleSkyroad : PathFollow3D
 		}
 
 		ReparentToPath(); // Reparent to new path and start again
+		Progress = Mathf.Max(remainingProgress, 0f);
 	}
 
 	// Get the length of all our paths and store for later
@@ -217,7 +250,6 @@ public partial class GargoyleSkyroad : PathFollow3D
 
 		PlayEntryAnimation();
 		ReparentToPath();
-		ToggleFastSpeed();
 	}
 
 	private void ReparentToPath()
