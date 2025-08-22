@@ -431,37 +431,66 @@ public partial class SkillSelect : Menu
 		}
 
 		if (status == SkillEquipStatusEnum.Conflict ||
-			status == SkillEquipStatusEnum.Expensive)
+			status == SkillEquipStatusEnum.Expensive ||
+			status == SkillEquipStatusEnum.ElementRequirement)
 		{
-			// Open alert menu
-			IsAlertMenuActive = true;
-			alertAnimator.Play("RESET");
-			alertAnimator.Advance(0.0);
+			SkillResource baseSkill = SelectedSkill.Skill;
+			if (IsEditingAugment)
+				baseSkill = baseSkill.GetAugment(AugmentSelection);
 
-			if (status == SkillEquipStatusEnum.Conflict)
+			ShowAlertMenu(baseSkill, status);
+		}
+
+		return false; // Something failed
+	}
+
+	private void ShowAlertMenu(SkillResource skill, SkillEquipStatusEnum status)
+	{
+		// Open alert menu
+		IsAlertMenuActive = true;
+		alertAnimator.Play("RESET");
+		alertAnimator.Advance(0.0);
+
+		if (status == SkillEquipStatusEnum.Conflict)
+		{
+			SkillResource conflictingSkill = ActiveSkillRing.GetConflictingSkill(skill.Key);
+
+			alertLabel.Text = Tr("skill_conflict");
+			alertLabel.Text = alertLabel.Text.Replace("SKILL", Tr(skill.NameKey));
+			alertLabel.Text = alertLabel.Text.Replace("CONFLICT", Tr(conflictingSkill.NameKey));
+			AlertSelection = 0; // Set to "No"
+		}
+		else
+		{
+			if (status == SkillEquipStatusEnum.ElementRequirement)
 			{
-				SkillResource baseSkill = SelectedSkill.Skill;
-				if (IsEditingAugment)
-					baseSkill = baseSkill.GetAugment(AugmentSelection);
-				SkillResource conflictingSkill = ActiveSkillRing.GetConflictingSkill(baseSkill.Key);
+				switch (skill.Element)
+				{
+					case SkillResource.SkillElement.Wind:
+						alertLabel.Text = Tr("skill_element_requirement_wind");
+						break;
+					case SkillResource.SkillElement.Fire:
+						alertLabel.Text = Tr("skill_element_requirement_fire");
+						break;
+					case SkillResource.SkillElement.Dark:
+						alertLabel.Text = Tr("skill_element_requirement_dark");
+						break;
+				}
 
-				alertLabel.Text = Tr("skill_conflict");
-				alertLabel.Text = alertLabel.Text.Replace("SKILL", Tr(baseSkill.NameKey));
-				alertLabel.Text = alertLabel.Text.Replace("CONFLICT", Tr(conflictingSkill.NameKey));
-				AlertSelection = 0; // Set to "No"
+				int equippedAmount = ActiveSkillRing.GetSkillCountByElement(skill.Element);
+				alertLabel.Text = alertLabel.Text.Replace("[AMOUNT]", (skill.ElementRequirement - equippedAmount).ToString());
 			}
 			else
 			{
 				alertLabel.Text = Tr("skill_sp_shortage");
-				AlertSelection = -1; // Disable Selection
-				alertAnimator.Play("select-cancel");
-				alertAnimator.Advance(0.0);
 			}
 
-			alertAnimator.Play("show");
+			AlertSelection = -1; // Disable Selection
+			alertAnimator.Play("select-cancel");
+			alertAnimator.Advance(0.0);
 		}
 
-		return false; // Something failed
+		alertAnimator.Play("show");
 	}
 
 	private void SortSkills()

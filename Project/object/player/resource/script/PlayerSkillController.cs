@@ -78,60 +78,21 @@ public partial class PlayerSkillController : Node3D
 	[Export]
 	public float landingDashSpeed;
 	public bool AllowCrestSkill { get; private set; }
+	private readonly float CrestOfFlameHueOffset = .45f;
+	private readonly float DefaultHueOffset = .02f;
 	private void SetUpSkills()
 	{
 		// Expand hitbox if skills is equipped
 		Runtime.Instance.UpdatePearlCollisionShapes(SkillRing.IsSkillEquipped(SkillKey.PearlRange) ? 5 : 1);
 		Runtime.Instance.UpdateRingCollisionShapes(SkillRing.IsSkillEquipped(SkillKey.RingRange) ? 5 : 1);
 
-		InitializeCrestSkills();
+		AllowCrestSkill = SkillRing.IsSkillEquipped(SkillKey.CrestWind) ||
+			SkillRing.IsSkillEquipped(SkillKey.CrestFire) ||
+			SkillRing.IsSkillEquipped(SkillKey.CrestDark);
+
 		// Update crest of flame's trail color
 		Player.Effect.UpdateTrailHueShift(AllowCrestSkill && SkillRing.IsSkillEquipped(SkillKey.CrestFire) ? CrestOfFlameHueOffset : DefaultHueOffset);
 		speedbreakOverlayMaterial.SetShaderParameter(SpeedbreakOverlayOpacityKey, 0);
-	}
-
-	private readonly float CrestOfFlameHueOffset = .45f;
-	private readonly float DefaultHueOffset = .02f;
-	private void InitializeCrestSkills()
-	{
-		int crestRequirement;
-		SkillResource.SkillElement crestType;
-		if (SkillRing.IsSkillEquipped(SkillKey.CrestWind))
-		{
-			crestRequirement = 10;
-			crestType = SkillResource.SkillElement.Wind;
-		}
-		else if (SkillRing.IsSkillEquipped(SkillKey.CrestFire))
-		{
-			crestRequirement = 6;
-			crestType = SkillResource.SkillElement.Fire;
-		}
-		else if (SkillRing.IsSkillEquipped(SkillKey.CrestDark))
-		{
-			crestRequirement = 8;
-			crestType = SkillResource.SkillElement.Dark;
-		}
-		else
-		{
-			// No crest skills equipped
-			return;
-		}
-
-		foreach (SkillKey key in SkillRing.EquippedSkills)
-		{
-			if (Runtime.Instance.SkillList.GetSkill(key).Element != crestType)
-				continue;
-
-			crestRequirement--;
-			if (crestRequirement > 0)
-				continue;
-
-			AllowCrestSkill = true;
-			break;
-		}
-
-		if (!AllowCrestSkill && OS.IsDebugBuild()) // Always allow crest skills when playing the game from the editor
-			AllowCrestSkill = true;
 	}
 
 	private readonly float WindCrestSpeedMultiplier = 1.5f;
