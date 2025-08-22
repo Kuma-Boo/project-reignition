@@ -226,7 +226,7 @@ public partial class PlatformTrigger : Node3D
 		ProcessFallingPlatform();
 		ProcessFloatingPlatform();
 
-		if (floorCalculationRoot != null)
+		if (floorCalculationRoot != null && StageSettings.Instance.IsLevelIngame)
 			CallDeferred(MethodName.SyncPlayerMovement);
 	}
 
