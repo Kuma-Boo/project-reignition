@@ -430,8 +430,10 @@ public partial class PlayerCameraController : Node3D
 			staticBlendRatio = Mathf.Lerp(staticBlendRatio, CameraBlendList[i].SettingsResource.copyPosition ? 1 : 0, CameraBlendList[i].SmoothedInfluence);
 		}
 
+		data.offsetBasis = data.offsetBasis.Orthonormalized();
+
 		// Recalculate non-static camera positions for better transition rotations.
-		Vector3 position = data.offsetBasis.Z.Normalized() * distance;
+		Vector3 position = data.offsetBasis.Z * distance;
 		position += Player.CenterPosition;
 
 		Transform3D cameraTransform = new(data.offsetBasis, position.Lerp(data.precalculatedPosition, staticBlendRatio));
@@ -601,7 +603,7 @@ public partial class PlayerCameraController : Node3D
 		data.CalculatePosition(sampler.GlobalPosition);
 
 		Vector3 globalDelta = Player.CenterPosition - data.precalculatedPosition;
-		Vector3 localDelta = data.offsetBasis.Inverse() * globalDelta;
+		Vector3 localDelta = data.offsetBasis.Inverse().Orthonormalized() * globalDelta;
 
 		if (settings.horizontalTrackingMode != CameraSettingsResource.TrackingModeEnum.Move)
 		{
@@ -737,7 +739,7 @@ public partial class PlayerCameraController : Node3D
 		data.blendData.yawAngle = sampledTargetYawAngle;
 		data.blendData.pitchAngle = sampledTargetPitchAngle;
 		data.CalculateBasis();
-		int yawSamplingFix = Mathf.Sign(sampledForward.Dot(-data.offsetBasis.Z));
+		int yawSamplingFix = Mathf.Sign(sampledForward.Dot(-data.offsetBasis.Z.Normalized()));
 		sampledTargetPitchAngle *= yawSamplingFix;
 		// Calculate tilt angle
 		data.blendData.tiltAngle = CalculateTilt(settings, ref data, yawSamplingFix);
@@ -819,7 +821,7 @@ public partial class PlayerCameraController : Node3D
 
 		public void BlendWith(CameraPositionData data, float influence)
 		{
-			offsetBasis = offsetBasis.Slerp(data.offsetBasis, influence);
+			offsetBasis = offsetBasis.Slerp(data.offsetBasis, influence).Orthonormalized();
 			precalculatedPosition = precalculatedPosition.Lerp(data.precalculatedPosition, influence);
 
 			yawTracking = Mathf.LerpAngle(yawTracking, data.yawTracking, influence);
