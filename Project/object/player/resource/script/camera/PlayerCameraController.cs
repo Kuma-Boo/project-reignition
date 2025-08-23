@@ -485,7 +485,7 @@ public partial class PlayerCameraController : Node3D
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, lookaroundPitch);
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Up, lookaroundYaw);
 
-		cameraTransform.Origin += cameraTransform.Basis.Z.Rotated(cameraTransform.Basis.X, lookaroundPitch) * inputCameraDistance;
+		cameraTransform.Origin += cameraTransform.Basis.Z.Rotated(cameraTransform.Basis.X.Normalized(), lookaroundPitch) * inputCameraDistance;
 
 		// Update cameraTransform origin
 		viewportOffset.Y = Mathf.Lerp(viewportOffset.Y, 0, lockonBlend);
