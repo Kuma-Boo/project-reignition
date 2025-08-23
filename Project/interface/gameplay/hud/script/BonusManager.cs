@@ -17,7 +17,7 @@ public partial class BonusManager : VBoxContainer
 	public override void _Ready()
 	{
 		instance = this;
-		Stage.Connect(nameof(StageSettings.LevelCompleted), new Callable(this, MethodName.OnLevelCompleted)); //Hide interface
+		Stage.LevelCompleted += OnLevelCompleted;
 	}
 
 	public override void _PhysicsProcess(double _)
