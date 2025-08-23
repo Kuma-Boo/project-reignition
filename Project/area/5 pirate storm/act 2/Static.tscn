@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://d1gknocio5io1"]
+[gd_scene load_steps=43 format=3 uid="uid://d1gknocio5io1"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_4xujv"]
 [ext_resource type="Resource" uid="uid://c2qttlm1qg5ji" path="res://area/5 pirate storm/act 2/camera/CloseCam.tres" id="2_or2ge"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://d3bwpl53f2wsi" path="res://area/5 pirate storm/data/skybox/SkyboxLightning.tscn" id="9_l6cxa"]
 [ext_resource type="Script" uid="uid://np5vcxq01ii8" path="res://object/trigger/modules/CheckpointTrigger.cs" id="9_or2ge"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="9_patcr"]
+[ext_resource type="PackedScene" uid="uid://0q5cfpfqkhek" path="res://area/6 skeleton dome/data/skybox/Skybox.tscn" id="10_gy6uc"]
 [ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="10_q3ufd"]
 [ext_resource type="Resource" uid="uid://bsdv21422t2gf" path="res://area/5 pirate storm/act 2/camera/OverheadCam.tres" id="11_oejkb"]
 [ext_resource type="Script" uid="uid://ch4pb1qqwy5al" path="res://object/stage/common/resource/script/CameraFollower.cs" id="16_83k4q"]
@@ -30,6 +31,28 @@ shading_mode = 0
 specular_mode = 2
 disable_fog = true
 albedo_color = Color(0.665114, 0.558452, 0.821712, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_drhlu"]
+render_priority = -120
+blend_mode = 3
+shading_mode = 0
+specular_mode = 2
+albedo_color = Color(1, 0.655843, 0.361279, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_iqmf8"]
+material = SubResource("StandardMaterial3D_drhlu")
+flip_faces = true
+top_radius = 800.0
+bottom_radius = 800.0
+height = 500.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gy6uc"]
+render_priority = -120
+blend_mode = 3
+shading_mode = 0
+specular_mode = 2
+disable_fog = true
+albedo_color = Color(0.62, 0.36580002, 0.4886634, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_or2ge"]
 size = Vector3(200, 5, 200)
@@ -436,22 +459,29 @@ _data = {
 &"demo3": SubResource("Animation_patcr")
 }
 
-[sub_resource type="Environment" id="Environment_yu8x7"]
+[sub_resource type="Environment" id="Environment_74w7x"]
+background_mode = 1
+background_color = Color(0.66, 0.5478, 0.62821007, 1)
 ambient_light_source = 2
-ambient_light_color = Color(0.239625, 0.246573, 0.368746, 1)
-ambient_light_energy = 0.8
-reflected_light_source = 1
-tonemap_mode = 2
+ambient_light_color = Color(0.67275, 0.48299998, 0.69, 1)
+tonemap_mode = 1
+tonemap_exposure = 1.1
 tonemap_white = 1.2
 glow_enabled = true
 glow_normalized = true
-glow_intensity = 1.0
-glow_strength = 1.2
 glow_blend_mode = 1
 glow_hdr_threshold = 1.2
 fog_enabled = true
-fog_light_color = Color(0.313728, 0.164897, 0.488441, 1)
-fog_light_energy = 0.2
+fog_mode = 1
+fog_light_color = Color(0.58, 0.3364, 0.46226004, 1)
+fog_density = 0.2859
+fog_sky_affect = 0.0
+fog_depth_curve = 0.25000027
+fog_depth_begin = 0.0
+fog_depth_end = 720.5
+adjustment_enabled = true
+adjustment_contrast = 1.2
+adjustment_saturation = 0.9
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_4xujv")
@@ -475,8 +505,9 @@ visible = false
 visible = false
 
 [node name="PSSky" parent="Visuals" instance=ExtResource("5_thlvq")]
+visible = false
 
-[node name="Tint" parent="Visuals/PSSky" index="4"]
+[node name="Tint" parent="Visuals/PSSky" index="5"]
 surface_material_override/0 = SubResource("StandardMaterial3D_q3ufd")
 
 [node name="PSSkyLightning" parent="Visuals/PSSky" instance=ExtResource("9_l6cxa")]
@@ -486,27 +517,31 @@ surface_material_override/0 = SubResource("StandardMaterial3D_q3ufd")
 [node name="EnvironmentLight" type="DirectionalLight3D" parent="Visuals/Lighting"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 19, 0)
 layers = 1024
-light_color = Color(0.747167, 0.63, 1, 1)
-light_energy = 2.0
+light_color = Color(1, 0.75, 0.97916675, 1)
+light_energy = 0.7
 light_cull_mask = 6
 shadow_enabled = true
 shadow_caster_mask = 65
+directional_shadow_mode = 1
+directional_shadow_split_1 = 0.2
+directional_shadow_blend_splits = true
+directional_shadow_fade_start = 0.5
+directional_shadow_max_distance = 50.0
 
 [node name="WaterLight" type="DirectionalLight3D" parent="Visuals/Lighting"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 19, 0)
 layers = 1024
-light_color = Color(0.748625, 0.63246, 1, 1)
-light_energy = 1.8
+light_color = Color(1, 0.59000003, 0.78816676, 1)
+light_energy = 2.0
 light_cull_mask = 8
-shadow_enabled = true
 shadow_caster_mask = 65
 
 [node name="ObjectLight" type="DirectionalLight3D" parent="Visuals/Lighting"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 19, 0)
 layers = 1024
-light_color = Color(0.72, 0.65, 1, 1)
-light_energy = 0.8
-light_specular = 10.0
+light_color = Color(1, 0.65, 0.65583324, 1)
+light_energy = 0.45
+light_specular = 3.0
 light_cull_mask = 65
 shadow_caster_mask = 65
 
@@ -517,8 +552,8 @@ size = Vector3(1694.43, 300, 1573.26)
 cull_mask = 0
 reflection_mask = 6
 ambient_mode = 2
-ambient_color = Color(0.645575, 0.5355, 0.85, 1)
-ambient_color_energy = 0.6
+ambient_color = Color(0.8693333, 0.86, 1, 1)
+ambient_color_energy = 0.2
 
 [node name="ObjectProbe" type="ReflectionProbe" parent="Visuals/Lighting"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 189, 150, -22.5)
@@ -527,8 +562,17 @@ size = Vector3(540, 300, 607)
 cull_mask = 0
 reflection_mask = 65
 ambient_mode = 2
-ambient_color = Color(0.645575, 0.5355, 0.85, 1)
-ambient_color_energy = 0.3
+ambient_color = Color(0.9854999, 0.71000004, 1, 1)
+ambient_color_energy = 0.1
+
+[node name="Skybox" parent="Visuals" instance=ExtResource("10_gy6uc")]
+
+[node name="Tint" type="MeshInstance3D" parent="Visuals/Skybox/SkyRoot" index="1"]
+transform = Transform3D(10, 0, 0, 0, 0, 10, 0, -10, 0, 1022.8282, 89.531845, -1940.0001)
+layers = 16
+mesh = SubResource("CylinderMesh_iqmf8")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_gy6uc")
 
 [node name="Trigger" type="Node3D" parent="."]
 
@@ -677,7 +721,7 @@ libraries = {
 }
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_yu8x7")
+environment = SubResource("Environment_74w7x")
 
 [node name="BGM" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_auaow")
@@ -691,3 +735,4 @@ isStageMusic = true
 
 [editable path="Collision"]
 [editable path="Visuals/PSSky"]
+[editable path="Visuals/Skybox"]
