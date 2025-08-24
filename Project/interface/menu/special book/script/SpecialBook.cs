@@ -470,7 +470,7 @@ public partial class SpecialBook : Menu
 	{
 		SpecialBookTab tab = tabs[tabSelection];
 		chapterLabel.Text = Tr("spb_chapter") + " " + (tabSelection + 1);
-		chapterName.Text = "[" + Tr("spb_chapter_" + tab.chapterType.ToString().ToLower()) + "]";
+		chapterName.Text = Tr("spb_brackets").Replace("DATA", Tr("spb_chapter_" + tab.chapterType.ToString().ToLower())).ToUpper();
 
 		// Load preview images
 		for (int i = 0; i < tab.PageResources.Length; i++)
