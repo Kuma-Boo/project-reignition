@@ -37,9 +37,34 @@ public partial class HeadsUpDisplay : Control
 	[Export] private Rings rings;
 	[Export] private AnimationPlayer fireSoulAnimator;
 
+	[Export] private TextureRect fireSoul1;
+	[Export] private TextureRect fireSoul2;
+	[Export] private TextureRect fireSoul3;
+
+	[Export] private Texture2D fireSoulImg;
+	[Export] private Texture2D fireSoulDashImg;
+
 	public void CollectFireSoul()
 	{
+
+		if (StageSettings.Instance.fireSoulCheckpoints[0])
+		{
+			fireSoul1.Texture = fireSoulImg;
+			fireSoul1.Visible = true;
+		}
+		if (StageSettings.Instance.fireSoulCheckpoints[1])
+		{
+			fireSoul2.Texture = fireSoulImg;
+			fireSoul2.Visible = true;
+		}
+		if (StageSettings.Instance.fireSoulCheckpoints[2])
+		{
+			fireSoul3.Texture = fireSoulImg;
+			fireSoul3.Visible = true;
+		}
+
 		fireSoulAnimator.Play("firesoul");
+
 		fireSoulAnimator.Seek(0.0, true);
 	}
 
