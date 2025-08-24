@@ -1,11 +1,77 @@
-[gd_scene load_steps=10 format=3 uid="uid://bwqgjo2ywq68m"]
+[gd_scene load_steps=16 format=3 uid="uid://bwqgjo2ywq68m"]
 
 [ext_resource type="Script" uid="uid://cmksigg2bddki" path="res://interface/menu/special book/script/SpecialBookWindow.cs" id="1_a31tl"]
 [ext_resource type="Texture2D" uid="uid://qys1j7pgsm0p" path="res://interface/menu/special book/texture/book objects/frame.png" id="2_i5uf0"]
 [ext_resource type="Texture2D" uid="uid://baor555ii24fi" path="res://interface/menu/special book/texture/book objects/frame_question.png" id="3_i5uf0"]
 [ext_resource type="Texture2D" uid="uid://0ihwssoc3k0e" path="res://interface/menu/special book/texture/book objects/frame_glow.png" id="4_i5uf0"]
 [ext_resource type="Texture2D" uid="uid://dv04kvw4ixivf" path="res://interface/menu/special book/texture/book objects/frame_number.png" id="6_l6bkd"]
+[ext_resource type="FontFile" uid="uid://d1bvfghhgreq7" path="res://interface/font/otf/Rodin DB.otf" id="7_l6bkd"]
 [ext_resource type="FontFile" uid="uid://bsoin3p4iygoo" path="res://interface/font/otf/Chiaro Std B.otf" id="7_utkmo"]
+[ext_resource type="LabelSettings" uid="uid://bqrydgixkulbv" path="res://interface/font/NavigationFont.tres" id="8_utkmo"]
+[ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="9_8qxfd"]
+
+[sub_resource type="Animation" id="Animation_03o5k"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Glow:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Glow:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_gr487"]
+resource_name = "loop"
+loop_mode = 1
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Glow:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Glow:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 1),
+"transitions": PackedFloat32Array(1, 0.5, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1), Vector2(1.5, 1.5)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8gw72"]
+_data = {
+&"RESET": SubResource("Animation_03o5k"),
+&"loop": SubResource("Animation_gr487")
+}
 
 [sub_resource type="Animation" id="Animation_6gyq1"]
 resource_name = "RESET"
@@ -69,7 +135,7 @@ _data = {
 &"select": SubResource("Animation_a31tl")
 }
 
-[node name="SpecialBookWindow" type="NinePatchRect" node_paths=PackedStringArray("numberLabel", "windowAnimator", "textureRect")]
+[node name="SpecialBookWindow" type="NinePatchRect" node_paths=PackedStringArray("numberLabel", "windowAnimator", "textureRect", "newTag")]
 custom_minimum_size = Vector2(186, 124)
 anchors_preset = -1
 anchor_right = 0.097
@@ -87,6 +153,58 @@ script = ExtResource("1_a31tl")
 numberLabel = NodePath("NumberFrame/NumberLabel")
 windowAnimator = NodePath("AnimationPlayer")
 textureRect = NodePath("PreviewTexture")
+newTag = NodePath("New")
+
+[node name="New" type="Label" parent="."]
+self_modulate = Color(1, 1, 0, 1)
+z_index = 2
+layout_mode = 1
+anchors_preset = -1
+offset_left = 14.999987
+offset_top = 9.999994
+offset_right = 327.0
+offset_bottom = 63.999992
+scale = Vector2(0.6, 0.6)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.784314)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("7_l6bkd")
+theme_override_font_sizes/font_size = 40
+text = "sys_new"
+label_settings = ExtResource("8_utkmo")
+vertical_alignment = 1
+uppercase = true
+
+[node name="Glow" type="Label" parent="New"]
+modulate = Color(1, 1, 0, 1)
+self_modulate = Color(1, 1, 1, 0)
+z_index = 2
+material = ExtResource("9_8qxfd")
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -110.0
+offset_right = -110.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(156, 54)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.784314)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("7_l6bkd")
+theme_override_font_sizes/font_size = 40
+text = "sys_new"
+label_settings = ExtResource("8_utkmo")
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="New"]
+libraries = {
+&"": SubResource("AnimationLibrary_8gw72")
+}
+autoplay = "loop"
 
 [node name="PreviewTexture" type="TextureRect" parent="."]
 layout_mode = 1
