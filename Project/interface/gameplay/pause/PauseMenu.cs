@@ -292,7 +292,7 @@ public partial class PauseMenu : Node
 			for (int i = 0; i < fireSoulRects.Length; i++)
 			{
 				bool isSaveCollected = SaveManager.ActiveGameData.LevelData.IsFireSoulCollected(Stage.Data.LevelID, i + 1);
-				bool isCheckpointCollected = StageSettings.Instance.fireSoulCheckpoints[i];
+				bool isCheckpointCollected = StageSettings.Instance.IsFireSoulCheckpointFlagSet(i);
 
 				fireSoulRects[i].Texture = (isSaveCollected || isCheckpointCollected) ? fireSoulSprite : noFireSoulSprite;
 				fireSoulRects[i].SelfModulate = isCheckpointCollected ? new(1f, 1f, 1f, .5f) : Colors.White;
