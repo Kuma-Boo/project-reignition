@@ -560,20 +560,23 @@ public partial class SpecialBook : Menu
 
 	private void DisableNewTag()
 	{
-		if (!SaveManager.SharedData.ViewedPages.Contains($"{tabSelection + 1}_{pageSelection + 1}"))
+		if (!SaveManager.SharedData.ViewedPages.Contains($"{tabSelection + 1}_{pageSelection + 1}") && tabs[tabSelection].PageResources[pageSelection].IsUnlocked())
+		{
 			SaveManager.SharedData.ViewedPages.Add($"{tabSelection + 1}_{pageSelection + 1}");
-		EnableNewTag(tabSelection);
+			EnableNewTag(tabSelection);
+		}
+
+
 	}
 	private void EnableNewTag(int tab)
 	{
-		for (int i = 0; i < 15; i++)
-		{
-			windows[i].DisableNew();
-		}
+		GD.Print(SaveManager.SharedData.ViewedPages);
 		for (int i = 0; i < 15; i++)
 		{
 			if (!SaveManager.SharedData.ViewedPages.Contains($"{tab + 1}_{i + 1}") && tabs[tab].PageResources[i].IsUnlocked())
 				windows[i].EnableNew();
+			else
+				windows[i].DisableNew();
 		}
 	}
 }
