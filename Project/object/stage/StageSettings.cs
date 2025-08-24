@@ -518,13 +518,13 @@ public partial class StageSettings : Node3D
 		Interface.PauseMenu.AllowPausing = false;
 		LevelState = wasSuccessful ? LevelStateEnum.Success : LevelStateEnum.Failed;
 
-		// Recalculate technical bonus
-		CalculateTechnicalBonus();
-		UpdateSaveData();
-		ProcessAchievements();
-
 		EmitSignal(SignalName.LevelCompleted);
 		EmitSignal(wasSuccessful ? SignalName.LevelSuccess : SignalName.LevelFailed);
+
+		// Process save data after emitting level completion
+		CalculateTechnicalBonus(); // Recalculate technical bonus
+		UpdateSaveData();
+		ProcessAchievements();
 	}
 
 	private void ProcessAchievements()

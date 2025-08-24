@@ -1154,7 +1154,7 @@ public partial class SaveManager : Node
 
 	#region Shared Game Data
 	public static SharedGameData SharedData;
-	private const string SharedFileName = "shared.dat";
+	private const string SharedFileName = "shared.sav";
 
 	public class SharedGameData
 	{
@@ -1174,6 +1174,9 @@ public partial class SaveManager : Node
 		public int SpeedBreakActivationCount { get; set; }
 		/// <summary> Total number of seconds TimeBreak was active. </summary>
 		public float TimeBreakTime { get; set; }
+
+		/// <summary> Has the player selected this page? If not, show the "new" tag </summary>
+		public Array<string> ViewedPages = [];
 
 		// Skills
 		public int MinimalSkillCount { get; set; }
@@ -1202,6 +1205,7 @@ public partial class SaveManager : Node
 				{ nameof(RingChainCount), RingChainCount },
 				{ nameof(SpeedBreakActivationCount), SpeedBreakActivationCount },
 				{ nameof(TimeBreakTime), TimeBreakTime },
+				{nameof(ViewedPages), ViewedPages},
 
 				{ nameof(MinimalSkillCount), MinimalSkillCount },
 				{ nameof(FireOnlyCount), FireOnlyCount },
@@ -1233,6 +1237,8 @@ public partial class SaveManager : Node
 				SpeedBreakActivationCount = (int)var;
 			if (dictionary.TryGetValue(nameof(TimeBreakTime), out var))
 				TimeBreakTime = (float)var;
+			if (dictionary.TryGetValue(nameof(ViewedPages), out var))
+				ViewedPages = (Array<string>)var;
 
 			if (dictionary.TryGetValue(nameof(MinimalSkillCount), out var))
 				MinimalSkillCount = (int)var;

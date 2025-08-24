@@ -755,10 +755,15 @@ public partial class PlayerController : CharacterBody3D
 		StateMachine.ChangeState(grindState);
 	}
 
-	public void UnregisterGrindrail(GrindRail rail)
+	public bool UnregisterGrindrail(GrindRail rail)
 	{
 		if (grindState.ActiveGrindRail == rail)
+		{
 			grindState.ActiveGrindRail = null;
+			return true;
+		}
+
+		return false;
 	}
 
 	public bool DisableSidle { get; set; }
