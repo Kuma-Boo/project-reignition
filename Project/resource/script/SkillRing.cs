@@ -18,6 +18,9 @@ public class SkillRing
 	public int TotalCost { get; private set; }
 	/// <summary> Amount of available skill points. </summary>
 	public int MaxSkillPoints { get; private set; }
+	/// <summary> Number of skills equipped per element. Indexes line up with SkillResource.SkillElement when casted to an int. </summary>
+	private int[] SkillCountByElement = new int[(int)SkillResource.SkillElement.Count];
+	public int GetSkillCountByElement(SkillResource.SkillElement element) => SkillCountByElement[(int)element];
 
 	/// <summary> Calculates how many skill points the player has based on their level. </summary>
 	public static int CalculateSkillPointsByLevel(int level)
@@ -33,7 +36,7 @@ public class SkillRing
 	public void UpdateTotalSkillPoints() => MaxSkillPoints = CalculateSkillPointsByLevel(SaveManager.ActiveGameData.level);
 
 	/// <summary> Updates the total cost based on the skills currently equipped on a skill ring. </summary>
-	public void UpdateTotalCost()
+	private void UpdateTotalCost()
 	{
 		TotalCost = 0;
 		for (int i = 0; i < EquippedSkills.Count; i++)
@@ -50,6 +53,19 @@ public class SkillRing
 			}
 
 			TotalCost += baseSkill.Augments[augmentIndex - 1].Cost;
+		}
+	}
+
+	private void UpdateSkillCounts()
+	{
+		for (int i = 0; i < SkillCountByElement.Length; i++) // Reset counts
+			SkillCountByElement[i] = 0;
+
+		foreach (SkillKey key in EquippedSkills)
+		{
+			SkillResource skill = Runtime.Instance.SkillList.GetSkill(key);
+			skill = skill.GetAugment(GetAugmentIndex(key));
+			SkillCountByElement[(int)skill.Element]++;
 		}
 	}
 
@@ -125,6 +141,7 @@ public class SkillRing
 				EquippedSkills.Add(key);
 			TotalCost -= currentCost; // Refund currently equipped cost
 			TotalCost += augment.Cost; // Take skill points
+			SkillCountByElement[(int)augment.Element]++;
 
 			// Update augment index
 			if (EquippedAugments.ContainsKey(key))
@@ -143,9 +160,14 @@ public class SkillRing
 				return SkillEquipStatusEnum.Expensive; // Too expensive!
 		}
 
+		int skillCount = SaveManager.ActiveSkillRing.GetSkillCountByElement(baseSkill.Element);
+		if (skillCount < baseSkill.ElementRequirement)
+			return SkillEquipStatusEnum.ElementRequirement;
+
 		if (!EquippedSkills.Contains(key))
 			EquippedSkills.Add(key);
 		TotalCost += baseSkill.Cost; // Take skill points
+		SkillCountByElement[(int)baseSkill.Element]++;
 		return SkillEquipStatusEnum.Success;
 	}
 
@@ -160,6 +182,7 @@ public class SkillRing
 			SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(key);
 			SkillResource augment = baseSkill.GetAugment(augmentIndex);
 			TotalCost -= augment.Cost; // Refund skill points
+			SkillCountByElement[(int)augment.Element]--;
 			return true;
 		}
 
@@ -240,6 +263,7 @@ public class SkillRing
 	{
 		UpdateTotalSkillPoints();
 		UpdateTotalCost();
+		UpdateSkillCounts();
 	}
 
 	/// <summary> Sorts skill resources based on their key (number). </summary>
@@ -274,6 +298,7 @@ public enum SkillEquipStatusEnum
 	Conflict,
 	Equipped,
 	Missing,
+	ElementRequirement
 }
 
 /// <summary> Dev keys for all possible skills in the game, in numerical order. </summary>
@@ -284,6 +309,7 @@ public enum SkillKey
 	ChargeJump,
 	SlowTurn, // Decreases Sonic's turning sensitivity
 	QuickTurn, // Increases Sonic's turning sensitivity
+	RankPreview, // Shows the current rank on the heads-up display
 
 	SpeedUp, // Increases Sonic's top speed
 	TractionUp, // Increases Sonic's traction
@@ -338,7 +364,6 @@ public enum SkillKey
 	DriftExp, // Manually perform a drift for more speed and points/exp
 
 	// New skills
-	RankPreview, // Shows the current rank on the heads-up display
 	QuickStep, // Quick Step, Unleashed style
 	PerfectHomingAttack, // Perfect homing attack, Colors Ultimate style
 	LightSpeedDash, // SA2 style

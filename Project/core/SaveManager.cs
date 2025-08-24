@@ -1154,7 +1154,7 @@ public partial class SaveManager : Node
 
 	#region Shared Game Data
 	public static SharedGameData SharedData;
-	private const string SharedFileName = "shared.sav";
+	private const string SharedFileName = "shared.dat";
 
 	public class SharedGameData
 	{
@@ -1205,7 +1205,7 @@ public partial class SaveManager : Node
 				{ nameof(RingChainCount), RingChainCount },
 				{ nameof(SpeedBreakActivationCount), SpeedBreakActivationCount },
 				{ nameof(TimeBreakTime), TimeBreakTime },
-				{nameof(ViewedPages), ViewedPages},
+				{ nameof(ViewedPages), ViewedPages},
 
 				{ nameof(MinimalSkillCount), MinimalSkillCount },
 				{ nameof(FireOnlyCount), FireOnlyCount },
