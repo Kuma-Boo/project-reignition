@@ -33,6 +33,8 @@ public partial class FallState : PlayerState
 		if (Player.IsOnGround)
 			return landState;
 
+		if (Player.Skills.IsSpeedBreakActive)
+			return null;
 
 		if (Player.Controller.IsJumpBufferActive)
 		{
