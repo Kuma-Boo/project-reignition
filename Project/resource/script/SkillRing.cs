@@ -309,6 +309,7 @@ public enum SkillKey
 	ChargeJump,
 	SlowTurn, // Decreases Sonic's turning sensitivity
 	QuickTurn, // Increases Sonic's turning sensitivity
+	RankPreview, // Shows the current rank on the heads-up display
 
 	SpeedUp, // Increases Sonic's top speed
 	TractionUp, // Increases Sonic's traction
@@ -363,7 +364,6 @@ public enum SkillKey
 	DriftExp, // Manually perform a drift for more speed and points/exp
 
 	// New skills
-	RankPreview, // Shows the current rank on the heads-up display
 	QuickStep, // Quick Step, Unleashed style
 	PerfectHomingAttack, // Perfect homing attack, Colors Ultimate style
 	LightSpeedDash, // SA2 style
