@@ -22,7 +22,7 @@ public partial class SkillListResource : Resource
 	/// <summary> Gets the matching Base SkillResource from a SkillKey. </summary>
 	public SkillResource GetSkill(SkillKey key)
 	{
-		if (key == SkillKey.Max)
+		if (key == SkillKey.Count)
 			return null;
 
 		foreach (var skill in skills)

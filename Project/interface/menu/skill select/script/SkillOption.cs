@@ -143,7 +143,7 @@ public partial class SkillOption : Control
 		{
 			animator.Play("expensive");
 		}
-		else if (ActiveSkillRing.IsConflictingSkillEquipped(Skill.Key) != SkillKey.Max ||
+		else if (ActiveSkillRing.IsConflictingSkillEquipped(Skill.Key) != SkillKey.Count ||
 			ActiveSkillRing.GetSkillCountByElement(Skill.Element) < Skill.ElementRequirement)
 		{
 			animator.Play("conflict");

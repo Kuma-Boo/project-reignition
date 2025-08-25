@@ -293,7 +293,7 @@ public partial class DebugManager : Control
 	private Slider skillAugmentSlider;
 	private void SetUpSkills()
 	{
-		for (int i = 0; i < (int)SkillKey.Max; i++)
+		for (int i = 0; i < (int)SkillKey.Count; i++)
 		{
 			skillSelectButton.AddItem(((SkillKey)i).ToString());
 		}

@@ -86,7 +86,7 @@ public class SkillRing
 		SkillResource skill = Runtime.Instance.SkillList.GetSkill(key);
 
 		if (skill.SkillConflicts == null)
-			return SkillKey.Max;
+			return SkillKey.Count;
 
 		foreach (string conflict in skill.SkillConflicts)
 		{
@@ -99,7 +99,7 @@ public class SkillRing
 			return conflictKey;
 		}
 
-		return SkillKey.Max; // No conflicts
+		return SkillKey.Count; // No conflicts
 	}
 
 	/// <summary> Equips a skill onto the skill ring. </summary>
@@ -173,21 +173,43 @@ public class SkillRing
 	}
 
 	/// <summary> Unequips a skill from the skill ring. </summary>
-	public bool UnequipSkill(SkillKey key, int augmentIndex = 0)
+	public SkillKey UnequipSkill(SkillKey key, int augmentIndex = 0)
 	{
 		if (augmentIndex != GetAugmentIndex(key))
-			return false; // Augment index mismatch
+			return SkillKey.Count; // Augment index mismatch
+
+		SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(key);
+		SkillResource augment = baseSkill.GetAugment(augmentIndex);
+
+		// Check for unequip requirements
+		int resultingElementCount = SkillCountByElement[(int)augment.Element] - 1;
+		foreach (SkillKey conflictKey in SaveManager.ActiveSkillRing.EquippedSkills)
+		{
+			SkillResource conflictSkill = Runtime.Instance.SkillList.GetSkill(conflictKey);
+			if (conflictSkill.ElementRequirement == 0 || conflictSkill.Element != augment.Element)
+				continue;
+
+			GD.PrintT(resultingElementCount, conflictSkill.ElementRequirement);
+			if (resultingElementCount <= conflictSkill.ElementRequirement)
+			{
+				// Can't unequip bc of a different skill
+				return conflictSkill.Key;
+			}
+		}
+
+		ForceUnequipSkill(key, augmentIndex);
+		return baseSkill.Key;
+	}
+
+	public void ForceUnequipSkill(SkillKey key, int augmentIndex = 0)
+	{
+		SkillResource targetSkill = Runtime.Instance.SkillList.GetSkill(key).GetAugment(augmentIndex);
 
 		if (EquippedSkills.Remove(key))
 		{
-			SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(key);
-			SkillResource augment = baseSkill.GetAugment(augmentIndex);
-			TotalCost -= augment.Cost; // Refund skill points
-			SkillCountByElement[(int)augment.Element]--;
-			return true;
+			TotalCost -= targetSkill.Cost; // Refund skill points
+			SkillCountByElement[(int)targetSkill.Element]--;
 		}
-
-		return false;
 	}
 
 	/// <summary> Resets a skill's augment index to 0. </summary>
@@ -375,5 +397,5 @@ public enum SkillKey
 	CrestFire,
 	CrestDark,
 
-	Max, // Number of skills
+	Count, // Number of skills
 }

@@ -65,7 +65,7 @@ public partial class SkillSelect : Menu
 		if (SaveManager.Config.useRetailMenuMusic) // Disable bgm
 			bgm = null;
 
-		for (int i = 0; i < (int)SkillKey.Max; i++)
+		for (int i = 0; i < (int)SkillKey.Count; i++)
 		{
 			SkillKey key = (SkillKey)i;
 			SkillResource skill = SkillList.GetSkill(key);
@@ -307,10 +307,7 @@ public partial class SkillSelect : Menu
 			skillOptionList[i].Visible = false;
 
 			if (!SaveManager.ActiveSkillRing.IsSkillUnlocked(key))
-			{
-				GD.Print($"{key} is not unlocked.");
 				continue;
-			}
 
 			visualSkillOptionList.Add(skillOptionList[i]);
 			skillOptionList[i].Visible = true;
@@ -398,12 +395,11 @@ public partial class SkillSelect : Menu
 			baseSkill = baseSkill.GetAugment(AugmentSelection);
 		SkillResource conflictingSkill = ActiveSkillRing.GetConflictingSkill(baseSkill.Key);
 
-		if (ActiveSkillRing.UnequipSkill(conflictingSkill.Key, ActiveSkillRing.GetAugmentIndex(conflictingSkill.Key)))
-		{
-			// Revert to base skill if unequipped
-			ActiveSkillRing.ResetAugmentIndex(conflictingSkill.Key);
-			ActiveSkillRing.EquipSkill(baseSkill.Key, IsEditingAugment ? AugmentSelection : 0);
-		}
+		ActiveSkillRing.ForceUnequipSkill(conflictingSkill.Key, ActiveSkillRing.GetAugmentIndex(conflictingSkill.Key));
+
+		// Revert to base skill if unequipped
+		ActiveSkillRing.ResetAugmentIndex(conflictingSkill.Key);
+		ActiveSkillRing.EquipSkill(baseSkill.Key, IsEditingAugment ? AugmentSelection : 0);
 
 		Redraw();
 	}
@@ -417,10 +413,21 @@ public partial class SkillSelect : Menu
 			return false;
 		}
 
-		if (ActiveSkillRing.UnequipSkill(key, IsEditingAugment ? AugmentSelection : 0))
+		if (ActiveSkillRing.IsSkillEquipped(key))
 		{
-			animator.Play("unequip");
-			return true;
+			SkillKey unequippedKey = ActiveSkillRing.UnequipSkill(key, IsEditingAugment ? AugmentSelection : 0);
+			if (unequippedKey == key)
+			{
+				animator.Play("unequip");
+				return true;
+			}
+			else if (unequippedKey != SkillKey.Count)
+			{
+				// TODO Add popup confirmation
+				// Conflict due to element count
+				ActiveSkillRing.ForceUnequipSkill(unequippedKey);
+				return ToggleSkill();
+			}
 		}
 
 		SkillEquipStatusEnum status = ActiveSkillRing.EquipSkill(key, IsEditingAugment ? AugmentSelection : 0);

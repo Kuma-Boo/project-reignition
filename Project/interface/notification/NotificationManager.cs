@@ -168,7 +168,7 @@ public partial class NotificationManager : Control
 	private int CalculateUnlockedSkillCount()
 	{
 		int count = 0;
-		for (int i = 0; i < (int)SkillKey.Max; i++)
+		for (int i = 0; i < (int)SkillKey.Count; i++)
 		{
 			if (SaveManager.ActiveSkillRing.IsSkillUnlocked((SkillKey)i))
 				count++;
