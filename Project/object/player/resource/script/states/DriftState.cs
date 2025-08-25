@@ -199,6 +199,10 @@ public partial class DriftState : PlayerState
 			driftAnimationTimer = FailAnimationLength;
 			Player.Animator.FailDrift();
 			Trigger.FadeSfx();
+
+			if (Player.Skills.IsSpeedBreakActive)
+				Player.Skills.ToggleSpeedBreak();
+
 			return;
 		}
 
