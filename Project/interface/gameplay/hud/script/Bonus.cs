@@ -4,15 +4,11 @@ namespace Project.Gameplay;
 
 public partial class Bonus : Control
 {
-	[Signal]
-	public delegate void BonusFinishedEventHandler(Bonus b);
+	[Signal] public delegate void BonusFinishedEventHandler();
 
-	[Export]
-	private AnimationPlayer animator;
-	[Export]
-	private Label typeLabel;
-	[Export]
-	private Label amountLabel;
+	[Export] private AnimationPlayer animator;
+	[Export] private Label typeLabel;
+	[Export] private Label amountLabel;
 
 	/// <summary> Updates the bonus text and shows the node. </summary>
 	public void ShowBonus(BonusData bonus, int bonusAmount)
