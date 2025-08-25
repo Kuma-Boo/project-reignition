@@ -57,16 +57,21 @@ public partial class BonusManager : VBoxContainer
 	/// <summary> Actually plays a bonus from the queue. </summary>
 	private void PlayBonus()
 	{
-		if (bonusesActive == GetChildCount()) return;
+		if (bonusesActive == GetChildCount() && StageSettings.Instance.IsLevelIngame) return;
 
 		BonusData bonusData = bonusQueue.Dequeue();
-		Bonus bonus = GetChildOrNull<Bonus>(GetChildCount() - 1);
-		if (!bonus.IsConnected(Bonus.SignalName.BonusFinished, new(this, MethodName.BonusFinished))) // Connect signal if needed
-			bonus.Connect(Bonus.SignalName.BonusFinished, new(this, MethodName.BonusFinished));
+		int bonusPointAmount = bonusData.CalculateBonusPoints();
 
-		MoveChild(bonus, 0); // Re-order to appear first
-		bonus.ShowBonus(bonusData, bonusData.CalculateBonusPoints()); // Activate bonus
-		bonusesActive++;
+		if (StageSettings.Instance.IsLevelIngame)
+		{
+			Bonus bonus = GetChildOrNull<Bonus>(GetChildCount() - 1);
+			if (!bonus.IsConnected(Bonus.SignalName.BonusFinished, new(this, MethodName.BonusFinished))) // Connect signal if needed
+				bonus.Connect(Bonus.SignalName.BonusFinished, new(this, MethodName.BonusFinished));
+
+			MoveChild(bonus, 0); // Re-order to appear first
+			bonus.ShowBonus(bonusData, bonusPointAmount); // Activate bonus
+			bonusesActive++;
+		}
 
 		if (bonusData.Type == BonusType.EXP)
 		{
@@ -75,7 +80,7 @@ public partial class BonusManager : VBoxContainer
 		}
 
 		// Update score
-		StageSettings.Instance.UpdateScore(bonusData.CalculateBonusPoints(), StageSettings.MathModeEnum.Add);
+		StageSettings.Instance.UpdateScore(bonusPointAmount, StageSettings.MathModeEnum.Add);
 		UpdateQueuedScore();
 	}
 
@@ -271,7 +276,7 @@ public readonly struct BonusData(BonusType type, int amount = 0)
 			case BonusType.GrindShuffle:
 				return "bonus_grind_shuffle";
 			case BonusType.EXP:
-				return TranslationServer.Translate("bonus_exp"); // TODO Replace with localized string
+				return "bonus_exp";
 			default:
 				return string.Empty;
 		}
