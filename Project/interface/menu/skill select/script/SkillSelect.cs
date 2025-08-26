@@ -513,6 +513,7 @@ public partial class SkillSelect : Menu
 		sortTypeLabel.Text = "sys_sort_" + currentSortType.ToString().ToLower();
 		SkillOption currentSkill = SelectedSkill;
 
+		/*
 		// Sort
 		if (currentSortType >= SortEnum.Wind && currentSortType <= SortEnum.Dark)
 		{
@@ -522,6 +523,7 @@ public partial class SkillSelect : Menu
 					CalculateExchange(j, SortEnum.Default);
 			}
 		}
+		*/
 
 		for (int i = skillOptionList.Count - 1; i > 0; i--) // Always start by reseting sorting to default
 		{
@@ -549,13 +551,13 @@ public partial class SkillSelect : Menu
 			// Ensure cursor doesn't get stuck on the edges of the list
 			if (cursorPosition == 0) // Top of the list
 			{
-				VerticalSelection++;
 				cursorPosition++;
+				scrollAmount--;
 			}
 			else if (cursorPosition == PageSize - 1)
 			{
-				VerticalSelection--;
 				cursorPosition--;
+				scrollAmount++;
 			}
 		}
 
