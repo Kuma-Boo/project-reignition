@@ -471,21 +471,28 @@ public partial class SkillSelect : Menu
 		{
 			if (status == SkillEquipStatusEnum.ElementRequirement)
 			{
+				string translationText = string.Empty;
+				int equippedAmount = ActiveSkillRing.GetSkillCountByElement(skill.Element);
+				int amountNeeded = skill.ElementRequirement - equippedAmount;
+
 				switch (skill.Element)
 				{
 					case SkillResource.SkillElement.Wind:
-						alertLabel.Text = Tr("skill_element_requirement_wind");
+						translationText = "skill_element_requirement_wind";
 						break;
 					case SkillResource.SkillElement.Fire:
-						alertLabel.Text = Tr("skill_element_requirement_fire");
+						translationText = "skill_element_requirement_fire";
 						break;
 					case SkillResource.SkillElement.Dark:
-						alertLabel.Text = Tr("skill_element_requirement_dark");
+						translationText = "skill_element_requirement_dark";
 						break;
 				}
 
-				int equippedAmount = ActiveSkillRing.GetSkillCountByElement(skill.Element);
-				alertLabel.Text = alertLabel.Text.Replace("[AMOUNT]", (skill.ElementRequirement - equippedAmount).ToString());
+				if (amountNeeded > 1)
+					translationText += "_multiple";
+
+				alertLabel.Text = Tr(translationText);
+				alertLabel.Text = alertLabel.Text.Replace("[AMOUNT]", amountNeeded.ToString());
 			}
 			else
 			{
