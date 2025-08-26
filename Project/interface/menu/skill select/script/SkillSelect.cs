@@ -507,10 +507,19 @@ public partial class SkillSelect : Menu
 		SkillOption currentSkill = SelectedSkill;
 
 		// Sort
-		for (int i = skillOptionList.Count - 1; i > 0; i--)
+		if (currentSortType >= SortEnum.Wind && currentSortType <= SortEnum.Dark)
+		{
+			for (int i = skillOptionList.Count - 1; i > 0; i--) // Ensure skills are sorted somewhat logically first
+			{
+				for (int j = 0; j < i; j++)
+					CalculateExchange(j, SortEnum.Default);
+			}
+		}
+
+		for (int i = skillOptionList.Count - 1; i > 0; i--) // Always start by reseting sorting to default
 		{
 			for (int j = 0; j < i; j++)
-				CalculateExchange(j);
+				CalculateExchange(j, currentSortType);
 		}
 
 		// Maintain selection
@@ -557,9 +566,9 @@ public partial class SkillSelect : Menu
 		return Tr(nameString);
 	}
 
-	private void CalculateExchange(int index)
+	private void CalculateExchange(int index, SortEnum sortType)
 	{
-		switch (currentSortType)
+		switch (sortType)
 		{
 			case SortEnum.Default:
 				if ((!isDescendingSort && skillOptionList[index].Skill.Key > skillOptionList[index + 1].Skill.Key) ||
