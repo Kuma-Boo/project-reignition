@@ -189,7 +189,6 @@ public class SkillRing
 			if (conflictSkill.ElementRequirement == 0 || conflictSkill.Element != augment.Element)
 				continue;
 
-			GD.PrintT(resultingElementCount, conflictSkill.ElementRequirement);
 			if (resultingElementCount <= conflictSkill.ElementRequirement)
 			{
 				// Can't unequip bc of a different skill

@@ -19,6 +19,7 @@ public partial class SkillSelect : Menu
 	[Export] private Label alertLabel;
 	private int AlertSelection;
 	private bool IsAlertMenuActive { get; set; }
+	private SkillKey AlertMenuTargetSkill = SkillKey.Count;
 
 	private bool IsEditingAugment { get; set; }
 
@@ -347,8 +348,19 @@ public partial class SkillSelect : Menu
 		{
 			if (AlertSelection == 1)
 			{
-				// Toggle skills
-				SwapConflictSkills();
+				if (AlertMenuTargetSkill != SkillKey.Count)
+				{
+					// Unequip a different skill before equipping this one
+					ActiveSkillRing.ForceUnequipSkill(AlertMenuTargetSkill);
+					ToggleSkill();
+					Redraw();
+				}
+				else
+				{
+					// Toggle skills
+					SwapConflictSkills();
+				}
+
 				alertAnimator.Play("confirm");
 			}
 			else
@@ -423,10 +435,9 @@ public partial class SkillSelect : Menu
 			}
 			else if (unequippedKey != SkillKey.Count)
 			{
-				// TODO Add popup confirmation
 				// Conflict due to element count
-				ActiveSkillRing.ForceUnequipSkill(unequippedKey);
-				return ToggleSkill();
+				ShowAlertMenu(Runtime.Instance.SkillList.GetSkill(key), SkillEquipStatusEnum.ElementRequirement, unequippedKey);
+				return false;
 			}
 		}
 
@@ -451,16 +462,18 @@ public partial class SkillSelect : Menu
 		return false; // Something failed
 	}
 
-	private void ShowAlertMenu(SkillResource skill, SkillEquipStatusEnum status)
+	private void ShowAlertMenu(SkillResource skill, SkillEquipStatusEnum status, SkillKey skillKey = SkillKey.Count)
 	{
 		// Open alert menu
 		IsAlertMenuActive = true;
+		AlertMenuTargetSkill = skillKey;
 		alertAnimator.Play("RESET");
 		alertAnimator.Advance(0.0);
 
-		if (status == SkillEquipStatusEnum.Conflict)
+		if (status == SkillEquipStatusEnum.Conflict || status == SkillEquipStatusEnum.ElementRequirement)
 		{
-			SkillResource conflictingSkill = ActiveSkillRing.GetConflictingSkill(skill.Key);
+			SkillResource conflictingSkill = status == SkillEquipStatusEnum.Conflict ? ActiveSkillRing.GetConflictingSkill(skill.Key) :
+				Runtime.Instance.SkillList.GetSkill(skillKey);
 
 			alertLabel.Text = Tr("skill_conflict");
 			alertLabel.Text = alertLabel.Text.Replace("SKILL", Tr(skill.NameKey));
@@ -513,7 +526,6 @@ public partial class SkillSelect : Menu
 		sortTypeLabel.Text = "sys_sort_" + currentSortType.ToString().ToLower();
 		SkillOption currentSkill = SelectedSkill;
 
-		/*
 		// Sort
 		if (currentSortType >= SortEnum.Wind && currentSortType <= SortEnum.Dark)
 		{
@@ -523,7 +535,6 @@ public partial class SkillSelect : Menu
 					CalculateExchange(j, SortEnum.Default);
 			}
 		}
-		*/
 
 		for (int i = skillOptionList.Count - 1; i > 0; i--) // Always start by reseting sorting to default
 		{
