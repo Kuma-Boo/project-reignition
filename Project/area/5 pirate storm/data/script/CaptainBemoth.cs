@@ -121,6 +121,8 @@ public partial class CaptainBemoth : PathFollow3D
 		Progress = 0;
 		root.GlobalTransform = Transform3D.Identity;
 		animator.Set(DefeatTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+
+		Player.Skills.DisableBreakSkills();
 		Player.Animator.PlayOneshotAnimation(DefeatCutsceneID);
 
 		BonusManager.instance.QueueBonus(new(BonusType.Boss, 8000));
@@ -723,6 +725,9 @@ public partial class CaptainBemoth : PathFollow3D
 	private void DamagePlayer()
 	{
 		if (hasPlayerJumpedOffHorn) // Player must have jumped off already
+			return;
+
+		if (Player.IsHomingAttacking) // Prevent unfair damage
 			return;
 
 		// Shock attack
