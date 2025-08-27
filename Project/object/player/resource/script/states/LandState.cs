@@ -23,6 +23,7 @@ public partial class LandState : PlayerState
 			Player.RemoveLockoutData(Player.ActiveLockoutData);
 		}
 
+		Player.ResetFallTimer();
 		Player.VerticalSpeed = 0;
 		Player.UpdateOrientation();
 		Player.SnapToGround();

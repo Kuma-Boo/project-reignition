@@ -1034,6 +1034,25 @@ public partial class PlayerController : CharacterBody3D
 		EmitSignal(SignalName.Defeated);
 	}
 
+	public float FallTimer { get; set; }
+	private readonly float FallDefeatLength = 30f;
+	public void ResetFallTimer() => FallTimer = 0;
+	public void AttemptFallIntoTheVoid()
+	{
+		FallTimer += PhysicsManager.physicsDelta;
+		if (FallTimer < FallDefeatLength)
+			return;
+
+		FallDefeat();
+	}
+
+	public void FallDefeat()
+	{
+		ResetFallTimer();
+		StartRespawn();
+		Effect.PlayVoice("fall");
+	}
+
 	public bool IsDebugRespawn { get; private set; }
 	public void StartRespawn(bool debugRespawn = false)
 	{

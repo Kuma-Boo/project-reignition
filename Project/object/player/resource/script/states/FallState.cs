@@ -5,14 +5,10 @@ namespace Project.Gameplay;
 
 public partial class FallState : PlayerState
 {
-	[Export]
-	private PlayerState landState;
-	[Export]
-	private PlayerState stompState;
-	[Export]
-	private PlayerState jumpDashState;
-	[Export]
-	private PlayerState homingAttackState;
+	[Export] private PlayerState landState;
+	[Export] private PlayerState stompState;
+	[Export] private PlayerState jumpDashState;
+	[Export] private PlayerState homingAttackState;
 
 	public override void EnterState()
 	{
@@ -32,7 +28,6 @@ public partial class FallState : PlayerState
 
 		if (Player.IsOnGround)
 			return landState;
-
 
 		if (Player.Controller.IsJumpBufferActive)
 		{
@@ -73,6 +68,7 @@ public partial class FallState : PlayerState
 			Player.StartLightSpeedDash();
 		}
 
+		Player.AttemptFallIntoTheVoid();
 		return null;
 	}
 
