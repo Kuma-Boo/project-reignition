@@ -672,6 +672,8 @@ public partial class IfritGolem : Node3D
 
 		cutsceneCamera.previousSettings = bounceCameraSettings;
 		cutsceneCamera.Activate();
+
+		Player.Skills.DisableBreakSkills();
 		Player.Deactivate();
 		Player.AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
 

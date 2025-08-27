@@ -645,10 +645,6 @@ public partial class StageSettings : Node3D
 		if (isCompletionDemoActive)
 			return;
 
-		Node3D objectParent = GetParent().GetChildOrNull<Node3D>(GetIndex() + 1);
-		if (objectParent != null) // Hide objects, which should always be the child after the static node
-			objectParent.Visible = false;
-
 		isCompletionDemoActive = true;
 		EmitSignal(SignalName.LevelDemoStarted);
 

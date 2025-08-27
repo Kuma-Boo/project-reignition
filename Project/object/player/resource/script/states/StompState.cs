@@ -55,6 +55,7 @@ public partial class StompState : PlayerState
 		if (Player.IsOnGround)
 			return landState;
 
+		Player.AttemptFallIntoTheVoid();
 		return null;
 	}
 
