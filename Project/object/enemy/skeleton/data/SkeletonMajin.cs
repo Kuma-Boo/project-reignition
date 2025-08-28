@@ -259,6 +259,8 @@ public partial class SkeletonMajin : Enemy
 
 	protected override void Defeat()
 	{
+		Deactivate(true);
+
 		if (isImmortal)
 		{
 			currentHealth = 0;
@@ -273,9 +275,6 @@ public partial class SkeletonMajin : Enemy
 			base.Defeat();
 		}
 
-		Deactivate(true);
-
-		Player.MovementAngle = Player.PathFollower.ForwardAngle; // More consistent direction
 		if (isImmortal)
 			stateTimer = ImmortalRespawnTime;
 	}
@@ -284,7 +283,7 @@ public partial class SkeletonMajin : Enemy
 	{
 		IsActive = false;
 		AnimationState.Start((!isDefeated || isImmortal) ? DamageAnimation : DefeatAnimation);
-		CallDeferred(MethodName.SetHitboxStatus, false);
+		SetHitboxStatus(false);
 	}
 
 	public void OnHurtboxEntered(Area3D a)
