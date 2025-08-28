@@ -567,15 +567,15 @@ public partial class SaveManager : Node
 		switch (Config.softShadowQuality)
 		{
 			case QualitySetting.Low:
-				targetShadowAtlasSize = 1024;
+				targetShadowAtlasSize = 2048;
 				targetSoftShadowQuality = RenderingServer.ShadowQuality.SoftLow;
 				break;
 			case QualitySetting.Medium:
-				targetShadowAtlasSize = 2048;
+				targetShadowAtlasSize = 4096;
 				targetSoftShadowQuality = RenderingServer.ShadowQuality.SoftMedium;
 				break;
 			case QualitySetting.High:
-				targetShadowAtlasSize = 4096;
+				targetShadowAtlasSize = 8192;
 				targetSoftShadowQuality = RenderingServer.ShadowQuality.SoftHigh;
 				break;
 		}
