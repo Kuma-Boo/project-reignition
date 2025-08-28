@@ -692,6 +692,7 @@ public partial class PlayerController : CharacterBody3D
 
 	public void StartDoubleJump()
 	{
+		Lockon.IsMonitoring = true;
 		Effect.PlayDoubleJumpFX();
 		VerticalSpeed = Runtime.CalculateJumpPower(Stats.DoubleJumpHeight);
 
