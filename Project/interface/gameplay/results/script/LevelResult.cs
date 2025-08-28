@@ -29,9 +29,20 @@ public partial class LevelResult : Control
 
 	public override void _Ready()
 	{
-		Stage?.Connect(StageSettings.SignalName.LevelCompleted, new Callable(this, MethodName.StartResults), (uint)ConnectFlags.Deferred);
-		Stage?.Connect(StageSettings.SignalName.LevelDemoStarted, new Callable(this, MethodName.MuteGameplaySoundEffects));
+		if (IsInstanceValid(Stage))
+		{
+			Stage.Connect(StageSettings.SignalName.LevelCompleted, new Callable(this, MethodName.StartResults), (uint)ConnectFlags.Deferred);
+			Stage.Connect(StageSettings.SignalName.LevelDemoStarted, new Callable(this, MethodName.MuteGameplaySoundEffects));
+		}
+
+		if (IsInstanceValid(DebugManager.Instance))
+		{
+			OnHUDVisibilityToggled();
+			DebugManager.Instance.Connect(DebugManager.SignalName.HUDToggled, new Callable(this, MethodName.OnHUDVisibilityToggled));
+		}
 	}
+
+	private void OnHUDVisibilityToggled() => Visible = !DebugManager.Instance.DisableHUD;
 
 	public override void _PhysicsProcess(double _)
 	{
