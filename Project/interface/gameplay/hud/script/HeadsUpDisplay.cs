@@ -17,6 +17,12 @@ public partial class HeadsUpDisplay : Control
 
 	public override void _Ready()
 	{
+		if (IsInstanceValid(DebugManager.Instance))
+		{
+			OnHUDVisibilityToggled();
+			DebugManager.Instance.Connect(DebugManager.SignalName.HUDToggled, new Callable(this, MethodName.OnHUDVisibilityToggled));
+		}
+
 		score.InitializeRankPreviewer();
 		rings.InitializeRings();
 		objectives.InitializeObjectives();
@@ -32,6 +38,8 @@ public partial class HeadsUpDisplay : Control
 			Stage.Connect(nameof(StageSettings.LevelCompleted), new Callable(this, MethodName.OnLevelCompleted)); // Hide interface
 		}
 	}
+
+	private void OnHUDVisibilityToggled() => Visible = !DebugManager.Instance.DisableHUD;
 
 	#region Rings
 	[Export] private Rings rings;

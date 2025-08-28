@@ -562,12 +562,12 @@ public partial class SaveManager : Node
 
 		RenderingServer.EnvironmentGlowSetUseBicubicUpscale(Config.bloomMode == QualitySetting.High);
 
-		int targetShadowAtlasSize = 4096;
-		bool use16BitShadowAtlas = Config.softShadowQuality == QualitySetting.High;
+		int targetShadowAtlasSize = 2048;
 		RenderingServer.ShadowQuality targetSoftShadowQuality = RenderingServer.ShadowQuality.Hard;
 		switch (Config.softShadowQuality)
 		{
 			case QualitySetting.Low:
+				targetShadowAtlasSize = 2048;
 				targetSoftShadowQuality = RenderingServer.ShadowQuality.SoftLow;
 				break;
 			case QualitySetting.Medium:
@@ -580,8 +580,8 @@ public partial class SaveManager : Node
 				break;
 		}
 
-		RenderingServer.DirectionalShadowAtlasSetSize(targetShadowAtlasSize, use16BitShadowAtlas);
-		RenderingServer.ViewportSetPositionalShadowAtlasSize(viewportRid, targetShadowAtlasSize, use16BitShadowAtlas);
+		RenderingServer.DirectionalShadowAtlasSetSize(targetShadowAtlasSize, false);
+		RenderingServer.ViewportSetPositionalShadowAtlasSize(viewportRid, targetShadowAtlasSize, false);
 		RenderingServer.DirectionalSoftShadowFilterSetQuality(targetSoftShadowQuality);
 		RenderingServer.PositionalSoftShadowFilterSetQuality(targetSoftShadowQuality);
 
@@ -600,9 +600,9 @@ public partial class SaveManager : Node
 					50, 300);
 				break;
 			case QualitySetting.High:
-				RenderingServer.EnvironmentSetSsaoQuality(RenderingServer.EnvironmentSsaoQuality.High, false, .5f, 2,
+				RenderingServer.EnvironmentSetSsaoQuality(RenderingServer.EnvironmentSsaoQuality.High, true, .5f, 2,
 					50, 300);
-				RenderingServer.EnvironmentSetSsilQuality(RenderingServer.EnvironmentSsilQuality.High, false, .5f, 2,
+				RenderingServer.EnvironmentSetSsilQuality(RenderingServer.EnvironmentSsilQuality.High, true, .5f, 2,
 					50, 300);
 				break;
 		}

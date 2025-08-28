@@ -384,13 +384,12 @@ public partial class DebugManager : Control
 	#endregion
 
 	#region Promo Settings
+	[Signal] public delegate void HUDToggledEventHandler();
 	public bool DisableHUD { get; private set; }
 	public void ToggleHUD(bool enabled)
 	{
 		DisableHUD = enabled;
-
-		if (!IsInstanceValid(HeadsUpDisplay.Instance)) return;
-		HeadsUpDisplay.Instance.SetVisibility(!enabled);
+		EmitSignal(SignalName.HUDToggled);
 	}
 
 	public bool DisableReticle { get; private set; }

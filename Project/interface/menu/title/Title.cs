@@ -8,8 +8,7 @@ namespace Project.Interface.Menus
 	/// </summary>
 	public partial class Title : Menu
 	{
-		[Export]
-		private Label versionLabel;
+		[Export] private Label versionLabel;
 
 		private bool isCutsceneActive;
 		private float cutsceneTimer;
@@ -19,13 +18,12 @@ namespace Project.Interface.Menus
 		{
 			isProcessing = menuMemory[MemoryKeys.ActiveMenu] == (int)MemoryKeys.Title;
 			versionLabel.Text = $"Version {(string)ProjectSettings.GetSetting("application/config/version")}";
+			versionLabel.Visible = !DebugManager.Instance.DisableHUD;
 			base.SetUp();
 		}
 
-
 		protected override void ProcessMenu()
 		{
-
 			if (isCutsceneActive)
 			{
 				if ((Runtime.Instance.IsActionJustPressed("sys_pause", "ui_accept") && !Input.IsActionJustPressed("toggle_fullscreen")) ||
