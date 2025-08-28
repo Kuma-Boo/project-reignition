@@ -87,8 +87,8 @@ public partial class Menu : Control
 	}
 
 	protected virtual void SetUp() { }
-	public void EnableProcessing() => isProcessing = true;
-	public void DisableProcessing() => isProcessing = false;
+	public virtual void EnableProcessing() => isProcessing = true;
+	public virtual void DisableProcessing() => isProcessing = false;
 
 	public virtual void ShowMenu()
 	{

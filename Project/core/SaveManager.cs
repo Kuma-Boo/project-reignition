@@ -69,6 +69,8 @@ public partial class SaveManager : Node
 	#region Config
 	public static ConfigData Config = new();
 	public static bool UseEnglishVoices => Config.voiceLanguage == VoiceLanguage.English;
+	/// <summary> Determines whether the game should ask the player whether to enable quick loading on the main menu. </summary>
+	public bool IsQuickLoadAlertEnabled;
 	private const string ConfigFileName = "config.cfg";
 
 	#region Config Enums
@@ -252,7 +254,7 @@ public partial class SaveManager : Node
 		public bool isUsingHorizontalSoulGauge;
 		public bool isActionPromptsEnabled = true;
 
-		public bool useQuickLoad = true;
+		public bool useQuickLoad;
 
 		/// <summary> Creates a dictionary based on config data. </summary>
 		public Dictionary ToDictionary()
@@ -411,6 +413,8 @@ public partial class SaveManager : Node
 
 			if (dictionary.TryGetValue(nameof(useQuickLoad), out var))
 				useQuickLoad = (bool)var;
+			else
+				Instance.IsQuickLoadAlertEnabled = true;
 		}
 	}
 

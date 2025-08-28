@@ -36,20 +36,26 @@ public partial class MainMenu : Menu
 			CallDeferred(MethodName.ShowMenu);
 	}
 
+	public override void EnableProcessing()
+	{
+		// Show quick load alert (We're reusing the quit menu bc I'm too lazy to manage another alert menu)
+		if (SaveManager.Instance.IsQuickLoadAlertEnabled && !isQuitMenuActive)
+		{
+			ShowQuitMenu();
+			return;
+		}
+
+		base.EnableProcessing();
+	}
+
 	protected override void ProcessMenu()
 	{
 		if (Runtime.Instance.IsActionJustPressed("sys_pause", "ui_accept") && !Input.IsActionJustPressed("toggle_fullscreen"))
 		{
 			if (isQuitMenuActive)
-			{
 				CancelQuitMenu();
-			}
 			else
-			{
-				quitAnimator.Play("show");
-				isQuitMenuActive = true;
-				isQuitSelected = false;
-			}
+				ShowQuitMenu();
 
 			return;
 		}
@@ -58,12 +64,28 @@ public partial class MainMenu : Menu
 		cursor.Position = cursor.Position.SmoothDamp(options[currentSelection].Position, ref cursorVelocity, CursorSmoothing);
 	}
 
+	private void ShowQuitMenu()
+	{
+		isQuitMenuActive = true;
+		isQuitSelected = SaveManager.Instance.IsQuickLoadAlertEnabled;
+
+		quitAnimator.Play(SaveManager.Instance.IsQuickLoadAlertEnabled ? "load-text" : "quit-text");
+		quitAnimator.Advance(0.0);
+
+		quitAnimator.Play(isQuitSelected ? "select-yes" : "select-no");
+		quitAnimator.Advance(0.0);
+
+		quitAnimator.Play("show");
+	}
+
 	[Export]
 	private AnimationPlayer quitAnimator;
 	private bool isQuitMenuActive;
 	private bool isQuitSelected;
 	private void CancelQuitMenu()
 	{
+		SaveManager.Instance.IsQuickLoadAlertEnabled = false;
+
 		if (isQuitSelected)
 		{
 			quitAnimator.Play("select-no");
@@ -108,9 +130,23 @@ public partial class MainMenu : Menu
 		if (isQuitMenuActive)
 		{
 			if (isQuitSelected)
-				quitAnimator.Play("confirm");
+			{
+				if (SaveManager.Instance.IsQuickLoadAlertEnabled)
+				{
+					isQuitMenuActive = false;
+					SaveManager.Config.useQuickLoad = true;
+					quitAnimator.Play("confirm_load");
+				}
+				else
+				{
+					quitAnimator.Play("confirm");
+				}
+			}
 			else
 				CancelQuitMenu();
+
+			if (SaveManager.Instance.IsQuickLoadAlertEnabled) // Enable quick load
+				SaveManager.Instance.IsQuickLoadAlertEnabled = false;
 
 			return;
 		}
