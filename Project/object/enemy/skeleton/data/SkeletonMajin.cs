@@ -118,7 +118,7 @@ public partial class SkeletonMajin : Enemy
 		if (!despawnOnRangeExit)
 			return;
 
-		Deactivate(false);
+		CallDeferred(MethodName.Deactivate, false);
 	}
 
 	protected override void Spawn()

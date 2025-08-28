@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://6rhkc33287q1"]
+[gd_scene load_steps=52 format=3 uid="uid://6rhkc33287q1"]
 
 [ext_resource type="PackedScene" uid="uid://c5ajp56pbyegl" path="res://area/6 skeleton dome/act 2/Static.tscn" id="1_klfa3"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_3uee3"]
@@ -18,7 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://cxb1fxhrsja13" path="res://object/stage/common/SpikeBallStatic.tscn" id="13_duve7"]
 [ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="14_8i4y8"]
 [ext_resource type="PackedScene" uid="uid://bgrpp6vriyi1w" path="res://area/6 skeleton dome/object/platform/PlatformSpiralSmall.tscn" id="14_cv5kw"]
-[ext_resource type="PackedScene" path="res://area/6 skeleton dome/object/obstacle/BonePillar.tscn" id="14_jikjh"]
+[ext_resource type="PackedScene" uid="uid://bilqmq7mc0jrm" path="res://area/6 skeleton dome/object/obstacle/BonePillar.tscn" id="14_jikjh"]
 [ext_resource type="PackedScene" uid="uid://nso0vvogx8g0" path="res://area/6 skeleton dome/object/platform/PlatformSpiralLarge.tscn" id="15_cv5kw"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="16_e42k8"]
 [ext_resource type="PackedScene" uid="uid://dfqrs5gil7236" path="res://area/6 skeleton dome/object/special/Switch.tscn" id="20_e3qh6"]
@@ -60,6 +60,9 @@ point_count = 2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kybv8"]
 size = Vector3(11, 4, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1527v"]
+size = Vector3(2, 2, 11)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nttmr"]
 size = Vector3(13, 4, 5)
@@ -1702,6 +1705,12 @@ transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 30.8511, 1
 [node name="PlatformSpiralSmall9" parent="RampageAct/Objects" instance=ExtResource("14_cv5kw")]
 transform = Transform3D(0.754709, 0, -0.656059, 0, 1, 0, 0.656059, 0, 0.754709, 37.4911, 2, -41.6101)
 
+[node name="VoidFix" type="StaticBody3D" parent="RampageAct/Objects/PlatformSpiralSmall9" groups=["wall"]]
+transform = Transform3D(0.9995599, 0, -0.029666245, 0, 1, 0, 0.029666245, 0, 0.9995599, 0.25, -1.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Objects/PlatformSpiralSmall9/VoidFix"]
+shape = SubResource("BoxShape3D_1527v")
+
 [node name="PlatformSpiralSmall8" parent="RampageAct/Objects" instance=ExtResource("14_cv5kw")]
 transform = Transform3D(0.754709, 0, -0.656059, 0, 1, 0, 0.656059, 0, 0.754709, 36.7393, 1, -42.2637)
 
@@ -2053,25 +2062,27 @@ transform = Transform3D(-0.766044, 0, -0.642788, 0, 1, 0, 0.642788, 0, -0.766044
 transform = Transform3D(-0.819152, 0, -0.573576, 0, 1, 0, 0.573576, 0, -0.819152, 51.721, 1.5, -38.469)
 rangeOverride = 40
 
+[connection signal="Activated" from="RampageAct/Objects/Switch1" to="RampageAct/Dialog/Switch1" method="Activate"]
 [connection signal="Activated" from="RampageAct/Objects/Switch1" to="RampageAct/Objects/ItemBox" method="ShowItemBox"]
 [connection signal="Activated" from="RampageAct/Objects/Switch1" to="RampageAct/Objects/Switch1Cull" method="Activate"]
-[connection signal="Activated" from="RampageAct/Objects/Switch1" to="RampageAct/Dialog/Switch1" method="Activate"]
+[connection signal="Activated" from="RampageAct/Objects/Switch2" to="RampageAct/Dialog/Switch2" method="Activate"]
 [connection signal="Activated" from="RampageAct/Objects/Switch2" to="RampageAct/Objects/ItemBox2" method="ShowItemBox"]
 [connection signal="Activated" from="RampageAct/Objects/Switch2" to="RampageAct/Objects/Spring2" method="ShowLauncher"]
-[connection signal="Activated" from="RampageAct/Objects/Switch2" to="RampageAct/Dialog/Switch2" method="Activate"]
 [connection signal="Activated" from="RampageAct/Objects/PlatformSpiralLarge5/Switch" to="RampageAct/Objects/PlatformSpiralLarge5/Spring" method="ShowLauncher"]
 [connection signal="Activated" from="RampageAct/Objects/Switch" to="RampageAct/Objects/Switch/Spring" method="ShowLauncher"]
+[connection signal="Activated" from="RampageAct/Objects/Switch3" to="RampageAct/Dialog/Switch3" method="Activate"]
 [connection signal="Activated" from="RampageAct/Objects/Switch3" to="RampageAct/Objects/Switch3Cull" method="Activate"]
 [connection signal="Activated" from="RampageAct/Objects/Switch3" to="RampageAct/Objects/Spring1" method="ShowLauncher"]
 [connection signal="Activated" from="RampageAct/Objects/Switch3" to="RampageAct/Objects/Spring3" method="ShowLauncher"]
-[connection signal="Activated" from="RampageAct/Objects/Switch3" to="RampageAct/Dialog/Switch3" method="Activate"]
 [connection signal="Activated" from="RampageAct/Objects/LaunchRing1" to="RampageAct/Objects/LaunchRing1/LaunchCamera" method="Activate"]
 [connection signal="Deactivated" from="RampageAct/Objects/LaunchRing1" to="RampageAct/Objects/LaunchRing1/LaunchCamera" method="Deactivate"]
 [connection signal="Entered" from="RampageAct/Objects/LaunchRing1" to="RampageAct/Objects/LaunchRing1/Camera" method="Activate"]
 [connection signal="Exited" from="RampageAct/Objects/LaunchRing1" to="RampageAct/Objects/LaunchRing1/Camera" method="Deactivate"]
+[connection signal="Activated" from="RampageAct/Objects/Switch4" to="RampageAct/Dialog/Switch4" method="Activate"]
 [connection signal="Activated" from="RampageAct/Objects/Switch4" to="RampageAct/Objects/BonePillar1" method="Activate"]
 [connection signal="Activated" from="RampageAct/Objects/Switch4" to="RampageAct/Objects/BonePillar2" method="Activate"]
-[connection signal="Activated" from="RampageAct/Objects/Switch4" to="RampageAct/Dialog/Switch4" method="Activate"]
+[connection signal="Activated" from="RampageAct/Objects/Switch5" to="RampageAct/Dialog/Switch5" method="Activate"]
+[connection signal="Activated" from="RampageAct/Objects/Switch5" to="RampageAct/Dialog/ActiveCullingTrigger" method="Activate"]
 [connection signal="Activated" from="RampageAct/Objects/Switch5" to="RampageAct/Objects/ItemBoxSwitch5" method="ShowItemBox"]
 [connection signal="Activated" from="RampageAct/Objects/Switch5" to="RampageAct/Objects/BonePillar3" method="Activate"]
 [connection signal="Activated" from="RampageAct/Objects/Switch5" to="RampageAct/Objects/BonePillar4" method="Activate"]
@@ -2105,8 +2116,6 @@ rangeOverride = 40
 [connection signal="Activated" from="RampageAct/Objects/Switch5" to="RampageAct/Enemies/SkeletonMajin27" method="Spawn"]
 [connection signal="Activated" from="RampageAct/Objects/Switch5" to="RampageAct/Enemies/SkeletonMajin28" method="Spawn"]
 [connection signal="Activated" from="RampageAct/Objects/Switch5" to="RampageAct/Enemies/SkeletonMajin29" method="Spawn"]
-[connection signal="Activated" from="RampageAct/Objects/Switch5" to="RampageAct/Dialog/ActiveCullingTrigger" method="Activate"]
-[connection signal="Activated" from="RampageAct/Objects/Switch5" to="RampageAct/Dialog/Switch5" method="Activate"]
 [connection signal="Defeated" from="RampageAct/Enemies/SkeletonMajin4" to="RampageAct/Objects/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="RampageAct/Enemies/SkeletonMajin4" to="RampageAct/Objects/EnemyStone5" method="IncrementCounter"]
 [connection signal="Defeated" from="RampageAct/Enemies/SkeletonMajin5" to="RampageAct/Objects/EnemyStone4" method="IncrementCounter"]
