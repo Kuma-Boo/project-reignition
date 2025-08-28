@@ -4,7 +4,7 @@
 [ext_resource type="Resource" uid="uid://bayssau62u7oe" path="res://resource/level data/skeleton dome/Act3Rampage.tres" id="2_q2bgh"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_pjcmv"]
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="9_5uv7q"]
-[ext_resource type="PackedScene" uid="uid://bgqkl6m4c27kk" path="res://area/6 skeleton dome/object/obstacle/Warp.tscn" id="10_4fjdm"]
+[ext_resource type="PackedScene" uid="uid://cbovci4wqnpxl" path="res://area/6 skeleton dome/object/obstacle/Warp.tscn" id="10_4fjdm"]
 [ext_resource type="PackedScene" uid="uid://dypfstf220mvi" path="res://area/6 skeleton dome/object/obstacle/WarpExit.tscn" id="11_ot83u"]
 [ext_resource type="PackedScene" uid="uid://cxb1fxhrsja13" path="res://object/stage/common/SpikeBallStatic.tscn" id="12_qremn"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="12_v1mhs"]
@@ -936,6 +936,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -130)
 "Attack Settings/Flame Inactive Time" = 2.0
 "Attack Settings/Flame Aggression Radius" = 30
 "Attack Settings/Attack Instantly" = true
+SpawnMode = 1
 
 [node name="RedMajin2" parent="RampageAct/YellowHall" instance=ExtResource("24_ipntq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -134)
@@ -950,6 +951,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -134)
 "Attack Settings/Flame Inactive Time" = 2.0
 "Attack Settings/Flame Aggression Radius" = 30
 "Attack Settings/Attack Instantly" = true
+SpawnMode = 1
 
 [node name="RedMajin1" parent="RampageAct/YellowHall" instance=ExtResource("24_ipntq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -130)
@@ -964,6 +966,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -130)
 "Attack Settings/Flame Inactive Time" = 2.0
 "Attack Settings/Flame Aggression Radius" = 30
 "Attack Settings/Attack Instantly" = true
+SpawnMode = 1
 
 [node name="WarpRed" parent="RampageAct/YellowHall" node_paths=PackedStringArray("warpTarget") instance=ExtResource("14_okxaf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -138.5)
@@ -1001,7 +1004,7 @@ warpTarget = NodePath("../../Throne/WarpExit")
 [connection signal="Teleport" from="RampageAct/BlueHall/WarpRed" to="Static/Visuals/03HallB" method="Deactivate"]
 [connection signal="Teleport" from="RampageAct/BlueHall/WarpRed" to="Static/Visuals/04HallC" method="Activate"]
 [connection signal="Teleport" from="RampageAct/BlueHall/WarpRed" to="Static/Trigger/Path/HallYellowPath" method="Activate"]
-[connection signal="Teleport" from="RampageAct/BlueHall/WarpRed" to="Static/Trigger/Checkpoint/HallTreasure" method="Activate" flags=3]
+[connection signal="Teleport" from="RampageAct/BlueHall/WarpRed" to="Static/Trigger/Checkpoint/HallYellow" method="Activate" flags=3]
 [connection signal="Teleport" from="RampageAct/BlueHall/WarpRed" to="RampageAct/BlueHall" method="Deactivate"]
 [connection signal="Teleport" from="RampageAct/BlueHall/WarpRed" to="RampageAct/YellowHall" method="Activate"]
 [connection signal="Defeated" from="RampageAct/YellowHall/SkeletonMajin5" to="RampageAct/YellowHall/EnemyStone3" method="IncrementCounter"]
@@ -1013,6 +1016,7 @@ warpTarget = NodePath("../../Throne/WarpExit")
 [connection signal="Teleport" from="RampageAct/YellowHall/WarpRed" to="Static/Visuals/01Throne" method="Activate"]
 [connection signal="Teleport" from="RampageAct/YellowHall/WarpRed" to="Static/Visuals/04HallC" method="Deactivate"]
 [connection signal="Teleport" from="RampageAct/YellowHall/WarpRed" to="Static/Trigger/Path/ThronePathReverse" method="Activate"]
+[connection signal="Teleport" from="RampageAct/YellowHall/WarpRed" to="RampageAct/Throne" method="Activate"]
 [connection signal="Teleport" from="RampageAct/YellowHall/WarpRed" to="RampageAct/YellowHall" method="Deactivate"]
 
 [editable path="Static"]
