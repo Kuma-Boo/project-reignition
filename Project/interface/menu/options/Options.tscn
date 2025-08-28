@@ -2230,7 +2230,7 @@ _data = {
 &"video": SubResource("Animation_q1gli")
 }
 
-[node name="Options" type="Control" node_paths=PackedStringArray("cursor", "cursorAnimator", "contentContainer", "resetAnimator", "lockNode", "scrollBar", "videoLabels", "audioLabels", "languageLabels", "controlLabels", "interfaceLabels", "partyMappingLabels", "controlMappingOptions", "partyMappingOptions", "bgm", "animator")]
+[node name="Options" type="Control" node_paths=PackedStringArray("cursor", "cursorAnimator", "contentContainer", "resetAnimator", "lockNode", "scrollBar", "videoLabels", "audioLabels", "languageLabels", "controlLabels", "interfaceLabels", "partyMappingLabels", "generalLabels", "controlMappingOptions", "partyMappingOptions", "bgm", "animator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -2250,6 +2250,7 @@ languageLabels = [NodePath("MenuBase/ContentClip/Content/Language/RSide/Options/
 controlLabels = [NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/DeadzoneLabel"), NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/BreakLabel"), NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/JumpLabel")]
 interfaceLabels = [NodePath("MenuBase/ContentClip/Content/Interface/RSide/Options/HUDStyleLabel"), NodePath("MenuBase/ContentClip/Content/Interface/RSide/Options/ControllerLabel"), NodePath("MenuBase/ContentClip/Content/Interface/RSide/Options/ButtonStyleLabel"), NodePath("MenuBase/ContentClip/Content/Interface/RSide/Options/SoulGaugeStyleLabel"), NodePath("MenuBase/ContentClip/Content/Interface/RSide/Options/ActionPromptLabel")]
 partyMappingLabels = [NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/RSide/Options/PlayerLabel"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/RSide/Options/DeviceLabel")]
+generalLabels = [NodePath("MenuBase/ContentClip/Content/Options/RSide/Options/QuickLoad")]
 controlMappingOptions = [NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveUp"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveDown"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveLeft"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveRight"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Jump"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Action"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/SpeedBreak"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/TimeBreak"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Attack"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Brake"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/LightDash"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/StepLeft"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/StepRight"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Pause"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Select"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Cancel"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Sort"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Clear")]
 partyMappingOptions = [NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/Options/MoveUp"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/Options/MoveDown"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/Options/MoveLeft"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/Options/MoveRight"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/Options/Primary"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/Options/Secondary"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/Options/Pause")]
 bgm = NodePath("BGM")
@@ -2356,7 +2357,7 @@ blend_shapes/Flip = 0.5
 blend_shapes/Stretch = 1.0
 
 [node name="Page2" parent="World/ControlBook/ControlBook/BookRoot" index="2" instance=ExtResource("7_37jow")]
-transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 0.575, 0)
+transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 0, 0.575, 0)
 
 [node name="PageMesh" parent="World/ControlBook/ControlBook/BookRoot/Page2" index="0"]
 layers = 2
@@ -2451,7 +2452,6 @@ UpdateEveryFrame = true
 
 [node name="MenuBase" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 192.0
@@ -2527,14 +2527,12 @@ grow_vertical = 2
 
 [node name="Content" type="Control" parent="MenuBase/ContentClip"]
 layout_mode = 1
-anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 552.0
 grow_horizontal = 2
 
 [node name="Options" type="Control" parent="MenuBase/ContentClip/Content"]
 layout_mode = 1
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 20.0
@@ -2544,7 +2542,6 @@ grow_vertical = 2
 
 [node name="LSide" type="Control" parent="MenuBase/ContentClip/Content/Options"]
 layout_mode = 1
-anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = 200.0
 offset_right = 1000.0
@@ -2552,7 +2549,7 @@ grow_vertical = 2
 
 [node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Options/LSide"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_bottom = 148.0
@@ -2600,6 +2597,14 @@ label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
 
+[node name="QuickLoad" type="Label" parent="MenuBase/ContentClip/Content/Options/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "option_quick_load"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
 [node name="ResetLabel" type="Label" parent="MenuBase/ContentClip/Content/Options/LSide/Options"]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
@@ -2610,7 +2615,6 @@ uppercase = true
 
 [node name="RSide" type="Control" parent="MenuBase/ContentClip/Content/Options"]
 layout_mode = 1
-anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -2621,7 +2625,7 @@ grow_vertical = 2
 
 [node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Options/RSide"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_bottom = 148.0
@@ -2674,10 +2678,18 @@ horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
+[node name="QuickLoad" type="Label" parent="MenuBase/ContentClip/Content/Options/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "enabled"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
 [node name="Video" type="Control" parent="MenuBase/ContentClip/Content"]
 visible = false
 layout_mode = 1
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 20.0
@@ -2687,7 +2699,6 @@ grow_vertical = 2
 
 [node name="LSide" type="Control" parent="MenuBase/ContentClip/Content/Video"]
 layout_mode = 1
-anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = 200.0
 offset_right = 1000.0
@@ -2695,7 +2706,7 @@ grow_vertical = 2
 
 [node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Video/LSide"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_bottom = 148.0
@@ -2825,7 +2836,6 @@ uppercase = true
 
 [node name="RSide" type="Control" parent="MenuBase/ContentClip/Content/Video"]
 layout_mode = 1
-anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -2836,7 +2846,7 @@ grow_vertical = 2
 
 [node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Video/RSide"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_bottom = 148.0
@@ -2982,7 +2992,6 @@ uppercase = true
 [node name="Audio" type="Control" parent="MenuBase/ContentClip/Content"]
 visible = false
 layout_mode = 1
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 20.0
@@ -2992,7 +3001,6 @@ grow_vertical = 2
 
 [node name="LSide" type="Control" parent="MenuBase/ContentClip/Content/Audio"]
 layout_mode = 1
-anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = 200.0
 offset_right = 1000.0
@@ -3000,7 +3008,7 @@ grow_vertical = 2
 
 [node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Audio/LSide"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_bottom = 148.0
@@ -3050,7 +3058,6 @@ uppercase = true
 
 [node name="RSide" type="Control" parent="MenuBase/ContentClip/Content/Audio"]
 layout_mode = 1
-anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -3061,7 +3068,7 @@ grow_vertical = 2
 
 [node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Audio/RSide"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_bottom = 148.0
@@ -3117,7 +3124,6 @@ uppercase = true
 [node name="Language" type="Control" parent="MenuBase/ContentClip/Content"]
 visible = false
 layout_mode = 1
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 20.0
@@ -3127,7 +3133,6 @@ grow_vertical = 2
 
 [node name="LSide" type="Control" parent="MenuBase/ContentClip/Content/Language"]
 layout_mode = 1
-anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = 200.0
 offset_right = 1000.0
@@ -3135,7 +3140,7 @@ grow_vertical = 2
 
 [node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Language/LSide"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_bottom = 148.0
@@ -3177,7 +3182,6 @@ uppercase = true
 
 [node name="RSide" type="Control" parent="MenuBase/ContentClip/Content/Language"]
 layout_mode = 1
-anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -3188,7 +3192,7 @@ grow_vertical = 2
 
 [node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Language/RSide"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_bottom = 148.0
@@ -3235,7 +3239,6 @@ uppercase = true
 [node name="Interface" type="Control" parent="MenuBase/ContentClip/Content"]
 visible = false
 layout_mode = 1
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 20.0
@@ -3245,7 +3248,6 @@ grow_vertical = 2
 
 [node name="LSide" type="Control" parent="MenuBase/ContentClip/Content/Interface"]
 layout_mode = 1
-anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = 200.0
 offset_right = 1000.0
@@ -3253,7 +3255,7 @@ grow_vertical = 2
 
 [node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Interface/LSide"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_bottom = 148.0
@@ -3303,7 +3305,6 @@ uppercase = true
 
 [node name="RSide" type="Control" parent="MenuBase/ContentClip/Content/Interface"]
 layout_mode = 1
-anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -3314,7 +3315,7 @@ grow_vertical = 2
 
 [node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Interface/RSide"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_bottom = 148.0
@@ -3370,7 +3371,6 @@ uppercase = true
 [node name="Control" type="Control" parent="MenuBase/ContentClip/Content"]
 visible = false
 layout_mode = 1
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 20.0
@@ -3388,7 +3388,6 @@ grow_vertical = 2
 
 [node name="LSide" type="Control" parent="MenuBase/ContentClip/Content/Control/Common"]
 layout_mode = 1
-anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = 200.0
 offset_right = 1000.0
@@ -3396,7 +3395,7 @@ grow_vertical = 2
 
 [node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Control/Common/LSide"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_bottom = 148.0
@@ -3462,7 +3461,6 @@ uppercase = true
 
 [node name="RSide" type="Control" parent="MenuBase/ContentClip/Content/Control/Common"]
 layout_mode = 1
-anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -3473,7 +3471,7 @@ grow_vertical = 2
 
 [node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Control/Common/RSide"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_bottom = 148.0
@@ -3538,14 +3536,13 @@ uppercase = true
 [node name="Mapping" type="Control" parent="MenuBase/ContentClip/Content/Control"]
 visible = false
 layout_mode = 1
-anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 1536.0
 grow_vertical = 2
 
 [node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Control/Mapping"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 200.0
@@ -3648,14 +3645,12 @@ inputId = &"sys_clear"
 [node name="PartyMapping" type="Control" parent="MenuBase/ContentClip/Content/Control"]
 visible = false
 layout_mode = 1
-anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 1536.0
 grow_vertical = 2
 
 [node name="LSide" type="Control" parent="MenuBase/ContentClip/Content/Control/PartyMapping"]
 layout_mode = 1
-anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = 200.0
 offset_right = 1000.0
@@ -3663,7 +3658,7 @@ grow_vertical = 2
 
 [node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Control/PartyMapping/LSide"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_bottom = 148.0
@@ -3689,7 +3684,6 @@ uppercase = true
 
 [node name="RSide" type="Control" parent="MenuBase/ContentClip/Content/Control/PartyMapping"]
 layout_mode = 1
-anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -3700,7 +3694,7 @@ grow_vertical = 2
 
 [node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Control/PartyMapping/RSide"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_bottom = 148.0
@@ -3729,7 +3723,7 @@ uppercase = true
 
 [node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Control/PartyMapping"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 200.0
@@ -3801,7 +3795,7 @@ patch_margin_bottom = 16
 [node name="ScrollPosition" type="TextureRect" parent="MenuBase/ScrollBar"]
 self_modulate = Color(0.870588, 0, 0, 1)
 layout_mode = 1
-anchors_preset = 5
+anchors_preset = -1
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -15.0
@@ -3927,7 +3921,7 @@ region_enabled = true
 region_rect = Rect2(367, 0, 140, 60)
 
 [node name="Background" type="NinePatchRect" parent="ResetMenu/Menu/Parent/Window"]
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -488.0
@@ -3977,7 +3971,6 @@ region_enabled = true
 region_rect = Rect2(367, 0, 140, 60)
 
 [node name="Text" type="Control" parent="ResetMenu/Menu/Parent"]
-layout_mode = 3
 anchors_preset = 0
 
 [node name="Options" type="HBoxContainer" parent="ResetMenu/Menu/Parent/Text"]
@@ -4092,8 +4085,8 @@ script = ExtResource("19_agawd")
 loopStartPosition = 0.01
 loopEndPosition = 122.4
 
-[connection signal="JumpFinished" from="World/JumpStart/JumpStart" to="." method="LockPlayer"]
 [connection signal="JumpFinished" from="World/JumpStart/JumpStart" to="." method="EnableProcessing"]
+[connection signal="JumpFinished" from="World/JumpStart/JumpStart" to="." method="LockPlayer"]
 
 [editable path="World/ControlBook/Collision"]
 [editable path="World/ControlBook/ControlBook"]
