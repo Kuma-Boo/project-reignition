@@ -55,6 +55,7 @@ public partial class BounceState : PlayerState
 		if (!Player.IsLockoutActive || Player.ActiveLockoutData != LockoutSettings)
 			Player.AddLockoutData(LockoutSettings);
 
+		Player.ResetFallTimer();
 		Player.Animator.ResetState(0.1f);
 		Player.Animator.BounceTrick();
 		Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);

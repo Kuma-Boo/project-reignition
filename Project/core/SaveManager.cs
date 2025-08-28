@@ -252,6 +252,8 @@ public partial class SaveManager : Node
 		public bool isUsingHorizontalSoulGauge;
 		public bool isActionPromptsEnabled = true;
 
+		public bool useQuickLoad = true;
+
 		/// <summary> Creates a dictionary based on config data. </summary>
 		public Dictionary ToDictionary()
 		{
@@ -307,6 +309,8 @@ public partial class SaveManager : Node
 				{ nameof(buttonStyle), (int)buttonStyle },
 				{ nameof(isUsingHorizontalSoulGauge), (bool)isUsingHorizontalSoulGauge },
 				{ nameof(isActionPromptsEnabled), isActionPromptsEnabled },
+
+				{ nameof(useQuickLoad), useQuickLoad }
 			};
 		}
 
@@ -404,6 +408,9 @@ public partial class SaveManager : Node
 				isUsingHorizontalSoulGauge = (bool)var;
 			if (dictionary.TryGetValue(nameof(isActionPromptsEnabled), out var))
 				isActionPromptsEnabled = (bool)var;
+
+			if (dictionary.TryGetValue(nameof(useQuickLoad), out var))
+				useQuickLoad = (bool)var;
 		}
 	}
 

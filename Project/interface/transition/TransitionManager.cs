@@ -104,7 +104,7 @@ public partial class TransitionManager : Node
 		if (data.loadAsynchronously) // Start loading immediately
 		{
 			GD.Print("Async loading started.");
-			ResourceLoader.LoadThreadedRequest(instance.QueuedScene);
+			ResourceLoader.LoadThreadedRequest(instance.QueuedScene, string.Empty, SaveManager.Config.useQuickLoad);
 		}
 
 		if (data.inSpeed == 0 && data.outSpeed == 0)

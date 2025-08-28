@@ -692,6 +692,7 @@ public partial class PlayerController : CharacterBody3D
 
 	public void StartDoubleJump()
 	{
+		Lockon.IsMonitoring = true;
 		Effect.PlayDoubleJumpFX();
 		VerticalSpeed = Runtime.CalculateJumpPower(Stats.DoubleJumpHeight);
 
@@ -1040,7 +1041,7 @@ public partial class PlayerController : CharacterBody3D
 	}
 
 	public float FallTimer { get; set; }
-	private readonly float FallDefeatLength = 30f;
+	private readonly float FallDefeatLength = 20f;
 	public void ResetFallTimer() => FallTimer = 0;
 	public void AttemptFallIntoTheVoid()
 	{

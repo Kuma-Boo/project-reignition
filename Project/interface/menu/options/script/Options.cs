@@ -26,7 +26,7 @@ public partial class Options : Menu
 		switch (currentSubmenu)
 		{
 			case Submenus.Options:
-				maxSelection = 6;
+				maxSelection = 7;
 				break;
 			case Submenus.Video:
 				maxSelection = videoLabels.Length;
@@ -420,6 +420,7 @@ public partial class Options : Menu
 	[Export] private Label[] controlLabels;
 	[Export] private Label[] interfaceLabels;
 	[Export] private Label[] partyMappingLabels;
+	[Export] private Label[] generalLabels;
 
 	private readonly string EnabledString = "option_enable";
 	private readonly string DisabledString = "option_disable";
@@ -531,6 +532,8 @@ public partial class Options : Menu
 
 		partyMappingLabels[0].Text = Tr(PlayerString).Replace("0", partyPlayerIndex.ToString());
 		partyMappingLabels[1].Text = partyMappingOptions[0].GetDevice();
+
+		generalLabels[0].Text = SaveManager.Config.useQuickLoad ? EnabledString : DisabledString;
 
 		// Update interface labels
 		switch (SaveManager.Config.hudStyle)
@@ -653,6 +656,9 @@ public partial class Options : Menu
 		bool settingUpdated = false;
 		switch (currentSubmenu)
 		{
+			case Submenus.Options:
+				settingUpdated = SlideOption();
+				break;
 			case Submenus.Video:
 				settingUpdated = SlideVideoOption(direction);
 				break;
@@ -1056,6 +1062,12 @@ public partial class Options : Menu
 	{
 		if (VerticalSelection == 5)
 		{
+			SlideOption();
+			ConfirmSFX();
+			return;
+		}
+		else if (VerticalSelection == 6)
+		{
 			currentSubmenu = Submenus.ResetSettings;
 			ShowResetMenu();
 			return;
@@ -1063,6 +1075,15 @@ public partial class Options : Menu
 
 		ConfirmSFX();
 		FlipBook((Submenus)VerticalSelection + 1, false, 0);
+	}
+
+	private bool SlideOption()
+	{
+		if (VerticalSelection != 5)
+			return false;
+
+		SaveManager.Config.useQuickLoad = !SaveManager.Config.useQuickLoad;
+		return true;
 	}
 
 	private void ShowResetMenu()
