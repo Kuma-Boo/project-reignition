@@ -1,4 +1,4 @@
-[gd_scene load_steps=91 format=3 uid="uid://csk7y7y8vgg6l"]
+[gd_scene load_steps=92 format=3 uid="uid://csk7y7y8vgg6l"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_g84th"]
 [ext_resource type="PackedScene" uid="uid://npgcl1ctbjyt" path="res://area/5 pirate storm/act 1/environment/01Opening.tscn" id="2_444mk"]
@@ -245,11 +245,64 @@ tracks/3/keys = {
 "values": [2.0, 0.0]
 }
 
+[sub_resource type="Animation" id="Animation_p2b7g"]
+resource_name = "interior"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../../Lighting/CaveLightEvent/InteriorPlayerLight:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [2.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../Lighting/CaveLightEvent/ExteriorPlayerLight:light_energy")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../../Lighting/CaveLightEvent/ExteriorEnvironmentLight:light_energy")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../../Lighting/CaveLightEvent/InteriorEnvironmentLight:light_energy")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [2.0]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_0tpv1"]
 _data = {
 &"RESET": SubResource("Animation_fgslk"),
 &"event": SubResource("Animation_m17ve"),
-&"event-deactivate": SubResource("Animation_avq68")
+&"event-deactivate": SubResource("Animation_avq68"),
+&"interior": SubResource("Animation_p2b7g")
 }
 
 [sub_resource type="QuadMesh" id="QuadMesh_5xsdu"]
@@ -631,6 +684,34 @@ tracks/16/keys = {
 "method": &"Activate"
 }]
 }
+tracks/17/type = "method"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("../Lighting/CaveLightEvent/AnimationPlayer")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"RESET", -1, 1.0, false],
+"method": &"play"
+}]
+}
+tracks/18/type = "method"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("../Triggers/EnvironmentFX/GrottoExit/FX")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_p0r0b"]
 resource_name = "demo2"
@@ -778,6 +859,20 @@ tracks/10/keys = {
 "method": &"Activate"
 }]
 }
+tracks/11/type = "method"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("../Lighting/CaveLightEvent/AnimationPlayer")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"interior", -1, 1.0, false],
+"method": &"play"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_qhv7k"]
 resource_name = "demo3"
@@ -909,6 +1004,20 @@ tracks/9/keys = {
 "values": [{
 "args": [],
 "method": &"Activate"
+}]
+}
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("../Lighting/CaveLightEvent/AnimationPlayer")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"RESET", -1, 1.0, false],
+"method": &"play"
 }]
 }
 
@@ -2228,7 +2337,7 @@ environment = SubResource("Environment_tsasv")
 [node name="DemoCamera" type="Node3D" parent="."]
 
 [node name="Camera" type="Camera3D" parent="DemoCamera"]
-transform = Transform3D(1, 0, 0, 0, 0.996195, 0.0871558, 0, -0.0871558, 0.996195, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 0.99619496, 0.0871558, 0, -0.0871558, 0.99619496, 0, 0, 0)
 cull_mask = 1086
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="DemoCamera"]

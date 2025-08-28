@@ -53,6 +53,13 @@ namespace Project.Interface.Menus
 		{
 			animator.Play("RESET");
 			animator.Seek(0, true);
+
+			if (SaveManager.Config.useProjectReignitionBranding)
+			{
+				animator.Play("pr-logo");
+				animator.Advance(0.0);
+			}
+
 			animator.Play(ShowAnimation);
 
 			cutsceneTimer = 0;

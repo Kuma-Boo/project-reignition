@@ -249,6 +249,7 @@ public partial class SaveManager : Node
 		public VoiceLanguage voiceLanguage = AutoDetectVoiceLocale();
 
 		// Interface
+		public bool useProjectReignitionBranding = true;
 		public HudStyle hudStyle = HudStyle.Retail;
 		public ButtonStyle buttonStyle = ButtonStyle.Style2;
 		public bool isUsingHorizontalSoulGauge;
@@ -307,6 +308,7 @@ public partial class SaveManager : Node
 				{ nameof(textLanguage), (int)textLanguage },
 
 				// Interface
+				{ nameof(useProjectReignitionBranding), useProjectReignitionBranding },
 				{ nameof(hudStyle), (int)hudStyle },
 				{ nameof(buttonStyle), (int)buttonStyle },
 				{ nameof(isUsingHorizontalSoulGauge), (bool)isUsingHorizontalSoulGauge },
@@ -402,6 +404,8 @@ public partial class SaveManager : Node
 				textLanguage = (TextLanguage)(int)var;
 
 			// Interface
+			if (dictionary.TryGetValue(nameof(useProjectReignitionBranding), out var))
+				useProjectReignitionBranding = (bool)var;
 			if (dictionary.TryGetValue(nameof(hudStyle), out var))
 				hudStyle = (HudStyle)(int)var;
 			if (dictionary.TryGetValue(nameof(buttonStyle), out var))

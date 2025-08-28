@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://cbamk7p3d1ddn"]
+[gd_scene load_steps=31 format=3 uid="uid://cbamk7p3d1ddn"]
 
 [ext_resource type="Texture2D" uid="uid://chvedyxbnb0fh" path="res://interface/menu/title/texture/logos/logo en.png" id="1"]
 [ext_resource type="Texture2D" uid="uid://vbh7a47k4llw" path="res://interface/menu/title/texture/transition fade.png" id="3_7q5op"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://druwlyf3jy3tt" path="res://interface/menu/title/texture/corner_L.png" id="12_ww6bn"]
 [ext_resource type="Texture2D" uid="uid://bt6qpovcvk3li" path="res://interface/menu/title/texture/corner_R.png" id="13_h62u8"]
 [ext_resource type="Script" uid="uid://df7uyhsm3g1ji" path="res://video/EventResizer.cs" id="14_h62u8"]
+[ext_resource type="Texture2D" uid="uid://66rrhfu22hn2" path="res://interface/menu/title/texture/logos/logo.png" id="18_34pt3"]
 [ext_resource type="Texture2D" uid="uid://ci31vwpumdkfo" path="res://interface/menu/title/texture/background.png" id="27_lbk60"]
 [ext_resource type="FontFile" uid="uid://dqhxie6ryk82j" path="res://interface/font/otf/Greco Std DB.otf" id="28_g60da"]
 [ext_resource type="SpriteFrames" uid="uid://jc646omm5n2y" path="res://effect/particle/sprite frames/Flame Menu Short.tres" id="28_gutvq"]
@@ -263,6 +264,18 @@ tracks/6/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Logo:texture")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1")]
 }
 
 [sub_resource type="Animation" id="12"]
@@ -731,6 +744,22 @@ tracks/9/keys = {
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_urcaa"]
+resource_name = "pr-logo"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Logo:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("18_34pt3")]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_dvawa"]
 _data = {
 &"RESET": SubResource("9"),
@@ -739,6 +768,7 @@ _data = {
 &"cutscene-start": SubResource("14"),
 &"init": SubResource("Animation_mexqn"),
 &"loop": SubResource("10"),
+&"pr-logo": SubResource("Animation_urcaa"),
 &"show": SubResource("8")
 }
 
@@ -764,7 +794,6 @@ grow_vertical = 2
 [node name="BackgroundClip" type="Control" parent="Background"]
 clip_contents = true
 layout_mode = 1
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_bottom = -1.60205
@@ -773,7 +802,7 @@ grow_vertical = 2
 
 [node name="Background" type="TextureRect" parent="Background/BackgroundClip"]
 layout_mode = 1
-anchors_preset = 10
+anchors_preset = -1
 anchor_right = 1.0
 offset_bottom = 1078.4
 grow_horizontal = 2
@@ -783,13 +812,14 @@ stretch_mode = 6
 
 [node name="LeftCorner" type="TextureRect" parent="Background/BackgroundClip"]
 layout_mode = 1
+anchors_preset = -1
 offset_right = 228.0
 offset_bottom = 220.0
 texture = ExtResource("12_ww6bn")
 
 [node name="RightCorner" type="TextureRect" parent="Background/BackgroundClip"]
 layout_mode = 1
-anchors_preset = 1
+anchors_preset = -1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -228.0
@@ -1084,7 +1114,6 @@ grow_vertical = 1
 [node name="Press Start" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
-anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -16.0
@@ -1139,7 +1168,7 @@ texture = ExtResource("1")
 [node name="VersionLabel" type="Label" parent="."]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
-anchors_preset = 2
+anchors_preset = -1
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 64.0
