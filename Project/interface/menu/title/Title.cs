@@ -9,6 +9,7 @@ namespace Project.Interface.Menus
 	public partial class Title : Menu
 	{
 		[Export] private Label versionLabel;
+		[Export] private Sprite2D startTextSprite;
 
 		private bool isCutsceneActive;
 		private float cutsceneTimer;
@@ -18,8 +19,17 @@ namespace Project.Interface.Menus
 		{
 			isProcessing = menuMemory[MemoryKeys.ActiveMenu] == (int)MemoryKeys.Title;
 			versionLabel.Text = $"Version {(string)ProjectSettings.GetSetting("application/config/version")}";
-			versionLabel.Visible = !DebugManager.Instance.DisableHUD;
+
+			OnHUDToggled();
+			DebugManager.Instance.Connect(DebugManager.SignalName.HUDToggled, new Callable(this, MethodName.OnHUDToggled));
+
 			base.SetUp();
+		}
+
+		private void OnHUDToggled()
+		{
+			versionLabel.Visible = !DebugManager.Instance.DisableHUD;
+			startTextSprite.Visible = !DebugManager.Instance.DisableHUD;
 		}
 
 		protected override void ProcessMenu()
