@@ -90,6 +90,7 @@ public partial class JumpDashState : PlayerState
 			return stompState;
 		}
 
+		Player.AttemptFallIntoTheVoid();
 		return null;
 	}
 
