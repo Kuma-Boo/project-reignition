@@ -439,6 +439,7 @@ public partial class CaptainBemoth : PathFollow3D
 				hintDialogs[hintDialogIndex].Activate();
 
 			hintDialogIndex++;
+			hintDialogIndex = Mathf.Min(hintDialogIndex, hintDialogs.Length - 1);
 		}
 
 		if (isAttackQueued) // Queued attacks are always waves
@@ -735,7 +736,6 @@ public partial class CaptainBemoth : PathFollow3D
 		{
 			ignoreMovementState = true,
 			overrideKnockbackHeight = true,
-			disableDownCancel = true,
 			knockbackHeight = LaunchFallHeight,
 		});
 	}
@@ -800,10 +800,11 @@ public partial class CaptainBemoth : PathFollow3D
 			mainCameraTrigger.Activate();
 
 			// Play dialog
-			if (!hasPlayerJumpedOffHorn && !Player.IsKnockback)
+			if (!hasPlayerJumpedOffHorn && currentState == BemothState.Damaged)
 			{
 				damageDialogs[damageDialogIndex].Activate();
 				damageDialogIndex++;
+				damageDialogIndex = Mathf.Min(damageDialogIndex, damageDialogs.Length - 1);
 			}
 		}
 
