@@ -41,7 +41,7 @@ public partial class Options : Menu
 				maxSelection = 7;
 				break;
 			case Submenus.Interface:
-				maxSelection = 5;
+				maxSelection = 6;
 				break;
 			case Submenus.Mapping:
 				maxSelection = controlMappingOptions.Length;
@@ -536,13 +536,14 @@ public partial class Options : Menu
 		generalLabels[0].Text = SaveManager.Config.useQuickLoad ? EnabledString : DisabledString;
 
 		// Update interface labels
+		interfaceLabels[0].Text = SaveManager.Config.useProjectReignitionBranding ? ReignitedStyle : RetailStyle;
 		switch (SaveManager.Config.hudStyle)
 		{
 			case SaveManager.HudStyle.Retail:
-				interfaceLabels[0].Text = RetailStyle;
+				interfaceLabels[1].Text = RetailStyle;
 				break;
 			case SaveManager.HudStyle.Reignition:
-				interfaceLabels[0].Text = ReignitedStyle;
+				interfaceLabels[1].Text = ReignitedStyle;
 				break;
 		}
 
@@ -562,7 +563,7 @@ public partial class Options : Menu
 				buttonStyle = "option_controller_steam";
 				break;
 		}
-		interfaceLabels[1].Text = buttonStyle;
+		interfaceLabels[2].Text = buttonStyle;
 
 		switch (SaveManager.Config.buttonStyle)
 		{
@@ -573,10 +574,10 @@ public partial class Options : Menu
 				buttonStyle = "option_style2";
 				break;
 		}
-		interfaceLabels[2].Text = buttonStyle;
+		interfaceLabels[3].Text = buttonStyle;
 
-		interfaceLabels[3].Text = SaveManager.Config.isUsingHorizontalSoulGauge ? HorizontalStyle : VerticalStyle;
-		interfaceLabels[4].Text = SaveManager.Config.isActionPromptsEnabled ? EnabledString : DisabledString;
+		interfaceLabels[4].Text = SaveManager.Config.isUsingHorizontalSoulGauge ? HorizontalStyle : VerticalStyle;
+		interfaceLabels[5].Text = SaveManager.Config.isActionPromptsEnabled ? EnabledString : DisabledString;
 	}
 
 	private string GetVoiceLanguageKey(SaveManager.VoiceLanguage voiceLanguage)
@@ -981,6 +982,11 @@ public partial class Options : Menu
 	{
 		if (VerticalSelection == 0)
 		{
+			SaveManager.Config.useProjectReignitionBranding = !SaveManager.Config.useProjectReignitionBranding;
+			return true;
+		}
+		else if (VerticalSelection == 1)
+		{
 			// TODO Add E3 HUD option
 			if (SaveManager.Config.hudStyle == SaveManager.HudStyle.Reignition)
 				SaveManager.Config.hudStyle = SaveManager.HudStyle.Retail;
@@ -988,24 +994,24 @@ public partial class Options : Menu
 				SaveManager.Config.hudStyle = SaveManager.HudStyle.Reignition;
 			return true;
 		}
-		else if (VerticalSelection == 1)
+		else if (VerticalSelection == 2)
 		{
 			int type = WrapSelection((int)SaveManager.Config.controllerType + direction, (int)SaveManager.ControllerType.Count);
 			SaveManager.Config.controllerType = (SaveManager.ControllerType)type;
 			return true;
 		}
-		else if (VerticalSelection == 2)
+		else if (VerticalSelection == 3)
 		{
 			int style = WrapSelection((int)SaveManager.Config.buttonStyle + direction, (int)SaveManager.ButtonStyle.Count);
 			SaveManager.Config.buttonStyle = (SaveManager.ButtonStyle)style;
 			return true;
 		}
-		else if (VerticalSelection == 3)
+		else if (VerticalSelection == 4)
 		{
 			SaveManager.Config.isUsingHorizontalSoulGauge = !SaveManager.Config.isUsingHorizontalSoulGauge;
 			return true;
 		}
-		else if (VerticalSelection == 4)
+		else if (VerticalSelection == 5)
 		{
 			SaveManager.Config.isActionPromptsEnabled = !SaveManager.Config.isActionPromptsEnabled;
 			return true;
