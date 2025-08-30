@@ -318,7 +318,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Paper:scale")
+tracks/0/path = NodePath("Control/Paper:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -1549,7 +1549,7 @@ tracks/15/keys = {
 tracks/16/type = "value"
 tracks/16/imported = false
 tracks/16/enabled = true
-tracks/16/path = NodePath("Paper:scale")
+tracks/16/path = NodePath("Control/Paper:scale")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
@@ -1961,7 +1961,7 @@ tracks/15/keys = {
 tracks/16/type = "value"
 tracks/16/imported = false
 tracks/16/enabled = true
-tracks/16/path = NodePath("Paper:scale")
+tracks/16/path = NodePath("Control/Paper:scale")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
@@ -2391,7 +2391,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Paper:scale")
+tracks/3/path = NodePath("Control/Paper:scale")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -2420,7 +2420,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Paper:scale")
+tracks/1/path = NodePath("Control/Paper:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -3205,11 +3205,11 @@ step = 0.01
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Paper:scale")
+tracks/0/path = NodePath("Control/Paper:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.133333),
+"times": PackedFloat32Array(0.04, 0.133333),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(1e-05, 1), Vector2(1, 1)]
@@ -3276,10 +3276,10 @@ tracks/5/path = NodePath("ScrollLeft:position")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.03, 0.12),
+"times": PackedFloat32Array(0, 0.03, 0.13),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(724, 0), Vector2(724, 0), Vector2(-26, 0)]
+"values": [Vector2(789.995, -9.24), Vector2(789.995, -9.24), Vector2(0, 0)]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
@@ -3288,10 +3288,10 @@ tracks/6/path = NodePath("ScrollRight:position")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.03, 0.12),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.03, 0.12, 0.13),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(724, 0), Vector2(724, 0), Vector2(1755, 0)]
+"values": [Vector2(972.875, 0), Vector2(972.875, 0), Vector2(1755, 0), Vector2(1734, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_c1m3d"]
@@ -3301,7 +3301,7 @@ step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Paper:scale")
+tracks/0/path = NodePath("Control/Paper:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -3721,7 +3721,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Paper:scale")
+tracks/3/path = NodePath("Control/Paper:scale")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -4789,34 +4789,51 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.705882)
 
-[node name="Paper" type="TextureRect" parent="Pause"]
+[node name="Control" type="Control" parent="Pause"]
+clip_contents = true
+layout_mode = 1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 62.0
+offset_right = -27.0
+offset_bottom = -71.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Paper" type="TextureRect" parent="Pause/Control"]
 material = ExtResource("7_u01fk")
+clip_contents = true
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -298.0
-offset_right = 298.0
+offset_left = -296.0
+offset_right = 2155.0
+offset_bottom = 21.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(960, 540)
 texture = ExtResource("10_qdqhi")
-metadata/_edit_lock_ = true
 
 [node name="ScrollLeft" type="TextureRect" parent="Pause"]
 layout_mode = 1
 anchors_preset = -1
+anchor_bottom = 1.0
 offset_left = -26.0
-offset_right = 164.00024
-offset_bottom = 1114.0
+offset_right = 164.0
+grow_vertical = 2
 texture = ExtResource("11_t074q")
 
 [node name="ScrollRight" type="TextureRect" parent="Pause"]
 layout_mode = 1
 anchors_preset = -1
-offset_left = 1755.0
-offset_right = 1941.0
-offset_bottom = 1114.0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -165.0
+offset_right = 21.0
+grow_horizontal = 0
+grow_vertical = 2
 texture = ExtResource("12_73vyn")
 
 [node name="PauseLabel" type="Label" parent="Pause"]
@@ -4829,7 +4846,7 @@ anchor_bottom = 0.5
 offset_left = -320.0
 offset_top = -52.0
 offset_right = 320.0
-offset_bottom = 36.000732
+offset_bottom = 36.000793
 grow_horizontal = 2
 grow_vertical = 2
 text = "sys_pause"
@@ -4884,7 +4901,7 @@ self_modulate = Color(1, 1, 1, 0.588235)
 anchors_preset = -1
 offset_top = 32.0
 offset_right = 200.0
-offset_bottom = 67.0
+offset_bottom = 67.00001
 text = "pause_restart"
 label_settings = ExtResource("8_3gka2")
 uppercase = true
@@ -4930,7 +4947,7 @@ self_modulate = Color(1, 1, 1, 0.588235)
 anchors_preset = -1
 offset_top = 96.0
 offset_right = 200.0
-offset_bottom = 131.0
+offset_bottom = 130.99997
 text = "pause_quit"
 label_settings = ExtResource("8_3gka2")
 uppercase = true
