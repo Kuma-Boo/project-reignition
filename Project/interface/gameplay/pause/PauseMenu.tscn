@@ -1,7 +1,6 @@
-[gd_scene load_steps=103 format=3 uid="uid://coshp5qmt1aq7"]
+[gd_scene load_steps=105 format=3 uid="uid://coshp5qmt1aq7"]
 
 [ext_resource type="Script" uid="uid://dyfvgibst7wnn" path="res://interface/gameplay/pause/PauseMenu.cs" id="1"]
-[ext_resource type="Texture2D" uid="uid://tbukuwdkqg5w" path="res://interface/gameplay/pause/texture/paper.png" id="2_6a5br"]
 [ext_resource type="PackedScene" uid="uid://c3d5r3parf5ur" path="res://interface/gameplay/pause/PauseSkill.tscn" id="2_pyysd"]
 [ext_resource type="Texture2D" uid="uid://dvyihcabrgkby" path="res://interface/menu/level select/texture/no fire soul.png" id="3_2xqwv"]
 [ext_resource type="Texture2D" uid="uid://deahdnedco0h8" path="res://interface/gameplay/pause/texture/flame/pause flame 1.png" id="4_w7b4q"]
@@ -18,6 +17,9 @@
 [ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="7_u01fk"]
 [ext_resource type="LabelSettings" uid="uid://c2ppn463q7sif" path="res://interface/font/PauseOptionFont.tres" id="8_3gka2"]
 [ext_resource type="Texture2D" uid="uid://ftko0u3nnv8" path="res://interface/gameplay/pause/texture/text/status/status common en.png" id="10_lpx5w"]
+[ext_resource type="Texture2D" uid="uid://d3svma0uvqtgk" path="res://interface/gameplay/pause/texture/PaperUpdated.png" id="10_qdqhi"]
+[ext_resource type="Texture2D" uid="uid://hqhhv5t5s5gt" path="res://interface/gameplay/pause/texture/scroll_L_Solid.png" id="11_t074q"]
+[ext_resource type="Texture2D" uid="uid://xnq4tv0n8xkl" path="res://interface/gameplay/pause/texture/scroll_R_Solid.png" id="12_73vyn"]
 [ext_resource type="FontFile" uid="uid://d1bvfghhgreq7" path="res://interface/font/otf/Rodin DB.otf" id="12_mqlo7"]
 [ext_resource type="FontFile" uid="uid://b60t6w3shtof1" path="res://interface/font/bitmap fonts/Status Numbers en.fnt" id="12_tp5bp"]
 [ext_resource type="LabelSettings" uid="uid://b3k06q5urpxjh" path="res://interface/font/PauseStatus.tres" id="12_twx0t"]
@@ -1092,6 +1094,30 @@ tracks/64/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/65/type = "value"
+tracks/65/imported = false
+tracks/65/enabled = true
+tracks/65/path = NodePath("ScrollLeft:position")
+tracks/65/interp = 1
+tracks/65/loop_wrap = true
+tracks/65/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-26, 0)]
+}
+tracks/66/type = "value"
+tracks/66/imported = false
+tracks/66/enabled = true
+tracks/66/path = NodePath("ScrollRight:position")
+tracks/66/interp = 1
+tracks/66/loop_wrap = true
+tracks/66/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1755, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_fg5m5"]
@@ -3175,7 +3201,7 @@ tracks/13/keys = {
 [sub_resource type="Animation" id="58"]
 resource_name = "show"
 length = 0.200003
-step = 0.0333333
+step = 0.01
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -3183,10 +3209,10 @@ tracks/0/path = NodePath("Paper:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.133333),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(1e-05, 1), Vector2(1.1, 1), Vector2(1, 1)]
+"values": [Vector2(1e-05, 1), Vector2(1, 1)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -3242,6 +3268,30 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("ScrollLeft:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.12),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(724, 0), Vector2(724, 0), Vector2(-26, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("ScrollRight:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.12),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(724, 0), Vector2(724, 0), Vector2(1755, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_c1m3d"]
@@ -4624,6 +4674,7 @@ input_2/break_loop_at_end = false
 input_2/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_sm8n7"]
+nodes/output/position = Vector2(720, 980)
 nodes/cancel-2/node = SubResource("AnimationNodeAnimation_2e06l")
 nodes/cancel-2/position = Vector2(-240, 1020)
 nodes/confirm/node = SubResource("AnimationNodeTransition_86qql")
@@ -4642,7 +4693,6 @@ nodes/hide/node = SubResource("AnimationNodeAnimation_sx5l7")
 nodes/hide/position = Vector2(-200, 300)
 nodes/hide-static/node = SubResource("AnimationNodeAnimation_kexeo")
 nodes/hide-static/position = Vector2(-340, 340)
-nodes/output/position = Vector2(720, 980)
 nodes/pause_add/node = SubResource("AnimationNodeAdd2_6x6tc")
 nodes/pause_add/position = Vector2(220, 860)
 nodes/select-0/node = SubResource("AnimationNodeAnimation_t5r15")
@@ -4691,7 +4741,7 @@ nodes/value-2/node = SubResource("AnimationNodeAnimation_jtug2")
 nodes/value-2/position = Vector2(-1180, 1040)
 nodes/value_selection/node = SubResource("AnimationNodeTransition_6f5vy")
 nodes/value_selection/position = Vector2(-1020, 820)
-node_connections = [&"confirm", 0, &"confirm-0", &"confirm", 1, &"confirm-1", &"confirm", 2, &"confirm-3", &"confirm_enabled", 0, &"pause_add", &"confirm_enabled", 1, &"confirm", &"output", 0, &"confirm_enabled", &"pause_add", 0, &"state", &"pause_add", 1, &"status_hide_trigger", &"selection", 0, &"select-0", &"selection", 1, &"select-1", &"selection", 2, &"select-2", &"selection", 3, &"select-3", &"show_trigger", 0, &"selection", &"show_trigger", 1, &"select_show", &"state", 0, &"hide", &"state", 1, &"hide-static", &"state", 2, &"show", &"state", 3, &"show-static", &"state", 4, &"status-hide", &"status_add", 0, &"value_selection", &"status_add", 1, &"status_selection", &"status_hide_trigger", 0, &"status_show_trigger", &"status_hide_trigger", 1, &"cancel-2", &"status_selection", 0, &"status-0", &"status_selection", 1, &"status-1", &"status_selection", 2, &"status-2", &"status_show_trigger", 0, &"submenu_transition", &"status_show_trigger", 1, &"confirm-2", &"submenu_transition", 0, &"show_trigger", &"submenu_transition", 1, &"status_add", &"value_selection", 0, &"value-0", &"value_selection", 1, &"value-1", &"value_selection", 2, &"value-2"]
+node_connections = [&"output", 0, &"confirm_enabled", &"confirm", 0, &"confirm-0", &"confirm", 1, &"confirm-1", &"confirm", 2, &"confirm-3", &"confirm_enabled", 0, &"pause_add", &"confirm_enabled", 1, &"confirm", &"pause_add", 0, &"state", &"pause_add", 1, &"status_hide_trigger", &"selection", 0, &"select-0", &"selection", 1, &"select-1", &"selection", 2, &"select-2", &"selection", 3, &"select-3", &"show_trigger", 0, &"selection", &"show_trigger", 1, &"select_show", &"state", 0, &"hide", &"state", 1, &"hide-static", &"state", 2, &"show", &"state", 3, &"show-static", &"state", 4, &"status-hide", &"status_add", 0, &"value_selection", &"status_add", 1, &"status_selection", &"status_hide_trigger", 0, &"status_show_trigger", &"status_hide_trigger", 1, &"cancel-2", &"status_selection", 0, &"status-0", &"status_selection", 1, &"status-1", &"status_selection", 2, &"status-2", &"status_show_trigger", 0, &"submenu_transition", &"status_show_trigger", 1, &"confirm-2", &"submenu_transition", 0, &"show_trigger", &"submenu_transition", 1, &"status_add", &"value_selection", 0, &"value-0", &"value_selection", 1, &"value-1", &"value_selection", 2, &"value-2"]
 
 [node name="Pause" type="Control" node_paths=PackedStringArray("animator", "pauseCursor", "pauseCursorAnimator", "selectSFX", "description", "statusCursor", "statusCursorAnimator", "values", "missionTypeLabel", "missionDescriptionLabel", "fireSoulParent", "fireSoulRects", "rankRect", "noSkillLabel", "skillContainer", "skillCursor", "skillCursorAnimator", "levelSprite", "skillScrollbar")]
 process_mode = 3
@@ -4742,18 +4792,36 @@ color = Color(0, 0, 0, 0.705882)
 [node name="Paper" type="TextureRect" parent="Pause"]
 material = ExtResource("7_u01fk")
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -298.0
+offset_right = 298.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(960, 540)
-texture = ExtResource("2_6a5br")
+texture = ExtResource("10_qdqhi")
 metadata/_edit_lock_ = true
+
+[node name="ScrollLeft" type="TextureRect" parent="Pause"]
+layout_mode = 1
+anchors_preset = -1
+offset_left = -26.0
+offset_right = 164.00024
+offset_bottom = 1114.0
+texture = ExtResource("11_t074q")
+
+[node name="ScrollRight" type="TextureRect" parent="Pause"]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 1755.0
+offset_right = 1941.0
+offset_bottom = 1114.0
+texture = ExtResource("12_73vyn")
 
 [node name="PauseLabel" type="Label" parent="Pause"]
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = -1
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -4761,7 +4829,7 @@ anchor_bottom = 0.5
 offset_left = -320.0
 offset_top = -52.0
 offset_right = 320.0
-offset_bottom = 36.0007
+offset_bottom = 36.000732
 grow_horizontal = 2
 grow_vertical = 2
 text = "sys_pause"
@@ -4791,6 +4859,7 @@ libraries = {
 }
 
 [node name="Continue" type="Label" parent="Pause/Options"]
+anchors_preset = -1
 offset_right = 200.0
 offset_bottom = 35.0
 text = "pause_continue"
@@ -4812,6 +4881,7 @@ uppercase = true
 
 [node name="Restart" type="Label" parent="Pause/Options"]
 self_modulate = Color(1, 1, 1, 0.588235)
+anchors_preset = -1
 offset_top = 32.0
 offset_right = 200.0
 offset_bottom = 67.0
@@ -4834,6 +4904,7 @@ uppercase = true
 
 [node name="Status" type="Label" parent="Pause/Options"]
 self_modulate = Color(1, 1, 1, 0.588235)
+anchors_preset = -1
 offset_top = 64.0
 offset_right = 200.0
 offset_bottom = 99.0
@@ -4856,6 +4927,7 @@ uppercase = true
 
 [node name="Quit" type="Label" parent="Pause/Options"]
 self_modulate = Color(1, 1, 1, 0.588235)
+anchors_preset = -1
 offset_top = 96.0
 offset_right = 200.0
 offset_bottom = 131.0
@@ -4876,6 +4948,7 @@ modulate = Color(1, 1, 1, 0)
 position = Vector2(280, 0)
 
 [node name="Header" type="Label" parent="Pause/StatusMenu"]
+anchors_preset = -1
 offset_left = -88.0
 offset_top = 136.0
 offset_right = 75.0
@@ -4902,6 +4975,7 @@ libraries = {
 }
 
 [node name="Status" type="Label" parent="Pause/StatusMenu"]
+anchors_preset = -1
 offset_left = -24.0
 offset_top = 280.0
 offset_right = 139.0
@@ -4926,6 +5000,7 @@ uppercase = true
 
 [node name="Mission" type="Label" parent="Pause/StatusMenu"]
 self_modulate = Color(1, 1, 1, 0.588235)
+anchors_preset = -1
 offset_top = 344.0
 offset_right = 172.0
 offset_bottom = 379.0
@@ -4949,6 +5024,7 @@ uppercase = true
 
 [node name="Skills" type="Label" parent="Pause/StatusMenu"]
 self_modulate = Color(1, 1, 1, 0.588235)
+anchors_preset = -1
 offset_top = 408.0
 offset_right = 141.0
 offset_bottom = 443.0
@@ -4975,6 +5051,7 @@ modulate = Color(1, 1, 1, 0)
 position = Vector2(1000, 448)
 
 [node name="BG" type="NinePatchRect" parent="Pause/StatusMenu/ValueMenu"]
+anchors_preset = -1
 offset_left = -368.0
 offset_top = -288.0
 offset_right = 368.0
@@ -5012,6 +5089,7 @@ region_rect = Rect2(0, 472, 396, 32)
 [node name="Status" type="Node2D" parent="Pause/StatusMenu/ValueMenu"]
 
 [node name="Level" type="Label" parent="Pause/StatusMenu/ValueMenu/Status"]
+anchors_preset = -1
 offset_left = -168.0
 offset_top = -256.0
 offset_right = 26.0
@@ -5056,6 +5134,7 @@ region_enabled = true
 region_rect = Rect2(452, 72, 36, 40)
 
 [node name="HighScore" type="Label" parent="Pause/StatusMenu/ValueMenu/Status"]
+anchors_preset = -1
 offset_left = -168.0
 offset_top = -196.0
 offset_right = 252.0
@@ -5086,6 +5165,7 @@ vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="Score" type="Label" parent="Pause/StatusMenu/ValueMenu/Status"]
+anchors_preset = -1
 offset_left = -168.0
 offset_top = -140.0
 offset_right = 252.0
@@ -5117,6 +5197,7 @@ vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="BestTime" type="Label" parent="Pause/StatusMenu/ValueMenu/Status"]
+anchors_preset = -1
 offset_left = -168.0
 offset_top = -84.0
 offset_right = 252.0
@@ -5148,6 +5229,7 @@ vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="Time" type="Label" parent="Pause/StatusMenu/ValueMenu/Status"]
+anchors_preset = -1
 offset_left = -168.0
 offset_top = -28.0
 offset_right = 252.0
@@ -5179,6 +5261,7 @@ vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="StageEXP" type="Label" parent="Pause/StatusMenu/ValueMenu/Status"]
+anchors_preset = -1
 offset_left = -168.0
 offset_top = 28.0
 offset_right = 252.0
@@ -5210,6 +5293,7 @@ vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="TotalEXP" type="Label" parent="Pause/StatusMenu/ValueMenu/Status"]
+anchors_preset = -1
 offset_left = -168.0
 offset_top = 84.0
 offset_right = 252.0
@@ -5241,6 +5325,7 @@ vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="SoulGauge" type="Label" parent="Pause/StatusMenu/ValueMenu/Status"]
+anchors_preset = -1
 offset_left = -168.0
 offset_top = 140.0
 offset_right = 252.0
@@ -5275,6 +5360,7 @@ metadata/_edit_use_anchors_ = true
 modulate = Color(1, 1, 1, 0)
 
 [node name="Header" type="Label" parent="Pause/StatusMenu/ValueMenu/Mission"]
+anchors_preset = -1
 offset_left = -343.0
 offset_top = -280.0
 offset_bottom = -236.0
@@ -5284,6 +5370,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="Type" type="Label" parent="Pause/StatusMenu/ValueMenu/Mission"]
+anchors_preset = -1
 offset_left = -343.0
 offset_top = -232.0
 offset_right = 11.0
@@ -5294,6 +5381,7 @@ text = "Go for the Goal"
 vertical_alignment = 1
 
 [node name="Description" type="Label" parent="Pause/StatusMenu/ValueMenu/Mission"]
+anchors_preset = -1
 offset_left = -343.0
 offset_top = -176.0
 offset_right = 344.0
@@ -5304,6 +5392,7 @@ autowrap_mode = 3
 metadata/_edit_use_anchors_ = true
 
 [node name="FireSoul" type="Label" parent="Pause/StatusMenu/ValueMenu/Mission"]
+anchors_preset = -1
 offset_left = -343.0
 offset_top = 40.0
 offset_bottom = 84.0
@@ -5340,6 +5429,7 @@ texture = ExtResource("14_5ds6k")
 expand_mode = 1
 
 [node name="Medal" type="Label" parent="Pause/StatusMenu/ValueMenu/Mission"]
+anchors_preset = -1
 offset_left = 64.0
 offset_top = 40.0
 offset_right = 407.0
@@ -5364,6 +5454,7 @@ stretch_mode = 5
 modulate = Color(1, 1, 1, 0)
 
 [node name="Header" type="Label" parent="Pause/StatusMenu/ValueMenu/Skill"]
+anchors_preset = -1
 offset_left = -343.0
 offset_top = -280.0
 offset_bottom = -236.0
@@ -5377,6 +5468,7 @@ position = Vector2(-352, -200)
 metadata/_edit_lock_ = true
 
 [node name="Cursor" type="NinePatchRect" parent="Pause/StatusMenu/ValueMenu/Skill/CursorAnchor"]
+anchors_preset = -1
 offset_right = 640.0
 offset_bottom = 54.0
 scale = Vector2(1, 1e-05)
@@ -5396,6 +5488,7 @@ libraries = {
 blend_times = [&"show", &"loop", 0.1]
 
 [node name="HorizontalLine" type="NinePatchRect" parent="Pause/StatusMenu/ValueMenu/Skill"]
+anchors_preset = -1
 offset_left = -360.0
 offset_top = -232.0
 offset_right = -320.0
@@ -5407,6 +5500,7 @@ patch_margin_left = 8
 patch_margin_right = 8
 
 [node name="NoSkill" type="Label" parent="Pause/StatusMenu/ValueMenu/Skill"]
+anchors_preset = -1
 offset_left = -328.0
 offset_top = -192.0
 offset_right = 280.0
@@ -5421,7 +5515,6 @@ max_lines_visible = 7
 [node name="Clip" type="Control" parent="Pause/StatusMenu/ValueMenu/Skill"]
 clip_contents = true
 layout_mode = 3
-anchors_preset = 0
 offset_left = -340.0
 offset_top = -200.0
 offset_right = 340.0
@@ -5429,7 +5522,7 @@ offset_bottom = 220.0
 
 [node name="Options" type="VBoxContainer" parent="Pause/StatusMenu/ValueMenu/Skill/Clip"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_bottom = 808.0
@@ -5438,6 +5531,7 @@ grow_vertical = 2
 theme_override_constants/separation = 4
 
 [node name="Scrollbar" type="NinePatchRect" parent="Pause/StatusMenu/ValueMenu/Skill"]
+anchors_preset = -1
 offset_left = 352.0
 offset_top = -216.0
 offset_right = 801.0
@@ -5457,6 +5551,7 @@ region_rect = Rect2(0, 448, 62, 64)
 
 [node name="Description" parent="Pause" instance=ExtResource("6_pouoc")]
 layout_mode = 1
+anchors_preset = -1
 
 [node name="SFX" type="Node" parent="."]
 
@@ -5487,6 +5582,9 @@ libraries = {
 active = false
 deterministic = false
 root_node = NodePath("../Pause")
+libraries = {
+&"": SubResource("AnimationLibrary_oiknc")
+}
 tree_root = SubResource("AnimationNodeBlendTree_sm8n7")
 anim_player = NodePath("../AnimationPlayer")
 parameters/confirm/current_state = "0"
