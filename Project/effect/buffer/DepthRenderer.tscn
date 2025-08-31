@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://dar74l2eiux2t"]
+[gd_scene load_steps=5 format=3 uid="uid://dar74l2eiux2t"]
 
 [ext_resource type="Script" uid="uid://2o7w04fafmsf" path="res://effect/buffer/script/DepthRenderer.cs" id="1_8ches"]
 [ext_resource type="Material" uid="uid://tma3nv6ewgck" path="res://effect/buffer/material/Depth Renderer Material.tres" id="2_jk5w5"]
+[ext_resource type="World3D" uid="uid://cenunrix6igno" path="res://effect/buffer/EffectRendererWorld.tres" id="3_ir7y8"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_xgfr5"]
 size = Vector2(2, 2)
@@ -14,8 +15,11 @@ depthMaterial = ExtResource("2_jk5w5")
 depthMaterials = []
 
 [node name="DepthViewport" type="SubViewport" parent="."]
+world_3d = ExtResource("3_ir7y8")
 transparent_bg = true
 handle_input_locally = false
+scaling_3d_scale = 0.25
+anisotropic_filtering_level = 0
 gui_disable_input = true
 positional_shadow_atlas_size = 0
 positional_shadow_atlas_16_bits = false
@@ -23,6 +27,7 @@ positional_shadow_atlas_quad_0 = 0
 positional_shadow_atlas_quad_1 = 0
 positional_shadow_atlas_quad_2 = 0
 positional_shadow_atlas_quad_3 = 0
+canvas_cull_mask = 0
 size = Vector2i(256, 256)
 render_target_update_mode = 0
 
