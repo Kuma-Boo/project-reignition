@@ -340,10 +340,9 @@ size = Vector3(30, 20, 1)
 [node name="Static" parent="." instance=ExtResource("1_6irkq")]
 Data = ExtResource("2_3jkye")
 
-[node name="09Spiral" parent="Static/Visuals" index="10"]
-startEnabled = false
-respawnOnActivation = false
-cacheRespawnMethods = false
+[node name="HallTreasureProbe" parent="Static/Lighting/Interior" index="12"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1100, -1.371933, -544.5295)
+size = Vector3(65.555664, 21.988434, 121.05896)
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -5053,6 +5052,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -45)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -138)
 warpTarget = NodePath("../../HallB/WarpExit")
 
+[node name="OmniLight3D" type="OmniLight3D" parent="MainAct/HallA/WarpRed"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.856788, 2.57312)
+light_color = Color(1, 0, 0, 1)
+light_energy = 1.5
+light_cull_mask = 4293918791
+omni_range = 10.0
+omni_shadow_mode = 0
+
 [node name="HallB" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 700, 0, -488)
 script = ExtResource("3_4cg0m")
@@ -5215,6 +5222,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
 [node name="WarpRed" parent="MainAct/HallB" node_paths=PackedStringArray("warpTarget") instance=ExtResource("52_e0f0q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, -138)
 warpTarget = NodePath("../../HallC/WarpExit")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="MainAct/HallB/WarpRed"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.2324395, 2.05188)
+light_color = Color(1, 0, 0, 1)
+light_energy = 1.5
+light_cull_mask = 4293918791
+omni_range = 6.885
+omni_attenuation = 0.5
+omni_shadow_mode = 0
 
 [node name="WarpWall" parent="MainAct/HallB" instance=ExtResource("57_4dden")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, -138)
@@ -5404,6 +5420,15 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -3, 0, -138.5)
 [node name="WarpRed" parent="MainAct/HallC" node_paths=PackedStringArray("warpTarget") instance=ExtResource("52_e0f0q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -138.5)
 warpTarget = NodePath("../../HallT/WarpExit")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="MainAct/HallC/WarpRed"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.549668, 2.630066)
+light_color = Color(1, 0, 0, 1)
+light_energy = 1.5
+light_cull_mask = 4293918791
+omni_range = 6.885
+omni_attenuation = 0.5
+omni_shadow_mode = 0
 
 [node name="WarpWallR" parent="MainAct/HallC" instance=ExtResource("57_4dden")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 3, 0, -138.5)
@@ -5960,6 +5985,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -116.7)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -134)
 warpTarget = NodePath("../../End/Arena/WarpExit")
 
+[node name="OmniLight3D" type="OmniLight3D" parent="MainAct/HallT/WarpRed"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.933336, 2.7877197)
+light_color = Color(1, 0, 0, 1)
+light_energy = 1.5
+light_cull_mask = 4293918791
+omni_range = 20.0
+omni_attenuation = 0.5
+omni_shadow_mode = 0
+
 [node name="End" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 925, 0, -1000)
 script = ExtResource("3_4cg0m")
@@ -6291,6 +6325,8 @@ shape = SubResource("BoxShape3D_7ky5u")
 
 [connection signal="Teleport" from="Static/Trigger/Object/CavernBTeleport/Teleport" to="MainAct/Field" method="Deactivate"]
 [connection signal="Teleport" from="Static/Trigger/Object/CavernBTeleport/Teleport" to="MainAct/CavernB" method="Activate"]
+[connection signal="Activated" from="Static/Trigger/Object/JumpTrigger" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="JumpFinished" from="Static/Trigger/Object/JumpTrigger/Jump" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Activated" from="MainAct/CullingMap/OverpassLoad" to="MainAct/Overpass" method="Activate"]
 [connection signal="Deactivated" from="MainAct/CullingMap/OverpassLoad" to="MainAct/Overpass" method="Deactivate"]
 [connection signal="Activated" from="MainAct/CullingMap/OpeningUnload" to="MainAct/Opening" method="Deactivate"]
