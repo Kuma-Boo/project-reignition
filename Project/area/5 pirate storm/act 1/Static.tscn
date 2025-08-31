@@ -670,48 +670,6 @@ tracks/15/keys = {
 "method": &"Deactivate"
 }]
 }
-tracks/16/type = "method"
-tracks/16/imported = false
-tracks/16/enabled = true
-tracks/16/path = NodePath("../Visuals/PSSky/FogSkyboxMesh")
-tracks/16/interp = 1
-tracks/16/loop_wrap = true
-tracks/16/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"Activate"
-}]
-}
-tracks/17/type = "method"
-tracks/17/imported = false
-tracks/17/enabled = true
-tracks/17/path = NodePath("../Lighting/CaveLightEvent/AnimationPlayer")
-tracks/17/interp = 1
-tracks/17/loop_wrap = true
-tracks/17/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [&"RESET", -1, 1.0, false],
-"method": &"play"
-}]
-}
-tracks/18/type = "method"
-tracks/18/imported = false
-tracks/18/enabled = true
-tracks/18/path = NodePath("../Triggers/EnvironmentFX/GrottoExit/FX")
-tracks/18/interp = 1
-tracks/18/loop_wrap = true
-tracks/18/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"Activate"
-}]
-}
 
 [sub_resource type="Animation" id="Animation_p0r0b"]
 resource_name = "demo2"
@@ -1154,6 +1112,9 @@ shape = SubResource("BoxShape3D_k720b")
 
 [node name="PSSky" parent="Visuals" instance=ExtResource("13_q3kya")]
 script = ExtResource("41_08hmi")
+
+[node name="FogSkyboxMesh" parent="Visuals/PSSky" index="4"]
+startEnabled = true
 
 [node name="PSSkyLightning" parent="Visuals/PSSky" instance=ExtResource("17_qhv7k")]
 minLightningInterval = 10.0
@@ -2380,7 +2341,6 @@ isStageMusic = true
 [connection signal="Deactivated" from="Visuals/CullingTriggers/06-U" to="Visuals/06GhostShip" method="Activate"]
 [connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Visuals/02Islands" method="Deactivate"]
 [connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Visuals/Sea1" method="Deactivate"]
-[connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Visuals/PSSky/FogSkyboxMesh" method="Deactivate"]
 [connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/PathAndCameraTriggers/ShipsStart/Checkpoint" method="Activate"]
 [connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/PathAndCameraTriggers/ShipsStart/Camera" method="Activate"]
 [connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/PathAndCameraTriggers/ShipsStart/Jump" method="Activate" flags=3]
@@ -2388,7 +2348,6 @@ isStageMusic = true
 [connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/CannonEvent/CannonBallCull/Cannonball" method="Advance" binds= [30.0]]
 [connection signal="JumpFinished" from="Triggers/PathAndCameraTriggers/ShipsStart/Jump" to="Triggers/PathAndCameraTriggers/ShipsStart/Camera" method="Deactivate"]
 [connection signal="Activated" from="Triggers/CannonEvent/CannonEventTrigger" to="Triggers/CannonEvent/CannonEventCull/CannonEvent" method="Activate"]
-[connection signal="EventFinished" from="Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Visuals/PSSky/FogSkyboxMesh" method="Activate"]
 [connection signal="EventFinished" from="Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Triggers/CannonEvent/CannonEventCull" method="Deactivate"]
 [connection signal="EventFinished" from="Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Triggers/CannonEvent/Camera" method="Activate"]
 [connection signal="EventFinished" from="Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Triggers/CannonEvent/Path" method="Activate"]
