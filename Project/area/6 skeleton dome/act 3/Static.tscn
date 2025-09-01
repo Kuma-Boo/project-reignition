@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://slvtrs84m8s0"]
+[gd_scene load_steps=40 format=3 uid="uid://slvtrs84m8s0"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_drnsg"]
 [ext_resource type="PackedScene" uid="uid://bsd07snxevqk5" path="res://area/6 skeleton dome/act 3/environment/01Throne.tscn" id="1_gpt5a"]
@@ -28,6 +28,8 @@
 [ext_resource type="Script" uid="uid://np5vcxq01ii8" path="res://object/trigger/modules/CheckpointTrigger.cs" id="25_vay8w"]
 [ext_resource type="Resource" uid="uid://dthe1vju4bxlo" path="res://area/6 skeleton dome/act 3/camera/ArenaCam.tres" id="26_q2jct"]
 [ext_resource type="Resource" uid="uid://bu377gi4d8wv5" path="res://area/6 skeleton dome/act 3/camera/SpiralCam.tres" id="27_vvehx"]
+[ext_resource type="AudioStream" uid="uid://dfly3x24mjpe8" path="res://sound/ost/bonus disc/Skeleton Dome Act 3.mp3" id="29_a6mka"]
+[ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="30_vxxf3"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_n6xm6"]
 size = Vector3(150, 5, 150)
@@ -760,6 +762,14 @@ cull_mask = 1086
 libraries = {
 &"": SubResource("AnimationLibrary_cmpse")
 }
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("29_a6mka")
+bus = &"BGM"
+script = ExtResource("30_vxxf3")
+loopStartPosition = 46.72
+loopEndPosition = 223.4
+isStageMusic = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_asv45")
