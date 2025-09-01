@@ -285,7 +285,7 @@ public partial class ZiplineState : PlayerState
 	{
 		if (Player.IsDefeated || Player.IsInvincible) return;
 
-		if (StageSettings.Instance.CurrentRingCount == 0)
+		if (Player.IsDamageDefeatingPlayer())
 		{
 			Player.Knockback -= OnPlayerDamaged;
 			Player.StartKnockback(new()

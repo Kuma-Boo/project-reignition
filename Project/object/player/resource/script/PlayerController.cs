@@ -892,6 +892,24 @@ public partial class PlayerController : CharacterBody3D
 
 	[Signal]
 	public delegate void DamagedEventHandler();
+
+	public bool IsDamageDefeatingPlayer()
+	{
+		if (StageSettings.Instance.CurrentRingCount != 0)
+			return false;
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.PearlRespawn) && Skills.IsSoulGaugeCharged)
+			return false;
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestDark) &&
+			Skills.AllowCrestSkill && Skills.IsSoulGaugeCharged)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
 	public void TakeDamage(bool disabledDefeat = false)
 	{
 		if (!Stage.IsLevelIngame) return;

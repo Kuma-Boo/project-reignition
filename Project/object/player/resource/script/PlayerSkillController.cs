@@ -100,7 +100,7 @@ public partial class PlayerSkillController : Node3D
 	{
 		if (!AllowCrestSkill ||
 			IsUsingBreakSkills ||
-			StageSettings.Instance.CurrentRingCount == 0)
+			Player.IsDamageDefeatingPlayer())
 		{
 			return;
 		}
