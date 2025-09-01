@@ -1,4 +1,4 @@
-[gd_scene load_steps=108 format=3 uid="uid://d1rcieilh21gs"]
+[gd_scene load_steps=110 format=3 uid="uid://d1rcieilh21gs"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_0tght"]
 [ext_resource type="Curve3D" uid="uid://56gh0yeexer3" path="res://area/6 skeleton dome/act 1/environment/path/ExteriorPath.tres" id="1_h00gj"]
@@ -66,6 +66,8 @@
 [ext_resource type="Material" uid="uid://dndcjme3820wo" path="res://area/6 skeleton dome/data/material/Snowflake.tres" id="59_sg7yc"]
 [ext_resource type="Script" uid="uid://ch4pb1qqwy5al" path="res://object/stage/common/resource/script/CameraFollower.cs" id="60_0ml3r"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="60_sg7yc"]
+[ext_resource type="PackedScene" uid="uid://0o1ds8o5k04j" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="67_mt304"]
+[ext_resource type="Material" uid="uid://bia2fywx2kiva" path="res://area/6 skeleton dome/data/material/Water.tres" id="68_3ot08"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mow5f"]
 size = Vector3(15, 20, 5)
@@ -2324,6 +2326,11 @@ isStageMusic = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_w7cdv")
 
+[node name="PlanarReflectionRenderer" parent="." instance=ExtResource("67_mt304")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 340, -25, -889)
+disableRenderering = true
+reflectionMaterials = [ExtResource("68_3ot08")]
+
 [connection signal="LevelStarted" from="." to="Snow" method="set_emitting" binds= [true]]
 [connection signal="Activated" from="Trigger/Object/CavernBTeleport/CavernBEntranceAutomation" to="Trigger/Object/CavernBTeleport/Camera" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/CavernBTeleport/CavernBEntranceAutomation" to="Lighting/Exterior/CaveEntranceEventTrigger" method="Activate"]
@@ -2386,6 +2393,8 @@ environment = SubResource("Environment_w7cdv")
 [connection signal="Activated" from="Visuals/CullingMap/16Load-14Unload" to="Visuals/16Throne" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/16Load-14Unload" to="Visuals/14Arena" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/16Load-14Unload" to="Visuals/16Throne" method="Deactivate"]
+[connection signal="Activated" from="Visuals/05CavernA" to="PlanarReflectionRenderer" method="EnableRendering"]
+[connection signal="Deactivated" from="Visuals/05CavernA" to="PlanarReflectionRenderer" method="DisableRendering"]
 [connection signal="Activated" from="Lighting/InteriorFX" to="Lighting/Exterior/CaveEntranceEventTrigger" method="Activate"]
 [connection signal="Activated" from="Lighting/InteriorFX" to="." method="SetEnvironmentFxFactor" binds= [0.0, 0.5]]
 [connection signal="Deactivated" from="Lighting/InteriorFX" to="Lighting/Exterior/CaveEntranceEventTrigger" method="Deactivate"]

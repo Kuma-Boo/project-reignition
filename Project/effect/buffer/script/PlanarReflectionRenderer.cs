@@ -19,7 +19,7 @@ public partial class PlanarReflectionRenderer : Node3D
 
 	[Export] private Camera3D reflectionCamera;
 	[Export] private SubViewport reflectionViewport;
-	[Export] private SubViewportContainer reflectionViewportContainer;
+	[Export] private Control reflectionViewportContainer;
 	private Camera3D GameplayCamera => GetViewport().GetCamera3D();
 
 	[Export] private HeightMode heightMode;
@@ -69,6 +69,12 @@ public partial class PlanarReflectionRenderer : Node3D
 
 		StageSettings.Instance.TriggeredCheckpoint += SaveCheckpointState;
 		StageSettings.Instance.Respawned += LoadCheckpointState;
+
+		// Disable expensive effects on reflections
+		reflectionCamera.Environment = StageSettings.Instance.Environment.Environment.Duplicate() as Environment;
+		reflectionCamera.Environment.SsaoEnabled = false;
+		reflectionCamera.Environment.SsilEnabled = false;
+		reflectionCamera.Environment.FogEnabled = false;
 
 		checkpointRenderingStateDisabled = disableRenderering;
 		LoadCheckpointState();

@@ -1,16 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://0o1ds8o5k04j"]
+[gd_scene load_steps=2 format=3 uid="uid://0o1ds8o5k04j"]
 
 [ext_resource type="Script" uid="uid://cvlkkqad3s2hf" path="res://effect/buffer/script/PlanarReflectionRenderer.cs" id="1_p6vq7"]
-[ext_resource type="World3D" uid="uid://cenunrix6igno" path="res://effect/buffer/EffectRendererWorld.tres" id="2_6uorc"]
 
 [node name="PlanarReflectionRenderer" type="Node3D" node_paths=PackedStringArray("reflectionCamera", "reflectionViewport", "reflectionViewportContainer")]
 script = ExtResource("1_p6vq7")
 reflectionCamera = NodePath("Viewport/ReflectionPreview/ReflectionViewport/ReflectionCamera")
 reflectionViewport = NodePath("Viewport/ReflectionPreview/ReflectionViewport")
-reflectionViewportContainer = NodePath("Viewport/ReflectionPreview")
+reflectionViewportContainer = NodePath("Viewport")
 reflectionMaterials = []
 
 [node name="Viewport" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,19 +19,17 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ReflectionPreview" type="SubViewportContainer" parent="Viewport"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
+anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = 540.0
+offset_top = -540.0
 offset_right = 960.0
 grow_vertical = 2
 scale = Vector2(0.5, 0.5)
 pivot_offset = Vector2(0, 540)
 
 [node name="ReflectionViewport" type="SubViewport" parent="Viewport/ReflectionPreview"]
-world_3d = ExtResource("2_6uorc")
-transparent_bg = true
 handle_input_locally = false
 mesh_lod_threshold = 10.0
 positional_shadow_atlas_size = 0
