@@ -252,7 +252,7 @@ public partial class GrindState : PlayerState
 	private readonly float ChargeSpeed = 3.0f;
 	private void UpdateCharge()
 	{
-		bool isCharging = Input.IsActionPressed("button_action");
+		bool isCharging = Input.IsActionPressed("button_action") || Input.IsActionPressed("button_attack");
 		bool isCharged = Mathf.IsEqualApprox(currentCharge, 1.0f);
 
 		perfectChargeTimer = Mathf.MoveToward(perfectChargeTimer, 0, PhysicsManager.physicsDelta);
