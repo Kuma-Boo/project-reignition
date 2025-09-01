@@ -1,7 +1,7 @@
 using Godot;
-using Godot.Collections;
 using Project.Core;
 using Project.Interface;
+using System.Collections.Generic;
 
 namespace Project.Gameplay;
 
@@ -68,6 +68,7 @@ public partial class StageSettings : Node3D
 		}
 		else
 		{
+			GetReflectionProbesRecursively(this);
 			LevelState = LevelStateEnum.Probes;
 			if (!TransitionManager.instance.IsReloadingScene)
 				TransitionManager.instance.UpdateLoadingText("load_probes");
@@ -106,27 +107,35 @@ public partial class StageSettings : Node3D
 	#region Shader Compilation
 	[Signal]
 	public delegate void LevelStartedEventHandler();
-	private float probeTimer;
-	private const float ProbeWaitLength = 2f;
+	private Queue<ReflectionProbe> probes = [];
 	public override void _Process(double _)
 	{
-		/*
-		TODO 
-		Temporary workaround because reflection probes are slow.
-		Reduce frame count when Godot adds a way to do quick "UPDATE_ONCE" reflection probes
-		*/
-
 		if (LevelState == LevelStateEnum.Probes)
 		{
-			probeTimer += PhysicsManager.normalDelta;
-			if (probeTimer >= ProbeWaitLength)
-				StartLevel();
+			if (probes.TryDequeue(out ReflectionProbe probe))
+			{
+				probe.UpdateMode = ReflectionProbe.UpdateModeEnum.Always;
+				probe.ProcessMode = ProcessModeEnum.Disabled;
+				return;
+			}
 
+			StartLevel();
 			return;
 		}
 
 		UpdateTime();
 		UpdateEnvironmentFXFactor();
+	}
+
+	private void GetReflectionProbesRecursively(Node parent)
+	{
+		foreach (Node child in parent.GetChildren())
+		{
+			GetReflectionProbesRecursively(child);
+
+			if (child is ReflectionProbe)
+				probes.Enqueue(child as ReflectionProbe);
+		}
 	}
 
 	private void StartLevel()
@@ -409,7 +418,7 @@ public partial class StageSettings : Node3D
 	[Export(PropertyHint.NodeType, "Node3D")]
 	private Node3D pathParent;
 	/// <summary> List of all level paths contained for this level. </summary>
-	private readonly Array<Path3D> pathList = [];
+	private readonly List<Path3D> pathList = [];
 
 	/// <summary>
 	/// Returns the path the player is currently the closest to.

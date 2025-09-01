@@ -4,12 +4,10 @@ namespace Project.Gameplay.Triggers
 {
 	public partial class ReflectionTrigger : StageTriggerModule
 	{
-		[Export]
-		private PlanarReflectionRenderer reflectionRenderer;
+		[Export] private PlanarReflectionRenderer reflectionRenderer;
 
 		// Store previous data for deactivation.
 		private Vector3 previousPosition;
-		private Path3D previousReflectionSyncPath;
 
 		public override void Activate()
 		{
