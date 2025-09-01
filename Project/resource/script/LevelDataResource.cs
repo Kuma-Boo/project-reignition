@@ -62,8 +62,9 @@ public partial class LevelDataResource : Resource
 		if (!SkipScore)
 			properties.Add(ExtensionMethods.CreateProperty("Ranking/Score Requirement", Variant.Type.Int, PropertyHint.Range, "0,999999,50"));
 
+		properties.Add(ExtensionMethods.CreateProperty("Completion/Disable Object Cull", Variant.Type.Bool));
 		properties.Add(ExtensionMethods.CreateProperty("Completion/Delay", Variant.Type.Float, PropertyHint.Range, "0,5,.1"));
-		properties.Add(ExtensionMethods.CreateProperty("Completion/Lockout", Variant.Type.Object)); //, PropertyHint.ResourceType, "LockoutResource"));
+		properties.Add(ExtensionMethods.CreateProperty("Completion/Lockout", Variant.Type.Object, PropertyHint.ResourceType, "LockoutResource"));
 		properties.Add(ExtensionMethods.CreateProperty("Completion/Animation", Variant.Type.Int, PropertyHint.Enum, CompletionAnimation.EnumToString()));
 		properties.Add(ExtensionMethods.CreateProperty("Completion/Unlock Stage", Variant.Type.Array, PropertyHint.ArrayType,
 		$"{Variant.Type.Object:D}/{PropertyHint.ResourceType:D}:LevelDataResource"));
@@ -116,6 +117,9 @@ public partial class LevelDataResource : Resource
 				return BronzeTime;
 			case "Ranking/Score Requirement":
 				return Score;
+
+			case "Completion/Disable Object Cull":
+				return DisableObjectCullOnCompletion;
 			case "Completion/Delay":
 				return CompletionDelay;
 			case "Completion/Lockout":
@@ -195,6 +199,9 @@ public partial class LevelDataResource : Resource
 				Score = (int)value;
 				break;
 
+			case "Completion/Disable Object Cull":
+				DisableObjectCullOnCompletion = (bool)value;
+				break;
 			case "Completion/Delay":
 				CompletionDelay = (float)value;
 				break;
@@ -258,6 +265,8 @@ public partial class LevelDataResource : Resource
 	// Requirement for score rank
 	public int Score { get; private set; }
 
+	/// <summary> Determines whether objects should be forcefully culled when starting the completion camera. </summary>
+	public bool DisableObjectCullOnCompletion { get; private set; }
 	/// <summary> How long to wait before transitioning to the completion camera. </summary>
 	public float CompletionDelay { get; private set; }
 	/// <summary> Control lockout to apply when the level is completed. Leave null to use Runtime.Instance.StopLockout. </summary>

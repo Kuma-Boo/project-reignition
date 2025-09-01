@@ -648,6 +648,14 @@ public partial class StageSettings : Node3D
 		isCompletionDemoActive = true;
 		EmitSignal(SignalName.LevelDemoStarted);
 
+		// Cull objects, if necessary
+		if (!Data.DisableObjectCullOnCompletion)
+		{
+			Node3D objectParent = GetParent().GetChildOrNull<Node3D>(GetIndex() + 1);
+			if (objectParent != null) // Object parent should always be the child after the static node
+				objectParent.Visible = false;
+		}
+
 		if (completionAnimator == null) return;
 		OnCameraDemoAdvance();
 	}
