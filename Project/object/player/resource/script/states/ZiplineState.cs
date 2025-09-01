@@ -138,10 +138,10 @@ public partial class ZiplineState : PlayerState
 
 	private void UpdateSwingButton()
 	{
-		if (!Player.Controller.IsActionBufferActive)
+		if (!Player.Controller.IsGimmickBufferActive)
 			return;
 
-		Player.Controller.ResetActionBuffer();
+		Player.Controller.ResetGimmickBuffer();
 
 		if (!isPromptShown)
 			return;

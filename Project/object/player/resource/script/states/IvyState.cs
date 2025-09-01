@@ -68,9 +68,9 @@ public partial class IvyState : PlayerState
 			return null;
 		}
 
-		if (Player.Controller.IsActionBufferActive && (!Player.Animator.IsIvySwingActive || Player.Animator.IsIvyStartActive))
+		if (Player.Controller.IsGimmickBufferActive && (!Player.Animator.IsIvySwingActive || Player.Animator.IsIvyStartActive))
 		{
-			Player.Controller.ResetActionBuffer();
+			Player.Controller.ResetGimmickBuffer();
 			Player.Animator.StartIvySwing();
 			Trigger.AddImpulseForce(CalculateSwingForce());
 		}

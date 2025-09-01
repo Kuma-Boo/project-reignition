@@ -37,6 +37,13 @@ public partial class PlayerInputController : Node
 	public bool IsActionBufferActive => !Mathf.IsZeroApprox(actionBuffer);
 	public void ResetActionBuffer() => actionBuffer = 0;
 
+	public bool IsGimmickBufferActive => IsActionBufferActive || IsAttackBufferActive;
+	public void ResetGimmickBuffer()
+	{
+		ResetActionBuffer();
+		ResetAttackBuffer();
+	}
+
 	private float attackBuffer;
 	public bool IsAttackBufferActive => !Mathf.IsZeroApprox(attackBuffer);
 	public void ResetAttackBuffer() => attackBuffer = 0;

@@ -63,9 +63,9 @@ public partial class FlyingPotState : PlayerState
 			return jumpState;
 		}
 
-		if (Player.Controller.IsActionBufferActive) // Move upwards
+		if (Player.Controller.IsGimmickBufferActive) // Move upwards
 		{
-			Player.Controller.ResetActionBuffer();
+			Player.Controller.ResetGimmickBuffer();
 
 			Pot.Flap();
 			flapSpeed = 1.5f + (flapTimer / FlapInterval);

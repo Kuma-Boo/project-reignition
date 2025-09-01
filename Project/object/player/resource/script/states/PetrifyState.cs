@@ -37,10 +37,10 @@ public partial class PetrifyState : PlayerState
 		Player.CheckGround();
 		Player.ApplyMovement();
 
-		if (Player.Controller.IsActionBufferActive)
+		if (Player.Controller.IsGimmickBufferActive)
 		{
 			Player.Animator.ShakePetrify();
-			Player.Controller.ResetActionBuffer();
+			Player.Controller.ResetGimmickBuffer();
 			currentPetrificationStrength--;
 
 			if (currentPetrificationStrength == 0)
