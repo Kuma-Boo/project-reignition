@@ -1059,7 +1059,7 @@ public partial class PlayerController : CharacterBody3D
 	}
 
 	public float FallTimer { get; set; }
-	private readonly float FallDefeatLength = 20f;
+	private readonly float FallDefeatLength = 10f;
 	public void ResetFallTimer() => FallTimer = 0;
 	public void AttemptFallIntoTheVoid()
 	{
