@@ -83,6 +83,7 @@ public partial class KnockbackState : PlayerState
 		if (!Settings.stayOnGround && Player.CheckGround())
 			return landState;
 
+		Player.AttemptFallIntoTheVoid();
 		return null;
 	}
 }

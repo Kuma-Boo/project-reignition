@@ -86,6 +86,7 @@ public partial class GrindStepState : PlayerState
 			return stompState;
 		}
 
+		Player.AttemptFallIntoTheVoid();
 		return null;
 	}
 
