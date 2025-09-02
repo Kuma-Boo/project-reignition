@@ -8,16 +8,12 @@ public partial class ZiplineState : PlayerState
 	public Zipline Trigger { get; set; }
 
 	private float input;
-	/// <summary> Determines whether the player's tap is registered as a double tap. </summary>
-	private float doubleTapTimer;
 	/// <summary> How long the player has been holding an input. </summary>
 	private float inputHoldTimer;
 	/// <summary> How quickly the player's input has to reach the TapDistance to count as a tap. </summary>
-	private readonly float TapLength = .02f;
+	private readonly float TapLength = .1f;
 	/// <summary> How strong the player's input has to be to count as a tap. </summary>
-	private readonly float TapRadius = .8f;
-	/// <summary> How far apart taps can be to count as a double tap. </summary>
-	private readonly float DoubleTapWindow = .4f;
+	private readonly float TapRadius = .5f;
 
 	private bool isPromptShown;
 	/// <summary> Localization key for swinging. </summary>
@@ -31,6 +27,7 @@ public partial class ZiplineState : PlayerState
 	private readonly float DamageLockoutLength = 0.5f;
 
 	private int fullSwingDirection;
+	private int queuedFullSwingDirection;
 	/// <summary> Determines how long the player can stay in the "Tap swing" state. </summary>
 	private float tapSwingTimer;
 	/// <summary> How long a tap swing lasts. </summary>
@@ -45,6 +42,8 @@ public partial class ZiplineState : PlayerState
 	private readonly float NormalRotationSmoothing = 12.0f;
 	/// <summary> How far out the player can rotate without doing a full swing. </summary>
 	private readonly float NormalRotationLimit = Mathf.Pi * .3f;
+	private readonly float QueuedFullSwingRotation = Mathf.Pi * .1f;
+	private readonly float QueuedFullSwingSmoothing = 6.0f;
 	/// <summary> Range where the player can start a reverse full-swing. </summary>
 	private readonly float ReverseFullSwingRange = Mathf.Pi * .8f;
 
@@ -119,11 +118,7 @@ public partial class ZiplineState : PlayerState
 			if (Mathf.Abs(input) > TapRadius)
 			{
 				// A tap occurred
-				if (Mathf.IsZeroApprox(doubleTapTimer))
-					StartTap();
-				else
-					StartDoubleTap();
-
+				StartTap();
 				InvalidateTapping();
 			}
 			else
@@ -132,13 +127,12 @@ public partial class ZiplineState : PlayerState
 			}
 		}
 
-		doubleTapTimer = Mathf.MoveToward(doubleTapTimer, 0, PhysicsManager.physicsDelta);
 		return input;
 	}
 
 	private void UpdateSwingButton()
 	{
-		if (!Player.Controller.IsGimmickBufferActive)
+		if (queuedFullSwingDirection != 0 || !Player.Controller.IsGimmickBufferActive)
 			return;
 
 		Player.Controller.ResetGimmickBuffer();
@@ -146,15 +140,7 @@ public partial class ZiplineState : PlayerState
 		if (!isPromptShown)
 			return;
 
-		// Prevent player from being able to spam tap
-		if (Mathf.Sign(input) != Trigger.SwingSide && Player.Animator.IsZiplineTapActive)
-			return;
-
-		if (Mathf.IsZeroApprox(doubleTapTimer))
-			StartTap();
-		else
-			StartDoubleTap();
-
+		StartFullSwing();
 		InvalidateTapping();
 	}
 
@@ -165,25 +151,23 @@ public partial class ZiplineState : PlayerState
 	private void StartTap()
 	{
 		tapSwingTimer = TapSwingLength;
-		doubleTapTimer = DoubleTapWindow; // Start listening for a double tap
-		Player.Animator.StartZiplineTap(Mathf.Sign(input) > 0);
+		Player.Animator.StartZiplineTap(Mathf.Sign(input) > 0, true);
 	}
 
-	/// <summary> Called when a double tap occurs. Attemps a full swing. </summary>
-	private void StartDoubleTap()
+	/// <summary> Attempts a full swing. </summary>
+	private void StartFullSwing()
 	{
-		if (Trigger.SwingSide != Mathf.Sign(input))
+		if (queuedFullSwingDirection == 0 && Trigger.SwingSide != Mathf.Sign(input) && Mathf.IsZeroApprox(tapSwingTimer))
 		{
-			// Not inputting the right direction to do a full swing; do a tap instead
-			StartTap();
+			queuedFullSwingDirection = Mathf.Sign(input);
 			return;
 		}
 
-		// A double tap occurred
 		tapSwingTimer = 0;
-		doubleTapTimer = 0;
-		fullSwingDirection = Mathf.Sign(input);
-		Player.Animator.StartZiplineTap(Mathf.Sign(input) > 0);
+		fullSwingDirection = queuedFullSwingDirection == 0 ? Mathf.Sign(input) : queuedFullSwingDirection;
+		Player.Animator.StartZiplineTap(Mathf.Sign(input) > 0, false);
+
+		queuedFullSwingDirection = 0;
 	}
 
 	private void UpdatePrompts()
@@ -199,7 +183,11 @@ public partial class ZiplineState : PlayerState
 	private void UpdateAnimations()
 	{
 		float animationBlend = Player.Animator.GetZiplineBlend();
-		animationBlend = ExtensionMethods.SmoothDamp(animationBlend, input, ref animationVelocity, AnimationSmoothing * PhysicsManager.physicsDelta);
+		float targetBlend = input;
+		if (queuedFullSwingDirection != 0)
+			targetBlend = -queuedFullSwingDirection * Mathf.Abs(Trigger.CurrentRotation / QueuedFullSwingRotation);
+
+		animationBlend = ExtensionMethods.SmoothDamp(animationBlend, targetBlend, ref animationVelocity, AnimationSmoothing * PhysicsManager.physicsDelta);
 		Player.Animator.SetZiplineBlend(animationBlend);
 	}
 
@@ -213,6 +201,13 @@ public partial class ZiplineState : PlayerState
 
 		if (Mathf.Abs(Trigger.CurrentRotation) > NormalRotationLimit)
 			tapSwingTimer = Mathf.MoveToward(tapSwingTimer, 0, PhysicsManager.physicsDelta);
+
+		if (queuedFullSwingDirection != 0 &&
+			Mathf.Sign(Trigger.CurrentRotation) != queuedFullSwingDirection &&
+			Mathf.Abs(Trigger.CurrentRotation) > QueuedFullSwingRotation * 0.5f)
+		{
+			StartFullSwing();
+		}
 	}
 
 	private void UpdateFullSwing()
@@ -222,8 +217,9 @@ public partial class ZiplineState : PlayerState
 
 		if (Mathf.IsZeroApprox(input))
 		{
-			if (Mathf.Sign(Trigger.CurrentRotation) != fullSwingDirection)
+			if (Mathf.Sign(Trigger.CurrentRotation) != fullSwingDirection && Mathf.Abs(Trigger.CurrentRotation) > NormalRotationLimit)
 				fullSwingDirection = 0;
+
 			return;
 		}
 
@@ -254,6 +250,9 @@ public partial class ZiplineState : PlayerState
 
 	private float CalculateTargetRotation()
 	{
+		if (queuedFullSwingDirection != 0)
+			return QueuedFullSwingRotation * -queuedFullSwingDirection;
+
 		if (fullSwingDirection != 0)
 			return Trigger.CurrentRotation + Mathf.Pi * .6f * fullSwingDirection;
 
@@ -268,6 +267,9 @@ public partial class ZiplineState : PlayerState
 
 	private float CalculateRotationSmoothing()
 	{
+		if (queuedFullSwingDirection != 0)
+			return QueuedFullSwingSmoothing;
+
 		// Full swings are slower at the top
 		if (fullSwingDirection != 0)
 			return Mathf.Abs(Trigger.CurrentRotation) > ReverseFullSwingRange ? NormalRotationSmoothing : TapSwingRotationSmoothing;
