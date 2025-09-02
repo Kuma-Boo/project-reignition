@@ -279,7 +279,7 @@ public partial class ItemBox : Pickup
 
 		if (Player.IsJumpDashOrHomingAttack)
 		{
-			Player.StartBounce(BounceState.SnapMode.SnappingEnabledNoHeight);
+			Player.StartBounce(BounceState.SnapMode.SnappingEnabledNoHeight, 1, this);
 			Animator.Play("disable-collision");
 			Animator.Advance(0.0);
 		}
