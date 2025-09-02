@@ -267,6 +267,16 @@ public partial class PlayerEffect : Node3D
 		grindrailBurstParticle.Restart();
 	}
 
+	public void StopFullChargeFX()
+	{
+		if (chargeParticle.Visible && !fullChargeParticle.Emitting)
+			return;
+
+		chargeParticle.Restart();
+		chargeParticle.Visible = true;
+		fullChargeParticle.Emitting = false;
+	}
+
 	public void PerfectGrindShuffleFX()
 	{
 		perfectShuffleParticle.Restart();

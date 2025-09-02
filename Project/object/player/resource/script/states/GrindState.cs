@@ -33,6 +33,9 @@ public partial class GrindState : PlayerState
 	{
 		currentCharge = 0;
 		perfectChargeTimer = 0;
+		fallbackShuffleTimer = 0;
+		fallbackOffsetTimer = FallbackInputWindow * 0.5f;
+		canBufferPerfectShuffle = true;
 		CheckGrindStep();
 
 		ActiveGrindRail.Activate();
@@ -246,9 +249,14 @@ public partial class GrindState : PlayerState
 		return jumpState;
 	}
 
+	/// <summary> Determines whether a button press can be buffered. </summary>
+	private bool canBufferPerfectShuffle;
+	private float fallbackShuffleTimer;
+	private float fallbackOffsetTimer;
 	private float currentCharge;
 	private float perfectChargeTimer;
 	private readonly float PerfectChargeInputWindow = .3f;
+	private readonly float FallbackInputWindow = .2f;
 	private readonly float ChargeSpeed = 3.0f;
 	private void UpdateCharge()
 	{
@@ -258,11 +266,48 @@ public partial class GrindState : PlayerState
 		perfectChargeTimer = Mathf.MoveToward(perfectChargeTimer, 0, PhysicsManager.physicsDelta);
 
 		if (isCharging)
+		{
 			Charge(isCharged);
-		else if (!Mathf.IsZeroApprox(currentCharge))
+		}
+		else
+		{
 			Uncharge(isCharged);
+			ProcessFallbackShuffle();
+		}
 
 		UpdateChargeAnimations(isCharging);
+	}
+
+	/// <summary> Adds an alternative fallback to shuffling, because players find the charge method unintuitive. </summary>
+	private void ProcessFallbackShuffle()
+	{
+		fallbackShuffleTimer = Mathf.MoveToward(fallbackShuffleTimer, 0, PhysicsManager.physicsDelta);
+
+		// TODO Retrace this logic.
+		if (!Mathf.IsZeroApprox(fallbackOffsetTimer) && Player.Controller.IsGimmickBufferActive)
+		{
+			Player.Controller.ResetGimmickBuffer();
+			fallbackShuffleTimer = canBufferPerfectShuffle ? FallbackInputWindow : 0;
+			canBufferPerfectShuffle = false;
+		}
+
+		if (Player.Animator.IsBalanceShuffleActive)
+			return;
+
+		fallbackOffsetTimer = Mathf.MoveToward(fallbackOffsetTimer, 0, PhysicsManager.physicsDelta);
+
+		if (!Mathf.IsZeroApprox(fallbackShuffleTimer))
+		{
+			// Perfect shuffle (Tap Version)
+			StartShuffle(true);
+			return;
+		}
+
+		if (!Mathf.IsZeroApprox(currentCharge))
+		{
+			// Fail shuffle
+			StartShuffle(false);
+		}
 	}
 
 	private void Charge(bool isCharged)
@@ -287,18 +332,24 @@ public partial class GrindState : PlayerState
 			perfectChargeTimer = PerfectChargeInputWindow;
 			Player.Effect.StartFullChargeFX();
 		}
+		else if (Mathf.IsZeroApprox(perfectChargeTimer))
+		{
+			Player.Effect.StopFullChargeFX();
+		}
 	}
 
 	private void Uncharge(bool isCharged)
 	{
+		if (Mathf.IsZeroApprox(currentCharge))
+			return;
+
 		currentCharge = Mathf.MoveToward(currentCharge, 0f, ChargeSpeed * PhysicsManager.physicsDelta);
 		Player.Effect.StopChargeFX();
 
 		// Update shuffling
 		if (!Player.Animator.IsBalanceShuffleActive && isCharged)
 		{
-			StartShuffle();
-			currentCharge = 0;
+			StartShuffle(!Mathf.IsZeroApprox(perfectChargeTimer));
 			return;
 		}
 
@@ -322,9 +373,14 @@ public partial class GrindState : PlayerState
 		}
 	}
 
-	private void StartShuffle()
+	private void StartShuffle(bool isPerfectCharge)
 	{
-		bool isPerfectCharge = !Mathf.IsZeroApprox(perfectChargeTimer);
+		currentCharge = 0;
+		fallbackShuffleTimer = 0;
+		fallbackOffsetTimer = FallbackInputWindow * 0.5f;
+		canBufferPerfectShuffle = true;
+		Player.Controller.ResetGimmickBuffer();
+
 		Player.MoveSpeed = isPerfectCharge ? Player.Stats.perfectShuffleSpeed : Player.Stats.GrindSettings.Speed;
 		Player.Effect.StartGrindFX(false);
 		Player.Animator.StartGrindShuffle();
