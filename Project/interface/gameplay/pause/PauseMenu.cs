@@ -15,7 +15,6 @@ public partial class PauseMenu : Node
 	[Export] private AnimationPlayer pauseCursorAnimator;
 	[Export] private AudioStreamPlayer selectSFX;
 	[Export] private Menus.Description description;
-	[Export] private ShaderMaterial fireSurface;
 
 	[ExportGroup("Status Menu")]
 	[Export] private Node2D statusCursor;
@@ -410,11 +409,6 @@ public partial class PauseMenu : Node
 			animator.Set(StateRequest, isActive ? "show" : "hide");
 		else
 			animator.Set(StateRequest, "status-hide");
-
-		if ((float)fireSurface.GetShaderParameter("animation_framerate") != 0)
-			fireSurface.SetShaderParameter("animation_framerate", 0); //Stops the soul gauge fire from animating
-		else
-			fireSurface.SetShaderParameter("animation_framerate", 24);
 
 		if (isActive) // Reset selection
 		{
