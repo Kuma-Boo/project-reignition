@@ -26,7 +26,7 @@ public partial class WindTrigger : StageTriggerModule
 		if (Mathf.IsZeroApprox(influence) && !isActive)
 			DisableProcessing();
 
-		if (!Player.Skills.IsSpeedBreakActive)
+		if (!Player.Skills.IsSpeedBreakActive && !Player.IsStomping)
 			Player.ExternalVelocity += this.Forward() * windStrength * influence;
 
 		GlobalPosition = Player.PathFollower.GlobalPosition;
