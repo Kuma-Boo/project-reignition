@@ -778,7 +778,7 @@ public partial class Options : Menu
 			int postProcessingQuality = (int)SaveManager.Config.postProcessingQuality;
 			postProcessingQuality = WrapSelection(postProcessingQuality + direction, (int)SaveManager.QualitySetting.Count);
 			SaveManager.Config.postProcessingQuality = (SaveManager.QualitySetting)postProcessingQuality;
-			StageSettings.Instance.UpdatePostProcessingStatus();
+			StageSettings.Instance.UpdateQualitySettings();
 		}
 		else if (VerticalSelection == 12)
 		{
