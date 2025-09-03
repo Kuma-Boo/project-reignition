@@ -198,6 +198,9 @@ public partial class SaveManager : Node
 		45,
 		60,
 		120,
+		144,
+		165,
+		240
 	];
 
 	#endregion
