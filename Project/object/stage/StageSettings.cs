@@ -57,7 +57,7 @@ public partial class StageSettings : Node3D
 
 		CalculateTechnicalBonus();
 		UpdateScore(0, MathModeEnum.Replace);
-		UpdatePostProcessingStatus();
+		UpdateQualitySettings();
 
 		// Update gameplay sfx audio channel
 		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, IsControlTest ? 100 : 0);
@@ -68,7 +68,7 @@ public partial class StageSettings : Node3D
 		}
 		else
 		{
-			GetReflectionProbesRecursively(this);
+			GetQualityNodesRecursively(this);
 			LevelState = LevelStateEnum.Probes;
 			if (!TransitionManager.instance.IsReloadingScene)
 				TransitionManager.instance.UpdateLoadingText("load_probes");
@@ -96,25 +96,66 @@ public partial class StageSettings : Node3D
 
 	public override void _ExitTree() => EmitSignal(SignalName.Unloaded);
 
-	public void UpdatePostProcessingStatus()
+	public void UpdateQualitySettings()
 	{
 		bool postProcessingEnabled = SaveManager.Config.postProcessingQuality != SaveManager.QualitySetting.Disabled;
 		Environment.Environment.SsaoEnabled = postProcessingEnabled;
 		Environment.Environment.SsilEnabled = postProcessingEnabled;
 		Environment.Environment.GlowEnabled = SaveManager.Config.bloomMode != SaveManager.QualitySetting.Disabled;
+
+		switch (SaveManager.Config.softShadowQuality)
+		{
+			case SaveManager.QualitySetting.Disabled:
+			case SaveManager.QualitySetting.Low:
+				targetDirectionalShadowMode = DirectionalLight3D.ShadowMode.Orthogonal;
+				break;
+			case SaveManager.QualitySetting.Medium:
+				targetDirectionalShadowMode = DirectionalLight3D.ShadowMode.Parallel2Splits;
+				break;
+			case SaveManager.QualitySetting.High:
+				targetDirectionalShadowMode = DirectionalLight3D.ShadowMode.Parallel4Splits;
+				break;
+		}
 	}
 
 	#region Shader Compilation
 	[Signal]
 	public delegate void LevelStartedEventHandler();
 	private Queue<ReflectionProbe> probes = [];
+	private Queue<DirectionalLight3D> lights = [];
+	private int targetDirectionalShadowFadeDistance = 20;
+	private int targetDirectionalShadowDistance = 30;
+	private DirectionalLight3D.ShadowMode targetDirectionalShadowMode = DirectionalLight3D.ShadowMode.Parallel2Splits;
+
 	public override void _Process(double _)
 	{
 		if (LevelState == LevelStateEnum.Probes)
 		{
+			if (lights.TryDequeue(out DirectionalLight3D light) && light.ShadowEnabled)
+			{
+				light.DistanceFadeBegin = targetDirectionalShadowFadeDistance;
+				light.DirectionalShadowBlendSplits = true;
+				light.DirectionalShadowMaxDistance = targetDirectionalShadowDistance;
+				light.DirectionalShadowMode = targetDirectionalShadowMode;
+				return;
+			}
+
 			if (probes.TryDequeue(out ReflectionProbe probe))
 			{
-				probe.UpdateMode = ReflectionProbe.UpdateModeEnum.Always;
+				probe.EnableShadows = false;
+				probe.MeshLodThreshold = 5;
+
+				/*
+				WORKAROUND
+				Godot's reflection probes update really slowly when set to "Once" mode, so here I'm setting it to always
+				then disabling processing immediately after.
+
+				Unfortunately, this workaround breaks Godot's visual profiler, so we keep the update mode to "Once" when in the editor.
+
+				TODO Replace this with proper update-mode once Godot fixes reflection probes
+				*/
+
+				probe.UpdateMode = OS.IsDebugBuild() ? ReflectionProbe.UpdateModeEnum.Once : ReflectionProbe.UpdateModeEnum.Always;
 				probe.ProcessMode = ProcessModeEnum.Disabled;
 				return;
 			}
@@ -127,14 +168,16 @@ public partial class StageSettings : Node3D
 		UpdateEnvironmentFXFactor();
 	}
 
-	private void GetReflectionProbesRecursively(Node parent)
+	private void GetQualityNodesRecursively(Node parent)
 	{
 		foreach (Node child in parent.GetChildren())
 		{
-			GetReflectionProbesRecursively(child);
+			GetQualityNodesRecursively(child);
 
 			if (child is ReflectionProbe)
 				probes.Enqueue(child as ReflectionProbe);
+			else if (child is DirectionalLight3D)
+				lights.Enqueue(child as DirectionalLight3D);
 		}
 	}
 
