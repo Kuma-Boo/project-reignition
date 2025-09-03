@@ -107,17 +107,15 @@ public partial class StageSettings : Node3D
 		{
 			case SaveManager.QualitySetting.Disabled:
 			case SaveManager.QualitySetting.Low:
-				targetDirectionalShadowFadeDistance = 10;
 				targetDirectionalShadowDistance = 20;
 				targetDirectionalShadowMode = DirectionalLight3D.ShadowMode.Orthogonal;
 				break;
 			case SaveManager.QualitySetting.Medium:
-				targetDirectionalShadowFadeDistance = 30;
 				targetDirectionalShadowDistance = 40;
 				targetDirectionalShadowMode = DirectionalLight3D.ShadowMode.Parallel2Splits;
 				break;
 			case SaveManager.QualitySetting.High:
-				targetDirectionalShadowFadeDistance = 40;
+				targetBlendSplitMode = true;
 				targetDirectionalShadowDistance = 50;
 				targetDirectionalShadowMode = DirectionalLight3D.ShadowMode.Parallel4Splits;
 				break;
@@ -129,8 +127,8 @@ public partial class StageSettings : Node3D
 	public delegate void LevelStartedEventHandler();
 	private Queue<ReflectionProbe> probes = [];
 	private Queue<DirectionalLight3D> lights = [];
-	private int targetDirectionalShadowFadeDistance = 20;
 	private int targetDirectionalShadowDistance = 30;
+	private bool targetBlendSplitMode = false;
 	private DirectionalLight3D.ShadowMode targetDirectionalShadowMode = DirectionalLight3D.ShadowMode.Parallel2Splits;
 
 	public override void _Process(double _)
@@ -139,10 +137,9 @@ public partial class StageSettings : Node3D
 		{
 			if (lights.TryDequeue(out DirectionalLight3D light) && light.ShadowEnabled)
 			{
-				light.DistanceFadeBegin = targetDirectionalShadowFadeDistance;
-				light.DirectionalShadowBlendSplits = true;
-				light.DirectionalShadowMaxDistance = targetDirectionalShadowDistance;
 				light.DirectionalShadowMode = targetDirectionalShadowMode;
+				light.DirectionalShadowMaxDistance = targetDirectionalShadowDistance;
+				light.DirectionalShadowBlendSplits = targetBlendSplitMode;
 				return;
 			}
 
