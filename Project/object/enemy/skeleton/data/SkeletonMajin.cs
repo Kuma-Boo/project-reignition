@@ -101,6 +101,9 @@ public partial class SkeletonMajin : Enemy
 
 	protected override void EnterRange()
 	{
+		if (IsDefeated)
+			return;
+
 		if (wasSpawned && !IsActive)
 		{
 			Spawn();
@@ -112,7 +115,7 @@ public partial class SkeletonMajin : Enemy
 
 	protected override void ExitRange()
 	{
-		if (!IsActive)
+		if (!IsActive || IsDefeated)
 			return;
 
 		if (!despawnOnRangeExit)
