@@ -234,12 +234,24 @@ size = Vector3(30, 15, 6)
 Data = ExtResource("2_ftyvr")
 disableObjectiveAutocompletion = true
 
+[node name="SpiralProbe" parent="Static/Lighting" index="0"]
+transform = Transform3D(0.8682595, 0, -0.4961104, 0, 1, 0, 0.4961104, 0, 0.8682595, 854.5646, -23, -1292.6759)
+size = Vector3(176.92297, 160, 160.85716)
+
 [node name="BoneAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="BoneAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1150, 0.000195503, -1125)
 
 [node name="CharacterSpawn" parent="BoneAct/SpawnPosition" instance=ExtResource("2_mh17e")]
+
+[node name="Player" parent="BoneAct/SpawnPosition/CharacterSpawn" index="0"]
+transform = Transform3D(0.90566504, 0, -0.42399395, 0, 1, 0, 0.42399395, 0, 0.90566504, 0, 0, 0)
+
+[node name="HeadsUpDisplay" parent="BoneAct/SpawnPosition/CharacterSpawn" index="3" node_paths=PackedStringArray("fireSouls")]
+fireSouls = []
+fireSoulImg = null
+fireSoulDashImg = null
 
 [node name="Dialog" type="Node3D" parent="BoneAct"]
 
@@ -380,6 +392,20 @@ initialVelocity = 1.0
 [node name="WarpRed" parent="BoneAct/RedHall" node_paths=PackedStringArray("warpTarget") instance=ExtResource("13_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -138)
 warpTarget = NodePath("../../BlueHall/WarpExit")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="BoneAct/RedHall/WarpRed"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.65173, 6.036072)
+light_color = Color(1, 0, 0, 1)
+light_energy = 3.0
+light_bake_mode = 0
+light_cull_mask = 4293918791
+shadow_enabled = true
+distance_fade_enabled = true
+distance_fade_begin = 80.0
+distance_fade_shadow = 0.0
+distance_fade_length = 60.0
+omni_range = 12.458833
+omni_attenuation = 0.2
 
 [node name="RedHall1" type="Node3D" parent="BoneAct/RedHall"]
 script = ExtResource("16_v6q0e")
@@ -818,6 +844,20 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, -138)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, -138)
 warpTarget = NodePath("../../YellowHall/WarpExit")
 
+[node name="OmniLight3D" type="OmniLight3D" parent="BoneAct/BlueHall/WarpRed"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1326294, 5.820847, 2.5414429)
+light_color = Color(1, 0, 0, 1)
+light_energy = 3.0
+light_bake_mode = 0
+light_cull_mask = 4293918791
+shadow_enabled = true
+distance_fade_enabled = true
+distance_fade_begin = 80.0
+distance_fade_shadow = 20.0
+distance_fade_length = 40.0
+omni_range = 12.458833
+omni_attenuation = 0.1
+
 [node name="YellowHall" type="Node3D" parent="BoneAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 900, 0, -488)
 script = ExtResource("16_v6q0e")
@@ -981,6 +1021,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 3, -125)
 [node name="WarpRed" parent="BoneAct/YellowHall" node_paths=PackedStringArray("warpTarget") instance=ExtResource("13_7ln1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -138.5)
 warpTarget = NodePath("../../RedHall/WarpExit")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="BoneAct/YellowHall/WarpRed"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.41986084, 6.0055895, 2.9870605)
+light_color = Color(1, 0, 0, 1)
+light_energy = 3.0
+light_bake_mode = 0
+light_cull_mask = 4293918791
+shadow_enabled = true
+distance_fade_enabled = true
+distance_fade_begin = 80.0
+distance_fade_shadow = 20.0
+distance_fade_length = 40.0
+omni_range = 15.0
+omni_attenuation = 0.1
 
 [node name="WarpWallL" parent="BoneAct/YellowHall" instance=ExtResource("20_pvpxi")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -3, 0, -138.5)
@@ -2621,6 +2675,20 @@ respawnAnimation = 1
 [node name="WarpRed" parent="BoneAct/Spiral/Warp" node_paths=PackedStringArray("warpTarget") instance=ExtResource("13_7ln1s")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 140, 0, 0)
 warpTarget = NodePath("../../../Throne/WarpExit")
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="BoneAct/Spiral/Warp/WarpRed"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 5.1018677, 2.4986572)
+light_color = Color(1, 0, 0, 1)
+light_energy = 3.0
+light_bake_mode = 0
+light_cull_mask = 4293918791
+shadow_enabled = true
+distance_fade_enabled = true
+distance_fade_begin = 50.0
+distance_fade_shadow = 5.0
+distance_fade_length = 50.0
+omni_range = 12.458833
+omni_attenuation = 0.2
 
 [node name="FireSoul3" parent="BoneAct/Spiral/Warp" instance=ExtResource("33_phq0i")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 115, 7, 0.2)

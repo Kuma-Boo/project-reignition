@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://slvtrs84m8s0"]
+[gd_scene load_steps=41 format=3 uid="uid://slvtrs84m8s0"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_drnsg"]
 [ext_resource type="PackedScene" uid="uid://bsd07snxevqk5" path="res://area/6 skeleton dome/act 3/environment/01Throne.tscn" id="1_gpt5a"]
@@ -30,6 +30,7 @@
 [ext_resource type="Resource" uid="uid://bu377gi4d8wv5" path="res://area/6 skeleton dome/act 3/camera/SpiralCam.tres" id="27_vvehx"]
 [ext_resource type="AudioStream" uid="uid://dfly3x24mjpe8" path="res://sound/ost/bonus disc/Skeleton Dome Act 3.mp3" id="29_a6mka"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="30_vxxf3"]
+[ext_resource type="CompressedTexture3D" uid="uid://cv8b0l2np7ud0" path="res://area/6 skeleton dome/data/texture/LUT test 7.png" id="31_vxxf3"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_n6xm6"]
 size = Vector3(150, 5, 150)
@@ -456,22 +457,32 @@ _data = {
 &"demo3": SubResource("Animation_q2jct")
 }
 
-[sub_resource type="Environment" id="Environment_asv45"]
+[sub_resource type="Environment" id="Environment_454hl"]
 background_mode = 1
 ambient_light_source = 2
-ambient_light_color = Color(0.277528, 0.277528, 0.277528, 1)
-tonemap_mode = 2
-tonemap_exposure = 1.2
+ambient_light_color = Color(0.56133336, 1, 0.44, 1)
+ambient_light_energy = 0.06
+tonemap_mode = 1
+tonemap_exposure = 1.1
 tonemap_white = 2.0
 glow_enabled = true
+glow_levels/2 = 1.0
+glow_levels/3 = 0.0
+glow_levels/4 = 0.5
+glow_levels/5 = 0.0
 glow_normalized = true
-glow_intensity = 1.0
-glow_strength = 0.9
-glow_bloom = 0.15
-glow_blend_mode = 1
+glow_strength = 0.5
+glow_mix = 0.293
+glow_bloom = 0.1
+glow_blend_mode = 0
 glow_hdr_threshold = 2.0
+fog_light_color = Color(1, 0, 0, 1)
+fog_light_energy = 0.01
 adjustment_enabled = true
-adjustment_contrast = 0.9
+adjustment_brightness = 1.1
+adjustment_contrast = 1.2
+adjustment_saturation = 1.2
+adjustment_color_correction = ExtResource("31_vxxf3")
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_drnsg")
@@ -503,96 +514,197 @@ visible = false
 [node name="Lighting" type="Node3D" parent="."]
 
 [node name="SpiralProbe" type="ReflectionProbe" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 881.4944, -23, -1284.3606)
+transform = Transform3D(0.736534, 0, -0.67640054, 0, 1, 0, 0.67640054, 0, 0.736534, 847.9157, -23, -1302.6052)
 layers = 1024
-size = Vector3(253.00339, 160, 211.27666)
+blend_distance = 8.0
+size = Vector3(193.36546, 160, 158.83826)
 interior = true
-cull_mask = 4
+cull_mask = 0
 reflection_mask = 4
 ambient_mode = 2
-ambient_color = Color(0.32930323, 0.7295215, 0.7128964, 1)
-ambient_color_energy = 1.5
+ambient_color = Color(0, 1, 1, 1)
+ambient_color_energy = 3.0
+
+[node name="SpiralProbe2" type="ReflectionProbe" parent="Lighting"]
+transform = Transform3D(0.3870328, 0, -0.922066, 0, 1, 0, 0.922066, 0, 0.3870328, 853.86456, -23, -1305.1023)
+layers = 1024
+blend_distance = 8.0
+size = Vector3(193.36546, 160, 171.74167)
+interior = true
+cull_mask = 0
+reflection_mask = 1
+ambient_mode = 2
+ambient_color = Color(0, 1, 1, 1)
+ambient_color_energy = 0.5
+
+[node name="SpiralProbe3" type="ReflectionProbe" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 929.23004, -35.08191, -1369.9343)
+layers = 1024
+blend_distance = 8.0
+size = Vector3(93.53516, 30.421143, 28.459816)
+interior = true
+cull_mask = 0
+reflection_mask = 4
+ambient_mode = 2
+ambient_color = Color(1, 0, 0, 1)
+ambient_color_energy = 0.4
+
+[node name="SpiralProbe5" type="ReflectionProbe" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 929.23004, -35.08191, -1369.9343)
+layers = 1024
+blend_distance = 8.0
+size = Vector3(89.1625, 30.421143, 28.459816)
+interior = true
+cull_mask = 0
+reflection_mask = 65
+ambient_mode = 2
+ambient_color = Color(1, 0, 0, 1)
+ambient_color_energy = 0.1
+
+[node name="SpiralProbe4" type="ReflectionProbe" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 985.74347, -35.08191, -1369.9343)
+layers = 1024
+blend_distance = 8.0
+size = Vector3(27.722656, 30.421143, 28.459816)
+interior = true
+cull_mask = 0
+reflection_mask = 5
+ambient_mode = 2
+ambient_color = Color(0, 1, 0.3833332, 1)
+ambient_color_energy = 0.5
 
 [node name="EndingProbe" type="ReflectionProbe" parent="Lighting"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1148.4231, 20, -1197.437)
 layers = 1024
 size = Vector3(63.15381, 60, 245.1261)
 interior = true
-cull_mask = 4
+cull_mask = 0
 reflection_mask = 4
 ambient_mode = 2
-ambient_color = Color(0.39045918, 0.9868457, 0.88617724, 1)
-ambient_color_energy = 0.6
+ambient_color = Color(0.35000002, 0.8483335, 1, 1)
+ambient_color_energy = 1.5
 
 [node name="ArenaProbe" type="ReflectionProbe" parent="Lighting"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1000, 40, -1000)
 layers = 1024
 size = Vector3(300, 100, 300)
 interior = true
-cull_mask = 2
+cull_mask = 0
 reflection_mask = 2
 ambient_mode = 2
-ambient_color = Color(0.588235, 1, 0.862745, 1)
+ambient_color = Color(0.80866665, 0.59000003, 1, 1)
+
+[node name="ArenaProbe2" type="ReflectionProbe" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1000, 40, -1000)
+layers = 1024
+size = Vector3(300, 100, 300)
+interior = true
+cull_mask = 0
+reflection_mask = 1
+ambient_mode = 2
+ambient_color = Color(0.59000003, 0.6856668, 1, 1)
+ambient_color_energy = 0.33
 
 [node name="HallAProbe" type="ReflectionProbe" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 500, 8, -558)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 500, 7.7646484, -552.9357)
 layers = 1024
-size = Vector3(25, 20, 147)
+blend_distance = 8.0
+size = Vector3(49.28711, 34.57422, 136.87146)
 interior = true
 cull_mask = 4
 reflection_mask = 4
 ambient_mode = 2
-ambient_color = Color(1, 0.81, 0.81, 1)
-ambient_color_energy = 0.6
+ambient_color = Color(0.47000003, 1, 0.62016666, 1)
+ambient_color_energy = 3.0
+
+[node name="HallAProbe2" type="ReflectionProbe" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 500, 7.7646484, -552.9357)
+layers = 1024
+blend_distance = 8.0
+size = Vector3(49.28711, 34.57422, 136.87146)
+interior = true
+cull_mask = 0
+reflection_mask = 1
+ambient_mode = 2
+ambient_color = Color(0.47000003, 1, 0.62016666, 1)
+ambient_color_energy = 0.1
 
 [node name="HallBProbe" type="ReflectionProbe" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 700, 8, -557)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 700, 8, -549.06616)
 layers = 1024
-size = Vector3(26, 20, 147)
+size = Vector3(26, 20, 131.13232)
 interior = true
 cull_mask = 4
 reflection_mask = 4
 ambient_mode = 2
-ambient_color = Color(0.49, 0.847, 1, 1)
-ambient_color_energy = 0.5
+ambient_color = Color(1, 0, 0.8000002, 1)
+ambient_color_energy = 2.0
+
+[node name="HallBProbe2" type="ReflectionProbe" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 700, 8, -549.06616)
+layers = 1024
+size = Vector3(26, 20, 131.13232)
+interior = true
+cull_mask = 0
+reflection_mask = 1
+ambient_mode = 2
+ambient_color = Color(0.2999997, 0, 1, 1)
+ambient_color_energy = 0.2
 
 [node name="HallCProbe" type="ReflectionProbe" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 900, 8, -558)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 900, 8, -543.3472)
 layers = 1024
-size = Vector3(23, 20, 147)
+blend_distance = 12.0
+size = Vector3(53.663086, 50.03418, 155.81628)
 interior = true
 cull_mask = 4
 reflection_mask = 4
 ambient_mode = 2
-ambient_color = Color(1, 0.7753107, 0.9445093, 1)
-ambient_color_energy = 0.5
+ambient_color = Color(0.76274997, 0.81, 0.5265, 1)
+ambient_color_energy = 1.2
+
+[node name="HallCProbe2" type="ReflectionProbe" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 900, 8, -543.3472)
+layers = 1024
+blend_distance = 12.0
+size = Vector3(53.663086, 50.03418, 155.81628)
+interior = true
+cull_mask = 0
+reflection_mask = 1
+ambient_mode = 2
+ambient_color = Color(0.74439, 0.81, 0.3726, 1)
+ambient_color_energy = 0.4
 
 [node name="HallTreasureProbe" type="ReflectionProbe" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1100, 5, -558)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1100, -0.6962557, -556.61096)
 layers = 1024
-size = Vector3(40, 20, 148)
+blend_distance = 16.0
+size = Vector3(80.46704, 31.521025, 188.55951)
 interior = true
 cull_mask = 4
 reflection_mask = 4
 ambient_mode = 2
-ambient_color = Color(0.670464, 0.63530356, 1.540184e-06, 1)
-ambient_color_energy = 0.5
+ambient_color = Color(0, 0.9833336, 1, 1)
+ambient_color_energy = 1.2
 
-[node name="EnvironmentLighting" type="DirectionalLight3D" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+[node name="HallTreasureProbe2" type="ReflectionProbe" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1100, -3.4126377, -556.61096)
 layers = 1024
-light_color = Color(1, 0.86, 0.86, 1)
-light_energy = 0.8
-light_cull_mask = 4293918724
-shadow_enabled = true
-shadow_caster_mask = 65
-directional_shadow_blend_splits = true
+blend_distance = 16.0
+size = Vector3(80.46704, 40.585194, 188.55951)
+interior = true
+cull_mask = 0
+reflection_mask = 1
+ambient_mode = 2
+ambient_color = Color(0, 1, 0.6833334, 1)
+ambient_color_energy = 0.2
 
 [node name="ObjectLighting" type="DirectionalLight3D" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+transform = Transform3D(0.9659258, 1.1313343e-08, -0.25881904, 0.25881904, -4.222197e-08, 0.9659258, 2.3798672e-16, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
-light_color = Color(1, 0.86, 0.86, 1)
-light_energy = 0.5
+light_color = Color(0.7607843, 1, 0.93333334, 1)
+light_energy = 0.2
+light_specular = 5.0
 light_cull_mask = 4293918785
 shadow_caster_mask = 65
 directional_shadow_blend_splits = true
@@ -772,7 +884,7 @@ loopEndPosition = 223.4
 isStageMusic = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_asv45")
+environment = SubResource("Environment_454hl")
 
 [connection signal="Activated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Path" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Camera" method="Activate"]
