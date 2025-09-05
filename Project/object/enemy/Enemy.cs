@@ -340,6 +340,7 @@ public partial class Enemy : Node3D
 	protected void ResetInteractionProcessed()
 	{
 		IsInteractionProcessed = false;
+		IsLightSpeedAttackValid = false;
 		timeSinceLastInteraction = 0;
 		Player.AttackStateChanged -= ResetInteractionProcessed;
 	}
