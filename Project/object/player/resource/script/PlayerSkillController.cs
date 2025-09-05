@@ -105,7 +105,7 @@ public partial class PlayerSkillController : Node3D
 			return;
 		}
 
-		if (UpdateCrestTimer())
+		if (StageSettings.Instance.CurrentRingCount > 0 && UpdateCrestTimer())
 		{
 			Player.MoveSpeed = Mathf.Max(Player.MoveSpeed, Player.Stats.GroundSettings.Speed * WindCrestSpeedMultiplier);
 			StageSettings.Instance.UpdateRingCount(1, StageSettings.MathModeEnum.Subtract, true);
