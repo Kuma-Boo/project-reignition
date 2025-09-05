@@ -39,20 +39,22 @@ namespace Project.Interface.Menus
 				if ((Runtime.Instance.IsActionJustPressed("sys_pause", "ui_accept") && !Input.IsActionJustPressed("toggle_fullscreen")) ||
 					Runtime.Instance.IsActionJustPressed("sys_select", "ui_select"))
 					FinishCutscene();
+
+				return;
 			}
-			else if (Input.IsAnythingPressed()) //Change menu
+
+			if (Input.IsAnythingPressed()) //Change menu
 			{
+				GD.Print("Confirmed");
 				Confirm();
 				return;
 			}
-			else
+
+			cutsceneTimer += PhysicsManager.physicsDelta;
+			if (cutsceneTimer >= CUTSCENE_TIME_LENGTH && !isCutsceneActive)
 			{
-				cutsceneTimer += PhysicsManager.physicsDelta;
-				if (cutsceneTimer >= CUTSCENE_TIME_LENGTH && !isCutsceneActive)
-				{
-					StartCutscene();
-					return;
-				}
+				StartCutscene();
+				return;
 			}
 		}
 
@@ -79,6 +81,7 @@ namespace Project.Interface.Menus
 		{
 			isCutsceneActive = true;
 			animator.Play("cutscene-start");
+			GD.Print("Started");
 		}
 
 		private void FinishCutscene()
@@ -86,6 +89,7 @@ namespace Project.Interface.Menus
 			cutsceneTimer = 0;
 			isCutsceneActive = false;
 			animator.Play("cutscene-finish");
+			GD.Print("Finishing Cutscene");
 		}
 	}
 }
