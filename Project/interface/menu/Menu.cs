@@ -78,7 +78,7 @@ public partial class Menu : Control
 			ShowMenu();
 	}
 
-	public override void _Process(double _)
+	public override void _PhysicsProcess(double _)
 	{
 		ProcessBgmFade(); // Always process background music fade
 
