@@ -3,9 +3,9 @@ using Project.Core;
 
 namespace Project.Interface.Menus
 {
-	/// <summary>
-	/// Press start. Also plays an intro cutscene if you wait long enough.
-	/// </summary>
+	// / <summary>
+	// / Press start. Also plays an intro cutscene if you wait long enough.
+	// / </summary>
 	public partial class Title : Menu
 	{
 		[Export] private Label versionLabel;
@@ -43,7 +43,7 @@ namespace Project.Interface.Menus
 				return;
 			}
 
-			if (Input.IsAnythingPressed()) //Change menu
+			if (Input.IsAnythingPressed()) // Change menu
 			{
 				Confirm();
 				return;
@@ -57,7 +57,7 @@ namespace Project.Interface.Menus
 			}
 		}
 
-		//Activate main menu (submenu 0);
+		// Activate main menu (submenu 0);
 		public override void OpenSubmenu() => _submenus[0].ShowMenu();
 
 		public override void ShowMenu()
@@ -80,6 +80,7 @@ namespace Project.Interface.Menus
 		{
 			isCutsceneActive = true;
 			animator.Play("cutscene-start");
+			DisableProcessing();
 		}
 
 		private void FinishCutscene()
@@ -87,6 +88,7 @@ namespace Project.Interface.Menus
 			cutsceneTimer = 0;
 			isCutsceneActive = false;
 			animator.Play("cutscene-finish");
+			DisableProcessing();
 		}
 	}
 }
