@@ -470,7 +470,7 @@ public partial class SkillSelect : Menu
 		alertAnimator.Play("RESET");
 		alertAnimator.Advance(0.0);
 
-		if (status == SkillEquipStatusEnum.Conflict || status == SkillEquipStatusEnum.ElementRequirement)
+		if (status == SkillEquipStatusEnum.Conflict)
 		{
 			SkillResource conflictingSkill = status == SkillEquipStatusEnum.Conflict ? ActiveSkillRing.GetConflictingSkill(skill.Key) :
 				Runtime.Instance.SkillList.GetSkill(skillKey);

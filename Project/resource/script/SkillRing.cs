@@ -283,9 +283,26 @@ public class SkillRing
 	/// <summary> Updates a skill ring to match the active game data. </summary>
 	public void LoadFromActiveData()
 	{
+		ValidateCrestSkills();
 		UpdateTotalSkillPoints();
 		UpdateTotalCost();
 		UpdateSkillCounts();
+	}
+
+	public void ValidateCrestSkills()
+	{
+		UpdateSkillCounts();
+
+		for (int i = EquippedSkills.Count - 1; i >= 0; i--)
+		{
+			SkillResource skill = Runtime.Instance.SkillList.GetSkill(EquippedSkills[i]);
+
+			if (skill.ElementRequirement == 0 || GetSkillCountByElement(skill.Element) >= skill.ElementRequirement)
+				continue;
+
+			EquippedSkills.Remove(EquippedSkills[i]);
+			UpdateSkillCounts();
+		}
 	}
 
 	/// <summary> Sorts skill resources based on their key (number). </summary>

@@ -1052,7 +1052,10 @@ public partial class SaveManager : Node
 
 			// Load Skill Ring
 			if (dictionary.TryGetValue(nameof(equippedSkills), out var))
+			{
 				equippedSkills = LoadSkills((Array<string>)var);
+				ActiveSkillRing.ValidateCrestSkills();
+			}
 
 			if (dictionary.TryGetValue(nameof(equippedAugments), out var))
 				equippedAugments = LoadAugments((Dictionary<string, int>)var);
