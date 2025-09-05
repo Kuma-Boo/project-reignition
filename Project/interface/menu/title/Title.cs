@@ -45,7 +45,6 @@ namespace Project.Interface.Menus
 
 			if (Input.IsAnythingPressed()) //Change menu
 			{
-				GD.Print("Confirmed");
 				Confirm();
 				return;
 			}
@@ -81,7 +80,6 @@ namespace Project.Interface.Menus
 		{
 			isCutsceneActive = true;
 			animator.Play("cutscene-start");
-			GD.Print("Started");
 		}
 
 		private void FinishCutscene()
@@ -89,7 +87,6 @@ namespace Project.Interface.Menus
 			cutsceneTimer = 0;
 			isCutsceneActive = false;
 			animator.Play("cutscene-finish");
-			GD.Print("Finishing Cutscene");
 		}
 	}
 }
