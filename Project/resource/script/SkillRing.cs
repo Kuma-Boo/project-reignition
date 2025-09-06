@@ -348,6 +348,7 @@ public enum SkillKey
 	ChargeJump,
 	SlowTurn, // Decreases Sonic's turning sensitivity
 	QuickTurn, // Increases Sonic's turning sensitivity
+	LockedSoulGauge, // Limits the soul gauge to lvl 1 Sonic
 	RankPreview, // Shows the current rank on the heads-up display
 
 	SpeedUp, // Increases Sonic's top speed

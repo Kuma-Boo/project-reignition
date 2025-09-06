@@ -916,10 +916,12 @@ public partial class SaveManager : Node
 		private LevelSaveData levelData = new();
 
 		/// <summary> Calculates the player's soul gauge size based on the player's level. </summary>
-		public int CalculateMaxSoulPower()
+		public int CalculateMaxSoulPower(bool isLocked)
 		{
 			int maxSoulPower = 100; // Starting soul gauge size
-			maxSoulPower += Mathf.FloorToInt(CalculateSoulGaugeLevelRatio() * 5f) * 20; // Soul Gauge size increases by 20 every 5 levels, so it caps at 300
+			if (!isLocked)
+				maxSoulPower += Mathf.FloorToInt(CalculateSoulGaugeLevelRatio() * 5f) * 20; // Soul Gauge size increases by 20 every 5 levels, so it caps at 300
+
 			return maxSoulPower;
 		}
 

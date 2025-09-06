@@ -24,7 +24,7 @@ public partial class PlayerSkillController : Node3D
 		normalCollisionMask = Player.CollisionMask;
 
 		// Determine the size of the soul gauge
-		MaxSoulPower = SaveManager.ActiveGameData.CalculateMaxSoulPower();
+		MaxSoulPower = SaveManager.ActiveGameData.CalculateMaxSoulPower(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LockedSoulGauge));
 
 		SetUpSkills();
 		timeBreakAnimator.Play("RESET");

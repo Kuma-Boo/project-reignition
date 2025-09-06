@@ -77,6 +77,7 @@ public partial class ExperienceResult : Control
 
 		return currentLevel;
 	}
+	private int initialMaxSoulPower;
 	private const int MaxLevel = 99;
 	private const int LevelInterval = 10000;
 
@@ -89,6 +90,8 @@ public partial class ExperienceResult : Control
 		useMissionExp = Stage.LevelState == StageSettings.LevelStateEnum.Success &&
 			SaveManager.ActiveGameData.LevelData.GetClearStatus(Stage.Data.LevelID) != SaveManager.LevelSaveData.LevelStatus.Cleared;
 		useAccumulatedExp = AccumulatedExp != 0;
+
+		initialMaxSoulPower = SaveManager.ActiveGameData.CalculateMaxSoulPower(false);
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -245,10 +248,10 @@ public partial class ExperienceResult : Control
 		if (levelsGained == 0)
 			return;
 
-		int maxSoulPower = SaveManager.ActiveGameData.CalculateMaxSoulPower();
+		int maxSoulPower = SaveManager.ActiveGameData.CalculateMaxSoulPower(false);
 		int maxSkillPoints = SkillRing.CalculateSkillPointsByLevel(SaveManager.ActiveGameData.level);
 
-		int soulGaugeGain = maxSoulPower - StageSettings.Player.Skills.MaxSoulPower;
+		int soulGaugeGain = maxSoulPower - initialMaxSoulPower;
 		int skillPointGain = maxSkillPoints - SaveManager.ActiveSkillRing.MaxSkillPoints;
 
 		levelGainLabel.Text = $"+{levelsGained:00}";
