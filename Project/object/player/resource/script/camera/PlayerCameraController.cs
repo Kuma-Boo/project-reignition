@@ -934,15 +934,13 @@ public partial class PlayerCameraController : Node3D
 	public bool IsCrossfading => crossfadeAnimator.IsPlaying();
 	public void StartCrossfade(float speed = 1.0f)
 	{
-		// Already crossfading
-		if (IsCrossfading)
-			return;
-
 		// Update the crossfade texture
 		ImageTexture tex = new();
 		tex.SetImage(GetViewport().GetTexture().GetImage());
 		crossfade.Texture = tex;
-		crossfadeAnimator.Play("activate");// Start crossfade animation
+		crossfadeAnimator.Play("activate"); // Start crossfade animation
+		crossfadeAnimator.Seek(0.0);
+		crossfadeAnimator.Play(); // Start crossfade animation
 		crossfadeAnimator.SpeedScale = speed;
 
 		if (!StageSettings.Instance.IsLevelIngame)
