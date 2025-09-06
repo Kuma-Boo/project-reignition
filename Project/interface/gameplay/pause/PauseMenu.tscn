@@ -1,4 +1,4 @@
-[gd_scene load_steps=105 format=3 uid="uid://coshp5qmt1aq7"]
+[gd_scene load_steps=107 format=3 uid="uid://coshp5qmt1aq7"]
 
 [ext_resource type="Script" uid="uid://dyfvgibst7wnn" path="res://interface/gameplay/pause/PauseMenu.cs" id="1"]
 [ext_resource type="PackedScene" uid="uid://c3d5r3parf5ur" path="res://interface/gameplay/pause/PauseSkill.tscn" id="2_pyysd"]
@@ -1179,10 +1179,46 @@ tracks/71/keys = {
 "update": 0,
 "values": [Vector2(0, 0)]
 }
+tracks/72/type = "value"
+tracks/72/imported = false
+tracks/72/enabled = true
+tracks/72/path = NodePath("StatusMenu/Header:modulate")
+tracks/72/interp = 1
+tracks/72/loop_wrap = true
+tracks/72/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/73/type = "value"
+tracks/73/imported = false
+tracks/73/enabled = true
+tracks/73/path = NodePath("StatusMenu/Status:modulate")
+tracks/73/interp = 1
+tracks/73/loop_wrap = true
+tracks/73/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/74/type = "value"
+tracks/74/imported = false
+tracks/74/enabled = true
+tracks/74/path = NodePath("StatusMenu/Skills:modulate")
+tracks/74/interp = 1
+tracks/74/loop_wrap = true
+tracks/74/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_fg5m5"]
 resource_name = "cancel-2"
-length = 1.3
+length = 1.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -2093,11 +2129,11 @@ tracks/21/keys = {
 tracks/22/type = "value"
 tracks/22/imported = false
 tracks/22/enabled = true
-tracks/22/path = NodePath("StatusMenu/Mission:position")
+tracks/22/path = NodePath("StatusMenu/Skills:position")
 tracks/22/interp = 1
 tracks/22/loop_wrap = true
 tracks/22/keys = {
-"times": PackedFloat32Array(0.8, 0.9),
+"times": PackedFloat32Array(0.79999995, 0.9),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector2(100, 344), Vector2(0, 344)]
@@ -2105,11 +2141,11 @@ tracks/22/keys = {
 tracks/23/type = "value"
 tracks/23/imported = false
 tracks/23/enabled = true
-tracks/23/path = NodePath("StatusMenu/Mission:self_modulate")
+tracks/23/path = NodePath("StatusMenu/Skills:self_modulate")
 tracks/23/interp = 1
 tracks/23/loop_wrap = true
 tracks/23/keys = {
-"times": PackedFloat32Array(0.8, 0.9),
+"times": PackedFloat32Array(0.79999995, 0.9),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.588235)]
@@ -2117,31 +2153,31 @@ tracks/23/keys = {
 tracks/24/type = "value"
 tracks/24/imported = false
 tracks/24/enabled = true
-tracks/24/path = NodePath("StatusMenu/Skills:position")
+tracks/24/path = NodePath("StatusMenu/Skills/Glow:self_modulate")
 tracks/24/interp = 1
 tracks/24/loop_wrap = true
 tracks/24/keys = {
-"times": PackedFloat32Array(0.9, 1),
-"transitions": PackedFloat32Array(0.5, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(100, 408), Vector2(0, 408)]
+"values": [Color(1, 1, 1, 0)]
 }
 tracks/25/type = "value"
 tracks/25/imported = false
 tracks/25/enabled = true
-tracks/25/path = NodePath("StatusMenu/Skills:self_modulate")
+tracks/25/path = NodePath("StatusMenu/Status/Glow:self_modulate")
 tracks/25/interp = 1
 tracks/25/loop_wrap = true
 tracks/25/keys = {
-"times": PackedFloat32Array(0.9, 1),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.588235)]
+"values": [Color(1, 1, 1, 0)]
 }
 tracks/26/type = "value"
 tracks/26/imported = false
 tracks/26/enabled = true
-tracks/26/path = NodePath("StatusMenu/Skills/Glow:self_modulate")
+tracks/26/path = NodePath("StatusMenu/Mission/Glow:self_modulate")
 tracks/26/interp = 1
 tracks/26/loop_wrap = true
 tracks/26/keys = {
@@ -2153,7 +2189,7 @@ tracks/26/keys = {
 tracks/27/type = "value"
 tracks/27/imported = false
 tracks/27/enabled = true
-tracks/27/path = NodePath("StatusMenu/Status/Glow:self_modulate")
+tracks/27/path = NodePath("StatusMenu/ValueMenu:modulate")
 tracks/27/interp = 1
 tracks/27/loop_wrap = true
 tracks/27/keys = {
@@ -2162,37 +2198,13 @@ tracks/27/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
 }
-tracks/28/type = "value"
+tracks/28/type = "method"
 tracks/28/imported = false
 tracks/28/enabled = true
-tracks/28/path = NodePath("StatusMenu/Mission/Glow:self_modulate")
+tracks/28/path = NodePath("Description")
 tracks/28/interp = 1
 tracks/28/loop_wrap = true
 tracks/28/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/29/type = "value"
-tracks/29/imported = false
-tracks/29/enabled = true
-tracks/29/path = NodePath("StatusMenu/ValueMenu:modulate")
-tracks/29/interp = 1
-tracks/29/loop_wrap = true
-tracks/29/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/30/type = "method"
-tracks/30/imported = false
-tracks/30/enabled = true
-tracks/30/path = NodePath("Description")
-tracks/30/interp = 1
-tracks/30/loop_wrap = true
-tracks/30/keys = {
 "times": PackedFloat32Array(0.6),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -2200,17 +2212,53 @@ tracks/30/keys = {
 "method": &"ShowDescription"
 }]
 }
-tracks/31/type = "value"
-tracks/31/imported = false
-tracks/31/enabled = true
-tracks/31/path = NodePath("Description:visible")
-tracks/31/interp = 1
-tracks/31/loop_wrap = true
-tracks/31/keys = {
+tracks/29/type = "value"
+tracks/29/imported = false
+tracks/29/enabled = true
+tracks/29/path = NodePath("Description:visible")
+tracks/29/interp = 1
+tracks/29/loop_wrap = true
+tracks/29/keys = {
 "times": PackedFloat32Array(0, 0.6),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
+}
+tracks/30/type = "value"
+tracks/30/imported = false
+tracks/30/enabled = true
+tracks/30/path = NodePath("StatusMenu/Header:modulate")
+tracks/30/interp = 1
+tracks/30/loop_wrap = true
+tracks/30/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/31/type = "value"
+tracks/31/imported = false
+tracks/31/enabled = true
+tracks/31/path = NodePath("StatusMenu/Status:modulate")
+tracks/31/interp = 1
+tracks/31/loop_wrap = true
+tracks/31/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/32/type = "value"
+tracks/32/imported = false
+tracks/32/enabled = true
+tracks/32/path = NodePath("StatusMenu/Skills:modulate")
+tracks/32/interp = 1
+tracks/32/loop_wrap = true
+tracks/32/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_wcyih"]
@@ -3429,7 +3477,7 @@ tracks/13/keys = {
 [sub_resource type="Animation" id="58"]
 resource_name = "show"
 length = 0.200003
-step = 0.016666668
+step = 0.01
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -3780,267 +3828,31 @@ tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 408)]
-}
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("StatusMenu/Skills:self_modulate")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0.588235)]
-}
-tracks/8/type = "value"
-tracks/8/imported = false
-tracks/8/enabled = true
-tracks/8/path = NodePath("StatusMenu/Skills/Glow:self_modulate")
-tracks/8/interp = 1
-tracks/8/loop_wrap = true
-tracks/8/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_8e8ou"]
-resource_name = "status-1"
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("StatusMenu/Status:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 280)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("StatusMenu/Status/Glow:self_modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("StatusMenu/Mission:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(-24, 344)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("StatusMenu/Mission:self_modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("StatusMenu/Mission/Glow:self_modulate")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("StatusMenu/Status:self_modulate")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0.588235)]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("StatusMenu/Skills:position")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 408)]
-}
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("StatusMenu/Skills:self_modulate")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0.588235)]
-}
-tracks/8/type = "value"
-tracks/8/imported = false
-tracks/8/enabled = true
-tracks/8/path = NodePath("StatusMenu/Skills/Glow:self_modulate")
-tracks/8/interp = 1
-tracks/8/loop_wrap = true
-tracks/8/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_12jur"]
-resource_name = "status-2"
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("StatusMenu/Status:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 280)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("StatusMenu/Status:self_modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0.588235)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("StatusMenu/Status/Glow:self_modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("StatusMenu/Mission:position")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
 "values": [Vector2(0, 344)]
 }
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("StatusMenu/Mission:self_modulate")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0.588235)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("StatusMenu/Mission/Glow:self_modulate")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("StatusMenu/Status:self_modulate")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("StatusMenu/Skills:position")
+tracks/7/path = NodePath("StatusMenu/Skills:self_modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-24, 408)]
+"values": [Color(1, 1, 1, 0.588235)]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("StatusMenu/Skills:self_modulate")
+tracks/8/path = NodePath("StatusMenu/Skills/Glow:self_modulate")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/9/type = "value"
-tracks/9/imported = false
-tracks/9/enabled = true
-tracks/9/path = NodePath("StatusMenu/Skills/Glow:self_modulate")
-tracks/9/interp = 1
-tracks/9/loop_wrap = true
-tracks/9/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+"values": [Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_gc5ll"]
@@ -4432,230 +4244,8 @@ tracks/25/keys = {
 "values": [Vector2(-320, 239.5), Vector2(-320, 144)]
 }
 
-[sub_resource type="Animation" id="Animation_qciop"]
-resource_name = "value-1"
-length = 2.0
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("..")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.2),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"EnableInteraction"
-}]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("StatusMenu/ValueMenu:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("StatusMenu/ValueMenu/LevelTop:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("StatusMenu/ValueMenu/Top:visible")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("StatusMenu/ValueMenu/Top:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(0.5, 1),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(0, -304)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("StatusMenu/ValueMenu/Bottom:position")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(0.5, 1),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(0, 240)]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("StatusMenu/ValueMenu/Status:modulate")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("StatusMenu/ValueMenu/Mission:modulate")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/8/type = "value"
-tracks/8/imported = false
-tracks/8/enabled = true
-tracks/8/path = NodePath("StatusMenu/ValueMenu/Skill:modulate")
-tracks/8/interp = 1
-tracks/8/loop_wrap = true
-tracks/8/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/9/type = "value"
-tracks/9/imported = false
-tracks/9/enabled = true
-tracks/9/path = NodePath("StatusMenu/ValueMenu/LevelTop:position")
-tracks/9/interp = 1
-tracks/9/loop_wrap = true
-tracks/9/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(0.5, 1),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(0, -328)]
-}
-tracks/10/type = "value"
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/path = NodePath("StatusMenu/ValueMenu/BG:size")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(736, 320)]
-}
-tracks/11/type = "value"
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/path = NodePath("StatusMenu/ValueMenu/Mission/Header:self_modulate")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/12/type = "value"
-tracks/12/imported = false
-tracks/12/enabled = true
-tracks/12/path = NodePath("StatusMenu/ValueMenu/Mission/FireSoul:modulate")
-tracks/12/interp = 1
-tracks/12/loop_wrap = true
-tracks/12/keys = {
-"times": PackedFloat32Array(0, 0.4, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/13/type = "value"
-tracks/13/imported = false
-tracks/13/enabled = true
-tracks/13/path = NodePath("StatusMenu/ValueMenu/Mission/Medal:modulate")
-tracks/13/interp = 1
-tracks/13/loop_wrap = true
-tracks/13/keys = {
-"times": PackedFloat32Array(0, 0.6, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/14/type = "value"
-tracks/14/imported = false
-tracks/14/enabled = true
-tracks/14/path = NodePath("StatusMenu/ValueMenu/Mission/FireSoul/FireSoul3:modulate")
-tracks/14/interp = 1
-tracks/14/loop_wrap = true
-tracks/14/keys = {
-"times": PackedFloat32Array(0, 1, 1.1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/15/type = "value"
-tracks/15/imported = false
-tracks/15/enabled = true
-tracks/15/path = NodePath("StatusMenu/ValueMenu/Mission/FireSoul/FireSoul2:modulate")
-tracks/15/interp = 1
-tracks/15/loop_wrap = true
-tracks/15/keys = {
-"times": PackedFloat32Array(0, 0.9, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/16/type = "value"
-tracks/16/imported = false
-tracks/16/enabled = true
-tracks/16/path = NodePath("StatusMenu/ValueMenu/Mission/FireSoul/FireSoul1:modulate")
-tracks/16/interp = 1
-tracks/16/loop_wrap = true
-tracks/16/keys = {
-"times": PackedFloat32Array(0, 0.8, 0.9),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/17/type = "value"
-tracks/17/imported = false
-tracks/17/enabled = true
-tracks/17/path = NodePath("StatusMenu/ValueMenu/Mission/Medal/Rank:modulate")
-tracks/17/interp = 1
-tracks/17/loop_wrap = true
-tracks/17/keys = {
-"times": PackedFloat32Array(0, 1.1, 1.2),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-
 [sub_resource type="Animation" id="Animation_5tncr"]
-resource_name = "value-2"
+resource_name = "value-1"
 length = 0.5
 tracks/0/type = "method"
 tracks/0/imported = false
@@ -4816,6 +4406,130 @@ tracks/12/keys = {
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_12jur"]
+resource_name = "status-1"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StatusMenu/Status:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 280)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StatusMenu/Status:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.588235)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("StatusMenu/Status/Glow:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StatusMenu/Mission:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 344)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("StatusMenu/Mission:self_modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.588235)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("StatusMenu/Mission/Glow:self_modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("StatusMenu/Status:self_modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("StatusMenu/Skills:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-24, 344)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("StatusMenu/Skills:self_modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("StatusMenu/Skills/Glow:self_modulate")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_oiknc"]
 _data = {
 &"RESET": SubResource("59"),
@@ -4834,12 +4548,862 @@ _data = {
 &"show": SubResource("58"),
 &"show-static": SubResource("Animation_c1m3d"),
 &"status-0": SubResource("Animation_u7e6h"),
-&"status-1": SubResource("Animation_8e8ou"),
-&"status-2": SubResource("Animation_12jur"),
+&"status-1": SubResource("Animation_12jur"),
 &"status-hide": SubResource("Animation_gc5ll"),
 &"value-0": SubResource("Animation_fam1d"),
-&"value-1": SubResource("Animation_qciop"),
-&"value-2": SubResource("Animation_5tncr")
+&"value-1": SubResource("Animation_5tncr")
+}
+
+[sub_resource type="Animation" id="Animation_73vyn"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pause/StatusMenu/ValueMenu:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pause/StatusMenu/ValueMenu/LevelTop:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Pause/StatusMenu/ValueMenu/LevelTop:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Pause/StatusMenu/ValueMenu/Top:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Pause/StatusMenu/ValueMenu/Top:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Pause/StatusMenu/ValueMenu/Bottom:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Pause/StatusMenu/ValueMenu/Status:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Pause/StatusMenu/ValueMenu/Mission:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Pause/StatusMenu/ValueMenu/Skill:modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Pause/StatusMenu/ValueMenu/Mission/Header:self_modulate")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Pause/StatusMenu/ValueMenu/Mission/FireSoul:modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Pause/StatusMenu/ValueMenu/Mission/Medal:modulate")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Pause/StatusMenu/ValueMenu/Mission/FireSoul/FireSoul3:modulate")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Pause/StatusMenu/ValueMenu/Mission/FireSoul/FireSoul2:modulate")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Pause/StatusMenu/ValueMenu/Mission/FireSoul/FireSoul1:modulate")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Pause/StatusMenu/ValueMenu/Mission/Medal/Rank:modulate")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Pause/StatusMenu:modulate")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("Pause/StatusMenu/Header:modulate")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("Pause/StatusMenu/StatusCursorAnchor:modulate")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("Pause/StatusMenu/Status:modulate")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/20/type = "value"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("Pause/StatusMenu/Skills:modulate")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_t074q"]
+resource_name = "value-1"
+length = 2.0
+step = 0.1
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"EnableInteraction"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pause/StatusMenu/ValueMenu:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Pause/StatusMenu/ValueMenu/LevelTop:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Pause/StatusMenu/ValueMenu/LevelTop:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -328)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Pause/StatusMenu/ValueMenu/Top:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Pause/StatusMenu/ValueMenu/Top:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -304)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Pause/StatusMenu/ValueMenu/Bottom:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 240)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Pause/StatusMenu/ValueMenu/Status:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Pause/StatusMenu/ValueMenu/Mission:modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Pause/StatusMenu/ValueMenu/Skill:modulate")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Pause/StatusMenu/ValueMenu/BG:size")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(736, 320)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Pause/StatusMenu/ValueMenu/Mission/Header:self_modulate")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Pause/StatusMenu/ValueMenu/Mission/FireSoul:modulate")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Pause/StatusMenu/ValueMenu/Mission/Medal:modulate")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0, 0.6, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Pause/StatusMenu/ValueMenu/Mission/FireSoul/FireSoul3:modulate")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0, 1, 1.1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Pause/StatusMenu/ValueMenu/Mission/FireSoul/FireSoul2:modulate")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 0.9, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Pause/StatusMenu/ValueMenu/Mission/FireSoul/FireSoul1:modulate")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 0.8, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("Pause/StatusMenu/ValueMenu/Mission/Medal/Rank:modulate")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0, 1.1, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("Pause/StatusMenu:modulate")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("Pause/StatusMenu/Header:modulate")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/20/type = "value"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("Pause/StatusMenu/StatusCursorAnchor:modulate")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/21/type = "value"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("Pause/StatusMenu/Status:modulate")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/22/type = "value"
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/path = NodePath("Pause/StatusMenu/Skills:modulate")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/23/type = "value"
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/path = NodePath("Pause/StatusMenu:position")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 2),
+"update": 0,
+"values": [Vector2(280, 196), Vector2(280, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_o56ng"]
+resource_name = "hide"
+length = 2.0
+step = 0.1
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"EnableInteraction"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pause/StatusMenu/ValueMenu:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Pause/StatusMenu/ValueMenu/LevelTop:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Pause/StatusMenu/ValueMenu/LevelTop:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, -328), Vector2(0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Pause/StatusMenu/ValueMenu/Top:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Pause/StatusMenu/ValueMenu/Top:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, -304), Vector2(0, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Pause/StatusMenu/ValueMenu/Bottom:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 240), Vector2(0, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Pause/StatusMenu/ValueMenu/Status:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Pause/StatusMenu/ValueMenu/Mission:modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Pause/StatusMenu/ValueMenu/Skill:modulate")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Pause/StatusMenu/ValueMenu/BG:size")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(736, 320)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Pause/StatusMenu/ValueMenu/Mission/Header:self_modulate")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Pause/StatusMenu/ValueMenu/Mission/FireSoul:modulate")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Pause/StatusMenu/ValueMenu/Mission/Medal:modulate")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0, 0.19999999),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Pause/StatusMenu/ValueMenu/Mission/FireSoul/FireSoul3:modulate")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0, 0.19999999),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Pause/StatusMenu/ValueMenu/Mission/FireSoul/FireSoul2:modulate")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 0.19999999),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Pause/StatusMenu/ValueMenu/Mission/FireSoul/FireSoul1:modulate")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 0.19999999),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("Pause/StatusMenu/ValueMenu/Mission/Medal/Rank:modulate")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0, 0.19999999),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("Pause/StatusMenu:modulate")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0, 0.19999999),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("Pause/StatusMenu/Header:modulate")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/20/type = "value"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("Pause/StatusMenu/StatusCursorAnchor:modulate")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/21/type = "value"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("Pause/StatusMenu/Status:modulate")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/22/type = "value"
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/path = NodePath("Pause/StatusMenu/Skills:modulate")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/23/type = "value"
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/path = NodePath("Pause/StatusMenu:position")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector2(280, 0), Vector2(280, 196)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_73vyn"]
+_data = {
+&"RESET": SubResource("Animation_73vyn"),
+&"hide": SubResource("Animation_o56ng"),
+&"value-1": SubResource("Animation_t074q")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2e06l"]
@@ -4968,7 +5532,7 @@ animation = &"status-0"
 animation = &"status-1"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_m866g"]
-animation = &"status-2"
+animation = &"status-1"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gwpy0"]
 animation = &"status-hide"
@@ -5016,7 +5580,7 @@ animation = &"value-0"
 animation = &"value-1"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jtug2"]
-animation = &"value-2"
+animation = &"value-1"
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_6f5vy"]
 allow_transition_to_self = true
@@ -5034,7 +5598,7 @@ input_2/break_loop_at_end = false
 input_2/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_sm8n7"]
-graph_offset = Vector2(-901.74445, 271.95627)
+graph_offset = Vector2(-1490.3838, 761.88434)
 nodes/output/position = Vector2(720, 980)
 nodes/cancel-2/node = SubResource("AnimationNodeAnimation_2e06l")
 nodes/cancel-2/position = Vector2(-240, 1020)
@@ -5043,11 +5607,11 @@ nodes/confirm/position = Vector2(0, 1220)
 nodes/confirm-0/node = SubResource("AnimationNodeAnimation_acwph")
 nodes/confirm-0/position = Vector2(-360, 1200)
 nodes/confirm-1/node = SubResource("AnimationNodeAnimation_55w04")
-nodes/confirm-1/position = Vector2(-340, 1340)
+nodes/confirm-1/position = Vector2(-346.66666, 1400)
 nodes/confirm-2/node = SubResource("AnimationNodeAnimation_h5m68")
-nodes/confirm-2/position = Vector2(-600, 940)
+nodes/confirm-2/position = Vector2(-586.6667, 986.6667)
 nodes/confirm-3/node = SubResource("AnimationNodeAnimation_fmrtk")
-nodes/confirm-3/position = Vector2(-260, 1460)
+nodes/confirm-3/position = Vector2(-186.66667, 1506.6666)
 nodes/confirm_enabled/node = SubResource("AnimationNodeTransition_ro3ll")
 nodes/confirm_enabled/position = Vector2(460, 980)
 nodes/hide/node = SubResource("AnimationNodeAnimation_sx5l7")
@@ -5077,11 +5641,11 @@ nodes/show_trigger/position = Vector2(-1000, 500)
 nodes/state/node = SubResource("AnimationNodeTransition_h542o")
 nodes/state/position = Vector2(-20, 540)
 nodes/status-0/node = SubResource("AnimationNodeAnimation_vv1s7")
-nodes/status-0/position = Vector2(-1220, 1140)
+nodes/status-0/position = Vector2(-1226.6666, 1093.3334)
 nodes/status-1/node = SubResource("AnimationNodeAnimation_xheg7")
 nodes/status-1/position = Vector2(-1220, 1260)
 nodes/status-2/node = SubResource("AnimationNodeAnimation_m866g")
-nodes/status-2/position = Vector2(-1180, 1380)
+nodes/status-2/position = Vector2(-1200, 1440)
 nodes/status-hide/node = SubResource("AnimationNodeAnimation_gwpy0")
 nodes/status-hide/position = Vector2(-220, 660)
 nodes/status_add/node = SubResource("AnimationNodeAdd2_4b6d6")
@@ -5089,7 +5653,7 @@ nodes/status_add/position = Vector2(-820, 920)
 nodes/status_hide_trigger/node = SubResource("AnimationNodeOneShot_jshk4")
 nodes/status_hide_trigger/position = Vector2(-80, 920)
 nodes/status_selection/node = SubResource("AnimationNodeTransition_0522j")
-nodes/status_selection/position = Vector2(-1020, 1180)
+nodes/status_selection/position = Vector2(-1026.6666, 1146.6666)
 nodes/status_show_trigger/node = SubResource("AnimationNodeOneShot_7spoh")
 nodes/status_show_trigger/position = Vector2(-380, 820)
 nodes/submenu_transition/node = SubResource("AnimationNodeTransition_lq24n")
@@ -5099,12 +5663,12 @@ nodes/value-0/position = Vector2(-1200, 800)
 nodes/value-1/node = SubResource("AnimationNodeAnimation_3si8f")
 nodes/value-1/position = Vector2(-1200, 920)
 nodes/value-2/node = SubResource("AnimationNodeAnimation_jtug2")
-nodes/value-2/position = Vector2(-1180, 1040)
+nodes/value-2/position = Vector2(-1360, 920)
 nodes/value_selection/node = SubResource("AnimationNodeTransition_6f5vy")
 nodes/value_selection/position = Vector2(-1020, 820)
 node_connections = [&"output", 0, &"confirm_enabled", &"confirm", 0, &"confirm-0", &"confirm", 1, &"confirm-1", &"confirm", 2, &"confirm-3", &"confirm_enabled", 0, &"pause_add", &"confirm_enabled", 1, &"confirm", &"pause_add", 0, &"state", &"pause_add", 1, &"status_hide_trigger", &"selection", 0, &"select-0", &"selection", 1, &"select-1", &"selection", 2, &"select-2", &"selection", 3, &"select-3", &"show_trigger", 0, &"selection", &"show_trigger", 1, &"select_show", &"state", 0, &"hide", &"state", 1, &"hide-static", &"state", 2, &"show", &"state", 3, &"show-static", &"state", 4, &"status-hide", &"status_add", 0, &"value_selection", &"status_add", 1, &"status_selection", &"status_hide_trigger", 0, &"status_show_trigger", &"status_hide_trigger", 1, &"cancel-2", &"status_selection", 0, &"status-0", &"status_selection", 1, &"status-1", &"status_selection", 2, &"status-2", &"status_show_trigger", 0, &"submenu_transition", &"status_show_trigger", 1, &"confirm-2", &"submenu_transition", 0, &"show_trigger", &"submenu_transition", 1, &"status_add", &"value_selection", 0, &"value-0", &"value_selection", 1, &"value-1", &"value_selection", 2, &"value-2"]
 
-[node name="Pause" type="Control" node_paths=PackedStringArray("animator", "pauseCursor", "pauseCursorAnimator", "selectSFX", "description", "statusCursor", "statusCursorAnimator", "values", "missionTypeLabel", "missionDescriptionLabel", "fireSoulParent", "fireSoulRects", "rankRect", "noSkillLabel", "skillContainer", "skillCursor", "skillCursorAnimator", "levelSprite", "skillScrollbar")]
+[node name="Pause" type="Control" node_paths=PackedStringArray("pageAnimator", "statusAnimator", "animator", "pauseCursor", "pauseCursorAnimator", "selectSFX", "description", "statusCursor", "statusCursorAnimator", "values", "missionTypeLabel", "missionDescriptionLabel", "fireSoulParent", "fireSoulRects", "rankRect", "noSkillLabel", "skillContainer", "skillCursor", "skillCursorAnimator", "levelSprite", "skillScrollbar")]
 process_mode = 3
 z_index = 50
 z_as_relative = false
@@ -5115,13 +5679,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
+pageAnimator = NodePath("PageAnimator")
+statusAnimator = NodePath("StatusAnimator")
 animator = NodePath("AnimationTree")
 pauseCursor = NodePath("Pause/Options/PauseCursorAnchor/Cursor")
-pauseCursorAnimator = NodePath("Pause/Options/PauseCursorAnchor/AnimationPlayer")
+pauseCursorAnimator = NodePath("Pause/Options/PauseCursorAnchor/PauseCursorAnimator")
 selectSFX = NodePath("SFX/SelectionSFX")
 description = NodePath("Pause/Description")
 statusCursor = NodePath("Pause/StatusMenu/StatusCursorAnchor/Cursor")
-statusCursorAnimator = NodePath("Pause/StatusMenu/StatusCursorAnchor/AnimationPlayer")
+statusCursorAnimator = NodePath("Pause/StatusMenu/StatusCursorAnchor/StatusCursorAnimator")
 values = [NodePath("Pause/StatusMenu/ValueMenu/Status/Level/LevelValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/Level/RingValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/HighScore/HighScoreValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/Score/ScoreValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/BestTime/BestTimeValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/Time/TimeValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/StageEXP/StageEXPValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/TotalEXP/TotalEXPValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/SoulGauge/SoulGaugeValue")]
 missionTypeLabel = NodePath("Pause/StatusMenu/ValueMenu/Mission/Type")
 missionDescriptionLabel = NodePath("Pause/StatusMenu/ValueMenu/Mission/Description")
@@ -5134,7 +5700,7 @@ rankSprites = Array[Texture2D]([ExtResource("4_whmhd"), ExtResource("5_onewr"), 
 noSkillLabel = NodePath("Pause/StatusMenu/ValueMenu/Skill/NoSkill")
 skillContainer = NodePath("Pause/StatusMenu/ValueMenu/Skill/Clip/Options")
 skillCursor = NodePath("Pause/StatusMenu/ValueMenu/Skill/CursorAnchor/Cursor")
-skillCursorAnimator = NodePath("Pause/StatusMenu/ValueMenu/Skill/CursorAnchor/AnimationPlayer")
+skillCursorAnimator = NodePath("Pause/StatusMenu/ValueMenu/Skill/CursorAnchor/SkillCursorAnimator")
 pauseSkillScene = ExtResource("2_pyysd")
 rectVerticalValues = PackedInt32Array(346, 8, 195, 244, 295, 98, 51, 145)
 levelSprite = NodePath("Pause/StatusMenu/ValueMenu/LevelTop")
@@ -5226,6 +5792,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PauseLabel" type="Label" parent="Pause/PauseAnchor"]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -5257,14 +5824,14 @@ autoplay = "default"
 offset = Vector2(0, -20)
 metadata/_edit_use_anchors_ = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Pause/Options/PauseCursorAnchor"]
+[node name="PauseCursorAnimator" type="AnimationPlayer" parent="Pause/Options/PauseCursorAnchor"]
 libraries = {
 &"": SubResource("AnimationLibrary_qllxi")
 }
 
 [node name="Continue" type="Label" parent="Pause/Options"]
 anchors_preset = -1
-offset_right = 199.99985
+offset_right = 199.99988
 offset_bottom = 35.0
 text = "pause_continue"
 label_settings = ExtResource("8_3gka2")
@@ -5287,7 +5854,7 @@ uppercase = true
 self_modulate = Color(1, 1, 1, 0.588235)
 anchors_preset = -1
 offset_top = 32.0
-offset_right = 199.99988
+offset_right = 199.99994
 offset_bottom = 67.00001
 text = "pause_restart"
 label_settings = ExtResource("8_3gka2")
@@ -5310,8 +5877,8 @@ uppercase = true
 self_modulate = Color(1, 1, 1, 0.588235)
 anchors_preset = -1
 offset_top = 64.0
-offset_right = 199.99997
-offset_bottom = 99.0
+offset_right = 199.99994
+offset_bottom = 99.00006
 text = "pause_status"
 label_settings = ExtResource("8_3gka2")
 uppercase = true
@@ -5356,7 +5923,7 @@ anchors_preset = -1
 offset_left = -88.0
 offset_top = 136.0
 offset_right = 75.0
-offset_bottom = 171.00002
+offset_bottom = 171.0
 scale = Vector2(2.25, 2.25)
 text = "pause_status"
 label_settings = ExtResource("8_3gka2")
@@ -5373,7 +5940,7 @@ autoplay = "default"
 offset = Vector2(0, -20)
 metadata/_edit_use_anchors_ = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Pause/StatusMenu/StatusCursorAnchor"]
+[node name="StatusCursorAnimator" type="AnimationPlayer" parent="Pause/StatusMenu/StatusCursorAnchor"]
 libraries = {
 &"": SubResource("AnimationLibrary_qllxi")
 }
@@ -5382,7 +5949,7 @@ libraries = {
 anchors_preset = -1
 offset_left = -24.0
 offset_top = 280.0
-offset_right = 139.0
+offset_right = 139.00003
 offset_bottom = 315.0
 scale = Vector2(2, 2)
 text = "pause_status"
@@ -5403,6 +5970,7 @@ label_settings = ExtResource("8_3gka2")
 uppercase = true
 
 [node name="Mission" type="Label" parent="Pause/StatusMenu"]
+visible = false
 self_modulate = Color(1, 1, 1, 0.588235)
 anchors_preset = -1
 offset_top = 344.0
@@ -5469,28 +6037,26 @@ patch_margin_right = 32
 patch_margin_bottom = 32
 
 [node name="Top" type="Sprite2D" parent="Pause/StatusMenu/ValueMenu"]
-position = Vector2(0, -304)
+visible = false
 scale = Vector2(2.25, 2.25)
 texture = ExtResource("10_lpx5w")
 region_enabled = true
 region_rect = Rect2(0, 436, 396, 32)
 
 [node name="LevelTop" type="Sprite2D" parent="Pause/StatusMenu/ValueMenu"]
-visible = false
-position = Vector2(0, -328)
 scale = Vector2(2.25, 2.25)
 texture = ExtResource("10_lpx5w")
 region_enabled = true
 region_rect = Rect2(0, 8, 396, 48)
 
 [node name="Bottom" type="Sprite2D" parent="Pause/StatusMenu/ValueMenu"]
-position = Vector2(0, 240)
 scale = Vector2(2.25, 2.25)
 texture = ExtResource("10_lpx5w")
 region_enabled = true
 region_rect = Rect2(0, 472, 396, 32)
 
 [node name="Status" type="Node2D" parent="Pause/StatusMenu/ValueMenu"]
+modulate = Color(1, 1, 1, 0)
 
 [node name="Level" type="Label" parent="Pause/StatusMenu/ValueMenu/Status"]
 anchors_preset = -1
@@ -5637,7 +6203,7 @@ anchors_preset = -1
 offset_left = -168.0
 offset_top = -28.0
 offset_right = 252.0
-offset_bottom = 25.0
+offset_bottom = 24.999985
 theme_override_fonts/font = ExtResource("12_tp5bp")
 theme_override_font_sizes/font_size = 64
 text = "pause_time"
@@ -5701,7 +6267,7 @@ anchors_preset = -1
 offset_left = -168.0
 offset_top = 84.0
 offset_right = 252.0
-offset_bottom = 137.00002
+offset_bottom = 136.99997
 theme_override_fonts/font = ExtResource("12_tp5bp")
 theme_override_font_sizes/font_size = 64
 text = "pause_total_exp"
@@ -5761,9 +6327,9 @@ vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="Mission" type="Node2D" parent="Pause/StatusMenu/ValueMenu"]
-modulate = Color(1, 1, 1, 0)
 
 [node name="Header" type="Label" parent="Pause/StatusMenu/ValueMenu/Mission"]
+self_modulate = Color(1, 1, 1, 0)
 anchors_preset = -1
 offset_left = -343.0
 offset_top = -280.0
@@ -5796,6 +6362,7 @@ autowrap_mode = 3
 metadata/_edit_use_anchors_ = true
 
 [node name="FireSoul" type="Label" parent="Pause/StatusMenu/ValueMenu/Mission"]
+modulate = Color(1, 1, 1, 0)
 anchors_preset = -1
 offset_left = -343.0
 offset_top = 40.0
@@ -5806,6 +6373,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="FireSoul1" type="TextureRect" parent="Pause/StatusMenu/ValueMenu/Mission/FireSoul"]
+modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_left = -25.0
 offset_top = 72.0
@@ -5815,6 +6383,7 @@ texture = ExtResource("14_5ds6k")
 expand_mode = 1
 
 [node name="FireSoul2" type="TextureRect" parent="Pause/StatusMenu/ValueMenu/Mission/FireSoul"]
+modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_left = 71.0
 offset_top = 72.0
@@ -5824,6 +6393,7 @@ texture = ExtResource("14_5ds6k")
 expand_mode = 1
 
 [node name="FireSoul3" type="TextureRect" parent="Pause/StatusMenu/ValueMenu/Mission/FireSoul"]
+modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_left = 167.0
 offset_top = 72.0
@@ -5833,6 +6403,7 @@ texture = ExtResource("14_5ds6k")
 expand_mode = 1
 
 [node name="Medal" type="Label" parent="Pause/StatusMenu/ValueMenu/Mission"]
+modulate = Color(1, 1, 1, 0)
 anchors_preset = -1
 offset_left = 64.0
 offset_top = 40.0
@@ -5844,6 +6415,7 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="Rank" type="TextureRect" parent="Pause/StatusMenu/ValueMenu/Mission/Medal"]
+modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_left = 88.0
 offset_top = 48.0
@@ -5884,7 +6456,7 @@ patch_margin_top = 10
 patch_margin_right = 18
 patch_margin_bottom = 12
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Pause/StatusMenu/ValueMenu/Skill/CursorAnchor"]
+[node name="SkillCursorAnimator" type="AnimationPlayer" parent="Pause/StatusMenu/ValueMenu/Skill/CursorAnchor"]
 root_node = NodePath("../Cursor")
 libraries = {
 &"": SubResource("AnimationLibrary_d6toc")
@@ -5975,11 +6547,16 @@ bus = &"SFX"
 stream = ExtResource("7_m12c2")
 bus = &"SFX"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="PageAnimator" type="AnimationPlayer" parent="."]
 process_mode = 3
 root_node = NodePath("../Pause")
 libraries = {
 &"": SubResource("AnimationLibrary_oiknc")
+}
+
+[node name="StatusAnimator" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_73vyn")
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
@@ -5990,7 +6567,7 @@ libraries = {
 &"": SubResource("AnimationLibrary_oiknc")
 }
 tree_root = SubResource("AnimationNodeBlendTree_sm8n7")
-anim_player = NodePath("../AnimationPlayer")
+anim_player = NodePath("../PageAnimator")
 parameters/confirm/current_state = "0"
 parameters/confirm/transition_request = ""
 parameters/confirm/current_index = 0

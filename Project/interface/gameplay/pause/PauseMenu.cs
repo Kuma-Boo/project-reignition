@@ -10,6 +10,9 @@ public partial class PauseMenu : Node
 
 	[Signal] public delegate void OnSceneChangeSelectedEventHandler();
 
+	[Export] AnimationPlayer pageAnimator;
+	[Export] AnimationPlayer statusAnimator;
+
 	[Export] AnimationTree animator;
 	[Export] private Node2D pauseCursor;
 	[Export] private AnimationPlayer pauseCursorAnimator;
@@ -69,6 +72,7 @@ public partial class PauseMenu : Node
 
 	private bool isConfirmButtonBuffered;
 	private bool isCancelButtonBuffered;
+	private bool isHidden;
 
 	public override void _Ready()
 	{
@@ -95,6 +99,7 @@ public partial class PauseMenu : Node
 			pauseSkill.Initialize();
 			skillContainer.AddChild(pauseSkill);
 		}
+		isHidden = false;
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -116,6 +121,18 @@ public partial class PauseMenu : Node
 			TogglePause();
 			return;
 		}
+
+		if (Input.IsActionJustPressed("button_attack") && Input.IsActionJustPressed("button_light_dash") && !isHidden)
+		{
+			pageAnimator.Play("hide_static");
+			isHidden = true;
+		}
+		if (Input.IsActionJustReleased("button_attack") && Input.IsActionJustReleased("button_light_dash") && isHidden)
+		{
+			pageAnimator.Play("show_static");
+			isHidden = false;
+		}
+
 
 		if (!GetTree().Paused)
 			return;
@@ -160,7 +177,7 @@ public partial class PauseMenu : Node
 	private void Confirm()
 	{
 		isConfirmButtonBuffered = false;
-		if (submenu == Submenu.Status && currentSelection == 2 && skills.Length != 0) // Enter skill menu
+		if (submenu == Submenu.Status && currentSelection == 1 && skills.Length != 0) // Enter skill menu
 		{
 			ApplySelection();
 			return;
@@ -193,11 +210,12 @@ public partial class PauseMenu : Node
 				statusCursorAnimator.Play("hide");
 				description.HideDescription();
 				animator.Set(StatusHideTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+				statusAnimator.Play("value-1");
 				break;
 			case Submenu.Skill:
 				skillCursorAnimator.Play("hide");
 				submenu = Submenu.Status;
-				currentSelection = 2;
+				currentSelection = 1;
 				break;
 		}
 	}
@@ -205,12 +223,17 @@ public partial class PauseMenu : Node
 	private void ChangeSelection(int direction)
 	{
 		int targetSelection = currentSelection + direction;
+
 		if (submenu == Submenu.Skill) // Allow wrapping when viewing skills
 		{
 			if (targetSelection < 0)
 				targetSelection = skills.Length - 1;
 			else if (targetSelection == skills.Length)
 				targetSelection = 0;
+		}
+		else if (submenu == Submenu.Status)
+		{
+			targetSelection = Mathf.Clamp(targetSelection, 0, 1);
 		}
 		else
 		{
@@ -252,7 +275,7 @@ public partial class PauseMenu : Node
 					break;
 			}
 		}
-		else if (submenu == Submenu.Status && currentSelection == 2) // Enter skill menu
+		else if (submenu == Submenu.Status && currentSelection == 1) // Enter skill menu
 		{
 			submenu = Submenu.Skill;
 			skillCursorAnimator.Play("select");
@@ -403,12 +426,24 @@ public partial class PauseMenu : Node
 		canMoveCursor = false; // Disable cursor movement
 		AllowPausing = false; // Disable pause inputs during the animation
 
+
+
 		isActive = !isActive;
 		animator.Set(ConfirmEnabledTransition, "false");
 		if (submenu == Submenu.Pause)
 			animator.Set(StateRequest, isActive ? "show" : "hide");
 		else
 			animator.Set(StateRequest, "status-hide");
+
+
+		if (isActive)
+		{
+			statusAnimator.Play("value-1");
+			UpdateStatusMenuData();
+		}
+		else
+			statusAnimator.Play("hide");
+
 
 		if (isActive) // Reset selection
 		{
@@ -425,6 +460,8 @@ public partial class PauseMenu : Node
 		{
 			Engine.TimeScale = unpausedSpeed;
 		}
+
+
 	}
 
 	private void ApplyPause()
