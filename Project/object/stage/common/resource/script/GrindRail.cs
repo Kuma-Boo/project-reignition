@@ -144,10 +144,6 @@ public partial class GrindRail : Area3D
 	public void Deactivate()
 	{
 		IsBonusDisabled = true;
-
-		if (isInvisibleRail) // Hide rail model
-			_railModel.Visible = false;
-
 		EmitSignal(SignalName.GrindCompleted);
 	}
 
@@ -166,5 +162,8 @@ public partial class GrindRail : Area3D
 
 		if (Player.UnregisterGrindrail(this))
 			Deactivate();
+
+		if (isInvisibleRail) // Hide rail model
+			_railModel.Visible = false;
 	}
 }
