@@ -125,8 +125,7 @@ public partial class SkillSelect : Menu
 			return;
 		}
 
-
-		if (!IsEditingAugment)
+		if (!IsEditingAugment && !IsAlertMenuActive)
 		{
 			// Quick scrolling
 			if (Input.IsActionJustPressed("button_step_left"))
@@ -350,7 +349,7 @@ public partial class SkillSelect : Menu
 			{
 				if (AlertMenuTargetSkill != SkillKey.Count)
 				{
-					// Unequip a different skill before equipping this one
+					// Unequip a different skill before toggling this one
 					ActiveSkillRing.ForceUnequipSkill(AlertMenuTargetSkill);
 					ToggleSkill();
 					Redraw();
@@ -436,7 +435,7 @@ public partial class SkillSelect : Menu
 			else if (unequippedKey != SkillKey.Count)
 			{
 				// Conflict due to element count
-				ShowAlertMenu(Runtime.Instance.SkillList.GetSkill(key), SkillEquipStatusEnum.ElementRequirement, unequippedKey);
+				ShowAlertMenu(Runtime.Instance.SkillList.GetSkill(key), SkillEquipStatusEnum.ConflictUnequip, unequippedKey);
 				return false;
 			}
 		}
@@ -448,7 +447,7 @@ public partial class SkillSelect : Menu
 			return true;
 		}
 
-		if (status == SkillEquipStatusEnum.Conflict ||
+		if (status == SkillEquipStatusEnum.ConflictEquip ||
 			status == SkillEquipStatusEnum.Expensive ||
 			status == SkillEquipStatusEnum.ElementRequirement)
 		{
@@ -470,12 +469,11 @@ public partial class SkillSelect : Menu
 		alertAnimator.Play("RESET");
 		alertAnimator.Advance(0.0);
 
-		if (status == SkillEquipStatusEnum.Conflict)
+		if (status == SkillEquipStatusEnum.ConflictEquip || status == SkillEquipStatusEnum.ConflictUnequip)
 		{
-			SkillResource conflictingSkill = status == SkillEquipStatusEnum.Conflict ? ActiveSkillRing.GetConflictingSkill(skill.Key) :
-				Runtime.Instance.SkillList.GetSkill(skillKey);
-
-			alertLabel.Text = Tr("skill_conflict");
+			bool isEquippingSkill = status == SkillEquipStatusEnum.ConflictEquip;
+			SkillResource conflictingSkill = isEquippingSkill ? ActiveSkillRing.GetConflictingSkill(skill.Key) : Runtime.Instance.SkillList.GetSkill(skillKey);
+			alertLabel.Text = Tr(isEquippingSkill ? "skill_equip_conflict" : "skill_unequip_conflict");
 			alertLabel.Text = alertLabel.Text.Replace("SKILL", Tr(skill.NameKey));
 			alertLabel.Text = alertLabel.Text.Replace("CONFLICT", Tr(conflictingSkill.NameKey));
 			AlertSelection = 0; // Set to "No"

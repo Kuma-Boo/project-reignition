@@ -116,7 +116,7 @@ public class SkillRing
 		if (conflict != null)
 		{
 			GD.Print($"You cannot equip {conflict.NameKey} when {baseSkill.NameKey} is active.");
-			return SkillEquipStatusEnum.Conflict;
+			return SkillEquipStatusEnum.ConflictEquip;
 		}
 
 		// Process augments
@@ -186,7 +186,7 @@ public class SkillRing
 		foreach (SkillKey conflictKey in SaveManager.ActiveSkillRing.EquippedSkills)
 		{
 			SkillResource conflictSkill = Runtime.Instance.SkillList.GetSkill(conflictKey);
-			if (conflictSkill.ElementRequirement == 0 || conflictSkill.Element != augment.Element)
+			if (conflictSkill.ElementRequirement == 0 || conflictSkill.Element != augment.Element || conflictSkill.Key == key)
 				continue;
 
 			if (resultingElementCount <= conflictSkill.ElementRequirement)
@@ -334,7 +334,8 @@ public enum SkillEquipStatusEnum
 {
 	Success,
 	Expensive,
-	Conflict,
+	ConflictEquip,
+	ConflictUnequip,
 	Equipped,
 	Missing,
 	ElementRequirement
