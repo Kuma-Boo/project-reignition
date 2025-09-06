@@ -211,6 +211,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_64hf2"]
 resource_name = "event"
+step = 0.1
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -218,7 +219,7 @@ tracks/0/path = NodePath("HangingScrap3/AnimationPlayer")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.8),
+"times": PackedFloat32Array(0.9),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": ["shatter", -1, 1.0, false],
@@ -232,7 +233,7 @@ tracks/1/path = NodePath("Event/SFX")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.8),
+"times": PackedFloat32Array(0.9),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [0.0],
@@ -891,7 +892,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.1, 28.5, -8.89998)
 
 [node name="SidleHall" type="Node3D" parent="TimerAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 120, 40, -194)
-visible = false
 script = ExtResource("5_gkrps")
 saveVisibilityOnCheckpoint = true
 
@@ -1098,7 +1098,6 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 33.2, 
 
 [node name="SidleObjects" type="Node3D" parent="TimerAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 160.6, 40, -290)
-visible = false
 script = ExtResource("5_gkrps")
 saveVisibilityOnCheckpoint = true
 
@@ -1290,7 +1289,6 @@ Movement/Distance = 5.0
 
 [node name="PlatformHall" type="Node3D" parent="TimerAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 120, 40, -340)
-visible = false
 script = ExtResource("5_gkrps")
 saveVisibilityOnCheckpoint = true
 
@@ -1369,12 +1367,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, -4.6)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -51.5)
 
 [node name="FireSoul1" parent="TimerAct/PlatformHall" instance=ExtResource("31_mxyuv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.5, -53.7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.5, -52.5)
 
 [node name="ScrapFall" parent="TimerAct/PlatformHall" instance=ExtResource("4_6wf7v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 17, -56)
 
 [node name="HangingScrap3" parent="TimerAct/PlatformHall/ScrapFall" instance=ExtResource("26_5p3y4")]
+snapMode = 2
 
 [node name="Event" type="Node3D" parent="TimerAct/PlatformHall/ScrapFall" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10, 0)
@@ -1516,7 +1515,6 @@ fireSoulIndex = 2
 
 [node name="Lava" type="Node3D" parent="TimerAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 40, -440)
-visible = false
 script = ExtResource("5_gkrps")
 saveVisibilityOnCheckpoint = true
 
@@ -1725,7 +1723,6 @@ transform = Transform3D(1, 0, -6.03961e-14, 0, 1, 0, 0, 0, 1.125, 0, -0.5, 82.85
 
 [node name="Elevator" type="Node3D" parent="TimerAct"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -25, 40, -190)
-visible = false
 script = ExtResource("5_gkrps")
 saveVisibilityOnCheckpoint = true
 
@@ -2046,7 +2043,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 11.2, 0)
 
 [node name="Spiral" type="Node3D" parent="TimerAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, -60, -180)
-visible = false
 script = ExtResource("5_gkrps")
 saveVisibilityOnCheckpoint = true
 
@@ -2078,6 +2074,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -6)
 [node name="SpikePanel1" parent="TimerAct/Spiral" instance=ExtResource("34_ssr7c")]
 transform = Transform3D(-0.972581, -0.21644, 0.0850897, -0.215616, 0.976296, 0.018864, -0.0871556, 5.7742e-08, -0.996195, 17.9905, 7.08657, 44.053)
 stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/warning" = 0.2
 "State Lengths/active" = 0.5
@@ -2085,6 +2082,7 @@ stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 [node name="SpikePanel2" parent="TimerAct/Spiral" instance=ExtResource("34_ssr7c")]
 transform = Transform3D(-0.972581, -0.21644, 0.0850897, -0.215616, 0.976296, 0.018864, -0.0871556, 5.7742e-08, -0.996195, 17.8629, 7.05828, 45.5473)
 stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/warning" = 0.2
 "State Lengths/active" = 0.5
@@ -2115,6 +2113,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 0, -12)
 transform = Transform3D(-0.939692, -0.0740267, 0.333913, 0, 0.976296, 0.21644, -0.34202, 0.203387, -0.917418, 38.3276, 13.5984, 30.7516)
 stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 "Current State" = 1
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/warning" = 0.2
 "State Lengths/active" = 0.5
@@ -2123,6 +2122,7 @@ stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 transform = Transform3D(-0.939692, -0.0740267, 0.333913, 0, 0.976296, 0.21644, -0.34202, 0.203387, -0.917418, 39.7371, 13.5984, 31.2648)
 stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 "Current State" = 1
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/warning" = 0.2
 "State Lengths/active" = 0.5
@@ -2153,6 +2153,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0, -15)
 transform = Transform3D(-0.809017, 0.12722, -0.573852, 0, 0.976296, 0.21644, 0.587785, 0.175103, -0.78984, 35.5301, 18.0304, 13.6285)
 stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 "Current State" = 2
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/warning" = 0.2
 "State Lengths/active" = 0.5
@@ -2161,6 +2162,7 @@ stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 transform = Transform3D(-0.809017, 0.12722, -0.573852, 0, 0.976296, 0.21644, 0.587785, 0.175103, -0.78984, 36.7436, 18.0304, 12.7469)
 stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 "Current State" = 2
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/warning" = 0.2
 "State Lengths/active" = 0.5
@@ -2171,6 +2173,7 @@ transform = Transform3D(0.766044, 0.139125, 0.627551, 0, 0.976296, -0.21644, -0.
 [node name="SpikePanel7" parent="TimerAct/Spiral" instance=ExtResource("34_ssr7c")]
 transform = Transform3D(0.573576, 0.177297, -0.799735, 0, 0.976296, 0.21644, 0.819152, -0.124145, 0.55998, 8.75923, 25.587, 9.28908)
 stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/warning" = 0.2
 "State Lengths/active" = 0.5
@@ -2178,6 +2181,7 @@ stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 [node name="SpikePanel8" parent="TimerAct/Spiral" instance=ExtResource("34_ssr7c")]
 transform = Transform3D(0.570395, 0.18728, -0.799735, -0.0170387, 0.976147, 0.21644, 0.821194, -0.10983, 0.55998, 7.89886, 25.587, 8.06035)
 stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/warning" = 0.2
 "State Lengths/active" = 0.5
@@ -2185,6 +2189,7 @@ stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 [node name="SpikePanel9" parent="TimerAct/Spiral" instance=ExtResource("34_ssr7c")]
 transform = Transform3D(-1, -7.6194e-09, -8.70901e-08, 0, 0.996195, -0.0871557, 8.74228e-08, -0.0871557, -0.996195, 0.800003, 29.9004, 29.0087)
 stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/warning" = 0.2
 "State Lengths/active" = 0.5
@@ -2192,6 +2197,7 @@ stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 [node name="SpikePanel10" parent="TimerAct/Spiral" instance=ExtResource("34_ssr7c")]
 transform = Transform3D(-1, -7.6194e-09, -8.70901e-08, 0, 0.996195, -0.0871557, 8.74228e-08, -0.0871557, -0.996195, -0.699997, 29.9004, 29.0087)
 stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
+"Start Paused" = false
 "State Lengths/inactive" = 0.3
 "State Lengths/warning" = 0.2
 "State Lengths/active" = 0.5
@@ -2251,7 +2257,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
 [node name="End" type="Node3D" parent="TimerAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -100, -30, -120)
-visible = false
 script = ExtResource("5_gkrps")
 saveVisibilityOnCheckpoint = true
 
@@ -2351,7 +2356,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 72, -9.99984, 2.59992)
 curve = SubResource("Curve3D_qho55")
 
 [node name="PathFollower" type="PathFollow3D" parent="TimerAct/End/GolemPath"]
-transform = Transform3D(0.999997, 0, 8.74225e-08, 0, 1, 0, -8.74225e-08, 0, 0.999997, 0, 0, 0)
+transform = Transform3D(0.999997, 0, 8.7422514e-08, 0, 1, 0, -8.7422514e-08, 0, 0.999997, 0, 0, 0)
 use_model_front = true
 cubic_interp = false
 tilt_enabled = false
@@ -2485,10 +2490,11 @@ transform = Transform3D(0.30242, 0, -0.953175, 0, 1, 0, 0.953175, 0, 0.30242, 16
 OneShot = true
 "Respawn Mode" = 0
 
-[node name="Dialog" type="Node3D" parent="DialogTriggers/TimerTrigger"]
+[node name="Dialog" type="Node3D" parent="DialogTriggers/TimerTrigger" node_paths=PackedStringArray("randomizedDialogTriggers")]
 script = ExtResource("44_1sjmd")
 delays = Array[float]([])
 textKeys = ["evi_timer_sh", "evi_timer_so"]
+randomizedDialogTriggers = Array[float]([])
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DialogTriggers/TimerTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
@@ -2499,10 +2505,11 @@ transform = Transform3D(-0.972917, 0, -0.231154, 0, 1, 0, 0.231154, 0, -0.972917
 OneShot = true
 "Respawn Mode" = 0
 
-[node name="Dialog" type="Node3D" parent="DialogTriggers/ExitTrigger"]
+[node name="Dialog" type="Node3D" parent="DialogTriggers/ExitTrigger" node_paths=PackedStringArray("randomizedDialogTriggers")]
 script = ExtResource("44_1sjmd")
 delays = Array[float]([])
 textKeys = ["evi_exit_sh", "evi_exit_so"]
+randomizedDialogTriggers = Array[float]([])
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DialogTriggers/ExitTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
