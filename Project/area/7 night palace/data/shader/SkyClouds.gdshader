@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded;
+render_mode unshaded, fog_disabled;
 
 global uniform float time;
 uniform sampler2D albedo : source_color;
