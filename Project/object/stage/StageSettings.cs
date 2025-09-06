@@ -158,7 +158,7 @@ public partial class StageSettings : Node3D
 				TODO Replace this with proper update-mode once Godot fixes reflection probes
 				*/
 
-				probe.UpdateMode = OS.IsDebugBuild() ? ReflectionProbe.UpdateModeEnum.Once : ReflectionProbe.UpdateModeEnum.Always;
+				probe.UpdateMode = DebugManager.Instance.EnableReflectionProbeDebugging ? ReflectionProbe.UpdateModeEnum.Once : ReflectionProbe.UpdateModeEnum.Always;
 				probe.ProcessMode = ProcessModeEnum.Disabled;
 				return;
 			}
