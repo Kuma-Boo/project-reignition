@@ -70,6 +70,8 @@ public partial class PlayerInputController : Node
 	public float InputVertical { get; private set; }
 	public Vector2 CameraAxis { get; private set; }
 
+	public float StepAxis { get; private set; }
+
 	/// <summary> Minimum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
 	private readonly float MinBackStepAngle = Mathf.Pi * .6f;
 	/// <summary> Maximum angle that counts as holding a direction. </summary>
@@ -163,6 +165,8 @@ public partial class PlayerInputController : Node
 
 	private void UpdateStepBuffer()
 	{
+		StepAxis = Input.GetAxis("button_step_right", "button_step_left");
+
 		if (Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.Sidestep))
 		{
 			ResetStepBuffer();
