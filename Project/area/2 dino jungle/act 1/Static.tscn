@@ -1,4 +1,4 @@
-[gd_scene load_steps=144 format=3 uid="uid://cby2m0q2072c2"]
+[gd_scene load_steps=143 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
@@ -88,7 +88,7 @@
 [ext_resource type="Curve3D" uid="uid://b48t3qogkoufq" path="res://area/2 dino jungle/act 1/environment/path/FeedingTunnelEntrancePath.tres" id="56_hmb1c"]
 [ext_resource type="Curve3D" uid="uid://2hbpxwttyx8k" path="res://area/2 dino jungle/act 1/environment/path/FeedingTunnelMiddlePath.tres" id="57_h6v6r"]
 [ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="58_vm1cj"]
-[ext_resource type="Curve3D" uid="uid://bdvkxr0kc8usi" path="res://area/2 dino jungle/act 1/environment/path/FeedingTunnelExitPath.tres" id="58_xpyy1"]
+[ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/FeedingTunnelExitPath.tres" id="58_xpyy1"]
 [ext_resource type="Curve3D" uid="uid://cg2l4xoxnugal" path="res://area/2 dino jungle/act 1/environment/path/EndMiddleIslandPath.tres" id="59_mdw42"]
 [ext_resource type="Curve3D" uid="uid://b14xxxrcpxq0j" path="res://area/2 dino jungle/act 1/environment/path/EndIslandPath.tres" id="60_xhla3"]
 [ext_resource type="Curve3D" uid="uid://yiqn26fm6vq" path="res://area/2 dino jungle/act 1/environment/path/BoatTopPath.tres" id="71_xrrh0"]
@@ -97,7 +97,6 @@
 [ext_resource type="Curve3D" uid="uid://d1cd8xa7wprvy" path="res://area/2 dino jungle/act 1/environment/path/EndMiddlePath.tres" id="80_4h07x"]
 [ext_resource type="Curve3D" uid="uid://dkof5hnvrvbuu" path="res://area/2 dino jungle/act 1/environment/path/EndTopPath.tres" id="81_vy7ml"]
 [ext_resource type="PackedScene" uid="uid://6cdlojevxvu7" path="res://area/2 dino jungle/act 1/completion/CompletionDemo.gltf" id="89_i1ci7"]
-[ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/FeedingTunnelIslandJumpPath.tres" id="91_mavbd"]
 [ext_resource type="AudioStream" uid="uid://tjq8v1nvh7i7" path="res://sound/ost/adventure disc/5 The Wicked Wild.mp3" id="95_tbflj"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="96_ubg5c"]
 
@@ -651,19 +650,6 @@ path = NodePath("../../../../Path/FeedingTunnelExitPath")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/FeedingTunnelExitPath"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_74bek")
-
-[node name="FeedingTunnelIslandJumpPath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
-transform = Transform3D(0.089868, 0, -0.995953, 0, 1, 0, 0.995953, 0, 0.089868, -757.268, -250.075, -1033.32)
-"Trigger Mode" = 2
-"Exit Mode" = 2
-
-[node name="Path" type="Node3D" parent="Trigger/Path/FeedingTunnelIslandJumpPath" node_paths=PackedStringArray("path")]
-script = ExtResource("35_vf0rg")
-path = NodePath("../../../../Path/FeedingTunnelIslandJumpPath")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/FeedingTunnelIslandJumpPath"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_c5pbm")
 
 [node name="EndIslandPath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
 transform = Transform3D(-0.33946, 0, -0.94062, 0, 1, 0, 0.94062, 0, -0.33946, -808.64, -269.575, -1094.12)
@@ -2179,10 +2165,6 @@ curve = ExtResource("57_h6v6r")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -642.422, -265.596, -1075.18)
 curve = ExtResource("58_xpyy1")
 
-[node name="FeedingTunnelIslandJumpPath" type="Path3D" parent="Path"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -761.63, -251.692, -1034.34)
-curve = ExtResource("91_mavbd")
-
 [node name="EndMiddleIslandPath" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -789.088, -259.802, -1056.51)
 curve = ExtResource("59_mdw42")
@@ -2502,19 +2484,19 @@ reflectionMaterials = [ExtResource("36_7bv1x")]
 [connection signal="Activated" from="Trigger/Object/Apatos1/ActivateTrigger" to="Collision/WallDinoOneWay" method="Deactivate"]
 [connection signal="Respawned" from="Trigger/Object/Apatos1/ActivateTrigger" to="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger" method="Respawn"]
 [connection signal="Activated" from="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger" to="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger/Head/Activate" method="play"]
-[connection signal="JumpFinished" from="Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Collision/WallDinoOneWay" method="Activate"]
 [connection signal="JumpFinished" from="Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Trigger/Object/Apatos1/ActivateTrigger/Camera" method="Deactivate"]
+[connection signal="JumpFinished" from="Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Collision/WallDinoOneWay" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Apatos1/GruntTrigger" to="Trigger/Object/Apatos1/GruntTrigger/Grunt" method="play"]
+[connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Trigger/Object/Apatos2/Event/PathSelectionEvent" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoRightOneWay" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoLeftOneWay" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoRight" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoLeft" method="Deactivate"]
-[connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Trigger/Object/Apatos2/Event/PathSelectionEvent" method="Activate"]
+[connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Trigger/Object/Apatos2/Event/PathSelectionEvent" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoRightOneWay" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoLeftOneWay" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoRight" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoLeft" method="Activate"]
-[connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Trigger/Object/Apatos2/Event/PathSelectionEvent" method="Deactivate"]
 [connection signal="Respawned" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoRightOneWay" method="Deactivate"]
 [connection signal="Respawned" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoLeftOneWay" method="Activate"]
 [connection signal="Respawned" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoRight" method="Deactivate"]
