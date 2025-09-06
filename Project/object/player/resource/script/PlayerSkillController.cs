@@ -83,8 +83,13 @@ public partial class PlayerSkillController : Node3D
 	private void SetUpSkills()
 	{
 		// Expand hitbox if skills is equipped
-		Runtime.Instance.UpdatePearlCollisionShapes(SkillRing.IsSkillEquipped(SkillKey.PearlRange) ? 5 : 1);
-		Runtime.Instance.UpdateRingCollisionShapes(SkillRing.IsSkillEquipped(SkillKey.RingRange) ? 5 : 1);
+		bool isPearlRangeEquipped = SkillRing.IsSkillEquipped(SkillKey.PearlRange) &&
+			(StageSettings.Instance.Data.MissionType != LevelDataResource.MissionTypes.Pearl || StageSettings.Instance.Data.MissionObjectiveCount != 0);
+		bool isRingRangeEquipped = SkillRing.IsSkillEquipped(SkillKey.RingRange) &&
+			(StageSettings.Instance.Data.MissionType != LevelDataResource.MissionTypes.Ring || StageSettings.Instance.Data.MissionObjectiveCount != 0);
+
+		Runtime.Instance.UpdatePearlCollisionShapes(isPearlRangeEquipped ? 5 : 1);
+		Runtime.Instance.UpdateRingCollisionShapes(isRingRangeEquipped ? 5 : 1);
 
 		AllowCrestSkill = SkillRing.IsSkillEquipped(SkillKey.CrestWind) ||
 			SkillRing.IsSkillEquipped(SkillKey.CrestFire) ||
