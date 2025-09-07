@@ -132,6 +132,16 @@ public partial class FlowerMajin : Enemy
 
 	protected override void UpdateInteraction()
 	{
+		if (Player.AttackState == PlayerController.AttackStates.OneShot)
+		{
+			// Always allow oneshot attacks to pierce defense
+			if (Player.Skills.IsSpeedBreakActive) // Shake the camera
+				Player.Camera.StartMediumCameraShake();
+
+			Defeat();
+			return;
+		}
+
 		if (!IsOpen)
 		{
 			if (Player.IsHomingAttacking)
