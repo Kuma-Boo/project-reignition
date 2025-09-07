@@ -4,24 +4,23 @@
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_6t3ar"]
 [ext_resource type="Resource" uid="uid://bxvflomap0uv3" path="res://resource/level data/evil foundry/Act2Ringless.tres" id="2_ttljy"]
 [ext_resource type="PackedScene" uid="uid://bntrixspwpi2" path="res://object/enemy/golem/GolemMajin.tscn" id="3_b1mfa"]
-[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="4_ejj34"]
+[ext_resource type="Script" uid="uid://bssd28yqn1cxg" path="res://object/trigger/modules/PathTrigger.cs" id="4_ejj34"]
 [ext_resource type="PackedScene" uid="uid://cswcb8bgweh5m" path="res://area/3 evil foundry/object/scrap/ScrapMachineShort.tscn" id="4_rrgqw"]
 [ext_resource type="PackedScene" uid="uid://cxgu3ob2u708b" path="res://area/3 evil foundry/object/scrap/ScrapMachineLadder.tscn" id="5_hbojg"]
 [ext_resource type="PackedScene" uid="uid://caxr4l7dgmca" path="res://area/3 evil foundry/object/scrap/ScrapMachineSupport.tscn" id="6_g2ajm"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="6_th2w2"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="8_1pn70"]
-[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="8_u5p1u"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="8_u5p1u"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="9_km1ug"]
 [ext_resource type="PackedScene" uid="uid://v2hbw6y70jr3" path="res://object/stage/pickups/RichPearl.tscn" id="9_o0awe"]
 [ext_resource type="Resource" uid="uid://bxmoitmc4gf64" path="res://area/3 evil foundry/act 2/camera/ringless/RinglessOverheadCam.tres" id="9_rrb6i"]
-[ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="10_lxxvc"]
+[ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="10_lxxvc"]
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="11_cq0k7"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="11_ib8qk"]
 
-
 [sub_resource type="Curve3D" id="Curve3D_15rvx"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 12, 0, 0, -10, 0, 0, 0, 0, -10, 55, 0, 0, 0, 0, 0, 0, 0, -10, 240),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 12, 0, 0, -10, 0, 0, 0, 0, 0, 55, -10, 0, 0, 0, 0, 0, 0, 0, 240, -10, 0),
 "tilts": PackedFloat32Array(0, 0, 0, 0)
 }
 point_count = 4
@@ -60,7 +59,7 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -150.5
 metadata/_edit_lock_ = true
 
 [node name="LevelPath" type="Path3D" parent="RinglessAct/SpawnPosition"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -12)
 curve = SubResource("Curve3D_15rvx")
 
 [node name="PathTrigger" parent="RinglessAct/SpawnPosition" instance=ExtResource("6_th2w2")]
@@ -95,7 +94,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -8)
 curve = SubResource("Curve3D_tso20")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="RinglessAct/ObjectMap/GolemPath"]
-transform = Transform3D(0.999997, 0, 0, 0, 1, 0, 0, 0, 0.999997, 0, 0, 5)
+transform = Transform3D(0.999997, 0, 8.7422514e-08, 0, 1, 0, -8.7422514e-08, 0, 0.999997, 0, 0, 5)
 progress = 5.0
 use_model_front = true
 cubic_interp = false
@@ -319,13 +318,13 @@ transform = Transform3D(-6.11959e-08, 0, 1.4, 0, 1, 0, -1.4, 0, -6.11959e-08, -4
 transform = Transform3D(-1.4, 0, -1.22392e-07, 0, 1, 0, 1.22392e-07, 0, -1.4, 5, 0, -19)
 
 [node name="RichPearl1" parent="RinglessAct/ObjectMap" instance=ExtResource("9_o0awe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -39)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -38)
 
 [node name="RichPearl2" parent="RinglessAct/ObjectMap" instance=ExtResource("9_o0awe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1, -46.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1, -46)
 
 [node name="RichPearl3" parent="RinglessAct/ObjectMap" instance=ExtResource("9_o0awe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 1, -50.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 1, -50)
 
 [node name="RichRing1" parent="RinglessAct/ObjectMap" instance=ExtResource("9_km1ug")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.99997, 1, -51)
