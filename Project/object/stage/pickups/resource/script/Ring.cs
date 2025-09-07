@@ -112,6 +112,7 @@ namespace Project.Gameplay.Objects
 
 			BonusManager.instance.AddRingChain();
 			Animator.Play("collect");
+			Animator.Advance(0.0);
 			base.Collect();
 		}
 	}
