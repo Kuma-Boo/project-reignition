@@ -15,6 +15,7 @@ namespace Project.Gameplay.Objects
 		private CollisionShape3D Collider { get; set; }
 
 		private bool isMagnetized;
+		private bool isCollected;
 		/* <summary> A timer to keep track of how long the ring has been trailing the player.
 			Artificially increases speed to force rings to be collected. </summary> */
 		private float collectionTimer;
@@ -38,6 +39,7 @@ namespace Project.Gameplay.Objects
 		public override void Respawn()
 		{
 			isMagnetized = false;
+			isCollected = false;
 			collectionTimer = 0f;
 
 			Animator.Play("RESET");
@@ -59,7 +61,7 @@ namespace Project.Gameplay.Objects
 
 		public override void _PhysicsProcess(double _)
 		{
-			if (!isMagnetized || Collider.Disabled)
+			if (!isMagnetized || isCollected)
 				return;
 
 			if (!Player.IsLightDashing)
@@ -77,6 +79,9 @@ namespace Project.Gameplay.Objects
 
 		private void ApplyCollection()
 		{
+			if (isCollected)
+				return;
+
 			if (isRichRing)
 			{
 				SoundManager.instance.PlayRichRingSFX();
@@ -105,6 +110,8 @@ namespace Project.Gameplay.Objects
 					Stage.UpdateRingCount(1, StageSettings.MathModeEnum.Add);
 				}
 			}
+
+			isCollected = true;
 
 			SaveManager.SharedData.RingCount = (int)Mathf.MoveToward(SaveManager.SharedData.RingCount, int.MaxValue, isRichRing ? 20 : 1);
 			if (SaveManager.SharedData.RingCount >= RingAchievementRequirement)
