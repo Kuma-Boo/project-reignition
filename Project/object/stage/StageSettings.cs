@@ -680,7 +680,9 @@ public partial class StageSettings : Node3D
 				continue;
 
 			SaveManager.ActiveGameData.UnlockStage(stage.LevelID);
-			missionsUnlocked++;
+
+			if (!DebugManager.Instance.UseDemoSave) // Only add notification when not using the demo save
+				missionsUnlocked++;
 		}
 
 		if (missionsUnlocked == 0)
