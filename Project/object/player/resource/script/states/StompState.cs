@@ -39,7 +39,7 @@ public partial class StompState : PlayerState
 
 	public override void ExitState()
 	{
-		if (!Player.IsOnGround)
+		if (!Player.IsOnGround && !Player.IsGrindRailActive)
 			Player.IsStomping = false;
 
 		Player.Effect.StopStompFX();
