@@ -277,7 +277,6 @@ public partial class GrindState : PlayerState
 	{
 		fallbackShuffleTimer = Mathf.MoveToward(fallbackShuffleTimer, 0, PhysicsManager.physicsDelta);
 
-		// TODO Retrace this logic.
 		if (!Mathf.IsZeroApprox(fallbackOffsetTimer) && Player.Controller.IsGimmickBufferActive)
 		{
 			Player.Controller.ResetGimmickBuffer();
@@ -369,6 +368,9 @@ public partial class GrindState : PlayerState
 
 	private void StartShuffle(bool isPerfectCharge)
 	{
+		if (Player.Animator.IsBalanceShuffleActive)
+			return;
+
 		currentCharge = 0;
 		fallbackShuffleTimer = 0;
 		fallbackOffsetTimer = FallbackInputWindow * 0.5f;
