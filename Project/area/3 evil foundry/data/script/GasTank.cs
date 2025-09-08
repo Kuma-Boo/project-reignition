@@ -134,7 +134,7 @@ public partial class GasTank : Area3D
 	{
 		currentTimeScale = StrikeTimeScale;
 
-		Player.StartBounce();
+		Player.StartBounce(BounceState.SnapMode.SnappingEnabledNoHeight, 1f, this);
 		Animator.Play("strike");
 		Animator.Advance(0);
 		EmitSignal(SignalName.OnStrike);
