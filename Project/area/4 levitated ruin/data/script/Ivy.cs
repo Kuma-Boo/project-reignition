@@ -11,6 +11,8 @@ public partial class Ivy : Launcher
 	private Callable ClearReversePathCallable => new(this, MethodName.ClearReversePath);
 
 	[ExportGroup("Settings")]
+	[ExportToolButton("Regenerate Sickle")]
+	public Callable GenerateIvyGroup => Callable.From(GenerateIvy);
 	[Export(PropertyHint.Range, "2, 50")] public int Length { get; private set; }
 	[Export] private float MaxRotation { get; set; }
 	private float IndividualRotation => MaxRotation / Length;
@@ -31,7 +33,8 @@ public partial class Ivy : Launcher
 	[ExportGroup("Components")]
 	[Export] private PackedScene IvyScene { get; set; }
 	[Export] private AudioStreamPlayer3D swingSfx;
-	private Node3D linkRoot;
+	[Export] private NodePath root;
+	private Node3D rootNode;
 	private Array<Node3D> ivyLinks = [];
 
 	private bool isInteractingWithPlayer;
@@ -48,12 +51,12 @@ public partial class Ivy : Launcher
 
 	protected override void SetUp()
 	{
-		base.SetUp();
-		Initialize();
+		GenerateIvy();
 
 		if (Engine.IsEditorHint())
 			return;
 
+		base.SetUp();
 		IsSleeping = true;
 
 		// Adjust swing speed based on length (longer ivys swing slower)
@@ -65,8 +68,6 @@ public partial class Ivy : Launcher
 	{
 		if (Engine.IsEditorHint())
 		{
-			if (Length != ivyLinks.Count)
-				Initialize();
 			SetRotation();
 			return;
 		}
@@ -260,7 +261,12 @@ public partial class Ivy : Launcher
 		float rotation = IndividualRotation * IvyRatio;
 
 		for (int i = 0; i < ivyLinks.Count; i++)
-			ivyLinks[i].RotationDegrees = Vector3.Left * rotation;
+		{
+			ivyLinks[i].RotationDegrees = Vector3.Left * (i + 1) * rotation;
+
+			if (i != 0)
+				ivyLinks[i].Position = ivyLinks[i - 1].Position + ivyLinks[i - 1].Basis * Vector3.Down;
+		}
 
 		UpdateAreaPosition();
 	}
@@ -275,7 +281,7 @@ public partial class Ivy : Launcher
 		launchPoint.GlobalPosition -= ivyLinks[ivyLinks.Count - 1].Up() * .5f;
 	}
 
-	private void Initialize()
+	private void GenerateIvy()
 	{
 		if (launchPoint == null)
 		{
@@ -290,33 +296,30 @@ public partial class Ivy : Launcher
 
 	private void UpdateIvyLength()
 	{
-		if (ivyLinks.Count > Length)
-		{
-			// Since every ivy link is parented, we only need to delete one.
-			ivyLinks[Length].QueueFree();
-			ivyLinks.Resize(Length);
-			return;
-		}
-
 		if (IvyScene == null)
 		{
 			GD.PushError("Ivy Scene could not be found.");
 			return;
 		}
 
-		if (ivyLinks.Count == 0)
+		rootNode = GetNodeOrNull<Node3D>(root);
+		if (rootNode == null)
 		{
-			linkRoot = IvyScene.Instantiate<Node3D>();
-			AddChild(linkRoot);
-			ivyLinks.Add(linkRoot);
+			GD.PushError("Ivy Root Node not found.");
+			return;
 		}
 
-		// Add ivy individually as needed
-		while (ivyLinks.Count < Length)
+		// Clear children
+		ivyLinks.Clear();
+		foreach (Node child in rootNode.GetChildren())
+			child.QueueFree();
+
+		// Add ivy segments as needed
+		for (int i = 0; i < Length; i++)
 		{
 			Node3D linkNode = IvyScene.Instantiate<Node3D>();
-			ivyLinks[ivyLinks.Count - 1].AddChild(linkNode); // Add as a child so rotations carry over
-			linkNode.Position = Vector3.Down;
+			rootNode.AddChild(linkNode);
+			linkNode.Position = i * Vector3.Down;
 			ivyLinks.Add(linkNode);
 		}
 	}
