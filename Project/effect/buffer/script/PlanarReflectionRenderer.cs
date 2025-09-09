@@ -47,6 +47,8 @@ public partial class PlanarReflectionRenderer : Node3D
 
 	public override void _EnterTree()
 	{
+		PhysicsInterpolationMode = PhysicsInterpolationModeEnum.Off;
+
 		reflectionViewport.Size = GetTree().Root.Size;
 		switch (SaveManager.Config.reflectionQuality)
 		{

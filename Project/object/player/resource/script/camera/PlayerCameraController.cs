@@ -499,7 +499,12 @@ public partial class PlayerCameraController : Node3D
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, CalculateLockonAngle(cameraTransform.Origin, lockonPitchReferenceAngle));
 
 		if (!isFreeCamActive || !isFreeCamLocked) // Only update camera transform when free cam isn't locked
+		{
 			cameraRoot.GlobalTransform = cameraTransform; // Update transform
+
+			if (SnapFlag)
+				cameraRoot.ResetPhysicsInterpolation();
+		}
 
 		Camera.Fov = fov; // Update fov
 	}
