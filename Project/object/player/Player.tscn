@@ -1,4 +1,4 @@
-[gd_scene load_steps=76 format=3 uid="uid://bqck0hqdn3o8r"]
+[gd_scene load_steps=70 format=3 uid="uid://bqck0hqdn3o8r"]
 
 [ext_resource type="Script" uid="uid://cy7pw3hj351lp" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" uid="uid://72x88nalpw8i" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
@@ -7,18 +7,13 @@
 [ext_resource type="PackedScene" uid="uid://wfh54hnc028k" path="res://object/player/resource/component/SonicRoot.tscn" id="3_rkpjr"]
 [ext_resource type="Script" uid="uid://cml57u0fek42" path="res://object/player/resource/script/states/JumpState.cs" id="4_ufscl"]
 [ext_resource type="Script" uid="uid://dj738fo8y04a5" path="res://object/player/resource/script/states/FallState.cs" id="5_niuke"]
-[ext_resource type="AnimationLibrary" uid="uid://dhcxjlduawy8d" path="res://object/player/resource/model/animation/ActionLibrary.gltf" id="5_ygirm"]
 [ext_resource type="PackedScene" uid="uid://dc3kqxiptkiyx" path="res://object/stage/genie/Shahra.tscn" id="6_3bugb"]
 [ext_resource type="Script" uid="uid://dgkcedoff2eu2" path="res://object/player/resource/script/states/LandState.cs" id="6_ihvo7"]
-[ext_resource type="AnimationLibrary" uid="uid://dck4cudd7a66a" path="res://object/player/resource/model/animation/BalanceLibrary.gltf" id="6_lmaqt"]
 [ext_resource type="PackedScene" uid="uid://bemb37fo0seak" path="res://object/player/resource/component/Skills.tscn" id="6_ywq6t"]
 [ext_resource type="Script" uid="uid://dxnwh8fsypbfj" path="res://object/player/resource/script/states/RunState.cs" id="7_1ojgh"]
-[ext_resource type="AnimationLibrary" uid="uid://bo26mw8v8m0eh" path="res://object/player/resource/model/animation/EventLibrary.gltf" id="7_qxnj1"]
 [ext_resource type="Script" uid="uid://c707ed6jiadua" path="res://object/player/resource/script/states/BackstepState.cs" id="8_0ksv7"]
-[ext_resource type="AnimationLibrary" uid="uid://dpd4w3nuuvybs" path="res://object/player/resource/model/animation/GimmickLibrary.gltf" id="8_tdatq"]
 [ext_resource type="Script" uid="uid://1yra4j6j47p" path="res://object/player/resource/script/states/BackflipState.cs" id="9_7wp0f"]
 [ext_resource type="Script" uid="uid://rtmyidvl1ukl" path="res://object/player/resource/script/PlayerStatsController.cs" id="9_ewscv"]
-[ext_resource type="AnimationLibrary" uid="uid://ql8twqq248an" path="res://object/player/resource/model/animation/SidleLibrary.gltf" id="9_pypvt"]
 [ext_resource type="Script" uid="uid://dhxvgs4jji5w0" path="res://object/player/resource/script/states/CrouchState.cs" id="10_7aiwm"]
 [ext_resource type="Script" uid="uid://c0fs5w2sko38j" path="res://object/player/resource/script/states/StompState.cs" id="10_eoh5j"]
 [ext_resource type="Script" uid="uid://c65her02gv67f" path="res://object/player/resource/script/states/SlideState.cs" id="11_2eo52"]
@@ -62,8 +57,6 @@ height = 0.8
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_pgn8o"]
 radius = 0.36
 height = 0.9
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_6smkh"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4p752"]
 radius = 0.36
@@ -1178,31 +1171,11 @@ travelMagnitude = Vector3(1, 0.3, 0.2)
 
 [node name="Sonic" parent="." instance=ExtResource("3_rkpjr")]
 
-[node name="ChestAttachment" parent="Sonic/SonicRoot/GeneralSkeleton" index="4"]
-transform = Transform3D(1, 7.9268597e-07, -7.92686e-07, -7.926861e-07, 0.99999994, -1.1843348e-07, 7.926859e-07, 1.18434116e-07, 1, 5.806809e-08, 0.55418926, -9.351473e-09)
-
 [node name="Embers" parent="Sonic/SonicRoot/GeneralSkeleton/ChestAttachment/FlameOffset" index="2"]
 visible = true
 
-[node name="RFoot" parent="Sonic/SonicRoot/GeneralSkeleton" index="5"]
-transform = Transform3D(0.99999976, -2.0250468e-13, 1.7782997e-13, -1.272038e-13, 3.3760443e-07, 0.999999, -1.2079227e-13, -0.9999983, 3.5529956e-07, -0.039727584, 0.1554691, 0.0020560892)
-
-[node name="LFoot" parent="Sonic/SonicRoot/GeneralSkeleton" index="6"]
-transform = Transform3D(1, 1.1706192e-12, -4.159173e-14, 2.672862e-14, 1.2014061e-06, 0.9999999, 1.3216095e-12, -0.9999998, 1.2065284e-06, 0.039727576, 0.15546896, 0.00205609)
-
 [node name="CountdownRoot" parent="Sonic" index="4"]
 transform = Transform3D(0.666918, 0, -0.74513, 0, 1, 0, 0.74513, 0, 0.666918, 0, 0, 0)
-
-[node name="AnimationTree" parent="Sonic" index="5"]
-libraries = {
-&"": SubResource("AnimationLibrary_6smkh"),
-&"ActionLibrary": ExtResource("5_ygirm"),
-&"BalanceLibrary": ExtResource("6_lmaqt"),
-&"EventLibrary": ExtResource("7_qxnj1"),
-&"GimmickLibrary": ExtResource("8_tdatq"),
-&"SidleLibrary": ExtResource("9_pypvt")
-}
-parameters/balance_tree/balance_state/balance_left_blend/blend_position = 0.0
 
 [node name="Effect" parent="Sonic" node_paths=PackedStringArray("rightFoot", "leftFoot", "landingParticles", "stepEmitters") instance=ExtResource("19_3dctg")]
 rightFoot = NodePath("../SonicRoot/GeneralSkeleton/RFoot")
@@ -1441,6 +1414,9 @@ backstepState = NodePath("../../Basic/Backstep")
 
 [node name="Ivy" type="Node" parent="StateMachine/Special"]
 script = ExtResource("38_b64oq")
+highSpeedSwingStrength = 10.0
+initialSwingStrength = 6.0
+additionalSwingStrength = 3.0
 
 [node name="Zipline" type="Node" parent="StateMachine/Special"]
 script = ExtResource("39_ixnde")

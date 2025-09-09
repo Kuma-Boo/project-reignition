@@ -8,13 +8,13 @@ public partial class IvyState : PlayerState
 {
 	public Ivy Trigger { get; set; }
 
+	[Export] private float highSpeedSwingStrength;
+	[Export] private float initialSwingStrength;
+	[Export] private float additionalSwingStrength;
+
 	private float currentAnimationBlend;
 	private float animationBlendVelocity;
 	private float animationBlendSmoothing = .2f;
-
-	private readonly float HighSpeedSwingStrength = .6f;
-	private readonly float InitialSwingStrength = .4f;
-	private readonly float AdditionalSwingStrength = .35f;
 
 	/// <summary> Determines whether the ivy should have some force automatically applied when starting. </summary>
 	private bool isHighSpeedEntry;
@@ -31,9 +31,9 @@ public partial class IvyState : PlayerState
 
 		float initialForce;
 		if (isHighSpeedEntry)
-			initialForce = HighSpeedSwingStrength;
+			initialForce = highSpeedSwingStrength;
 		else
-			initialForce = HighSpeedSwingStrength * (Player.MoveSpeed / Player.Stats.baseGroundSpeed);
+			initialForce = highSpeedSwingStrength * (Player.MoveSpeed / Player.Stats.baseGroundSpeed);
 
 		Trigger.AddImpulseForce(initialForce, true);
 
@@ -86,12 +86,9 @@ public partial class IvyState : PlayerState
 	private float CalculateSwingForce()
 	{
 		if (Trigger.IsSleeping || Player.Animator.IsIvyStartActive)
-			return InitialSwingStrength;
+			return initialSwingStrength;
 
-		if (Trigger.IvyRatio >= 0)
-			return AdditionalSwingStrength * (1f - Trigger.IvyRatio);
-
-		return AdditionalSwingStrength;
+		return additionalSwingStrength;
 	}
 
 

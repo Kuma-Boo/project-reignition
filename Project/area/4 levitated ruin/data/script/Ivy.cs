@@ -11,7 +11,7 @@ public partial class Ivy : Launcher
 	private Callable ClearReversePathCallable => new(this, MethodName.ClearReversePath);
 
 	[ExportGroup("Settings")]
-	[ExportToolButton("Regenerate Sickle")]
+	[ExportToolButton("Regenerate Ivy")]
 	public Callable GenerateIvyGroup => Callable.From(GenerateIvy);
 	[Export(PropertyHint.Range, "2, 50")] public int Length { get; private set; }
 	[Export] private float MaxRotation { get; set; }
@@ -36,18 +36,21 @@ public partial class Ivy : Launcher
 	[Export] private NodePath root;
 	private Node3D rootNode;
 	private Array<Node3D> ivyLinks = [];
+	private float lengthInfluence;
 
 	private bool isInteractingWithPlayer;
 
+	/// <summary> Ratio of velocity that gets applied, sampled based on the ivy's current ratio. </summary>
+	[Export] private Curve velocityLimitCurve;
+	/// <summary> How quickly the ivy is currently rotating. </summary>
 	private float rotationVelocity;
-	private float targetImpulse;
-	private float impulseVelocity;
-	private float lengthInfluence;
-	private readonly float ImpulseAcceleration = 10.0f;
-	private readonly float ImpulseDecceleration = 2.5f;
-	private readonly float Gravity = 1.2f;
-	private readonly float GravityMultiplier = 1.5f;
-	private readonly float MaxRotationSpeed = 10.0f;
+	/// <summary> The maximum speed at which the ivy can rotate. </summary>
+	[Export] private float rotationLimit;
+
+	/// <summary> Amount of gravity to add. </summary>
+	[Export] private float gravity;
+	private float ratioLimit;
+	private bool canChangeRatioLimit;
 
 	protected override void SetUp()
 	{
@@ -60,7 +63,7 @@ public partial class Ivy : Launcher
 		IsSleeping = true;
 
 		// Adjust swing speed based on length (longer ivys swing slower)
-		lengthInfluence = Mathf.Clamp(50f / Length, 0.5f, 5f);
+		lengthInfluence = 1 / Mathf.Lerp(1f, 3f, Mathf.Min(Length / 50f, 1f));
 		StageSettings.Instance.Respawned += Respawn;
 	}
 
@@ -108,7 +111,7 @@ public partial class Ivy : Launcher
 		if (IvyRatio > 0 && rotationVelocity > 0)
 			return Mathf.Clamp(IvyRatio + 1, 0f, 1f);
 
-		if (IvyRatio <= 0)
+		if (IvyRatio <= 0 || rotationVelocity < 0)
 			return 0;
 
 		return IvyRatio;
@@ -118,7 +121,6 @@ public partial class Ivy : Launcher
 
 	private void StartSleeping()
 	{
-		targetImpulse = impulseVelocity = 0;
 		rotationVelocity = 0;
 		IvyRatio = 0;
 		IsSleeping = true;
@@ -172,78 +174,77 @@ public partial class Ivy : Launcher
 		}
 
 		IsSleeping = false;
-		targetImpulse = Mathf.Min(targetImpulse + amount, 1f);
-	}
-
-	public void AddGravity()
-	{
-		float gravityAmount = Gravity;
-		int velocitySign = Mathf.Sign(rotationVelocity);
-		if (Mathf.Sign(IvyRatio) == velocitySign)
-		{
-			if (isInteractingWithPlayer)
-			{
-				// Only apply heavy gravity when swinging far to keep swinging slowly when idle
-				if (Mathf.Abs(IvyRatio) > .2f)
-					gravityAmount *= GravityMultiplier;
-			}
-			else
-			{
-				// Kill speed quickly when not interacting with player
-				rotationVelocity *= 0.8f;
-				gravityAmount *= 0.8f;
-			}
-		}
-
-		rotationVelocity -= Mathf.Sign(IvyRatio) * gravityAmount * PhysicsManager.physicsDelta; // Apply gravity
-
-		if (velocitySign != Mathf.Sign(rotationVelocity))
-			ChangeSwingDirection();
+		rotationVelocity += amount * lengthInfluence;
+		ratioLimit = 1f;
 	}
 
 	private void ChangeSwingDirection()
 	{
-		if (Mathf.Abs(IvyRatio) < 0.01f)
-		{
-			// Barely swinging; start sleeping again
-			StartSleeping();
-			return;
-		}
-
 		// Update swingSfx volume 
 		swingSfx.VolumeLinear = Mathf.Abs(IvyRatio);
 	}
 
 	private void UpdateSwing()
 	{
-		targetImpulse = Mathf.MoveToward(targetImpulse, 0, ImpulseDecceleration * PhysicsManager.physicsDelta);
-		impulseVelocity = Mathf.MoveToward(impulseVelocity, targetImpulse, ImpulseAcceleration * PhysicsManager.physicsDelta);
+		ProcessGravity();
+		ProcessLimitRotation();
+		ProcessRotationVelocity();
 
-		rotationVelocity += impulseVelocity; // Add impulse velocity
-		AddGravity();
+		IvyRatio += (lengthInfluence * rotationVelocity * PhysicsManager.physicsDelta);
+		IvyRatio = Mathf.Clamp(IvyRatio, -1f, 1f);
 
-		float rotationClampAmount = Mathf.Clamp(1f - Mathf.Abs(IvyRatio), 0f, 1f);
-		float velocityClamp = MaxRotationSpeed * rotationClampAmount / lengthInfluence;
-		rotationVelocity = Mathf.Clamp(rotationVelocity, -velocityClamp, velocityClamp);
+		CheckSwingSfx(IvyRatio);
+	}
 
-		float targetRatio = IvyRatio + (rotationVelocity * lengthInfluence * PhysicsManager.physicsDelta);
-		CheckSwingSfx(targetRatio);
-		IvyRatio = Mathf.Clamp(targetRatio, -1f, 1f);
-
-		if (!isInteractingWithPlayer)
+	private void ProcessGravity()
+	{
+		if (Mathf.IsZeroApprox(ratioLimit))
 		{
-			if (Mathf.Abs(IvyRatio) < 0.01f && Mathf.Abs(rotationVelocity) < 0.01f)
-			{
-				IvyRatio = 0;
-				rotationVelocity = 0;
+			// Return to stationary position
+			IvyRatio *= 0.9f;
+			if (IvyRatio < 0.05f * lengthInfluence)
 				IsSleeping = true;
-			}
-			else if (Mathf.Abs(IvyRatio) < 0.05f && Mathf.Abs(rotationVelocity) < 0.5f &&
-				Mathf.Sign(IvyRatio) == Mathf.Sign(rotationVelocity))
-			{
-				rotationVelocity *= 0.9f;
-			}
+
+			return;
 		}
+
+		// Add gravity (amount is more intense towards edges of the ivy's ratio)
+		rotationVelocity += gravity * lengthInfluence * -IvyRatio * PhysicsManager.physicsDelta;
+	}
+
+	private void ProcessLimitRotation()
+	{
+		if (Mathf.Sign(IvyRatio) != Mathf.Sign(rotationVelocity))
+		{
+			canChangeRatioLimit = true;
+			return;
+		}
+
+		if (!canChangeRatioLimit)
+			return;
+
+		// Flipped direction--update ratio limits
+		canChangeRatioLimit = false;
+		ratioLimit *= 0.8f;
+		if (ratioLimit < 0.05f * lengthInfluence)
+			ratioLimit = 0f;
+
+	}
+
+	private void ProcessRotationVelocity()
+	{
+		if (Mathf.IsZeroApprox(ratioLimit))
+		{
+			rotationVelocity = 0f;
+			return;
+		}
+
+		if (Mathf.Sign(IvyRatio) != Mathf.Sign(rotationVelocity)) // Falling -- don't clamp speed
+			return;
+
+		float currentSampleRatio = Mathf.Clamp(Mathf.Abs(IvyRatio) / ratioLimit, 0f, 1f);
+		float velocityClamp = rotationLimit * velocityLimitCurve.Sample(currentSampleRatio);
+		rotationVelocity = Mathf.Clamp(rotationVelocity, -velocityClamp, velocityClamp);
 	}
 
 	/// <summary> Checks whether we're switching sides, and plays the swing sound effect. </summary>
