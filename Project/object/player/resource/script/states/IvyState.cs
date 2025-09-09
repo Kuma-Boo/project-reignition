@@ -85,7 +85,7 @@ public partial class IvyState : PlayerState
 	/// <summary> Calculates how much addition force to add based on swing state. </summary>
 	private float CalculateSwingForce()
 	{
-		if (Trigger.IsSleeping || Player.Animator.IsIvyStartActive)
+		if (Trigger.IsSleeping)
 			return initialSwingStrength;
 
 		return additionalSwingStrength;

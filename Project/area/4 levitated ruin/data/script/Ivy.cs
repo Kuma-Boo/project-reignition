@@ -63,7 +63,7 @@ public partial class Ivy : Launcher
 		IsSleeping = true;
 
 		// Adjust swing speed based on length (longer ivys swing slower)
-		lengthInfluence = 1 / Mathf.Lerp(1f, 3f, Mathf.Min(Length / 50f, 1f));
+		lengthInfluence = 1 / Mathf.Lerp(0.8f, 2.5f, Mathf.Min(Length / 50f, 1f));
 		StageSettings.Instance.Respawned += Respawn;
 	}
 
@@ -111,7 +111,7 @@ public partial class Ivy : Launcher
 		if (IvyRatio > 0 && rotationVelocity > 0)
 			return Mathf.Clamp(IvyRatio + 1, 0f, 1f);
 
-		if (IvyRatio <= 0 || rotationVelocity < 0)
+		if (IvyRatio <= 0 || (rotationVelocity < 0 && IvyRatio < 0.5f))
 			return 0;
 
 		return IvyRatio;
