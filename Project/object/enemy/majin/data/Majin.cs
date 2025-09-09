@@ -302,6 +302,8 @@ public partial class Majin : Enemy
 		Wander, // Stay in a "moving forward" state. Use a pathfollower if you need a consistent movement pattern.
 	}
 
+	private bool isUsingPathFollowerWander;
+
 	public bool IsRedMajin => attackType == AttackTypes.Fire;
 	/// <summary> Only become aggressive within a certain radius? </summary>
 	public int FlameAggressionRadius { get; private set; }
@@ -358,7 +360,10 @@ public partial class Majin : Enemy
 		HitboxAttachment.BoneIdx = 0;
 
 		if (attackType == AttackTypes.Wander)
+		{
+			isUsingPathFollowerWander = GetParentOrNull<PathFollow3D>() != null;
 			wanderHomePosition = GlobalPosition;
+		}
 	}
 
 	public void AttemptRespawn()
@@ -539,8 +544,10 @@ public partial class Majin : Enemy
 	private readonly float MaxWanderLength = 5f;
 	private void UpdateWandering()
 	{
-		ProcessRotation(wanderPosition, WanderRotationSmoothing);
+		if (isUsingPathFollowerWander)
+			return;
 
+		ProcessRotation(wanderPosition, WanderRotationSmoothing);
 		GlobalPosition += Root.Forward() * WanderSpeed * PhysicsManager.physicsDelta;
 
 		if (GlobalPosition.DistanceSquaredTo(wanderPosition) < 1f)
