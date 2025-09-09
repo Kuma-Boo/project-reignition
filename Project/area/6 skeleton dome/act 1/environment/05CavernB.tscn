@@ -1,8 +1,39 @@
-[gd_scene load_steps=4 format=3 uid="uid://f70owqcwad3i"]
+[gd_scene load_steps=9 format=3 uid="uid://f70owqcwad3i"]
 
 [ext_resource type="PackedScene" uid="uid://bgttkau4gmccx" path="res://area/6 skeleton dome/act 1/environment/model/05CavernB.gltf" id="1_4b61x"]
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="2_jfyap"]
+[ext_resource type="Texture2D" uid="uid://cbbr8hwmd2mla" path="res://area/6 skeleton dome/data/texture/skeleton bridge.png" id="3_bse23"]
 [ext_resource type="PackedScene" uid="uid://wnnthoykndrj" path="res://effect/particle/Lantern.tscn" id="3_v3cka"]
+[ext_resource type="Texture2D" uid="uid://cimsrwcl1u0hm" path="res://area/6 skeleton dome/data/texture/skeleton bridge top.png" id="4_s2n4e"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bse23"]
+resource_name = "Skeleton Bridge"
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(1.0374315, 1.6524299, 1.5191802, 1)
+albedo_texture = ExtResource("3_bse23")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s2n4e"]
+resource_name = "Skeleton Bridge"
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(1.0374315, 1.6524299, 1.3346808, 1)
+albedo_texture = ExtResource("3_bse23")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m07ay"]
+resource_name = "Skeleton Bridge Top"
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(1.2383369, 1.5790963, 1.5052651, 1)
+albedo_texture = ExtResource("3_bse23")
+detail_enabled = true
+detail_blend_mode = 3
+detail_uv_layer = 1
+detail_albedo = ExtResource("4_s2n4e")
+grow_amount = 1.846
 
 [node name="05CavernB" instance=ExtResource("1_4b61x")]
 script = ExtResource("2_jfyap")
@@ -58,6 +89,7 @@ gi_mode = 1
 layers = 4
 cast_shadow = 0
 gi_mode = 1
+surface_material_override/0 = SubResource("StandardMaterial3D_bse23")
 
 [node name="stg040_o12_Mesh_0006" parent="." index="10"]
 layers = 4
@@ -68,11 +100,13 @@ gi_mode = 1
 layers = 4
 cast_shadow = 0
 gi_mode = 1
+surface_material_override/0 = SubResource("StandardMaterial3D_s2n4e")
 
 [node name="stg040_o12_Mesh_0010" parent="." index="12"]
 layers = 4
 cast_shadow = 0
 gi_mode = 1
+surface_material_override/0 = SubResource("StandardMaterial3D_m07ay")
 
 [node name="stg040_o13_Mesh_0002" parent="." index="13"]
 layers = 4
