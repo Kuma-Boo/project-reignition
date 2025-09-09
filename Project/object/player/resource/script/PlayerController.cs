@@ -146,12 +146,20 @@ public partial class PlayerController : CharacterBody3D
 	public Vector3 CenterPosition
 	{
 		get => GlobalPosition + (UpDirection * .4f);
-		set => GlobalPosition = value - (UpDirection * .4f);
+		set
+		{
+			GlobalPosition = value - (UpDirection * .4f);
+			ResetPhysicsInterpolation();
+		}
 	}
 	public Vector3 CollisionPosition
 	{
 		get => GlobalPosition + (UpDirection * CollisionSize.Y);
-		set => GlobalPosition = value - (UpDirection * CollisionSize.Y);
+		set
+		{
+			GlobalPosition = value - (UpDirection * CollisionSize.Y);
+			ResetPhysicsInterpolation();
+		}
 	}
 	private const float CollisionPadding = .02f;
 
@@ -1161,6 +1169,7 @@ public partial class PlayerController : CharacterBody3D
 
 		MovementAngle = PathFollower.ForwardAngle; // Reset movement angle
 		Animator.SnapRotation(MovementAngle);
+		ResetPhysicsInterpolation();
 	}
 
 	[Export] private TeleportState teleportState;

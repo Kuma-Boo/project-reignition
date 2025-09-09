@@ -40,6 +40,7 @@ public partial class Pearl : Pickup
 		GetParent().RemoveChild(this);
 		Player.AddChild(this);
 		GlobalTransform = t;
+		ResetPhysicsInterpolation();
 
 		Tweener?.Kill();
 

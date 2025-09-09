@@ -876,6 +876,7 @@ public partial class Majin : Enemy
 		isFinishedTraveling = true;
 		SetHitboxStatus(true);
 		HitboxRoot.GlobalPosition = HitboxAttachment.GlobalPosition;
+		HitboxRoot.ResetPhysicsInterpolation();
 		hitBoxVelocity = Vector3.Zero;
 
 		if (SpawnTravelEnabled && attackType != AttackTypes.Wander)

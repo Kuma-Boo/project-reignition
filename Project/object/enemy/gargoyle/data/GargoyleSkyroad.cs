@@ -259,6 +259,8 @@ public partial class GargoyleSkyroad : PathFollow3D
 		CurrentPath.AddChild(this);
 		Progress = 0;
 		root.GlobalPosition = offset;
+		ResetPhysicsInterpolation();
+		root.ResetPhysicsInterpolation();
 	}
 
 	private void PlayEntryAnimation()

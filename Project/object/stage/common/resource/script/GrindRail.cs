@@ -80,6 +80,7 @@ public partial class GrindRail : Area3D
 			return;
 
 		_railModel.GlobalPosition = Player.GlobalPosition;
+		_railModel.ResetPhysicsInterpolation();
 		_railModel.Position = new Vector3(0, _railModel.Position.Y, _railModel.Position.Z); // Ignore player's x-offset
 		railMaterial.SetShaderParameter("uv_offset", _railModel.Position.Z);
 	}

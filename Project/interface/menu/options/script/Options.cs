@@ -143,17 +143,20 @@ public partial class Options : Menu
 		isPlayerLocked = true;
 		StageSettings.Player.Skills.EnableBreakSkills();
 	}
+
 	private void UnlockPlayer()
 	{
 		isPlayerLocked = false;
 		StageSettings.Player.Skills.DisableBreakSkills();
 	}
+
 	private void UpdatePlayerPosition()
 	{
 		Vector3 lockPosition = Player.GlobalPosition;
 		lockPosition.X = Mathf.Clamp(lockPosition.X, lockNode.GlobalPosition.X - 1.2f, lockNode.GlobalPosition.X + 1.2f);
 		lockPosition.Z = lockNode.GlobalPosition.Z;
 		Player.GlobalPosition = lockPosition;
+		Player.ResetPhysicsInterpolation();
 	}
 
 	protected override void Confirm()

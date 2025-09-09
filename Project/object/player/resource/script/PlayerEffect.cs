@@ -464,6 +464,7 @@ public partial class PlayerEffect : Node3D
 			animator.Play(animator.Autoplay);
 		}
 		activeFootprintDecal.GlobalTransform = spawnTransform;
+		activeFootprintDecal.ResetPhysicsInterpolation();
 	}
 
 	[Export]
@@ -471,6 +472,7 @@ public partial class PlayerEffect : Node3D
 	private void CreateSplashFootFX(bool isRightFoot)
 	{
 		waterStep.GlobalPosition = isRightFoot ? rightFoot.GlobalPosition : leftFoot.GlobalPosition;
+		waterStep.ResetPhysicsInterpolation();
 
 		const uint flags = (uint)GpuParticles3D.EmitFlags.Position + (uint)GpuParticles3D.EmitFlags.Velocity;
 		waterStep.EmitParticle(waterStep.GlobalTransform, Player.Velocity * .2f, Colors.White, Colors.White, flags);

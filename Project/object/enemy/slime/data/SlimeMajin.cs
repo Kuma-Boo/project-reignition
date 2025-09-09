@@ -104,6 +104,7 @@ public partial class SlimeMajin : Enemy
 	{
 		slimeState = SlimeState.Unspawned;
 		Root.GlobalPosition = SpawnPosition;
+		Root.ResetPhysicsInterpolation();
 		attackTimer = 0;
 
 		if (IsMovementEnabled)

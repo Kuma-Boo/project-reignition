@@ -304,6 +304,7 @@ public partial class Gargoyle : Enemy
 	{
 		isWindballActive = true;
 		windball.GlobalTransform = Root.GlobalTransform;
+		windball.ResetPhysicsInterpolation();
 	}
 	private void StopWindball() => isWindballActive = false;
 

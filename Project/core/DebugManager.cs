@@ -366,6 +366,7 @@ public partial class DebugManager : Control
 		}
 
 		DebugCheckpoint.GlobalTransform = StageSettings.Player.GlobalTransform;
+		DebugCheckpoint.ResetPhysicsInterpolation();
 		DebugCheckpoint.SaveCheckpointData();
 		GD.Print("Checkpoint created at ", StageSettings.Player.GlobalPosition);
 

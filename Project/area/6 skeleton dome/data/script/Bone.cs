@@ -55,13 +55,12 @@ public partial class Bone : Node3D
 	{
 		warpParticleGroup.GetParent().RemoveChild(warpParticleGroup);
 		Stage.AddChild(warpParticleGroup);
-		warpParticleGroup.GlobalPosition = Player.CenterPosition;
-
-		warpParticleGroup.RestartGroup();
-		warpParticleGroup.Visible = true;
 
 		RaycastHit groundHit = Player.CastRay(Player.GlobalPosition, Vector3.Down * 20f, Runtime.Instance.environmentMask);
 		warpParticleGroup.GlobalPosition = groundHit.point + Vector3.Up * 0.5f;
+		warpParticleGroup.ResetPhysicsInterpolation();
+		warpParticleGroup.RestartGroup();
+		warpParticleGroup.Visible = true;
 
 		LaunchSettings settings = LaunchSettings.Create(Player.GlobalPosition, groundHit.point, 3f);
 		settings.AllowDamage = false;
@@ -103,6 +102,7 @@ public partial class Bone : Node3D
 		Player.AddChild(this);
 		t.Origin = Player.CenterPosition;
 		GlobalTransform = t;
+		ResetPhysicsInterpolation();
 
 		tween = CreateTween().SetParallel(true);
 		tween.TweenProperty(this, "rotation", Rotation + Vector3.Up * Mathf.Tau, 1f).FromCurrent();

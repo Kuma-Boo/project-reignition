@@ -16,6 +16,7 @@ namespace Project.Gameplay.Triggers
 
 			// Move to new position
 			reflectionRenderer.GlobalPosition = GlobalPosition;
+			reflectionRenderer.ResetPhysicsInterpolation();
 		}
 
 		public override void Deactivate() => reflectionRenderer.GlobalPosition = previousPosition;

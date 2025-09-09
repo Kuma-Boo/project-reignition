@@ -267,6 +267,7 @@ public partial class ItemBox : Pickup
 
 				objectPool[i].GlobalPosition = objectLaunchSettings[i].InterpolatePositionRatio(currentTime);
 				objectPool[i].Scale = Vector3.One * Mathf.Clamp(currentTime, 0.5f, 1f);
+				objectPool[i].ResetPhysicsInterpolation();
 			}
 		}
 

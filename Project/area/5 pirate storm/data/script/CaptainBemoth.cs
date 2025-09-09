@@ -75,6 +75,7 @@ public partial class CaptainBemoth : PathFollow3D
 
 		// Reset positions so everything lines up in the cutscene
 		root.GlobalTransform = Transform3D.Identity;
+		root.ResetPhysicsInterpolation();
 		currentState = BemothState.Introduction;
 	}
 
@@ -120,6 +121,7 @@ public partial class CaptainBemoth : PathFollow3D
 
 		Progress = 0;
 		root.GlobalTransform = Transform3D.Identity;
+		root.ResetPhysicsInterpolation();
 		animator.Set(DefeatTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 
 		Player.Skills.DisableBreakSkills();
@@ -153,6 +155,7 @@ public partial class CaptainBemoth : PathFollow3D
 		Player.PathFollower.Resync();
 		Player.Animator.SnapRotation(Player.PathFollower.ForwardAngle);
 		jumpTrigger.GlobalPosition = Player.GetParentNode3D().GlobalPosition;
+		jumpTrigger.ResetPhysicsInterpolation();
 		jumpTrigger.Activate();
 
 		Player.Activate();
@@ -705,6 +708,7 @@ public partial class CaptainBemoth : PathFollow3D
 			return;
 
 		jumpCameraTrigger.GlobalPosition = Player.Camera.Camera.GlobalPosition; // Sync jump camera's position
+		jumpCameraTrigger.ResetPhysicsInterpolation();
 		jumpCameraTrigger.Activate();
 	}
 
@@ -784,10 +788,12 @@ public partial class CaptainBemoth : PathFollow3D
 
 		Player.PathFollower.Progress = initialProgress;
 		jumpTrigger.GlobalPosition = hit.point;
+		jumpTrigger.ResetPhysicsInterpolation();
 		if (isJump)
 		{
 			jumpTrigger.Position += Vector3.Up * LaunchFallHeight;
 			jumpCameraTrigger.GlobalPosition = Player.Camera.Camera.GlobalPosition; // Sync jump camera's position
+			jumpCameraTrigger.ResetPhysicsInterpolation();
 			jumpCameraTrigger.Activate();
 			jumpTrigger.JumpFinished += FinishJump;
 			hasPlayerJumpedOffHorn = true;
@@ -796,6 +802,7 @@ public partial class CaptainBemoth : PathFollow3D
 		{
 			// Teleport to the proper location
 			Player.GlobalPosition = jumpTrigger.GlobalPosition + Vector3.Up * LaunchFallHeight;
+			Player.ResetPhysicsInterpolation();
 			Player.PathFollower.Resync();
 			mainCameraTrigger.Activate();
 

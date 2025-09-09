@@ -116,6 +116,7 @@ public partial class CaptainBemothHorn : Node3D
 		GetParent().RemoveChild(this);
 		StageSettings.Instance.AddChild(this);
 		GlobalTransform = t;
+		ResetPhysicsInterpolation();
 
 		IsPopping = true;
 		animator.Set(PopTransition, "enabled");
@@ -123,6 +124,7 @@ public partial class CaptainBemothHorn : Node3D
 		if (IsFinalHorn)
 		{
 			GlobalTransform = Transform3D.Identity;
+			ResetPhysicsInterpolation();
 			return;
 		}
 
