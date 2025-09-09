@@ -13,7 +13,7 @@ public partial class ZiplineState : PlayerState
 	/// <summary> How quickly the player's input has to reach the TapDistance to count as a tap. </summary>
 	private readonly float TapLength = .1f;
 	/// <summary> How strong the player's input has to be to count as a tap. </summary>
-	private readonly float TapRadius = .5f;
+	private readonly float TapRadius = .8f;
 
 	private bool isPromptShown;
 	/// <summary> Localization key for swinging. </summary>

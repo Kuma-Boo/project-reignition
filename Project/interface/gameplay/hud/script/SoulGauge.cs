@@ -21,7 +21,7 @@ public partial class SoulGauge : Control
 		// Resize the soul gauge
 		float soulGaugeRatio = 0f;
 		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LockedSoulGauge))
-			SaveManager.ActiveGameData.CalculateSoulGaugeLevelRatio();
+			soulGaugeRatio = SaveManager.ActiveGameData.CalculateSoulGaugeLevelRatio();
 
 		float maxMovementAmount = soulGaugeRect.Position.Y;
 		float maxSize = soulGaugeRect.RegionRect.Size.Y + (maxMovementAmount / soulGaugeRect.Scale.Y);
