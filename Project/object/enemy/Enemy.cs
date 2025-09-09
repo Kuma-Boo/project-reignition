@@ -314,17 +314,19 @@ public partial class Enemy : Node3D
 			if (!IsLightSpeedAttackValid)
 				Player.StartBounce(IsDefeated, bounceScale, Hurtbox);
 		}
-		else if ((Player.IsBouncing && !Player.IsBounceInteruptable) ||
-			(Player.IsJumping && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ArmorJump)))
+		else if (Player.AttackState == PlayerController.AttackStates.None)
 		{
-			// Bouncing off an enemy
-			UpdateLockon();
-			Player.StartBounce(IsDefeated, bounceScale, Hurtbox);
-		}
-		else if (damagePlayer && Player.AttackState == PlayerController.AttackStates.None &&
-			(!Player.IsBouncing || Player.IsBounceInteruptable))
-		{
-			Player.StartKnockback();
+			if ((Player.IsBouncing && !Player.IsBounceInteruptable) ||
+				(Player.IsJumping && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ArmorJump)))
+			{
+				// Bouncing off an enemy
+				UpdateLockon();
+				Player.StartBounce(IsDefeated, bounceScale, Hurtbox);
+			}
+			else if (damagePlayer && (!Player.IsBouncing || Player.IsBounceInteruptable))
+			{
+				Player.StartKnockback();
+			}
 		}
 
 		SetInteractionProcessed();
