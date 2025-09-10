@@ -195,6 +195,7 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		IsPlayerCentered = false;
 		Activate();
 	}
+
 	public virtual void Activate()
 	{
 		EmitSignal(SignalName.Activated);

@@ -19,7 +19,7 @@ public partial class IvyState : PlayerState
 	/// <summary> Determines whether the ivy should have some force automatically applied when starting. </summary>
 	private bool isHighSpeedEntry;
 	public void UpdateHighSpeedEntry() => isHighSpeedEntry = Player.IsJumpDashOrHomingAttack ||
-		Player.MoveSpeed > Player.Stats.baseGroundSpeed * .5f;
+		Player.IsBackflipping || Player.IsLaunching;
 
 	private readonly string JumpAction = "action_jump";
 	private readonly string SwingAction = "action_swing";
