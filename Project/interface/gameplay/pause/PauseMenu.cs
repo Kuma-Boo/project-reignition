@@ -210,7 +210,7 @@ public partial class PauseMenu : Node
 				statusCursorAnimator.Play("hide");
 				description.HideDescription();
 				animator.Set(StatusHideTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-				statusAnimator.Play("value-1");
+				//statusAnimator.Play("value-1");
 				break;
 			case Submenu.Skill:
 				skillCursorAnimator.Play("hide");
@@ -474,5 +474,10 @@ public partial class PauseMenu : Node
 
 		GetTree().Paused = isActive;
 		BGMPlayer.StageMusicPaused = isActive;
+	}
+
+	private void PlayMissionStatus()
+	{
+		statusAnimator.Play("value-1");
 	}
 }
