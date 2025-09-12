@@ -246,6 +246,14 @@ public partial class PlayerInputController : Node
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) && InputAxis.IsZeroApprox())
 			return Player.PathFollower.ForwardAngle;
 
+		if (Player.IsLockoutActive && Player.ActiveLockoutData.allowGlobalForward &&
+			!InputAxis.IsZeroApprox() && NonZeroInputAxis.AngleTo(Vector2.Up) < Mathf.Pi * 0.2f &&
+			Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed) > 0.2f)
+		{
+			// Allow moving forward by just holding up when moving quickly along certain lockouts
+			return Player.PathFollower.ForwardAngle;
+		}
+
 		return NonZeroInputAxis.Rotated(-XformAngle).AngleTo(Vector2.Up);
 	}
 

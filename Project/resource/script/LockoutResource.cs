@@ -38,6 +38,7 @@ public partial class LockoutResource : Resource
 			properties.Add(ExtensionMethods.CreateProperty("Controls/Movement Angle", Variant.Type.Float, PropertyHint.Range, "-180,180"));
 			properties.Add(ExtensionMethods.CreateProperty("Controls/Direction Space", Variant.Type.Int, PropertyHint.Enum, spaceMode.EnumToString()));
 			properties.Add(ExtensionMethods.CreateProperty("Controls/Allow Reversing", Variant.Type.Bool));
+			properties.Add(ExtensionMethods.CreateProperty("Controls/Allow Global Forward", Variant.Type.Bool));
 		}
 		return properties;
 	}
@@ -96,6 +97,9 @@ public partial class LockoutResource : Resource
 			case "Controls/Movement Angle":
 				movementAngle = (float)value;
 				break;
+			case "Controls/Allow Global Forward":
+				allowGlobalForward = (bool)value;
+				break;
 
 			default:
 				return false;
@@ -141,6 +145,8 @@ public partial class LockoutResource : Resource
 				return (int)spaceMode;
 			case "Controls/Movement Angle":
 				return movementAngle;
+			case "Controls/Allow Global Forward":
+				return allowGlobalForward;
 		}
 		return base._Get(property);
 	}
@@ -172,6 +178,9 @@ public partial class LockoutResource : Resource
 		Strafe, // Enable this to use strafing instead of rotation. Works best when DirectionSpaceMode is set to pathfollower
 		Replace, // Replace movement direction with movementAngle
 	}
+
+	/// <summary> Allow the player to move forwards when holding up on the controller? </summary>
+	public bool allowGlobalForward;
 	/// <summary> Allow the player to move backwards when overriding movement angle? </summary>
 	public bool allowReversing;
 	/// <summary> Returns the player to the center of the path </summary>
