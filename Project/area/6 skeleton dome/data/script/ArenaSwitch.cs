@@ -38,6 +38,7 @@ public partial class ArenaSwitch : Node3D
 	{
 		isActivated = false;
 		animator.Play("RESET");
+		InitializeSwitches();
 		EmitSignal(SignalName.Respawned);
 	}
 
