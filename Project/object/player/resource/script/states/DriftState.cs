@@ -40,7 +40,7 @@ public partial class DriftState : PlayerState
 	/// <summary> Positional smoothing. </summary>
 	private readonly float DriftSmoothing = .25f;
 	/// <summary> Positional smoothing when SpeedBreaking. </summary>
-	private readonly float SpeedBreakDriftSmoothing = .1f;
+	private readonly float SpeedBreakDriftSmoothing = .06f;
 	/// <summary> How generous the input window is (Due to player's decceleration, it's harder to get an early drift.) </summary>
 	private readonly float InputWindowDistance = 1f;
 	/// <summary> Delay animation state reset for this amount of time. </summary>
@@ -175,7 +175,7 @@ public partial class DriftState : PlayerState
 	{
 		bool isManualDrift = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.DriftExp);
 		bool isAttemptingDrift = ((Input.IsActionJustPressed("button_action") && isManualDrift) ||
-			(!isManualDrift && distance <= InputWindowDistance)) && driftStatus != DriftStatus.TimingFail;
+			((!isManualDrift || Player.Skills.IsSpeedBreakActive) && distance <= InputWindowDistance)) && driftStatus != DriftStatus.TimingFail;
 
 		if (!isAttemptingDrift)
 			return;
@@ -186,7 +186,7 @@ public partial class DriftState : PlayerState
 			driftStatus = DriftStatus.Success;
 			driftAnimationTimer = LaunchAnimationLength;
 
-			if (isManualDrift)
+			if (isManualDrift && !Player.Skills.IsSpeedBreakActive)
 			{
 				BonusManager.instance.QueueBonus(new(BonusType.EXP, 100));
 				Player.Skills.ModifySoulGauge(10); // Not written in skill description, but that's what the original game does -_-
@@ -199,10 +199,6 @@ public partial class DriftState : PlayerState
 			driftAnimationTimer = FailAnimationLength;
 			Player.Animator.FailDrift();
 			Trigger.FadeSfx();
-
-			if (Player.Skills.IsSpeedBreakActive)
-				Player.Skills.ToggleSpeedBreak();
-
 			return;
 		}
 
