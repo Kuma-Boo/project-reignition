@@ -121,18 +121,18 @@ public partial class PauseMenu : Node
 			TogglePause();
 			return;
 		}
-/*
-		if (Input.IsActionJustPressed("button_attack") && Input.IsActionJustPressed("button_light_dash") && !isHidden)
-		{
-			pageAnimator.Play("hide_static");
-			isHidden = true;
-		}
-		if (Input.IsActionJustReleased("button_attack") && Input.IsActionJustReleased("button_light_dash") && isHidden)
-		{
-			pageAnimator.Play("show_static");
-			isHidden = false;
-		}
-*/
+		/*
+				if (Input.IsActionJustPressed("button_attack") && Input.IsActionJustPressed("button_light_dash") && !isHidden)
+				{
+					pageAnimator.Play("hide_static");
+					isHidden = true;
+				}
+				if (Input.IsActionJustReleased("button_attack") && Input.IsActionJustReleased("button_light_dash") && isHidden)
+				{
+					pageAnimator.Play("show_static");
+					isHidden = false;
+				}
+		*/
 
 		if (!GetTree().Paused)
 			return;
@@ -403,12 +403,7 @@ public partial class PauseMenu : Node
 
 	private void UpdateStatusDescription()
 	{
-		description.Text = currentSelection switch
-		{
-			0 => "pause_status_description",
-			1 => "pause_mission_description",
-			_ => "pause_skill_description",
-		};
+		description.Text = currentSelection == 0 ? "pause_status_description" : "pause_skill_description";
 		description.ShowDescription();
 	}
 
