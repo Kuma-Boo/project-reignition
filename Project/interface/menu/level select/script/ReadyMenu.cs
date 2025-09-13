@@ -26,11 +26,11 @@ public partial class ReadyMenu : Menu
 		}
 		else
 		{
+			HorizontalSelection = 0; // Default to yes
 			base.ShowMenu();
 		}
 
 		menuMemory[MemoryKeys.SkillMenuOpen] = 0;
-		HorizontalSelection = 0; // Default to yes
 	}
 
 	protected override void ProcessMenu()
