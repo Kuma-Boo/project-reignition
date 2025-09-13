@@ -267,6 +267,16 @@ public partial class PlayerEffect : Node3D
 		grindrailBurstParticle.Restart();
 	}
 
+	public void StopFullChargeFX()
+	{
+		if (chargeParticle.Visible && !fullChargeParticle.Emitting)
+			return;
+
+		chargeParticle.Restart();
+		chargeParticle.Visible = true;
+		fullChargeParticle.Emitting = false;
+	}
+
 	public void PerfectGrindShuffleFX()
 	{
 		perfectShuffleParticle.Restart();
@@ -454,6 +464,7 @@ public partial class PlayerEffect : Node3D
 			animator.Play(animator.Autoplay);
 		}
 		activeFootprintDecal.GlobalTransform = spawnTransform;
+		activeFootprintDecal.ResetPhysicsInterpolation();
 	}
 
 	[Export]
@@ -461,6 +472,7 @@ public partial class PlayerEffect : Node3D
 	private void CreateSplashFootFX(bool isRightFoot)
 	{
 		waterStep.GlobalPosition = isRightFoot ? rightFoot.GlobalPosition : leftFoot.GlobalPosition;
+		waterStep.ResetPhysicsInterpolation();
 
 		const uint flags = (uint)GpuParticles3D.EmitFlags.Position + (uint)GpuParticles3D.EmitFlags.Velocity;
 		waterStep.EmitParticle(waterStep.GlobalTransform, Player.Velocity * .2f, Colors.White, Colors.White, flags);

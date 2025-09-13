@@ -143,17 +143,20 @@ public partial class Options : Menu
 		isPlayerLocked = true;
 		StageSettings.Player.Skills.EnableBreakSkills();
 	}
+
 	private void UnlockPlayer()
 	{
 		isPlayerLocked = false;
 		StageSettings.Player.Skills.DisableBreakSkills();
 	}
+
 	private void UpdatePlayerPosition()
 	{
 		Vector3 lockPosition = Player.GlobalPosition;
 		lockPosition.X = Mathf.Clamp(lockPosition.X, lockNode.GlobalPosition.X - 1.2f, lockNode.GlobalPosition.X + 1.2f);
 		lockPosition.Z = lockNode.GlobalPosition.Z;
 		Player.GlobalPosition = lockPosition;
+		Player.ResetPhysicsInterpolation();
 	}
 
 	protected override void Confirm()
@@ -778,7 +781,7 @@ public partial class Options : Menu
 			int postProcessingQuality = (int)SaveManager.Config.postProcessingQuality;
 			postProcessingQuality = WrapSelection(postProcessingQuality + direction, (int)SaveManager.QualitySetting.Count);
 			SaveManager.Config.postProcessingQuality = (SaveManager.QualitySetting)postProcessingQuality;
-			StageSettings.Instance.UpdatePostProcessingStatus();
+			StageSettings.Instance.UpdateQualitySettings();
 		}
 		else if (VerticalSelection == 12)
 		{

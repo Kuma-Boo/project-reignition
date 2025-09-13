@@ -15,6 +15,7 @@ public partial class BossBombAttack : BombMissile
 			targetPosition = GetTargetPosition(false);
 
 		lockonDecalRoot.GlobalPosition = targetPosition;
+		lockonDecalRoot.ResetPhysicsInterpolation();
 		base._PhysicsProcess(_);
 	}
 

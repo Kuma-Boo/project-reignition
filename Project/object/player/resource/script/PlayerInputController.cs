@@ -37,6 +37,13 @@ public partial class PlayerInputController : Node
 	public bool IsActionBufferActive => !Mathf.IsZeroApprox(actionBuffer);
 	public void ResetActionBuffer() => actionBuffer = 0;
 
+	public bool IsGimmickBufferActive => IsActionBufferActive || IsAttackBufferActive;
+	public void ResetGimmickBuffer()
+	{
+		ResetActionBuffer();
+		ResetAttackBuffer();
+	}
+
 	private float attackBuffer;
 	public bool IsAttackBufferActive => !Mathf.IsZeroApprox(attackBuffer);
 	public void ResetAttackBuffer() => attackBuffer = 0;
@@ -62,6 +69,8 @@ public partial class PlayerInputController : Node
 	public float InputHorizontal { get; private set; }
 	public float InputVertical { get; private set; }
 	public Vector2 CameraAxis { get; private set; }
+
+	public float StepAxis { get; private set; }
 
 	/// <summary> Minimum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
 	private readonly float MinBackStepAngle = Mathf.Pi * .6f;
@@ -156,6 +165,8 @@ public partial class PlayerInputController : Node
 
 	private void UpdateStepBuffer()
 	{
+		StepAxis = Input.GetAxis("button_step_right", "button_step_left");
+
 		if (Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.Sidestep))
 		{
 			ResetStepBuffer();
@@ -234,6 +245,14 @@ public partial class PlayerInputController : Node
 	{
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) && InputAxis.IsZeroApprox())
 			return Player.PathFollower.ForwardAngle;
+
+		if (Player.IsLockoutActive && Player.ActiveLockoutData.allowGlobalForward &&
+			!InputAxis.IsZeroApprox() && NonZeroInputAxis.AngleTo(Vector2.Up) < Mathf.Pi * 0.2f &&
+			Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed) > 0.2f)
+		{
+			// Allow moving forward by just holding up when moving quickly along certain lockouts
+			return Player.PathFollower.ForwardAngle;
+		}
 
 		return NonZeroInputAxis.Rotated(-XformAngle).AngleTo(Vector2.Up);
 	}

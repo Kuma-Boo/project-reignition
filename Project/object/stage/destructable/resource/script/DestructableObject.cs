@@ -206,6 +206,7 @@ public partial class DestructableObject : Node3D
 		pieceRoot.Visible = true; // Make sure piece root is visible
 		pieceRoot.ProcessMode = ProcessModeEnum.Inherit;
 		pieceRoot.GlobalTransform = root.GlobalTransform; // Copy root transform
+		pieceRoot.ResetPhysicsInterpolation();
 
 		Vector3 shatterPoint = root.GlobalPosition;
 		float shatterStrength = ShatterStrength;

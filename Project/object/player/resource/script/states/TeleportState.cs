@@ -27,7 +27,8 @@ public partial class TeleportState : PlayerState
 
 	public override void EnterState()
 	{
-		Player.Skills.DisableBreakSkills();
+		if (Trigger.resetMovespeed)
+			Player.Skills.DisableBreakSkills();
 
 		Player.IsTeleporting = true;
 		if (Player.IsKnockback)

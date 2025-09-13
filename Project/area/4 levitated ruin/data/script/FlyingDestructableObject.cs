@@ -50,6 +50,7 @@ public partial class FlyingDestructableObject : DestructableObject
 		base.Shatter();
 		isSleeping = true;
 		pieceRoot.GlobalTransform = rotationRoot.GlobalTransform;
+		pieceRoot.ResetPhysicsInterpolation();
 	}
 
 	public void Activate()

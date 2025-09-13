@@ -969,9 +969,13 @@ public partial class PlayerAnimator : Node3D
 	public void SetZiplineBlend(float ratio) => animationTree.Set(ZiplineBlend, ratio);
 	public float GetZiplineBlend() => (float)animationTree.Get(ZiplineBlend);
 
-	public void StartZiplineTap(bool isFacingRight)
+	public void StartZiplineTap(bool isFacingRight, bool interuptAnimation)
 	{
 		animationTree.Set(ZiplineDirection, isFacingRight ? RightConstant : LeftConstant);
+
+		if (!interuptAnimation && IsZiplineTapActive)
+			return;
+
 		animationTree.Set(ZiplineTapTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 

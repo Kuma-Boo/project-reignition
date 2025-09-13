@@ -125,6 +125,7 @@ public partial class Surfboard : PathTraveller
 			clearCameraTrigger.distanceBlending = Mathf.FloorToInt(currentWave.Scale.Z * BaseWaveLength);
 			clearCameraTrigger.Activate();
 			clearCameraTrigger.GlobalPosition = Player.Camera.PathFollower.GlobalPosition;
+			clearCameraTrigger.ResetPhysicsInterpolation();
 		}
 	}
 

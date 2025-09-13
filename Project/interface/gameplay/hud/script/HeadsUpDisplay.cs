@@ -14,6 +14,7 @@ public partial class HeadsUpDisplay : Control
 	[Export] private AnimationPlayer visibilityAnimator;
 
 	public override void _EnterTree() => Instance = this;
+	public override void _ExitTree() => Instance = null;
 
 	public override void _Ready()
 	{

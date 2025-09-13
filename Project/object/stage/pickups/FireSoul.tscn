@@ -1,8 +1,9 @@
-[gd_scene load_steps=26 format=3 uid="uid://cu6lpq7q82grk"]
+[gd_scene load_steps=28 format=3 uid="uid://cu6lpq7q82grk"]
 
 [ext_resource type="PackedScene" uid="uid://bpe2f7mqbqm5p" path="res://object/stage/pickups/resource/model/RedRing.gltf" id="2"]
 [ext_resource type="Script" uid="uid://cqpplke7vxyty" path="res://object/stage/pickups/resource/script/FireSoul.cs" id="3"]
 [ext_resource type="Material" uid="uid://b0ljbpy47k3m4" path="res://object/stage/pickups/resource/model/material/Fire Soul Flame.tres" id="3_026a5"]
+[ext_resource type="Material" uid="uid://b32v826ro4i7i" path="res://object/stage/pickups/resource/model/material/Red Ring Collected.tres" id="3_57hms"]
 [ext_resource type="Material" uid="uid://bcnpvvdlevuow" path="res://object/stage/pickups/resource/model/material/Fire Soul Ember Process Material.tres" id="3_75fjl"]
 [ext_resource type="Material" uid="uid://by80k2boe4ips" path="res://object/stage/pickups/resource/model/material/Fire Soul Ember.tres" id="3_sdnvx"]
 [ext_resource type="Material" uid="uid://d1uwmbeay6w83" path="res://object/stage/pickups/resource/model/material/Fire Soul Process Material.tres" id="3_u27aa"]
@@ -149,6 +150,42 @@ tracks/7/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("RedRing/RedRingMesh:material_override")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("EmberParticle:transparency")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("RedRing/Flames:transparency")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
 [sub_resource type="Animation" id="Animation_fuxoe"]
 resource_name = "collect"
@@ -254,6 +291,46 @@ tracks/7/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_n1jb7"]
+resource_name = "collected"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RedRing/RedRingMesh:material_override")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("3_57hms")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("EmberParticle:transparency")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.8]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("RedRing/Flames:transparency")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.8]
 }
 
 [sub_resource type="Animation" id="Animation_viic3"]
@@ -434,6 +511,7 @@ tracks/4/keys = {
 _data = {
 &"RESET": SubResource("4"),
 &"collect": SubResource("Animation_fuxoe"),
+&"collected": SubResource("Animation_n1jb7"),
 &"enable-lockon": SubResource("Animation_viic3"),
 &"hide": SubResource("Animation_7osfg"),
 &"loop": SubResource("5"),

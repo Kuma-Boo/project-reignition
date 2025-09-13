@@ -1,4 +1,4 @@
-[gd_scene load_steps=99 format=3 uid="uid://d1rcieilh21gs"]
+[gd_scene load_steps=110 format=3 uid="uid://d1rcieilh21gs"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_0tght"]
 [ext_resource type="Curve3D" uid="uid://56gh0yeexer3" path="res://area/6 skeleton dome/act 1/environment/path/ExteriorPath.tres" id="1_h00gj"]
@@ -43,7 +43,7 @@
 [ext_resource type="PackedScene" uid="uid://cry4fy5icucbc" path="res://object/trigger/state trigger/SidleTrigger.tscn" id="16_0ldoj"]
 [ext_resource type="PackedScene" uid="uid://bp53tgvmd31jj" path="res://area/6 skeleton dome/act 1/environment/13HallTreasure.tscn" id="16_1seix"]
 [ext_resource type="Resource" uid="uid://dknaoyb6l7bmr" path="res://area/6 skeleton dome/act 1/camera/FieldUpperPathCam.tres" id="16_u35fa"]
-[ext_resource type="Resource" path="res://area/6 skeleton dome/act 1/camera/HallJumpTransitionCam.tres" id="17_3bann"]
+[ext_resource type="Resource" uid="uid://s3ls5ifkhv6e" path="res://area/6 skeleton dome/act 1/camera/HallJumpTransitionCam.tres" id="17_3bann"]
 [ext_resource type="PackedScene" uid="uid://wnhqambb5iaa" path="res://area/6 skeleton dome/act 1/environment/14Arena.tscn" id="17_b8rpm"]
 [ext_resource type="Resource" uid="uid://bmgolvymt25i8" path="res://area/6 skeleton dome/act 1/camera/CavernBCam.tres" id="17_c3wha"]
 [ext_resource type="PackedScene" uid="uid://cd53n0epyrvql" path="res://area/6 skeleton dome/act 1/environment/15Hall.tscn" id="18_sulau"]
@@ -61,10 +61,13 @@
 [ext_resource type="Curve3D" uid="uid://lsst4vgfp82f" path="res://area/6 skeleton dome/act 1/environment/path/CavernBPath.tres" id="37_1a8ni"]
 [ext_resource type="Curve3D" uid="uid://bfnsb54vg6vkv" path="res://area/6 skeleton dome/act 1/environment/path/AutomationPath.tres" id="40_ih587"]
 [ext_resource type="PackedScene" uid="uid://0q5cfpfqkhek" path="res://area/6 skeleton dome/data/skybox/Skybox.tscn" id="41_pilw5"]
+[ext_resource type="Script" uid="uid://coiui4qvdxbqe" path="res://object/trigger/modules/EventTrigger.cs" id="48_m0cc8"]
 [ext_resource type="AudioStream" uid="uid://t1ye7s5fb488" path="res://sound/ost/adventure disc/11 The White of Sky.mp3" id="59_rqena"]
 [ext_resource type="Material" uid="uid://dndcjme3820wo" path="res://area/6 skeleton dome/data/material/Snowflake.tres" id="59_sg7yc"]
 [ext_resource type="Script" uid="uid://ch4pb1qqwy5al" path="res://object/stage/common/resource/script/CameraFollower.cs" id="60_0ml3r"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="60_sg7yc"]
+[ext_resource type="PackedScene" uid="uid://0o1ds8o5k04j" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="67_mt304"]
+[ext_resource type="Material" uid="uid://bia2fywx2kiva" path="res://area/6 skeleton dome/data/material/Water.tres" id="68_3ot08"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mow5f"]
 size = Vector3(15, 20, 5)
@@ -121,6 +124,315 @@ size = Vector3(40, 20, 150)
 size = Vector3(40, 20, 5)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_doimh"]
+
+[sub_resource type="Animation" id="Animation_mt304"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../ExteriorObjectLighting:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.2]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../CaveObjectLighting:light_energy")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.4]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../CaveObjectLighting:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../ExteriorObjectLighting:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../../../WorldEnvironment:environment:fog_density")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.4]
+}
+
+[sub_resource type="Animation" id="Animation_4u3o5"]
+resource_name = "event"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../ExteriorObjectLighting:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.2, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../CaveObjectLighting:light_energy")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.4]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../CaveObjectLighting:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../ExteriorObjectLighting:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../../../WorldEnvironment:environment:fog_density")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.4, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_m0cc8"]
+resource_name = "event-deactivate"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../ExteriorObjectLighting:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.2]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../CaveObjectLighting:light_energy")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.4, 0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../CaveObjectLighting:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../ExteriorObjectLighting:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../../../WorldEnvironment:environment:fog_density")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.4]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3ot08"]
+_data = {
+&"RESET": SubResource("Animation_mt304"),
+&"event": SubResource("Animation_4u3o5"),
+&"event-deactivate": SubResource("Animation_m0cc8")
+}
+
+[sub_resource type="Animation" id="Animation_sc7id"]
+resource_name = "RESET"
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_3ot08"]
+resource_name = "event"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../ExteriorObjectLighting:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../CaveObjectLighting:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../CaveObjectLighting:light_energy")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.4, 0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../../../WorldEnvironment:environment:fog_density")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_4uowr"]
+resource_name = "event-deactivate"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../ExteriorObjectLighting:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../CaveObjectLighting:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../CaveObjectLighting:light_energy")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.4]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../../../WorldEnvironment:environment:fog_density")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4uowr"]
+_data = {
+&"RESET": SubResource("Animation_sc7id"),
+&"event": SubResource("Animation_3ot08"),
+&"event-deactivate": SubResource("Animation_4uowr")
+}
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_sg7yc"]
 size = Vector3(20, 20, 5)
@@ -386,6 +698,18 @@ tracks/8/keys = {
 "method": &"Deactivate"
 }]
 }
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("../../WorldEnvironment:environment:fog_density")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.4]
+}
 
 [sub_resource type="Animation" id="Animation_sg7yc"]
 resource_name = "demo2"
@@ -495,6 +819,18 @@ tracks/7/keys = {
 "args": [],
 "method": &"Activate"
 }]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("../../WorldEnvironment:environment:fog_density")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
 }
 
 [sub_resource type="Animation" id="Animation_0ml3r"]
@@ -615,18 +951,23 @@ _data = {
 [sub_resource type="Environment" id="Environment_w7cdv"]
 background_mode = 1
 ambient_light_source = 2
-ambient_light_color = Color(0.277528, 0.277528, 0.277528, 1)
+ambient_light_color = Color(0.28, 0.28, 0.28, 1)
 tonemap_mode = 2
-tonemap_exposure = 1.2
+tonemap_exposure = 1.1
 tonemap_white = 2.0
 glow_enabled = true
 glow_normalized = true
 glow_intensity = 1.0
 glow_strength = 0.9
-glow_bloom = 0.1
+glow_bloom = 0.2
 glow_blend_mode = 1
 glow_hdr_threshold = 2.0
-adjustment_enabled = true
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.28608578, 0.31290916, 0.35464323, 1)
+fog_density = 0.4
+fog_depth_begin = 0.0
+fog_depth_end = 200.0
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_0tght")
@@ -694,6 +1035,7 @@ shape = SubResource("BoxShape3D_c618p")
 transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 0, 1, 13)
 script = ExtResource("8_ka6po")
 transitionTime = 1.0
+deactivationTransitionTime = 0.0
 settings = ExtResource("9_sg7yc")
 
 [node name="Teleport" type="Node3D" parent="Trigger/Object/CavernBTeleport"]
@@ -921,12 +1263,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0)
 shape = SubResource("BoxShape3D_nlr3n")
 
 [node name="Interior2" parent="Trigger/Camera" instance=ExtResource("3_gut3n")]
-transform = Transform3D(-1.39091e-08, 0, -1, 0, 1, 0, 1, 0, -1.39091e-08, 405.334, 30.3473, -1089.93)
+transform = Transform3D(-1.39091e-08, 0, -1, 0, 1, 0, 1, 0, -1.39091e-08, 407.334, 30.3473, -1089.93)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/Interior2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -159.75, 40, 2.3)
 script = ExtResource("8_ka6po")
 settings = ExtResource("2_g7phu")
 
@@ -1297,6 +1638,7 @@ shape = SubResource("BoxShape3D_7hn3n")
 [node name="Visuals" type="Node3D" parent="."]
 
 [node name="CullingMap" type="Node3D" parent="Visuals"]
+visible = false
 
 [node name="02Load" parent="Visuals/CullingMap" instance=ExtResource("3_gut3n")]
 transform = Transform3D(0.972174, 7.5904e-09, 0.23426, -7.53476e-09, 1, -1.13253e-09, -0.23426, -6.64075e-10, 0.972174, -25.2, 3, -162.3)
@@ -1443,6 +1785,9 @@ startEnabled = true
 [node name="08Exterior" parent="Visuals" instance=ExtResource("11_sdnx7")]
 
 [node name="09Spiral" parent="Visuals" instance=ExtResource("12_oijso")]
+startEnabled = false
+respawnOnActivation = false
+cacheRespawnMethods = false
 
 [node name="10HallA" parent="Visuals" instance=ExtResource("13_ceqn3")]
 
@@ -1479,26 +1824,37 @@ transform = Transform3D(6.12836, 0, -4.50401, 0, 5, 0, 5.1423, 0, 5.36767, 79.60
 cast_shadow = 3
 mesh = SubResource("PlaneMesh_doimh")
 
-[node name="ObjectLighting" type="DirectionalLight3D" parent="Lighting/Exterior"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+[node name="ExteriorObjectLighting" type="DirectionalLight3D" parent="Lighting/Exterior"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
 layers = 1024
-light_energy = 0.6
+light_energy = 0.2
+light_cull_mask = 4293918785
+
+[node name="CaveObjectLighting" type="DirectionalLight3D" parent="Lighting/Exterior"]
+transform = Transform3D(-1, 3.821371e-15, -8.742278e-08, 8.742278e-08, 4.371139e-08, -1, 0, -1, -4.371139e-08, 0, 0, 0)
+visible = false
+layers = 1024
+light_color = Color(0.68, 1, 0.7173334, 1)
+light_energy = 0.4
 light_cull_mask = 4293918785
 
 [node name="EnvironmentLighting" type="DirectionalLight3D" parent="Lighting/Exterior"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
-light_energy = 0.6
-light_cull_mask = 4293918722
+light_energy = 0.5
+light_cull_mask = 4293918726
 shadow_enabled = true
+shadow_opacity = 0.8
 shadow_caster_mask = 67
 directional_shadow_blend_splits = true
+directional_shadow_fade_start = 0.5
+directional_shadow_max_distance = 50.0
 
 [node name="ExteriorEnvironmentProbe" type="ReflectionProbe" parent="Lighting/Exterior"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, 35, -394.568)
 layers = 1024
 size = Vector3(450, 120, 1070.86)
-cull_mask = 2
+cull_mask = 0
 reflection_mask = 2
 ambient_mode = 2
 ambient_color = Color(0.85, 0.9375, 1, 1)
@@ -1508,11 +1864,37 @@ ambient_color_energy = 0.2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 557.981, 3.9165, -1332.77)
 layers = 1024
 size = Vector3(492.826, 182.167, 450.944)
-cull_mask = 2
+cull_mask = 0
 reflection_mask = 2
 ambient_mode = 2
 ambient_color = Color(0.85, 0.9375, 1, 1)
 ambient_color_energy = 0.2
+
+[node name="CaveEntranceEventTrigger" type="Node3D" parent="Lighting/Exterior" node_paths=PackedStringArray("animator")]
+script = ExtResource("48_m0cc8")
+animator = NodePath("AnimationPlayer")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = false
+"Trigger Settings/Animation Blending" = 0.2
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Lighting/Exterior/CaveEntranceEventTrigger"]
+libraries = {
+&"": SubResource("AnimationLibrary_3ot08")
+}
+
+[node name="CaveExitEventTrigger" type="Node3D" parent="Lighting/Exterior" node_paths=PackedStringArray("animator")]
+script = ExtResource("48_m0cc8")
+animator = NodePath("AnimationPlayer")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = false
+"Trigger Settings/Animation Blending" = 0.2
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Lighting/Exterior/CaveExitEventTrigger"]
+libraries = {
+&"": SubResource("AnimationLibrary_4uowr")
+}
 
 [node name="InteriorFX" parent="Lighting" instance=ExtResource("3_gut3n")]
 transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 128, 0, -820)
@@ -1539,107 +1921,310 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 240.217, -26.7178, -969.603)
 layers = 1024
 size = Vector3(410.324, 254.436, 350.793)
 interior = true
-cull_mask = 4
+cull_mask = 0
 reflection_mask = 4
 ambient_mode = 2
 ambient_color = Color(0.87, 1, 0.9545, 1)
+
+[node name="CaveObjectProbe" type="ReflectionProbe" parent="Lighting/Interior"]
+transform = Transform3D(0.9966174, 0, 0.08218204, 0, 1, 0, -0.08218204, 0, 0.9966174, 263.93768, 37.55947, -979.0513)
+layers = 1024
+blend_distance = 2.0
+size = Vector3(331, 125.88146, 312)
+interior = true
+cull_mask = 0
+reflection_mask = 65
+ambient_mode = 2
+ambient_color = Color(0.13247386, 0.3396407, 0.27588916, 1)
+ambient_color_energy = 1.4
 
 [node name="HallProbe" type="ReflectionProbe" parent="Lighting/Interior"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 571.256, 32, -982.159)
 layers = 1024
 size = Vector3(322.488, 78, 343.683)
-cull_mask = 4
+cull_mask = 0
 reflection_mask = 4
 ambient_mode = 2
-ambient_color = Color(0.81, 1, 0.7, 1)
-ambient_color_energy = 0.5
+ambient_color = Color(0.89499986, 0.7, 1, 1)
+ambient_color_energy = 0.1
 
 [node name="SpiralProbe" type="ReflectionProbe" parent="Lighting/Interior"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 848.232, -23, -1260.57)
 layers = 1024
 size = Vector3(313.537, 160, 258.858)
 interior = true
-cull_mask = 4
+cull_mask = 0
 reflection_mask = 4
 ambient_mode = 2
 ambient_color = Color(0.66699, 0.581258, 0.359394, 1)
 ambient_color_energy = 1.5
 
-[node name="EndingProbe" type="ReflectionProbe" parent="Lighting/Interior"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1130, 20, -1160)
+[node name="SpiralObjectProbe" type="ReflectionProbe" parent="Lighting/Interior"]
+transform = Transform3D(0.6717723, 0, -0.7407577, 0, 1, 0, 0.7407577, 0, 0.6717723, 854.70233, -23, -1300.5625)
 layers = 1024
-size = Vector3(100, 60, 320)
+blend_distance = 8.0
+size = Vector3(169.58786, 160, 177.97665)
 interior = true
-cull_mask = 4
-reflection_mask = 4
+cull_mask = 0
+reflection_mask = 65
 ambient_mode = 2
-ambient_color = Color(1, 0.843137, 0.694118, 1)
+ambient_color = Color(1, 0.776, 0.44, 1)
 ambient_color_energy = 0.3
 
-[node name="ArenaProbe" type="ReflectionProbe" parent="Lighting/Interior"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1000, 40, -1000)
+[node name="OmniLight3D" type="OmniLight3D" parent="Lighting/Interior/SpiralObjectProbe"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -11.582691, 0)
+light_color = Color(1, 0.776, 0.44, 1)
+light_energy = 0.05
+light_negative = true
+light_specular = 0.0
+light_cull_mask = 4293918785
+distance_fade_enabled = true
+distance_fade_begin = 150.0
+distance_fade_length = 20.0
+omni_range = 100.0
+omni_attenuation = 0.0
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="Lighting/Interior/SpiralObjectProbe"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.589302, 0)
+light_color = Color(1, 0.776, 0.44, 1)
+light_energy = 0.05
+light_negative = true
+light_specular = 0.0
+light_cull_mask = 4293918785
+distance_fade_enabled = true
+distance_fade_begin = 150.0
+distance_fade_length = 20.0
+omni_range = 100.0
+omni_attenuation = 0.0
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="Lighting/Interior/SpiralObjectProbe"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 39.45832, 0)
+light_color = Color(1, 0.776, 0.44, 1)
+light_energy = 0.05
+light_negative = true
+light_specular = 0.0
+light_cull_mask = 4293918785
+distance_fade_enabled = true
+distance_fade_begin = 150.0
+distance_fade_length = 20.0
+omni_range = 100.0
+omni_attenuation = 0.0
+
+[node name="OmniLight3D4" type="OmniLight3D" parent="Lighting/Interior/SpiralObjectProbe"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.41226578, 0)
+light_color = Color(1, 0.776, 0.44, 1)
+light_energy = 0.05
+light_negative = true
+light_specular = 0.0
+light_cull_mask = 4293918785
+distance_fade_enabled = true
+distance_fade_begin = 150.0
+distance_fade_length = 20.0
+omni_range = 100.0
+omni_attenuation = 0.0
+
+[node name="OmniLight3D5" type="OmniLight3D" parent="Lighting/Interior/SpiralObjectProbe"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 23.584259, 0)
+light_color = Color(1, 0.776, 0.44, 1)
+light_energy = 0.05
+light_negative = true
+light_specular = 0.0
+light_cull_mask = 4293918785
+distance_fade_enabled = true
+distance_fade_begin = 150.0
+distance_fade_length = 20.0
+omni_range = 100.0
+omni_attenuation = 0.0
+
+[node name="OmniLight3D6" type="OmniLight3D" parent="Lighting/Interior/SpiralObjectProbe"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 51.453278, 0)
+light_color = Color(1, 0.776, 0.44, 1)
+light_energy = 0.05
+light_negative = true
+light_specular = 0.0
+light_cull_mask = 4293918785
+distance_fade_enabled = true
+distance_fade_begin = 150.0
+distance_fade_length = 20.0
+omni_range = 100.0
+omni_attenuation = 0.0
+
+[node name="CurvedHallObjectProbe" type="ReflectionProbe" parent="Lighting/Interior"]
+transform = Transform3D(0.6717723, 0, -0.7407577, 0, 1, 0, 0.7407577, 0, 0.6717723, 748.62756, 14.701477, -1162.7653)
 layers = 1024
-size = Vector3(300, 100, 300)
+blend_distance = 8.0
+size = Vector3(101.43602, 53.951782, 108.83545)
 interior = true
-cull_mask = 2
-reflection_mask = 2
+cull_mask = 0
+reflection_mask = 65
 ambient_mode = 2
-ambient_color = Color(0.588235, 1, 0.862745, 1)
-ambient_color_energy = 0.5
+ambient_color = Color(1, 1, 1, 1)
+ambient_color_energy = 0.3
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="Lighting/Interior/CurvedHallObjectProbe"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.830292, 17.708149, -0.6253662)
+light_color = Color(0.948, 0.94, 1, 1)
+light_energy = 0.11
+light_negative = true
+light_specular = 0.0
+light_cull_mask = 4293918785
+distance_fade_enabled = true
+distance_fade_begin = 100.0
+distance_fade_length = 25.0
+omni_range = 75.0
+omni_attenuation = 0.0
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="Lighting/Interior/CurvedHallObjectProbe"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.830292, 9.688696, -0.6253662)
+light_color = Color(0.948, 0.94, 1, 1)
+light_energy = 0.11
+light_negative = true
+light_specular = 0.0
+light_cull_mask = 4293918785
+distance_fade_enabled = true
+distance_fade_begin = 100.0
+distance_fade_length = 25.0
+omni_range = 75.0
+omni_attenuation = 0.0
+
+[node name="OmniLight3D4" type="OmniLight3D" parent="Lighting/Interior/CurvedHallObjectProbe"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.830414, 0.5909157, -0.6254883)
+light_color = Color(0.948, 0.94, 1, 1)
+light_energy = 0.11
+light_negative = true
+light_specular = 0.0
+light_cull_mask = 4293918785
+distance_fade_enabled = true
+distance_fade_begin = 100.0
+distance_fade_length = 25.0
+omni_range = 75.0
+omni_attenuation = 0.0
 
 [node name="HallAProbe" type="ReflectionProbe" parent="Lighting/Interior"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 500, 8, -558)
 layers = 1024
 size = Vector3(25, 20, 147)
 interior = true
-cull_mask = 4
+cull_mask = 0
 reflection_mask = 4
 ambient_mode = 2
-ambient_color = Color(1, 0.81, 0.81, 1)
+ambient_color = Color(1, 1, 1, 1)
 ambient_color_energy = 0.5
 
-[node name="HallBProbe" type="ReflectionProbe" parent="Lighting/Interior"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 700, 8, -557)
+[node name="HallAObjectProbe" type="ReflectionProbe" parent="Lighting/Interior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 500, 6.725525, -540.253)
 layers = 1024
-size = Vector3(26, 20, 147)
+blend_distance = 8.0
+size = Vector3(38.55078, 33.813354, 130.47989)
 interior = true
-cull_mask = 4
+cull_mask = 0
+reflection_mask = 65
+ambient_mode = 2
+ambient_color = Color(0.66, 0.4158, 0.4158, 1)
+ambient_color_energy = 0.6
+
+[node name="HallBProbe" type="ReflectionProbe" parent="Lighting/Interior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 700, 0.017166138, -557)
+layers = 1024
+blend_distance = 8.0
+size = Vector3(32.552734, 24.159576, 147)
+interior = true
+cull_mask = 0
 reflection_mask = 4
 ambient_mode = 2
-ambient_color = Color(0.49, 0.847, 1, 1)
-ambient_color_energy = 0.5
+ambient_color = Color(0.77, 0.93099993, 1, 1)
+ambient_color_energy = 0.2
+
+[node name="HallBObjectProbe" type="ReflectionProbe" parent="Lighting/Interior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 700, 7.604126, -548.6578)
+layers = 1024
+blend_distance = 8.0
+size = Vector3(34.86914, 39.062744, 144.16809)
+interior = true
+cull_mask = 0
+reflection_mask = 65
+ambient_mode = 2
+ambient_color = Color(0.48299998, 0.55890006, 0.69, 1)
 
 [node name="HallCProbe" type="ReflectionProbe" parent="Lighting/Interior"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 900, 8, -558)
 layers = 1024
 size = Vector3(23, 20, 147)
 interior = true
-cull_mask = 4
+cull_mask = 0
 reflection_mask = 4
 ambient_mode = 2
 ambient_color = Color(1, 0.886333, 0.78, 1)
-ambient_color_energy = 0.5
+ambient_color_energy = 0.3
+
+[node name="HallCObjectProbe" type="ReflectionProbe" parent="Lighting/Interior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 900, 8, -558)
+layers = 1024
+size = Vector3(23, 20, 147)
+interior = true
+cull_mask = 0
+reflection_mask = 65
+ambient_mode = 2
+ambient_color = Color(1, 0.89849997, 0.71000004, 1)
+ambient_color_energy = 0.3
 
 [node name="HallTreasureProbe" type="ReflectionProbe" parent="Lighting/Interior"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1100, 5, -558)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1100, 1.2876587, -558)
 layers = 1024
-size = Vector3(40, 20, 148)
+blend_distance = 8.0
+size = Vector3(40, 23.607544, 148)
 interior = true
-cull_mask = 4
+cull_mask = 0
 reflection_mask = 4
 ambient_mode = 2
-ambient_color = Color(1, 0.9835, 0.67, 1)
+ambient_color = Color(1, 0.7666667, 0, 1)
 ambient_color_energy = 0.5
 
-[node name="EnvironmentLighting" type="DirectionalLight3D" parent="Lighting/Interior"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+[node name="HallTreasureObjectProbe" type="ReflectionProbe" parent="Lighting/Interior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1100, 5.218643, -548.4026)
 layers = 1024
-light_color = Color(1, 0.86, 0.86, 1)
-light_energy = 0.8
-light_cull_mask = 4293918724
-shadow_enabled = true
-shadow_caster_mask = 65
-directional_shadow_blend_splits = true
+blend_distance = 8.0
+size = Vector3(40, 31.337494, 128.80518)
+interior = true
+cull_mask = 0
+reflection_mask = 65
+ambient_mode = 2
+ambient_color = Color(1, 0.877, 0.59000003, 1)
+ambient_color_energy = 0.2
+
+[node name="ArenaUpperProbe" type="ReflectionProbe" parent="Lighting/Interior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1000, 29.88272, -1000)
+layers = 1024
+blend_distance = 24.0
+size = Vector3(300, 74.338394, 300)
+interior = true
+cull_mask = 0
+reflection_mask = 2
+ambient_mode = 2
+ambient_color = Color(0, 0.93333316, 1, 1)
+ambient_color_energy = 0.5
+
+[node name="ArenaLowerProbe" type="ReflectionProbe" parent="Lighting/Interior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1010.81506, -1.976511, -1002.9783)
+layers = 1024
+blend_distance = 8.0
+size = Vector3(100.307556, 25.62495, 199.92535)
+interior = true
+cull_mask = 0
+reflection_mask = 2
+ambient_mode = 2
+ambient_color = Color(1, 0.5, 0, 1)
+
+[node name="EndingProbe" type="ReflectionProbe" parent="Lighting/Interior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1130, 20, -1160)
+layers = 1024
+size = Vector3(100, 60, 320)
+interior = true
+cull_mask = 0
+reflection_mask = 4
+ambient_mode = 2
+ambient_color = Color(1, 0.843137, 0.694118, 1)
+ambient_color_energy = 0.3
 
 [node name="Path" type="Node3D" parent="."]
 
@@ -1742,8 +2327,14 @@ isStageMusic = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_w7cdv")
 
+[node name="PlanarReflectionRenderer" parent="." instance=ExtResource("67_mt304")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 340, -25, -889)
+disableRenderering = true
+reflectionMaterials = [ExtResource("68_3ot08")]
+
 [connection signal="LevelStarted" from="." to="Snow" method="set_emitting" binds= [true]]
 [connection signal="Activated" from="Trigger/Object/CavernBTeleport/CavernBEntranceAutomation" to="Trigger/Object/CavernBTeleport/Camera" method="Activate"]
+[connection signal="Activated" from="Trigger/Object/CavernBTeleport/CavernBEntranceAutomation" to="Lighting/Exterior/CaveEntranceEventTrigger" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/CavernBTeleport/CavernBEntranceAutomation" to="Trigger/Object/CavernBTeleport/Camera" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/CavernBTeleport/CavernBEntranceAutomation" to="Trigger/Object/CavernBTeleport/Teleport" method="Activate"]
 [connection signal="Teleport" from="Trigger/Object/CavernBTeleport/Teleport" to="Visuals/03Field" method="Deactivate"]
@@ -1761,6 +2352,8 @@ environment = SubResource("Environment_w7cdv")
 [connection signal="Activated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Camera" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Path" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/SidleTrigger/Camera" method="Deactivate"]
+[connection signal="Activated" from="Trigger/Camera/Interior2" to="Lighting/Exterior/CaveExitEventTrigger" method="Activate"]
+[connection signal="Deactivated" from="Trigger/Camera/Interior2" to="Lighting/Exterior/CaveExitEventTrigger" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/02Load" to="Visuals/02Overpass" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/02Load" to="Visuals/02Overpass" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/01Unload" to="Visuals/01Opening" method="Deactivate"]
@@ -1780,7 +2373,9 @@ environment = SubResource("Environment_w7cdv")
 [connection signal="Activated" from="Visuals/CullingMap/07Load" to="Visuals/07Hall" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/07Load" to="Visuals/07Hall" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/06Load" to="Visuals/06Hall" method="Activate"]
+[connection signal="Activated" from="Visuals/CullingMap/06Load" to="Lighting/Exterior/CaveExitEventTrigger" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/06Load" to="Visuals/06Hall" method="Deactivate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/06Load" to="Lighting/Exterior/CaveExitEventTrigger" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/05AUnload-07Load" to="Visuals/05CavernA" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/05AUnload-07Load" to="Visuals/07Hall" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/05AUnload-07Load" to="Visuals/05CavernA" method="Activate"]
@@ -1799,7 +2394,11 @@ environment = SubResource("Environment_w7cdv")
 [connection signal="Activated" from="Visuals/CullingMap/16Load-14Unload" to="Visuals/16Throne" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/16Load-14Unload" to="Visuals/14Arena" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/16Load-14Unload" to="Visuals/16Throne" method="Deactivate"]
+[connection signal="Activated" from="Visuals/05CavernA" to="PlanarReflectionRenderer" method="EnableRendering"]
+[connection signal="Deactivated" from="Visuals/05CavernA" to="PlanarReflectionRenderer" method="DisableRendering"]
+[connection signal="Activated" from="Lighting/InteriorFX" to="Lighting/Exterior/CaveEntranceEventTrigger" method="Activate"]
 [connection signal="Activated" from="Lighting/InteriorFX" to="." method="SetEnvironmentFxFactor" binds= [0.0, 0.5]]
+[connection signal="Deactivated" from="Lighting/InteriorFX" to="Lighting/Exterior/CaveEntranceEventTrigger" method="Deactivate"]
 [connection signal="Deactivated" from="Lighting/InteriorFX" to="." method="SetEnvironmentFxFactor" binds= [1.0, 0.5]]
 [connection signal="Activated" from="Lighting/InteriorFX2" to="." method="SetEnvironmentFxFactor" binds= [0.0, 0.5]]
 [connection signal="Deactivated" from="Lighting/InteriorFX2" to="." method="SetEnvironmentFxFactor" binds= [1.0, 0.5]]

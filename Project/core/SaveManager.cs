@@ -198,6 +198,9 @@ public partial class SaveManager : Node
 		45,
 		60,
 		120,
+		144,
+		165,
+		240
 	];
 
 	#endregion
@@ -592,15 +595,15 @@ public partial class SaveManager : Node
 		switch (Config.postProcessingQuality)
 		{
 			case QualitySetting.Low:
-				RenderingServer.EnvironmentSetSsaoQuality(RenderingServer.EnvironmentSsaoQuality.Low, true, .5f, 2, 50,
+				RenderingServer.EnvironmentSetSsaoQuality(RenderingServer.EnvironmentSsaoQuality.Low, true, .5f, 0, 50,
 					300);
-				RenderingServer.EnvironmentSetSsilQuality(RenderingServer.EnvironmentSsilQuality.Low, true, .5f, 2, 50,
+				RenderingServer.EnvironmentSetSsilQuality(RenderingServer.EnvironmentSsilQuality.Low, true, .5f, 0, 50,
 					300);
 				break;
 			case QualitySetting.Medium:
-				RenderingServer.EnvironmentSetSsaoQuality(RenderingServer.EnvironmentSsaoQuality.Medium, true, .5f, 2,
+				RenderingServer.EnvironmentSetSsaoQuality(RenderingServer.EnvironmentSsaoQuality.Medium, true, .5f, 1,
 					50, 300);
-				RenderingServer.EnvironmentSetSsilQuality(RenderingServer.EnvironmentSsilQuality.Medium, true, .5f, 2,
+				RenderingServer.EnvironmentSetSsilQuality(RenderingServer.EnvironmentSsilQuality.Medium, true, .5f, 1,
 					50, 300);
 				break;
 			case QualitySetting.High:
@@ -913,10 +916,12 @@ public partial class SaveManager : Node
 		private LevelSaveData levelData = new();
 
 		/// <summary> Calculates the player's soul gauge size based on the player's level. </summary>
-		public int CalculateMaxSoulPower()
+		public int CalculateMaxSoulPower(bool isLocked)
 		{
 			int maxSoulPower = 100; // Starting soul gauge size
-			maxSoulPower += Mathf.FloorToInt(CalculateSoulGaugeLevelRatio() * 5f) * 20; // Soul Gauge size increases by 20 every 5 levels, so it caps at 300
+			if (!isLocked)
+				maxSoulPower += Mathf.FloorToInt(CalculateSoulGaugeLevelRatio() * 5f) * 20; // Soul Gauge size increases by 20 every 5 levels, so it caps at 300
+
 			return maxSoulPower;
 		}
 
@@ -1049,7 +1054,10 @@ public partial class SaveManager : Node
 
 			// Load Skill Ring
 			if (dictionary.TryGetValue(nameof(equippedSkills), out var))
+			{
 				equippedSkills = LoadSkills((Array<string>)var);
+				ActiveSkillRing.ValidateCrestSkills();
+			}
 
 			if (dictionary.TryGetValue(nameof(equippedAugments), out var))
 				equippedAugments = LoadAugments((Dictionary<string, int>)var);

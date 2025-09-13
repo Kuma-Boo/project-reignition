@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://bm47vn5goqp8d"]
+[gd_scene load_steps=26 format=3 uid="uid://bm47vn5goqp8d"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_vd2xh"]
 [ext_resource type="Resource" uid="uid://boarx5o8g73my" path="res://resource/level data/pirate storm/Boss.tres" id="2_crdxn"]
@@ -23,7 +23,7 @@ cull_mode = 1
 shading_mode = 0
 specular_mode = 2
 disable_fog = true
-albedo_color = Color(0.790827, 0.63607, 0.717231, 1)
+albedo_color = Color(0.5717406, 0.5394571, 0.6675487, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xt6vc"]
 size = Vector3(200, 5, 200)
@@ -384,6 +384,13 @@ _data = {
 &"demo3": SubResource("Animation_sttlg")
 }
 
+[sub_resource type="Gradient" id="Gradient_08nae"]
+offsets = PackedFloat32Array(0, 0.44363636, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.47457832, 0.3921805, 0.6343625, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_0me6b"]
+gradient = SubResource("Gradient_08nae")
+
 [sub_resource type="Environment" id="Environment_1yslj"]
 tonemap_mode = 2
 tonemap_white = 2.0
@@ -393,7 +400,16 @@ glow_intensity = 1.2
 glow_strength = 1.2
 glow_blend_mode = 1
 glow_hdr_threshold = 2.0
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.41785866, 0.36520565, 0.6035937, 1)
+fog_light_energy = 0.5
+fog_density = 1.0
+fog_sky_affect = 0.0
+fog_depth_begin = 100.0
+fog_depth_end = 1000.0
 adjustment_enabled = true
+adjustment_color_correction = SubResource("GradientTexture1D_0me6b")
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_vd2xh")
@@ -417,7 +433,7 @@ visible = false
 
 [node name="PSSky" parent="Visuals" instance=ExtResource("5_qe48x")]
 
-[node name="Tint" parent="Visuals/PSSky" index="4"]
+[node name="Tint" parent="Visuals/PSSky" index="5"]
 surface_material_override/0 = SubResource("StandardMaterial3D_xt6vc")
 
 [node name="PSSkyLightning" parent="Visuals/PSSky" instance=ExtResource("6_j7qrk")]
@@ -436,7 +452,7 @@ shadow_caster_mask = 65
 [node name="WaterLight" type="DirectionalLight3D" parent="Lighting"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 19, 0)
 layers = 1024
-light_color = Color(0.744168, 0.667215, 0.858137, 1)
+light_color = Color(0.7905144, 0.652669, 0.82073873, 1)
 light_energy = 1.8
 light_cull_mask = 8
 shadow_caster_mask = 65

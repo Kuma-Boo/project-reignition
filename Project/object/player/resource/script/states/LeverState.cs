@@ -13,6 +13,7 @@ public partial class LeverState : PlayerState
 		Player.Skills.DisableBreakSkills();
 		Player.Animator.StartLever(Trigger.IsRightLever);
 		Player.GlobalPosition = Trigger.TargetStandingPosition;
+		Player.ResetPhysicsInterpolation();
 	}
 
 	public override PlayerState ProcessPhysics()

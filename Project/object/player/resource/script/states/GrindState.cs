@@ -5,12 +5,9 @@ namespace Project.Gameplay;
 
 public partial class GrindState : PlayerState
 {
-	[Export]
-	private PlayerState jumpState;
-	[Export]
-	private PlayerState grindstepState;
-	[Export]
-	private PlayerState fallState;
+	[Export] private PlayerState jumpState;
+	[Export] private PlayerState grindstepState;
+	[Export] private PlayerState fallState;
 
 	public GrindRail ActiveGrindRail { get; set; }
 	private bool isAttemptingGrindStep;
@@ -33,6 +30,9 @@ public partial class GrindState : PlayerState
 	{
 		currentCharge = 0;
 		perfectChargeTimer = 0;
+		fallbackShuffleTimer = 0;
+		fallbackOffsetTimer = FallbackInputWindow * 0.5f;
+		canBufferPerfectShuffle = true;
 		CheckGrindStep();
 
 		ActiveGrindRail.Activate();
@@ -114,20 +114,17 @@ public partial class GrindState : PlayerState
 		CheckGrindStep(true);
 		UpdateCharge();
 
-		bool isGrindCompleted = Mathf.IsEqualApprox(ActiveGrindRail.PathFollower.ProgressRatio, 1);
-		if (!Player.Animator.IsBalanceShuffleActive || isGrindCompleted)
-		{
-			if (Player.Controller.IsJumpBufferActive)
-				return ProcessJump();
+		if (Player.Controller.IsJumpBufferActive)
+			return ProcessJump();
 
-			if (Player.Controller.IsStepBufferActive)
-			{
-				// Start a grind step from the shoulder buttons. Buffer is reset during GrindStepState
-				Player.IsGrindstepping = true;
-				return grindstepState;
-			}
+		if (Player.Controller.IsStepBufferActive)
+		{
+			// Start a grind step from the shoulder buttons. Buffer is reset during GrindStepState
+			Player.IsGrindstepping = true;
+			return grindstepState;
 		}
 
+		bool isGrindCompleted = Mathf.IsEqualApprox(ActiveGrindRail.PathFollower.ProgressRatio, 1);
 		if (isGrindCompleted || movementDelta <= 0) // Disconnect from the rail
 			return fallState;
 
@@ -246,23 +243,64 @@ public partial class GrindState : PlayerState
 		return jumpState;
 	}
 
+	/// <summary> Determines whether a button press can be buffered. </summary>
+	private bool canBufferPerfectShuffle;
+	private float fallbackShuffleTimer;
+	private float fallbackOffsetTimer;
 	private float currentCharge;
 	private float perfectChargeTimer;
 	private readonly float PerfectChargeInputWindow = .3f;
+	private readonly float FallbackInputWindow = .2f;
 	private readonly float ChargeSpeed = 3.0f;
 	private void UpdateCharge()
 	{
-		bool isCharging = Input.IsActionPressed("button_action");
+		bool isCharging = Input.IsActionPressed("button_action") || Input.IsActionPressed("button_attack");
 		bool isCharged = Mathf.IsEqualApprox(currentCharge, 1.0f);
 
 		perfectChargeTimer = Mathf.MoveToward(perfectChargeTimer, 0, PhysicsManager.physicsDelta);
 
 		if (isCharging)
+		{
 			Charge(isCharged);
-		else if (!Mathf.IsZeroApprox(currentCharge))
+		}
+		else
+		{
 			Uncharge(isCharged);
+			ProcessFallbackShuffle();
+		}
 
 		UpdateChargeAnimations(isCharging);
+	}
+
+	/// <summary> Adds an alternative fallback to shuffling, because players find the charge method unintuitive. </summary>
+	private void ProcessFallbackShuffle()
+	{
+		fallbackShuffleTimer = Mathf.MoveToward(fallbackShuffleTimer, 0, PhysicsManager.physicsDelta);
+
+		if (!Mathf.IsZeroApprox(fallbackOffsetTimer) && Player.Controller.IsGimmickBufferActive)
+		{
+			Player.Controller.ResetGimmickBuffer();
+			fallbackShuffleTimer = canBufferPerfectShuffle ? FallbackInputWindow : 0;
+			canBufferPerfectShuffle = false;
+		}
+
+		if (Player.Animator.IsBalanceShuffleActive)
+			return;
+
+		fallbackOffsetTimer = Mathf.MoveToward(fallbackOffsetTimer, 0, PhysicsManager.physicsDelta);
+
+		if (!Mathf.IsZeroApprox(fallbackShuffleTimer))
+		{
+			// Perfect shuffle (Tap Version)
+			StartShuffle(true);
+			return;
+		}
+
+		if (!Mathf.IsZeroApprox(currentCharge))
+		{
+			// Fail shuffle
+			StartShuffle(false);
+		}
 	}
 
 	private void Charge(bool isCharged)
@@ -287,18 +325,24 @@ public partial class GrindState : PlayerState
 			perfectChargeTimer = PerfectChargeInputWindow;
 			Player.Effect.StartFullChargeFX();
 		}
+		else if (Mathf.IsZeroApprox(perfectChargeTimer))
+		{
+			Player.Effect.StopFullChargeFX();
+		}
 	}
 
 	private void Uncharge(bool isCharged)
 	{
+		if (Mathf.IsZeroApprox(currentCharge))
+			return;
+
 		currentCharge = Mathf.MoveToward(currentCharge, 0f, ChargeSpeed * PhysicsManager.physicsDelta);
 		Player.Effect.StopChargeFX();
 
 		// Update shuffling
 		if (!Player.Animator.IsBalanceShuffleActive && isCharged)
 		{
-			StartShuffle();
-			currentCharge = 0;
+			StartShuffle(!Mathf.IsZeroApprox(perfectChargeTimer));
 			return;
 		}
 
@@ -322,9 +366,17 @@ public partial class GrindState : PlayerState
 		}
 	}
 
-	private void StartShuffle()
+	private void StartShuffle(bool isPerfectCharge)
 	{
-		bool isPerfectCharge = !Mathf.IsZeroApprox(perfectChargeTimer);
+		if (Player.Animator.IsBalanceShuffleActive)
+			return;
+
+		currentCharge = 0;
+		fallbackShuffleTimer = 0;
+		fallbackOffsetTimer = FallbackInputWindow * 0.5f;
+		canBufferPerfectShuffle = true;
+		Player.Controller.ResetGimmickBuffer();
+
 		Player.MoveSpeed = isPerfectCharge ? Player.Stats.perfectShuffleSpeed : Player.Stats.GrindSettings.Speed;
 		Player.Effect.StartGrindFX(false);
 		Player.Animator.StartGrindShuffle();

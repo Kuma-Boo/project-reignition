@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://c1qim6x2gc38r"]
+[gd_scene load_steps=5 format=3 uid="uid://c1qim6x2gc38r"]
 
 [ext_resource type="Script" uid="uid://bkfwy1d65ovun" path="res://effect/buffer/script/MultiplicativeBloomRenderer.cs" id="1_ainlh"]
 [ext_resource type="Material" uid="uid://n2dtgpdm7w7l" path="res://effect/buffer/material/Multiplicative Bloom Renderer Material.tres" id="2_632yc"]
+[ext_resource type="World3D" uid="uid://cenunrix6igno" path="res://effect/buffer/EffectRendererWorld.tres" id="3_6t0qq"]
 
 [sub_resource type="Environment" id="Environment_632yc"]
 background_mode = 1
@@ -32,6 +33,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="BloomViewport" type="SubViewport" parent="."]
+world_3d = ExtResource("3_6t0qq")
 handle_input_locally = false
 anisotropic_filtering_level = 0
 gui_disable_input = true
@@ -41,6 +43,7 @@ positional_shadow_atlas_quad_0 = 0
 positional_shadow_atlas_quad_1 = 0
 positional_shadow_atlas_quad_2 = 0
 positional_shadow_atlas_quad_3 = 0
+canvas_cull_mask = 0
 size = Vector2i(256, 256)
 render_target_update_mode = 4
 
@@ -50,6 +53,7 @@ environment = SubResource("Environment_632yc")
 current = true
 
 [node name="ObjectViewport" type="SubViewport" parent="."]
+world_3d = ExtResource("3_6t0qq")
 transparent_bg = true
 handle_input_locally = false
 screen_space_aa = 1
@@ -61,6 +65,7 @@ positional_shadow_atlas_quad_0 = 0
 positional_shadow_atlas_quad_1 = 0
 positional_shadow_atlas_quad_2 = 0
 positional_shadow_atlas_quad_3 = 0
+canvas_cull_mask = 0
 size = Vector2i(256, 256)
 render_target_update_mode = 4
 

@@ -62,9 +62,9 @@ public partial class LaunchRingState : PlayerState
 			return fallState;
 		}
 
-		if (Player.Controller.IsActionBufferActive)
+		if (Player.Controller.IsGimmickBufferActive)
 		{
-			Player.Controller.ResetActionBuffer();
+			Player.Controller.ResetGimmickBuffer();
 			Player.Effect.StartTrailFX();
 			Launcher.Activate();
 			return null;

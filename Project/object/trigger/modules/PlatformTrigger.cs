@@ -357,6 +357,9 @@ public partial class PlatformTrigger : Node3D
 	/// <summary> Checks whether the player is currently standing on top of the platform. </summary>
 	private bool IsPlayerOnPlatform()
 	{
+		if (Player.ProcessMode == ProcessModeEnum.Disabled)
+			return false;
+
 		float checkLength = Mathf.Abs(Player.CenterPosition.Y - floorCalculationRoot.GlobalPosition.Y) + (Player.CollisionSize.Y * 2.0f);
 		checkLength += Mathf.Abs(Mathf.Min(Player.VerticalSpeed, 0f) * PhysicsManager.physicsDelta);
 		KinematicCollision3D collision = Player.MoveAndCollide(-Player.UpDirection * checkLength, true);

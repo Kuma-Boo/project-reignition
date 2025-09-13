@@ -63,6 +63,14 @@
 [ext_resource type="Curve3D" uid="uid://rus44tcch71j" path="res://area/4 levitated ruin/act 2/environment/path/Tower4Sidle3Path.tres" id="40_vgqrq"]
 [ext_resource type="Curve3D" uid="uid://mlp38x0qybc4" path="res://area/4 levitated ruin/act 2/environment/path/Tower5SidlePath.tres" id="43_toorb"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_flgq4"]
+render_priority = 0
+shader = ExtResource("10_nwodq")
+shader_parameter/albedo = ExtResource("11_q7bfn")
+shader_parameter/detail = ExtResource("12_tjkwn")
+shader_parameter/lut = ExtResource("13_h61ba")
+shader_parameter/tint = Color(0, 0.19, 0.3, 1)
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lnv7r"]
 render_priority = -128
 shader = ExtResource("5_ttop8")
@@ -83,6 +91,7 @@ vertex_color_use_as_albedo = true
 resource_name = "Moon"
 render_priority = -125
 specular_mode = 2
+disable_fog = true
 vertex_color_use_as_albedo = true
 albedo_color = Color(1, 0.874, 0.46, 1)
 albedo_texture = ExtResource("5_y7vf5")
@@ -90,14 +99,6 @@ emission_enabled = true
 emission = Color(0.845805, 0.646575, 0, 1)
 emission_energy_multiplier = 0.8
 emission_texture = ExtResource("5_y7vf5")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_flgq4"]
-render_priority = 0
-shader = ExtResource("10_nwodq")
-shader_parameter/albedo = ExtResource("11_q7bfn")
-shader_parameter/detail = ExtResource("12_tjkwn")
-shader_parameter/lut = ExtResource("13_h61ba")
-shader_parameter/tint = Color(0, 0.19, 0.3, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mwnvi"]
 size = Vector3(5, 8, 3)
@@ -171,8 +172,15 @@ glow_strength = 1.5
 glow_blend_mode = 1
 glow_hdr_threshold = 1.4
 glow_hdr_scale = 3.0
-fog_light_color = Color(0, 0, 0, 1)
-fog_density = 0.0011
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.2310881, 0.29222518, 0.4804198, 1)
+fog_light_energy = 0.01
+fog_density = 1.0
+fog_height = 100.0
+fog_height_density = -0.01
+fog_depth_begin = 2000.0
+fog_depth_end = 2500.0
 adjustment_enabled = true
 adjustment_saturation = 0.8
 adjustment_color_correction = SubResource("GradientTexture1D_qg5bm")
@@ -854,29 +862,21 @@ visible = false
 
 [node name="Visuals" type="Node3D" parent="."]
 
-[node name="Skybox" parent="Visuals" instance=ExtResource("4_c0tbi")]
-transform = Transform3D(0.195415, 0, 0.980721, 0, 1, 0, -0.980721, 0, 0.195415, 0, 0, 0)
-
-[node name="SkyRoot" parent="Visuals/Skybox" index="0"]
-transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, 0, -179.753, 0)
-
-[node name="Skeleton3D" parent="Visuals/Skybox/SkyRoot" index="0"]
-bones/1/rotation = Quaternion(5.33851e-08, 0.707107, 0.707107, 5.33851e-08)
-
-[node name="BackgroundMesh" parent="Visuals/Skybox/SkyRoot/Skeleton3D" index="0"]
-surface_material_override/0 = SubResource("ShaderMaterial_lnv7r")
-
-[node name="BloomMesh" parent="Visuals/Skybox/SkyRoot/Skeleton3D" index="1"]
-visible = false
-surface_material_override/0 = SubResource("StandardMaterial3D_nwodq")
-
-[node name="MoonMesh" parent="Visuals/Skybox/SkyRoot/Skeleton3D" index="5"]
-surface_material_override/0 = SubResource("StandardMaterial3D_q7bfn")
-
 [node name="LRSky" parent="Visuals" instance=ExtResource("2_dq0yd")]
 
 [node name="SkyRoot" parent="Visuals/LRSky" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -466.856, 0)
+
+[node name="Skeleton3D" parent="Visuals/LRSky/SkyRoot" index="0"]
+bones/2/position = Vector3(0, 0.0003682732, 2223.495)
+bones/3/position = Vector3(0, 0.00029838335, 1423.4946)
+bones/4/position = Vector3(0, 5.1447372e-05, 623.49414)
+bones/5/position = Vector3(0, -1.2383101e-05, -176.50586)
+bones/6/position = Vector3(0, -7.6213575e-05, -976.50635)
+bones/7/position = Vector3(0, -1.7973725e-05, -1776.5066)
+bones/8/position = Vector3(0, -0.00020387449, -2576.5063)
+bones/9/position = Vector3(0, -655.0199, -236.57007)
+bones/13/rotation = Quaternion(-5.1827752e-15, 0.98930204, -3.514707e-14, 0.14588214)
 
 [node name="stg060_tsky_obj_Mesh_0000" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="0"]
 visible = false
@@ -933,6 +933,26 @@ visible = false
 
 [node name="Sun" parent="Visuals/LRSky" index="2"]
 visible = false
+
+[node name="Skybox" parent="Visuals/LRSky" instance=ExtResource("4_c0tbi")]
+transform = Transform3D(0.13679044, 0, 0.6865044, 0, 0.7, 0, -0.6865044, 0, 0.13679044, 11.725, -450, -50)
+script = null
+
+[node name="SkyRoot" parent="Visuals/LRSky/Skybox" index="0"]
+transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, 0, -179.753, 0)
+
+[node name="Skeleton3D" parent="Visuals/LRSky/Skybox/SkyRoot" index="0"]
+bones/1/rotation = Quaternion(5.33851e-08, 0.707107, 0.707107, 5.33851e-08)
+
+[node name="BackgroundMesh" parent="Visuals/LRSky/Skybox/SkyRoot/Skeleton3D" index="0"]
+surface_material_override/0 = SubResource("ShaderMaterial_lnv7r")
+
+[node name="BloomMesh" parent="Visuals/LRSky/Skybox/SkyRoot/Skeleton3D" index="1"]
+visible = false
+surface_material_override/0 = SubResource("StandardMaterial3D_nwodq")
+
+[node name="MoonMesh" parent="Visuals/LRSky/Skybox/SkyRoot/Skeleton3D" index="5"]
+surface_material_override/0 = SubResource("StandardMaterial3D_q7bfn")
 
 [node name="Rukh1" parent="Visuals" instance=ExtResource("3_8fsym")]
 startEnabled = true
@@ -1980,5 +2000,5 @@ isStageMusic = true
 [connection signal="Activated" from="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer4" to="Triggers/RecenterLockout" method="Activate"]
 
 [editable path="Collision"]
-[editable path="Visuals/Skybox"]
 [editable path="Visuals/LRSky"]
+[editable path="Visuals/LRSky/Skybox"]

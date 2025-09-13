@@ -3,9 +3,9 @@ using Project.Core;
 
 namespace Project.Interface.Menus
 {
-	/// <summary>
-	/// Press start. Also plays an intro cutscene if you wait long enough.
-	/// </summary>
+	// / <summary>
+	// / Press start. Also plays an intro cutscene if you wait long enough.
+	// / </summary>
 	public partial class Title : Menu
 	{
 		[Export] private Label versionLabel;
@@ -39,24 +39,25 @@ namespace Project.Interface.Menus
 				if ((Runtime.Instance.IsActionJustPressed("sys_pause", "ui_accept") && !Input.IsActionJustPressed("toggle_fullscreen")) ||
 					Runtime.Instance.IsActionJustPressed("sys_select", "ui_select"))
 					FinishCutscene();
+
+				return;
 			}
-			else if (Input.IsAnythingPressed()) //Change menu
+
+			if (Input.IsAnythingPressed()) // Change menu
 			{
 				Confirm();
 				return;
 			}
-			else
+
+			cutsceneTimer += PhysicsManager.physicsDelta;
+			if (cutsceneTimer >= CUTSCENE_TIME_LENGTH && !isCutsceneActive)
 			{
-				cutsceneTimer += PhysicsManager.physicsDelta;
-				if (cutsceneTimer >= CUTSCENE_TIME_LENGTH && !isCutsceneActive)
-				{
-					StartCutscene();
-					return;
-				}
+				StartCutscene();
+				return;
 			}
 		}
 
-		//Activate main menu (submenu 0);
+		// Activate main menu (submenu 0);
 		public override void OpenSubmenu() => _submenus[0].ShowMenu();
 
 		public override void ShowMenu()
@@ -79,6 +80,7 @@ namespace Project.Interface.Menus
 		{
 			isCutsceneActive = true;
 			animator.Play("cutscene-start");
+			DisableProcessing();
 		}
 
 		private void FinishCutscene()
@@ -86,6 +88,7 @@ namespace Project.Interface.Menus
 			cutsceneTimer = 0;
 			isCutsceneActive = false;
 			animator.Play("cutscene-finish");
+			DisableProcessing();
 		}
 	}
 }

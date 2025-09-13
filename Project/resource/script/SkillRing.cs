@@ -116,7 +116,7 @@ public class SkillRing
 		if (conflict != null)
 		{
 			GD.Print($"You cannot equip {conflict.NameKey} when {baseSkill.NameKey} is active.");
-			return SkillEquipStatusEnum.Conflict;
+			return SkillEquipStatusEnum.ConflictEquip;
 		}
 
 		// Process augments
@@ -186,7 +186,7 @@ public class SkillRing
 		foreach (SkillKey conflictKey in SaveManager.ActiveSkillRing.EquippedSkills)
 		{
 			SkillResource conflictSkill = Runtime.Instance.SkillList.GetSkill(conflictKey);
-			if (conflictSkill.ElementRequirement == 0 || conflictSkill.Element != augment.Element)
+			if (conflictSkill.ElementRequirement == 0 || conflictSkill.Element != augment.Element || conflictSkill.Key == key)
 				continue;
 
 			if (resultingElementCount <= conflictSkill.ElementRequirement)
@@ -283,9 +283,26 @@ public class SkillRing
 	/// <summary> Updates a skill ring to match the active game data. </summary>
 	public void LoadFromActiveData()
 	{
+		ValidateCrestSkills();
 		UpdateTotalSkillPoints();
 		UpdateTotalCost();
 		UpdateSkillCounts();
+	}
+
+	public void ValidateCrestSkills()
+	{
+		UpdateSkillCounts();
+
+		for (int i = EquippedSkills.Count - 1; i >= 0; i--)
+		{
+			SkillResource skill = Runtime.Instance.SkillList.GetSkill(EquippedSkills[i]);
+
+			if (skill.ElementRequirement == 0 || GetSkillCountByElement(skill.Element) >= skill.ElementRequirement)
+				continue;
+
+			EquippedSkills.Remove(EquippedSkills[i]);
+			UpdateSkillCounts();
+		}
 	}
 
 	/// <summary> Sorts skill resources based on their key (number). </summary>
@@ -317,7 +334,8 @@ public enum SkillEquipStatusEnum
 {
 	Success,
 	Expensive,
-	Conflict,
+	ConflictEquip,
+	ConflictUnequip,
 	Equipped,
 	Missing,
 	ElementRequirement
@@ -331,6 +349,7 @@ public enum SkillKey
 	ChargeJump,
 	SlowTurn, // Decreases Sonic's turning sensitivity
 	QuickTurn, // Increases Sonic's turning sensitivity
+	LockedSoulGauge, // Limits the soul gauge to lvl 1 Sonic
 	RankPreview, // Shows the current rank on the heads-up display
 
 	SpeedUp, // Increases Sonic's top speed

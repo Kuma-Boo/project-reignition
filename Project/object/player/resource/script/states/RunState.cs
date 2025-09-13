@@ -88,20 +88,20 @@ public partial class RunState : PlayerState
 				return slideState;
 			}
 
-			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.QuickStep) &&
-				Player.Controller.IsStepBufferActive)
-			{
-				if (Player.IsQuickStepValid)
-					Player.StartQuickStep(Player.Controller.StepDirection < 0);
-				Player.Controller.ResetStepBuffer();
-				return null;
-			}
-
 			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LightSpeedDash) &&
 				Player.Controller.IsLightDashBufferActive && Player.StartLightSpeedDash())
 			{
 				return null;
 			}
+		}
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.QuickStep) &&
+			Player.Controller.IsStepBufferActive)
+		{
+			if (Player.IsQuickStepValid)
+				Player.StartQuickStep(Player.Controller.StepDirection < 0);
+			Player.Controller.ResetStepBuffer();
+			return null;
 		}
 
 		if (!Player.IsOnGround)

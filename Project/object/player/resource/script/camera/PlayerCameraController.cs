@@ -374,15 +374,14 @@ public partial class PlayerCameraController : Node3D
 	{
 		Vector2 targetRotation = targetRotation = Vector2.Zero;
 
-		if (!Player.Controller.CameraAxis.IsZeroApprox() && !StageSettings.Instance.IsControlTest || !Player.IsLaunching)
+		if (!isFreeCamActive)
 		{
-			if (Mathf.Abs(Player.Controller.CameraAxis.X) > Mathf.Abs(Player.Controller.CameraAxis.Y))
+			if (!Player.Controller.CameraAxis.IsZeroApprox() && !StageSettings.Instance.IsControlTest || !Player.IsLaunching)
 			{
-				targetRotation.X = -Player.Controller.CameraAxis.X * MaxLookaroundYaw;
-			}
-			else
-			{
-				targetRotation.Y = -Player.Controller.CameraAxis.Y * MaxLookaroundPitch;
+				if (Mathf.Abs(Player.Controller.CameraAxis.X) > Mathf.Abs(Player.Controller.CameraAxis.Y))
+					targetRotation.X = -Player.Controller.CameraAxis.X * MaxLookaroundYaw;
+				else
+					targetRotation.Y = -Player.Controller.CameraAxis.Y * MaxLookaroundPitch;
 			}
 		}
 
@@ -500,7 +499,12 @@ public partial class PlayerCameraController : Node3D
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, CalculateLockonAngle(cameraTransform.Origin, lockonPitchReferenceAngle));
 
 		if (!isFreeCamActive || !isFreeCamLocked) // Only update camera transform when free cam isn't locked
+		{
 			cameraRoot.GlobalTransform = cameraTransform; // Update transform
+
+			if (SnapFlag)
+				cameraRoot.ResetPhysicsInterpolation();
+		}
 
 		Camera.Fov = fov; // Update fov
 	}
@@ -935,15 +939,13 @@ public partial class PlayerCameraController : Node3D
 	public bool IsCrossfading => crossfadeAnimator.IsPlaying();
 	public void StartCrossfade(float speed = 1.0f)
 	{
-		// Already crossfading
-		if (IsCrossfading)
-			return;
-
 		// Update the crossfade texture
 		ImageTexture tex = new();
 		tex.SetImage(GetViewport().GetTexture().GetImage());
 		crossfade.Texture = tex;
-		crossfadeAnimator.Play("activate");// Start crossfade animation
+		crossfadeAnimator.Play("activate"); // Start crossfade animation
+		crossfadeAnimator.Seek(0.0);
+		crossfadeAnimator.Play(); // Start crossfade animation
 		crossfadeAnimator.SpeedScale = speed;
 
 		if (!StageSettings.Instance.IsLevelIngame)

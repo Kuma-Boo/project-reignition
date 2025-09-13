@@ -49,6 +49,9 @@ public partial class Seed : Area3D
 			return;
 		}
 
+		if (Player.Skills.IsSpeedBreakActive)
+			return;
+
 		Player.StartKnockback();
 	}
 

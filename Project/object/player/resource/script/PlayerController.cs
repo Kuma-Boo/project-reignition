@@ -146,12 +146,20 @@ public partial class PlayerController : CharacterBody3D
 	public Vector3 CenterPosition
 	{
 		get => GlobalPosition + (UpDirection * .4f);
-		set => GlobalPosition = value - (UpDirection * .4f);
+		set
+		{
+			GlobalPosition = value - (UpDirection * .4f);
+			ResetPhysicsInterpolation();
+		}
 	}
 	public Vector3 CollisionPosition
 	{
 		get => GlobalPosition + (UpDirection * CollisionSize.Y);
-		set => GlobalPosition = value - (UpDirection * CollisionSize.Y);
+		set
+		{
+			GlobalPosition = value - (UpDirection * CollisionSize.Y);
+			ResetPhysicsInterpolation();
+		}
 	}
 	private const float CollisionPadding = .02f;
 
@@ -380,7 +388,8 @@ public partial class PlayerController : CharacterBody3D
 			return false;
 
 		// Check if the player is being crushed
-		if (!IsBackflipping && ceilingHit.collidedObject.IsInGroup("crusher") && GroundHit)
+		bool isPlayerCrushable = IsGrinding || GroundHit;
+		if (!IsBackflipping && ceilingHit.collidedObject.IsInGroup("crusher") && isPlayerCrushable)
 		{
 			// Prevent clipping through the ground
 			AddCollisionExceptionWith(ceilingHit.collidedObject);
@@ -714,8 +723,7 @@ public partial class PlayerController : CharacterBody3D
 
 	[Export] private QuickStepState quickStepState;
 	public bool IsQuickStepValid => !IsAutomationActive &&
-				!(IsLockoutActive && ActiveLockoutData.recenterPlayer) &&
-				Stats.GroundSettings.GetSpeedRatioClamped(MoveSpeed) > .2f;
+				!(IsLockoutActive && ActiveLockoutData.recenterPlayer);
 	public void StartQuickStep(bool isSteppingRight)
 	{
 		quickStepState.IsSteppingRight = isSteppingRight;
@@ -892,6 +900,24 @@ public partial class PlayerController : CharacterBody3D
 
 	[Signal]
 	public delegate void DamagedEventHandler();
+
+	public bool IsDamageDefeatingPlayer()
+	{
+		if (StageSettings.Instance.CurrentRingCount != 0)
+			return false;
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.PearlRespawn) && Skills.IsSoulGaugeCharged)
+			return false;
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestDark) &&
+			Skills.AllowCrestSkill && Skills.IsSoulGaugeCharged)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
 	public void TakeDamage(bool disabledDefeat = false)
 	{
 		if (!Stage.IsLevelIngame) return;
@@ -1041,7 +1067,7 @@ public partial class PlayerController : CharacterBody3D
 	}
 
 	public float FallTimer { get; set; }
-	private readonly float FallDefeatLength = 20f;
+	private readonly float FallDefeatLength = 10f;
 	public void ResetFallTimer() => FallTimer = 0;
 	public void AttemptFallIntoTheVoid()
 	{
@@ -1143,6 +1169,7 @@ public partial class PlayerController : CharacterBody3D
 
 		MovementAngle = PathFollower.ForwardAngle; // Reset movement angle
 		Animator.SnapRotation(MovementAngle);
+		ResetPhysicsInterpolation();
 	}
 
 	[Export] private TeleportState teleportState;

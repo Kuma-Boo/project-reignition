@@ -1,7 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://b1dlkxish3oxb"]
+[gd_scene load_steps=4 format=3 uid="uid://b1dlkxish3oxb"]
 
 [ext_resource type="PackedScene" uid="uid://bbi47cvykk2r5" path="res://area/6 skeleton dome/act 3/environment/model/06Arena.gltf" id="1_a3xae"]
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="2_p5vta"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p5vta"]
+resource_name = "Light Emission Orange"
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 0, 0, 1)
+emission_enabled = true
+emission = Color(1, 0, 0, 1)
+emission_energy_multiplier = 8.0
 
 [node name="06Arena" instance=ExtResource("1_a3xae")]
 script = ExtResource("2_p5vta")
@@ -112,3 +121,17 @@ layers = 2
 
 [node name="stg041_o48_Mesh_0103" parent="." index="34"]
 layers = 2
+surface_material_override/0 = SubResource("StandardMaterial3D_p5vta")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="stg041_o48_Mesh_0103" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1000.5383, 4.3415785, -1000.0719)
+light_color = Color(1, 0.120000005, 0.120000005, 1)
+light_energy = 2.0
+light_cull_mask = 4293918791
+distance_fade_enabled = true
+distance_fade_begin = 100.0
+distance_fade_shadow = 0.0
+distance_fade_length = 120.0
+omni_range = 98.28905
+omni_attenuation = 0.0
+omni_shadow_mode = 0

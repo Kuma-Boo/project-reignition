@@ -167,7 +167,7 @@ public partial class SidleState : PlayerState
 		velocity = 0;
 		cycleTimer = 0;
 
-		if (StageSettings.Instance.CurrentRingCount == 0)
+		if (Player.IsDamageDefeatingPlayer())
 		{
 			Player.Knockback -= OnPlayerDamaged;
 			Player.StartKnockback(new()
