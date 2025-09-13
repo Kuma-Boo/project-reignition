@@ -309,6 +309,7 @@ public partial class PlayerLockonController : Area3D
 		IsTargetAttackable = isTargetAttackable;
 		lockonAnimator.Play("RESET");
 		lockonAnimator.Advance(0);
+		DisablePerfectHomingAttack();
 		if (!IsTargetAttackable)
 			lockonAnimator.Play("preview");
 		else if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.PerfectHomingAttack))
