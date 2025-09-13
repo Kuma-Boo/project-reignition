@@ -85,11 +85,11 @@ public partial class ExperienceResult : Control
 
 	public override void _Ready()
 	{
+		useMissionExp = SaveManager.ActiveGameData.LevelData.GetClearStatus(Stage.Data.LevelID) != SaveManager.LevelSaveData.LevelStatus.Cleared;
+		useAccumulatedExp = AccumulatedExp != 0;
+
 		SaveManager.ActiveGameData.level = CalculateLevel(SaveManager.ActiveGameData.exp); // Update from old save data, just in case
 		SaveManager.ActiveGameData.level = Mathf.Min(SaveManager.ActiveGameData.level, MaxLevel);
-		useMissionExp = Stage.LevelState == StageSettings.LevelStateEnum.Success &&
-			SaveManager.ActiveGameData.LevelData.GetClearStatus(Stage.Data.LevelID) != SaveManager.LevelSaveData.LevelStatus.Cleared;
-		useAccumulatedExp = AccumulatedExp != 0;
 
 		initialMaxSoulPower = SaveManager.ActiveGameData.CalculateMaxSoulPower(false);
 	}
@@ -282,7 +282,7 @@ public partial class ExperienceResult : Control
 		if (string.IsNullOrEmpty(TransitionManager.instance.QueuedScene))
 		{
 			// Player is restarting a level -- accumulate exp and skip experience screen
-			AccumulatedExp += Stage.TotalScore + Stage.CurrentEXP;
+			AccumulatedExp += Mathf.FloorToInt((Stage.TotalScore + Stage.CurrentEXP) * 0.5f);
 
 			TransitionManager.QueueSceneChange(string.Empty);
 			TransitionManager.StartTransition(new()
