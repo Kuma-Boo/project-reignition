@@ -121,7 +121,7 @@ public partial class PauseMenu : Node
 			TogglePause();
 			return;
 		}
-
+/*
 		if (Input.IsActionJustPressed("button_attack") && Input.IsActionJustPressed("button_light_dash") && !isHidden)
 		{
 			pageAnimator.Play("hide_static");
@@ -132,7 +132,7 @@ public partial class PauseMenu : Node
 			pageAnimator.Play("show_static");
 			isHidden = false;
 		}
-
+*/
 
 		if (!GetTree().Paused)
 			return;
