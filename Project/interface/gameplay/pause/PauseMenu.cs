@@ -306,7 +306,7 @@ public partial class PauseMenu : Node
 				bool isCheckpointCollected = StageSettings.Instance.IsFireSoulCheckpointFlagSet(i);
 
 				fireSoulRects[i].Texture = (isSaveCollected || isCheckpointCollected) ? fireSoulSprite : noFireSoulSprite;
-				fireSoulRects[i].SelfModulate = isCheckpointCollected ? new(1f, 1f, 1f, .5f) : Colors.White;
+				fireSoulRects[i].SelfModulate = (isCheckpointCollected && !isSaveCollected) ? new(1f, 1f, 1f, .5f) : Colors.White;
 			}
 		}
 

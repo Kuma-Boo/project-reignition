@@ -30,6 +30,7 @@ public partial class HeadsUpDisplay : Control
 		InitializeSoulGauge();
 		race.InitializeRace();
 		InitializePrompts();
+		InitializeFireSouls();
 
 		if (Stage != null) // Decouple from level settings
 		{
@@ -42,7 +43,7 @@ public partial class HeadsUpDisplay : Control
 
 	private void OnHUDVisibilityToggled() => Visible = !DebugManager.Instance.DisableHUD;
 
-	#region Rings
+	#region Rings and Fire Souls
 	[Export] private Rings rings;
 	[Export] private AnimationPlayer fireSoulAnimator;
 
@@ -51,26 +52,26 @@ public partial class HeadsUpDisplay : Control
 	[Export] private Texture2D fireSoulImg;
 	[Export] private Texture2D fireSoulDashImg;
 
-	public void CollectFireSoul()
+	private void InitializeFireSouls()
 	{
 		for (int i = 0; i < fireSouls.Length; i++)
 		{
-			if (!StageSettings.Instance.IsFireSoulCheckpointFlagSet(i))
-				continue;
-
-			fireSouls[i].Texture = fireSoulImg;
-			fireSouls[i].Visible = true;
+			bool isSaveCollected = SaveManager.ActiveGameData.LevelData.IsFireSoulCollected(Stage.Data.LevelID, i + 1);
+			fireSouls[i].Texture = isSaveCollected ? fireSoulImg : fireSoulDashImg;
 		}
+	}
+
+	public void CollectFireSoul(int index)
+	{
+		fireSouls[index].Texture = fireSoulImg;
 
 		fireSoulAnimator.Play("firesoul");
 		fireSoulAnimator.Seek(0.0, true);
 	}
 
-	private void UpdateRingCount(int amount, bool disableAnimations)
-	{
-		rings.UpdateRingCount(amount, disableAnimations);
-	}
+	public void UncollectFireSoul(int index) => fireSouls[index].Texture = fireSoulImg;
 
+	private void UpdateRingCount(int amount, bool disableAnimations) => rings.UpdateRingCount(amount, disableAnimations);
 	#endregion
 
 	#region Time and Score
