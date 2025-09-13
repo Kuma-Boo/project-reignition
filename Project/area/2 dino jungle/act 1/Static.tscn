@@ -1,4 +1,4 @@
-[gd_scene load_steps=143 format=3 uid="uid://cby2m0q2072c2"]
+[gd_scene load_steps=145 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
@@ -105,6 +105,9 @@ size = Vector3(20, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3fp3q"]
 size = Vector3(20, 30, 2.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1mx0u"]
+size = Vector3(20, 30, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_74bek"]
 size = Vector3(10, 20, 5)
@@ -267,6 +270,9 @@ size = Vector3(6, 11, 6)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ppten"]
 size = Vector3(6, 11, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4on6f"]
+size = Vector3(10, 10, 23)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1y700"]
 size = Vector3(25, 80, 15)
@@ -470,8 +476,8 @@ transform = Transform3D(-0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, -0.939693, 
 "Enter Mode" = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/05-L"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_ibe76")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_1mx0u")
 
 [node name="06-L" parent="Visuals/CullingMap" instance=ExtResource("15_86eng")]
 transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -369.891, -264.997, -959.972)
@@ -597,8 +603,8 @@ script = ExtResource("35_vf0rg")
 path = NodePath("../../../../Path/CaveExitPath")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/CaveExitPath"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_ibe76")
+transform = Transform3D(1, 0, -2.9802322e-08, 0, 1, 0, 2.9802322e-08, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_1mx0u")
 
 [node name="DinoPath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
 transform = Transform3D(0.409222, 0, 0.912434, 0, 1, 0, -0.912434, 0, 0.409222, -349.375, -256.515, -960.106)
@@ -975,6 +981,10 @@ shape = SubResource("BoxShape3D_x053g")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -516, 0, -128.403)
 shape = SubResource("BoxShape3D_x053g")
 
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="Trigger/Object/WaterTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -132, 0, 44.597)
+shape = SubResource("BoxShape3D_x053g")
+
 [node name="CaveLogLockoutTrigger1" parent="Trigger/Object" instance=ExtResource("15_86eng")]
 transform = Transform3D(-0.999457, 0, -0.0329635, 0, 1, 0, 0.0329635, 0, -0.999457, -368.511, -218.064, -666.653)
 "Trigger Mode" = 2
@@ -1009,8 +1019,8 @@ isRightTurn = true
 slideDistance = 6
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/DriftTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_ibe76")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_1mx0u")
 
 [node name="LogAutomationTrigger" parent="Trigger/Object" instance=ExtResource("14_lokxv")]
 transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -392.077, -264.264, -936.318)
@@ -1841,8 +1851,12 @@ settings = ExtResource("30_ju7m7")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/SpiralCam3"]
 shape = SubResource("SphereShape3D_quiap")
 
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger/Camera/SpiralCam3"]
+transform = Transform3D(-0.96795964, 0, 0.2511068, 0, 1, 0, -0.2511068, 0, -0.96795964, -4.354843, 0, 11.90918)
+shape = SubResource("BoxShape3D_4on6f")
+
 [node name="CaveExitCam" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
-transform = Transform3D(-0.920723, 0, -0.390217, 0, 1, 0, 0.390217, 0, -0.920723, -431.757, -264.915, -912.091)
+transform = Transform3D(-0.920723, 0, -0.390217, 0, 1, 0, 0.390217, 0, -0.920723, -433.31787, -264.915, -915.7739)
 "Enter Mode" = 0
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/CaveExitCam"]
@@ -1850,7 +1864,8 @@ script = ExtResource("36_8t574")
 settings = ExtResource("34_qb2qj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/CaveExitCam"]
-shape = SubResource("SphereShape3D_iq0gp")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_1mx0u")
 
 [node name="LogWallCam" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
 transform = Transform3D(-0.698416, 0, 0.715693, 0, 1, 0, -0.715693, 0, -0.698416, -373.908, -265.018, -956.148)
@@ -2484,19 +2499,19 @@ reflectionMaterials = [ExtResource("36_7bv1x")]
 [connection signal="Activated" from="Trigger/Object/Apatos1/ActivateTrigger" to="Collision/WallDinoOneWay" method="Deactivate"]
 [connection signal="Respawned" from="Trigger/Object/Apatos1/ActivateTrigger" to="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger" method="Respawn"]
 [connection signal="Activated" from="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger" to="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger/Head/Activate" method="play"]
-[connection signal="JumpFinished" from="Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Trigger/Object/Apatos1/ActivateTrigger/Camera" method="Deactivate"]
 [connection signal="JumpFinished" from="Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Collision/WallDinoOneWay" method="Activate"]
+[connection signal="JumpFinished" from="Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Trigger/Object/Apatos1/ActivateTrigger/Camera" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Object/Apatos1/GruntTrigger" to="Trigger/Object/Apatos1/GruntTrigger/Grunt" method="play"]
-[connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Trigger/Object/Apatos2/Event/PathSelectionEvent" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoRightOneWay" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoLeftOneWay" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoRight" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoLeft" method="Deactivate"]
-[connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Trigger/Object/Apatos2/Event/PathSelectionEvent" method="Deactivate"]
+[connection signal="Activated" from="Trigger/Object/Apatos2/Event" to="Trigger/Object/Apatos2/Event/PathSelectionEvent" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoRightOneWay" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoLeftOneWay" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoRight" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoLeft" method="Activate"]
+[connection signal="Deactivated" from="Trigger/Object/Apatos2/Event" to="Trigger/Object/Apatos2/Event/PathSelectionEvent" method="Deactivate"]
 [connection signal="Respawned" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoRightOneWay" method="Deactivate"]
 [connection signal="Respawned" from="Trigger/Object/Apatos2/Event" to="Collision/WallDinoLeftOneWay" method="Activate"]
 [connection signal="Respawned" from="Trigger/Object/Apatos2/Event" to="Collision/FloorDinoRight" method="Deactivate"]

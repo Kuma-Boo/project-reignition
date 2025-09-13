@@ -18,6 +18,8 @@ public partial class AutomationTrigger : Area3D
 	[Export] private bool ignoreDirection;
 	/// <summary> Queue the automation to start after landing even if the player is in the air. </summary>
 	[Export] private bool autoQueueOnLand = true;
+	/// <summary> Calculate activation using a specific path? </summary>
+	[Export] private Path3D path;
 	private bool isInteractingWithPlayer;
 	private bool isAutomationQueued;
 	private PlayerController Player => StageSettings.Player;
@@ -45,6 +47,12 @@ public partial class AutomationTrigger : Area3D
 
 		if (Player.IsTeleporting)
 			return;
+
+		if (path != null && path.Curve.GetClosestOffset(Player.GlobalPosition - path.GlobalPosition) > endPoint)
+		{
+			isAutomationQueued = false;
+			return;
+		}
 
 		if (!ignoreDirection)
 		{
