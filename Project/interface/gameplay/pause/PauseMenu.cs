@@ -121,18 +121,6 @@ public partial class PauseMenu : Node
 			TogglePause();
 			return;
 		}
-		/*
-				if (Input.IsActionJustPressed("button_attack") && Input.IsActionJustPressed("button_light_dash") && !isHidden)
-				{
-					pageAnimator.Play("hide_static");
-					isHidden = true;
-				}
-				if (Input.IsActionJustReleased("button_attack") && Input.IsActionJustReleased("button_light_dash") && isHidden)
-				{
-					pageAnimator.Play("show_static");
-					isHidden = false;
-				}
-		*/
 
 		if (!GetTree().Paused)
 			return;
@@ -210,12 +198,12 @@ public partial class PauseMenu : Node
 				statusCursorAnimator.Play("hide");
 				description.HideDescription();
 				animator.Set(StatusHideTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-				//statusAnimator.Play("value-1");
 				break;
 			case Submenu.Skill:
 				skillCursorAnimator.Play("hide");
 				submenu = Submenu.Status;
 				currentSelection = 1;
+				UpdateStatusDescription();
 				break;
 		}
 	}
