@@ -63,7 +63,7 @@ public partial class Ivy : Launcher
 		IsSleeping = true;
 
 		// Adjust swing speed based on length (longer ivys swing slower)
-		lengthInfluence = 1 / Mathf.Lerp(0.8f, 2.5f, Mathf.Min(Length / 50f, 1f));
+		lengthInfluence = 1 / Mathf.Lerp(0.8f, 2.5f, Mathf.SmoothStep(0f, 1f, Mathf.Min(Length / 50f, 1f)));
 		StageSettings.Instance.Respawned += Respawn;
 	}
 
@@ -175,6 +175,7 @@ public partial class Ivy : Launcher
 
 		IsSleeping = false;
 		rotationVelocity += amount * lengthInfluence;
+		canChangeRatioLimit = false;
 		ratioLimit = 1f;
 	}
 
@@ -214,7 +215,7 @@ public partial class Ivy : Launcher
 
 	private void ProcessLimitRotation()
 	{
-		if (Mathf.Sign(IvyRatio) != Mathf.Sign(rotationVelocity))
+		if (Mathf.Sign(IvyRatio) != Mathf.Sign(rotationVelocity) && Mathf.Sign(rotationVelocity) < 0)
 		{
 			canChangeRatioLimit = true;
 			return;
@@ -228,7 +229,11 @@ public partial class Ivy : Launcher
 		ratioLimit *= 0.8f;
 		if (ratioLimit < 0.05f * lengthInfluence)
 			ratioLimit = 0f;
+	}
 
+	public void DebugData()
+	{
+		GD.PrintT(ratioLimit, lengthInfluence, rotationVelocity);
 	}
 
 	private void ProcessRotationVelocity()

@@ -19,7 +19,7 @@ public partial class IvyState : PlayerState
 	/// <summary> Determines whether the ivy should have some force automatically applied when starting. </summary>
 	private bool isHighSpeedEntry;
 	public void UpdateHighSpeedEntry() => isHighSpeedEntry = Player.IsJumpDashOrHomingAttack ||
-		Player.IsBackflipping || Player.IsLaunching;
+		Player.IsBackflipping;
 
 	private readonly string JumpAction = "action_jump";
 	private readonly string SwingAction = "action_swing";
@@ -33,7 +33,7 @@ public partial class IvyState : PlayerState
 		if (isHighSpeedEntry)
 			initialForce = highSpeedSwingStrength;
 		else
-			initialForce = highSpeedSwingStrength * (Player.MoveSpeed / Player.Stats.baseGroundSpeed);
+			initialForce = initialSwingStrength * (Player.MoveSpeed / Player.Stats.baseGroundSpeed);
 
 		Trigger.AddImpulseForce(initialForce, true);
 
@@ -75,6 +75,7 @@ public partial class IvyState : PlayerState
 			Trigger.AddImpulseForce(CalculateSwingForce());
 		}
 
+		Trigger.DebugData();
 		CalculateAnimationBlend();
 		Player.Animator.SetIvyBlend(currentAnimationBlend);
 		Player.CallDeferred(PlayerController.MethodName.UpdateExternalControl, false);
