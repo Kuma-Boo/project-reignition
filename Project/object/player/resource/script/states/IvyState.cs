@@ -75,7 +75,6 @@ public partial class IvyState : PlayerState
 			Trigger.AddImpulseForce(CalculateSwingForce());
 		}
 
-		Trigger.DebugData();
 		CalculateAnimationBlend();
 		Player.Animator.SetIvyBlend(currentAnimationBlend);
 		Player.CallDeferred(PlayerController.MethodName.UpdateExternalControl, false);

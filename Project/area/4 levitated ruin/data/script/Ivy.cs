@@ -231,11 +231,6 @@ public partial class Ivy : Launcher
 			ratioLimit = 0f;
 	}
 
-	public void DebugData()
-	{
-		GD.PrintT(ratioLimit, lengthInfluence, rotationVelocity);
-	}
-
 	private void ProcessRotationVelocity()
 	{
 		if (Mathf.IsZeroApprox(ratioLimit))
