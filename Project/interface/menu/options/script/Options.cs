@@ -1153,7 +1153,7 @@ public partial class Options : Menu
 			case 6:
 				currentSubmenu = Submenus.ResetControls;
 				ShowResetMenu();
-				break;
+				return;
 			default:
 				SlideControlOption(1);
 				break;
