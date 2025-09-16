@@ -13,7 +13,6 @@ public partial class PauseMenu : Node
 	[Export] AnimationPlayer pageAnimator;
 	[Export] AnimationPlayer statusAnimator;
 
-	[Export] AnimationTree animator;
 	[Export] private Node2D pauseCursor;
 	[Export] private AnimationPlayer pauseCursorAnimator;
 	[Export] private AudioStreamPlayer selectSFX;
@@ -58,25 +57,13 @@ public partial class PauseMenu : Node
 	private Submenu submenu;
 	private StageSettings Stage => StageSettings.Instance;
 
-	private readonly string SelectionTransition = "parameters/selection/transition_request";
-	private readonly string ConfirmTransition = "parameters/confirm/transition_request";
-	private readonly string ConfirmEnabledTransition = "parameters/confirm_enabled/transition_request";
-	private readonly string StateRequest = "parameters/state/transition_request";
-	private readonly string ShowTrigger = "parameters/show_trigger/request";
-
-	private readonly string StatusShowTrigger = "parameters/status_show_trigger/request";
-	private readonly string StatusHideTrigger = "parameters/status_hide_trigger/request";
-	private readonly string StatusSelectionTransition = "parameters/status_selection/transition_request";
-	private readonly string ValueSelectionTransition = "parameters/value_selection/transition_request";
-	private readonly string SubmenuParameter = "parameters/submenu_transition/transition_request";
-
 	private bool isConfirmButtonBuffered;
 	private bool isCancelButtonBuffered;
 	private bool isHidden;
 
 	public override void _Ready()
 	{
-		animator.Active = true;
+		pageAnimator.Play("init");
 		levelSprite.RegionRect = new
 		(
 			new(levelSprite.RegionRect.Position.X, rectVerticalValues[(int)SaveManager.ActiveGameData.lastPlayedWorld]),
@@ -377,9 +364,9 @@ public partial class PauseMenu : Node
 				break;
 			case Submenu.Status:
 				statusCursorAnimator.Play("move");
-				animator.Set(ValueSelectionTransition, selection.ToString());
 				animator.Set(StatusSelectionTransition, selection.ToString());
 				UpdateStatusDescription();
+				UpdateStatusAnimation();
 				break;
 			case Submenu.Skill:
 				skillSelection = selection;
@@ -393,6 +380,12 @@ public partial class PauseMenu : Node
 	{
 		description.Text = currentSelection == 0 ? "pause_status_description" : "pause_skill_description";
 		description.ShowDescription();
+	}
+
+	private void UpdateStatusAnimation()
+	{
+		statusAnimator.Seek(0.0);
+		statusAnimator.Play(currentSelection == 0 ? "status" : "skill");
 	}
 
 	private void UpdateSkillDescription()
@@ -409,8 +402,6 @@ public partial class PauseMenu : Node
 		canMoveCursor = false; // Disable cursor movement
 		AllowPausing = false; // Disable pause inputs during the animation
 
-
-
 		isActive = !isActive;
 		animator.Set(ConfirmEnabledTransition, "false");
 		if (submenu == Submenu.Pause)
@@ -418,15 +409,13 @@ public partial class PauseMenu : Node
 		else
 			animator.Set(StateRequest, "status-hide");
 
-
 		if (isActive)
 		{
-			statusAnimator.Play("value-1");
+			statusAnimator.Play("mission");
 			UpdateStatusMenuData();
 		}
 		else
 			statusAnimator.Play("hide");
-
 
 		if (isActive) // Reset selection
 		{
@@ -443,8 +432,6 @@ public partial class PauseMenu : Node
 		{
 			Engine.TimeScale = unpausedSpeed;
 		}
-
-
 	}
 
 	private void ApplyPause()
@@ -461,6 +448,7 @@ public partial class PauseMenu : Node
 
 	private void PlayMissionStatus()
 	{
-		statusAnimator.Play("value-1");
+		statusAnimator.Seek(0.0);
+		statusAnimator.Play("mission");
 	}
 }
