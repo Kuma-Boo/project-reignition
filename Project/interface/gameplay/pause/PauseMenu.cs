@@ -6,21 +6,19 @@ namespace Project.Interface;
 
 public partial class PauseMenu : Node
 {
-	public static bool AllowPausing = true;
+	public static bool AllowInputs = true;
 
 	[Signal] public delegate void OnSceneChangeSelectedEventHandler();
 
 	[Export] AnimationPlayer pageAnimator;
 	[Export] AnimationPlayer statusAnimator;
+	[Export] AnimationPlayer selectionAnimator;
 
-	[Export] private Node2D pauseCursor;
 	[Export] private AnimationPlayer pauseCursorAnimator;
 	[Export] private AudioStreamPlayer selectSFX;
 	[Export] private Menus.Description description;
 
 	[ExportGroup("Status Menu")]
-	[Export] private Node2D statusCursor;
-	[Export] private AnimationPlayer statusCursorAnimator;
 	[Export] private Label[] values;
 
 	[ExportSubgroup("Mission Menu")]
@@ -51,7 +49,6 @@ public partial class PauseMenu : Node
 	private enum Submenu
 	{
 		Pause,
-		Status,
 		Skill
 	}
 	private Submenu submenu;
@@ -64,12 +61,15 @@ public partial class PauseMenu : Node
 	public override void _Ready()
 	{
 		pageAnimator.Play("init");
+		pageAnimator.Advance(0.0);
+
 		levelSprite.RegionRect = new
 		(
 			new(levelSprite.RegionRect.Position.X, rectVerticalValues[(int)SaveManager.ActiveGameData.lastPlayedWorld]),
 			levelSprite.RegionRect.Size
 		);
 
+		// Set up the skill menu
 		noSkillLabel.Visible = SaveManager.ActiveSkillRing.EquippedSkills.Count == 0;
 		skillScrollbar.GetParent<NinePatchRect>().Visible = SaveManager.ActiveSkillRing.EquippedSkills.Count != 0;
 
@@ -86,24 +86,19 @@ public partial class PauseMenu : Node
 			pauseSkill.Initialize();
 			skillContainer.AddChild(pauseSkill);
 		}
+		
 		isHidden = false;
 	}
 
 	public override void _PhysicsProcess(double _)
 	{
-		if (!AllowPausing || !Stage.IsLevelIngame || TransitionManager.IsTransitionActive) return;
+		if (!AllowInputs || !Stage.IsLevelIngame || TransitionManager.IsTransitionActive) return;
 
 		if (skillScrollbar.IsVisibleInTree())
-		{
-			float denominator = SaveManager.ActiveSkillRing.EquippedSkills.Count - 1;
-			if (denominator > 0)
-			{
-				float targetPosition = 312 * (skillSelection / denominator);
-				skillScrollbar.Position = skillScrollbar.Position.SmoothDamp(Vector2.Right * targetPosition, ref scrollVelocity, ScrollSmoothing);
-			}
-		}
-
-		if (Runtime.Instance.IsActionJustPressed("sys_pause", "ui_accept") && !Input.IsActionJustPressed("toggle_fullscreen"))
+			UpdateSkillScrollbar();
+			
+		if (Runtime.Instance.IsActionJustPressed("sys_pause", "ui_accept") &&
+			!Input.IsActionJustPressed("toggle_fullscreen"))
 		{
 			TogglePause();
 			return;
@@ -119,12 +114,14 @@ public partial class PauseMenu : Node
 
 		if (isConfirmButtonBuffered)
 		{
+			isConfirmButtonBuffered = false;
 			Confirm();
 			return;
 		}
 
 		if (isCancelButtonBuffered)
 		{
+			isCancelButtonBuffered = false;
 			Cancel();
 			return;
 		}
@@ -132,6 +129,16 @@ public partial class PauseMenu : Node
 		int sign = Mathf.Sign(Input.GetAxis("ui_up", "ui_down"));
 		if (sign != 0)
 			ChangeSelection(sign);
+	}
+
+	private void UpdateSkillScrollbar()
+	{
+		float denominator = SaveManager.ActiveSkillRing.EquippedSkills.Count - 1;
+		if (denominator <= 0)
+			return;
+
+		float targetPosition = 312 * (skillSelection / denominator);
+		skillScrollbar.Position = skillScrollbar.Position.SmoothDamp(Vector2.Right * targetPosition, ref scrollVelocity, ScrollSmoothing);
 	}
 
 	private void UpdateBuffers()
@@ -151,48 +158,30 @@ public partial class PauseMenu : Node
 
 	private void Confirm()
 	{
-		isConfirmButtonBuffered = false;
-		if (submenu == Submenu.Status && currentSelection == 1 && skills.Length != 0) // Enter skill menu
-		{
-			ApplySelection();
-			return;
-		}
-
-		if (submenu != Submenu.Pause)
+		if (submenu == Submenu.Skill)
 			return;
 
-		AllowPausing = false;
-		if (currentSelection != 2)
-		{
-			animator.Set(ConfirmTransition, currentSelection.ToString());
-			animator.Set(ConfirmEnabledTransition, "true");
+		if (currentSelection == 2) // You can't select the status menu
 			return;
-		}
 
-		ApplySelection();
+		AllowInputs = false;
+		selectionAnimator.Play($"confirm-{currentSelection}");
 	}
 
 	private void Cancel()
 	{
 		isCancelButtonBuffered = false;
-		switch (submenu)
+
+		if (submenu == Submenu.Pause)
 		{
-			case Submenu.Pause:
-				TogglePause();
-				break;
-			case Submenu.Status:
-				AllowPausing = false;
-				statusCursorAnimator.Play("hide");
-				description.HideDescription();
-				animator.Set(StatusHideTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-				break;
-			case Submenu.Skill:
-				skillCursorAnimator.Play("hide");
-				submenu = Submenu.Status;
-				currentSelection = 1;
-				UpdateStatusDescription();
-				break;
+			TogglePause();
+			return;
 		}
+		
+		skillCursorAnimator.Play("hide");
+		submenu = Submenu.Pause;
+		currentSelection = 3;
+		description.HideDescription();
 	}
 
 	private void ChangeSelection(int direction)
@@ -206,57 +195,52 @@ public partial class PauseMenu : Node
 			else if (targetSelection == skills.Length)
 				targetSelection = 0;
 		}
-		else if (submenu == Submenu.Status)
-		{
-			targetSelection = Mathf.Clamp(targetSelection, 0, 1);
-		}
 		else
 		{
-			targetSelection = Mathf.Clamp(targetSelection, 0, submenu == Submenu.Pause ? 3 : 2);
+			targetSelection = WrapSelection(targetSelection, 5);
 		}
 
 		if (targetSelection != currentSelection)
 			UpdateSelection(targetSelection, true);
 	}
 
+	private int WrapSelection(int selection, int max)
+	{
+		selection %= max;
+		if (selection < 0)
+			selection += max;
+		else if (selection >= max)
+			selection -= max;
+
+		return selection;
+	}
+
 	/// <summary> Actually applies the current selection (called from the animator). </summary>
 	private void ApplySelection()
 	{
-		if (submenu == Submenu.Pause)
+		if (submenu != Submenu.Pause || currentSelection == 2)
+			return;
+
+		if (currentSelection == 0) // Resume
 		{
-			switch (currentSelection)
-			{
-				case 0: // Resume
-					isActive = false;
-					ApplyPause();
-					break;
-				case 1: // Restart
-					TransitionManager.instance.QueuedScene = string.Empty;
-					EmitSignal(SignalName.OnSceneChangeSelected);
-					break;
-				case 2: // Status menu
-					submenu = Submenu.Status;
-					pauseCursorAnimator.Play("hide");
-					animator.Set(SubmenuParameter, "status");
-					animator.Set(StatusShowTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-					UpdateSelection(0);
-					UpdateCursorPosition();
-					UpdateStatusMenuData();
-					break;
-				case 3: // Open EXP menu
-					SaveManager.SaveGameData();
-					TransitionManager.instance.QueuedScene = TransitionManager.MenuScenePath;
-					EmitSignal(SignalName.OnSceneChangeSelected);
-					break;
-			}
+			isActive = false;
+			ApplyPause();
 		}
-		else if (submenu == Submenu.Status && currentSelection == 1) // Enter skill menu
+		else if (currentSelection == 1) // Restart
 		{
-			submenu = Submenu.Skill;
-			skillCursorAnimator.Play("select");
-			skillCursorAnimator.Advance(0.0);
-			UpdateSelection(skillSelection); // Remember previously selected skill
-			UpdateCursorPosition();
+			// Resume
+			TransitionManager.instance.QueuedScene = string.Empty;
+			EmitSignal(SignalName.OnSceneChangeSelected);
+		}
+		else if (currentSelection == 3) // Open the Skill Menu
+		{
+			// TODO Implement this
+		}
+		else if (currentSelection == 4) // Quit by opening the EXP menu
+		{
+			SaveManager.SaveGameData();
+			TransitionManager.instance.QueuedScene = TransitionManager.MenuScenePath;
+			EmitSignal(SignalName.OnSceneChangeSelected);
 		}
 	}
 
@@ -264,7 +248,6 @@ public partial class PauseMenu : Node
 	{
 		submenu = Submenu.Pause;
 		UpdateSelection(2);
-		animator.Set(SubmenuParameter, "pause");
 	}
 
 	private void UpdateStatusMenuData()
@@ -284,21 +267,25 @@ public partial class PauseMenu : Node
 		missionTypeLabel.Text = Stage.Data.MissionTypeKey;
 		missionDescriptionLabel.Text = Stage.Data.MissionDescriptionKey;
 
-		fireSoulParent.Visible = Stage.Data.HasFireSouls;
-		if (Stage.Data.HasFireSouls)
-		{
-			for (int i = 0; i < fireSoulRects.Length; i++)
-			{
-				bool isSaveCollected = SaveManager.ActiveGameData.LevelData.IsFireSoulCollected(Stage.Data.LevelID, i + 1);
-				bool isCheckpointCollected = StageSettings.Instance.IsFireSoulCheckpointFlagSet(i);
-
-				fireSoulRects[i].Texture = (isSaveCollected || isCheckpointCollected) ? fireSoulSprite : noFireSoulSprite;
-				fireSoulRects[i].SelfModulate = (isCheckpointCollected && !isSaveCollected) ? new(1f, 1f, 1f, .5f) : Colors.White;
-			}
-		}
-
+		UpdateFireSouls();
 		int rank = SaveManager.ActiveGameData.LevelData.GetRankClamped(Stage.Data.LevelID);
 		rankRect.Texture = rankSprites[rank];
+	}
+
+	private void UpdateFireSouls()
+	{
+		fireSoulParent.Visible = Stage.Data.HasFireSouls;
+		if (!Stage.Data.HasFireSouls)
+			return;
+
+		for (int i = 0; i < fireSoulRects.Length; i++)
+		{
+			bool isSaveCollected = SaveManager.ActiveGameData.LevelData.IsFireSoulCollected(Stage.Data.LevelID, i + 1);
+			bool isCheckpointCollected = StageSettings.Instance.IsFireSoulCheckpointFlagSet(i);
+
+			fireSoulRects[i].Texture = (isSaveCollected || isCheckpointCollected) ? fireSoulSprite : noFireSoulSprite;
+			fireSoulRects[i].SelfModulate = (isCheckpointCollected && !isSaveCollected) ? new(1f, 1f, 1f, .5f) : Colors.White;
+		}
 	}
 
 	/// <summary> Selected menu option. </summary>
@@ -315,37 +302,29 @@ public partial class PauseMenu : Node
 	}
 	private void UpdateCursorPosition()
 	{
-		switch (submenu)
+		if (submenu == Submenu.Pause)
 		{
-			case Submenu.Pause:
-				pauseCursor.Position = Vector2.Down * currentSelection * 32;
-				pauseCursorAnimator.Play("show");
-				pauseCursorAnimator.Seek(0.0, true);
-				break;
-			case Submenu.Status:
-				statusCursor.Position = Vector2.Down * currentSelection * 32;
-				statusCursorAnimator.Play("show");
-				statusCursorAnimator.Seek(0.0, true);
-				break;
-			case Submenu.Skill:
-				int visualSelection = skillSelection - skillScrollOffset;
-				if (skillSelection > skillScrollOffset + 6)
-				{
-					visualSelection = 6;
-					skillScrollOffset = skillSelection - visualSelection;
-				}
-				else if (skillSelection < skillScrollOffset)
-				{
-					visualSelection = 0;
-					skillScrollOffset = skillSelection;
-				}
-
-				skillContainer.Position = Vector2.Up * skillScrollOffset * 60;
-				skillCursor.Position = Vector2.Down * visualSelection * 60;
-				skillCursorAnimator.Play("show");
-				skillCursorAnimator.Seek(0.0, true);
-				break;
+			pauseCursorAnimator.Play("show");
+			pauseCursorAnimator.Seek(0.0, true);
+			return;
 		}
+
+		int visualSelection = skillSelection - skillScrollOffset;
+		if (skillSelection > skillScrollOffset + 6)
+		{
+			visualSelection = 6;
+			skillScrollOffset = skillSelection - visualSelection;
+		}
+		else if (skillSelection < skillScrollOffset)
+		{
+			visualSelection = 0;
+			skillScrollOffset = skillSelection;
+		}
+
+		skillContainer.Position = Vector2.Up * skillScrollOffset * 60;
+		skillCursor.Position = Vector2.Down * visualSelection * 60;
+		skillCursorAnimator.Play("show");
+		skillCursorAnimator.Seek(0.0, true);
 	}
 
 	private void UpdateSelection(int selection, bool playSFX = default)
@@ -356,36 +335,32 @@ public partial class PauseMenu : Node
 		canMoveCursor = false;
 		currentSelection = selection;
 
-		switch (submenu)
+		if (submenu == Submenu.Pause)
 		{
-			case Submenu.Pause:
-				pauseCursorAnimator.Play("move");
-				animator.Set(SelectionTransition, selection.ToString());
-				break;
-			case Submenu.Status:
-				statusCursorAnimator.Play("move");
-				animator.Set(StatusSelectionTransition, selection.ToString());
-				UpdateStatusDescription();
-				UpdateStatusAnimation();
-				break;
-			case Submenu.Skill:
-				skillSelection = selection;
-				UpdateCursorPosition();
-				UpdateSkillDescription();
-				break;
+			pauseCursorAnimator.Play("move");
+			selectionAnimator.Play($"select-{selection}", 0.1);
+
+			UpdateStatusMenu();
+			return;
 		}
+
+		skillSelection = selection;
+		UpdateCursorPosition();
+		UpdateSkillDescription();
 	}
 
-	private void UpdateStatusDescription()
+	private void UpdateStatusMenu()
 	{
-		description.Text = currentSelection == 0 ? "pause_status_description" : "pause_skill_description";
-		description.ShowDescription();
-	}
+		string targetAnimation = "mission";
+		if (currentSelection == 2)
+			targetAnimation = "status";
+		else if (currentSelection == 3)
+			targetAnimation = "skill";
 
-	private void UpdateStatusAnimation()
-	{
-		statusAnimator.Seek(0.0);
-		statusAnimator.Play(currentSelection == 0 ? "status" : "skill");
+		if(statusAnimator.AssignedAnimation.Equals(targetAnimation))
+			return;
+
+		statusAnimator.Play(targetAnimation);
 	}
 
 	private void UpdateSkillDescription()
@@ -395,36 +370,26 @@ public partial class PauseMenu : Node
 		description.ShowDescription();
 	}
 
-	private void EnableInteraction() => AllowPausing = true;
+	private void EnableInteraction() => AllowInputs = true;
 	private float unpausedSpeed;
 	private void TogglePause()
 	{
 		canMoveCursor = false; // Disable cursor movement
-		AllowPausing = false; // Disable pause inputs during the animation
+		AllowInputs = false; // Disable pause inputs during the animation
 
 		isActive = !isActive;
-		animator.Set(ConfirmEnabledTransition, "false");
-		if (submenu == Submenu.Pause)
-			animator.Set(StateRequest, isActive ? "show" : "hide");
-		else
-			animator.Set(StateRequest, "status-hide");
-
-		if (isActive)
-		{
-			statusAnimator.Play("mission");
-			UpdateStatusMenuData();
-		}
-		else
-			statusAnimator.Play("hide");
+		pageAnimator.Play(isActive ? "show" : "hide");
+		statusAnimator.Play(isActive ? "mission" : "hide");
 
 		if (isActive) // Reset selection
 		{
 			// Reset cursors
 			skillCursorAnimator.Play("RESET");
+			selectionAnimator.Play("show");
 
 			UpdateSelection(0);
 			UpdateCursorPosition();
-			animator.Set(ShowTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			UpdateStatusMenuData();
 			unpausedSpeed = (float)Engine.TimeScale;
 			Engine.TimeScale = 1.0f;
 		}
@@ -444,11 +409,5 @@ public partial class PauseMenu : Node
 
 		GetTree().Paused = isActive;
 		BGMPlayer.StageMusicPaused = isActive;
-	}
-
-	private void PlayMissionStatus()
-	{
-		statusAnimator.Seek(0.0);
-		statusAnimator.Play("mission");
 	}
 }

@@ -682,7 +682,7 @@ public partial class IfritGolem : Node3D
 		AnimationTree.Set(DefeatTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		// Award 8000 points for defeating the boss
 		BonusManager.instance.QueueBonus(new(BonusType.Boss, 8000));
-		Interface.PauseMenu.AllowPausing = false;
+		Interface.PauseMenu.AllowInputs = false;
 		HeadsUpDisplay.Instance.Visible = false;
 		currentState = GolemState.Defeated;
 

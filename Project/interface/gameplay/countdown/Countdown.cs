@@ -40,7 +40,7 @@ public partial class Countdown : Control
 		TweenCountdownTicks();
 
 		IsCountdownActive = true;
-		PauseMenu.AllowPausing = false;
+		PauseMenu.AllowInputs = false;
 		StageSettings.Player.StartCountdown();
 		StageSettings.Instance.LevelStarted -= StartCountdown;
 		EmitSignal(SignalName.CountdownStarted);
@@ -49,7 +49,7 @@ public partial class Countdown : Control
 	public void FinishCountdown()
 	{
 		IsCountdownActive = false;
-		PauseMenu.AllowPausing = true;
+		PauseMenu.AllowInputs = true;
 		EmitSignal(SignalName.CountdownFinished);
 	}
 

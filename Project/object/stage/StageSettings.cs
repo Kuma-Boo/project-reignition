@@ -437,7 +437,7 @@ public partial class StageSettings : Node3D
 	public string DisplayTime { get; private set; } // Current time formatted in mm:ss.ff
 	private void UpdateTime(bool skipPhysicsTick = false)
 	{
-		if (!IsLevelIngame || !Interface.PauseMenu.AllowPausing) return;
+		if (!IsLevelIngame || !Interface.PauseMenu.AllowInputs) return;
 
 		if (!skipPhysicsTick)
 			CurrentTime += PhysicsManager.normalDelta; // Add current time
@@ -570,7 +570,7 @@ public partial class StageSettings : Node3D
 
 		BGMPlayer.StageMusicPaused = true;
 		SoundManager.instance.CancelDialog();
-		Interface.PauseMenu.AllowPausing = false;
+		Interface.PauseMenu.AllowInputs = false;
 		LevelState = wasSuccessful ? LevelStateEnum.Success : LevelStateEnum.Failed;
 
 		EmitSignal(SignalName.LevelCompleted);

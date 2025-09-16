@@ -219,7 +219,7 @@ public partial class SandScorpion : Node3D
 
 		Player.Visible = false;
 		Player.AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
-		Interface.PauseMenu.AllowPausing = false;
+		Interface.PauseMenu.AllowInputs = false;
 
 		// Award 1000 points for defeating the boss
 		BonusManager.instance.QueueBonus(new(BonusType.Boss, 1000));

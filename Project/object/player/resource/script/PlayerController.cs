@@ -1251,7 +1251,7 @@ public partial class PlayerController : CharacterBody3D
 			return;
 
 		HeadsUpDisplay.Instance.SetVisibility(true);
-		Interface.PauseMenu.AllowPausing = true;
+		Interface.PauseMenu.AllowInputs = true;
 	}
 
 	public void Deactivate()
@@ -1268,7 +1268,7 @@ public partial class PlayerController : CharacterBody3D
 			return;
 
 		HeadsUpDisplay.Instance.SetVisibility(false);
-		Interface.PauseMenu.AllowPausing = false;
+		Interface.PauseMenu.AllowInputs = false;
 	}
 	#endregion
 }
