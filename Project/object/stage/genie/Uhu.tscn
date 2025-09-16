@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://dc1ik7p6xlh0a"]
+[gd_scene load_steps=29 format=3 uid="uid://dc1ik7p6xlh0a"]
 
 [ext_resource type="Material" uid="uid://bxgvc6gx60btc" path="res://object/stage/genie/material/Uhu.tres" id="1_hnp5r"]
 [ext_resource type="Script" uid="uid://ia7mbsq46cqi" path="res://object/stage/genie/Uhu.cs" id="1_hq5a4"]
@@ -6,6 +6,7 @@
 [ext_resource type="Material" uid="uid://bm6mblpuw33xo" path="res://object/stage/genie/material/Wind.tres" id="3_qpv05"]
 [ext_resource type="Material" uid="uid://c8ctul6a8utn2" path="res://object/stage/genie/material/Uhu Trail.tres" id="4_gjuqx"]
 [ext_resource type="Material" uid="uid://c0ul0kasu0kpi" path="res://effect/particle/material/environment/Circular Glow Add.tres" id="5_0l31m"]
+[ext_resource type="AudioStream" uid="uid://d4j65vadoigpk" path="res://sound/sfx/enemy/majin/uhu travel.wav" id="7_nfddu"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_0o2g1"]
 size = Vector2(1, 1)
@@ -205,3 +206,11 @@ visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_igdhi")
 draw_pass_1 = SubResource("PlaneMesh_rxv6i")
+
+[node name="SFX" type="AudioStreamPlayer3D" parent="Root/Base"]
+stream = ExtResource("7_nfddu")
+unit_size = 20.0
+max_db = 0.0
+autoplay = true
+max_distance = 80.0
+bus = &"GAME SFX"
