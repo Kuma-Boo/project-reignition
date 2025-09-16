@@ -21,7 +21,7 @@ public partial class EventResizer : Control
 			return;
 		}
 
-		player.SetDeferred("size", (baseSize * Size.X / baseSize.X).Ceil());
+		player.Size = (baseSize * Size.X / baseSize.X).Ceil();
 		player.Position = Vector2.Right * (player.Size.X - Size.X) + Vector2.Down * (Size.Y - player.Size.Y);
 		player.Position *= 0.5f;
 	}
