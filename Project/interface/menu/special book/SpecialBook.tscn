@@ -418,7 +418,7 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("PrevChapter:modulate")
+tracks/11/path = NodePath("NavigationButtonsMain/PrevChapter:modulate")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -430,7 +430,7 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("NextChapter:modulate")
+tracks/12/path = NodePath("NavigationButtonsMain/NextChapter:modulate")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -643,7 +643,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("PrevChapter:modulate")
+tracks/7/path = NodePath("NavigationButtonsMain/PrevChapter:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -655,7 +655,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("NextChapter:modulate")
+tracks/8/path = NodePath("NavigationButtonsMain/NextChapter:modulate")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -856,7 +856,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("PrevChapter:modulate")
+tracks/7/path = NodePath("NavigationButtonsMain/PrevChapter:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -868,7 +868,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("NextChapter:modulate")
+tracks/8/path = NodePath("NavigationButtonsMain/NextChapter:modulate")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -1101,7 +1101,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("PrevChapter:modulate")
+tracks/7/path = NodePath("NavigationButtonsMain/PrevChapter:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -1113,7 +1113,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("NextChapter:modulate")
+tracks/8/path = NodePath("NavigationButtonsMain/NextChapter:modulate")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -1318,7 +1318,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("PrevChapter:modulate")
+tracks/7/path = NodePath("NavigationButtonsMain/PrevChapter:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -1330,7 +1330,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("NextChapter:modulate")
+tracks/8/path = NodePath("NavigationButtonsMain/NextChapter:modulate")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -2035,9 +2035,12 @@ libraries = {
 [node name="NavButtonsFull" type="Control" parent="Book"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
-anchor_right = 1.0
+anchor_left = 0.5
+anchor_right = 0.5
 anchor_bottom = 1.0
+offset_left = -960.01196
 offset_top = 984.0
+offset_right = 960.01196
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -2082,54 +2085,71 @@ ActionKey = &"spb_controls_hide"
 inputKey = &"sys_select"
 fallbackKey = &"ui_select"
 
-[node name="PrevChapter" parent="Book" instance=ExtResource("35_6o01v")]
-layout_mode = 0
-offset_left = 245.0
-offset_top = 106.0
-offset_right = 455.0
-offset_bottom = 154.0
+[node name="NavigationButtonsMain" type="Control" parent="Book"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PrevChapter" parent="Book/NavigationButtonsMain" instance=ExtResource("35_6o01v")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -688.01196
+offset_top = 104.0
+offset_right = -478.012
+offset_bottom = 152.0
 scale = Vector2(1.1, 1.1)
 alignment = 0
 ActionKey = &""
 inputKey = &"button_step_left"
 fallbackKey = &""
 
-[node name="NextChapter" parent="Book" instance=ExtResource("35_6o01v")]
-layout_mode = 0
-offset_left = 1584.0
-offset_top = 106.0
-offset_right = 1794.0
-offset_bottom = 154.0
+[node name="NextChapter" parent="Book/NavigationButtonsMain" instance=ExtResource("35_6o01v")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 615.98804
+offset_top = 103.99999
+offset_right = 825.98804
+offset_bottom = 152.0
 scale = Vector2(1.1, 1.1)
 alignment = 0
 ActionKey = &""
 inputKey = &"button_step_right"
 fallbackKey = &""
 
-[node name="NavigationButtonsMain" type="HBoxContainer" parent="Book"]
-modulate = Color(1, 1, 1, 0)
+[node name="Footer" type="HBoxContainer" parent="Book/NavigationButtonsMain"]
 z_index = 1
-layout_mode = 0
-offset_left = 384.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -576.01196
 offset_top = 1003.0
-offset_right = 1536.0
+offset_right = 575.98804
 offset_bottom = 1051.0
 theme_override_constants/separation = 64
 alignment = 2
 
-[node name="PlayRandom" parent="Book/NavigationButtonsMain" instance=ExtResource("35_6o01v")]
+[node name="PlayRandom" parent="Book/NavigationButtonsMain/Footer" instance=ExtResource("35_6o01v")]
 layout_mode = 2
 ActionKey = &"spb_controls_random"
 inputKey = &"sys_pause"
 fallbackKey = &"ui_accept"
 
-[node name="Return" parent="Book/NavigationButtonsMain" instance=ExtResource("35_6o01v")]
+[node name="Return" parent="Book/NavigationButtonsMain/Footer" instance=ExtResource("35_6o01v")]
 layout_mode = 2
 ActionKey = &"sys_return"
 inputKey = &"sys_cancel"
 fallbackKey = &"ui_cancel"
 
-[node name="Select" parent="Book/NavigationButtonsMain" instance=ExtResource("35_6o01v")]
+[node name="Select" parent="Book/NavigationButtonsMain/Footer" instance=ExtResource("35_6o01v")]
 layout_mode = 2
 ActionKey = &"sys_select"
 inputKey = &"sys_select"
@@ -2138,10 +2158,13 @@ fallbackKey = &"ui_select"
 [node name="NavigationButtonsBook" type="HBoxContainer" parent="Book"]
 modulate = Color(1, 1, 1, 0)
 z_index = 1
-layout_mode = 0
-offset_left = 384.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -576.01196
 offset_top = 1003.0
-offset_right = 1536.0
+offset_right = 575.98804
 offset_bottom = 1051.0
 theme_override_constants/separation = 64
 alignment = 2
