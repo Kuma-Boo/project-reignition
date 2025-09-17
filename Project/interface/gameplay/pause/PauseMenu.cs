@@ -86,7 +86,7 @@ public partial class PauseMenu : Node
 			pauseSkill.Initialize();
 			skillContainer.AddChild(pauseSkill);
 		}
-		
+
 		isHidden = false;
 	}
 
@@ -96,7 +96,7 @@ public partial class PauseMenu : Node
 
 		if (skillScrollbar.IsVisibleInTree())
 			UpdateSkillScrollbar();
-			
+
 		if (Runtime.Instance.IsActionJustPressed("sys_pause", "ui_accept") &&
 			!Input.IsActionJustPressed("toggle_fullscreen"))
 		{
@@ -177,9 +177,11 @@ public partial class PauseMenu : Node
 			TogglePause();
 			return;
 		}
-		
-		skillCursorAnimator.Play("hide");
+
 		submenu = Submenu.Pause;
+		skillCursorAnimator.Play("hide");
+		pauseCursorAnimator.Play("show");
+		selectionAnimator.Play("show-skill");
 		currentSelection = 3;
 		description.HideDescription();
 	}
@@ -234,7 +236,11 @@ public partial class PauseMenu : Node
 		}
 		else if (currentSelection == 3) // Open the Skill Menu
 		{
-			// TODO Implement this
+			submenu = Submenu.Skill;
+			pauseCursorAnimator.Play("hide");
+			skillCursorAnimator.Play("select");
+			skillCursorAnimator.Advance(0.0);
+			UpdateSelection(skillSelection); // Remember previously selected skill
 		}
 		else if (currentSelection == 4) // Quit by opening the EXP menu
 		{
@@ -242,12 +248,6 @@ public partial class PauseMenu : Node
 			TransitionManager.instance.QueuedScene = TransitionManager.MenuScenePath;
 			EmitSignal(SignalName.OnSceneChangeSelected);
 		}
-	}
-
-	private void CancelSelection()
-	{
-		submenu = Submenu.Pause;
-		UpdateSelection(2);
 	}
 
 	private void UpdateStatusMenuData()
@@ -357,7 +357,7 @@ public partial class PauseMenu : Node
 		else if (currentSelection == 3)
 			targetAnimation = "skill";
 
-		if(statusAnimator.AssignedAnimation.Equals(targetAnimation))
+		if (statusAnimator.AssignedAnimation.Equals(targetAnimation))
 			return;
 
 		statusAnimator.Play(targetAnimation);
@@ -401,12 +401,6 @@ public partial class PauseMenu : Node
 
 	private void ApplyPause()
 	{
-		if (submenu != Submenu.Pause)
-		{
-			UpdateSelection(0); // Select Continue
-			CancelSelection();
-		}
-
 		GetTree().Paused = isActive;
 		BGMPlayer.StageMusicPaused = isActive;
 	}
