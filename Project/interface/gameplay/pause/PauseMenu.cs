@@ -15,7 +15,8 @@ public partial class PauseMenu : Node
 	[Export] AnimationPlayer selectionAnimator;
 
 	[Export] private AnimationPlayer pauseCursorAnimator;
-	[Export] private AudioStreamPlayer selectSFX;
+	[Export] private AudioStreamPlayer selectSfx;
+	[Export] private AudioStreamPlayer cancelSfx;
 	[Export] private Menus.Description description;
 
 	[ExportGroup("Status Menu")]
@@ -238,7 +239,6 @@ public partial class PauseMenu : Node
 		{
 			submenu = Submenu.Skill;
 			pauseCursorAnimator.Play("hide");
-			skillCursorAnimator.Play("select");
 			skillCursorAnimator.Advance(0.0);
 			UpdateSelection(skillSelection); // Remember previously selected skill
 		}
@@ -330,7 +330,7 @@ public partial class PauseMenu : Node
 	private void UpdateSelection(int selection, bool playSFX = default)
 	{
 		if (playSFX)
-			selectSFX.Play();
+			selectSfx.Play();
 
 		canMoveCursor = false;
 		currentSelection = selection;
@@ -395,6 +395,9 @@ public partial class PauseMenu : Node
 		}
 		else if (!TransitionManager.IsTransitionActive)
 		{
+			if (!cancelSfx.Playing)
+				cancelSfx.Play();
+
 			Engine.TimeScale = unpausedSpeed;
 		}
 	}

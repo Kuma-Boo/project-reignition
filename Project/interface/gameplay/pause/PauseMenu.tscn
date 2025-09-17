@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=3 uid="uid://coshp5qmt1aq7"]
+[gd_scene load_steps=70 format=3 uid="uid://coshp5qmt1aq7"]
 
 [ext_resource type="Script" uid="uid://dyfvgibst7wnn" path="res://interface/gameplay/pause/PauseMenu.cs" id="1_1kq15"]
 [ext_resource type="Texture2D" uid="uid://b6eevqhlu5ymx" path="res://interface/menu/level select/texture/fire soul.png" id="2_5bjqt"]
@@ -255,24 +255,6 @@ tracks/0/keys = {
 "values": [Vector2(1, 1), Vector2(1, 1.3), Vector2(1, 1)]
 }
 
-[sub_resource type="Animation" id="Animation_5rcp8"]
-resource_name = "select"
-length = 0.001
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../../../../../../SFX/ScreenChangeSFX")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
-}
-
 [sub_resource type="Animation" id="Animation_qyq0t"]
 resource_name = "show"
 length = 0.3
@@ -309,7 +291,6 @@ _data = {
 &"RESET": SubResource("Animation_gc03k"),
 &"hide": SubResource("Animation_nsrdk"),
 &"loop": SubResource("Animation_c3bhf"),
-&"select": SubResource("Animation_5rcp8"),
 &"show": SubResource("Animation_qyq0t")
 }
 
@@ -457,24 +438,22 @@ tracks/1/keys = {
 "method": &"EnableInteraction"
 }]
 }
-tracks/2/type = "method"
+tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("SFX/CancelSFX")
+tracks/2/path = NodePath("Pause/LeftPosition/ScrollLeft:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
+"update": 0,
+"values": [Vector2(-95, 0)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Pause/LeftPosition/ScrollLeft:position")
+tracks/3/path = NodePath("Pause/RightPosition/ScrollRight:position")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -486,19 +465,19 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Pause/RightPosition/ScrollRight:position")
+tracks/4/path = NodePath("Pause/LeftPosition:anchor_left")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-95, 0)]
+"values": [0.0]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Pause/LeftPosition:anchor_left")
+tracks/5/path = NodePath("Pause/LeftPosition:anchor_right")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -510,19 +489,19 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Pause/LeftPosition:anchor_right")
+tracks/6/path = NodePath("Pause/RightPosition:anchor_left")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0]
+"values": [1.0]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Pause/RightPosition:anchor_left")
+tracks/7/path = NodePath("Pause/RightPosition:anchor_right")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -534,34 +513,22 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Pause/RightPosition:anchor_right")
+tracks/8/path = NodePath("Pause/Clip:anchor_left")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [1.0]
+"values": [0.0]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("Pause/Clip:anchor_left")
+tracks/9/path = NodePath("Pause/Clip:anchor_right")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-tracks/10/type = "value"
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/path = NodePath("Pause/Clip:anchor_right")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -3250,7 +3217,7 @@ _data = {
 &"show-skill": SubResource("Animation_ecgsa")
 }
 
-[node name="Pause" type="Control" node_paths=PackedStringArray("pageAnimator", "statusAnimator", "selectionAnimator", "pauseCursorAnimator", "selectSFX", "description", "values", "missionTypeLabel", "missionDescriptionLabel", "fireSoulParent", "fireSoulRects", "rankRect", "noSkillLabel", "skillContainer", "skillCursor", "skillCursorAnimator", "levelSprite", "skillScrollbar")]
+[node name="Pause" type="Control" node_paths=PackedStringArray("pageAnimator", "statusAnimator", "selectionAnimator", "pauseCursorAnimator", "selectSfx", "cancelSfx", "description", "values", "missionTypeLabel", "missionDescriptionLabel", "fireSoulParent", "fireSoulRects", "rankRect", "noSkillLabel", "skillContainer", "skillCursor", "skillCursorAnimator", "levelSprite", "skillScrollbar")]
 process_mode = 3
 z_index = 50
 z_as_relative = false
@@ -3265,7 +3232,8 @@ pageAnimator = NodePath("PageAnimator")
 statusAnimator = NodePath("StatusAnimator")
 selectionAnimator = NodePath("SelectionAnimator")
 pauseCursorAnimator = NodePath("Pause/Options/PauseCursorAnchor/PauseCursorAnimator")
-selectSFX = NodePath("SFX/SelectionSFX")
+selectSfx = NodePath("SFX/SelectionSFX")
+cancelSfx = NodePath("SFX/CancelSFX")
 description = NodePath("Pause/Description")
 values = [NodePath("Pause/StatusMenu/ValueMenu/Status/Level/LevelValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/Level/RingValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/HighScore/HighScoreValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/Score/ScoreValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/BestTime/BestTimeValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/Time/TimeValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/StageEXP/StageEXPValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/TotalEXP/TotalEXPValue"), NodePath("Pause/StatusMenu/ValueMenu/Status/SoulGauge/SoulGaugeValue")]
 missionTypeLabel = NodePath("Pause/StatusMenu/ValueMenu/Mission/Type")
@@ -3545,8 +3513,8 @@ position = Vector2(1000, 448)
 anchors_preset = -1
 offset_left = -368.0
 offset_top = -288.0
-offset_right = 368.0
-offset_bottom = 244.0
+offset_right = -304.0
+offset_bottom = -224.0
 pivot_offset = Vector2(368, 266)
 texture = ExtResource("17_pdwl1")
 region_rect = Rect2(128, 352, 96, 96)
@@ -3717,7 +3685,7 @@ metadata/_edit_use_anchors_ = true
 modulate = Color(0, 0, 0, 1)
 anchors_preset = -1
 offset_right = 420.0
-offset_bottom = 53.000004
+offset_bottom = 53.0
 theme_override_fonts/font = ExtResource("20_637u3")
 theme_override_font_sizes/font_size = 64
 text = "pause_time"
@@ -3810,7 +3778,7 @@ metadata/_edit_use_anchors_ = true
 modulate = Color(0, 0, 0, 1)
 anchors_preset = -1
 offset_right = 420.0
-offset_bottom = 52.999893
+offset_bottom = 52.999878
 theme_override_fonts/font = ExtResource("20_637u3")
 theme_override_font_sizes/font_size = 64
 text = "pause_gauge"
@@ -3941,7 +3909,7 @@ stretch_mode = 5
 modulate = Color(1, 1, 1, 0)
 
 [node name="Header" type="Label" parent="Pause/StatusMenu/ValueMenu/Skill"]
-self_modulate = Color(1, 1, 1, 0)
+self_modulate = Color(0, 0, 0, 1)
 anchors_preset = -1
 offset_left = -343.0
 offset_top = -280.0
@@ -3980,8 +3948,8 @@ anchors_preset = -1
 offset_left = -360.0
 offset_top = -232.0
 offset_right = -344.0
-offset_bottom = -212.0
-scale = Vector2(1e-05, 1)
+offset_bottom = -232.0
+scale = Vector2(1e-05, 1e-05)
 texture = ExtResource("18_dyfn0")
 region_rect = Rect2(436, 136, 28, 12)
 patch_margin_left = 8
