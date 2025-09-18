@@ -606,6 +606,10 @@ path = NodePath("../../../../Path/CaveExitPath")
 transform = Transform3D(1, 0, -2.9802322e-08, 0, 1, 0, 2.9802322e-08, 0, 1, 0, 10, 0)
 shape = SubResource("BoxShape3D_1mx0u")
 
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger/Path/CaveExitPath"]
+transform = Transform3D(0.25881898, 0, -0.9659258, 0, 1, 0, 0.9659258, 0, 0.25881898, -37.681763, 10, 8.8783245)
+shape = SubResource("BoxShape3D_1mx0u")
+
 [node name="DinoPath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
 transform = Transform3D(0.409222, 0, 0.912434, 0, 1, 0, -0.912434, 0, 0.409222, -349.375, -256.515, -960.106)
 "Trigger Mode" = 2
@@ -1022,12 +1026,14 @@ slideDistance = 6
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
 shape = SubResource("BoxShape3D_1mx0u")
 
-[node name="LogAutomationTrigger" parent="Trigger/Object" instance=ExtResource("14_lokxv")]
-transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -392.077, -264.264, -936.318)
+[node name="LogAutomationTrigger" parent="Trigger/Object" node_paths=PackedStringArray("path") instance=ExtResource("14_lokxv")]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -395.077, -265.05902, -935.318)
 endPoint = 45.0
+autoQueueOnLand = false
+path = NodePath("../../../Path/LogAutomationPath")
 
 [node name="Path" type="Node3D" parent="Trigger/Object/LogAutomationTrigger" node_paths=PackedStringArray("path")]
-transform = Transform3D(0.831954, 0, 0.554845, 0, 1, 0, -0.554845, 0, 0.831954, -30.7302, 43.764, -98.5684)
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, 0, 0, 0)
 script = ExtResource("35_vf0rg")
 path = NodePath("../../../../Path/LogAutomationPath")
 affectCamera = false
@@ -1038,10 +1044,11 @@ settings = ExtResource("23_pnpt3")
 previousSettings = ExtResource("34_qb2qj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/LogAutomationTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4142456, 0.7950134, 2.8283997)
 shape = SubResource("SphereShape3D_iq0gp")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger/Object/LogAutomationTrigger"]
-transform = Transform3D(0.766045, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.766045, 1.32147, 2, 3.3107)
+transform = Transform3D(0.766045, 0, 0.64278805, 0, 1, 0, -0.64278805, 0, 0.766045, -0.09277344, 1.7950134, 6.139099)
 shape = SubResource("SphereShape3D_iq0gp")
 
 [node name="LogRecenterTrigger" parent="Trigger/Object" instance=ExtResource("15_86eng")]

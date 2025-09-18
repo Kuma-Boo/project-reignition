@@ -48,10 +48,15 @@ public partial class AutomationTrigger : Area3D
 		if (Player.IsTeleporting)
 			return;
 
-		if (path != null && path.Curve.GetClosestOffset(Player.GlobalPosition - path.GlobalPosition) > endPoint)
+		if (path != null)
 		{
-			isAutomationQueued = false;
-			return;
+			float triggerOffset = path.Curve.GetClosestOffset(GlobalPosition - path.GlobalPosition);
+			float playerOffset = path.Curve.GetClosestOffset(Player.GlobalPosition - path.GlobalPosition);
+			if (playerOffset > endPoint || playerOffset < triggerOffset)
+			{
+				isAutomationQueued = false;
+				return;
+			}
 		}
 
 		if (!ignoreDirection)
