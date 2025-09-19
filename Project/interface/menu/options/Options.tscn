@@ -2275,7 +2275,7 @@ controlLabels = [NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Opt
 interfaceLabels = [NodePath("MenuBase/ContentClip/Content/Interface/RSide/Options/BrandingLabel"), NodePath("MenuBase/ContentClip/Content/Interface/RSide/Options/HUDStyleLabel"), NodePath("MenuBase/ContentClip/Content/Interface/RSide/Options/ControllerLabel"), NodePath("MenuBase/ContentClip/Content/Interface/RSide/Options/ButtonStyleLabel"), NodePath("MenuBase/ContentClip/Content/Interface/RSide/Options/SoulGaugeStyleLabel"), NodePath("MenuBase/ContentClip/Content/Interface/RSide/Options/ActionPromptLabel")]
 partyMappingLabels = [NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/RSide/Options/PlayerLabel"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/RSide/Options/DeviceLabel")]
 generalLabels = [NodePath("MenuBase/ContentClip/Content/Options/RSide/Options/QuickLoad")]
-controlMappingOptions = [NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveUp"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveDown"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveLeft"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveRight"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Jump"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Action"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/SpeedBreak"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/TimeBreak"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Attack"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Brake"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/LightDash"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/StepLeft"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/StepRight"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Pause"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Select"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Cancel"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Sort"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Clear")]
+controlMappingOptions = [NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveUp"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveDown"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveLeft"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveRight"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Jump"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Action"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/SpeedBreak"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/TimeBreak"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Attack"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Brake"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/LightDash"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/StepLeft"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/StepRight"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/CameraUp"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/CameraDown"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/CameraLeft"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/CameraRight"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Pause"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Select"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Cancel"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Sort"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Clear")]
 partyMappingOptions = [NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/Options/MoveUp"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/Options/MoveDown"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/Options/MoveLeft"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/Options/MoveRight"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/Options/Primary"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/Options/Secondary"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/Options/Pause")]
 bgm = NodePath("BGM")
 animator = NodePath("AnimationPlayer")
@@ -2327,8 +2327,11 @@ visible = false
 [node name="ControlBook" parent="World/ControlBook" instance=ExtResource("6_jppea")]
 
 [node name="Skeleton3D" parent="World/ControlBook/ControlBook/BookRoot" index="0"]
+bones/0/rotation = Quaternion(-0.50000006, -0.5, -0.50000006, 0.5)
+bones/2/rotation = Quaternion(-0.7071068, -1.4875364e-08, -1.4875357e-08, 0.7071068)
 bones/3/rotation = Quaternion(0.707106, 1.72081e-08, 1.72081e-08, 0.707107)
 bones/4/rotation = Quaternion(3.23117e-08, 0.707106, 0.707107, 5.3385e-08)
+bones/5/rotation = Quaternion(-0.7071068, -1.4875364e-08, -1.4875357e-08, 0.7071068)
 bones/6/rotation = Quaternion(-0.707107, 1.45739e-08, -1.45739e-08, 0.707107)
 
 [node name="obj_book01_Mesh_0001" parent="World/ControlBook/ControlBook/BookRoot/Skeleton3D" index="0"]
@@ -4145,8 +4148,8 @@ script = ExtResource("19_agawd")
 loopStartPosition = 0.01
 loopEndPosition = 122.4
 
-[connection signal="JumpFinished" from="World/JumpStart/JumpStart" to="." method="LockPlayer"]
 [connection signal="JumpFinished" from="World/JumpStart/JumpStart" to="." method="EnableProcessing"]
+[connection signal="JumpFinished" from="World/JumpStart/JumpStart" to="." method="LockPlayer"]
 
 [editable path="World/ControlBook/Collision"]
 [editable path="World/ControlBook/ControlBook"]
