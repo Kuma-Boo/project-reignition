@@ -269,8 +269,8 @@ public partial class PlayerSkillController : Node3D
 		IsTimeBreakActive = IsSpeedBreakActive = false;
 		timeBreakAnimator.Play("RESET");
 		timeBreakAnimator.Advance(0);
-		speedBreakAnimator.Play("RESET");
-		speedBreakAnimator.Advance(0);
+
+		CancelSpeedbreakFX();
 	}
 
 	private readonly float TimeBreakAchievementRequirement = 300f;
@@ -434,6 +434,7 @@ public partial class PlayerSkillController : Node3D
 			speedBreakAnimator.Advance(0.0);
 			speedBreakShockwave.PivotOffset = speedBreakShockwave.Size * 0.5f;
 			speedBreakAnimator.Play("start");
+			speedBreakAnimator.Advance(0.0);
 
 			Player.Effect.PlayVoice("speed break");
 			Player.MovementAngle = Player.PathFollower.ForwardAngle;
@@ -451,6 +452,7 @@ public partial class PlayerSkillController : Node3D
 		else
 		{
 			speedBreakAnimator.Play("stop");
+			speedBreakAnimator.Advance(0.0);
 			speedBreakSFX.Stream = speedBreakDeactivate;
 			speedBreakSFX.Play();
 
@@ -464,7 +466,7 @@ public partial class PlayerSkillController : Node3D
 		HeadsUpDisplay.Instance?.ActiveSoulGauge.UpdateSoulGaugeColor(IsSoulGaugeCharged);
 	}
 
-	private void CancelSpeedbreakFX()
+	public void CancelSpeedbreakFX()
 	{
 		speedBreakAnimator.Play("RESET");
 		speedBreakAnimator.Advance(0.0);

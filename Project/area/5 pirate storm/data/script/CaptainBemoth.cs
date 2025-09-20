@@ -124,6 +124,7 @@ public partial class CaptainBemoth : PathFollow3D
 		root.ResetPhysicsInterpolation();
 		animator.Set(DefeatTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 
+		Player.Skills.CancelBreakSkills();
 		Player.Skills.DisableBreakSkills();
 		Player.Animator.PlayOneshotAnimation(DefeatCutsceneID);
 

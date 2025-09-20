@@ -214,6 +214,7 @@ public partial class SandScorpion : Node3D
 		eventAnimator.Play("defeat");
 		eventAnimator.Advance(0.0);
 
+		Player.Skills.CancelBreakSkills();
 		Player.Skills.DisableBreakSkills();
 		Player.MoveSpeed = 0;
 

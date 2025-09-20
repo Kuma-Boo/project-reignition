@@ -141,13 +141,13 @@ public partial class Options : Menu
 	private void LockPlayer()
 	{
 		isPlayerLocked = true;
-		StageSettings.Player.Skills.EnableBreakSkills();
+		Player.Skills.EnableBreakSkills();
 	}
 
 	private void UnlockPlayer()
 	{
 		isPlayerLocked = false;
-		StageSettings.Player.Skills.DisableBreakSkills();
+		Player.Skills.DisableBreakSkills();
 	}
 
 	private void UpdatePlayerPosition()
