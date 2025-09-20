@@ -44,7 +44,7 @@ public partial class SoulGauge : Control
 
 	private float targetSoulGaugeRatio;
 	private Vector2 soulGaugeVelocity;
-	private const int SoulGaugeChargePoint = 360;
+	private const int SoulGaugeChargePoint = 320;
 	private const int SoulGaugeFillOffset = 15;
 	private void UpdateSoulGauge()
 	{
