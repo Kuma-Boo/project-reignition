@@ -149,4 +149,13 @@ public partial class SpecialBookTab : Control
 	}
 
 	public Texture2D GetFullTexture(int pageIndex) => fullTextures[pageIndex];
+
+	public void GetResource(ChapterType chapterType, Texture2D PageThumbnail, SpecialBookPage[] PageResources, string PageTexturePath)
+	{
+		this.chapterType = chapterType;
+		this.PageThumbnail = PageThumbnail;
+		this.PageResources = PageResources;
+		this.pageTexturePath = PageTexturePath;
+
+	}
 }
