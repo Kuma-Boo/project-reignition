@@ -1,4 +1,4 @@
-[gd_scene load_steps=78 format=3 uid="uid://c58uuw11dgeta"]
+[gd_scene load_steps=93 format=3 uid="uid://c58uuw11dgeta"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
 [ext_resource type="Resource" uid="uid://beyea7f0e70sm" path="res://resource/level data/night palace/Act1Main.tres" id="2_wwd1j"]
@@ -48,6 +48,11 @@
 [ext_resource type="PackedScene" uid="uid://cj6jnnqlu60tm" path="res://area/7 night palace/object/destructable/SpacePillar.tscn" id="44_uu756"]
 [ext_resource type="PackedScene" uid="uid://ckjoa1p7lnd7y" path="res://area/7 night palace/object/obstacle/SpaceWall.tscn" id="45_pvb6h"]
 [ext_resource type="Resource" uid="uid://rlt4iyu1l7tg" path="res://area/7 night palace/act 1/camera/HallCam.tres" id="47_v5767"]
+[ext_resource type="PackedScene" uid="uid://y3f5d4j7oher" path="res://area/7 night palace/object/obstacle/GasGeyser.tscn" id="49_pvb6h"]
+[ext_resource type="Script" uid="uid://cvjtgyoqq8vsw" path="res://area/7 night palace/data/script/GasChamber.cs" id="50_8m7cr"]
+[ext_resource type="Shader" uid="uid://dntow3skrfok4" path="res://effect/shader/particle/BillboardCameraOffset.gdshader" id="51_qu6wm"]
+[ext_resource type="Texture2D" uid="uid://cpkbc7p47d2bg" path="res://effect/particle/texture/environment/common dust.png" id="52_cpwgb"]
+[ext_resource type="Script" uid="uid://ch4pb1qqwy5al" path="res://object/stage/common/resource/script/CameraFollower.cs" id="52_qu6wm"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mow5f"]
 size = Vector3(20, 20, 5)
@@ -888,6 +893,203 @@ point_count = 6
 _limits = [0.0, 5.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 15.0, 0, 0, Vector2(1, 5), -7.5, 0.0, 0, 0]
 point_count = 2
+
+[sub_resource type="Curve" id="Curve_cpwgb"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_aiy33"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_cpwgb")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_cs034"]
+lifetime_randomness = 0.2
+emission_shape_offset = Vector3(0, 0, -2)
+emission_shape = 3
+emission_box_extents = Vector3(5, 5, 0)
+angle_min = 1.0728836e-05
+angle_max = 360.00003
+gravity = Vector3(0, 0, 0)
+scale_min = 10.0
+scale_max = 10.0
+color = Color(1, 0.39215687, 0, 0.5882353)
+alpha_curve = SubResource("CurveTexture_aiy33")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aiy33"]
+render_priority = 0
+shader = ExtResource("51_qu6wm")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/texture_albedo = ExtResource("52_cpwgb")
+shader_parameter/clipping_offset = 2.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_cpwgb"]
+material = SubResource("ShaderMaterial_aiy33")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uu756"]
+size = Vector3(180, 50, 60)
+
+[sub_resource type="Animation" id="Animation_8m7cr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GasGeyser1:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GasGeyser2:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GasGeyser3:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Gas/GasPulse:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_pvb6h"]
+resource_name = "event"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GasGeyser1:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GasGeyser2:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GasGeyser3:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Gas/GasPulse:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_1vic0"]
+resource_name = "event-deactivate"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GasGeyser1:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GasGeyser2:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GasGeyser3:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Gas/GasPulse:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1vic0"]
+_data = {
+&"RESET": SubResource("Animation_8m7cr"),
+&"event": SubResource("Animation_pvb6h"),
+&"event-deactivate": SubResource("Animation_1vic0")
+}
 
 [node name="World" type="Node"]
 
@@ -2873,7 +3075,7 @@ script = ExtResource("4_kcdaq")
 
 [node name="Spear" parent="MainAct/SpaceA/Spear3/SpearCull2" instance=ExtResource("37_627rn")]
 transform = Transform3D(0.9999999, 0, 0, 0, 1.0000004, 0, 0, 0, 0.99999934, -6.1035156e-05, 6.1035156e-05, -50)
-activationDelay = 0.40000000000873115
+activationDelay = 0.4000000000087311
 
 [node name="SpacePanel1" parent="MainAct/SpaceA/Spear3" instance=ExtResource("36_ghnrl")]
 transform = Transform3D(-4.37114e-08, 0, -0.99999994, 0, 0.99999994, 0, 1, 0, -4.37114e-08, 3.1, -0.25, 32.1)
@@ -3049,7 +3251,7 @@ script = ExtResource("4_kcdaq")
 
 [node name="Spear" parent="MainAct/SpaceA/Spear5/SpearCull2" instance=ExtResource("37_627rn")]
 transform = Transform3D(1.0000004, 0, 0, 0, 1.0000002, 0, 0, 0, 0.9999995, -0.00012207031, 0, -50)
-activationDelay = 0.40000000000873115
+activationDelay = 0.4000000000087311
 
 [node name="SpacePanel1" parent="MainAct/SpaceA/Spear5" instance=ExtResource("36_ghnrl")]
 transform = Transform3D(-4.37114e-08, 0, -0.99999994, 0, 0.99999994, 0, 1, 0, -4.37114e-08, 3.1, -0.25, 14.6)
@@ -3431,7 +3633,7 @@ script = ExtResource("4_kcdaq")
 
 [node name="Spear" parent="MainAct/SpaceB/Spear1/SpearCull2" instance=ExtResource("37_627rn")]
 transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.9999998, 0, 0, -50)
-activationDelay = 0.40000000000873115
+activationDelay = 0.4000000000087311
 
 [node name="SpacePanel1" parent="MainAct/SpaceB/Spear1" instance=ExtResource("36_ghnrl")]
 transform = Transform3D(-4.37114e-08, 0, -0.99999994, 0, 0.99999994, 0, 1, 0, -4.37114e-08, 3.1, -0.25, 25)
@@ -3460,7 +3662,7 @@ script = ExtResource("4_kcdaq")
 
 [node name="Spear" parent="MainAct/SpaceB/Spear2/SpearCull2" instance=ExtResource("37_627rn")]
 transform = Transform3D(1.0000001, 0, 0, 0, 1.0000001, 0, 0, 0, 1, 0, 0, -50)
-activationDelay = 0.40000000000873115
+activationDelay = 0.4000000000087311
 
 [node name="SpacePanel1" parent="MainAct/SpaceB/Spear2" instance=ExtResource("36_ghnrl")]
 transform = Transform3D(-4.37114e-08, 0, -0.99999994, 0, 0.99999994, 0, 1, 0, -4.37114e-08, -3.1, -0.25, 13.6)
@@ -4238,7 +4440,7 @@ script = ExtResource("4_kcdaq")
 
 [node name="Spear" parent="MainAct/SpaceC/Spear1/SpearCull2" instance=ExtResource("37_627rn")]
 transform = Transform3D(0.9999999, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, -50)
-activationDelay = 0.40000000000873115
+activationDelay = 0.4000000000087311
 
 [node name="SpearCull3" type="Node3D" parent="MainAct/SpaceC/Spear1"]
 transform = Transform3D(0.76472956, 0.4149695, 0.49293822, 0.51696247, 0.061524466, -0.85379386, -0.38462627, 0.9077521, -0.16747427, 3.100006, 0, 59.049988)
@@ -4278,7 +4480,7 @@ script = ExtResource("4_kcdaq")
 
 [node name="Spear" parent="MainAct/SpaceC/Spear2/SpearCull2" instance=ExtResource("37_627rn")]
 transform = Transform3D(0.9999999, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, -50)
-activationDelay = 0.19999999999708962
+activationDelay = 0.1999999999970896
 
 [node name="SpearCull3" type="Node3D" parent="MainAct/SpaceC/Spear2"]
 transform = Transform3D(-0.3965855, -0.809456, 0.43301266, -0.85286796, 0.15038368, -0.4999999, 0.33960992, -0.5675955, -0.7499999, 3.1, 0, 39.65)
@@ -5550,8 +5752,60 @@ script = ExtResource("29_uohue")
 transitionTime = 0.0
 settings = ExtResource("47_v5767")
 
-[connection signal="Activated" from="Static/Carpet/StartTrigger" to="Static/Collision/Collision/CarpetWallOneWay" method="Deactivate"]
-[connection signal="JumpFinished" from="Static/Carpet/EndTrigger/JumpTrigger" to="Static/Collision/Collision/CarpetWallOneWay" method="Activate"]
+[node name="GasTrigger" parent="MainAct/GasRoom" instance=ExtResource("26_bkait")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, 0)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 1
+
+[node name="GasGeyser1" parent="MainAct/GasRoom/GasTrigger" instance=ExtResource("49_pvb6h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -58.75, 0, 0)
+
+[node name="GasGeyser2" parent="MainAct/GasRoom/GasTrigger" instance=ExtResource("49_pvb6h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.199951, 0, 0)
+
+[node name="GasGeyser3" parent="MainAct/GasRoom/GasTrigger" instance=ExtResource("49_pvb6h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49.19995, 0, 0)
+
+[node name="Event" type="Node3D" parent="MainAct/GasRoom/GasTrigger" node_paths=PackedStringArray("animator")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 0, 0)
+script = ExtResource("33_o2ldu")
+animator = NodePath("../AnimationPlayer")
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = false
+"Trigger Settings/Animation Blending" = 0.0
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="Gas" type="Node3D" parent="MainAct/GasRoom/GasTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 0, 0)
+script = ExtResource("50_8m7cr")
+
+[node name="GasPulse" type="GPUParticles3D" parent="MainAct/GasRoom/GasTrigger/Gas"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+emitting = false
+amount = 16
+lifetime = 1.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_cs034")
+draw_pass_1 = SubResource("QuadMesh_cpwgb")
+script = ExtResource("52_qu6wm")
+followYRotation = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/GasRoom/GasTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
+shape = SubResource("BoxShape3D_uu756")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/GasRoom/GasTrigger"]
+libraries = {
+&"": SubResource("AnimationLibrary_1vic0")
+}
+
 [connection signal="Activated" from="MainAct/CullingMap/SidleL" to="MainAct/Sidle" method="Activate"]
 [connection signal="Deactivated" from="MainAct/CullingMap/SidleL" to="MainAct/Sidle" method="Deactivate"]
 [connection signal="Activated" from="MainAct/CullingMap/StartU" to="MainAct/Start" method="Deactivate"]
@@ -5696,6 +5950,7 @@ settings = ExtResource("47_v5767")
 [connection signal="ObjectHit" from="MainAct/SpaceC/Spear2/SpearCull4/Spear" to="MainAct/SpaceC/Spear2/SpacePanel4" method="Shatter"]
 [connection signal="Activated" from="MainAct/SpaceC/Switch" to="MainAct/SpaceC/Switch/RingCull" method="Activate"]
 [connection signal="Deactivated" from="MainAct/SpaceC/Switch" to="MainAct/SpaceC/Switch/RingCull" method="Deactivate"]
+[connection signal="Respawned" from="MainAct/SpaceC/Switch" to="MainAct/SpaceC/Switch/RingCull" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/SpaceC/Hourglass" to="Static/Trigger/Path/GasRoomPath" method="Activate"]
 [connection signal="Teleport" from="MainAct/SpaceC/Hourglass" to="Static/Visuals/SpaceSection/07GasRoom" method="Activate"]
 [connection signal="Teleport" from="MainAct/SpaceC/Hourglass" to="Static/Visuals/SpaceSection/NPSpaceC" method="Deactivate"]
