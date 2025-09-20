@@ -904,7 +904,6 @@ public partial class PlayerCameraController : Node3D
 		opacity = Mathf.MoveToward(opacity, motionBlurRequests == 0 ? 0 : 1, 5.0f * PhysicsManager.physicsDelta);
 		motionBlurMaterial.SetShaderParameter(OpacityParameter, opacity);
 
-		GD.Print(CalculateLinearVelocity());
 		motionBlurMaterial.SetShaderParameter(LinearVelocityParameter, CalculateLinearVelocity());
 		motionBlurMaterial.SetShaderParameter(AngularVelocityParameter, CalculateAngularVelocity());
 
