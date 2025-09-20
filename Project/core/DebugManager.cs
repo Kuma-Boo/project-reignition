@@ -15,9 +15,6 @@ public partial class DebugManager : Control
 	[Export]
 	private Control debugMenuRoot;
 
-	/// <summary> Set this to True when debugging rendering performance issues, otherwise Godot will spam errors. </summary>
-	public bool EnableReflectionProbeDebugging = false;
-
 	private bool isAdvancingFrame;
 	private bool isAttemptingPause;
 	private bool IsPaused => GetTree().Paused;
