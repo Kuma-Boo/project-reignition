@@ -161,9 +161,6 @@ public partial class GrindRail : Area3D
 		if (!a.IsInGroup("player detection")) return;
 		IsInteractingWithPlayer = false;
 
-		if (Player.UnregisterGrindrail(this))
-			Deactivate();
-
 		if (isInvisibleRail) // Hide rail model
 			_railModel.Visible = false;
 	}
