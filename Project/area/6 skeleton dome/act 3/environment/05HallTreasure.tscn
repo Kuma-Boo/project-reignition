@@ -1,7 +1,35 @@
-[gd_scene load_steps=3 format=3 uid="uid://bosu54mwdw1rw"]
+[gd_scene load_steps=7 format=3 uid="uid://bosu54mwdw1rw"]
 
 [ext_resource type="PackedScene" uid="uid://ba4rdmvlrg8y3" path="res://area/6 skeleton dome/act 3/environment/model/05HallTreasure.gltf" id="1_ffbbo"]
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="2_5xlwp"]
+[ext_resource type="Texture2D" uid="uid://dsbtqffq6hlit" path="res://area/6 skeleton dome/data/texture/gold coin pile.png" id="3_l3yyu"]
+[ext_resource type="Texture2D" uid="uid://d10nsc8owp3hn" path="res://area/6 skeleton dome/data/texture/gold coin scattered.png" id="4_55bps"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7hca6"]
+resource_name = "Gold Coin Pile"
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 1, 0, 1)
+albedo_texture = ExtResource("3_l3yyu")
+emission_enabled = true
+emission = Color(0, 1, 0, 1)
+emission_energy_multiplier = 4.0
+emission_operator = 1
+emission_texture = ExtResource("3_l3yyu")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_co6hv"]
+resource_name = "Gold Coin Scattered"
+transparency = 1
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 1, 0, 1)
+albedo_texture = ExtResource("4_55bps")
+emission_enabled = true
+emission = Color(0.3254902, 1, 0, 1)
+emission_energy_multiplier = 4.0
+emission_operator = 1
+emission_texture = ExtResource("4_55bps")
+uv1_scale = Vector3(0.995, 0.995, 0.995)
 
 [node name="05HallTreasure" instance=ExtResource("1_ffbbo")]
 script = ExtResource("2_5xlwp")
@@ -37,10 +65,12 @@ layers = 4
 cast_shadow = 0
 
 [node name="stg040_o41_Mesh_0009" parent="." index="7"]
+visible = false
 layers = 4
 cast_shadow = 0
 
 [node name="stg040_o41_Mesh_0010" parent="." index="8"]
+visible = false
 layers = 4
 cast_shadow = 0
 
@@ -65,9 +95,13 @@ layers = 4
 cast_shadow = 0
 
 [node name="stg040_o41_Mesh_0016" parent="." index="14"]
+visible = false
 layers = 4
 cast_shadow = 0
+surface_material_override/0 = SubResource("StandardMaterial3D_7hca6")
 
 [node name="stg040_p41_Mesh_0000" parent="." index="15"]
+visible = false
 layers = 4
 cast_shadow = 0
+surface_material_override/0 = SubResource("StandardMaterial3D_co6hv")

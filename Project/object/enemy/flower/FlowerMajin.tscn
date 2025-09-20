@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://ctt8k8ju64i3l"]
+[gd_scene load_steps=40 format=3 uid="uid://ctt8k8ju64i3l"]
 
 [ext_resource type="PackedScene" uid="uid://ci1q4ubgknkjc" path="res://object/enemy/flower/data/model/FlowerMajin.gltf" id="1_g4mq2"]
 [ext_resource type="Script" uid="uid://ep2s385tep1n" path="res://object/enemy/flower/data/FlowerMajin.cs" id="2_14l8s"]
@@ -10,6 +10,14 @@
 [ext_resource type="PackedScene" uid="uid://cb3g1o7g8tyc5" path="res://object/enemy/flower/Petal.tscn" id="5_glesf"]
 [ext_resource type="AudioStream" uid="uid://djkjwq28o5v4k" path="res://sound/sfx/enemy/flower/flower defeated.wav" id="5_ijj0t"]
 [ext_resource type="AudioStream" uid="uid://bageplss4yb7m" path="res://sound/sfx/enemy/flower/flower hit.wav" id="5_qbppd"]
+[ext_resource type="Animation" uid="uid://dqdp2nyop6qmk" path="res://object/enemy/flower/data/model/animation/attack.res" id="6_o4yjx"]
+[ext_resource type="Animation" uid="uid://wl0kw4taw3x0" path="res://object/enemy/flower/data/model/animation/defeat.res" id="7_ixhk0"]
+[ext_resource type="Animation" uid="uid://dyf6t1fu4t7m2" path="res://object/enemy/flower/data/model/animation/hide.res" id="8_vdk26"]
+[ext_resource type="Animation" uid="uid://djxvd4x4uyttk" path="res://object/enemy/flower/data/model/animation/RESET.res" id="9_miyh1"]
+[ext_resource type="Animation" uid="uid://c3vffrwlrp8bd" path="res://object/enemy/flower/data/model/animation/show.res" id="10_hm1dv"]
+[ext_resource type="Animation" uid="uid://dxb7oww30bahh" path="res://object/enemy/flower/data/model/animation/stagger.res" id="11_tsip6"]
+[ext_resource type="Animation" uid="uid://bgjqcj86yca4f" path="res://object/enemy/flower/data/model/animation/aggressive.res" id="12_ccuyc"]
+[ext_resource type="Animation" uid="uid://ba42sexuq6irk" path="res://object/enemy/flower/data/model/animation/passive.res" id="13_7c5mq"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_iip0l"]
 radius = 0.2
@@ -24,6 +32,283 @@ radius = 1.3
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_w6adf"]
 radius = 0.8
+
+[sub_resource type="Animation" id="Animation_eydsd"]
+resource_name = "boop"
+length = 0.6666667
+step = 0.06666667
+tracks/0/type = "position_3d"
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/path = NodePath("FlowerMajinRoot/Skeleton3D:head_attachment")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 2.3841858e-07, 1.9248571, 0.84052885, 0.06666667, 1, -0.09358966, 1.7578611, 0.83441794, 0.13333334, 1, -0.10036063, 1.6430814, 0.83263016, 0.2, 1, -0.0963999, 1.6487026, 0.89033115, 0.26666668, 1, -0.09047449, 1.6729198, 0.9304276, 0.33333334, 1, -0.08212507, 1.6900389, 0.9254069, 0.4, 1, -0.07829571, 1.7164251, 0.9111951, 0.46666667, 1, -0.07396793, 1.7590773, 0.89191526, 0.53333336, 1, -0.058628082, 1.8240434, 0.8706819, 0.6, 1, -0.021784186, 1.8928889, 0.8506683, 0.6666667, 1, 2.3841858e-07, 1.9248571, 0.84052885)
+tracks/1/type = "position_3d"
+tracks/1/imported = true
+tracks/1/enabled = true
+tracks/1/path = NodePath("FlowerMajinRoot/Skeleton3D:chest")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, -3.991587e-09, 1.8798786, 7.337879e-06, 0.06666667, 1, -2.641054e-09, 1.8170156, 7.275861e-06, 0.13333334, 1, -1.1094254e-09, 1.7975154, 0.01130355, 0.2, 1, 1.39206815e-08, 1.8127283, 0.07039094, 0.26666668, 1, -3.9915875e-09, 1.8308835, 0.108623914, 0.33333334, 1, -6.0543996e-09, 1.8420875, 0.10161318, 0.4, 1, -1.0883859e-08, 1.8480892, 0.08352745, 0.46666667, 1, -1.7431358e-08, 1.8535477, 0.0587865, 0.53333336, 1, -2.5564765e-08, 1.8628556, 0.03189954, 0.6, 1, -3.164911e-08, 1.874263, 0.009432358, 0.6666667, 1, -3.991587e-09, 1.8798786, 7.337879e-06)
+tracks/2/type = "rotation_3d"
+tracks/2/imported = true
+tracks/2/enabled = true
+tracks/2/path = NodePath("FlowerMajinRoot/Skeleton3D:chest")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, 0.5735771, 1.12611e-07, -6.5737645e-08, 0.8191516, 0.06666667, 1, 0.6147932, 0.011379744, 0.11434877, 0.7802719, 0.13333334, 1, 0.6550274, 0.0150221335, 0.13912912, 0.74253386, 0.2, 1, 0.6679826, -0.026955027, 0.066583194, 0.740702, 0.26666668, 1, 0.66825205, -0.05266412, 0.016883032, 0.7418765, 0.33333334, 1, 0.6655152, -0.04627878, 0.017896077, 0.7447332, 0.4, 1, 0.6559979, -0.039171256, 0.025174253, 0.7533251, 0.46666667, 1, 0.6387793, -0.03282931, 0.030128272, 0.7680987, 0.53333336, 1, 0.61316854, -0.025665484, 0.024068478, 0.7891681, 0.6, 1, 0.5862761, -0.009711088, 0.008611741, 0.8100074, 0.6666667, 1, 0.5735771, 1.12611e-07, -6.5737645e-08, 0.8191516)
+tracks/3/type = "scale_3d"
+tracks/3/imported = true
+tracks/3/enabled = true
+tracks/3/path = NodePath("FlowerMajinRoot/Skeleton3D:chest")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 1, 0.99999994, 1)
+tracks/4/type = "rotation_3d"
+tracks/4/imported = true
+tracks/4/enabled = true
+tracks/4/path = NodePath("FlowerMajinRoot/Skeleton3D:leaf_rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = PackedFloat32Array(0, 1, -0.70710737, -8.796484e-08, -1.0315618e-07, 0.7071062, 0.06666667, 1, -0.6418986, -0.29659244, -0.29659194, 0.6418975, 0.13333334, 1, -0.6493082, -0.2799994, -0.27999896, 0.64930713, 0.2, 1, -0.6613838, -0.25014454, -0.25014412, 0.66138273, 0.26666668, 1, -0.6750438, -0.21051532, -0.21051499, 0.6750427, 0.33333334, 1, -0.68761045, -0.16490217, -0.16490191, 0.6876093, 0.4, 1, -0.69727886, -0.117486306, -0.117486134, 0.6972777, 0.46666667, 1, -0.7033557, -0.072742544, -0.07274244, 0.70335466, 0.53333336, 1, -0.70622814, -0.035251595, -0.03525155, 0.70622694, 0.6, 1, -0.7070431, -0.009536083, -0.009536081, 0.7070419, 0.6666667, 1, -0.70710737, -8.796484e-08, -1.0315618e-07, 0.7071062)
+tracks/5/type = "scale_3d"
+tracks/5/imported = true
+tracks/5/enabled = true
+tracks/5/path = NodePath("FlowerMajinRoot/Skeleton3D:leaf_rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = PackedFloat32Array(0, 1, 1.5, 1.5, 0.5, 0.06666667, 1, 1.3703704, 1.3703707, 0.75925934, 0.13333334, 1, 1.1296296, 1.1296295, 1.2407407, 0.2, 1, 1, 1, 1.5000001, 0.26666668, 1, 1.0276968, 1.0276968, 1.4446065, 0.33333334, 1, 1.0991255, 1.0991255, 1.3017493, 0.4, 1, 1.1967932, 1.1967931, 1.106414, 0.46666667, 1, 1.3032072, 1.3032072, 0.8935862, 0.53333336, 1, 1.4008747, 1.4008746, 0.69825083, 0.6, 1, 1.4723034, 1.4723034, 0.5553937, 0.6666667, 1, 1.5, 1.5, 0.5)
+tracks/6/type = "position_3d"
+tracks/6/imported = true
+tracks/6/enabled = true
+tracks/6/path = NodePath("FlowerMajinRoot/Skeleton3D:head")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = PackedFloat32Array(0, 1, -4.5748724e-08, 0.80521584, 0.24520795)
+tracks/7/type = "rotation_3d"
+tracks/7/imported = true
+tracks/7/enabled = true
+tracks/7/path = NodePath("FlowerMajinRoot/Skeleton3D:head")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = PackedFloat32Array(0, 1, -0.5000008, -8.734039e-08, -3.5263373e-08, 0.866025, 0.06666667, 1, -0.5286079, -0.01673, -0.014458084, 0.8485781, 0.13333334, 1, -0.5797658, -0.043888934, -0.045888647, 0.81230515, 0.2, 1, -0.60644555, -0.053057194, -0.069145314, 0.790334, 0.26666668, 1, -0.6026313, -0.026538027, -0.06206905, 0.7951596, 0.33333334, 1, -0.5890884, 0.02344378, -0.03596698, 0.8069273, 0.4, 1, -0.56709766, 0.07246805, -0.009624212, 0.82039994, 0.46666667, 1, -0.54259205, 0.09480781, 0.00047322412, 0.8346287, 0.53333336, 1, -0.52238363, 0.070298925, -0.0015760012, 0.8498064, 0.6, 1, -0.5070242, 0.024619749, -0.0010823603, 0.8615795, 0.6666667, 1, -0.5000008, -8.734039e-08, -3.5263373e-08, 0.866025)
+tracks/8/type = "scale_3d"
+tracks/8/imported = true
+tracks/8/enabled = true
+tracks/8/path = NodePath("FlowerMajinRoot/Skeleton3D:head")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = PackedFloat32Array(0, 1, 1, 1, 1.0000001)
+tracks/9/type = "rotation_3d"
+tracks/9/imported = true
+tracks/9/enabled = true
+tracks/9/path = NodePath("FlowerMajinRoot/Skeleton3D:mouth_top")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = PackedFloat32Array(0, 1, 0.7983736, 3.6097597e-06, 3.5340368e-06, 0.6021624)
+tracks/10/type = "rotation_3d"
+tracks/10/imported = true
+tracks/10/enabled = true
+tracks/10/path = NodePath("FlowerMajinRoot/Skeleton3D:mouth_bottom")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = PackedFloat32Array(0, 1, 0.81124306, 2.3105335e-06, 2.3553955e-06, 0.5847091, 0.06666667, 1, 0.82012755, 2.3446353e-06, 2.316337e-06, 0.5721808, 0.13333334, 1, 0.8334767, 2.4014973e-06, 2.267402e-06, 0.55255455, 0.26666668, 1, 0.8334767, 2.406606e-06, 2.25855e-06, 0.55255455, 0.33333334, 1, 0.82971436, 2.387004e-06, 2.2806712e-06, 0.5581882, 0.4, 1, 0.8250384, 2.3657617e-06, 2.300015e-06, 0.5650768, 0.46666667, 1, 0.82012755, 2.34453e-06, 2.316987e-06, 0.5721808, 0.53333336, 1, 0.8156945, 2.3280102e-06, 2.3385653e-06, 0.57848305, 0.6, 1, 0.812481, 2.3146836e-06, 2.350522e-06, 0.5829877, 0.6666667, 1, 0.81124306, 2.3105335e-06, 2.3553955e-06, 0.5847091)
+tracks/11/type = "position_3d"
+tracks/11/imported = true
+tracks/11/enabled = true
+tracks/11/path = NodePath("FlowerMajinRoot/Skeleton3D:petal_front01")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = PackedFloat32Array(0, 1, -1.3893274e-08, 0.6249999, 8.1534307e-07)
+tracks/12/type = "rotation_3d"
+tracks/12/imported = true
+tracks/12/enabled = true
+tracks/12/path = NodePath("FlowerMajinRoot/Skeleton3D:petal_front01")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = PackedFloat32Array(0, 1, 1.2927562e-06, 0.7459064, 0.66605085, 1.5809256e-06, 0.06666667, 1, -0.0057974327, -0.7534432, -0.657454, 0.006644685, 0.13333334, 1, -0.016142748, -0.76701796, -0.64113086, 0.019342083, 0.2, 1, -0.02148265, -0.7740953, -0.63215506, 0.026363797, 0.26666668, 1, -0.0015131679, 0.7737237, 0.6335187, 0.0018509174, 0.33333334, 1, -0.04466246, 0.7691676, 0.635208, 0.05382723, 0.4, 1, -0.068537705, 0.7618531, 0.63898385, 0.08113053, 0.46666667, 1, -0.058516648, 0.7565415, 0.6477701, 0.06793124, 0.53333336, 1, -0.035060916, 0.7519532, 0.6570682, 0.039983124, 0.6, 1, -0.011040865, 0.74783766, 0.66367346, 0.012430054, 0.6666667, 1, 1.2927562e-06, 0.7459064, 0.66605085, 1.5809256e-06)
+tracks/13/type = "rotation_3d"
+tracks/13/imported = true
+tracks/13/enabled = true
+tracks/13/path = NodePath("FlowerMajinRoot/Skeleton3D:petal_front02")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = PackedFloat32Array(0, 1, 0.05340743, 1.745237e-06, -2.684151e-07, 0.9985728, 0.06666667, 1, 0.09198303, 0.008431085, -0.00693187, 0.9957008, 0.13333334, 1, 0.17668287, 0.024481272, -0.02829608, 0.9835564, 0.2, 1, 0.26080427, 0.034711394, -0.061867073, 0.9627818, 0.26666668, 1, 0.2992619, 0.031610873, -0.100171745, 0.9483716, 0.33333334, 1, 0.23765266, 0.015732216, -0.13508686, 0.96178234, 0.4, 1, 0.10561934, 0.0010736232, -0.16674665, 0.980326, 0.46666667, 1, -0.005985703, -0.0043741767, -0.18973199, 0.98180795, 0.53333336, 1, -0.01605019, -0.005682992, -0.17341907, 0.9847009, 0.6, 1, 0.02667648, -0.0050691837, -0.068281636, 0.9972965, 0.6666667, 1, 0.05340743, 1.745237e-06, -2.684151e-07, 0.9985728)
+tracks/14/type = "position_3d"
+tracks/14/imported = true
+tracks/14/enabled = true
+tracks/14/path = NodePath("FlowerMajinRoot/Skeleton3D:l_petal_front01")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = PackedFloat32Array(0, 1, 6.066358e-08, 0.62499976, 1.0615938e-06)
+tracks/15/type = "rotation_3d"
+tracks/15/imported = true
+tracks/15/enabled = true
+tracks/15/path = NodePath("FlowerMajinRoot/Skeleton3D:l_petal_front01")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = PackedFloat32Array(0, 1, -0.3543137, -0.6767048, -0.5472096, 0.34219015, 0.06666667, 1, -0.3549164, -0.6798361, -0.5363273, 0.35243478, 0.13333334, 1, -0.35545292, -0.6850799, -0.51601756, 0.37154368, 0.2, 1, -0.35542676, -0.6875947, -0.5050358, 0.38186938, 0.26666668, 1, -0.3381637, -0.7003535, -0.51855934, 0.35531196, 0.33333334, 1, -0.30513102, -0.7204285, -0.5433079, 0.3044575, 0.4, 1, -0.28796515, -0.72677535, -0.55962235, 0.27513003, 0.46666667, 1, -0.29982895, -0.71641266, -0.56208307, 0.28446114, 0.6, 1, -0.3445272, -0.6839861, -0.5509372, 0.33156037, 0.6666667, 1, -0.3543137, -0.6767048, -0.5472096, 0.34219015)
+tracks/16/type = "rotation_3d"
+tracks/16/imported = true
+tracks/16/enabled = true
+tracks/16/path = NodePath("FlowerMajinRoot/Skeleton3D:l_petal_front02")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = PackedFloat32Array(0, 1, 0.111399226, 0.04113658, -0.0052138898, 0.99291027, 0.06666667, 1, 0.15007913, 0.04684085, -0.0085225785, 0.987527, 0.13333334, 1, 0.23414452, 0.05797781, -0.02076852, 0.97024924, 0.2, 1, 0.31630987, 0.06490407, -0.043240696, 0.9454448, 0.26666668, 1, 0.35259104, 0.060547166, -0.07326966, 0.93093777, 0.33333334, 1, 0.2790918, 0.04582868, -0.10488482, 0.95341843, 0.4, 1, 0.122816145, 0.035987347, -0.13580617, 0.98243463, 0.46666667, 1, -0.009491375, 0.036227044, -0.15843822, 0.98665845, 0.53333336, 1, -0.016291652, 0.0353558, -0.14572105, 0.98855954, 0.6, 1, 0.06168184, 0.034833297, -0.06029504, 0.99566394, 0.6666667, 1, 0.11139924, 0.041136585, -0.00521389, 0.9929104)
+tracks/17/type = "position_3d"
+tracks/17/imported = true
+tracks/17/enabled = true
+tracks/17/path = NodePath("FlowerMajinRoot/Skeleton3D:l_petal_back01")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = PackedFloat32Array(0, 1, -3.5573482e-09, 0.6249998, 1.1033096e-06)
+tracks/18/type = "rotation_3d"
+tracks/18/imported = true
+tracks/18/enabled = true
+tracks/18/path = NodePath("FlowerMajinRoot/Skeleton3D:l_petal_back01")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = PackedFloat32Array(0, 1, -0.52516824, -0.408958, -0.29196957, 0.6868082, 0.06666667, 1, -0.5275206, -0.40279946, -0.28744724, 0.6905423, 0.13333334, 1, -0.53178024, -0.39127952, -0.2789895, 0.6973343, 0.2, 1, -0.53401476, -0.38503268, -0.2744042, 0.700914, 0.26666668, 1, -0.52452356, -0.41062182, -0.2931915, 0.68578684, 0.33333334, 1, -0.5050609, -0.45667398, -0.3270317, 0.6552958, 0.4, 1, -0.4936181, -0.4806191, -0.3446434, 0.63762647, 0.46666667, 1, -0.49892607, -0.46976092, -0.33665565, 0.64580226, 0.6, 1, -0.52062225, -0.42048156, -0.30043343, 0.6796231, 0.6666667, 1, -0.52516824, -0.408958, -0.29196957, 0.6868082)
+tracks/19/type = "rotation_3d"
+tracks/19/imported = true
+tracks/19/enabled = true
+tracks/19/path = NodePath("FlowerMajinRoot/Skeleton3D:l_petal_back02")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = PackedFloat32Array(0, 1, 0.024488175, 0.014247029, -0.00036192962, 0.9995986, 0.06666667, 1, 0.021209817, 0.014041851, -0.017686086, 0.99952, 0.2, 1, 0.006485678, 0.014341574, -0.09378077, 0.9954685, 0.26666668, 1, 0.0030878698, 0.014684628, -0.11101224, 0.9937058, 0.33333334, 1, 0.03404034, 0.011876456, -0.08949342, 0.9953347, 0.4, 1, 0.09778666, 0.010279787, -0.04498115, 0.9941372, 0.46666667, 1, 0.150247, 0.01322072, -0.008252057, 0.9885257, 0.53333336, 1, 0.14490761, 0.014099266, -0.0020781779, 0.9893426, 0.6, 1, 0.07193628, 0.014213758, -0.0010381786, 0.9973074, 0.6666667, 1, 0.024488179, 0.014247027, -0.00036192226, 0.99959856)
+tracks/20/type = "position_3d"
+tracks/20/imported = true
+tracks/20/enabled = true
+tracks/20/path = NodePath("FlowerMajinRoot/Skeleton3D:petal_back01")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = PackedFloat32Array(0, 1, -1.3892816e-08, 0.6249999, 7.9505037e-07)
+tracks/21/type = "rotation_3d"
+tracks/21/imported = true
+tracks/21/enabled = true
+tracks/21/path = NodePath("FlowerMajinRoot/Skeleton3D:petal_back01")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = PackedFloat32Array(0, 1, -0.6660499, 1.349718e-07, 1.562821e-07, 0.74590725, 0.06666667, 1, -0.6657929, 0.00657811, 0.005873646, 0.7460845, 0.13333334, 1, -0.6651782, 0.018793087, 0.016779464, 0.74625957, 0.2, 1, -0.6647731, 0.025368774, 0.022649804, 0.74627084, 0.26666668, 1, -0.66606474, -0.0017829739, -0.0015918928, 0.74589014, 0.33333334, 1, -0.66612035, -0.05217352, -0.04658283, 0.7425575, 0.4, 1, -0.664893, -0.079221874, -0.07073448, 0.73934966, 0.46666667, 1, -0.66557664, -0.06687908, -0.059715584, 0.7409244, 0.6, 1, -0.6663687, -0.012400781, -0.011072974, 0.745437, 0.6666667, 1, -0.6660499, 1.349718e-07, 1.562821e-07, 0.74590725)
+tracks/22/type = "rotation_3d"
+tracks/22/imported = true
+tracks/22/enabled = true
+tracks/22/path = NodePath("FlowerMajinRoot/Skeleton3D:petal_back02")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = PackedFloat32Array(0, 1, 0.05340734, 5.8407556e-07, -1.6614489e-07, 0.9985728, 0.06666667, 1, 0.018794829, -0.007877511, -0.020802312, 0.9995759, 0.13333334, 1, -0.0584416, -0.020046609, -0.06821477, 0.99575573, 0.2, 1, -0.13633516, -0.024863934, -0.117088966, 0.98340464, 0.26666668, 1, -0.1716712, -0.024565965, -0.13951308, 0.9749162, 0.33333334, 1, -0.12389503, -0.027134256, -0.081874155, 0.9885395, 0.4, 1, -0.02732753, -0.015539579, 0.036656477, 0.99883336, 0.46666667, 1, 0.047983937, 0.010592549, 0.13178499, 0.9900597, 0.53333336, 1, 0.059327293, 0.01443835, 0.13172914, 0.9894035, 0.6, 1, 0.056273635, 0.005454226, 0.051909585, 0.9970501, 0.6666667, 1, 0.05340734, 5.8407556e-07, -1.6614489e-07, 0.9985728)
+tracks/23/type = "position_3d"
+tracks/23/imported = true
+tracks/23/enabled = true
+tracks/23/path = NodePath("FlowerMajinRoot/Skeleton3D:r_petal_front01")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = PackedFloat32Array(0, 1, 4.509592e-08, 0.6249998, 1.0952405e-06)
+tracks/24/type = "rotation_3d"
+tracks/24/imported = true
+tracks/24/enabled = true
+tracks/24/path = NodePath("FlowerMajinRoot/Skeleton3D:r_petal_front01")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = PackedFloat32Array(0, 1, -0.35431382, 0.67670476, 0.5472095, 0.34219033, 0.06666667, 1, -0.34540588, 0.6859442, 0.54250515, 0.3403875, 0.13333334, 1, -0.3290382, 0.70291036, 0.5332827, 0.33654213, 0.2, 1, -0.32032645, 0.71193534, 0.5280579, 0.3342065, 0.26666668, 1, -0.34063932, 0.6986466, 0.5169367, 0.35865614, 0.33333334, 1, -0.37819633, 0.67079484, 0.49551252, 0.4018325, 0.4, 1, -0.4002127, 0.6520536, 0.48638454, 0.4220024, 0.46666667, 1, -0.3957787, 0.65392995, 0.4996506, 0.40753427, 0.53333336, 1, -0.38012156, 0.6632133, 0.52046657, 0.3804869, 0.6, 1, -0.36266586, 0.6725786, 0.5391846, 0.35410666, 0.6666667, 1, -0.35431382, 0.67670476, 0.5472095, 0.34219033)
+tracks/25/type = "rotation_3d"
+tracks/25/imported = true
+tracks/25/enabled = true
+tracks/25/path = NodePath("FlowerMajinRoot/Skeleton3D:r_petal_front02")
+tracks/25/interp = 1
+tracks/25/loop_wrap = true
+tracks/25/keys = PackedFloat32Array(0, 1, 0.11139924, -0.041136578, 0.005213914, 0.99291027, 0.06666667, 1, 0.14925104, -0.025751343, -0.017182343, 0.9883146, 0.13333334, 1, 0.23379809, 0.0019463577, -0.069908716, 0.9697667, 0.2, 1, 0.3186442, 0.02059385, -0.12618588, 0.93921185, 0.26666668, 1, 0.35681114, 0.02593111, -0.15252134, 0.9212766, 0.33333334, 1, 0.2811021, 0.03158821, -0.09863276, 0.9540731, 0.4, 1, 0.12105406, 0.016457818, 0.012041601, 0.99243647, 0.46666667, 1, -0.009090819, -0.025219526, 0.09735942, 0.9948882, 0.53333336, 1, -0.014127115, -0.04152612, 0.098900385, 0.99413013, 0.6, 1, 0.062303454, -0.040028207, 0.0420089, 0.9963691, 0.6666667, 1, 0.11139924, -0.041136578, 0.005213914, 0.99291027)
+tracks/26/type = "position_3d"
+tracks/26/imported = true
+tracks/26/enabled = true
+tracks/26/path = NodePath("FlowerMajinRoot/Skeleton3D:r_petal_back01")
+tracks/26/interp = 1
+tracks/26/loop_wrap = true
+tracks/26/keys = PackedFloat32Array(0, 1, 7.3699496e-08, 0.6249998, 1.170042e-06)
+tracks/27/type = "rotation_3d"
+tracks/27/imported = true
+tracks/27/enabled = true
+tracks/27/path = NodePath("FlowerMajinRoot/Skeleton3D:r_petal_back01")
+tracks/27/interp = 1
+tracks/27/loop_wrap = true
+tracks/27/keys = PackedFloat32Array(0, 1, -0.5251683, 0.40895784, 0.29196948, 0.6868082, 0.06666667, 1, -0.5223711, 0.41491273, 0.29670957, 0.6833295, 0.13333334, 1, -0.5170687, 0.4258859, 0.30545107, 0.67672807, 0.2, 1, -0.51415586, 0.43174732, 0.31012422, 0.6730981, 0.26666668, 1, -0.5259195, 0.4073382, 0.2906807, 0.687742, 0.33333334, 1, -0.545904, 0.36059833, 0.25356814, 0.7125034, 0.4, 1, -0.5556358, 0.33473352, 0.23309292, 0.724493, 0.46666667, 1, -0.55128205, 0.34660283, 0.2424837, 0.71913576, 0.6, 1, -0.5303305, 0.39764473, 0.28297144, 0.6932211, 0.6666667, 1, -0.5251683, 0.40895784, 0.29196948, 0.6868082)
+tracks/28/type = "rotation_3d"
+tracks/28/imported = true
+tracks/28/enabled = true
+tracks/28/path = NodePath("FlowerMajinRoot/Skeleton3D:r_petal_back02")
+tracks/28/interp = 1
+tracks/28/loop_wrap = true
+tracks/28/keys = PackedFloat32Array(0, 1, 0.024488209, -0.014247053, 0.00036187505, 0.99959856, 0.06666667, 1, 0.023575943, -0.014552865, -0.022925807, 0.9993533, 0.2, 1, 0.014808305, -0.014584128, -0.12514837, 0.99192035, 0.26666668, 1, 0.006761202, -0.0133963255, -0.14832005, 0.9888256, 0.33333334, 1, -0.0032707788, -0.010740227, -0.07784836, 0.996902, 0.4, 1, -0.015281188, -0.008651684, 0.06823179, 0.997515, 0.46666667, 1, -0.025482632, -0.008646142, 0.18826798, 0.981749, 0.53333336, 1, -0.021569626, -0.008446637, 0.18639971, 0.98220086, 0.6, 1, 0.0070510483, -0.010146507, 0.07375768, 0.99719965, 0.6666667, 1, 0.024488207, -0.01424705, 0.0003618751, 0.99959856)
+tracks/29/type = "position_3d"
+tracks/29/imported = true
+tracks/29/enabled = true
+tracks/29/path = NodePath("FlowerMajinRoot/Skeleton3D:waist")
+tracks/29/interp = 1
+tracks/29/loop_wrap = true
+tracks/29/keys = PackedFloat32Array(0, 1, -3.991587e-09, 1.8798786, 7.337879e-06, 0.06666667, 1, -2.641054e-09, 1.8170156, 7.275861e-06, 0.13333334, 1, -1.1094254e-09, 1.7975154, 0.01130355, 0.2, 1, 1.39206815e-08, 1.8127283, 0.07039094, 0.26666668, 1, -3.9915875e-09, 1.8308835, 0.108623914, 0.33333334, 1, -6.0543996e-09, 1.8420875, 0.10161318, 0.4, 1, -1.0883859e-08, 1.8480892, 0.08352745, 0.46666667, 1, -1.7431358e-08, 1.8535477, 0.0587865, 0.53333336, 1, -2.5564765e-08, 1.8628556, 0.03189954, 0.6, 1, -3.164911e-08, 1.874263, 0.009432358, 0.6666667, 1, -3.991587e-09, 1.8798786, 7.337879e-06)
+tracks/30/type = "rotation_3d"
+tracks/30/imported = true
+tracks/30/enabled = true
+tracks/30/path = NodePath("FlowerMajinRoot/Skeleton3D:waist")
+tracks/30/interp = 1
+tracks/30/loop_wrap = true
+tracks/30/keys = PackedFloat32Array(0, 1, -0.96592546, 3.3182e-08, 1.915763e-08, 0.25882077)
+tracks/31/type = "scale_3d"
+tracks/31/imported = true
+tracks/31/enabled = true
+tracks/31/path = NodePath("FlowerMajinRoot/Skeleton3D:waist")
+tracks/31/interp = 1
+tracks/31/loop_wrap = true
+tracks/31/keys = PackedFloat32Array(0, 1, 1, 0.9999999, 1)
+tracks/32/type = "rotation_3d"
+tracks/32/imported = true
+tracks/32/enabled = true
+tracks/32/path = NodePath("FlowerMajinRoot/Skeleton3D:tail01")
+tracks/32/interp = 1
+tracks/32/loop_wrap = true
+tracks/32/keys = PackedFloat32Array(0, 1, -0.2689378, -0.00067771936, -0.012913799, 0.9630708, 0.06666667, 1, -0.13796574, -0.04427081, -0.020983253, 0.9892246, 0.13333334, 1, -0.10155438, -0.10528748, 0.011098525, 0.98918056, 0.2, 1, -0.080173686, -0.13183899, 0.02381911, 0.98773646, 0.26666668, 1, -0.083678335, -0.12309995, 0.018179478, 0.988693, 0.33333334, 1, -0.106025755, -0.106530145, 0.012134503, 0.98856604, 0.4, 1, -0.12782586, -0.08338883, 0.003247529, 0.9882795, 0.46666667, 1, -0.15419503, -0.057099275, -0.0065382225, 0.9863675, 0.53333336, 1, -0.1921104, -0.031209737, -0.013691147, 0.9807814, 0.6, 1, -0.23932122, -0.010050091, -0.015021132, 0.97077227, 0.6666667, 1, -0.2689378, -0.00067771936, -0.012913798, 0.96307075)
+tracks/33/type = "rotation_3d"
+tracks/33/imported = true
+tracks/33/enabled = true
+tracks/33/path = NodePath("FlowerMajinRoot/Skeleton3D:tail02")
+tracks/33/interp = 1
+tracks/33/loop_wrap = true
+tracks/33/keys = PackedFloat32Array(0, 1, -0.10667124, 0.016758015, 0.020969737, 0.99393195, 0.06666667, 1, -0.3530414, 0.015728964, 0.06940194, 0.9328975, 0.13333334, 1, -0.4012918, 0.015383655, 0.078887135, 0.9124172, 0.2, 1, -0.381252, 0.015533377, 0.07494764, 0.9212973, 0.26666668, 1, -0.341923, 0.01580129, 0.06721624, 0.93718785, 0.33333334, 1, -0.31073138, 0.01599031, 0.061084487, 0.9483981, 0.4, 1, -0.29031354, 0.01610317, 0.057070702, 0.9550925, 0.46666667, 1, -0.26721126, 0.01622079, 0.052529182, 0.96206856, 0.53333336, 1, -0.22339058, 0.016415229, 0.043914776, 0.9736009, 0.6, 1, -0.15522826, 0.01664564, 0.030515222, 0.98726696, 0.6666667, 1, -0.10667124, 0.016758015, 0.020969737, 0.99393195)
+tracks/34/type = "position_3d"
+tracks/34/imported = true
+tracks/34/enabled = true
+tracks/34/path = NodePath("FlowerMajinRoot/Skeleton3D:tail03")
+tracks/34/interp = 1
+tracks/34/loop_wrap = true
+tracks/34/keys = PackedFloat32Array(0, 1, -1.1442395e-07, 0.63158584, 0.0033919811)
+tracks/35/type = "rotation_3d"
+tracks/35/imported = true
+tracks/35/enabled = true
+tracks/35/path = NodePath("FlowerMajinRoot/Skeleton3D:tail03")
+tracks/35/interp = 1
+tracks/35/loop_wrap = true
+tracks/35/keys = PackedFloat32Array(0, 1, 0.9782171, -0.089050174, 0.0013339797, 0.18750893, 0.06666667, 1, 0.9815955, -0.03617792, 0.011441998, 0.18716434, 0.13333334, 1, 0.9802922, 0.062175814, 0.030103497, 0.18508148, 0.2, 1, 0.97551394, 0.114939995, 0.040038787, 0.1831891, 0.26666668, 1, 0.97677386, 0.10368926, 0.037924804, 0.18363851, 0.33333334, 1, 0.979424, 0.07461419, 0.032450408, 0.18468451, 0.4, 1, 0.9816469, 0.034756925, 0.024919568, 0.18585049, 0.46666667, 1, 0.9822232, -0.008732742, 0.0166679, 0.18677133, 0.53333336, 1, 0.9810572, -0.04863492, 0.0090652965, 0.1872944, 0.6, 1, 0.9791785, -0.07776998, 0.0034950033, 0.1874812, 0.6666667, 1, 0.9782171, -0.089050174, 0.0013339797, 0.18750893)
+tracks/36/type = "scale_3d"
+tracks/36/imported = true
+tracks/36/enabled = true
+tracks/36/path = NodePath("FlowerMajinRoot/Skeleton3D:tail03")
+tracks/36/interp = 1
+tracks/36/loop_wrap = true
+tracks/36/keys = PackedFloat32Array(0, 1, 1, 0.99999994, 0.9999998)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jkxxb"]
+_data = {
+&"RESET": ExtResource("9_miyh1"),
+&"aggressive": ExtResource("12_ccuyc"),
+&"attack": ExtResource("6_o4yjx"),
+&"boop": SubResource("Animation_eydsd"),
+&"defeat": ExtResource("7_ixhk0"),
+&"hide": ExtResource("8_vdk26"),
+&"passive": ExtResource("13_7c5mq"),
+&"show": ExtResource("10_hm1dv"),
+&"stagger": ExtResource("11_tsip6")
+}
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4gv11"]
 animation = &"aggressive"
@@ -100,6 +385,7 @@ input_3/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_efgxh"]
 graph_offset = Vector2(-861.162, -34.9173)
+nodes/output/position = Vector2(420, 0)
 nodes/aggressive_anim/node = SubResource("AnimationNodeAnimation_4gv11")
 nodes/aggressive_anim/position = Vector2(-820, 180)
 nodes/attack_anim/node = SubResource("AnimationNodeAnimation_k515p")
@@ -118,7 +404,6 @@ nodes/hit_transition/node = SubResource("AnimationNodeTransition_tgmbm")
 nodes/hit_transition/position = Vector2(-200, 240)
 nodes/hit_trigger/node = SubResource("AnimationNodeOneShot_g2vvp")
 nodes/hit_trigger/position = Vector2(0, 0)
-nodes/output/position = Vector2(420, 0)
 nodes/passive_anim/node = SubResource("AnimationNodeAnimation_h3v7l")
 nodes/passive_anim/position = Vector2(-760, -40)
 nodes/show_anim/node = SubResource("AnimationNodeAnimation_qkjx6")
@@ -127,7 +412,7 @@ nodes/stagger_anim/node = SubResource("AnimationNodeAnimation_jjxgh")
 nodes/stagger_anim/position = Vector2(-360, 260)
 nodes/state_transition/node = SubResource("AnimationNodeTransition_swlia")
 nodes/state_transition/position = Vector2(-560, 60)
-node_connections = [&"attack_trigger", 0, &"state_transition", &"attack_trigger", 1, &"attack_anim", &"defeat_transition", 0, &"defeat_anim", &"defeat_transition", 1, &"hit_trigger", &"hit_transition", 0, &"stagger_anim", &"hit_transition", 1, &"boop_anim", &"hit_trigger", 0, &"attack_trigger", &"hit_trigger", 1, &"hit_transition", &"output", 0, &"defeat_transition", &"state_transition", 0, &"passive_anim", &"state_transition", 1, &"show_anim", &"state_transition", 2, &"aggressive_anim", &"state_transition", 3, &"hide_anim"]
+node_connections = [&"output", 0, &"defeat_transition", &"attack_trigger", 0, &"state_transition", &"attack_trigger", 1, &"attack_anim", &"defeat_transition", 0, &"defeat_anim", &"defeat_transition", 1, &"hit_trigger", &"hit_transition", 0, &"stagger_anim", &"hit_transition", 1, &"boop_anim", &"hit_trigger", 0, &"attack_trigger", &"hit_trigger", 1, &"hit_transition", &"state_transition", 0, &"passive_anim", &"state_transition", 1, &"show_anim", &"state_transition", 2, &"aggressive_anim", &"state_transition", 3, &"hide_anim"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_1avlv"]
 height = 15.0
@@ -150,6 +435,8 @@ animationTree = NodePath("AnimationTree")
 animationPlayer = NodePath("")
 
 [node name="Collider" type="StaticBody3D" parent="." groups=["enemy", "wall"]]
+collision_layer = 8
+collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Collider"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
@@ -177,7 +464,7 @@ extra_cull_margin = 2.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55756e-08, 2.65659, 8.22544e-06)
 
 [node name="HeadAttachment" type="BoneAttachment3D" parent="Attachments"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.55756e-08, -3.57628e-06, 9.09495e-13)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.55756e-08, -3.5762787e-06, 9.094947e-13)
 bone_name = "head_attachment"
 bone_idx = 0
 use_external_skeleton = true
@@ -203,42 +490,42 @@ shape = SubResource("SphereShape3D_w6adf")
 disabled = true
 
 [node name="PetalBack" type="BoneAttachment3D" parent="Attachments"]
-transform = Transform3D(1, -6.71561e-07, 5.13266e-08, 7.72221e-08, 0.190025, 0.98178, -6.69078e-07, -0.981779, 0.190025, -1.17442e-08, -0.100004, 8.1733e-07)
+transform = Transform3D(0.99999994, -6.715612e-07, 5.1326595e-08, 7.722213e-08, 0.19002509, 0.9817795, -6.690782e-07, -0.9817792, 0.19002515, -1.1744156e-08, -0.10000396, 8.1733015e-07)
 bone_name = "petal_back01"
 bone_idx = 13
 use_external_skeleton = true
 external_skeleton = NodePath("../../FlowerMajin/FlowerMajinRoot/Skeleton3D")
 
 [node name="PetalFront" type="BoneAttachment3D" parent="Attachments"]
-transform = Transform3D(-1, 3.9352e-07, 4.0085e-06, 4.01024e-06, 0.19002, 0.98178, -3.75343e-07, 0.98178, -0.19002, -1.17441e-08, -0.100004, 8.17333e-07)
+transform = Transform3D(-1, 3.9352e-07, 4.0084965e-06, 4.0102395e-06, 0.1900195, 0.98178023, -3.7534252e-07, 0.98177975, -0.19001953, -1.1744074e-08, -0.10000396, 8.173329e-07)
 bone_name = "petal_front01"
 bone_idx = 7
 use_external_skeleton = true
 external_skeleton = NodePath("../../FlowerMajin/FlowerMajinRoot/Skeleton3D")
 
 [node name="PetalFrontL" type="BoneAttachment3D" parent="Attachments"]
-transform = Transform3D(-0.514735, 0.850247, -0.110129, 0.105031, 0.190021, 0.976146, 0.850891, 0.49089, -0.187112, -5.06668e-08, -0.100004, 8.58374e-07)
+transform = Transform3D(-0.5147352, 0.85024655, -0.11012857, 0.10503079, 0.19002096, 0.97614574, 0.8508913, 0.49088982, -0.18711248, -5.0666785e-08, -0.10000396, 8.583738e-07)
 bone_name = "l_petal_front01"
 bone_idx = 9
 use_external_skeleton = true
 external_skeleton = NodePath("../../FlowerMajin/FlowerMajinRoot/Skeleton3D")
 
 [node name="PetalFrontR" type="BoneAttachment3D" parent="Attachments"]
-transform = Transform3D(-0.514735, -0.850247, 0.110129, -0.105031, 0.190021, 0.976146, -0.850891, 0.49089, -0.187112, 3.11405e-08, -0.100004, 8.87633e-07)
+transform = Transform3D(-0.51473534, -0.85024667, 0.11012851, -0.105030656, 0.1900207, 0.97614586, -0.8508915, 0.4908898, -0.18711242, 3.114047e-08, -0.10000396, 8.876332e-07)
 bone_name = "r_petal_front01"
 bone_idx = 15
 use_external_skeleton = true
 external_skeleton = NodePath("../../FlowerMajin/FlowerMajinRoot/Skeleton3D")
 
 [node name="PetalBackL" type="BoneAttachment3D" parent="Attachments"]
-transform = Transform3D(0.495014, 0.850246, -0.179004, 0.0284879, 0.190023, 0.981366, 0.868418, -0.49089, 0.0698427, -2.02058e-08, -0.100004, 8.52112e-07)
+transform = Transform3D(0.4950145, 0.850246, -0.17900413, 0.028487869, 0.19002347, 0.98136616, 0.8684176, -0.49088994, 0.069842696, -2.0205848e-08, -0.10000396, 8.5211195e-07)
 bone_name = "l_petal_back01"
 bone_idx = 11
 use_external_skeleton = true
 external_skeleton = NodePath("../../FlowerMajin/FlowerMajinRoot/Skeleton3D")
 
 [node name="PetalBackR" type="BoneAttachment3D" parent="Attachments"]
-transform = Transform3D(0.495014, -0.850246, 0.179004, -0.0284878, 0.190023, 0.981366, -0.868418, -0.49089, 0.0698425, 1.19371e-07, -0.100004, 8.8339e-07)
+transform = Transform3D(0.49501425, -0.8502462, 0.17900398, -0.028487816, 0.1900232, 0.9813663, -0.8684178, -0.49088976, 0.06984248, 1.1937131e-07, -0.10000372, 8.833904e-07)
 bone_name = "r_petal_back01"
 bone_idx = 17
 use_external_skeleton = true
@@ -273,6 +560,9 @@ attachment = NodePath("../../Attachments/PetalBackR")
 [node name="AnimationTree" type="AnimationTree" parent="."]
 active = false
 root_node = NodePath("../FlowerMajin")
+libraries = {
+&"": SubResource("AnimationLibrary_jkxxb")
+}
 tree_root = SubResource("AnimationNodeBlendTree_efgxh")
 anim_player = NodePath("../FlowerMajin/AnimationPlayer")
 parameters/attack_trigger/active = false

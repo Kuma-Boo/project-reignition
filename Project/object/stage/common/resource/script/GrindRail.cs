@@ -80,6 +80,7 @@ public partial class GrindRail : Area3D
 			return;
 
 		_railModel.GlobalPosition = Player.GlobalPosition;
+		_railModel.ResetPhysicsInterpolation();
 		_railModel.Position = new Vector3(0, _railModel.Position.Y, _railModel.Position.Z); // Ignore player's x-offset
 		railMaterial.SetShaderParameter("uv_offset", _railModel.Position.Z);
 	}
@@ -144,10 +145,6 @@ public partial class GrindRail : Area3D
 	public void Deactivate()
 	{
 		IsBonusDisabled = true;
-
-		if (isInvisibleRail) // Hide rail model
-			_railModel.Visible = false;
-
 		EmitSignal(SignalName.GrindCompleted);
 	}
 
@@ -164,7 +161,7 @@ public partial class GrindRail : Area3D
 		if (!a.IsInGroup("player detection")) return;
 		IsInteractingWithPlayer = false;
 
-		if (Player.UnregisterGrindrail(this))
-			Deactivate();
+		if (isInvisibleRail) // Hide rail model
+			_railModel.Visible = false;
 	}
 }

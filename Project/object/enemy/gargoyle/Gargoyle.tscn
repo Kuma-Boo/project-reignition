@@ -1,20 +1,32 @@
-[gd_scene load_steps=67 format=3 uid="uid://b2jsh7hensgem"]
+[gd_scene load_steps=83 format=3 uid="uid://b2jsh7hensgem"]
 
 [ext_resource type="PackedScene" uid="uid://b4n1751vh5d4s" path="res://object/enemy/gargoyle/data/model/Gargoyle.gltf" id="1_gl7tb"]
 [ext_resource type="Script" uid="uid://db7pahktq6q6v" path="res://object/enemy/gargoyle/data/Gargoyle.cs" id="2_gr8hu"]
 [ext_resource type="PackedScene" uid="uid://dyg4af257op4a" path="res://object/enemy/gargoyle/data/model/Windball.gltf" id="3_mw58f"]
 [ext_resource type="Material" uid="uid://bwvsqjnpry0xm" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters Process Material.tres" id="4_rchb7"]
+[ext_resource type="Animation" uid="uid://bxq7n3g0slqko" path="res://object/enemy/gargoyle/data/model/animation/block-end.res" id="4_voe4n"]
 [ext_resource type="Material" uid="uid://chrq2jlovey6c" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters.tres" id="5_w0cpa"]
+[ext_resource type="Animation" uid="uid://ccwwjfumu8ejf" path="res://object/enemy/gargoyle/data/model/animation/block-start.res" id="5_y82xr"]
 [ext_resource type="Material" uid="uid://b4vmiws2hdmhs" path="res://object/enemy/majin/data/particle/material/Majin Spawn Smoke Process Material.tres" id="6_4tu6r"]
+[ext_resource type="Animation" uid="uid://2kju4b1vb3qu" path="res://object/enemy/gargoyle/data/model/animation/block-stun.res" id="6_bkge0"]
+[ext_resource type="Animation" uid="uid://di1pcstk3euse" path="res://object/enemy/gargoyle/data/model/animation/damage-left.res" id="7_4oa2m"]
 [ext_resource type="Texture2D" uid="uid://cpjydx5buf0av" path="res://effect/particle/texture/teleport dust.png" id="7_5vb6p"]
 [ext_resource type="Material" uid="uid://do5esuoehqh56" path="res://object/enemy/majin/data/particle/material/Majin Flash Process Material.tres" id="8_a5g66"]
+[ext_resource type="Animation" uid="uid://dvyu3lvv6xajb" path="res://object/enemy/gargoyle/data/model/animation/damage-right.res" id="8_cgff7"]
 [ext_resource type="Material" uid="uid://rhqpvcj8ph13" path="res://object/enemy/majin/data/particle/material/Majin Glow.tres" id="9_pxsym"]
+[ext_resource type="Animation" uid="uid://bg06nsat1a5di" path="res://object/enemy/gargoyle/data/model/animation/defeat.res" id="9_t45ls"]
 [ext_resource type="AudioStream" uid="uid://bqt0gpwc55dfl" path="res://sound/sfx/enemy/majin/majin spawn.wav" id="10_nrx4w"]
+[ext_resource type="Animation" uid="uid://cv8rm11tnmfrg" path="res://object/enemy/gargoyle/data/model/animation/petrify.res" id="10_uwfkt"]
+[ext_resource type="Animation" uid="uid://bueyp6qglux8v" path="res://object/enemy/gargoyle/data/model/animation/RESET.res" id="11_1eqo4"]
 [ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="11_37lc7"]
+[ext_resource type="Animation" uid="uid://b7eogypcotskp" path="res://object/enemy/gargoyle/data/model/animation/slash.res" id="12_a8ngv"]
 [ext_resource type="AudioStream" uid="uid://dmtmemmgn333x" path="res://sound/sfx/enemy/gargoyle/gargoyle flap.wav" id="12_w0cpa"]
 [ext_resource type="AudioStream" uid="uid://dkrvxb66a34rp" path="res://sound/sfx/enemy/gargoyle/gargoyle swipe.wav" id="13_5vb6p"]
+[ext_resource type="Animation" uid="uid://c5d5qkihkgnfm" path="res://object/enemy/gargoyle/data/model/animation/spawn.res" id="13_yv6xl"]
 [ext_resource type="AudioStream" uid="uid://c36o7iiftrtnt" path="res://sound/sfx/enemy/gargoyle/gargoyle strike.wav" id="14_a5g66"]
+[ext_resource type="Animation" uid="uid://dhyn30tjm0obj" path="res://object/enemy/gargoyle/data/model/animation/statue-activate.res" id="14_x4dqq"]
 [ext_resource type="AudioStream" uid="uid://bqbuntl6rv6af" path="res://sound/sfx/enemy/gargoyle/gargoyle defeat.wav" id="15_a5g66"]
+[ext_resource type="Animation" uid="uid://d0wqq1bucw7pb" path="res://object/enemy/gargoyle/data/model/animation/idle.res" id="15_lbcpu"]
 [ext_resource type="AudioStream" uid="uid://dxahgos3gjxnf" path="res://sound/sfx/enemy/gargoyle/gargoyle petrify.wav" id="16_37lc7"]
 [ext_resource type="AudioStream" uid="uid://bisuf6ofohigp" path="res://sound/sfx/enemy/gargoyle/gargoyle petrify warn.wav" id="17_xnarc"]
 [ext_resource type="AudioStream" uid="uid://ces0gaaorjfpn" path="res://sound/sfx/enemy/gargoyle/gargoyle windball.wav" id="18_lafif"]
@@ -32,6 +44,567 @@ radius = 10.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_el5bw"]
 radius = 2.0
+
+[sub_resource type="Animation" id="Animation_dl8rw"]
+resource_name = "statue"
+length = 0.001
+step = 0.06666667
+tracks/0/type = "position_3d"
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/path = NodePath("GargoyleRoot/Skeleton3D:root")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, -1.7763573e-16, 3.1600003, 1.1861505e-07)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = true
+tracks/1/enabled = true
+tracks/1/path = NodePath("GargoyleRoot/Skeleton3D:root")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, -0.7071068, 0, 0, 0.7071068)
+tracks/2/type = "scale_3d"
+tracks/2/imported = true
+tracks/2/enabled = true
+tracks/2/path = NodePath("GargoyleRoot/Skeleton3D:root")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, 1, 1, 1)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = true
+tracks/3/enabled = true
+tracks/3/path = NodePath("GargoyleRoot/Skeleton3D:chest")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0.8433915, 6.689853e-09, 3.0175975e-08, 0.53729963)
+tracks/4/type = "rotation_3d"
+tracks/4/imported = true
+tracks/4/enabled = true
+tracks/4/path = NodePath("GargoyleRoot/Skeleton3D:neck")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = PackedFloat32Array(0, 1, 0.7677518, -2.5045512e-07, -2.1689569e-07, 0.64074737)
+tracks/5/type = "rotation_3d"
+tracks/5/imported = true
+tracks/5/enabled = true
+tracks/5/path = NodePath("GargoyleRoot/Skeleton3D:head")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = PackedFloat32Array(0, 1, 0.17930785, 1.1889828e-07, -6.66512e-08, 0.983793)
+tracks/6/type = "rotation_3d"
+tracks/6/imported = true
+tracks/6/enabled = true
+tracks/6/path = NodePath("GargoyleRoot/Skeleton3D:mouth")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = PackedFloat32Array(0, 1, -0.038376316, -1.0224413e-06, 2.9041632e-07, 0.99926335)
+tracks/7/type = "rotation_3d"
+tracks/7/imported = true
+tracks/7/enabled = true
+tracks/7/path = NodePath("GargoyleRoot/Skeleton3D:l_arm01")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = PackedFloat32Array(0, 1, 0.5669692, -0.15332225, 0.8065598, 0.067078225)
+tracks/8/type = "rotation_3d"
+tracks/8/imported = true
+tracks/8/enabled = true
+tracks/8/path = NodePath("GargoyleRoot/Skeleton3D:l_arm02")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = PackedFloat32Array(0, 1, 0.19679888, -0.08082551, -0.45453593, 0.86494774)
+tracks/9/type = "rotation_3d"
+tracks/9/imported = true
+tracks/9/enabled = true
+tracks/9/path = NodePath("GargoyleRoot/Skeleton3D:l_hand")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = PackedFloat32Array(0, 1, 0.30939877, 0.56699115, -0.30495143, 0.6998558)
+tracks/10/type = "rotation_3d"
+tracks/10/imported = true
+tracks/10/enabled = true
+tracks/10/path = NodePath("GargoyleRoot/Skeleton3D:l_finger")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = PackedFloat32Array(0, 1, -0.3007058, -1.8390221e-08, 6.239997e-08, 0.953717)
+tracks/11/type = "rotation_3d"
+tracks/11/imported = true
+tracks/11/enabled = true
+tracks/11/path = NodePath("GargoyleRoot/Skeleton3D:r_arm01")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = PackedFloat32Array(0, 1, 0.5669693, 0.15332226, -0.8065598, 0.06707819)
+tracks/12/type = "rotation_3d"
+tracks/12/imported = true
+tracks/12/enabled = true
+tracks/12/path = NodePath("GargoyleRoot/Skeleton3D:r_arm02")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = PackedFloat32Array(0, 1, 0.19679888, 0.08082555, 0.45453593, 0.86494774)
+tracks/13/type = "rotation_3d"
+tracks/13/imported = true
+tracks/13/enabled = true
+tracks/13/path = NodePath("GargoyleRoot/Skeleton3D:r_hand")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = PackedFloat32Array(0, 1, 0.30939877, -0.56699115, 0.30495143, 0.6998558)
+tracks/14/type = "rotation_3d"
+tracks/14/imported = true
+tracks/14/enabled = true
+tracks/14/path = NodePath("GargoyleRoot/Skeleton3D:r_finger")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = PackedFloat32Array(0, 1, -0.3007058, -1.0116332e-08, 3.8279147e-08, 0.953717)
+tracks/15/type = "rotation_3d"
+tracks/15/imported = true
+tracks/15/enabled = true
+tracks/15/path = NodePath("GargoyleRoot/Skeleton3D:l_wing01")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = PackedFloat32Array(0, 1, -0.7071068, -2.1068682e-09, -3.30155e-08, 0.7071068)
+tracks/16/type = "rotation_3d"
+tracks/16/imported = true
+tracks/16/enabled = true
+tracks/16/path = NodePath("GargoyleRoot/Skeleton3D:l_wing02")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = PackedFloat32Array(0, 1, -0.061748367, -7.0253753e-10, 0.08758466, 0.9942415)
+tracks/17/type = "rotation_3d"
+tracks/17/imported = true
+tracks/17/enabled = true
+tracks/17/path = NodePath("GargoyleRoot/Skeleton3D:l_wing03")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = PackedFloat32Array(0, 1, 0.061689593, 0.0026933693, -0.13086864, 0.9894749)
+tracks/18/type = "rotation_3d"
+tracks/18/imported = true
+tracks/18/enabled = true
+tracks/18/path = NodePath("GargoyleRoot/Skeleton3D:r_wing01")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = PackedFloat32Array(0, 1, -0.7071068, -2.1068682e-09, -3.30155e-08, 0.7071068)
+tracks/19/type = "rotation_3d"
+tracks/19/imported = true
+tracks/19/enabled = true
+tracks/19/path = NodePath("GargoyleRoot/Skeleton3D:r_wing02")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = PackedFloat32Array(0, 1, -0.061749544, -4.683584e-10, -0.087584935, 0.99424136)
+tracks/20/type = "rotation_3d"
+tracks/20/imported = true
+tracks/20/enabled = true
+tracks/20/path = NodePath("GargoyleRoot/Skeleton3D:r_wing03")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = PackedFloat32Array(0, 1, 0.061690804, -0.002693413, 0.1308688, 0.9894748)
+tracks/21/type = "rotation_3d"
+tracks/21/imported = true
+tracks/21/enabled = true
+tracks/21/path = NodePath("GargoyleRoot/Skeleton3D:stomach")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = PackedFloat32Array(0, 1, -0.7071067, 0, 4.3902947e-08, 0.7071068)
+tracks/22/type = "rotation_3d"
+tracks/22/imported = true
+tracks/22/enabled = true
+tracks/22/path = NodePath("GargoyleRoot/Skeleton3D:tail01")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = PackedFloat32Array(0, 1, -0.08715572, 2.4262917e-08, -2.0359005e-08, 0.9961947)
+tracks/23/type = "rotation_3d"
+tracks/23/imported = true
+tracks/23/enabled = true
+tracks/23/path = NodePath("GargoyleRoot/Skeleton3D:tail02")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = PackedFloat32Array(0, 1, 0.7071068, -6.28037e-16, 1.9845881e-08, 0.7071067)
+tracks/24/type = "rotation_3d"
+tracks/24/imported = true
+tracks/24/enabled = true
+tracks/24/path = NodePath("GargoyleRoot/Skeleton3D:tail03")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = PackedFloat32Array(0, 1, 0.1305261, -2.4088424e-08, 3.1392652e-08, 0.9914449)
+
+[sub_resource type="Animation" id="Animation_g2aie"]
+resource_name = "block-loop"
+length = 0.6666667
+loop_mode = 1
+step = 0.06666667
+tracks/0/type = "position_3d"
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/path = NodePath("GargoyleRoot/Skeleton3D:root")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, -1.7763573e-16, 2.1500003, 1.1861505e-07, 0.06666667, 1, -1.7763573e-16, 2.1708004, 1.1861505e-07, 0.13333334, 1, -1.7763573e-16, 2.2204003, 1.1861505e-07, 0.2, 1, -1.7763573e-16, 2.2796004, 1.1861505e-07, 0.26666668, 1, -1.7763573e-16, 2.3292005, 1.1861505e-07, 0.4, 1, -1.7763573e-16, 2.3292003, 1.1861505e-07, 0.46666667, 1, -1.7763573e-16, 2.2796004, 1.1861505e-07, 0.53333336, 1, -1.7763573e-16, 2.2204003, 1.1861505e-07, 0.6, 1, -1.7763573e-16, 2.1708004, 1.1861505e-07, 0.6666667, 1, -1.7763573e-16, 2.1500003, 1.1861505e-07)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = true
+tracks/1/enabled = true
+tracks/1/path = NodePath("GargoyleRoot/Skeleton3D:root")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, -0.7071068, 0, 0, 0.7071068)
+tracks/2/type = "scale_3d"
+tracks/2/imported = true
+tracks/2/enabled = true
+tracks/2/path = NodePath("GargoyleRoot/Skeleton3D:root")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, 1, 1, 1)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = true
+tracks/3/enabled = true
+tracks/3/path = NodePath("GargoyleRoot/Skeleton3D:chest")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0.77716446, -1.5511642e-08, 2.6734487e-08, 0.62929755)
+tracks/4/type = "rotation_3d"
+tracks/4/imported = true
+tracks/4/enabled = true
+tracks/4/path = NodePath("GargoyleRoot/Skeleton3D:neck")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = PackedFloat32Array(0, 1, 0.8939207, -2.9341345e-07, -1.5388257e-07, 0.4482253)
+tracks/5/type = "rotation_3d"
+tracks/5/imported = true
+tracks/5/enabled = true
+tracks/5/path = NodePath("GargoyleRoot/Skeleton3D:head")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = PackedFloat32Array(0, 1, 0.18742369, 1.1834397e-07, -6.7630495e-08, 0.9822792)
+tracks/6/type = "rotation_3d"
+tracks/6/imported = true
+tracks/6/enabled = true
+tracks/6/path = NodePath("GargoyleRoot/Skeleton3D:mouth")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = PackedFloat32Array(0, 1, -0.03837633, -1.0224413e-06, 2.9041635e-07, 0.99926335)
+tracks/7/type = "rotation_3d"
+tracks/7/imported = true
+tracks/7/enabled = true
+tracks/7/path = NodePath("GargoyleRoot/Skeleton3D:l_arm01")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = PackedFloat32Array(0, 1, 0.24262984, 0.19979848, 0.9438623, 0.10166244)
+tracks/8/type = "rotation_3d"
+tracks/8/imported = true
+tracks/8/enabled = true
+tracks/8/path = NodePath("GargoyleRoot/Skeleton3D:l_arm02")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = PackedFloat32Array(0, 1, -0.17986515, 0.21067283, -0.6008095, 0.74986225)
+tracks/9/type = "rotation_3d"
+tracks/9/imported = true
+tracks/9/enabled = true
+tracks/9/path = NodePath("GargoyleRoot/Skeleton3D:l_hand")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = PackedFloat32Array(0, 1, -0.65195686, 0.06572748, -0.24796858, 0.71354306)
+tracks/10/type = "rotation_3d"
+tracks/10/imported = true
+tracks/10/enabled = true
+tracks/10/path = NodePath("GargoyleRoot/Skeleton3D:l_finger")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = PackedFloat32Array(0, 1, -0.34999162, -1.685536e-08, 7.6859514e-08, 0.93675286)
+tracks/11/type = "rotation_3d"
+tracks/11/imported = true
+tracks/11/enabled = true
+tracks/11/path = NodePath("GargoyleRoot/Skeleton3D:r_arm01")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = PackedFloat32Array(0, 1, 0.40445107, -0.17886515, -0.8866594, 0.13513677)
+tracks/12/type = "rotation_3d"
+tracks/12/imported = true
+tracks/12/enabled = true
+tracks/12/path = NodePath("GargoyleRoot/Skeleton3D:r_arm02")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = PackedFloat32Array(0, 1, -0.33815652, -0.105047464, 0.30666035, 0.88350147)
+tracks/13/type = "rotation_3d"
+tracks/13/imported = true
+tracks/13/enabled = true
+tracks/13/path = NodePath("GargoyleRoot/Skeleton3D:r_hand")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = PackedFloat32Array(0, 1, -0.66190076, -0.009763455, 0.0679995, 0.74643695)
+tracks/14/type = "rotation_3d"
+tracks/14/imported = true
+tracks/14/enabled = true
+tracks/14/path = NodePath("GargoyleRoot/Skeleton3D:r_finger")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = PackedFloat32Array(0, 1, -0.3547746, -3.216964e-08, 6.541729e-08, 0.9349519)
+tracks/15/type = "rotation_3d"
+tracks/15/imported = true
+tracks/15/enabled = true
+tracks/15/path = NodePath("GargoyleRoot/Skeleton3D:l_wing01")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = PackedFloat32Array(0, 1, -0.3620225, -0.2798279, -0.01936429, 0.8889663)
+tracks/16/type = "rotation_3d"
+tracks/16/imported = true
+tracks/16/enabled = true
+tracks/16/path = NodePath("GargoyleRoot/Skeleton3D:l_wing02")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = PackedFloat32Array(0, 1, 0.085625306, -0.3986634, -0.73194236, 0.5458903)
+tracks/17/type = "rotation_3d"
+tracks/17/imported = true
+tracks/17/enabled = true
+tracks/17/path = NodePath("GargoyleRoot/Skeleton3D:l_wing03")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = PackedFloat32Array(0, 1, -0.32985964, -0.21711437, -0.17339899, 0.90221214)
+tracks/18/type = "rotation_3d"
+tracks/18/imported = true
+tracks/18/enabled = true
+tracks/18/path = NodePath("GargoyleRoot/Skeleton3D:r_wing01")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = PackedFloat32Array(0, 1, -0.34935835, 0.2919985, 0.025126548, 0.88997436)
+tracks/19/type = "rotation_3d"
+tracks/19/imported = true
+tracks/19/enabled = true
+tracks/19/path = NodePath("GargoyleRoot/Skeleton3D:r_wing02")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = PackedFloat32Array(0, 1, 0.085624784, 0.39866427, 0.7319418, 0.54589045)
+tracks/20/type = "rotation_3d"
+tracks/20/imported = true
+tracks/20/enabled = true
+tracks/20/path = NodePath("GargoyleRoot/Skeleton3D:r_wing03")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = PackedFloat32Array(0, 1, -0.32985857, 0.21711424, 0.17339948, 0.9022125)
+tracks/21/type = "rotation_3d"
+tracks/21/imported = true
+tracks/21/enabled = true
+tracks/21/path = NodePath("GargoyleRoot/Skeleton3D:stomach")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = PackedFloat32Array(0, 1, -0.60293806, 6.0489285e-09, 4.348424e-08, 0.797788)
+tracks/22/type = "rotation_3d"
+tracks/22/imported = true
+tracks/22/enabled = true
+tracks/22/path = NodePath("GargoyleRoot/Skeleton3D:tail01")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = PackedFloat32Array(0, 1, -0.2749509, 2.7690849e-08, -1.5375145e-08, 0.96145827)
+tracks/23/type = "rotation_3d"
+tracks/23/imported = true
+tracks/23/enabled = true
+tracks/23/path = NodePath("GargoyleRoot/Skeleton3D:tail02")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = PackedFloat32Array(0, 1, -0.5721073, -1.9538174e-08, 3.481234e-09, 0.8201788)
+tracks/24/type = "rotation_3d"
+tracks/24/imported = true
+tracks/24/enabled = true
+tracks/24/path = NodePath("GargoyleRoot/Skeleton3D:tail03")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = PackedFloat32Array(0, 1, -0.35133192, -3.6026456e-08, 1.6365988e-08, 0.936251)
+
+[sub_resource type="Animation" id="Animation_4drs0"]
+resource_name = "skyroad-loop"
+length = 0.4
+loop_mode = 1
+step = 0.06666667
+tracks/0/type = "position_3d"
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/path = NodePath("GargoyleRoot/Skeleton3D:root")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, -1.7763573e-16, 1.4500004, 1.1861505e-07, 0.06666667, 1, -1.7763573e-16, 1.4240744, 1.1861505e-07, 0.13333334, 1, -1.7763573e-16, 1.3759263, 1.1861505e-07, 0.26666668, 1, -1.7763573e-16, 1.3759263, 1.1861505e-07, 0.33333334, 1, -1.7763573e-16, 1.4240744, 1.1861505e-07, 0.4, 1, -1.7763573e-16, 1.4500004, 1.1861505e-07)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = true
+tracks/1/enabled = true
+tracks/1/path = NodePath("GargoyleRoot/Skeleton3D:root")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, -0.25881907, 0, 0, 0.96592593)
+tracks/2/type = "scale_3d"
+tracks/2/imported = true
+tracks/2/enabled = true
+tracks/2/path = NodePath("GargoyleRoot/Skeleton3D:root")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, 1, 1, 1)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = true
+tracks/3/enabled = true
+tracks/3/path = NodePath("GargoyleRoot/Skeleton3D:chest")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0.7071068, 0, 3.0908634e-08, 0.7071068, 0.06666667, 1, 0.7227736, 6.9257844e-10, 3.090087e-08, 0.69108486, 0.13333334, 1, 0.72259986, 6.848119e-10, 3.0901045e-08, 0.69126654, 0.26666668, 1, 0.689864, -7.4473405e-10, 3.0899656e-08, 0.723939, 0.33333334, 1, 0.69004595, -7.3696543e-10, 3.0899844e-08, 0.72376555, 0.4, 1, 0.7071068, 0, 3.0908634e-08, 0.7071068)
+tracks/4/type = "rotation_3d"
+tracks/4/imported = true
+tracks/4/enabled = true
+tracks/4/path = NodePath("GargoyleRoot/Skeleton3D:neck")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = PackedFloat32Array(0, 1, 0.42971072, -1.3688994e-07, -3.0171606e-07, 0.9029666, 0.06666667, 1, 0.43989772, -1.4029423e-07, -3.0014826e-07, 0.8980479, 0.13333334, 1, 0.45866603, -1.4656851e-07, -2.9713485e-07, 0.8886088, 0.26666668, 1, 0.458666, -1.4656852e-07, -2.9713487e-07, 0.88860875, 0.33333334, 1, 0.43989778, -1.4029426e-07, -3.001483e-07, 0.898048, 0.4, 1, 0.42971072, -1.3688994e-07, -3.0171606e-07, 0.9029666)
+tracks/5/type = "rotation_3d"
+tracks/5/imported = true
+tracks/5/enabled = true
+tracks/5/path = NodePath("GargoyleRoot/Skeleton3D:head")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = PackedFloat32Array(0, 1, 0.04188064, 1.2695591e-07, -4.96121e-08, 0.9991227, 0.06666667, 1, 0.0047238627, 1.2871186e-07, -4.4860094e-08, 0.9999889, 0.13333334, 1, 0.0047238627, 1.2871185e-07, -4.4860094e-08, 0.9999889, 0.26666668, 1, 0.0789796, 1.2502464e-07, -5.4295604e-08, 0.9968763, 0.33333334, 1, 0.078979604, 1.2502461e-07, -5.4295597e-08, 0.9968763, 0.4, 1, 0.04188064, 1.2695591e-07, -4.96121e-08, 0.9991227)
+tracks/6/type = "rotation_3d"
+tracks/6/imported = true
+tracks/6/enabled = true
+tracks/6/path = NodePath("GargoyleRoot/Skeleton3D:mouth")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = PackedFloat32Array(0, 1, -0.03837634, -1.0224412e-06, 2.9041635e-07, 0.99926335)
+tracks/7/type = "rotation_3d"
+tracks/7/imported = true
+tracks/7/enabled = true
+tracks/7/path = NodePath("GargoyleRoot/Skeleton3D:l_arm01")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = PackedFloat32Array(0, 1, -0.70604634, -0.038710754, -0.7060464, 0.038710702)
+tracks/8/type = "rotation_3d"
+tracks/8/imported = true
+tracks/8/enabled = true
+tracks/8/path = NodePath("GargoyleRoot/Skeleton3D:l_arm02")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = PackedFloat32Array(0, 1, 4.507139e-09, 1.2318877e-08, -0.1305262, 0.9914449, 0.06666667, 1, 0.00064250664, -0.0046943375, -0.17312635, 0.98488826, 0.13333334, 1, 0.00071420614, -0.005004693, -0.17595634, 0.984385, 0.26666668, 1, -0.0002398477, 0.0026142723, -0.10688847, 0.9942676, 0.33333334, 1, -0.00035473486, 0.0029151032, -0.10402837, 0.99457, 0.4, 1, 4.507139e-09, 1.2318877e-08, -0.1305262, 0.9914449)
+tracks/9/type = "rotation_3d"
+tracks/9/imported = true
+tracks/9/enabled = true
+tracks/9/path = NodePath("GargoyleRoot/Skeleton3D:l_hand")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = PackedFloat32Array(0, 1, -5.7850884e-09, -0.25881907, 2.4164732e-08, 0.96592593, 0.06666667, 1, -0.0033268663, -0.26028255, -0.01429741, 0.9654209, 0.13333334, 1, -0.009622672, -0.26288658, -0.040802456, 0.9639156, 0.26666668, 1, -0.009622662, -0.2628866, -0.040802445, 0.9639156, 0.33333334, 1, -0.0033268735, -0.2602826, -0.014297427, 0.9654209, 0.4, 1, -5.7850875e-09, -0.25881904, 2.4164729e-08, 0.9659258)
+tracks/10/type = "rotation_3d"
+tracks/10/imported = true
+tracks/10/enabled = true
+tracks/10/path = NodePath("GargoyleRoot/Skeleton3D:l_finger")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = PackedFloat32Array(0, 1, 1.8626451e-09, 3.725291e-09, 6.9060896e-08, 1)
+tracks/11/type = "rotation_3d"
+tracks/11/imported = true
+tracks/11/enabled = true
+tracks/11/path = NodePath("GargoyleRoot/Skeleton3D:r_arm01")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = PackedFloat32Array(0, 1, -0.70604646, 0.038710702, 0.7060464, 0.038710706)
+tracks/12/type = "rotation_3d"
+tracks/12/imported = true
+tracks/12/enabled = true
+tracks/12/path = NodePath("GargoyleRoot/Skeleton3D:r_arm02")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = PackedFloat32Array(0, 1, 5.8258185e-09, 2.0297803e-08, 0.13052619, 0.9914449, 0.06666667, 1, 0.00064251025, 0.004694367, 0.17312634, 0.98488826, 0.13333334, 1, 0.000714208, 0.0050047208, 0.17595634, 0.984385, 0.26666668, 1, -0.00023984013, -0.002614241, 0.10688845, 0.9942676, 0.33333334, 1, -0.0003547357, -0.0029150734, 0.10402836, 0.99457, 0.4, 1, 5.8258185e-09, 2.0297803e-08, 0.13052619, 0.9914449)
+tracks/13/type = "rotation_3d"
+tracks/13/imported = true
+tracks/13/enabled = true
+tracks/13/path = NodePath("GargoyleRoot/Skeleton3D:r_hand")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = PackedFloat32Array(0, 1, -1.25343425e-08, 0.25881907, 1.681295e-08, 0.96592593, 0.06666667, 1, -0.0033268724, 0.26028258, 0.014297424, 0.9654209, 0.13333334, 1, -0.0096226735, 0.26288655, 0.040802475, 0.9639156, 0.26666668, 1, -0.009622681, 0.2628866, 0.04080246, 0.9639156, 0.33333334, 1, -0.0033268821, 0.2602826, 0.014297416, 0.9654209, 0.4, 1, -1.2534341e-08, 0.25881904, 1.6812947e-08, 0.9659258)
+tracks/14/type = "rotation_3d"
+tracks/14/imported = true
+tracks/14/enabled = true
+tracks/14/path = NodePath("GargoyleRoot/Skeleton3D:r_finger")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = PackedFloat32Array(0, 1, -3.7252907e-09, 1.8626453e-08, 4.7587385e-08, 1)
+tracks/15/type = "rotation_3d"
+tracks/15/imported = true
+tracks/15/enabled = true
+tracks/15/path = NodePath("GargoyleRoot/Skeleton3D:l_wing01")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = PackedFloat32Array(0, 1, -0.7071068, -2.1068671e-09, -3.3015507e-08, 0.7071068, 0.06666667, 1, -0.69493073, 0.13065726, 0.13065724, 0.69493073, 0.13333334, 1, -0.69493073, 0.13065726, 0.13065724, 0.69493073, 0.2, 1, -0.7071068, -1.264358e-08, -4.3552213e-08, 0.7071068, 0.26666668, 1, -0.69493073, -0.1306573, -0.13065733, 0.69493073, 0.33333334, 1, -0.6949308, -0.1306573, -0.13065733, 0.6949307, 0.4, 1, -0.7071068, -2.1068671e-09, -3.3015507e-08, 0.7071068)
+tracks/16/type = "rotation_3d"
+tracks/16/imported = true
+tracks/16/enabled = true
+tracks/16/path = NodePath("GargoyleRoot/Skeleton3D:l_wing02")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = PackedFloat32Array(0, 1, -0.061748367, 1.1708958e-09, 0.08758466, 0.9942415, 0.06666667, 1, -0.061591804, 0.004394359, 0.15811831, 0.9854876, 0.13333334, 1, -0.06047416, 0.012479365, 0.28671384, 0.9560243, 0.26666668, 1, -0.0604742, 0.01247937, 0.28671384, 0.9560243, 0.33333334, 1, -0.06159177, 0.0043943683, 0.15811828, 0.9854876, 0.4, 1, -0.061748367, 1.1708958e-09, 0.08758466, 0.9942415)
+tracks/17/type = "rotation_3d"
+tracks/17/imported = true
+tracks/17/enabled = true
+tracks/17/path = NodePath("GargoyleRoot/Skeleton3D:l_wing03")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = PackedFloat32Array(0, 1, 0.061220158, 0.008059721, -0.2166091, 0.9743037, 0.06666667, 1, 0.06136779, 0.0068453555, -0.19726543, 0.9784036, 0.13333334, 1, 0.061652865, 0.0034332494, -0.14272963, 0.9878338, 0.2, 1, 0.061741006, -0.00095426047, -0.0722095, 0.99547625, 0.26666668, 1, 0.061606664, -0.0041817343, -0.02005169, 0.9978903, 0.33333334, 1, 0.061732966, -0.0013785021, -0.065367006, 0.995949, 0.4, 1, 0.061220154, 0.008059721, -0.21660909, 0.97430366)
+tracks/18/type = "rotation_3d"
+tracks/18/imported = true
+tracks/18/enabled = true
+tracks/18/path = NodePath("GargoyleRoot/Skeleton3D:r_wing01")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = PackedFloat32Array(0, 1, -0.7071068, -2.1068671e-09, -3.3015507e-08, 0.7071068, 0.06666667, 1, -0.69493073, -0.13065729, -0.1306573, 0.69493073, 0.13333334, 1, -0.69493073, -0.13065727, -0.1306573, 0.69493073, 0.2, 1, -0.7071068, 3.1614884e-09, -2.7747147e-08, 0.7071068, 0.26666668, 1, -0.69493073, 0.1306573, 0.13065726, 0.69493073, 0.33333334, 1, -0.69493073, 0.13065729, 0.13065726, 0.69493073, 0.4, 1, -0.7071068, -2.1068671e-09, -3.3015507e-08, 0.7071068)
+tracks/19/type = "rotation_3d"
+tracks/19/imported = true
+tracks/19/enabled = true
+tracks/19/path = NodePath("GargoyleRoot/Skeleton3D:r_wing02")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = PackedFloat32Array(0, 1, -0.06174955, 2.341792e-10, -0.087584935, 0.99424136, 0.06666667, 1, -0.06159298, -0.00439443, -0.15811853, 0.9854875, 0.13333334, 1, -0.060475342, -0.012479608, -0.28671405, 0.9560241, 0.26666668, 1, -0.060475357, -0.012479623, -0.2867141, 0.95602417, 0.33333334, 1, -0.061592985, -0.0043944507, -0.15811853, 0.98548746, 0.4, 1, -0.06174955, 2.341792e-10, -0.087584935, 0.99424136)
+tracks/20/type = "rotation_3d"
+tracks/20/imported = true
+tracks/20/enabled = true
+tracks/20/path = NodePath("GargoyleRoot/Skeleton3D:r_wing03")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = PackedFloat32Array(0, 1, 0.06122132, -0.008059868, 0.21660925, 0.97430354, 0.06666667, 1, 0.061368994, -0.0068454836, 0.19726552, 0.97840345, 0.13333334, 1, 0.061654057, -0.0034333135, 0.14272977, 0.9878336, 0.2, 1, 0.061742198, 0.00095426396, 0.07220968, 0.99547625, 0.26666668, 1, 0.061607793, 0.004181811, 0.020051869, 0.99789023, 0.33333334, 1, 0.06173423, 0.0013785302, 0.06536717, 0.99594885, 0.4, 1, 0.061221328, -0.008059869, 0.21660928, 0.97430366)
+tracks/21/type = "rotation_3d"
+tracks/21/imported = true
+tracks/21/enabled = true
+tracks/21/path = NodePath("GargoyleRoot/Skeleton3D:stomach")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = PackedFloat32Array(0, 1, -0.7071067, 0, 4.3902947e-08, 0.7071068)
+tracks/22/type = "rotation_3d"
+tracks/22/imported = true
+tracks/22/enabled = true
+tracks/22/path = NodePath("GargoyleRoot/Skeleton3D:tail01")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = PackedFloat32Array(0, 1, 2.089086e-08, 2.2396186e-08, -2.2396183e-08, 1, 0.06666667, 1, 0.006787359, 2.2243658e-08, -2.254768e-08, 0.999977, 0.13333334, 1, 0.019391341, 2.1957678e-08, -2.282626e-08, 0.99981195, 0.26666668, 1, 0.019391343, 2.1508015e-08, -2.3282075e-08, 0.999812, 0.33333334, 1, 0.006787359, 2.179977e-08, -2.3009125e-08, 0.999977, 0.4, 1, 2.089086e-08, 2.2396186e-08, -2.2396183e-08, 1)
+tracks/23/type = "rotation_3d"
+tracks/23/imported = true
+tracks/23/enabled = true
+tracks/23/path = NodePath("GargoyleRoot/Skeleton3D:tail02")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = PackedFloat32Array(0, 1, 0.05339428, -1.5663797e-08, 1.2414908e-08, 0.99857354, 0.06666667, 1, 0.0022857382, -1.6277871e-08, 1.1598079e-08, 0.9999974, 0.13333334, 1, 0.004273437, -1.2673609e-08, 1.542579e-08, 0.9999909, 0.2, 1, 0.06104857, -1.3150285e-08, 1.4863687e-08, 0.9981349, 0.26666668, 1, 0.106339864, -1.2461309e-08, 1.5445872e-08, 0.9943299, 0.33333334, 1, 0.10436321, -1.5008776e-08, 1.31992826e-08, 0.99453926, 0.4, 1, 0.05339428, -1.5663797e-08, 1.2414908e-08, 0.99857354)
+tracks/24/type = "rotation_3d"
+tracks/24/imported = true
+tracks/24/enabled = true
+tracks/24/path = NodePath("GargoyleRoot/Skeleton3D:tail03")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = PackedFloat32Array(0, 1, 0.03753082, -1.6747624e-08, 3.627086e-08, 0.9992955, 0.06666667, 1, 0.033024676, -1.0461324e-08, 4.0472187e-08, 0.99945456, 0.13333334, 1, 0.03434417, -1.0407877e-08, 4.048595e-08, 0.9994101, 0.2, 1, 0.039317153, 3.0974165e-09, 4.538701e-08, 0.9992268, 0.26666668, 1, 0.048480634, 3.5135819e-09, 4.5356686e-08, 0.9988241, 0.33333334, 1, 0.04599146, -1.6439875e-08, 3.641137e-08, 0.9989419, 0.4, 1, 0.032973927, -1.0463378e-08, 4.047165e-08, 0.9994562)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ueqrt"]
+_data = {
+&"RESET": ExtResource("11_1eqo4"),
+&"block": SubResource("Animation_g2aie"),
+&"block-end": ExtResource("4_voe4n"),
+&"block-start": ExtResource("5_y82xr"),
+&"block-stun": ExtResource("6_bkge0"),
+&"damage-left": ExtResource("7_4oa2m"),
+&"damage-right": ExtResource("8_cgff7"),
+&"defeat": ExtResource("9_t45ls"),
+&"idle": ExtResource("15_lbcpu"),
+&"petrify": ExtResource("10_uwfkt"),
+&"skyroad": SubResource("Animation_4drs0"),
+&"slash": ExtResource("12_a8ngv"),
+&"spawn": ExtResource("13_yv6xl"),
+&"statue": SubResource("Animation_dl8rw"),
+&"statue-activate": ExtResource("14_x4dqq")
+}
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_6t1i8"]
 input_0/name = "petrify"
@@ -209,6 +782,7 @@ animation = &"spawn"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_a4b7b"]
 graph_offset = Vector2(-1081.62, -68.7691)
+nodes/output/position = Vector2(420, 140)
 nodes/action_transition/node = SubResource("AnimationNodeTransition_6t1i8")
 nodes/action_transition/position = Vector2(-880, 80)
 nodes/action_trigger/node = SubResource("AnimationNodeOneShot_2kn1h")
@@ -229,7 +803,6 @@ nodes/defeat_transition/node = SubResource("AnimationNodeTransition_wgx27")
 nodes/defeat_transition/position = Vector2(200, 100)
 nodes/movement_state/node = SubResource("AnimationNodeStateMachine_1srrh")
 nodes/movement_state/position = Vector2(-1160, -100)
-nodes/output/position = Vector2(420, 140)
 nodes/petrify_anim/node = SubResource("AnimationNodeAnimation_d3875")
 nodes/petrify_anim/position = Vector2(-1160, 100)
 nodes/slash_anim/node = SubResource("AnimationNodeAnimation_oy0p3")
@@ -238,7 +811,7 @@ nodes/spawn_animation/node = SubResource("AnimationNodeAnimation_rchb7")
 nodes/spawn_animation/position = Vector2(-380, 420)
 nodes/spawn_trigger/node = SubResource("AnimationNodeOneShot_w0cpa")
 nodes/spawn_trigger/position = Vector2(-168.318, 119.031)
-node_connections = [&"action_transition", 0, &"petrify_anim", &"action_transition", 1, &"slash_anim", &"action_transition", 2, &"block_state", &"action_trigger", 0, &"movement_state", &"action_trigger", 1, &"action_transition", &"damage_direction_transition", 0, &"damage_left_anim", &"damage_direction_transition", 1, &"damage_right_anim", &"damage_trigger", 0, &"action_trigger", &"damage_trigger", 1, &"damage_direction_transition", &"defeat_transition", 0, &"defeat_anim", &"defeat_transition", 1, &"spawn_trigger", &"output", 0, &"defeat_transition", &"spawn_trigger", 0, &"damage_trigger", &"spawn_trigger", 1, &"spawn_animation"]
+node_connections = [&"output", 0, &"defeat_transition", &"action_transition", 0, &"petrify_anim", &"action_transition", 1, &"slash_anim", &"action_transition", 2, &"block_state", &"action_trigger", 0, &"movement_state", &"action_trigger", 1, &"action_transition", &"damage_direction_transition", 0, &"damage_left_anim", &"damage_direction_transition", 1, &"damage_right_anim", &"damage_trigger", 0, &"action_trigger", &"damage_trigger", 1, &"damage_direction_transition", &"defeat_transition", 0, &"defeat_anim", &"defeat_transition", 1, &"spawn_trigger", &"spawn_trigger", 0, &"damage_trigger", &"spawn_trigger", 1, &"spawn_animation"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_xnarc"]
 material = ExtResource("5_w0cpa")
@@ -279,6 +852,10 @@ animationPlayer = NodePath("")
 
 [node name="Root" parent="." instance=ExtResource("1_gl7tb")]
 
+[node name="GargoyleMesh" parent="Root/GargoyleRoot/Skeleton3D" index="0"]
+transparency = 1.0
+instance_shader_parameters/opacity = 1.0
+
 [node name="Hitbox" type="Area3D" parent="Root/GargoyleRoot/Skeleton3D" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0.5)
 collision_layer = 0
@@ -290,7 +867,7 @@ shape = SubResource("SphereShape3D_tsk0o")
 disabled = true
 
 [node name="Head" type="BoneAttachment3D" parent="Root/GargoyleRoot/Skeleton3D" index="2"]
-transform = Transform3D(1, -9.67494e-08, -3.49296e-07, -3.49296e-07, -0.514496, -0.857493, -9.67496e-08, 0.857493, -0.514496, -5.96046e-08, 1.9, 0.55)
+transform = Transform3D(1, -9.6749375e-08, -3.4929633e-07, -3.4929636e-07, -0.5144958, -0.85749286, -9.674959e-08, 0.8574929, -0.51449573, -5.960458e-08, 1.9000003, 0.5500001)
 bone_name = "head"
 bone_idx = 3
 
@@ -309,7 +886,7 @@ shape = SubResource("SphereShape3D_tsk0o")
 disabled = true
 
 [node name="Root" type="BoneAttachment3D" parent="Root/GargoyleRoot/Skeleton3D" index="3"]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.77636e-16, 1.35, 1.18615e-07)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.7763573e-16, 1.3500004, 1.1861505e-07)
 bone_name = "root"
 bone_idx = 0
 
@@ -339,7 +916,7 @@ collision_mask = 2
 monitorable = false
 
 [node name="Windball" parent="Windball" instance=ExtResource("3_mw58f")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 2.5, 0)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 2.5, 0)
 visible = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Windball"]
@@ -351,6 +928,9 @@ disabled = true
 active = false
 root_node = NodePath("../Root")
 callback_mode_discrete = 0
+libraries = {
+&"": SubResource("AnimationLibrary_ueqrt")
+}
 tree_root = SubResource("AnimationNodeBlendTree_a4b7b")
 anim_player = NodePath("../Root/AnimationPlayer")
 parameters/action_transition/current_state = "petrify"

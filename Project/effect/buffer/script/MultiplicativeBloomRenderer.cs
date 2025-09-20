@@ -24,7 +24,9 @@ public partial class MultiplicativeBloomRenderer : Node
 	public override void _Ready()
 	{
 		bloomCamera.Near = objectCamera.Near = 0.01f;
-		bloomCamera.Far = objectCamera.Far = 100.0f; // Wonderblocks fade out by 50 units, so don't render any further
+		bloomCamera.Far = objectCamera.Far = 80.0f; // Wonderblocks fade out by 50 units, so don't render any further
+
+		PhysicsInterpolationMode = PhysicsInterpolationModeEnum.Off;
 	}
 
 	public override void _EnterTree()

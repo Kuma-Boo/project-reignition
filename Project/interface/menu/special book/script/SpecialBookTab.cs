@@ -109,7 +109,7 @@ public partial class SpecialBookTab : Control
 		currentAsyncFilePath = pageTexturePath + $"/{(asyncLoadIndex + 1).ToString("00")}";
 		currentAsyncFilePath += isLoadingFullImages ? ".png" : "P.png";
 
-		if (FileAccess.FileExists(currentAsyncFilePath))
+		if (ResourceLoader.Exists(currentAsyncFilePath))
 		{
 			Error error = ResourceLoader.LoadThreadedRequest(currentAsyncFilePath, "Texture2D");
 

@@ -30,6 +30,7 @@ public partial class PathTraveller : Node3D
 
 	[Export] private float rotationAmount = 45;
 	[Export] private float tiltRatio = 1.0f;
+	[Export] private bool disableStepButtons;
 
 	/// <summary> Maximum distance from the path allowed. </summary>
 	[Export] private Vector2 bounds;
@@ -171,9 +172,18 @@ public partial class PathTraveller : Node3D
 	/// <summary> Handles player input. </summary>
 	private void CalculateMovement()
 	{
-		Vector2 inputVector = Player.Controller.InputAxis * GetCurrentTurnSpeed;
+		Vector2 inputVector = Player.Controller.InputAxis;
 		if (IsVerticalMovementDisabled) // Ignore vertical input
 			inputVector.Y = 0;
+
+		if (!disableStepButtons)
+		{
+			// Add step input influence
+			float turnInfluence = Player.Controller.StepAxis;
+			inputVector.X -= turnInfluence * 0.5f;
+		}
+
+		inputVector *= GetCurrentTurnSpeed;
 
 		// Smooth out edges
 		bool isSmoothingHorizontal = Mathf.Abs(PathFollower.HOffset) > HorizontalTurnSmoothing &&

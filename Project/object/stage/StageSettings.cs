@@ -1,7 +1,7 @@
 using Godot;
-using Godot.Collections;
 using Project.Core;
 using Project.Interface;
+using System.Collections.Generic;
 
 namespace Project.Gameplay;
 
@@ -57,7 +57,7 @@ public partial class StageSettings : Node3D
 
 		CalculateTechnicalBonus();
 		UpdateScore(0, MathModeEnum.Replace);
-		UpdatePostProcessingStatus();
+		UpdateQualitySettings();
 
 		// Update gameplay sfx audio channel
 		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, IsControlTest ? 100 : 0);
@@ -68,6 +68,7 @@ public partial class StageSettings : Node3D
 		}
 		else
 		{
+			GetQualityNodesRecursively(this);
 			LevelState = LevelStateEnum.Probes;
 			if (!TransitionManager.instance.IsReloadingScene)
 				TransitionManager.instance.UpdateLoadingText("load_probes");
@@ -95,38 +96,93 @@ public partial class StageSettings : Node3D
 
 	public override void _ExitTree() => EmitSignal(SignalName.Unloaded);
 
-	public void UpdatePostProcessingStatus()
+	public void UpdateQualitySettings()
 	{
 		bool postProcessingEnabled = SaveManager.Config.postProcessingQuality != SaveManager.QualitySetting.Disabled;
 		Environment.Environment.SsaoEnabled = postProcessingEnabled;
 		Environment.Environment.SsilEnabled = postProcessingEnabled;
 		Environment.Environment.GlowEnabled = SaveManager.Config.bloomMode != SaveManager.QualitySetting.Disabled;
+
+		switch (SaveManager.Config.softShadowQuality)
+		{
+			case SaveManager.QualitySetting.Disabled:
+			case SaveManager.QualitySetting.Low:
+				targetDirectionalShadowDistance = 20;
+				targetDirectionalShadowMode = DirectionalLight3D.ShadowMode.Orthogonal;
+				break;
+			case SaveManager.QualitySetting.Medium:
+				targetBlendSplitMode = true;
+				targetDirectionalShadowDistance = 40;
+				targetDirectionalShadowMode = DirectionalLight3D.ShadowMode.Parallel2Splits;
+				break;
+			case SaveManager.QualitySetting.High:
+				targetBlendSplitMode = true;
+				targetDirectionalShadowDistance = 50;
+				targetDirectionalShadowMode = DirectionalLight3D.ShadowMode.Parallel4Splits;
+				break;
+		}
 	}
 
 	#region Shader Compilation
 	[Signal]
 	public delegate void LevelStartedEventHandler();
-	private float probeTimer;
-	private const float ProbeWaitLength = 2f;
+	private Queue<ReflectionProbe> probes = [];
+	private Queue<DirectionalLight3D> lights = [];
+	private int targetDirectionalShadowDistance = 30;
+	private bool targetBlendSplitMode = false;
+	private DirectionalLight3D.ShadowMode targetDirectionalShadowMode = DirectionalLight3D.ShadowMode.Parallel2Splits;
+
 	public override void _Process(double _)
 	{
-		/*
-		TODO 
-		Temporary workaround because reflection probes are slow.
-		Reduce frame count when Godot adds a way to do quick "UPDATE_ONCE" reflection probes
-		*/
-
 		if (LevelState == LevelStateEnum.Probes)
 		{
-			probeTimer += PhysicsManager.normalDelta;
-			if (probeTimer >= ProbeWaitLength)
-				StartLevel();
+			if (lights.TryDequeue(out DirectionalLight3D light) && light.ShadowEnabled)
+			{
+				light.DirectionalShadowMode = targetDirectionalShadowMode;
+				light.DirectionalShadowMaxDistance = targetDirectionalShadowDistance;
+				light.DirectionalShadowBlendSplits = targetBlendSplitMode;
+				return;
+			}
 
+			if (probes.TryDequeue(out ReflectionProbe probe))
+			{
+				probe.EnableShadows = false;
+				probe.MeshLodThreshold = 5;
+
+				/*
+				WORKAROUND
+				Godot's reflection probes update really slowly when set to "Once" mode, so here I'm setting it to always
+				then disabling processing immediately after.
+
+				Unfortunately, this workaround breaks Godot's visual profiler, so we keep the update mode to "Once" when in the editor.
+
+				TODO Replace this with proper update-mode once Godot fixes reflection probes
+				*/
+
+				probe.UpdateMode = DebugManager.Instance.EnableReflectionProbeDebugging ? ReflectionProbe.UpdateModeEnum.Once : ReflectionProbe.UpdateModeEnum.Always;
+				probe.ProcessMode = ProcessModeEnum.Disabled;
+				return;
+			}
+
+			StartLevel();
 			return;
 		}
 
 		UpdateTime();
 		UpdateEnvironmentFXFactor();
+	}
+
+	private void GetQualityNodesRecursively(Node parent)
+	{
+		foreach (Node child in parent.GetChildren())
+		{
+			GetQualityNodesRecursively(child);
+
+			if (child is ReflectionProbe)
+				probes.Enqueue(child as ReflectionProbe);
+			else if (child is DirectionalLight3D)
+				lights.Enqueue(child as DirectionalLight3D);
+		}
 	}
 
 	private void StartLevel()
@@ -382,7 +438,7 @@ public partial class StageSettings : Node3D
 	public string DisplayTime { get; private set; } // Current time formatted in mm:ss.ff
 	private void UpdateTime(bool skipPhysicsTick = false)
 	{
-		if (!IsLevelIngame || !Interface.PauseMenu.AllowPausing) return;
+		if (!IsLevelIngame || !Interface.PauseMenu.AllowInputs) return;
 
 		if (!skipPhysicsTick)
 			CurrentTime += PhysicsManager.normalDelta; // Add current time
@@ -400,7 +456,7 @@ public partial class StageSettings : Node3D
 		UpdateTime(true);
 	}
 
-	public bool[] fireSoulCheckpoints = new bool[3];
+	private bool[] fireSoulCheckpoints = new bool[3];
 	public bool IsFireSoulCheckpointFlagSet(int index) => fireSoulCheckpoints[index];
 	public bool SetFireSoulCheckpointFlag(int index, bool value) => fireSoulCheckpoints[index] = value;
 	#endregion
@@ -409,7 +465,7 @@ public partial class StageSettings : Node3D
 	[Export(PropertyHint.NodeType, "Node3D")]
 	private Node3D pathParent;
 	/// <summary> List of all level paths contained for this level. </summary>
-	private readonly Array<Path3D> pathList = [];
+	private readonly List<Path3D> pathList = [];
 
 	/// <summary>
 	/// Returns the path the player is currently the closest to.
@@ -515,7 +571,7 @@ public partial class StageSettings : Node3D
 
 		BGMPlayer.StageMusicPaused = true;
 		SoundManager.instance.CancelDialog();
-		Interface.PauseMenu.AllowPausing = false;
+		Interface.PauseMenu.AllowInputs = false;
 		LevelState = wasSuccessful ? LevelStateEnum.Success : LevelStateEnum.Failed;
 
 		EmitSignal(SignalName.LevelCompleted);
@@ -625,7 +681,9 @@ public partial class StageSettings : Node3D
 				continue;
 
 			SaveManager.ActiveGameData.UnlockStage(stage.LevelID);
-			missionsUnlocked++;
+
+			if (!DebugManager.Instance.UseDemoSave) // Only add notification when not using the demo save
+				missionsUnlocked++;
 		}
 
 		if (missionsUnlocked == 0)
@@ -645,12 +703,16 @@ public partial class StageSettings : Node3D
 		if (isCompletionDemoActive)
 			return;
 
-		Node3D objectParent = GetParent().GetChildOrNull<Node3D>(GetIndex() + 1);
-		if (objectParent != null) // Hide objects, which should always be the child after the static node
-			objectParent.Visible = false;
-
 		isCompletionDemoActive = true;
 		EmitSignal(SignalName.LevelDemoStarted);
+
+		// Cull objects, if necessary
+		if (!Data.DisableObjectCullOnCompletion)
+		{
+			Node3D objectParent = GetParent().GetChildOrNull<Node3D>(GetIndex() + 1);
+			if (objectParent != null) // Object parent should always be the child after the static node
+				objectParent.Visible = false;
+		}
 
 		if (completionAnimator == null) return;
 		OnCameraDemoAdvance();

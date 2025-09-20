@@ -14,15 +14,23 @@ public partial class HeadsUpDisplay : Control
 	[Export] private AnimationPlayer visibilityAnimator;
 
 	public override void _EnterTree() => Instance = this;
+	public override void _ExitTree() => Instance = null;
 
 	public override void _Ready()
 	{
+		if (IsInstanceValid(DebugManager.Instance))
+		{
+			OnHUDVisibilityToggled();
+			DebugManager.Instance.Connect(DebugManager.SignalName.HUDToggled, new Callable(this, MethodName.OnHUDVisibilityToggled));
+		}
+
 		score.InitializeRankPreviewer();
 		rings.InitializeRings();
 		objectives.InitializeObjectives();
 		InitializeSoulGauge();
 		race.InitializeRace();
 		InitializePrompts();
+		InitializeFireSouls();
 
 		if (Stage != null) // Decouple from level settings
 		{
@@ -33,21 +41,37 @@ public partial class HeadsUpDisplay : Control
 		}
 	}
 
-	#region Rings
+	private void OnHUDVisibilityToggled() => Visible = !DebugManager.Instance.DisableHUD;
+
+	#region Rings and Fire Souls
 	[Export] private Rings rings;
 	[Export] private AnimationPlayer fireSoulAnimator;
 
-	public void CollectFireSoul()
+	[Export] private TextureRect[] fireSouls;
+
+	[Export] private Texture2D fireSoulImg;
+	[Export] private Texture2D fireSoulDashImg;
+
+	private void InitializeFireSouls()
 	{
+		for (int i = 0; i < fireSouls.Length; i++)
+		{
+			bool isSaveCollected = SaveManager.ActiveGameData.LevelData.IsFireSoulCollected(Stage.Data.LevelID, i + 1);
+			fireSouls[i].Texture = isSaveCollected ? fireSoulImg : fireSoulDashImg;
+		}
+	}
+
+	public void CollectFireSoul(int index)
+	{
+		fireSouls[index].Texture = fireSoulImg;
+
 		fireSoulAnimator.Play("firesoul");
 		fireSoulAnimator.Seek(0.0, true);
 	}
 
-	private void UpdateRingCount(int amount, bool disableAnimations)
-	{
-		rings.UpdateRingCount(amount, disableAnimations);
-	}
+	public void UncollectFireSoul(int index) => fireSouls[index].Texture = fireSoulImg;
 
+	private void UpdateRingCount(int amount, bool disableAnimations) => rings.UpdateRingCount(amount, disableAnimations);
 	#endregion
 
 	#region Time and Score

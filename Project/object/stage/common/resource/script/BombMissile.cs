@@ -234,6 +234,7 @@ public partial class BombMissile : Node3D
 		{
 			initialPosition = root.GlobalPosition;
 			root.GlobalPosition = StartPosition;
+			root.ResetPhysicsInterpolation();
 		}
 
 		spawnData = new(GetParent(), Transform);
@@ -274,6 +275,7 @@ public partial class BombMissile : Node3D
 		if (launchTimer >= LaunchSettings.TotalTravelTime)
 		{
 			root.GlobalPosition = LaunchSettings.endPosition;
+			root.ResetPhysicsInterpolation();
 			Explode();
 		}
 

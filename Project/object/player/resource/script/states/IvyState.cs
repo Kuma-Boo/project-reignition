@@ -8,18 +8,18 @@ public partial class IvyState : PlayerState
 {
 	public Ivy Trigger { get; set; }
 
+	[Export] private float highSpeedSwingStrength;
+	[Export] private float initialSwingStrength;
+	[Export] private float additionalSwingStrength;
+
 	private float currentAnimationBlend;
 	private float animationBlendVelocity;
 	private float animationBlendSmoothing = .2f;
 
-	private readonly float HighSpeedSwingStrength = .6f;
-	private readonly float InitialSwingStrength = .4f;
-	private readonly float AdditionalSwingStrength = .35f;
-
 	/// <summary> Determines whether the ivy should have some force automatically applied when starting. </summary>
 	private bool isHighSpeedEntry;
 	public void UpdateHighSpeedEntry() => isHighSpeedEntry = Player.IsJumpDashOrHomingAttack ||
-		Player.MoveSpeed > Player.Stats.baseGroundSpeed * .5f;
+		Player.IsBackflipping;
 
 	private readonly string JumpAction = "action_jump";
 	private readonly string SwingAction = "action_swing";
@@ -31,9 +31,9 @@ public partial class IvyState : PlayerState
 
 		float initialForce;
 		if (isHighSpeedEntry)
-			initialForce = HighSpeedSwingStrength;
+			initialForce = highSpeedSwingStrength;
 		else
-			initialForce = HighSpeedSwingStrength * (Player.MoveSpeed / Player.Stats.baseGroundSpeed);
+			initialForce = initialSwingStrength * (Player.MoveSpeed / Player.Stats.baseGroundSpeed);
 
 		Trigger.AddImpulseForce(initialForce, true);
 
@@ -68,9 +68,9 @@ public partial class IvyState : PlayerState
 			return null;
 		}
 
-		if (Player.Controller.IsActionBufferActive && (!Player.Animator.IsIvySwingActive || Player.Animator.IsIvyStartActive))
+		if (Player.Controller.IsGimmickBufferActive && (!Player.Animator.IsIvySwingActive))
 		{
-			Player.Controller.ResetActionBuffer();
+			Player.Controller.ResetGimmickBuffer();
 			Player.Animator.StartIvySwing();
 			Trigger.AddImpulseForce(CalculateSwingForce());
 		}
@@ -85,13 +85,10 @@ public partial class IvyState : PlayerState
 	/// <summary> Calculates how much addition force to add based on swing state. </summary>
 	private float CalculateSwingForce()
 	{
-		if (Trigger.IsSleeping || Player.Animator.IsIvyStartActive)
-			return InitialSwingStrength;
+		if (Trigger.IsSleeping)
+			return initialSwingStrength;
 
-		if (Trigger.IvyRatio >= 0)
-			return AdditionalSwingStrength * (1f - Trigger.IvyRatio);
-
-		return AdditionalSwingStrength;
+		return additionalSwingStrength;
 	}
 
 

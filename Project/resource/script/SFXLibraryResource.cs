@@ -252,9 +252,6 @@ public partial class SFXLibraryResource : Resource
 	{
 		int keyIndex = keys.GetStringNameIndex(key);
 
-		if (channel > channelCount - 1) // Fallback to English
-			channel = 0;
-
 		if (keyIndex == -1)
 		{
 			if (fallbackResource != null) // Fallback if possible
@@ -285,4 +282,26 @@ public partial class SFXLibraryResource : Resource
 
 	public AudioStream GetStream(int index, int channel = 0, int sfxIndex = -1) => GetStream(GetKeyByIndex(index), channel, sfxIndex);
 	public StringName GetKeyByIndex(int index) => keys[index];
+
+	/// <summary> Returns a Dialog audio clip, but fallback to English if it's not found. </summary>
+	public AudioStream GetDialogStream(StringName key, int channel)
+	{
+		int keyIndex = keys.GetStringNameIndex(key);
+		if (keyIndex == -1)
+		{
+			if (fallbackResource != null) // Fallback if possible
+				return fallbackResource.GetDialogStream(key, channel);
+
+			GD.PushWarning($"Couldn't find dialog stream '{key}'!");
+			return null;
+		}
+
+		if (channel > channelCount - 1) // Fallback to English
+			channel = 0;
+
+		if (channel != 0 && streams[channel][keyIndex].Count != 0)
+			return GetStream(key, channel);
+
+		return GetStream(key, 0); // English fallback
+	}
 }

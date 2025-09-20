@@ -26,8 +26,6 @@ public partial class SkillPresetSelect : Menu
 	[Export] private AudioStreamPlayer selectSFX;
 	[Export] private AudioStreamPlayer failSFX;
 
-
-
 	private SkillRing ActiveSkillRing => SaveManager.ActiveSkillRing;
 
 	private int scrollAmount;

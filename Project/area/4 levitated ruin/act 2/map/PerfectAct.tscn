@@ -338,6 +338,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, -8.35188e-23, 1, 0, 0, 0)
 [node name="SpikePanel1" parent="PerfectAct/Objects/SecondFloor/SpikePanelCull/SpikePanelGroup1" instance=ExtResource("59_2hgap")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
 stateLengths = PackedFloat32Array(2, 0.5, 0.5)
+"Start Paused" = false
 "Start Time" = 1.0
 "State Lengths/inactive" = 2.0
 "State Lengths/warning" = 0.5
@@ -346,6 +347,7 @@ stateLengths = PackedFloat32Array(2, 0.5, 0.5)
 [node name="SpikePanel2" parent="PerfectAct/Objects/SecondFloor/SpikePanelCull/SpikePanelGroup1" instance=ExtResource("59_2hgap")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
 stateLengths = PackedFloat32Array(2, 0.5, 0.5)
+"Start Paused" = false
 "Start Time" = 1.0
 "State Lengths/inactive" = 2.0
 "State Lengths/warning" = 0.5
@@ -355,6 +357,7 @@ stateLengths = PackedFloat32Array(2, 0.5, 0.5)
 transform = Transform3D(0.906308, -0.422618, 0, 0.422618, 0.906308, 0, -2.66007e-14, 1.14656e-14, 1, 2.91553, 0.28125, 0)
 stateLengths = PackedFloat32Array(2, 0.5, 0.5)
 "Current State" = 2
+"Start Paused" = false
 "State Lengths/inactive" = 2.0
 "State Lengths/warning" = 0.5
 "State Lengths/active" = 0.5
@@ -365,6 +368,7 @@ transform = Transform3D(0.707107, -0.707107, 0, 0.707107, 0.707107, 0, -4.04309e
 [node name="SpikePanel1" parent="PerfectAct/Objects/SecondFloor/SpikePanelCull/SpikePanelGroup2" instance=ExtResource("59_2hgap")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
 stateLengths = PackedFloat32Array(2, 0.5, 0.5)
+"Start Paused" = false
 "Start Time" = 1.0
 "State Lengths/inactive" = 2.0
 "State Lengths/warning" = 0.5
@@ -373,6 +377,7 @@ stateLengths = PackedFloat32Array(2, 0.5, 0.5)
 [node name="SpikePanel2" parent="PerfectAct/Objects/SecondFloor/SpikePanelCull/SpikePanelGroup2" instance=ExtResource("59_2hgap")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
 stateLengths = PackedFloat32Array(2, 0.5, 0.5)
+"Start Paused" = false
 "Start Time" = 1.0
 "State Lengths/inactive" = 2.0
 "State Lengths/warning" = 0.5
@@ -469,6 +474,8 @@ shape = SubResource("BoxShape3D_5yb3a")
 [connection signal="Activated" from="PerfectAct/Objects/FirstFloor/Switch" to="PerfectAct/Objects/FirstFloor/Switch/Spring" method="ShowLauncher"]
 [connection signal="Activated" from="PerfectAct/Objects/FirstFloor/Switch" to="PerfectAct/Objects/Layer1Culler" method="Activate"]
 [connection signal="Respawned" from="PerfectAct/Objects/FirstFloor/Switch" to="PerfectAct/Objects/Layer1Culler" method="Deactivate"]
+[connection signal="Activated" from="PerfectAct/Objects/FirstFloor/Switch/Spring" to="Static/Collision/OneWay" method="Deactivate"]
+[connection signal="Deactivated" from="PerfectAct/Objects/FirstFloor/Switch/Spring" to="Static/Collision/OneWay" method="Activate"]
 [connection signal="Deactivated" from="PerfectAct/Objects/FirstFloor/Switch/Spring" to="PerfectAct/Objects/Triggers/Lockout" method="Deactivate"]
 [connection signal="Defeated" from="PerfectAct/Objects/Layer1Culler/RedMajin" to="PerfectAct/Objects/EnemyStone2" method="IncrementCounter"]
 [connection signal="Activated" from="PerfectAct/Objects/SecondFloor/Switch" to="PerfectAct/Objects/SecondFloor/Switch/Spring" method="ShowLauncher"]
@@ -479,3 +486,5 @@ shape = SubResource("BoxShape3D_5yb3a")
 
 [editable path="Static"]
 [editable path="Static/Collision"]
+[editable path="Static/Visuals/LRSky"]
+[editable path="Static/Visuals/LRSky/Skybox"]

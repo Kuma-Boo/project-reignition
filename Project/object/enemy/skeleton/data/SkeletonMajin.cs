@@ -101,6 +101,9 @@ public partial class SkeletonMajin : Enemy
 
 	protected override void EnterRange()
 	{
+		if (IsDefeated)
+			return;
+
 		if (wasSpawned && !IsActive)
 		{
 			Spawn();
@@ -112,13 +115,13 @@ public partial class SkeletonMajin : Enemy
 
 	protected override void ExitRange()
 	{
-		if (!IsActive)
+		if (!IsActive || IsDefeated)
 			return;
 
 		if (!despawnOnRangeExit)
 			return;
 
-		Deactivate(false);
+		CallDeferred(MethodName.Deactivate, false);
 	}
 
 	protected override void Spawn()
@@ -259,6 +262,8 @@ public partial class SkeletonMajin : Enemy
 
 	protected override void Defeat()
 	{
+		Deactivate(true);
+
 		if (isImmortal)
 		{
 			currentHealth = 0;
@@ -273,9 +278,6 @@ public partial class SkeletonMajin : Enemy
 			base.Defeat();
 		}
 
-		Deactivate(true);
-
-		Player.MovementAngle = Player.PathFollower.ForwardAngle; // More consistent direction
 		if (isImmortal)
 			stateTimer = ImmortalRespawnTime;
 	}
@@ -284,7 +286,7 @@ public partial class SkeletonMajin : Enemy
 	{
 		IsActive = false;
 		AnimationState.Start((!isDefeated || isImmortal) ? DamageAnimation : DefeatAnimation);
-		CallDeferred(MethodName.SetHitboxStatus, false);
+		SetHitboxStatus(false);
 	}
 
 	public void OnHurtboxEntered(Area3D a)

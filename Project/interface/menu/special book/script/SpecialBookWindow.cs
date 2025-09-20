@@ -4,6 +4,12 @@ namespace Project.Interface.Menus;
 
 public partial class SpecialBookWindow : NinePatchRect
 {
+	public bool IsNewTagVisible
+	{
+		get => newTag.Visible;
+		set => newTag.Visible = value;
+	}
+
 	[Export] private Label numberLabel;
 	[Export] private AnimationPlayer windowAnimator;
 	[Export] private TextureRect textureRect;
@@ -18,7 +24,4 @@ public partial class SpecialBookWindow : NinePatchRect
 
 	public void Select() => windowAnimator.Play("select");
 	public void Deselect() => windowAnimator.Play("RESET");
-
-	public void EnableNew() => newTag.Visible = true;
-	public void DisableNew() => newTag.Visible = false;
 }

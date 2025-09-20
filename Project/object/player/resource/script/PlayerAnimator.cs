@@ -33,8 +33,6 @@ public partial class PlayerAnimator : Node3D
 	private AnimationPlayer eventAnimationPlayer;
 	[Export]
 	private MeshInstance3D bodyMesh;
-	[Export]
-	private ShaderMaterial blurOverrideMaterial;
 
 	/// <summary> Reference to the root blend tree of the animation tree. </summary>
 	private AnimationNodeBlendTree animationRoot;
@@ -603,9 +601,6 @@ public partial class PlayerAnimator : Node3D
 		StopCrouching(Mathf.Clamp(0.2f, 0f, max));
 	}
 
-	public void StartMotionBlur() => bodyMesh.MaterialOverride = blurOverrideMaterial;
-	public void StopMotionBlur() => bodyMesh.MaterialOverride = null;
-
 	public void StartInvincibility(float speedScale)
 	{
 		eventAnimationPlayer.Play("invincibility", -1, speedScale);
@@ -969,9 +964,13 @@ public partial class PlayerAnimator : Node3D
 	public void SetZiplineBlend(float ratio) => animationTree.Set(ZiplineBlend, ratio);
 	public float GetZiplineBlend() => (float)animationTree.Get(ZiplineBlend);
 
-	public void StartZiplineTap(bool isFacingRight)
+	public void StartZiplineTap(bool isFacingRight, bool interuptAnimation)
 	{
 		animationTree.Set(ZiplineDirection, isFacingRight ? RightConstant : LeftConstant);
+
+		if (!interuptAnimation && IsZiplineTapActive)
+			return;
+
 		animationTree.Set(ZiplineTapTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 

@@ -19,7 +19,10 @@ public partial class SoulGauge : Control
 		soulGaugeBackground = soulGaugeFill.GetParent<Control>();
 
 		// Resize the soul gauge
-		float soulGaugeRatio = SaveManager.ActiveGameData.CalculateSoulGaugeLevelRatio();
+		float soulGaugeRatio = 0f;
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LockedSoulGauge))
+			soulGaugeRatio = SaveManager.ActiveGameData.CalculateSoulGaugeLevelRatio();
+
 		float maxMovementAmount = soulGaugeRect.Position.Y;
 		float maxSize = soulGaugeRect.RegionRect.Size.Y + (maxMovementAmount / soulGaugeRect.Scale.Y);
 		soulGaugeRect.Size = new Vector2(
@@ -41,7 +44,7 @@ public partial class SoulGauge : Control
 
 	private float targetSoulGaugeRatio;
 	private Vector2 soulGaugeVelocity;
-	private const int SoulGaugeChargePoint = 360;
+	private const int SoulGaugeChargePoint = 320;
 	private const int SoulGaugeFillOffset = 15;
 	private void UpdateSoulGauge()
 	{

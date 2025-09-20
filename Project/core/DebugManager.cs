@@ -15,6 +15,9 @@ public partial class DebugManager : Control
 	[Export]
 	private Control debugMenuRoot;
 
+	/// <summary> Set this to True when debugging rendering performance issues, otherwise Godot will spam errors. </summary>
+	public bool EnableReflectionProbeDebugging = false;
+
 	private bool isAdvancingFrame;
 	private bool isAttemptingPause;
 	private bool IsPaused => GetTree().Paused;
@@ -293,7 +296,7 @@ public partial class DebugManager : Control
 	private Slider skillAugmentSlider;
 	private void SetUpSkills()
 	{
-		for (int i = 0; i < (int)SkillKey.Max; i++)
+		for (int i = 0; i < (int)SkillKey.Count; i++)
 		{
 			skillSelectButton.AddItem(((SkillKey)i).ToString());
 		}
@@ -363,6 +366,7 @@ public partial class DebugManager : Control
 		}
 
 		DebugCheckpoint.GlobalTransform = StageSettings.Player.GlobalTransform;
+		DebugCheckpoint.ResetPhysicsInterpolation();
 		DebugCheckpoint.SaveCheckpointData();
 		GD.Print("Checkpoint created at ", StageSettings.Player.GlobalPosition);
 
@@ -384,13 +388,12 @@ public partial class DebugManager : Control
 	#endregion
 
 	#region Promo Settings
+	[Signal] public delegate void HUDToggledEventHandler();
 	public bool DisableHUD { get; private set; }
 	public void ToggleHUD(bool enabled)
 	{
 		DisableHUD = enabled;
-
-		if (!IsInstanceValid(HeadsUpDisplay.Instance)) return;
-		HeadsUpDisplay.Instance.SetVisibility(!enabled);
+		EmitSignal(SignalName.HUDToggled);
 	}
 
 	public bool DisableReticle { get; private set; }

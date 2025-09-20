@@ -99,7 +99,7 @@ public partial class SpecialBook : Menu
 			return;
 		}
 
-		EnableNewTag(0);
+		UpdateNewTags();
 
 		tabs[tabSelection].Select(); // Select chapter tab
 		base.ShowMenu();
@@ -216,6 +216,7 @@ public partial class SpecialBook : Menu
 
 			tabs[tabSelection].Deselect();
 			animator.Play("hide");
+			SaveManager.SaveSharedData();
 			return;
 		}
 
@@ -233,7 +234,6 @@ public partial class SpecialBook : Menu
 		if (menuState == MenuStateEnum.Entry)
 		{
 			animator.Play("hide-entry");
-			EnableNewTag(tabSelection);
 			menuState = MenuStateEnum.Page;
 		}
 
@@ -299,7 +299,6 @@ public partial class SpecialBook : Menu
 		if (menuState == MenuStateEnum.Page)
 		{
 			ProcessWindowSelection(input);
-			DisableNewTag();
 			return;
 		}
 
@@ -345,7 +344,7 @@ public partial class SpecialBook : Menu
 			tabs[tabSelection].Select();
 
 			LoadChapterData();
-			EnableNewTag(tabSelection);
+			UpdateNewTags();
 			sfxCategorySelect.Play();
 
 			if (!autoSelect)
@@ -472,7 +471,7 @@ public partial class SpecialBook : Menu
 	{
 		SpecialBookTab tab = tabs[tabSelection];
 		chapterLabel.Text = Tr("spb_chapter") + " " + (tabSelection + 1);
-		chapterName.Text = "[" + Tr("spb_chapter_" + tab.chapterType.ToString().ToLower()) + "]";
+		chapterName.Text = Tr("spb_brackets").Replace("DATA", Tr("spb_chapter_" + tab.chapterType.ToString().ToLower())).ToUpper();
 
 		// Load preview images
 		for (int i = 0; i < tab.PageResources.Length; i++)
@@ -533,13 +532,18 @@ public partial class SpecialBook : Menu
 				descriptionText = Tr("spb_bgm") + $"\n{descriptionText}";
 		}
 
-
 		textboxTitle.Text = chapterName.Text + "\n" + titleText;
 		previewDescription.Text = descriptionText;
 		previewNumber.Text = "-" + ((tabs[tabSelection].PageResources.Length * tabSelection) + pageSelection + 1).ToString("D3") + "-";
 
 		previewTextureRect.Texture = tabs[tabSelection].GetPreviewTexture(pageSelection);
 		fullTextureRect.Texture = tabs[tabSelection].GetFullTexture(pageSelection);
+
+		// Record that this tag has been viewed
+		if (!SaveManager.SharedData.ViewedPages.Contains($"{tabSelection + 1}_{pageSelection + 1}"))
+			SaveManager.SharedData.ViewedPages.Add($"{tabSelection + 1}_{pageSelection + 1}");
+
+		UpdateNewTags();
 	}
 
 	private void OnPreviewTextureLoaded(int tabIndex, int pageIndex)
@@ -558,22 +562,12 @@ public partial class SpecialBook : Menu
 		fullTextureRect.Texture = tabs[tabSelection].GetFullTexture(pageSelection);
 	}
 
-	private void DisableNewTag()
+	private void UpdateNewTags()
 	{
-		if (!SaveManager.SharedData.ViewedPages.Contains($"{tabSelection + 1}_{pageSelection + 1}"))
-			SaveManager.SharedData.ViewedPages.Add($"{tabSelection + 1}_{pageSelection + 1}");
-		EnableNewTag(tabSelection);
-	}
-	private void EnableNewTag(int tab)
-	{
-		for (int i = 0; i < 15; i++)
+		for (int i = 0; i < tabs[tabSelection].PageResources.Length; i++)
 		{
-			windows[i].DisableNew();
-		}
-		for (int i = 0; i < 15; i++)
-		{
-			if (!SaveManager.SharedData.ViewedPages.Contains($"{tab + 1}_{i + 1}") && tabs[tab].PageResources[i].IsUnlocked())
-				windows[i].EnableNew();
+			windows[i].IsNewTagVisible = !SaveManager.SharedData.ViewedPages.Contains($"{tabSelection + 1}_{i + 1}") &&
+				tabs[tabSelection].PageResources[i].IsUnlocked();
 		}
 	}
 }

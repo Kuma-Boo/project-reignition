@@ -77,6 +77,7 @@ public partial class ExperienceResult : Control
 
 		return currentLevel;
 	}
+	private int initialMaxSoulPower;
 	private const int MaxLevel = 99;
 	private const int LevelInterval = 10000;
 
@@ -84,11 +85,13 @@ public partial class ExperienceResult : Control
 
 	public override void _Ready()
 	{
+		useMissionExp = SaveManager.ActiveGameData.LevelData.GetClearStatus(Stage.Data.LevelID) != SaveManager.LevelSaveData.LevelStatus.Cleared;
+		useAccumulatedExp = AccumulatedExp != 0;
+
 		SaveManager.ActiveGameData.level = CalculateLevel(SaveManager.ActiveGameData.exp); // Update from old save data, just in case
 		SaveManager.ActiveGameData.level = Mathf.Min(SaveManager.ActiveGameData.level, MaxLevel);
-		useMissionExp = Stage.LevelState == StageSettings.LevelStateEnum.Success &&
-			SaveManager.ActiveGameData.LevelData.GetClearStatus(Stage.Data.LevelID) != SaveManager.LevelSaveData.LevelStatus.Cleared;
-		useAccumulatedExp = AccumulatedExp != 0;
+
+		initialMaxSoulPower = SaveManager.ActiveGameData.CalculateMaxSoulPower(false);
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -245,10 +248,10 @@ public partial class ExperienceResult : Control
 		if (levelsGained == 0)
 			return;
 
-		int maxSoulPower = SaveManager.ActiveGameData.CalculateMaxSoulPower();
+		int maxSoulPower = SaveManager.ActiveGameData.CalculateMaxSoulPower(false);
 		int maxSkillPoints = SkillRing.CalculateSkillPointsByLevel(SaveManager.ActiveGameData.level);
 
-		int soulGaugeGain = maxSoulPower - StageSettings.Player.Skills.MaxSoulPower;
+		int soulGaugeGain = maxSoulPower - initialMaxSoulPower;
 		int skillPointGain = maxSkillPoints - SaveManager.ActiveSkillRing.MaxSkillPoints;
 
 		levelGainLabel.Text = $"+{levelsGained:00}";
@@ -279,7 +282,7 @@ public partial class ExperienceResult : Control
 		if (string.IsNullOrEmpty(TransitionManager.instance.QueuedScene))
 		{
 			// Player is restarting a level -- accumulate exp and skip experience screen
-			AccumulatedExp += Stage.TotalScore + Stage.CurrentEXP;
+			AccumulatedExp += Mathf.FloorToInt((Stage.TotalScore + Stage.CurrentEXP) * 0.5f);
 
 			TransitionManager.QueueSceneChange(string.Empty);
 			TransitionManager.StartTransition(new()

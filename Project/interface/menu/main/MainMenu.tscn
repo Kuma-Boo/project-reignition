@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://do5h1l0j40l23"]
+[gd_scene load_steps=53 format=3 uid="uid://do5h1l0j40l23"]
 
 [ext_resource type="Script" uid="uid://c8xggtgtbxr2d" path="res://interface/menu/main/MainMenu.cs" id="3"]
 [ext_resource type="Texture2D" uid="uid://cgr5n541nctwp" path="res://interface/menu/main/texture/text/base en.png" id="5"]
@@ -572,7 +572,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(100, 16)]
+"values": [Vector2(100, 42)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -597,6 +597,18 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [ExtResource("15_jx3kk")]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Menu/Parent/Text/Label:text")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["sys_quit_description"]
 }
 
 [sub_resource type="Animation" id="Animation_yred1"]
@@ -645,6 +657,68 @@ tracks/2/keys = {
 }, {
 "args": [],
 "method": &"StartQuitTransition"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_y0owu"]
+resource_name = "confirm_load"
+length = 0.500003
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.166667, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../SFX/Confirm")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Menu/Parent/Text/Cursor/CursorAnimationPlayer")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["confirm", -1, 1.0, false],
+"method": &"play"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("..")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"DisableProcessing"
+}, {
+"args": [],
+"method": &"EnableProcessing"
 }]
 }
 
@@ -710,6 +784,38 @@ tracks/3/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_jx3kk"]
+resource_name = "load-text"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Menu/Parent/Text/Label:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["option_quick_load_alert"]
+}
+
+[sub_resource type="Animation" id="Animation_aq63c"]
+resource_name = "quit-text"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Menu/Parent/Text/Label:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["sys_quit_description"]
+}
+
 [sub_resource type="Animation" id="Animation_yxa58"]
 resource_name = "select-no"
 length = 0.001
@@ -751,7 +857,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(100, 16)]
+"values": [Vector2(100, 42)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -791,7 +897,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-400, 16)]
+"values": [Vector2(-400, 42)]
 }
 tracks/1/type = "method"
 tracks/1/imported = false
@@ -905,25 +1011,13 @@ tracks/3/keys = {
 "update": 0,
 "values": [Vector2(0, 634), Vector2(0, 470)]
 }
-tracks/4/type = "value"
+tracks/4/type = "method"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Menu/Parent/Text/Cursor:position")
+tracks/4/path = NodePath("Menu/Parent/Text/Cursor/CursorAnimationPlayer")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(100, 16)]
-}
-tracks/5/type = "method"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("Menu/Parent/Text/Cursor/CursorAnimationPlayer")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -931,36 +1025,15 @@ tracks/5/keys = {
 "method": &"play"
 }]
 }
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("Menu/Parent/Text/Options/Yes:texture")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("14_y0owu")]
-}
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("Menu/Parent/Text/Options/No:texture")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("15_jx3kk")]
-}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_y0owu"]
 _data = {
 &"RESET": SubResource("Animation_usxt6"),
 &"confirm": SubResource("Animation_yred1"),
+&"confirm_load": SubResource("Animation_y0owu"),
 &"hide": SubResource("Animation_crj0a"),
+&"load-text": SubResource("Animation_jx3kk"),
+&"quit-text": SubResource("Animation_aq63c"),
 &"select-no": SubResource("Animation_yxa58"),
 &"select-yes": SubResource("Animation_1q86i"),
 &"show": SubResource("Animation_56tgp")
@@ -2895,9 +2968,9 @@ anchors_preset = 0
 [node name="Options" type="HBoxContainer" parent="QuitMenu/Menu/Parent/Text"]
 layout_mode = 0
 offset_left = -480.0
-offset_top = 16.0
+offset_top = 42.0
 offset_right = 480.0
-offset_bottom = 144.0
+offset_bottom = 170.0
 theme_override_constants/separation = 200
 alignment = 1
 
@@ -2945,9 +3018,9 @@ uppercase = true
 custom_minimum_size = Vector2(150, 64)
 anchors_preset = 0
 offset_left = 100.0
-offset_top = 16.0
+offset_top = 42.0
 offset_right = 400.0
-offset_bottom = 144.0
+offset_bottom = 170.0
 pivot_offset = Vector2(150, 64)
 
 [node name="Sprite" type="TextureRect" parent="QuitMenu/Menu/Parent/Text/Cursor"]
@@ -2972,9 +3045,9 @@ libraries = {
 [node name="Label" type="Label" parent="QuitMenu/Menu/Parent/Text"]
 layout_mode = 0
 offset_left = -480.0
-offset_top = -85.0
+offset_top = -150.0
 offset_right = 488.0
-offset_bottom = -37.0
+offset_bottom = 42.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 2
@@ -2983,6 +3056,7 @@ theme_override_font_sizes/font_size = 32
 text = "sys_quit_description"
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 3
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="QuitMenu"]
 libraries = {

@@ -39,6 +39,9 @@ public partial class StompState : PlayerState
 
 	public override void ExitState()
 	{
+		if (!Player.IsOnGround && !Player.IsGrindRailActive)
+			Player.IsStomping = false;
+
 		Player.Effect.StopStompFX();
 		Player.ChangeHitbox("RESET");
 		Player.AttackState = PlayerController.AttackStates.None;
@@ -55,6 +58,7 @@ public partial class StompState : PlayerState
 		if (Player.IsOnGround)
 			return landState;
 
+		Player.AttemptFallIntoTheVoid();
 		return null;
 	}
 

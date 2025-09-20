@@ -62,8 +62,6 @@ public partial class ControlOption : Control
 		AxisTextureRect = GetNodeOrNull<TextureRect>(axisTextureRect);
 		ButtonTextureRect = GetNodeOrNull<TextureRect>(buttonTextureRect);
 
-		ActionLabel.Text = Tr(actionId);
-
 		RedrawBinding();
 
 		Runtime.Instance.EventInputed += ReceiveInput;
@@ -307,6 +305,8 @@ public partial class ControlOption : Control
 
 	public void RedrawBinding()
 	{
+		ActionLabel.Text = Tr(actionId);
+
 		KeyTextureRect.Modulate = Colors.Transparent;
 		ButtonTextureRect.Modulate = Colors.Transparent;
 		AxisTextureRect.Modulate = Colors.Transparent;

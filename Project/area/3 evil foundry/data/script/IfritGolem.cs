@@ -313,6 +313,7 @@ public partial class IfritGolem : Node3D
 	private readonly string IdleAnimation = "idle";
 	private void EnterStep()
 	{
+		PhysicsInterpolationMode = PhysicsInterpolationModeEnum.Off; // Disable interpolation during steps
 		ExitIdle();
 		UpdatePreviousSector();
 
@@ -337,6 +338,7 @@ public partial class IfritGolem : Node3D
 
 	private void ExitStep()
 	{
+		PhysicsInterpolationMode = PhysicsInterpolationModeEnum.Inherit; // Disable interpolation during steps
 		if (leftHandCores == 0 && rightHandCores == 0)
 			RespawnCores();
 
@@ -672,13 +674,16 @@ public partial class IfritGolem : Node3D
 
 		cutsceneCamera.previousSettings = bounceCameraSettings;
 		cutsceneCamera.Activate();
+
+		Player.Skills.CancelBreakSkills();
+		Player.Skills.DisableBreakSkills();
 		Player.Deactivate();
 		Player.AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
 
 		AnimationTree.Set(DefeatTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		// Award 8000 points for defeating the boss
 		BonusManager.instance.QueueBonus(new(BonusType.Boss, 8000));
-		Interface.PauseMenu.AllowPausing = false;
+		Interface.PauseMenu.AllowInputs = false;
 		HeadsUpDisplay.Instance.Visible = false;
 		currentState = GolemState.Defeated;
 
@@ -785,6 +790,7 @@ public partial class IfritGolem : Node3D
 
 		LaserRoot.Rotation = Vector3.Up * targetRotation;
 		LaserRoot.GlobalPosition = targetPosition;
+		LaserRoot.ResetPhysicsInterpolation();
 
 		// Update VFX positions
 		LaserVFXRoot.GlobalPosition = samplePosition + (Vector3.Up * 10.0f);
@@ -792,6 +798,7 @@ public partial class IfritGolem : Node3D
 		RaycastHit hit = LaserVFXRoot.CastRay(LaserVFXRoot.GlobalPosition, Vector3.Down * 50.0f, Runtime.Instance.environmentMask);
 		if (hit)
 			LaserVFXRoot.GlobalPosition = new(LaserVFXRoot.GlobalPosition.X, hit.point.Y, LaserVFXRoot.GlobalPosition.Z);
+		LaserVFXRoot.ResetPhysicsInterpolation();
 
 		EventAnimator.Play(currentState == GolemState.SpecialAttack ? "laser-far" : "laser-close");
 		isLaserAttackActive = true;

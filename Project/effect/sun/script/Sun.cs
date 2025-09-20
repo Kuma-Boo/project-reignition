@@ -27,7 +27,7 @@ namespace Project
 		private readonly float OCCLUSION_SMOOTHING = .5f;
 		private readonly float MOVEMENT_SMOOTHING = 4.0f;
 
-		private PlayerCameraController Camera => StageSettings.Player.Camera;
+		private Camera3D Camera => GetViewport().GetCamera3D();
 		private Callable UpdateSunCallable => new(this, MethodName.UpdateSun);
 
 		private readonly string SHADER_GLOBAL_SUN_OCCLUSION = "sun_occlusion";
@@ -55,7 +55,7 @@ namespace Project
 			currentOcclusion = ExtensionMethods.SmoothDamp(currentOcclusion, isOccluded ? 1f : 0f, ref currentOcclusionVelocity, OCCLUSION_SMOOTHING);
 			RenderingServer.GlobalShaderParameterSet(SHADER_GLOBAL_SUN_OCCLUSION, currentOcclusion);
 
-			screenUV = Camera.ConvertToScreenSpace(GlobalPosition) / Runtime.ScreenSize;
+			screenUV = Camera.UnprojectPosition(GlobalPosition) / Runtime.ScreenSize;
 			if ((screenUV - previousScreenUV).LengthSquared() * 100.0f > movementThreshold)
 				currentMovement = 0f;
 			previousScreenUV = screenUV;
@@ -72,9 +72,9 @@ namespace Project
 		{
 			if (updateTimer <= 0f)
 			{
-				if (Camera.IsBehindCamera(GlobalPosition) || screenUV.X < 0.0f || screenUV.X > 1.0f || screenUV.Y < 0.0f || screenUV.Y > 1.0f)
+				if (Camera.IsPositionBehind(GlobalPosition) || screenUV.X < 0.0f || screenUV.X > 1.0f || screenUV.Y < 0.0f || screenUV.Y > 1.0f)
 					isOccluded = true; // Always occluded when the camera faces away
-				else if (Camera.IsOnScreen(GlobalPosition))
+				else if (Camera.IsPositionInFrustum(GlobalPosition))
 				{
 					// Sample texture. VERY SLOW!!!
 					Image depthBuffer = DepthRenderer.DepthTexture.GetImage();
@@ -95,7 +95,7 @@ namespace Project
 
 		private void UpdateLensFlare()
 		{
-			Vector2 originPosition = Camera.ConvertToScreenSpace(GlobalPosition);
+			Vector2 originPosition = Camera.UnprojectPosition(GlobalPosition);
 			Vector2 flareDirection = lensFlareBase.GlobalPosition - originPosition; // Get the direction to the center of the screen
 
 			lensFlareBase.Modulate = Colors.White.Lerp(Colors.Transparent, currentOcclusion);

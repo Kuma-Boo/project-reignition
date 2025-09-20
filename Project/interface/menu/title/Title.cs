@@ -3,13 +3,13 @@ using Project.Core;
 
 namespace Project.Interface.Menus
 {
-	/// <summary>
-	/// Press start. Also plays an intro cutscene if you wait long enough.
-	/// </summary>
+	// / <summary>
+	// / Press start. Also plays an intro cutscene if you wait long enough.
+	// / </summary>
 	public partial class Title : Menu
 	{
-		[Export]
-		private Label versionLabel;
+		[Export] private Label versionLabel;
+		[Export] private Sprite2D startTextSprite;
 
 		private bool isCutsceneActive;
 		private float cutsceneTimer;
@@ -19,42 +19,58 @@ namespace Project.Interface.Menus
 		{
 			isProcessing = menuMemory[MemoryKeys.ActiveMenu] == (int)MemoryKeys.Title;
 			versionLabel.Text = $"Version {(string)ProjectSettings.GetSetting("application/config/version")}";
+
+			OnHUDToggled();
+			DebugManager.Instance.Connect(DebugManager.SignalName.HUDToggled, new Callable(this, MethodName.OnHUDToggled));
+
 			base.SetUp();
 		}
 
+		private void OnHUDToggled()
+		{
+			versionLabel.Visible = !DebugManager.Instance.DisableHUD;
+			startTextSprite.Visible = !DebugManager.Instance.DisableHUD;
+		}
 
 		protected override void ProcessMenu()
 		{
-
 			if (isCutsceneActive)
 			{
 				if ((Runtime.Instance.IsActionJustPressed("sys_pause", "ui_accept") && !Input.IsActionJustPressed("toggle_fullscreen")) ||
 					Runtime.Instance.IsActionJustPressed("sys_select", "ui_select"))
 					FinishCutscene();
+
+				return;
 			}
-			else if (Input.IsAnythingPressed()) //Change menu
+
+			if (Input.IsAnythingPressed()) // Change menu
 			{
 				Confirm();
 				return;
 			}
-			else
+
+			cutsceneTimer += PhysicsManager.physicsDelta;
+			if (cutsceneTimer >= CUTSCENE_TIME_LENGTH && !isCutsceneActive)
 			{
-				cutsceneTimer += PhysicsManager.physicsDelta;
-				if (cutsceneTimer >= CUTSCENE_TIME_LENGTH && !isCutsceneActive)
-				{
-					StartCutscene();
-					return;
-				}
+				StartCutscene();
+				return;
 			}
 		}
 
-		//Activate main menu (submenu 0);
+		// Activate main menu (submenu 0);
 		public override void OpenSubmenu() => _submenus[0].ShowMenu();
 
 		public override void ShowMenu()
 		{
 			animator.Play("RESET");
 			animator.Seek(0, true);
+
+			if (SaveManager.Config.useProjectReignitionBranding)
+			{
+				animator.Play("pr-logo");
+				animator.Advance(0.0);
+			}
+
 			animator.Play(ShowAnimation);
 
 			cutsceneTimer = 0;
@@ -64,6 +80,7 @@ namespace Project.Interface.Menus
 		{
 			isCutsceneActive = true;
 			animator.Play("cutscene-start");
+			DisableProcessing();
 		}
 
 		private void FinishCutscene()
@@ -71,6 +88,7 @@ namespace Project.Interface.Menus
 			cutsceneTimer = 0;
 			isCutsceneActive = false;
 			animator.Play("cutscene-finish");
+			DisableProcessing();
 		}
 	}
 }

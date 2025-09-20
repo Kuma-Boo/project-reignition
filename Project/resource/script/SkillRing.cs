@@ -18,6 +18,9 @@ public class SkillRing
 	public int TotalCost { get; private set; }
 	/// <summary> Amount of available skill points. </summary>
 	public int MaxSkillPoints { get; private set; }
+	/// <summary> Number of skills equipped per element. Indexes line up with SkillResource.SkillElement when casted to an int. </summary>
+	private int[] SkillCountByElement = new int[(int)SkillResource.SkillElement.Count];
+	public int GetSkillCountByElement(SkillResource.SkillElement element) => SkillCountByElement[(int)element];
 
 	/// <summary> Calculates how many skill points the player has based on their level. </summary>
 	public static int CalculateSkillPointsByLevel(int level)
@@ -33,7 +36,7 @@ public class SkillRing
 	public void UpdateTotalSkillPoints() => MaxSkillPoints = CalculateSkillPointsByLevel(SaveManager.ActiveGameData.level);
 
 	/// <summary> Updates the total cost based on the skills currently equipped on a skill ring. </summary>
-	public void UpdateTotalCost()
+	private void UpdateTotalCost()
 	{
 		TotalCost = 0;
 		for (int i = 0; i < EquippedSkills.Count; i++)
@@ -50,6 +53,19 @@ public class SkillRing
 			}
 
 			TotalCost += baseSkill.Augments[augmentIndex - 1].Cost;
+		}
+	}
+
+	private void UpdateSkillCounts()
+	{
+		for (int i = 0; i < SkillCountByElement.Length; i++) // Reset counts
+			SkillCountByElement[i] = 0;
+
+		foreach (SkillKey key in EquippedSkills)
+		{
+			SkillResource skill = Runtime.Instance.SkillList.GetSkill(key);
+			skill = skill.GetAugment(GetAugmentIndex(key));
+			SkillCountByElement[(int)skill.Element]++;
 		}
 	}
 
@@ -70,7 +86,7 @@ public class SkillRing
 		SkillResource skill = Runtime.Instance.SkillList.GetSkill(key);
 
 		if (skill.SkillConflicts == null)
-			return SkillKey.Max;
+			return SkillKey.Count;
 
 		foreach (string conflict in skill.SkillConflicts)
 		{
@@ -83,11 +99,11 @@ public class SkillRing
 			return conflictKey;
 		}
 
-		return SkillKey.Max; // No conflicts
+		return SkillKey.Count; // No conflicts
 	}
 
 	/// <summary> Equips a skill onto the skill ring. </summary>
-	public SkillEquipStatusEnum EquipSkill(SkillKey key, int augmentIndex = 0, bool allowSkillPointOverflow = false)
+	public SkillEquipStatusEnum EquipSkill(SkillKey key, int augmentIndex = 0, bool isDebugToggle = false)
 	{
 		if (EquippedSkills.Contains(key) && augmentIndex == GetAugmentIndex(key))
 			return SkillEquipStatusEnum.Equipped; // Already equipped
@@ -100,7 +116,7 @@ public class SkillRing
 		if (conflict != null)
 		{
 			GD.Print($"You cannot equip {conflict.NameKey} when {baseSkill.NameKey} is active.");
-			return SkillEquipStatusEnum.Conflict;
+			return SkillEquipStatusEnum.ConflictEquip;
 		}
 
 		// Process augments
@@ -114,7 +130,7 @@ public class SkillRing
 			}
 
 			int currentCost = IsSkillEquipped(key) ? baseSkill.GetAugment(GetAugmentIndex(key)).Cost : 0;
-			if (!allowSkillPointOverflow) // Check for total cost
+			if (!isDebugToggle) // Check for total cost
 			{
 				int targetTotalCost = TotalCost - currentCost + augment.Cost;
 				if (targetTotalCost > MaxSkillPoints)
@@ -125,6 +141,7 @@ public class SkillRing
 				EquippedSkills.Add(key);
 			TotalCost -= currentCost; // Refund currently equipped cost
 			TotalCost += augment.Cost; // Take skill points
+			SkillCountByElement[(int)augment.Element]++;
 
 			// Update augment index
 			if (EquippedAugments.ContainsKey(key))
@@ -136,34 +153,62 @@ public class SkillRing
 		}
 
 		// Not an augment skill
-		if (!allowSkillPointOverflow) // Check for total cost
+		if (!isDebugToggle) // Check for total cost
 		{
 			int targetTotalCost = TotalCost + baseSkill.Cost;
 			if (targetTotalCost > MaxSkillPoints)
 				return SkillEquipStatusEnum.Expensive; // Too expensive!
 		}
 
+		int skillCount = SaveManager.ActiveSkillRing.GetSkillCountByElement(baseSkill.Element);
+		if (skillCount < baseSkill.ElementRequirement && !isDebugToggle)
+			return SkillEquipStatusEnum.ElementRequirement;
+
 		if (!EquippedSkills.Contains(key))
 			EquippedSkills.Add(key);
+
 		TotalCost += baseSkill.Cost; // Take skill points
+		SkillCountByElement[(int)baseSkill.Element]++;
 		return SkillEquipStatusEnum.Success;
 	}
 
 	/// <summary> Unequips a skill from the skill ring. </summary>
-	public bool UnequipSkill(SkillKey key, int augmentIndex = 0)
+	public SkillKey UnequipSkill(SkillKey key, int augmentIndex = 0)
 	{
 		if (augmentIndex != GetAugmentIndex(key))
-			return false; // Augment index mismatch
+			return SkillKey.Count; // Augment index mismatch
+
+		SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(key);
+		SkillResource augment = baseSkill.GetAugment(augmentIndex);
+
+		// Check for unequip requirements
+		int resultingElementCount = SkillCountByElement[(int)augment.Element] - 1;
+		foreach (SkillKey conflictKey in SaveManager.ActiveSkillRing.EquippedSkills)
+		{
+			SkillResource conflictSkill = Runtime.Instance.SkillList.GetSkill(conflictKey);
+			if (conflictSkill.ElementRequirement == 0 || conflictSkill.Element != augment.Element || conflictSkill.Key == key)
+				continue;
+
+			if (resultingElementCount <= conflictSkill.ElementRequirement)
+			{
+				// Can't unequip bc of a different skill
+				return conflictSkill.Key;
+			}
+		}
+
+		ForceUnequipSkill(key, augmentIndex);
+		return baseSkill.Key;
+	}
+
+	public void ForceUnequipSkill(SkillKey key, int augmentIndex = 0)
+	{
+		SkillResource targetSkill = Runtime.Instance.SkillList.GetSkill(key).GetAugment(augmentIndex);
 
 		if (EquippedSkills.Remove(key))
 		{
-			SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(key);
-			SkillResource augment = baseSkill.GetAugment(augmentIndex);
-			TotalCost -= augment.Cost; // Refund skill points
-			return true;
+			TotalCost -= targetSkill.Cost; // Refund skill points
+			SkillCountByElement[(int)targetSkill.Element]--;
 		}
-
-		return false;
 	}
 
 	/// <summary> Resets a skill's augment index to 0. </summary>
@@ -238,8 +283,26 @@ public class SkillRing
 	/// <summary> Updates a skill ring to match the active game data. </summary>
 	public void LoadFromActiveData()
 	{
+		ValidateCrestSkills();
 		UpdateTotalSkillPoints();
 		UpdateTotalCost();
+		UpdateSkillCounts();
+	}
+
+	public void ValidateCrestSkills()
+	{
+		UpdateSkillCounts();
+
+		for (int i = EquippedSkills.Count - 1; i >= 0; i--)
+		{
+			SkillResource skill = Runtime.Instance.SkillList.GetSkill(EquippedSkills[i]);
+
+			if (skill.ElementRequirement == 0 || GetSkillCountByElement(skill.Element) >= skill.ElementRequirement)
+				continue;
+
+			EquippedSkills.Remove(EquippedSkills[i]);
+			UpdateSkillCounts();
+		}
 	}
 
 	/// <summary> Sorts skill resources based on their key (number). </summary>
@@ -271,9 +334,11 @@ public enum SkillEquipStatusEnum
 {
 	Success,
 	Expensive,
-	Conflict,
+	ConflictEquip,
+	ConflictUnequip,
 	Equipped,
 	Missing,
+	ElementRequirement
 }
 
 /// <summary> Dev keys for all possible skills in the game, in numerical order. </summary>
@@ -284,6 +349,8 @@ public enum SkillKey
 	ChargeJump,
 	SlowTurn, // Decreases Sonic's turning sensitivity
 	QuickTurn, // Increases Sonic's turning sensitivity
+	LockedSoulGauge, // Limits the soul gauge to lvl 1 Sonic
+	RankPreview, // Shows the current rank on the heads-up display
 
 	SpeedUp, // Increases Sonic's top speed
 	TractionUp, // Increases Sonic's traction
@@ -338,7 +405,6 @@ public enum SkillKey
 	DriftExp, // Manually perform a drift for more speed and points/exp
 
 	// New skills
-	RankPreview, // Shows the current rank on the heads-up display
 	QuickStep, // Quick Step, Unleashed style
 	PerfectHomingAttack, // Perfect homing attack, Colors Ultimate style
 	LightSpeedDash, // SA2 style
@@ -349,5 +415,5 @@ public enum SkillKey
 	CrestFire,
 	CrestDark,
 
-	Max, // Number of skills
+	Count, // Number of skills
 }

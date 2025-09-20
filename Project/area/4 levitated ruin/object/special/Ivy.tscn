@@ -1,10 +1,14 @@
-[gd_scene load_steps=7 format=3 uid="uid://ci8d3jdqrc0nr"]
+[gd_scene load_steps=8 format=3 uid="uid://ci8d3jdqrc0nr"]
 
 [ext_resource type="Script" uid="uid://b2npn6f8s5xl7" path="res://area/4 levitated ruin/data/script/Ivy.cs" id="1_3x35n"]
 [ext_resource type="PackedScene" uid="uid://bhyhksqbx12de" path="res://area/4 levitated ruin/object/model/special/IvyBase.gltf" id="1_mnuw2"]
 [ext_resource type="PackedScene" uid="uid://loro11gywkcy" path="res://area/4 levitated ruin/object/model/special/IvyLink.gltf" id="2_17bjr"]
 [ext_resource type="AudioStream" uid="uid://lx6yh1sfq2ir" path="res://sound/sfx/stage/levitated ruin/ivy swing.wav" id="4_d1lf5"]
 [ext_resource type="AudioStream" uid="uid://biwdex13eh70l" path="res://sound/sfx/stage/levitated ruin/ivy catch.wav" id="5_724sq"]
+
+[sub_resource type="Curve" id="Curve_fuur8"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bxmnq"]
 height = 1.5
@@ -15,6 +19,10 @@ Length = 5
 MaxRotation = 45.0
 IvyScene = ExtResource("2_17bjr")
 swingSfx = NodePath("Lockon/SwingSFX")
+root = NodePath("IvyBase/SegmentRoot")
+velocityLimitCurve = SubResource("Curve_fuur8")
+rotationLimit = 10.0
+gravity = 8.0
 "Secondary Settings/Enabled" = true
 "Secondary Settings/Middle Height" = 4.0
 "Secondary Settings/Final Height" = 3.0
@@ -31,20 +39,20 @@ ignoreLaunchPointRotation = true
 [node name="IvyBase" parent="." instance=ExtResource("1_mnuw2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
 
+[node name="SegmentRoot" type="Node3D" parent="IvyBase"]
+
 [node name="Lockon" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.15, 0)
 collision_layer = 12
 collision_mask = 2
 
 [node name="SwingSFX" type="AudioStreamPlayer3D" parent="Lockon"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 0)
 stream = ExtResource("4_d1lf5")
 max_db = 0.0
 max_distance = 200.0
 bus = &"GAME SFX"
 
 [node name="CatchSFX" type="AudioStreamPlayer3D" parent="Lockon"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 0)
 stream = ExtResource("5_724sq")
 max_db = 0.0
 max_distance = 200.0

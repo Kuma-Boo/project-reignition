@@ -63,6 +63,9 @@ public partial class GrindStepState : PlayerState
 		Player.MovementAngle = Player.Animator.VisualAngle;
 		Player.Animator.ResetState(.1f);
 
+		if (!Player.IsStomping && !Player.IsGrindRailActive) // The only action that doesn't cancel a grind step is a stomp or a grind
+			Player.IsGrindstepping = false;
+
 		HeadsUpDisplay.Instance.HidePrompts();
 	}
 
@@ -86,6 +89,7 @@ public partial class GrindStepState : PlayerState
 			return stompState;
 		}
 
+		Player.AttemptFallIntoTheVoid();
 		return null;
 	}
 

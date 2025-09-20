@@ -19,6 +19,7 @@ public partial class SkillSelect : Menu
 	[Export] private Label alertLabel;
 	private int AlertSelection;
 	private bool IsAlertMenuActive { get; set; }
+	private SkillKey AlertMenuTargetSkill = SkillKey.Count;
 
 	private bool IsEditingAugment { get; set; }
 
@@ -65,7 +66,7 @@ public partial class SkillSelect : Menu
 		if (SaveManager.Config.useRetailMenuMusic) // Disable bgm
 			bgm = null;
 
-		for (int i = 0; i < (int)SkillKey.Max; i++)
+		for (int i = 0; i < (int)SkillKey.Count; i++)
 		{
 			SkillKey key = (SkillKey)i;
 			SkillResource skill = SkillList.GetSkill(key);
@@ -124,8 +125,7 @@ public partial class SkillSelect : Menu
 			return;
 		}
 
-
-		if (!IsEditingAugment)
+		if (!IsEditingAugment && !IsAlertMenuActive)
 		{
 			// Quick scrolling
 			if (Input.IsActionJustPressed("button_step_left"))
@@ -307,10 +307,7 @@ public partial class SkillSelect : Menu
 			skillOptionList[i].Visible = false;
 
 			if (!SaveManager.ActiveSkillRing.IsSkillUnlocked(key))
-			{
-				GD.Print($"{key} is not unlocked.");
 				continue;
-			}
 
 			visualSkillOptionList.Add(skillOptionList[i]);
 			skillOptionList[i].Visible = true;
@@ -350,8 +347,19 @@ public partial class SkillSelect : Menu
 		{
 			if (AlertSelection == 1)
 			{
-				// Toggle skills
-				SwapConflictSkills();
+				if (AlertMenuTargetSkill != SkillKey.Count)
+				{
+					// Unequip a different skill before toggling this one
+					ActiveSkillRing.ForceUnequipSkill(AlertMenuTargetSkill);
+					ToggleSkill();
+					Redraw();
+				}
+				else
+				{
+					// Toggle skills
+					SwapConflictSkills();
+				}
+
 				alertAnimator.Play("confirm");
 			}
 			else
@@ -398,12 +406,11 @@ public partial class SkillSelect : Menu
 			baseSkill = baseSkill.GetAugment(AugmentSelection);
 		SkillResource conflictingSkill = ActiveSkillRing.GetConflictingSkill(baseSkill.Key);
 
-		if (ActiveSkillRing.UnequipSkill(conflictingSkill.Key, ActiveSkillRing.GetAugmentIndex(conflictingSkill.Key)))
-		{
-			// Revert to base skill if unequipped
-			ActiveSkillRing.ResetAugmentIndex(conflictingSkill.Key);
-			ActiveSkillRing.EquipSkill(baseSkill.Key, IsEditingAugment ? AugmentSelection : 0);
-		}
+		ActiveSkillRing.ForceUnequipSkill(conflictingSkill.Key, ActiveSkillRing.GetAugmentIndex(conflictingSkill.Key));
+
+		// Revert to base skill if unequipped
+		ActiveSkillRing.ResetAugmentIndex(conflictingSkill.Key);
+		ActiveSkillRing.EquipSkill(baseSkill.Key, IsEditingAugment ? AugmentSelection : 0);
 
 		Redraw();
 	}
@@ -417,10 +424,20 @@ public partial class SkillSelect : Menu
 			return false;
 		}
 
-		if (ActiveSkillRing.UnequipSkill(key, IsEditingAugment ? AugmentSelection : 0))
+		if (ActiveSkillRing.IsSkillEquipped(key))
 		{
-			animator.Play("unequip");
-			return true;
+			SkillKey unequippedKey = ActiveSkillRing.UnequipSkill(key, IsEditingAugment ? AugmentSelection : 0);
+			if (unequippedKey == key)
+			{
+				animator.Play("unequip");
+				return true;
+			}
+			else if (unequippedKey != SkillKey.Count)
+			{
+				// Conflict due to element count
+				ShowAlertMenu(Runtime.Instance.SkillList.GetSkill(key), SkillEquipStatusEnum.ConflictUnequip, unequippedKey);
+				return false;
+			}
 		}
 
 		SkillEquipStatusEnum status = ActiveSkillRing.EquipSkill(key, IsEditingAugment ? AugmentSelection : 0);
@@ -430,38 +447,75 @@ public partial class SkillSelect : Menu
 			return true;
 		}
 
-		if (status == SkillEquipStatusEnum.Conflict ||
-			status == SkillEquipStatusEnum.Expensive)
+		if (status == SkillEquipStatusEnum.ConflictEquip ||
+			status == SkillEquipStatusEnum.Expensive ||
+			status == SkillEquipStatusEnum.ElementRequirement)
 		{
-			// Open alert menu
-			IsAlertMenuActive = true;
-			alertAnimator.Play("RESET");
-			alertAnimator.Advance(0.0);
+			SkillResource baseSkill = SelectedSkill.Skill;
+			if (IsEditingAugment)
+				baseSkill = baseSkill.GetAugment(AugmentSelection);
 
-			if (status == SkillEquipStatusEnum.Conflict)
+			ShowAlertMenu(baseSkill, status);
+		}
+
+		return false; // Something failed
+	}
+
+	private void ShowAlertMenu(SkillResource skill, SkillEquipStatusEnum status, SkillKey skillKey = SkillKey.Count)
+	{
+		// Open alert menu
+		IsAlertMenuActive = true;
+		AlertMenuTargetSkill = skillKey;
+		alertAnimator.Play("RESET");
+		alertAnimator.Advance(0.0);
+
+		if (status == SkillEquipStatusEnum.ConflictEquip || status == SkillEquipStatusEnum.ConflictUnequip)
+		{
+			bool isEquippingSkill = status == SkillEquipStatusEnum.ConflictEquip;
+			SkillResource conflictingSkill = isEquippingSkill ? ActiveSkillRing.GetConflictingSkill(skill.Key) : Runtime.Instance.SkillList.GetSkill(skillKey);
+			alertLabel.Text = Tr(isEquippingSkill ? "skill_equip_conflict" : "skill_unequip_conflict");
+			alertLabel.Text = alertLabel.Text.Replace("SKILL", Tr(skill.NameKey));
+			alertLabel.Text = alertLabel.Text.Replace("CONFLICT", Tr(conflictingSkill.NameKey));
+			AlertSelection = 0; // Set to "No"
+		}
+		else
+		{
+			if (status == SkillEquipStatusEnum.ElementRequirement)
 			{
-				SkillResource baseSkill = SelectedSkill.Skill;
-				if (IsEditingAugment)
-					baseSkill = baseSkill.GetAugment(AugmentSelection);
-				SkillResource conflictingSkill = ActiveSkillRing.GetConflictingSkill(baseSkill.Key);
+				string translationText = string.Empty;
+				int equippedAmount = ActiveSkillRing.GetSkillCountByElement(skill.Element);
+				int amountNeeded = skill.ElementRequirement - equippedAmount;
 
-				alertLabel.Text = Tr("skill_conflict");
-				alertLabel.Text = alertLabel.Text.Replace("SKILL", Tr(baseSkill.NameKey));
-				alertLabel.Text = alertLabel.Text.Replace("CONFLICT", Tr(conflictingSkill.NameKey));
-				AlertSelection = 0; // Set to "No"
+				switch (skill.Element)
+				{
+					case SkillResource.SkillElement.Wind:
+						translationText = "skill_element_requirement_wind";
+						break;
+					case SkillResource.SkillElement.Fire:
+						translationText = "skill_element_requirement_fire";
+						break;
+					case SkillResource.SkillElement.Dark:
+						translationText = "skill_element_requirement_dark";
+						break;
+				}
+
+				if (amountNeeded > 1)
+					translationText += "_multiple";
+
+				alertLabel.Text = Tr(translationText);
+				alertLabel.Text = alertLabel.Text.Replace("[AMOUNT]", amountNeeded.ToString());
 			}
 			else
 			{
 				alertLabel.Text = Tr("skill_sp_shortage");
-				AlertSelection = -1; // Disable Selection
-				alertAnimator.Play("select-cancel");
-				alertAnimator.Advance(0.0);
 			}
 
-			alertAnimator.Play("show");
+			AlertSelection = -1; // Disable Selection
+			alertAnimator.Play("select-cancel");
+			alertAnimator.Advance(0.0);
 		}
 
-		return false; // Something failed
+		alertAnimator.Play("show");
 	}
 
 	private void SortSkills()
@@ -471,10 +525,19 @@ public partial class SkillSelect : Menu
 		SkillOption currentSkill = SelectedSkill;
 
 		// Sort
-		for (int i = skillOptionList.Count - 1; i > 0; i--)
+		if (currentSortType >= SortEnum.Wind && currentSortType <= SortEnum.Dark)
+		{
+			for (int i = skillOptionList.Count - 1; i > 0; i--) // Ensure skills are sorted somewhat logically first
+			{
+				for (int j = 0; j < i; j++)
+					CalculateExchange(j, SortEnum.Default);
+			}
+		}
+
+		for (int i = skillOptionList.Count - 1; i > 0; i--) // Always start by reseting sorting to default
 		{
 			for (int j = 0; j < i; j++)
-				CalculateExchange(j);
+				CalculateExchange(j, currentSortType);
 		}
 
 		// Maintain selection
@@ -497,13 +560,13 @@ public partial class SkillSelect : Menu
 			// Ensure cursor doesn't get stuck on the edges of the list
 			if (cursorPosition == 0) // Top of the list
 			{
-				VerticalSelection++;
 				cursorPosition++;
+				scrollAmount--;
 			}
 			else if (cursorPosition == PageSize - 1)
 			{
-				VerticalSelection--;
 				cursorPosition--;
+				scrollAmount++;
 			}
 		}
 
@@ -521,9 +584,9 @@ public partial class SkillSelect : Menu
 		return Tr(nameString);
 	}
 
-	private void CalculateExchange(int index)
+	private void CalculateExchange(int index, SortEnum sortType)
 	{
-		switch (currentSortType)
+		switch (sortType)
 		{
 			case SortEnum.Default:
 				if ((!isDescendingSort && skillOptionList[index].Skill.Key > skillOptionList[index + 1].Skill.Key) ||

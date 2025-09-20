@@ -96,9 +96,9 @@ public partial class CatapultState : PlayerState
 			return;
 		}
 
-		if (Player.Controller.IsActionBufferActive)
+		if (Player.Controller.IsGimmickBufferActive)
 		{
-			Player.Controller.ResetActionBuffer();
+			Player.Controller.ResetGimmickBuffer();
 			currentState = State.Launch;
 			Catapult.LaunchTween();
 			return;

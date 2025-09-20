@@ -6,10 +6,11 @@
 script = ExtResource("1_p6vq7")
 reflectionCamera = NodePath("Viewport/ReflectionPreview/ReflectionViewport/ReflectionCamera")
 reflectionViewport = NodePath("Viewport/ReflectionPreview/ReflectionViewport")
-reflectionViewportContainer = NodePath("Viewport/ReflectionPreview")
+reflectionViewportContainer = NodePath("Viewport")
 reflectionMaterials = []
 
 [node name="Viewport" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -18,18 +19,17 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ReflectionPreview" type="SubViewportContainer" parent="Viewport"]
-visible = false
 layout_mode = 1
-anchors_preset = 9
+anchors_preset = -1
+anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = 540.0
+offset_top = -540.0
 offset_right = 960.0
 grow_vertical = 2
 scale = Vector2(0.5, 0.5)
 pivot_offset = Vector2(0, 540)
 
 [node name="ReflectionViewport" type="SubViewport" parent="Viewport/ReflectionPreview"]
-transparent_bg = true
 handle_input_locally = false
 mesh_lod_threshold = 10.0
 positional_shadow_atlas_size = 0
@@ -38,6 +38,7 @@ positional_shadow_atlas_quad_0 = 0
 positional_shadow_atlas_quad_1 = 0
 positional_shadow_atlas_quad_2 = 0
 positional_shadow_atlas_quad_3 = 0
+canvas_cull_mask = 0
 size = Vector2i(960, 540)
 render_target_update_mode = 0
 

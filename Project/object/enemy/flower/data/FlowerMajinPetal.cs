@@ -40,6 +40,7 @@ public partial class FlowerMajinPetal : Node3D
 		// Sync position and rotation
 		GlobalRotation = attachment.GlobalRotation;
 		GlobalPosition = attachment.GlobalPosition + this.Up();
+		ResetPhysicsInterpolation();
 
 		linearVelocity = this.Forward().Lerp(this.Up(), directionBlend).Normalized() * explosionPower;
 		angularVelocity = this.Forward().Lerp(this.Up(), directionBlend).Normalized() * Runtime.randomNumberGenerator.RandfRange(5f, 10f);

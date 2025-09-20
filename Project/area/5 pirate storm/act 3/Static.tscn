@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=4 uid="uid://cu3mc0x6pj3p"]
+[gd_scene load_steps=42 format=4 uid="uid://cu3mc0x6pj3p"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_wmyme"]
 [ext_resource type="PackedScene" uid="uid://bap6v64qrvejk" path="res://area/5 pirate storm/act 3/environment/collision/Collision.tscn" id="2_w468r"]
@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="6_oc3qp"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="7_cgsbr"]
 [ext_resource type="Script" uid="uid://bvmyay4bo83qu" path="res://object/trigger/modules/DeathTrigger.cs" id="7_ivena"]
-[ext_resource type="AudioStream" uid="uid://dpvsb186jvr2q" path="res://sound/ost/bonus disc/Pirate Storm Act 3.mp3" id="7_skabk"]
+[ext_resource type="AudioStream" uid="uid://dpvsb186jvr2q" path="res://sound/ost/bonus disc/Pirate Storm Act 3 alt.mp3" id="7_skabk"]
 [ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="8_ivena"]
 [ext_resource type="PackedScene" uid="uid://bd40ra0xnjbfv" path="res://area/1 sand oasis/data/skybox/Skybox.tscn" id="8_j0cb7"]
 [ext_resource type="Shader" uid="uid://b40ka57lp6byx" path="res://effect/shader/environment/CloudScrollAdd.gdshader" id="9_a16bl"]
@@ -22,6 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://buvo6ko7q7533" path="res://area/1 sand oasis/data/skybox/model/texture/cloud detail.png" id="12_1swgv"]
 [ext_resource type="Texture2D" uid="uid://b63xiyahsrmoh" path="res://area/1 sand oasis/data/skybox/model/texture/cloud tint.png" id="13_111k7"]
 [ext_resource type="Material" uid="uid://b8b6ktenpyox1" path="res://area/1 sand oasis/data/skybox/model/material/Clouds Side.tres" id="14_ha7ip"]
+[ext_resource type="AudioStream" uid="uid://dy1koid5dgwk" path="res://sound/ost/bonus disc/Pirate Storm Act 3.mp3" id="21_g6fej"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_skabk"]
 render_priority = -124
@@ -775,12 +776,19 @@ libraries = {
 environment = SubResource("Environment_j0cb7")
 
 [node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("21_g6fej")
+bus = &"BGM"
+script = ExtResource("7_cgsbr")
+loopStartPosition = 96.28
+loopEndPosition = 257.5
+isStageMusic = true
+
+[node name="BGMALT" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_skabk")
 bus = &"BGM"
 script = ExtResource("7_cgsbr")
 loopStartPosition = 6.74
 loopEndPosition = 155.08
-isStageMusic = true
 
 [editable path="Visuals/PSSky"]
 [editable path="Visuals/Skybox"]

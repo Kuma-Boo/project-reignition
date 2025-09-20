@@ -132,6 +132,7 @@ public partial class PteroEgg : Area3D
 		Root.AddChild(model);
 		model.GlobalTransform = GlobalTransform;
 		model.Position += Vector3.Up * .5f;
+		model.ResetPhysicsInterpolation();
 	}
 
 	public void OnEntered(Area3D a)

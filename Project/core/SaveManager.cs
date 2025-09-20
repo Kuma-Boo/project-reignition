@@ -69,6 +69,8 @@ public partial class SaveManager : Node
 	#region Config
 	public static ConfigData Config = new();
 	public static bool UseEnglishVoices => Config.voiceLanguage == VoiceLanguage.English;
+	/// <summary> Determines whether the game should ask the player whether to enable quick loading on the main menu. </summary>
+	public bool IsQuickLoadAlertEnabled;
 	private const string ConfigFileName = "config.cfg";
 
 	#region Config Enums
@@ -196,6 +198,9 @@ public partial class SaveManager : Node
 		45,
 		60,
 		120,
+		144,
+		165,
+		240
 	];
 
 	#endregion
@@ -247,10 +252,13 @@ public partial class SaveManager : Node
 		public VoiceLanguage voiceLanguage = AutoDetectVoiceLocale();
 
 		// Interface
+		public bool useProjectReignitionBranding = true;
 		public HudStyle hudStyle = HudStyle.Retail;
 		public ButtonStyle buttonStyle = ButtonStyle.Style2;
 		public bool isUsingHorizontalSoulGauge;
 		public bool isActionPromptsEnabled = true;
+
+		public bool useQuickLoad;
 
 		/// <summary> Creates a dictionary based on config data. </summary>
 		public Dictionary ToDictionary()
@@ -303,10 +311,13 @@ public partial class SaveManager : Node
 				{ nameof(textLanguage), (int)textLanguage },
 
 				// Interface
+				{ nameof(useProjectReignitionBranding), useProjectReignitionBranding },
 				{ nameof(hudStyle), (int)hudStyle },
 				{ nameof(buttonStyle), (int)buttonStyle },
 				{ nameof(isUsingHorizontalSoulGauge), (bool)isUsingHorizontalSoulGauge },
 				{ nameof(isActionPromptsEnabled), isActionPromptsEnabled },
+
+				{ nameof(useQuickLoad), useQuickLoad }
 			};
 		}
 
@@ -396,6 +407,8 @@ public partial class SaveManager : Node
 				textLanguage = (TextLanguage)(int)var;
 
 			// Interface
+			if (dictionary.TryGetValue(nameof(useProjectReignitionBranding), out var))
+				useProjectReignitionBranding = (bool)var;
 			if (dictionary.TryGetValue(nameof(hudStyle), out var))
 				hudStyle = (HudStyle)(int)var;
 			if (dictionary.TryGetValue(nameof(buttonStyle), out var))
@@ -404,6 +417,11 @@ public partial class SaveManager : Node
 				isUsingHorizontalSoulGauge = (bool)var;
 			if (dictionary.TryGetValue(nameof(isActionPromptsEnabled), out var))
 				isActionPromptsEnabled = (bool)var;
+
+			if (dictionary.TryGetValue(nameof(useQuickLoad), out var))
+				useQuickLoad = (bool)var;
+			else
+				Instance.IsQuickLoadAlertEnabled = true;
 		}
 	}
 
@@ -551,12 +569,12 @@ public partial class SaveManager : Node
 
 		RenderingServer.EnvironmentGlowSetUseBicubicUpscale(Config.bloomMode == QualitySetting.High);
 
-		int targetShadowAtlasSize = 4096;
-		bool use16BitShadowAtlas = Config.softShadowQuality == QualitySetting.High;
+		int targetShadowAtlasSize = 2048;
 		RenderingServer.ShadowQuality targetSoftShadowQuality = RenderingServer.ShadowQuality.Hard;
 		switch (Config.softShadowQuality)
 		{
 			case QualitySetting.Low:
+				targetShadowAtlasSize = 2048;
 				targetSoftShadowQuality = RenderingServer.ShadowQuality.SoftLow;
 				break;
 			case QualitySetting.Medium:
@@ -569,29 +587,29 @@ public partial class SaveManager : Node
 				break;
 		}
 
-		RenderingServer.DirectionalShadowAtlasSetSize(targetShadowAtlasSize, use16BitShadowAtlas);
-		RenderingServer.ViewportSetPositionalShadowAtlasSize(viewportRid, targetShadowAtlasSize, use16BitShadowAtlas);
+		RenderingServer.DirectionalShadowAtlasSetSize(targetShadowAtlasSize, false);
+		RenderingServer.ViewportSetPositionalShadowAtlasSize(viewportRid, targetShadowAtlasSize, false);
 		RenderingServer.DirectionalSoftShadowFilterSetQuality(targetSoftShadowQuality);
 		RenderingServer.PositionalSoftShadowFilterSetQuality(targetSoftShadowQuality);
 
 		switch (Config.postProcessingQuality)
 		{
 			case QualitySetting.Low:
-				RenderingServer.EnvironmentSetSsaoQuality(RenderingServer.EnvironmentSsaoQuality.Low, true, .5f, 2, 50,
+				RenderingServer.EnvironmentSetSsaoQuality(RenderingServer.EnvironmentSsaoQuality.Low, true, .5f, 0, 50,
 					300);
-				RenderingServer.EnvironmentSetSsilQuality(RenderingServer.EnvironmentSsilQuality.Low, true, .5f, 2, 50,
+				RenderingServer.EnvironmentSetSsilQuality(RenderingServer.EnvironmentSsilQuality.Low, true, .5f, 0, 50,
 					300);
 				break;
 			case QualitySetting.Medium:
-				RenderingServer.EnvironmentSetSsaoQuality(RenderingServer.EnvironmentSsaoQuality.Medium, true, .5f, 2,
+				RenderingServer.EnvironmentSetSsaoQuality(RenderingServer.EnvironmentSsaoQuality.Medium, true, .5f, 1,
 					50, 300);
-				RenderingServer.EnvironmentSetSsilQuality(RenderingServer.EnvironmentSsilQuality.Medium, true, .5f, 2,
+				RenderingServer.EnvironmentSetSsilQuality(RenderingServer.EnvironmentSsilQuality.Medium, true, .5f, 1,
 					50, 300);
 				break;
 			case QualitySetting.High:
-				RenderingServer.EnvironmentSetSsaoQuality(RenderingServer.EnvironmentSsaoQuality.High, false, .5f, 2,
+				RenderingServer.EnvironmentSetSsaoQuality(RenderingServer.EnvironmentSsaoQuality.High, true, .5f, 2,
 					50, 300);
-				RenderingServer.EnvironmentSetSsilQuality(RenderingServer.EnvironmentSsilQuality.High, false, .5f, 2,
+				RenderingServer.EnvironmentSetSsilQuality(RenderingServer.EnvironmentSsilQuality.High, true, .5f, 2,
 					50, 300);
 				break;
 		}
@@ -898,10 +916,12 @@ public partial class SaveManager : Node
 		private LevelSaveData levelData = new();
 
 		/// <summary> Calculates the player's soul gauge size based on the player's level. </summary>
-		public int CalculateMaxSoulPower()
+		public int CalculateMaxSoulPower(bool isLocked)
 		{
 			int maxSoulPower = 100; // Starting soul gauge size
-			maxSoulPower += Mathf.FloorToInt(CalculateSoulGaugeLevelRatio() * 5f) * 20; // Soul Gauge size increases by 20 every 5 levels, so it caps at 300
+			if (!isLocked)
+				maxSoulPower += Mathf.FloorToInt(CalculateSoulGaugeLevelRatio() * 5f) * 20; // Soul Gauge size increases by 20 every 5 levels, so it caps at 300
+
 			return maxSoulPower;
 		}
 
@@ -1034,7 +1054,10 @@ public partial class SaveManager : Node
 
 			// Load Skill Ring
 			if (dictionary.TryGetValue(nameof(equippedSkills), out var))
+			{
 				equippedSkills = LoadSkills((Array<string>)var);
+				ActiveSkillRing.ValidateCrestSkills();
+			}
 
 			if (dictionary.TryGetValue(nameof(equippedAugments), out var))
 				equippedAugments = LoadAugments((Dictionary<string, int>)var);
@@ -1154,7 +1177,7 @@ public partial class SaveManager : Node
 
 	#region Shared Game Data
 	public static SharedGameData SharedData;
-	private const string SharedFileName = "shared.sav";
+	private const string SharedFileName = "shared.dat";
 
 	public class SharedGameData
 	{
@@ -1205,7 +1228,7 @@ public partial class SaveManager : Node
 				{ nameof(RingChainCount), RingChainCount },
 				{ nameof(SpeedBreakActivationCount), SpeedBreakActivationCount },
 				{ nameof(TimeBreakTime), TimeBreakTime },
-				{nameof(ViewedPages), ViewedPages},
+				{ nameof(ViewedPages), ViewedPages},
 
 				{ nameof(MinimalSkillCount), MinimalSkillCount },
 				{ nameof(FireOnlyCount), FireOnlyCount },

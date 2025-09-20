@@ -21,7 +21,7 @@ public partial class CaptainBemothHorn : Node3D
 	/// <summary> How long to delay the actual pop so animations have time to catch up. </summary>
 	[Export] private AudioStreamPlayer3D popSfx;
 	[Export] private float popDelay = .5f;
-	[Export] private bool isPopFXDisabled;
+	[Export] public bool IsFinalHorn { get; private set; }
 	private float popTimer;
 
 	private int damageDealt;
@@ -79,7 +79,7 @@ public partial class CaptainBemothHorn : Node3D
 	{
 		if (IsPopping)
 		{
-			if (!isPopFXDisabled)
+			if (!IsFinalHorn)
 				GlobalPosition += Vector3.Up * PhysicsManager.physicsDelta * PopSpeed;
 
 			return;
@@ -116,12 +116,17 @@ public partial class CaptainBemothHorn : Node3D
 		GetParent().RemoveChild(this);
 		StageSettings.Instance.AddChild(this);
 		GlobalTransform = t;
+		ResetPhysicsInterpolation();
 
 		IsPopping = true;
 		animator.Set(PopTransition, "enabled");
 
-		if (isPopFXDisabled)
+		if (IsFinalHorn)
+		{
+			GlobalTransform = Transform3D.Identity;
+			ResetPhysicsInterpolation();
 			return;
+		}
 
 		StageSettings.Player.Effect.PlayVoice("jump panel");
 		PlayPopFX();

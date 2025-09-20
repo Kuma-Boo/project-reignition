@@ -65,6 +65,7 @@ public partial class FallingStar : Node3D
 	{
 		currentLifetime = 0f;
 		GlobalPosition = spawnPosition;
+		ResetPhysicsInterpolation();
 		particles.SetEmitting(true);
 		EmitSignal(SignalName.Restarted);
 	}

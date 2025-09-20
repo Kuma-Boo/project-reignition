@@ -30,6 +30,7 @@ namespace Project.Gameplay
 				RenderingServer.Singleton.Connect(RenderingServer.SignalName.FramePostDraw, ApplyTextureCallable);
 
 			depthCamera.Visible = true;
+			PhysicsInterpolationMode = PhysicsInterpolationModeEnum.Off;
 		}
 
 		public override void _ExitTree()

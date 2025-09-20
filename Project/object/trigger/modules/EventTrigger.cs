@@ -168,6 +168,7 @@ public partial class EventTrigger : StageTriggerModule
 
 		Respawn();
 		PlayerStandin = GetNodeOrNull<Node3D>(playerStandin);
+		PhysicsInterpolationMode = PhysicsInterpolationModeEnum.Off; // Disable physics interpolation for events
 	}
 
 	public override void _PhysicsProcess(double _)

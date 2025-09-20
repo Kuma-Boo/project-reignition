@@ -2,6 +2,7 @@ shader_type spatial;
 render_mode diffuse_burley, depth_draw_always;
 
 instance uniform float defeat_blend : hint_range(0.0, 1.0) = 0.0;
+instance uniform float opacity : hint_range(0.0, 1.0) = 1.0;
 
 uniform sampler2D albedo : hint_default_black, source_color;
 uniform sampler2D specular : hint_default_black;
@@ -32,6 +33,7 @@ void fragment()
 	ROUGHNESS = roughness;
 	SPECULAR = spec;
 	ALBEDO = col.rgb;
+	ALPHA = opacity;
 	EMISSION = clamp((col.rgb + vec3(rim)) * rim * .5, vec3(0.0), vec3(1.0));
 	
 	{

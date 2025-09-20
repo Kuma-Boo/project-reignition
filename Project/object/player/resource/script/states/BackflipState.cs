@@ -98,6 +98,7 @@ public partial class BackflipState : PlayerState
 			Player.StartLightSpeedDash();
 		}
 
+		Player.AttemptFallIntoTheVoid();
 		return null;
 	}
 

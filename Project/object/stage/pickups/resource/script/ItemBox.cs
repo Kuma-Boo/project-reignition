@@ -267,6 +267,7 @@ public partial class ItemBox : Pickup
 
 				objectPool[i].GlobalPosition = objectLaunchSettings[i].InterpolatePositionRatio(currentTime);
 				objectPool[i].Scale = Vector3.One * Mathf.Clamp(currentTime, 0.5f, 1f);
+				objectPool[i].ResetPhysicsInterpolation();
 			}
 		}
 
@@ -279,7 +280,7 @@ public partial class ItemBox : Pickup
 
 		if (Player.IsJumpDashOrHomingAttack)
 		{
-			Player.StartBounce(BounceState.SnapMode.SnappingEnabledNoHeight);
+			Player.StartBounce(BounceState.SnapMode.SnappingEnabledNoHeight, 1, this);
 			Animator.Play("disable-collision");
 			Animator.Advance(0.0);
 		}

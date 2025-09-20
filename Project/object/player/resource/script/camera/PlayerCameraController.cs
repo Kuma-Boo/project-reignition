@@ -372,7 +372,20 @@ public partial class PlayerCameraController : Node3D
 	private readonly float MaxInputCameraDistance = 2f;
 	private void UpdateLookaroundCameraAngle()
 	{
-		cameraLookaroundRotation = cameraLookaroundRotation.SmoothDamp(GetLookaroundCameraInput(), ref cameraLookaroundVelocity, InputCameraSmoothing * PhysicsManager.physicsDelta);
+		Vector2 targetRotation = targetRotation = Vector2.Zero;
+
+		if (!isFreeCamActive)
+		{
+			if (!Player.Controller.CameraAxis.IsZeroApprox() && !StageSettings.Instance.IsControlTest || !Player.IsLaunching)
+			{
+				if (Mathf.Abs(Player.Controller.CameraAxis.X) > Mathf.Abs(Player.Controller.CameraAxis.Y))
+					targetRotation.X = -Player.Controller.CameraAxis.X * MaxLookaroundYaw;
+				else
+					targetRotation.Y = -Player.Controller.CameraAxis.Y * MaxLookaroundPitch;
+			}
+		}
+
+		cameraLookaroundRotation = cameraLookaroundRotation.SmoothDamp(targetRotation, ref cameraLookaroundVelocity, InputCameraSmoothing * PhysicsManager.physicsDelta);
 		inputCameraDistance = Mathf.SmoothStep(0f, 1f, Mathf.Max(cameraLookaroundRotation.Y / -MaxLookaroundPitch, 0f)) * MaxInputCameraDistance;
 	}
 
@@ -500,7 +513,12 @@ public partial class PlayerCameraController : Node3D
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, CalculateLockonAngle(cameraTransform.Origin, lockonPitchReferenceAngle));
 
 		if (!isFreeCamActive || !isFreeCamLocked) // Only update camera transform when free cam isn't locked
+		{
 			cameraRoot.GlobalTransform = cameraTransform; // Update transform
+
+			if (SnapFlag)
+				cameraRoot.ResetPhysicsInterpolation();
+		}
 
 		Camera.Fov = fov; // Update fov
 	}
@@ -886,7 +904,6 @@ public partial class PlayerCameraController : Node3D
 
 	public int motionBlurRequests;
 
-	private readonly float TimeBreakMotionBlurStrength = 4.0f;
 	private readonly float RotationMotionBlurStrength = 5.0f;
 	private readonly string OpacityParameter = "opacity";
 	private readonly string LinearVelocityParameter = "linear_velocity";
@@ -910,9 +927,7 @@ public partial class PlayerCameraController : Node3D
 	private Vector3 CalculateLinearVelocity()
 	{
 		Vector3 velocity = Camera.GlobalPosition - previousCameraPosition;
-		if (Player.Skills.IsTimeBreakActive)
-			return velocity * PhysicsManager.physicsDelta * TimeBreakMotionBlurStrength;
-
+		velocity *= Mathf.Abs(velocity.Normalized().Dot(Camera.Forward()));
 		return velocity * PhysicsManager.physicsDelta;
 	}
 
@@ -935,15 +950,13 @@ public partial class PlayerCameraController : Node3D
 	public bool IsCrossfading => crossfadeAnimator.IsPlaying();
 	public void StartCrossfade(float speed = 1.0f)
 	{
-		// Already crossfading
-		if (IsCrossfading)
-			return;
-
 		// Update the crossfade texture
 		ImageTexture tex = new();
 		tex.SetImage(GetViewport().GetTexture().GetImage());
 		crossfade.Texture = tex;
-		crossfadeAnimator.Play("activate");// Start crossfade animation
+		crossfadeAnimator.Play("activate"); // Start crossfade animation
+		crossfadeAnimator.Seek(0.0);
+		crossfadeAnimator.Play(); // Start crossfade animation
 		crossfadeAnimator.SpeedScale = speed;
 
 		if (!StageSettings.Instance.IsLevelIngame)

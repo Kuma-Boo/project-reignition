@@ -107,6 +107,7 @@ public partial class SandScorpion : Node3D
 		bossPathFollower.Progress = StartingPosition;
 		GlobalPosition = Vector3.Forward * StartingPosition;
 		GlobalRotation = Vector3.Up * Mathf.Pi;
+		ResetPhysicsInterpolation();
 
 		// Reset animations
 		isPhaseTwoActive = false;
@@ -167,6 +168,7 @@ public partial class SandScorpion : Node3D
 		lTailAnimationTree.Set(IntroParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		rTailAnimationTree.Set(IntroParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		GlobalTransform = Transform3D.Identity;
+		ResetPhysicsInterpolation();
 
 		cutsceneCamera.Activate();
 		Player.Deactivate();
@@ -212,12 +214,13 @@ public partial class SandScorpion : Node3D
 		eventAnimator.Play("defeat");
 		eventAnimator.Advance(0.0);
 
+		Player.Skills.CancelBreakSkills();
 		Player.Skills.DisableBreakSkills();
 		Player.MoveSpeed = 0;
 
 		Player.Visible = false;
 		Player.AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
-		Interface.PauseMenu.AllowPausing = false;
+		Interface.PauseMenu.AllowInputs = false;
 
 		// Award 1000 points for defeating the boss
 		BonusManager.instance.QueueBonus(new(BonusType.Boss, 1000));
@@ -706,6 +709,7 @@ public partial class SandScorpion : Node3D
 		Vector3 p = GetNode<Node3D>(n).GlobalPosition;
 		p.Y = 0; // Snap to the floor
 		impactEffect.GlobalPosition = p;
+		impactEffect.ResetPhysicsInterpolation();
 		impactEffect.RestartGroup();
 	}
 
@@ -715,6 +719,7 @@ public partial class SandScorpion : Node3D
 	{
 		hitEffect.Visible = true;
 		hitEffect.GlobalPosition = Player.CenterPosition;
+		hitEffect.ResetPhysicsInterpolation();
 		hitEffect.RestartGroup();
 	}
 

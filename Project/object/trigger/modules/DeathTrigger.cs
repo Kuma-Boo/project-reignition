@@ -26,8 +26,7 @@ namespace Project.Gameplay.Triggers
 			if (!StageSettings.Instance.IsLevelIngame)
 				return;
 
-			Player.StartRespawn();
-			Player.Effect.PlayVoice("fall");
+			Player.FallDefeat();
 		}
 	}
 }
