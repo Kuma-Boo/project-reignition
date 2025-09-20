@@ -445,7 +445,6 @@ public partial class PlayerSkillController : Node3D
 			Player.Animator.SpeedBreak();
 			Player.ChangeHitbox("speed break");
 			Player.AttackState = PlayerController.AttackStates.OneShot;
-			Player.Camera.RequestMotionBlur();
 			Player.Animator.StartMotionBlur();
 
 			SaveManager.SharedData.SpeedBreakActivationCount = (int)Mathf.MoveToward(SaveManager.SharedData.SpeedBreakActivationCount, int.MaxValue, 1);
@@ -464,7 +463,6 @@ public partial class PlayerSkillController : Node3D
 			Player.CollisionMask = normalCollisionMask; // Reset collision layer
 			Player.AttackState = PlayerController.AttackStates.None;
 			Player.ChangeHitbox("RESET");
-			Player.Camera.UnrequestMotionBlur();
 			Player.Animator.StopMotionBlur();
 			EmitSignal(SignalName.SpeedBreakStopped);
 		}
