@@ -390,11 +390,10 @@ public partial class PlayerSkillController : Node3D
 
 		if (IsTimeBreakActive)
 		{
+			timeBreakAnimator.Play(SaveManager.Config.useMotionBlur ? "enable-blur" : "disable-blur");
+			timeBreakAnimator.Advance(0.0);
 			timeBreakAnimator.Play("start");
 			Player.Effect.PlayVoice("time break");
-
-			Player.Camera.RequestMotionBlur();
-			Player.Animator.StartMotionBlur();
 
 			BGMPlayer.SetStageMusicVolume(-80f);
 
@@ -404,15 +403,12 @@ public partial class PlayerSkillController : Node3D
 			heartbeatSFX.Play();
 
 			previousTimeBreakTime = Time.GetTicksMsec();
-
 			EmitSignal(SignalName.TimeBreakStarted);
 		}
 		else
 		{
 			timeBreakAnimator.Play(isTimeBreakEnabled ? "stop" : "RESET");
 			timeBreakAnimator.Advance(0.0);
-			Player.Camera.UnrequestMotionBlur();
-			Player.Animator.StopMotionBlur();
 
 			breakTimer = BreakSkillsCooldown;
 			BGMPlayer.SetStageMusicVolume(0f);
@@ -436,16 +432,15 @@ public partial class PlayerSkillController : Node3D
 		{
 			speedBreakAnimator.Play(SaveManager.Config.useMotionBlur ? "enable-blur" : "disable-blur");
 			speedBreakAnimator.Advance(0.0);
-
 			speedBreakShockwave.PivotOffset = speedBreakShockwave.Size * 0.5f;
 			speedBreakAnimator.Play("start");
+
 			Player.Effect.PlayVoice("speed break");
 			Player.MovementAngle = Player.PathFollower.ForwardAngle;
 			Player.CollisionMask = Runtime.Instance.environmentMask; // Don't collide with any objects
 			Player.Animator.SpeedBreak();
 			Player.ChangeHitbox("speed break");
 			Player.AttackState = PlayerController.AttackStates.OneShot;
-			Player.Animator.StartMotionBlur();
 
 			SaveManager.SharedData.SpeedBreakActivationCount = (int)Mathf.MoveToward(SaveManager.SharedData.SpeedBreakActivationCount, int.MaxValue, 1);
 			if (SaveManager.SharedData.SpeedBreakActivationCount >= SpeedBreakAchievementRequirement)
@@ -463,7 +458,6 @@ public partial class PlayerSkillController : Node3D
 			Player.CollisionMask = normalCollisionMask; // Reset collision layer
 			Player.AttackState = PlayerController.AttackStates.None;
 			Player.ChangeHitbox("RESET");
-			Player.Animator.StopMotionBlur();
 			EmitSignal(SignalName.SpeedBreakStopped);
 		}
 

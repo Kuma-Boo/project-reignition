@@ -153,6 +153,8 @@ public partial class GasTank : Area3D
 		if (endTarget != null)
 			endPosition = endTarget.GlobalPosition - GlobalPosition;
 
+		GD.Print($"Launching {Name}");
+
 		travelTime = 0;
 		IsFalling = false;
 		IsTravelling = true;
@@ -180,6 +182,8 @@ public partial class GasTank : Area3D
 
 	private void Detonate()
 	{
+		GD.Print($"Detonating {Name}");
+
 		IsDetonated = true;
 		IsTravelling = false;
 		Animator.Play("detonate");

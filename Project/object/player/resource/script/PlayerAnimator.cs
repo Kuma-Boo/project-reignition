@@ -25,10 +25,6 @@ public partial class PlayerAnimator : Node3D
 
 		AnimationNodeBlendTree oneShotTree = animationRoot.GetNode("oneshot_tree") as AnimationNodeBlendTree;
 		oneShotTransition = oneShotTree.GetNode("oneshot_transition") as AnimationNodeTransition;
-
-		// Fix speed-break stutter
-		StartMotionBlur();
-		StageSettings.Instance.LevelStarted += StopMotionBlur;
 	}
 
 	[Export]
@@ -37,8 +33,6 @@ public partial class PlayerAnimator : Node3D
 	private AnimationPlayer eventAnimationPlayer;
 	[Export]
 	private MeshInstance3D bodyMesh;
-	[Export]
-	private ShaderMaterial blurOverrideMaterial;
 
 	/// <summary> Reference to the root blend tree of the animation tree. </summary>
 	private AnimationNodeBlendTree animationRoot;
@@ -606,9 +600,6 @@ public partial class PlayerAnimator : Node3D
 		float max = CrouchStatePlayback.GetCurrentLength() - CrouchStatePlayback.GetCurrentPlayPosition();
 		StopCrouching(Mathf.Clamp(0.2f, 0f, max));
 	}
-
-	public void StartMotionBlur() => bodyMesh.MaterialOverride = blurOverrideMaterial;
-	public void StopMotionBlur() => bodyMesh.MaterialOverride = null;
 
 	public void StartInvincibility(float speedScale)
 	{
