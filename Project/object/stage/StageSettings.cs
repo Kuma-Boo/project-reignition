@@ -111,6 +111,7 @@ public partial class StageSettings : Node3D
 				targetDirectionalShadowMode = DirectionalLight3D.ShadowMode.Orthogonal;
 				break;
 			case SaveManager.QualitySetting.Medium:
+				targetBlendSplitMode = true;
 				targetDirectionalShadowDistance = 40;
 				targetDirectionalShadowMode = DirectionalLight3D.ShadowMode.Parallel2Splits;
 				break;
