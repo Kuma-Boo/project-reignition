@@ -188,8 +188,6 @@ public partial class GasTank : Area3D
 
 	private void Detonate()
 	{
-		GD.Print($"Detonating {Name}");
-
 		CurrentState = TankStates.Detonating;
 		Animator.Play("detonate");
 		Animator.CallDeferred("advance", 0.0);
