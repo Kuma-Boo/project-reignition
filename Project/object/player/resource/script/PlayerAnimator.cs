@@ -25,6 +25,10 @@ public partial class PlayerAnimator : Node3D
 
 		AnimationNodeBlendTree oneShotTree = animationRoot.GetNode("oneshot_tree") as AnimationNodeBlendTree;
 		oneShotTransition = oneShotTree.GetNode("oneshot_transition") as AnimationNodeTransition;
+
+		// Fix speed-break stutter
+		StartMotionBlur();
+		StageSettings.Instance.LevelStarted += StopMotionBlur;
 	}
 
 	[Export]
