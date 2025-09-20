@@ -93,7 +93,7 @@ public partial class GolemMajin : Enemy
 
 	private void LaunchGasTank()
 	{
-		if (gasTank.IsTravelling || gasTank.IsDetonated) // Gas tank has already been launched
+		if (gasTank.CurrentState == GasTank.TankStates.Travelling || gasTank.CurrentState == GasTank.TankStates.Detonating) // Gas tank has already been launched
 			return;
 
 		Transform3D t = gasTank.GlobalTransform;
@@ -120,7 +120,7 @@ public partial class GolemMajin : Enemy
 	/// <summary> Update the gas tank to lock onto the golem's head. </summary>
 	private void LockGasTankToGolem()
 	{
-		if (!gasTank.IsTravelling)
+		if (gasTank.CurrentState != GasTank.TankStates.Travelling)
 		{
 			gasTank.height = 2f;
 			gasTank.endPosition = Vector3.Down * 2.0f;

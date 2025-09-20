@@ -42,9 +42,16 @@ public partial class GasTank : Area3D
 	private readonly List<GasTank> tankList = [];
 
 	public bool AllowDoubleLaunch { get; set; }
-	public bool IsFalling { get; private set; }
-	public bool IsDetonated { get; private set; }
-	public bool IsTravelling { get; private set; }
+
+	public TankStates CurrentState { get; private set; }
+	public enum TankStates
+	{
+		Idle,
+		Falling,
+		Travelling,
+		Detonating
+	}
+
 	private float travelTime;
 	private readonly float VisualRotationSpeed = 10f;
 	private readonly float StrikeTimeScale = 1.2f;
@@ -75,9 +82,7 @@ public partial class GasTank : Area3D
 	{
 		tankList.Clear();
 		travelTime = 0;
-		IsFalling = false;
-		IsDetonated = false;
-		IsTravelling = false;
+		CurrentState = TankStates.Idle;
 		AllowDoubleLaunch = false;
 
 		Root.Rotation = Vector3.Zero;
@@ -90,18 +95,22 @@ public partial class GasTank : Area3D
 
 	public override void _PhysicsProcess(double _)
 	{
-		if (Engine.IsEditorHint()) return;
+		if (Engine.IsEditorHint())
+			return;
 
-		if (IsDetonated) return;
+		if (CurrentState == TankStates.Detonating)
+			return;
+
 		CheckInteraction();
 
-		if (IsFalling)
+		if (CurrentState == TankStates.Falling)
 		{
 			ProcessFalling();
 			return;
 		}
 
-		if (!IsTravelling) return;
+		if (CurrentState != TankStates.Travelling)
+			return;
 
 		LaunchSettings launchSettings = GetLaunchSettings();
 		if (launchSettings.IsLauncherFinished(travelTime))
@@ -145,7 +154,7 @@ public partial class GasTank : Area3D
 
 	public void Launch()
 	{
-		if (IsTravelling && !AllowDoubleLaunch) // Already traveling
+		if (CurrentState != TankStates.Idle && !AllowDoubleLaunch) // Already traveling
 			return;
 
 		AllowDoubleLaunch = false;
@@ -153,11 +162,8 @@ public partial class GasTank : Area3D
 		if (endTarget != null)
 			endPosition = endTarget.GlobalPosition - GlobalPosition;
 
-		GD.Print($"Launching {Name}");
-
 		travelTime = 0;
-		IsFalling = false;
-		IsTravelling = true;
+		CurrentState = TankStates.Travelling;
 		Animator.Play("launch");
 		startPosition = GlobalPosition;
 	}
@@ -165,10 +171,10 @@ public partial class GasTank : Area3D
 	/// <summary> Causes a gas tank to fall straight down if it is inactive. </summary>
 	private void Fall()
 	{
-		if (IsTravelling || IsDetonated)
+		if (CurrentState != TankStates.Idle)
 			return;
 
-		IsFalling = true;
+		CurrentState = TankStates.Falling;
 		fallingVelocity = 0;
 		Animator.Play("launch");
 	}
@@ -184,8 +190,7 @@ public partial class GasTank : Area3D
 	{
 		GD.Print($"Detonating {Name}");
 
-		IsDetonated = true;
-		IsTravelling = false;
+		CurrentState = TankStates.Detonating;
 		Animator.Play("detonate");
 		Animator.CallDeferred("advance", 0.0);
 		Player.Camera.StartCameraShake(new()
@@ -227,7 +232,7 @@ public partial class GasTank : Area3D
 
 	private void OnBodyEntered(Node3D b)
 	{
-		if (b.IsInGroup("floor") && (IsTravelling || IsFalling))
+		if (b.IsInGroup("floor") && (CurrentState == TankStates.Travelling || CurrentState == TankStates.Falling))
 			Detonate();
 	}
 
