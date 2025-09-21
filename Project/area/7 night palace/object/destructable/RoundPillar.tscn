@@ -1,0 +1,97 @@
+[gd_scene load_steps=4 format=3 uid="uid://cxj50t3vtny1x"]
+
+[ext_resource type="Script" uid="uid://coiui4qvdxbqe" path="res://object/trigger/modules/EventTrigger.cs" id="1_uou3m"]
+[ext_resource type="PackedScene" uid="uid://divntc23ssxes" path="res://area/7 night palace/object/model/destructable/RoundPillar.gltf" id="2_250th"]
+[ext_resource type="PackedScene" uid="uid://hdia8whqfpw8" path="res://area/7 night palace/object/model/destructable/RoundPillarBroken.gltf" id="3_chro1"]
+
+[node name="RoundPillar" type="Node3D" node_paths=PackedStringArray("animator")]
+script = ExtResource("1_uou3m")
+animator = NodePath("RoundPillarBroken/AnimationPlayer")
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="RoundPillar" parent="." instance=ExtResource("2_250th")]
+
+[node name="RoundPillarWallCollision" parent="RoundPillar" index="1"]
+visible = false
+
+[node name="StaticBody3D" parent="RoundPillar/RoundPillarWallCollision" index="0" groups=["wall"]]
+
+[node name="RoundPillarFloorCollision" parent="RoundPillar" index="2"]
+visible = false
+
+[node name="StaticBody3D" parent="RoundPillar/RoundPillarFloorCollision" index="0" groups=["floor", "pavement"]]
+
+[node name="RoundPillarBroken" parent="." instance=ExtResource("3_chro1")]
+
+[node name="RoundPillarBrokenFloorCollision1" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D" index="0"]
+visible = false
+
+[node name="StaticBody3D" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D/RoundPillarBrokenFloorCollision1" index="0" groups=["floor", "pavement"]]
+
+[node name="CollisionShape3D" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D/RoundPillarBrokenFloorCollision1/StaticBody3D" index="0"]
+disabled = true
+
+[node name="RoundPillarBrokenFloorCollision2" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D" index="1"]
+visible = false
+
+[node name="StaticBody3D" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D/RoundPillarBrokenFloorCollision2" index="0" groups=["floor", "pavement"]]
+
+[node name="CollisionShape3D" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D/RoundPillarBrokenFloorCollision2/StaticBody3D" index="0"]
+disabled = true
+
+[node name="RoundPillarBrokenFloorCollision3" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D" index="2"]
+visible = false
+
+[node name="StaticBody3D" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D/RoundPillarBrokenFloorCollision3" index="0" groups=["floor", "pavement"]]
+
+[node name="CollisionShape3D" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D/RoundPillarBrokenFloorCollision3/StaticBody3D" index="0"]
+disabled = true
+
+[node name="RoundPillarBrokenFloorCollision4" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D" index="3"]
+visible = false
+
+[node name="StaticBody3D" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D/RoundPillarBrokenFloorCollision4" index="0" groups=["floor", "pavement"]]
+
+[node name="CollisionShape3D" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D/RoundPillarBrokenFloorCollision4/StaticBody3D" index="0"]
+disabled = true
+
+[node name="RoundPillarBrokenWallCollision1" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D" index="5"]
+visible = false
+
+[node name="StaticBody3D" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D/RoundPillarBrokenWallCollision1" index="0" groups=["crusher", "wall"]]
+
+[node name="CollisionShape3D" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D/RoundPillarBrokenWallCollision1/StaticBody3D" index="0"]
+disabled = true
+
+[node name="RoundPillarBrokenWallCollision2" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D" index="6"]
+visible = false
+
+[node name="StaticBody3D" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D/RoundPillarBrokenWallCollision2" index="0" groups=["crusher", "wall"]]
+
+[node name="CollisionShape3D" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D/RoundPillarBrokenWallCollision2/StaticBody3D" index="0"]
+disabled = true
+
+[node name="RoundPillarBrokenWallCollision3" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D" index="7"]
+visible = false
+
+[node name="StaticBody3D" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D/RoundPillarBrokenWallCollision3" index="0" groups=["crusher", "wall"]]
+
+[node name="CollisionShape3D" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D/RoundPillarBrokenWallCollision3/StaticBody3D" index="0"]
+disabled = true
+
+[node name="RoundPillarBrokenWallCollision4" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D" index="8"]
+visible = false
+
+[node name="StaticBody3D" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D/RoundPillarBrokenWallCollision4" index="0" groups=["crusher", "wall"]]
+
+[node name="CollisionShape3D" parent="RoundPillarBroken/RoundPillarBrokenRoot/Skeleton3D/RoundPillarBrokenWallCollision4/StaticBody3D" index="0"]
+disabled = true
+
+[node name="AnimationPlayer" parent="RoundPillarBroken" index="1"]
+callback_mode_process = 0
+
+[editable path="RoundPillar"]
+[editable path="RoundPillarBroken"]
