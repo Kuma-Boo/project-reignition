@@ -1,4 +1,4 @@
-[gd_scene load_steps=95 format=3 uid="uid://c58uuw11dgeta"]
+[gd_scene load_steps=97 format=3 uid="uid://c58uuw11dgeta"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
 [ext_resource type="Resource" uid="uid://beyea7f0e70sm" path="res://resource/level data/night palace/Act1Main.tres" id="2_wwd1j"]
@@ -46,6 +46,7 @@
 [ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="43_sswox"]
 [ext_resource type="Script" uid="uid://dpt5o0lh62p6t" path="res://object/stage/MovingObject.cs" id="44_dyala"]
 [ext_resource type="PackedScene" uid="uid://cj6jnnqlu60tm" path="res://area/7 night palace/object/destructable/SpacePillar.tscn" id="44_uu756"]
+[ext_resource type="PackedScene" uid="uid://cxj50t3vtny1x" path="res://area/7 night palace/object/destructable/RoundPillar.tscn" id="45_cs034"]
 [ext_resource type="PackedScene" uid="uid://ckjoa1p7lnd7y" path="res://area/7 night palace/object/obstacle/SpaceWall.tscn" id="45_pvb6h"]
 [ext_resource type="Resource" uid="uid://rlt4iyu1l7tg" path="res://area/7 night palace/act 1/camera/HallCam.tres" id="47_v5767"]
 [ext_resource type="PackedScene" uid="uid://w1aqpn8spe65" path="res://area/7 night palace/object/grindrail/Grindrail04.tscn" id="49_aiy33"]
@@ -891,6 +892,9 @@ _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 1.4901161e-08), 0.0, 0.0, 0, 0, Vector2(0.1627907, 1), 0.0, 0.0, 0, 0, Vector2(0.33333337, -0.56524885), 0.0, 0.0, 0, 0, Vector2(0.6395349, 1), 0.0, 0.0, 0, 0, Vector2(0.8003876, -0.24657547), 0.0, 0.0, 0, 0, Vector2(1, 1.4901161e-08), 0.0, 0.0, 0, 0]
 point_count = 6
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_cs034"]
+size = Vector3(60, 50, 5)
+
 [sub_resource type="Curve" id="Curve_2eu8w"]
 _limits = [0.0, 5.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 15.0, 0, 0, Vector2(1, 5), -7.5, 0.0, 0, 0]
@@ -1116,7 +1120,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("1_dm4pv")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 788, 0, -290)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 788, 0, -630)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 
@@ -3022,6 +3026,7 @@ shape = SubResource("BoxShape3D_ly3wh")
 [node name="SpaceA" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 786, 0, -640)
 script = ExtResource("4_kcdaq")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="Spear1" parent="MainAct/SpaceA" instance=ExtResource("26_bkait")]
@@ -4422,7 +4427,6 @@ settings = ExtResource("42_didft")
 [node name="SpaceC" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 788, 0, -300)
 script = ExtResource("4_kcdaq")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="Spear1" parent="MainAct/SpaceC" instance=ExtResource("26_bkait")]
@@ -4836,9 +4840,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1128, 0, -560)
 
 [node name="GasA" type="Node3D" parent="MainAct/GasRoom"]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
-visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
+
+[node name="PillarGroup1" parent="MainAct/GasRoom/GasA" instance=ExtResource("26_bkait")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="RoundPillar1" parent="MainAct/GasRoom/GasA/PillarGroup1" instance=ExtResource("45_cs034")]
+transform = Transform3D(0.9063079, 0, -0.4226183, 0, 1, 0, 0.4226183, 0, 0.9063079, 9, 0, 19)
+
+[node name="RoundPillar2" parent="MainAct/GasRoom/GasA/PillarGroup1" instance=ExtResource("45_cs034")]
+transform = Transform3D(0.9063079, 0, -0.4226183, 0, 1, 0, 0.4226183, 0, 0.9063079, -11, 0, 19)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/GasRoom/GasA/PillarGroup1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
+shape = SubResource("BoxShape3D_cs034")
 
 [node name="RichRingGroup1" type="Node3D" parent="MainAct/GasRoom/GasA"]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 4)
@@ -5729,6 +5748,7 @@ settings = ExtResource("47_v5767")
 
 [node name="GasB" type="Node3D" parent="MainAct/GasRoom"]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -5798,6 +5818,10 @@ settings = ExtResource("47_v5767")
 
 [node name="Grindrail1" parent="MainAct/GasRoom/GasB" instance=ExtResource("49_aiy33")]
 transform = Transform3D(-1, 0, -8.742277e-08, 0, 1, 0, 8.742277e-08, 0, -1, -8.742277e-08, 0.35, 20)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Rings" type="Node3D" parent="MainAct/GasRoom/GasB/Grindrail1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -9)

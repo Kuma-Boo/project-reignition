@@ -77,6 +77,7 @@ public partial class BoneAttachment3DNoScale : Node3D
 		Transform3D transform = _skeleton.GetBoneGlobalPose(boneIndex);
 		if (parentNode != null)
 		{
+			transform.Origin = parentNode.GlobalBasis * transform.Origin;
 			transform.Origin += parentNode.GlobalPosition;
 			transform.Basis = parentNode.GlobalBasis * transform.Basis;
 			transform = transform.Orthonormalized();
