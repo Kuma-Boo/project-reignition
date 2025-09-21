@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3 uid="uid://dr3eymchp1afn"]
+
+[ext_resource type="Script" uid="uid://coiui4qvdxbqe" path="res://object/trigger/modules/EventTrigger.cs" id="1_1ly62"]
+[ext_resource type="PackedScene" uid="uid://d2rl52ixgscql" path="res://area/7 night palace/object/model/destructable/Chandelier.gltf" id="1_4mdm3"]
+[ext_resource type="PackedScene" uid="uid://doskclv2v6ngx" path="res://area/7 night palace/object/model/destructable/ChandelierBase.gltf" id="2_1ly62"]
+[ext_resource type="PackedScene" uid="uid://cjbuu74lougjl" path="res://area/7 night palace/object/model/destructable/ChandelierBloom.gltf" id="3_24adw"]
+[ext_resource type="PackedScene" uid="uid://1am22j0nkit2" path="res://area/7 night palace/object/model/destructable/ChandelierBroken.gltf" id="4_1gcvb"]
+
+[node name="Chandelier" type="Node3D" node_paths=PackedStringArray("animator")]
+physics_interpolation_mode = 2
+script = ExtResource("1_1ly62")
+animator = NodePath("ChandelierBroken/AnimationPlayer")
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="ChandelierBase" parent="." instance=ExtResource("2_1ly62")]
+
+[node name="Bloom" type="BoneAttachment3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, -3.657739e-06, 0, 3.657739e-06, 1, 0, -16, 0)
+bone_name = "root"
+bone_idx = 0
+use_external_skeleton = true
+external_skeleton = NodePath("../ChandelierBroken/ChandelierBrokenRoot/Skeleton3D")
+
+[node name="ChandelierBloom" parent="Bloom" instance=ExtResource("3_24adw")]
+
+[node name="Chandelier" parent="." instance=ExtResource("1_4mdm3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -16, 0)
+
+[node name="ChandelierBroken" parent="." instance=ExtResource("4_1gcvb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -16, 0)
+
+[editable path="ChandelierBroken"]
