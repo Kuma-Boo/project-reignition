@@ -32,6 +32,8 @@ public partial class StageSettings : Node3D
 		"np_a1_main",
 	};
 
+	private int probeTimer;
+
 	private readonly int SkillSaverAchievementRequirement = 30;
 	private readonly int SkillMasterAchievementRequirement = 20;
 	private readonly int RebellionAchievementRequirement = 25;
@@ -118,7 +120,7 @@ public partial class StageSettings : Node3D
 			case SaveManager.QualitySetting.High:
 				targetBlendSplitMode = true;
 				targetDirectionalShadowDistance = 50;
-				targetDirectionalShadowMode = DirectionalLight3D.ShadowMode.Parallel4Splits;
+				targetDirectionalShadowMode = DirectionalLight3D.ShadowMode.Parallel2Splits;
 				break;
 		}
 	}
@@ -127,20 +129,37 @@ public partial class StageSettings : Node3D
 	[Signal]
 	public delegate void LevelStartedEventHandler();
 	private Queue<ReflectionProbe> probes = [];
-	private Queue<DirectionalLight3D> lights = [];
+	private Queue<OmniLight3D> omniLights = [];
+	private Queue<DirectionalLight3D> directionalLights = [];
 	private int targetDirectionalShadowDistance = 30;
 	private bool targetBlendSplitMode = false;
 	private DirectionalLight3D.ShadowMode targetDirectionalShadowMode = DirectionalLight3D.ShadowMode.Parallel2Splits;
+	private OmniLight3D.ShadowMode targetOmniShadowMode = OmniLight3D.ShadowMode.DualParaboloid;
 
 	public override void _Process(double _)
 	{
 		if (LevelState == LevelStateEnum.Probes)
 		{
-			if (lights.TryDequeue(out DirectionalLight3D light) && light.ShadowEnabled)
+			if (directionalLights.TryDequeue(out DirectionalLight3D dirLight) && dirLight.ShadowEnabled)
 			{
-				light.DirectionalShadowMode = targetDirectionalShadowMode;
-				light.DirectionalShadowMaxDistance = targetDirectionalShadowDistance;
-				light.DirectionalShadowBlendSplits = targetBlendSplitMode;
+				dirLight.DirectionalShadowMode = targetDirectionalShadowMode;
+				dirLight.DirectionalShadowMaxDistance = targetDirectionalShadowDistance;
+				dirLight.DirectionalShadowBlendSplits = targetBlendSplitMode;
+				return;
+			}
+
+			if (omniLights.TryDequeue(out OmniLight3D omniLight) && omniLight.ShadowEnabled)
+			{
+				omniLight.OmniShadowMode = targetOmniShadowMode;
+				omniLight.DistanceFadeBegin = targetDirectionalShadowDistance;
+				omniLight.DistanceFadeLength = 10;
+				omniLight.DistanceFadeEnabled = true;
+				return;
+			}
+
+			if (probeTimer > 0)
+			{
+				probeTimer--;
 				return;
 			}
 
@@ -151,15 +170,14 @@ public partial class StageSettings : Node3D
 
 				/*
 				WORKAROUND
-				Godot's reflection probes update really slowly when set to "Once" mode, so here I'm setting it to always
-				then disabling processing immediately after.
-
-				Unfortunately, this workaround breaks Godot's visual profiler, so we keep the update mode to "Once" when in the editor.
+				Godot's reflection probes update really slowly when set to "Once" mode,
+				so we need to wait until the probes finish calculating.
 
 				TODO Replace this with proper update-mode once Godot fixes reflection probes
 				*/
 
-				probe.UpdateMode = DebugManager.Instance.EnableReflectionProbeDebugging ? ReflectionProbe.UpdateModeEnum.Once : ReflectionProbe.UpdateModeEnum.Always;
+				probeTimer = 8; // Each probes takes about 8 frames to update
+				probe.UpdateMode = ReflectionProbe.UpdateModeEnum.Once;
 				probe.ProcessMode = ProcessModeEnum.Disabled;
 				return;
 			}
@@ -181,7 +199,9 @@ public partial class StageSettings : Node3D
 			if (child is ReflectionProbe)
 				probes.Enqueue(child as ReflectionProbe);
 			else if (child is DirectionalLight3D)
-				lights.Enqueue(child as DirectionalLight3D);
+				directionalLights.Enqueue(child as DirectionalLight3D);
+			else if (child is OmniLight3D)
+				omniLights.Enqueue(child as OmniLight3D);
 		}
 	}
 
