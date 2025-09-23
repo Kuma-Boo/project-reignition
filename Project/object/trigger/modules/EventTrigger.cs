@@ -44,7 +44,7 @@ public partial class EventTrigger : StageTriggerModule
 		Activate,
 		Deactivate,
 	}
-	[Export] private bool respawnToEnd = true;
+	[Export] private float respawnRatio = 1f;
 
 	private readonly string ResetAnimation = "RESET";
 	private readonly string EventAnimation = "event";
@@ -208,9 +208,9 @@ public partial class EventTrigger : StageTriggerModule
 		if (string.IsNullOrEmpty(animator.CurrentAnimation))
 			return;
 
-		animator.Seek(respawnToEnd ? animator.CurrentAnimationLength : 0, true, true);
+		animator.Seek(animator.CurrentAnimationLength * respawnRatio, true, true);
 		animator.Advance(0);
-		if (!respawnToEnd)
+		if (!Mathf.IsEqualApprox(respawnRatio, 1f))
 			animator.Stop(true);
 	}
 
