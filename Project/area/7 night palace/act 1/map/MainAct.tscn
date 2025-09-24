@@ -1,4 +1,4 @@
-[gd_scene load_steps=98 format=3 uid="uid://c58uuw11dgeta"]
+[gd_scene load_steps=101 format=3 uid="uid://c58uuw11dgeta"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_dm4pv"]
 [ext_resource type="Resource" uid="uid://beyea7f0e70sm" path="res://resource/level data/night palace/Act1Main.tres" id="2_wwd1j"]
@@ -57,6 +57,8 @@
 [ext_resource type="Shader" uid="uid://dntow3skrfok4" path="res://effect/shader/particle/BillboardCameraOffset.gdshader" id="51_qu6wm"]
 [ext_resource type="Texture2D" uid="uid://cpkbc7p47d2bg" path="res://effect/particle/texture/environment/common dust.png" id="52_cpwgb"]
 [ext_resource type="Script" uid="uid://ch4pb1qqwy5al" path="res://object/stage/common/resource/script/CameraFollower.cs" id="52_qu6wm"]
+[ext_resource type="Script" uid="uid://cciy1oeuvbh3e" path="res://object/trigger/modules/JumpTrigger.cs" id="53_fl2lb"]
+[ext_resource type="PackedScene" uid="uid://b1njulyoblxx3" path="res://area/7 night palace/object/grindrail/Grindrail02.tscn" id="53_i5gq5"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mow5f"]
 size = Vector3(20, 20, 5)
@@ -900,6 +902,9 @@ size = Vector3(60, 50, 5)
 _limits = [0.0, 5.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 15.0, 0, 0, Vector2(1, 5), -7.5, 0.0, 0, 0]
 point_count = 2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_pq3dh"]
+radius = 1.0
 
 [sub_resource type="Curve" id="Curve_cpwgb"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -4370,9 +4375,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.5, -39)
 
 [node name="GreenMajin1" parent="MainAct/SpaceB/EnemyGroup" instance=ExtResource("18_wuv3v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 4.5, -42)
+rangeOverride = 10
 
 [node name="GreenMajin2" parent="MainAct/SpaceB/EnemyGroup" instance=ExtResource("18_wuv3v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 3, -53)
+rangeOverride = 10
 
 [node name="BlueMajin2" parent="MainAct/SpaceB/EnemyGroup" instance=ExtResource("18_ggltt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, -51)
@@ -4841,6 +4848,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1128, 0, -560)
 
 [node name="GasA" type="Node3D" parent="MainAct/GasRoom"]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -5905,7 +5913,6 @@ settings = ExtResource("47_v5767")
 
 [node name="GasB" type="Node3D" parent="MainAct/GasRoom"]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
-visible = false
 script = ExtResource("4_kcdaq")
 saveVisibilityOnCheckpoint = true
 
@@ -5973,14 +5980,16 @@ script = ExtResource("29_uohue")
 transitionTime = 0.0
 settings = ExtResource("47_v5767")
 
-[node name="Grindrail1" parent="MainAct/GasRoom/GasB" instance=ExtResource("49_aiy33")]
-transform = Transform3D(-1, 0, -8.742277e-08, 0, 1, 0, 8.742277e-08, 0, -1, -8.742277e-08, 0.35, 20)
+[node name="GrindGroupM1" type="Node3D" parent="MainAct/GasRoom/GasB"]
+transform = Transform3D(-1, 0, -8.742277e-08, 0, 1, 0, 8.742277e-08, 0, -1, 6.1035156e-05, 0.35, 20)
+
+[node name="Grindrail1" parent="MainAct/GasRoom/GasB/GrindGroupM1" instance=ExtResource("49_aiy33")]
 railModel = NodePath("")
 startCap = NodePath("")
 endCap = NodePath("")
 collider = NodePath("")
 
-[node name="Rings" type="Node3D" parent="MainAct/GasRoom/GasB/Grindrail1"]
+[node name="Rings" type="Node3D" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -9)
 script = ExtResource("4_nmhcr")
 Source = ExtResource("5_guij8")
@@ -5992,44 +6001,44 @@ Spacing = 2.2
 "Vertical Offset" = null
 metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
 
-[node name="Child01" parent="MainAct/GasRoom/GasB/Grindrail1/Rings" instance=ExtResource("5_guij8")]
+[node name="Child01" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/Rings" instance=ExtResource("5_guij8")]
 
-[node name="Child02" parent="MainAct/GasRoom/GasB/Grindrail1/Rings" instance=ExtResource("5_guij8")]
+[node name="Child02" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/Rings" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.2)
 
-[node name="Child03" parent="MainAct/GasRoom/GasB/Grindrail1/Rings" instance=ExtResource("5_guij8")]
+[node name="Child03" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/Rings" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.4)
 
-[node name="Child04" parent="MainAct/GasRoom/GasB/Grindrail1/Rings" instance=ExtResource("5_guij8")]
+[node name="Child04" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/Rings" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.6000004)
 
-[node name="Child05" parent="MainAct/GasRoom/GasB/Grindrail1/Rings" instance=ExtResource("5_guij8")]
+[node name="Child05" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/Rings" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.8)
 
-[node name="Child06" parent="MainAct/GasRoom/GasB/Grindrail1/Rings" instance=ExtResource("5_guij8")]
+[node name="Child06" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/Rings" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
 
-[node name="Child07" parent="MainAct/GasRoom/GasB/Grindrail1/Rings" instance=ExtResource("5_guij8")]
+[node name="Child07" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/Rings" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.200001)
 
-[node name="Child08" parent="MainAct/GasRoom/GasB/Grindrail1/Rings" instance=ExtResource("5_guij8")]
+[node name="Child08" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/Rings" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.400001)
 
-[node name="Child09" parent="MainAct/GasRoom/GasB/Grindrail1/Rings" instance=ExtResource("5_guij8")]
+[node name="Child09" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/Rings" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.6)
 
-[node name="Child10" parent="MainAct/GasRoom/GasB/Grindrail1/Rings" instance=ExtResource("5_guij8")]
+[node name="Child10" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/Rings" instance=ExtResource("5_guij8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19.800001)
 
-[node name="SpikeBallStatic" parent="MainAct/GasRoom/GasB/Grindrail1" instance=ExtResource("50_cs034")]
+[node name="SpikeBallStatic" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1" instance=ExtResource("50_cs034")]
 transform = Transform3D(0.5176381, 0.96592575, 1.6730325, 0, 1.7320508, -1, -1.9318515, 0.25881904, 0.44828787, 0, 1.2, -47)
 
-[node name="RichRingGroup" type="Node3D" parent="MainAct/GasRoom/GasB/Grindrail1"]
+[node name="RichRingGroup" type="Node3D" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1"]
 transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, 0, 5, -47)
 
-[node name="RichRing" parent="MainAct/GasRoom/GasB/Grindrail1/RichRingGroup" instance=ExtResource("7_fjkar")]
+[node name="RichRing" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/RichRingGroup" instance=ExtResource("7_fjkar")]
 
-[node name="PearlRing" type="Node3D" parent="MainAct/GasRoom/GasB/Grindrail1/RichRingGroup"]
+[node name="PearlRing" type="Node3D" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/RichRingGroup"]
 script = ExtResource("4_nmhcr")
 Source = ExtResource("38_cjtko")
 Amount = 12
@@ -6038,41 +6047,737 @@ Orientation = 1
 "Ring Size" = 1.5
 "Ring Ratio" = 1.0
 
-[node name="Child01" parent="MainAct/GasRoom/GasB/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+[node name="Child01" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0)
 
-[node name="Child02" parent="MainAct/GasRoom/GasB/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+[node name="Child02" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.299038, 0.75, 0)
 
-[node name="Child03" parent="MainAct/GasRoom/GasB/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+[node name="Child03" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.74999994, 1.2990382, 0)
 
-[node name="Child04" parent="MainAct/GasRoom/GasB/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+[node name="Child04" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.556708e-08, 1.5, 0)
 
-[node name="Child05" parent="MainAct/GasRoom/GasB/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+[node name="Child05" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7500001, 1.299038, 0)
 
-[node name="Child06" parent="MainAct/GasRoom/GasB/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+[node name="Child06" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.299038, 0.7500001, 0)
 
-[node name="Child07" parent="MainAct/GasRoom/GasB/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+[node name="Child07" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -1.3113416e-07, 0)
 
-[node name="Child08" parent="MainAct/GasRoom/GasB/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+[node name="Child08" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2990379, -0.75000036, 0)
 
-[node name="Child09" parent="MainAct/GasRoom/GasB/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+[node name="Child09" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7499999, -1.2990382, 0)
 
-[node name="Child10" parent="MainAct/GasRoom/GasB/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+[node name="Child10" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.788732e-08, -1.5, 0)
 
-[node name="Child11" parent="MainAct/GasRoom/GasB/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+[node name="Child11" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7499999, -1.2990382, 0)
 
-[node name="Child12" parent="MainAct/GasRoom/GasB/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+[node name="Child12" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2990384, -0.74999964, 0)
+
+[node name="Spring" parent="MainAct/GasRoom/GasB/GrindGroupM1/Grindrail1" instance=ExtResource("42_m3821")]
+transform = Transform3D(-1, 6.181724e-08, 6.181724e-08, 0, 0.70710677, -0.70710677, -8.742278e-08, -0.70710677, -0.70710677, 0.00018310547, 0.099999994, -60)
+MiddleHeight = 3.5
+FinalHeight = 3.0
+Distance = 7.0
+
+[node name="InvisibleGrindrail" parent="MainAct/GasRoom/GasB/GrindGroupM1" instance=ExtResource("25_t50ri")]
+transform = Transform3D(1, 0, 0, 0, 0.9945219, 0.104528464, 0, -0.104528464, 0.9945219, 0, 3, -65)
+railLength = 30
+
+[node name="Rings" type="Node3D" parent="MainAct/GasRoom/GasB/GrindGroupM1/InvisibleGrindrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -2)
+script = ExtResource("4_nmhcr")
+Source = ExtResource("5_guij8")
+Amount = 7
+Shape = 0
+Orientation = 0
+Spacing = 4.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/GasRoom/GasB/GrindGroupM1/InvisibleGrindrail/Rings" instance=ExtResource("5_guij8")]
+
+[node name="Child02" parent="MainAct/GasRoom/GasB/GrindGroupM1/InvisibleGrindrail/Rings" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.4)
+
+[node name="Child03" parent="MainAct/GasRoom/GasB/GrindGroupM1/InvisibleGrindrail/Rings" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.8)
+
+[node name="Child04" parent="MainAct/GasRoom/GasB/GrindGroupM1/InvisibleGrindrail/Rings" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.200001)
+
+[node name="Child05" parent="MainAct/GasRoom/GasB/GrindGroupM1/InvisibleGrindrail/Rings" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.6)
+
+[node name="Child06" parent="MainAct/GasRoom/GasB/GrindGroupM1/InvisibleGrindrail/Rings" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22)
+
+[node name="Child07" parent="MainAct/GasRoom/GasB/GrindGroupM1/InvisibleGrindrail/Rings" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -26.400002)
+
+[node name="GrindGroupM2" type="Node3D" parent="MainAct/GasRoom/GasB"]
+transform = Transform3D(-1, 0, -8.742277e-08, 0, 1, 0, 8.742277e-08, 0, -1, 0, 0.35, 75)
+
+[node name="SpringR" parent="MainAct/GasRoom/GasB/GrindGroupM2" instance=ExtResource("42_m3821")]
+transform = Transform3D(-0.5372996, -0.28845683, -0.79252857, 0, 0.9396926, -0.34202006, 0.8433913, -0.18376729, -0.50489646, 11, 0, -1)
+MiddleHeight = 15.0
+FinalHeight = 12.0
+Distance = 13.0
+
+[node name="Grindrail" parent="MainAct/GasRoom/GasB/GrindGroupM2" instance=ExtResource("20_kogq7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, -5)
+
+[node name="RichRingGroup" type="Node3D" parent="MainAct/GasRoom/GasB/GrindGroupM2/Grindrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -15)
+
+[node name="RichRing" parent="MainAct/GasRoom/GasB/GrindGroupM2/Grindrail/RichRingGroup" instance=ExtResource("7_fjkar")]
+
+[node name="PearlRing" type="Node3D" parent="MainAct/GasRoom/GasB/GrindGroupM2/Grindrail/RichRingGroup"]
+script = ExtResource("4_nmhcr")
+Source = ExtResource("38_cjtko")
+Amount = 12
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.5
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/GasRoom/GasB/GrindGroupM2/Grindrail/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0)
+
+[node name="Child02" parent="MainAct/GasRoom/GasB/GrindGroupM2/Grindrail/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.299038, 0.75, 0)
+
+[node name="Child03" parent="MainAct/GasRoom/GasB/GrindGroupM2/Grindrail/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.74999994, 1.2990382, 0)
+
+[node name="Child04" parent="MainAct/GasRoom/GasB/GrindGroupM2/Grindrail/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.556708e-08, 1.5, 0)
+
+[node name="Child05" parent="MainAct/GasRoom/GasB/GrindGroupM2/Grindrail/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7500001, 1.299038, 0)
+
+[node name="Child06" parent="MainAct/GasRoom/GasB/GrindGroupM2/Grindrail/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.299038, 0.7500001, 0)
+
+[node name="Child07" parent="MainAct/GasRoom/GasB/GrindGroupM2/Grindrail/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -1.3113416e-07, 0)
+
+[node name="Child08" parent="MainAct/GasRoom/GasB/GrindGroupM2/Grindrail/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2990379, -0.75000036, 0)
+
+[node name="Child09" parent="MainAct/GasRoom/GasB/GrindGroupM2/Grindrail/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7499999, -1.2990382, 0)
+
+[node name="Child10" parent="MainAct/GasRoom/GasB/GrindGroupM2/Grindrail/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.788732e-08, -1.5, 0)
+
+[node name="Child11" parent="MainAct/GasRoom/GasB/GrindGroupM2/Grindrail/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7499999, -1.2990382, 0)
+
+[node name="Child12" parent="MainAct/GasRoom/GasB/GrindGroupM2/Grindrail/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2990384, -0.74999964, 0)
+
+[node name="RoundPillar6" parent="MainAct/GasRoom/GasB/GrindGroupM2" instance=ExtResource("45_cs034")]
+transform = Transform3D(-0.57357645, 0, 0.8191521, 0, 1, 0, -0.8191521, 0, -0.57357645, 10, -0.35, -11)
+respawnAnimation = 1
+respawnRatio = 0.35
+
+[node name="RoundPillar8" parent="MainAct/GasRoom/GasB/GrindGroupM2" instance=ExtResource("45_cs034")]
+transform = Transform3D(0.57357675, 0, 0.8191524, 0, 1, 0, -0.8191524, 0, 0.57357675, 9.5, -0.35, -30)
+respawnAnimation = 1
+respawnRatio = 0.35
+
+[node name="SpringL" parent="MainAct/GasRoom/GasB/GrindGroupM2" instance=ExtResource("42_m3821")]
+transform = Transform3D(-0.9659259, -0.12940949, -0.2241438, 0, 0.8660253, -0.49999997, 0.258819, -0.4829629, -0.8365163, -4, 0, -7.5)
+MiddleHeight = 15.0
+FinalHeight = 13.5
+Distance = 15.0
+
+[node name="JumpPoint" type="Node3D" parent="MainAct/GasRoom/GasB/GrindGroupM2"]
+transform = Transform3D(-0.9659259, 0, -0.25881898, 0, 1.0000001, 0, 0.25881898, 0, -0.9659259, -7.882263, 13.500001, -21.988892)
+
+[node name="Jump1" type="Node3D" parent="MainAct/GasRoom/GasB/GrindGroupM2/JumpPoint"]
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1, -11.00708, -0.70648193, 10.711792)
+script = ExtResource("53_fl2lb")
+jumpHeight = 2.0
+autoAlign = true
+
+[node name="JumpTrigger" parent="MainAct/GasRoom/GasB/GrindGroupM2" instance=ExtResource("26_bkait")]
+transform = Transform3D(1.0000001, 0, 0, 0, 1.0000001, 0, 0, 0, 1, 0, 12, -35)
+"Enter Mode" = 0
+
+[node name="Jump" type="Node3D" parent="MainAct/GasRoom/GasB/GrindGroupM2/JumpTrigger"]
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1, -11.265869, -12.349984, -13.322266)
+script = ExtResource("53_fl2lb")
+jumpHeight = 16.0
+autoAlign = true
+forceConsistentHeight = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/GasRoom/GasB/GrindGroupM2/JumpTrigger"]
+shape = SubResource("SphereShape3D_pq3dh")
+
+[node name="RichRingGroup" type="Node3D" parent="MainAct/GasRoom/GasB/GrindGroupM2"]
+transform = Transform3D(1, 0, -3.496911e-07, 0, 1, 0, 3.496911e-07, 0, 1, -6.4000244, 13, -43)
+
+[node name="RichRing" parent="MainAct/GasRoom/GasB/GrindGroupM2/RichRingGroup" instance=ExtResource("7_fjkar")]
+
+[node name="PearlRing" type="Node3D" parent="MainAct/GasRoom/GasB/GrindGroupM2/RichRingGroup"]
+script = ExtResource("4_nmhcr")
+Source = ExtResource("38_cjtko")
+Amount = 12
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.5
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/GasRoom/GasB/GrindGroupM2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0)
+
+[node name="Child02" parent="MainAct/GasRoom/GasB/GrindGroupM2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.299038, 0.75, 0)
+
+[node name="Child03" parent="MainAct/GasRoom/GasB/GrindGroupM2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.74999994, 1.2990382, 0)
+
+[node name="Child04" parent="MainAct/GasRoom/GasB/GrindGroupM2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.556708e-08, 1.5, 0)
+
+[node name="Child05" parent="MainAct/GasRoom/GasB/GrindGroupM2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7500001, 1.299038, 0)
+
+[node name="Child06" parent="MainAct/GasRoom/GasB/GrindGroupM2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.299038, 0.7500001, 0)
+
+[node name="Child07" parent="MainAct/GasRoom/GasB/GrindGroupM2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -1.3113416e-07, 0)
+
+[node name="Child08" parent="MainAct/GasRoom/GasB/GrindGroupM2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2990379, -0.75000036, 0)
+
+[node name="Child09" parent="MainAct/GasRoom/GasB/GrindGroupM2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7499999, -1.2990382, 0)
+
+[node name="Child10" parent="MainAct/GasRoom/GasB/GrindGroupM2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.788732e-08, -1.5, 0)
+
+[node name="Child11" parent="MainAct/GasRoom/GasB/GrindGroupM2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7499999, -1.2990382, 0)
+
+[node name="Child12" parent="MainAct/GasRoom/GasB/GrindGroupM2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2990384, -0.74999964, 0)
+
+[node name="GrindGroupL" type="Node3D" parent="MainAct/GasRoom/GasB"]
+transform = Transform3D(-1, 0, -8.742277e-08, 0, 1, 0, 8.742277e-08, 0, -1, 8.4000025, 0.35, 50)
+
+[node name="Spring" parent="MainAct/GasRoom/GasB/GrindGroupL" instance=ExtResource("42_m3821")]
+transform = Transform3D(-0.10193475, -0.3365927, -0.9361168, 0.040988814, 0.93879825, -0.34202012, 0.9939463, -0.07323406, -0.08189963, 4, 0, -2)
+MiddleHeight = 7.0
+FinalHeight = 6.0
+Distance = 4.0
+
+[node name="RoundPillar3" parent="MainAct/GasRoom/GasB/GrindGroupL" instance=ExtResource("45_cs034")]
+transform = Transform3D(-0.7660445, 0, -0.64278775, 0, 1, 0, 0.64278775, 0, -0.7660445, -5.5999756, -0.35, -5.5)
+respawnAnimation = 1
+respawnRatio = 0.35
+
+[node name="GrindrailL1" parent="MainAct/GasRoom/GasB/GrindGroupL" instance=ExtResource("20_kogq7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 1.5)
+
+[node name="Rings" type="Node3D" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0999999, -8)
+script = ExtResource("4_nmhcr")
+Source = ExtResource("5_guij8")
+Amount = 7
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL1/Rings" instance=ExtResource("5_guij8")]
+
+[node name="Child02" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL1/Rings" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL1/Rings" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL1/Rings" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL1/Rings" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child06" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL1/Rings" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.5)
+
+[node name="Child07" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL1/Rings" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Spring" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL1" instance=ExtResource("42_m3821")]
+transform = Transform3D(-1, 6.181724e-08, 6.181724e-08, 0, 0.70710677, -0.70710677, -8.742278e-08, -0.70710677, -0.70710677, 0, 0.1, -25)
+MiddleHeight = 4.0
+Distance = 10.0
+
+[node name="RoundPillar5" parent="MainAct/GasRoom/GasB/GrindGroupL" instance=ExtResource("45_cs034")]
+transform = Transform3D(0.34202027, 0, -0.9396927, 0, 1, 0, 0.9396927, 0, 0.34202027, -4.699951, -0.35, -27)
+respawnAnimation = 1
+respawnRatio = 0.24
+
+[node name="GrindrailL2" parent="MainAct/GasRoom/GasB/GrindGroupL" instance=ExtResource("53_i5gq5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, -29)
+
+[node name="RichRingGroup" type="Node3D" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL2"]
+transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, 0, 1, -14)
+
+[node name="RichRing" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL2/RichRingGroup" instance=ExtResource("7_fjkar")]
+
+[node name="PearlRing" type="Node3D" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL2/RichRingGroup"]
+script = ExtResource("4_nmhcr")
+Source = ExtResource("38_cjtko")
+Amount = 12
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.5
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0)
+
+[node name="Child02" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.299038, 0.75, 0)
+
+[node name="Child03" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.74999994, 1.2990382, 0)
+
+[node name="Child04" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.556708e-08, 1.5, 0)
+
+[node name="Child05" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7500001, 1.299038, 0)
+
+[node name="Child06" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.299038, 0.7500001, 0)
+
+[node name="Child07" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -1.3113416e-07, 0)
+
+[node name="Child08" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2990379, -0.75000036, 0)
+
+[node name="Child09" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7499999, -1.2990382, 0)
+
+[node name="Child10" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.788732e-08, -1.5, 0)
+
+[node name="Child11" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7499999, -1.2990382, 0)
+
+[node name="Child12" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2990384, -0.74999964, 0)
+
+[node name="RoundPillar7" parent="MainAct/GasRoom/GasB/GrindGroupL" instance=ExtResource("45_cs034")]
+transform = Transform3D(-1.0000001, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1.0000001, -0.5999756, -0.35, -55)
+respawnAnimation = 1
+respawnRatio = 0.25
+
+[node name="GrindrailL3" parent="MainAct/GasRoom/GasB/GrindGroupL" instance=ExtResource("49_aiy33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -67)
+
+[node name="SpikeBallStatic" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL3" instance=ExtResource("50_cs034")]
+transform = Transform3D(0.5176381, 0.96592575, 1.6730325, 0, 1.7320508, -1, -1.9318515, 0.25881904, 0.44828787, 0, 1.2, -25)
+
+[node name="RichRingGroup" type="Node3D" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL3"]
+transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, 0, 5, -25)
+
+[node name="RichRing" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL3/RichRingGroup" instance=ExtResource("7_fjkar")]
+
+[node name="PearlRing" type="Node3D" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL3/RichRingGroup"]
+script = ExtResource("4_nmhcr")
+Source = ExtResource("38_cjtko")
+Amount = 12
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.5
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL3/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0)
+
+[node name="Child02" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL3/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.299038, 0.75, 0)
+
+[node name="Child03" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL3/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.74999994, 1.2990382, 0)
+
+[node name="Child04" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL3/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.556708e-08, 1.5, 0)
+
+[node name="Child05" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL3/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7500001, 1.299038, 0)
+
+[node name="Child06" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL3/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.299038, 0.7500001, 0)
+
+[node name="Child07" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL3/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -1.3113416e-07, 0)
+
+[node name="Child08" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL3/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2990379, -0.75000036, 0)
+
+[node name="Child09" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL3/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7499999, -1.2990382, 0)
+
+[node name="Child10" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL3/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.788732e-08, -1.5, 0)
+
+[node name="Child11" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL3/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7499999, -1.2990382, 0)
+
+[node name="Child12" parent="MainAct/GasRoom/GasB/GrindGroupL/GrindrailL3/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2990384, -0.74999964, 0)
+
+[node name="GrindGroupR" type="Node3D" parent="MainAct/GasRoom/GasB"]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -16, 0.35, 64)
+
+[node name="Grindrail1" parent="MainAct/GasRoom/GasB/GrindGroupR" instance=ExtResource("49_aiy33")]
+
+[node name="Rings1" type="Node3D" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -2)
+script = ExtResource("4_nmhcr")
+Source = ExtResource("5_guij8")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/Rings1" instance=ExtResource("5_guij8")]
+
+[node name="Child02" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child04" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child05" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/Rings1" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Rings2" type="Node3D" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -33)
+script = ExtResource("4_nmhcr")
+Source = ExtResource("5_guij8")
+Amount = 7
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/Rings2" instance=ExtResource("5_guij8")]
+
+[node name="Child02" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child04" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child05" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child06" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child07" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/Rings2" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="SpikeBallStatic" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1" instance=ExtResource("50_cs034")]
+transform = Transform3D(1.7075101, -0.682706, -0.78633463, 0.226078, 1.717233, -1, 1.0165129, 0.76486856, 1.5432686, 0, 1.2, -25)
+
+[node name="RichRingGroup" type="Node3D" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1"]
+transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, 0, 5, -25)
+
+[node name="RichRing" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/RichRingGroup" instance=ExtResource("7_fjkar")]
+
+[node name="PearlRing" type="Node3D" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/RichRingGroup"]
+script = ExtResource("4_nmhcr")
+Source = ExtResource("38_cjtko")
+Amount = 12
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.5
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0)
+
+[node name="Child02" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.299038, 0.75, 0)
+
+[node name="Child03" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.74999994, 1.2990382, 0)
+
+[node name="Child04" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.556708e-08, 1.5, 0)
+
+[node name="Child05" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7500001, 1.299038, 0)
+
+[node name="Child06" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.299038, 0.7500001, 0)
+
+[node name="Child07" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -1.3113416e-07, 0)
+
+[node name="Child08" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2990379, -0.75000036, 0)
+
+[node name="Child09" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7499999, -1.2990382, 0)
+
+[node name="Child10" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.788732e-08, -1.5, 0)
+
+[node name="Child11" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7499999, -1.2990382, 0)
+
+[node name="Child12" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2990384, -0.74999964, 0)
+
+[node name="Grindrail2" parent="MainAct/GasRoom/GasB/GrindGroupR" instance=ExtResource("20_kogq7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0, -62.5)
+
+[node name="Rings" type="Node3D" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -2)
+script = ExtResource("4_nmhcr")
+Source = ExtResource("5_guij8")
+Amount = 7
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail2/Rings" instance=ExtResource("5_guij8")]
+
+[node name="Child02" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail2/Rings" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail2/Rings" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child04" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail2/Rings" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child05" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail2/Rings" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child06" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail2/Rings" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child07" parent="MainAct/GasRoom/GasB/GrindGroupR/Grindrail2/Rings" instance=ExtResource("5_guij8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="JumpPath1" type="Node3D" parent="MainAct/GasRoom/GasB"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3.7, 107.945)
+
+[node name="Spring" parent="MainAct/GasRoom/GasB/JumpPath1" instance=ExtResource("42_m3821")]
+transform = Transform3D(0.9177962, -0.28075802, -0.28075802, 3.5932417e-09, 0.70710677, -0.70710677, 0.39705178, 0.6489799, 0.6489799, 0, 0, 0)
+MiddleHeight = 10.0
+FinalHeight = 9.0
+Distance = 12.0
+
+[node name="JumpPosition" type="Node3D" parent="MainAct/GasRoom/GasB/JumpPath1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.647, 9, 10.738)
+
+[node name="Jump1" type="Node3D" parent="MainAct/GasRoom/GasB/JumpPath1/JumpPosition"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.799988, -1, 15.699951)
+script = ExtResource("53_fl2lb")
+jumpHeight = 3.0
+
+[node name="Jump2" type="Node3D" parent="MainAct/GasRoom/GasB/JumpPath1/JumpPosition/Jump1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5999756, -11.699985, 12.599976)
+script = ExtResource("53_fl2lb")
+jumpHeight = 1.0
+
+[node name="RichRingGroup" type="Node3D" parent="MainAct/GasRoom/GasB/JumpPath1"]
+transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, -0.8, 7, 33)
+
+[node name="RichRing" parent="MainAct/GasRoom/GasB/JumpPath1/RichRingGroup" instance=ExtResource("7_fjkar")]
+
+[node name="PearlRing" type="Node3D" parent="MainAct/GasRoom/GasB/JumpPath1/RichRingGroup"]
+script = ExtResource("4_nmhcr")
+Source = ExtResource("38_cjtko")
+Amount = 12
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.5
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/GasRoom/GasB/JumpPath1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0)
+
+[node name="Child02" parent="MainAct/GasRoom/GasB/JumpPath1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.299038, 0.75, 0)
+
+[node name="Child03" parent="MainAct/GasRoom/GasB/JumpPath1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.74999994, 1.2990382, 0)
+
+[node name="Child04" parent="MainAct/GasRoom/GasB/JumpPath1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.556708e-08, 1.5, 0)
+
+[node name="Child05" parent="MainAct/GasRoom/GasB/JumpPath1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7500001, 1.299038, 0)
+
+[node name="Child06" parent="MainAct/GasRoom/GasB/JumpPath1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.299038, 0.7500001, 0)
+
+[node name="Child07" parent="MainAct/GasRoom/GasB/JumpPath1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -1.3113416e-07, 0)
+
+[node name="Child08" parent="MainAct/GasRoom/GasB/JumpPath1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2990379, -0.75000036, 0)
+
+[node name="Child09" parent="MainAct/GasRoom/GasB/JumpPath1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7499999, -1.2990382, 0)
+
+[node name="Child10" parent="MainAct/GasRoom/GasB/JumpPath1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.788732e-08, -1.5, 0)
+
+[node name="Child11" parent="MainAct/GasRoom/GasB/JumpPath1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7499999, -1.2990382, 0)
+
+[node name="Child12" parent="MainAct/GasRoom/GasB/JumpPath1/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2990384, -0.74999964, 0)
+
+[node name="JumpPath2" type="Node3D" parent="MainAct/GasRoom/GasB"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.3, 137.5)
+
+[node name="Spring" parent="MainAct/GasRoom/GasB/JumpPath2" instance=ExtResource("42_m3821")]
+transform = Transform3D(0.8494878, -0.37307543, -0.37307543, 3.5932413e-09, 0.70710665, -0.70710665, 0.5276084, 0.6006784, 0.6006784, 0, 0, 0)
+MiddleHeight = 12.0
+FinalHeight = 11.3
+Distance = 12.0
+
+[node name="JumpPosition" type="Node3D" parent="MainAct/GasRoom/GasB/JumpPath2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.346985, 11.3, 10.338013)
+
+[node name="Jump1" type="Node3D" parent="MainAct/GasRoom/GasB/JumpPath2/JumpPosition"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9000244, 1.6000004, 15.599976)
+script = ExtResource("53_fl2lb")
+jumpHeight = 3.0
+
+[node name="Jump2" type="Node3D" parent="MainAct/GasRoom/GasB/JumpPath2/JumpPosition/Jump1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.200012, -13.1999855, 14)
+script = ExtResource("53_fl2lb")
+jumpHeight = 1.5
+
+[node name="RichRingGroup" type="Node3D" parent="MainAct/GasRoom/GasB/JumpPath2"]
+transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, -7.299988, 12.5, 33)
+
+[node name="RichRing" parent="MainAct/GasRoom/GasB/JumpPath2/RichRingGroup" instance=ExtResource("7_fjkar")]
+
+[node name="PearlRing" type="Node3D" parent="MainAct/GasRoom/GasB/JumpPath2/RichRingGroup"]
+script = ExtResource("4_nmhcr")
+Source = ExtResource("38_cjtko")
+Amount = 12
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.5
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/GasRoom/GasB/JumpPath2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0)
+
+[node name="Child02" parent="MainAct/GasRoom/GasB/JumpPath2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.299038, 0.75, 0)
+
+[node name="Child03" parent="MainAct/GasRoom/GasB/JumpPath2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.74999994, 1.2990382, 0)
+
+[node name="Child04" parent="MainAct/GasRoom/GasB/JumpPath2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.556708e-08, 1.5, 0)
+
+[node name="Child05" parent="MainAct/GasRoom/GasB/JumpPath2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7500001, 1.299038, 0)
+
+[node name="Child06" parent="MainAct/GasRoom/GasB/JumpPath2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.299038, 0.7500001, 0)
+
+[node name="Child07" parent="MainAct/GasRoom/GasB/JumpPath2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -1.3113416e-07, 0)
+
+[node name="Child08" parent="MainAct/GasRoom/GasB/JumpPath2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2990379, -0.75000036, 0)
+
+[node name="Child09" parent="MainAct/GasRoom/GasB/JumpPath2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7499999, -1.2990382, 0)
+
+[node name="Child10" parent="MainAct/GasRoom/GasB/JumpPath2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.788732e-08, -1.5, 0)
+
+[node name="Child11" parent="MainAct/GasRoom/GasB/JumpPath2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7499999, -1.2990382, 0)
+
+[node name="Child12" parent="MainAct/GasRoom/GasB/JumpPath2/RichRingGroup/PearlRing" instance=ExtResource("38_cjtko")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2990384, -0.74999964, 0)
+
+[node name="RoundPillar1" parent="MainAct/GasRoom/GasB" instance=ExtResource("45_cs034")]
+transform = Transform3D(0.9961947, 0, 0.08715574, 0, 1, 0, -0.08715574, 0, 0.9961947, -7, 0, 32)
+respawnAnimation = 1
+respawnRatio = 0.3
+
+[node name="RoundPillar2" parent="MainAct/GasRoom/GasB" instance=ExtResource("45_cs034")]
+transform = Transform3D(-0.9396926, 0, -0.3420202, 0, 1, 0, 0.3420202, 0, -0.9396926, 7, 0, 31)
+respawnAnimation = 1
+respawnRatio = 0.5
+
+[node name="RoundPillar4" parent="MainAct/GasRoom/GasB" instance=ExtResource("45_cs034")]
+transform = Transform3D(-0.70710677, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.70710677, -14, 0, 51)
+respawnAnimation = 1
+respawnRatio = 0.5
+
+[node name="RoundPillar9" parent="MainAct/GasRoom/GasB" instance=ExtResource("45_cs034")]
+transform = Transform3D(-0.34202033, 0, 0.9396929, 0, 1, 0, -0.9396929, 0, -0.34202033, 8, 0, 130)
+respawnAnimation = 1
+respawnRatio = 0.35
+
+[node name="RoundPillar10" parent="MainAct/GasRoom/GasB" instance=ExtResource("45_cs034")]
+transform = Transform3D(0.98480797, 0, 0.17364828, 0, 1, 0, -0.17364828, 0, 0.98480797, -9, 0, 130)
+respawnAnimation = 1
+respawnRatio = 0.3
+
+[node name="RoundPillar11" parent="MainAct/GasRoom/GasB" instance=ExtResource("45_cs034")]
+transform = Transform3D(0.57357645, 0, 0.81915224, 0, 1, 0, -0.81915224, 0, 0.57357645, 9, 0, 156)
+respawnAnimation = 1
+respawnRatio = 0.4
+
+[node name="RoundPillar12" parent="MainAct/GasRoom/GasB" instance=ExtResource("45_cs034")]
+transform = Transform3D(-0.9063078, 0, -0.4226184, 0, 1, 0, 0.4226184, 0, -0.9063078, -9, 0, 156)
+respawnAnimation = 1
+respawnRatio = 0.3
 
 [node name="GasC" type="Node3D" parent="MainAct/GasRoom"]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
@@ -6309,6 +7014,11 @@ libraries = {
 [connection signal="Teleport" from="MainAct/GasRoom/GasB/Hourglass" to="MainAct/Ending/Gate2" method="Activate"]
 [connection signal="Teleport" from="MainAct/GasRoom/GasB/Hourglass" to="MainAct/GasRoom/GasB" method="Deactivate"]
 [connection signal="Teleport" from="MainAct/GasRoom/GasB/Hourglass" to="MainAct/GasRoom/GasB/Hourglass/Camera" method="Activate"]
+[connection signal="Deactivated" from="MainAct/GasRoom/GasB/GrindGroupM2/SpringL" to="MainAct/GasRoom/GasB/GrindGroupM2/JumpPoint/Jump1" method="Activate" flags=3]
+[connection signal="Deactivated" from="MainAct/GasRoom/GasB/JumpPath1/Spring" to="MainAct/GasRoom/GasB/JumpPath1/JumpPosition/Jump1" method="Activate" flags=3]
+[connection signal="JumpFinished" from="MainAct/GasRoom/GasB/JumpPath1/JumpPosition/Jump1" to="MainAct/GasRoom/GasB/JumpPath1/JumpPosition/Jump1/Jump2" method="Activate" flags=3]
+[connection signal="Deactivated" from="MainAct/GasRoom/GasB/JumpPath2/Spring" to="MainAct/GasRoom/GasB/JumpPath2/JumpPosition/Jump1" method="Activate" flags=3]
+[connection signal="JumpFinished" from="MainAct/GasRoom/GasB/JumpPath2/JumpPosition/Jump1" to="MainAct/GasRoom/GasB/JumpPath2/JumpPosition/Jump1/Jump2" method="Activate" flags=3]
 [connection signal="Teleport" from="MainAct/GasRoom/GasC/Hourglass" to="Static/Trigger/Path/MainPath4" method="Activate"]
 [connection signal="Teleport" from="MainAct/GasRoom/GasC/Hourglass" to="Static/Visuals/MainSection" method="Activate"]
 [connection signal="Teleport" from="MainAct/GasRoom/GasC/Hourglass" to="Static/Visuals/SpaceSection" method="Deactivate"]
