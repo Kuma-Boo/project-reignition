@@ -50,8 +50,8 @@ public partial class EventTrigger : StageTriggerModule
 	[Export(PropertyHint.Range, "0,1")] private float respawnRatio = 1f;
 
 	private readonly string ResetAnimation = "RESET";
-	private readonly string EventAnimation = "event";
-	private readonly string DeactivateEventAnimation = "event-deactivate";
+	[Export] private string eventAnimation = "event";
+	[Export] private string deactivateEventAnimation = "event-deactivate";
 
 	[Export(PropertyHint.Range, "0.1,10,0.1,or_greater")] private float activationSpeedScale = 1f;
 	[Export(PropertyHint.Range, "0.1,10,0.1,or_greater")] private float deactivationSpeedScale = 1f;
@@ -222,12 +222,12 @@ public partial class EventTrigger : StageTriggerModule
 					animator.Play(ResetAnimation);
 				break;
 			case RespawnAnimation.Activate:
-				if (animator.HasAnimation(EventAnimation))
-					animator.Play(EventAnimation);
+				if (animator.HasAnimation(eventAnimation))
+					animator.Play(eventAnimation);
 				break;
 			case RespawnAnimation.Deactivate:
-				if (animator.HasAnimation(DeactivateEventAnimation))
-					animator.Play(DeactivateEventAnimation);
+				if (animator.HasAnimation(deactivateEventAnimation))
+					animator.Play(deactivateEventAnimation);
 				break;
 		}
 
@@ -245,7 +245,7 @@ public partial class EventTrigger : StageTriggerModule
 		if (isOneShot && isActivated) return;
 
 		Visible = true;
-		PlayAnimation(EventAnimation, activationSpeedScale);
+		PlayAnimation(eventAnimation, activationSpeedScale);
 		EmitSignal(SignalName.Activated);
 	}
 
@@ -253,7 +253,7 @@ public partial class EventTrigger : StageTriggerModule
 	{
 		if (isOneShot && !isActivated) return;
 
-		PlayAnimation(DeactivateEventAnimation, deactivationSpeedScale);
+		PlayAnimation(deactivateEventAnimation, deactivationSpeedScale);
 		EmitSignal(SignalName.Deactivated);
 	}
 
