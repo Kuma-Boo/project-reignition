@@ -1345,7 +1345,6 @@ shape = SubResource("BoxShape3D_pd5lb")
 
 [node name="Carpet" parent="Carpet" node_paths=PackedStringArray("path", "pathFollower") instance=ExtResource("52_vgsxs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.5, 17)
-turnSmoothing = 20.0
 path = NodePath("../../Path/CarpetPath")
 pathFollower = NodePath("../../Path/CarpetPath/CarpetPathFollower")
 
@@ -1417,8 +1416,8 @@ reflectionMaterials = [ExtResource("47_eiuc0")]
 [connection signal="JumpFinished" from="Carpet/StartTrigger/JumpTrigger" to="Carpet/Carpet" method="Activate"]
 [connection signal="Activated" from="Carpet/Carpet" to="Carpet/Carpet/Camera" method="Activate"]
 [connection signal="Activated" from="Carpet/Carpet" to="Carpet/Carpet/Path" method="Activate"]
-[connection signal="Deactivated" from="Carpet/Carpet" to="Carpet/Carpet/Camera" method="Deactivate"]
 [connection signal="Activated" from="Carpet/EndTrigger" to="Carpet/Carpet" method="Deactivate"]
+[connection signal="Activated" from="Carpet/EndTrigger" to="Carpet/Carpet/Camera" method="Deactivate"]
 [connection signal="JumpFinished" from="Carpet/EndTrigger/JumpTrigger" to="Collision/Collision/CarpetWallOneWay" method="Activate"]
 [connection signal="JumpFinished" from="Carpet/EndTrigger/JumpTrigger" to="Trigger/Path/MainPath4" method="Activate"]
 

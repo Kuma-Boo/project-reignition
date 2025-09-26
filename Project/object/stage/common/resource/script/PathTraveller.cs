@@ -28,6 +28,8 @@ public partial class PathTraveller : Node3D
 	[Export] private bool isVerticalMovementDisabled;
 	public bool IsVerticalMovementDisabled => isVerticalMovementDisabled;
 
+	/// <summary> Should this PathTraveller automatically respawn the player after taking damage? </summary>
+	[Export] public bool AutoDefeat { get; private set; }
 	[Export] private float rotationAmount = 45;
 	[Export] private float tiltRatio = 1.0f;
 	[Export] private bool disableStepButtons;

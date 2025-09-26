@@ -1,17 +1,150 @@
-[gd_scene load_steps=3 format=3 uid="uid://b2ym415hopd85"]
+[gd_scene load_steps=9 format=3 uid="uid://b2ym415hopd85"]
 
 [ext_resource type="Script" uid="uid://c0f78bfayvnvc" path="res://object/stage/common/resource/script/PathTraveller.cs" id="1_imlpk"]
 [ext_resource type="PackedScene" uid="uid://drabhhqncnl47" path="res://area/7 night palace/object/model/Carpet.gltf" id="1_plokg"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7w8qu"]
+size = Vector3(1, 0.2, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_y7b4k"]
+radius = 0.4
+height = 1.2
+
+[sub_resource type="Animation" id="Animation_bpxeu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Carpet:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Carpet:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Trigger:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_y7b4k"]
+resource_name = "deactivate"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Carpet:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.16666667, 0.33333334),
+"transitions": PackedFloat32Array(0.5, 2, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(2, 1.5, 0.8), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Carpet:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.33333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Trigger:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_7w8qu"]
+resource_name = "respawn"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Carpet:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Carpet:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Trigger:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_j74o1"]
+_data = {
+&"RESET": SubResource("Animation_bpxeu"),
+&"deactivate": SubResource("Animation_y7b4k"),
+&"respawn": SubResource("Animation_7w8qu")
+}
 
 [node name="Carpet" type="Node3D" node_paths=PackedStringArray("root", "playerPosition", "animator")]
 script = ExtResource("1_imlpk")
 MaxSpeed = 20.0
 TurnSpeed = 15.0
 turnSmoothing = 10.0
+AutoDefeat = true
 bounds = Vector2(4, 2)
 root = NodePath("Carpet")
 playerPosition = NodePath("Carpet/FlyingCarpetRoot")
-animator = NodePath("Carpet/AnimationPlayer")
+animator = NodePath("AnimationPlayer")
 
 [node name="Carpet" parent="." instance=ExtResource("1_plokg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
@@ -21,5 +154,25 @@ cast_shadow = 0
 
 [node name="AnimationPlayer" parent="Carpet" index="1"]
 autoplay = "carpet-idle"
+
+[node name="Trigger" type="Area3D" parent="."]
+collision_layer = 8
+collision_mask = 8
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.099999994, 0)
+shape = SubResource("BoxShape3D_7w8qu")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.24999997, 0)
+shape = SubResource("CapsuleShape3D_y7b4k")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_j74o1")
+}
+
+[connection signal="body_entered" from="Trigger" to="." method="OnBodyEntered"]
 
 [editable path="Carpet"]

@@ -17,6 +17,7 @@ public partial class PathTravellerState : PlayerState
 		Player.Animator.ExternalAngle = 0; // Rotate to follow pathfollower
 		Player.StartExternal(this, Traveller.PlayerStandin, .1f);
 
+		Player.Knockback += OnDamage;
 		Traveller.Advanced += OnAdvance;
 		Traveller.Staggered += OnStagger;
 		Traveller.Damaged += OnDamage;
@@ -30,6 +31,7 @@ public partial class PathTravellerState : PlayerState
 		Player.Animator.ResetState();
 		Player.Skills.IsSpeedBreakEnabled = true;
 
+		Player.Knockback -= OnDamage;
 		Traveller.StopMovement();
 		Traveller.Advanced -= OnAdvance;
 		Traveller.Staggered -= OnStagger;
@@ -68,10 +70,27 @@ public partial class PathTravellerState : PlayerState
 		Traveller.Despawn();
 
 		// Bump the player off
-		LaunchSettings launchSettings = LaunchSettings.Create(Player.GlobalPosition, Traveller.GetDamageEndPosition(), 2);
+		Vector3 targetEndPosition = Traveller.GetDamageEndPosition();
+
+		if (Traveller.AutoDefeat)
+		{
+			targetEndPosition += Vector3.Down * Traveller.Bounds.Y;
+			Player.Camera.IsDefeatFreezeActive = true;
+			Player.LaunchFinished += ForceRespawn;
+		}
+
+		LaunchSettings launchSettings = LaunchSettings.Create(Player.GlobalPosition, targetEndPosition, 2);
+		launchSettings.AllowDamage = !Traveller.AutoDefeat;
+
 		Player.StartLauncher(launchSettings);
 		Player.Animator.ResetState(0.1f);
 		Player.Animator.StartSpin(3.0f);
 		Player.Animator.SnapRotation(Player.Animator.ExternalAngle);
+	}
+
+	private void ForceRespawn()
+	{
+		Player.StartRespawn();
+		Player.LaunchFinished -= ForceRespawn;
 	}
 }
