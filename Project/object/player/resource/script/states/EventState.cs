@@ -13,6 +13,7 @@ public partial class EventState : PlayerState
 	[Export] private PlayerState fallState;
 
 	private bool isEventFinished;
+	private bool isPlayingOneshotAnimation;
 
 	public override void EnterState()
 	{
@@ -32,7 +33,8 @@ public partial class EventState : PlayerState
 		Player.Animator.ExternalAngle = 0; // Reset external angle
 		Player.Animator.SnapRotation(Player.Animator.ExternalAngle);
 
-		if (Player.Animator.IsOneshotAnimationValid(Trigger.EventID))
+		isPlayingOneshotAnimation = Player.Animator.IsOneshotAnimationValid(Trigger.EventID);
+		if (isPlayingOneshotAnimation)
 			Player.Animator.PlayOneshotAnimation(Trigger.EventID);
 	}
 
@@ -74,7 +76,10 @@ public partial class EventState : PlayerState
 
 			// Call deferred so sync happens AFTER event animator updates
 			if (Trigger.PlayerStandin != null)
+			{
 				Player.CallDeferred(PlayerController.MethodName.UpdateExternalControl, true);
+				CheckLanding();
+			}
 
 			return null;
 		}
@@ -89,6 +94,15 @@ public partial class EventState : PlayerState
 			return idleState;
 
 		return runState;
+	}
+
+	private void CheckLanding()
+	{
+		if (isPlayingOneshotAnimation || Player.IsOnGround || !Player.GroundHit)
+			return;
+
+		Player.IsOnGround = true;
+		Player.Animator.LandingAnimation();
 	}
 
 	private bool IsSkippingEvent()
