@@ -318,9 +318,17 @@ public partial class PlayerInputController : Node
 			int rotationDirection = Mathf.Sign(ExtensionMethods.SignedDeltaAngleRad(XformAngle, baseAngle));
 			inputs = inputs.Rotated(rotationDirection * Mathf.Pi * .5f);
 		}
-
-		if (controlMode == CameraSettingsResource.ControlModeEnum.Reverse) // Transform inputs based on the control mode
+		else if (controlMode == CameraSettingsResource.ControlModeEnum.Reverse)
+		{
+			// Transform inputs based on the control mode
 			inputs.X *= -1;
+		}
+		else if (controlMode == CameraSettingsResource.ControlModeEnum.Auto)
+		{
+			// Transform inputs based on camera angle
+			int sign = Mathf.Sign(ExtensionMethods.DotAngle(Player.PathFollower.ForwardAngle, XformAngle));
+			inputs *= sign >= 0 ? 1 : -1;
+		}
 
 		if (allowBackstep && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun)) // Check for backstep
 		{

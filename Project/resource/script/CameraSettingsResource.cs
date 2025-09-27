@@ -300,7 +300,8 @@ public partial class CameraSettingsResource : Resource
 	{
 		Normal, // Forward is forward and backwards is backwards
 		Reverse, // Invert forward and backwards
-		Sidescrolling // Alter inputs to be faced on IsFacingRight
+		Sidescrolling, // Alter inputs to be faced on IsFacingRight
+		Auto, // Automatically invert controls based on the direction to the camera
 	}
 
 	/// <summary> How closely to follow the path. </summary>
