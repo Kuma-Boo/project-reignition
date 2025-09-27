@@ -40,6 +40,7 @@ namespace Project.Gameplay.Hazards
 			Visible = true;
 			ProcessMode = ProcessModeEnum.Inherit;
 
+			GlobalRotation = Vector3.Zero;
 			LinearVelocity = GlobalBasis * startingVelocity;
 			AngularVelocity = Vector3.Zero;
 			animator.Play("spawn");
