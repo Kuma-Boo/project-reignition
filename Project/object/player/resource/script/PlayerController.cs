@@ -836,6 +836,8 @@ public partial class PlayerController : CharacterBody3D
 		StateMachine.ChangeState(driftState);
 	}
 
+	public bool IsDriftTriggerEqualTo(DriftTrigger trigger) => driftState.Trigger == trigger;
+
 	[Export] private IvyState ivyState;
 	public void StartIvy(Ivy trigger)
 	{

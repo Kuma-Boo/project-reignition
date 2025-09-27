@@ -217,7 +217,7 @@ public partial class DriftState : PlayerState
 	private void SuccessfulDrift()
 	{
 		driftAnimationTimer = LaunchAnimationLength;
-		Player.MoveSpeed = Player.Stats.GroundSettings.Speed;
+		Player.MoveSpeed = Player.Skills.IsSpeedBreakActive ? Player.Skills.speedBreakSpeed : Player.Stats.GroundSettings.Speed;
 		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(Trigger.ExitDirection, Player.PathFollower.Up());
 		Player.MovementAngle -= Mathf.Pi * .1f * Player.Controller.InputHorizontal;
 		Player.AddLockoutData(LockoutSettings); // Apply lockout

@@ -54,7 +54,7 @@ public partial class DriftTrigger : Area3D
 	/// <summary> Checks whether the player is in a state where a drift is possible. </summary>
 	private void AttemptDrift()
 	{
-		if (Player.IsDrifting)
+		if (Player.IsDriftTriggerEqualTo(this))
 			return;
 
 		if (!Player.IsOnGround)
