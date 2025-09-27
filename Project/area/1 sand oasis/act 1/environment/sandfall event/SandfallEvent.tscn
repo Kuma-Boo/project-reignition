@@ -79,15 +79,16 @@ draw_pass_1 = SubResource("PlaneMesh_7nyph")
 transform = Transform3D(0.56712335, -0.1629993, 0.8073426, 1.4901161e-08, 0.9802216, 0.19790287, -0.8236328, -0.112235345, 0.5559066, 6.4150195, 4.375309, 2.8678818)
 bone_name = "camera"
 bone_idx = 1
-
-[node name="CameraReference" type="Camera3D" parent="SandfallEventRoot/Skeleton3D/Camera" index="0"]
-cull_mask = 32767
-fov = 50.0
 script = ExtResource("4_vy1ou")
 transitionTime = 0.0
 deactivationTransitionTime = 0.5
 settings = ExtResource("8_7ej3u")
 UpdateEveryFrame = true
+followObject = NodePath("CameraReference")
+
+[node name="CameraReference" type="Camera3D" parent="SandfallEventRoot/Skeleton3D/Camera" index="0"]
+cull_mask = 32767
+fov = 50.0
 
 [node name="SandfallEventMesh" parent="SandfallEventRoot/Skeleton3D" index="3"]
 layers = 2
@@ -96,12 +97,13 @@ extra_cull_margin = 100.0
 [node name="AnimationPlayer" parent="." index="1"]
 callback_mode_process = 0
 
-[node name="Dialog" type="Node3D" parent="." index="2"]
+[node name="Dialog" type="Node3D" parent="." index="2" node_paths=PackedStringArray("randomizedDialogTriggers")]
 script = ExtResource("6_iexgt")
 playbackType = 1
 delays = Array[float]([0.0, 0.0, 4.1, 1.5])
 displayLength = Array[float]([1.0, 2.4, 1.0, 0.0])
 textKeys = ["oas_sandfall_event_so", "oas_sandfall_event_sh", "oas_sandfall_event2_so", "oas_sandfall_event3_so"]
+randomizedDialogTriggers = []
 
 [node name="SFX" type="Node" parent="." index="3"]
 
@@ -120,7 +122,7 @@ process_mode = 1
 stream = ExtResource("9_pqrfn")
 bus = &"GAME SFX"
 
-[connection signal="Activated" from="." to="SandfallEventRoot/Skeleton3D/Camera/CameraReference" method="Activate"]
+[connection signal="Activated" from="." to="SandfallEventRoot/Skeleton3D/Camera" method="Activate"]
 [connection signal="Activated" from="." to="Dialog" method="Activate"]
 [connection signal="EventSkipped" from="." to="Dialog" method="Deactivate"]
 [connection signal="EventSkipped" from="." to="SFX/SandfallSFX" method="stop"]

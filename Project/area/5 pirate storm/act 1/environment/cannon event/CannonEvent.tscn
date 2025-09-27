@@ -302,7 +302,7 @@ overrideEventLength = 5.3
 "Player Event Settings/Exit Lockout" = null
 
 [node name="Player" type="BoneAttachment3D" parent="CannonEventRoot/Skeleton3D" index="0"]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.00427246, 0.00236511, -29.9589)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.004272461, 0.0023651123, -29.958923)
 bone_name = "player"
 bone_idx = 4
 
@@ -334,7 +334,7 @@ process_material = SubResource("ParticleProcessMaterial_gmmsf")
 draw_pass_1 = SubResource("QuadMesh_5561m")
 
 [node name="CannonballFX" type="BoneAttachment3D" parent="CannonEventRoot/Skeleton3D" index="1"]
-transform = Transform3D(1, 1.70096e-16, 1.42728e-16, -2.18671e-16, 0.866025, 0.5, -3.85576e-17, -0.5, 0.866025, 0.00427246, 4.50949, -0.425949)
+transform = Transform3D(1, 1.7009606e-16, 1.4272755e-16, -2.1867128e-16, 0.8660253, 0.50000006, -3.855764e-17, -0.50000006, 0.8660253, 0.004272461, 4.5094895, -0.42594934)
 bone_name = "cannon_shell_fx"
 bone_idx = 3
 
@@ -395,21 +395,20 @@ process_material = SubResource("ParticleProcessMaterial_6bewi")
 draw_pass_1 = SubResource("QuadMesh_sa8n2")
 
 [node name="Camera" type="BoneAttachment3D" parent="CannonEventRoot/Skeleton3D" index="2"]
-transform = Transform3D(0.798636, -0.104504, -0.592672, 1.11759e-08, 0.984808, -0.173648, 0.601815, 0.138682, 0.786502, -1.99573, 0.439155, -20.4589)
+transform = Transform3D(0.79863554, -0.104504086, -0.5926721, 1.1175871e-08, 0.98480767, -0.17364821, 0.601815, 0.1386816, 0.7865025, -1.9957275, 0.43915462, -20.458923)
 bone_name = "camera"
 bone_idx = 5
-
-[node name="Camera" type="Camera3D" parent="CannonEventRoot/Skeleton3D/Camera" index="0"]
-cull_mask = 0
-fov = 100.0
 script = ExtResource("3_bvgsx")
 transitionTime = 0.0
 settings = ExtResource("4_q3031")
 UpdateEveryFrame = true
-followObject = NodePath(".")
+followObject = NodePath("Camera")
+
+[node name="Camera" type="Camera3D" parent="CannonEventRoot/Skeleton3D/Camera" index="0"]
+fov = 70.0
 
 [node name="Cannon" type="BoneAttachment3D" parent="CannonEventRoot/Skeleton3D" index="3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00427246, 3.22233, 0.0168457)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.004272461, 3.2223349, 0.016845703)
 bone_name = "cannon_rotation"
 bone_idx = 1
 
@@ -518,5 +517,5 @@ process_mode = 1
 stream = ExtResource("5_n03it")
 bus = &"GAME SFX"
 
-[connection signal="Activated" from="." to="CannonEventRoot/Skeleton3D/Camera/Camera" method="Activate"]
+[connection signal="Activated" from="." to="CannonEventRoot/Skeleton3D/Camera" method="Activate"]
 [connection signal="EventSkipped" from="." to="SFX/CannonSFX" method="stop"]

@@ -8248,7 +8248,7 @@ _data = {
 
 [node name="SandScorpion" type="Node3D" node_paths=PackedStringArray("cutsceneCamera", "hitDialogs", "hintDialogs", "rootAnimationTree", "lTailAnimationTree", "rTailAnimationTree", "flyingEyeAnimationTree", "eventAnimator", "impactEffect", "hitEffect", "flyingEyeVFX", "mainEyes", "tailEyes", "flyingEyeHitbox", "flyingEyeRoot", "flyingEyeBone")]
 script = ExtResource("1_8xsd2")
-cutsceneCamera = NodePath("SandScorpion/CameraRoot/CutsceneCamera")
+cutsceneCamera = NodePath("SandScorpion/CameraRoot")
 hitDialogs = [NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/Sound/Dialog/Hit1"), NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/Sound/Dialog/Hit2"), NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/Sound/Dialog/Hit3"), NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/Sound/Dialog/Hit4")]
 hintDialogs = [NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/Sound/Dialog/Hint1"), NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/Sound/Dialog/Hint2"), NodePath("SandScorpion/ScorpionRoot/Skeleton3D/Root/Sound/Dialog/Hint3")]
 rootAnimationTree = NodePath("RootAnimationTree")
@@ -9405,14 +9405,15 @@ parameters/phase_two/current_index = 1
 
 [node name="CameraRoot" type="Node3D" parent="SandScorpion"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -200)
-
-[node name="CutsceneCamera" type="Camera3D" parent="SandScorpion/CameraRoot"]
-cull_mask = 59
-fov = 70.0
 script = ExtResource("25_wqkkv")
 transitionTime = 0.0
 settings = ExtResource("26_mkoai")
 UpdateEveryFrame = true
+followObject = NodePath("CutsceneCamera")
+
+[node name="CutsceneCamera" type="Camera3D" parent="SandScorpion/CameraRoot"]
+cull_mask = 59
+fov = 70.0
 
 [node name="Shockwave" type="GPUParticles3D" parent="." node_paths=PackedStringArray("subSystems")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)

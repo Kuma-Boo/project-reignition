@@ -10,8 +10,6 @@
 [ext_resource type="Material" uid="uid://ckyg4aygq0uan" path="res://effect/particle/material/environment/Water Dust.tres" id="7_kljfr"]
 [ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter Add.tres" id="8_ya4t4"]
 
-
-
 [sub_resource type="Curve" id="Curve_wlfgs"]
 _data = [Vector2(0, 0), 0.0, 8.26422, 0, 0, Vector2(0.315451, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
@@ -77,7 +75,6 @@ overrideEventLength = 7.0
 "Trigger Settings/Is One Shot" = true
 "Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("PlayerBone/Player")
-"Player Event Settings/Animation" = null
 "Player Event Settings/Animation Fadeout Time" = 0.2
 "Player Event Settings/Position Smoothing" = 0.0
 "Player Event Settings/Normalize Exit Move Speed" = true
@@ -91,7 +88,7 @@ overrideEventLength = 7.0
 callback_mode_process = 0
 
 [node name="PlayerBone" type="BoneAttachment3D" parent="."]
-transform = Transform3D(0.996195, -0.0210849, 0.0845668, -9.31323e-10, 0.970296, 0.241922, -0.0871557, -0.241001, 0.966603, 0.868011, 2.4655, 18.728)
+transform = Transform3D(0.9961947, -0.021084882, 0.08456685, -9.313226e-10, 0.9702957, 0.24192192, -0.087155744, -0.24100132, 0.96660346, 0.8680115, 2.4654999, 18.727997)
 bone_name = "player"
 bone_idx = 8
 use_external_skeleton = true
@@ -100,18 +97,19 @@ external_skeleton = NodePath("../RiverEvent/RiverEventRoot/Skeleton3D")
 [node name="Player" type="Node3D" parent="PlayerBone"]
 
 [node name="Camera" type="BoneAttachment3D" parent="."]
-transform = Transform3D(1.19209e-07, 0.939693, -0.34202, 5.96046e-08, 0.34202, 0.939693, 1, -1.19209e-07, 0, 7.81476, -15.5345, 0.694639)
+transform = Transform3D(5.9604645e-08, 0.9396926, -0.3420201, 5.9604645e-08, 0.34202015, 0.9396926, 0.99999994, -2.9802322e-08, 0, 7.814763, -15.5345, 0.6946392)
 bone_name = "camera"
 bone_idx = 9
 use_external_skeleton = true
 external_skeleton = NodePath("../RiverEvent/RiverEventRoot/Skeleton3D")
-
-[node name="CameraReference" type="Camera3D" parent="Camera"]
-fov = 70.0
 script = ExtResource("3_4d2ap")
 transitionTime = 0.0
 settings = ExtResource("7_c7d3t")
 UpdateEveryFrame = true
+followObject = NodePath("CameraReference")
+
+[node name="CameraReference" type="Camera3D" parent="Camera"]
+fov = 70.0
 
 [node name="CameraDeactivateTrigger" type="Node3D" parent="Camera/CameraReference"]
 transform = Transform3D(1, 0, 0, 0, 1, -1.49012e-08, 0, 0, 1, 0, 0, 0)
@@ -120,7 +118,7 @@ transitionType = 1
 settings = ExtResource("6_vw7ab")
 
 [node name="Log" type="BoneAttachment3D" parent="."]
-transform = Transform3D(-3.35185e-05, -1, -5.79852e-05, -5.79854e-05, -5.79833e-05, 1, -1, 3.35219e-05, -5.79835e-05, -53.6927, 8.46513, -1.47034)
+transform = Transform3D(-3.351851e-05, -1, -5.7985213e-05, -5.7985377e-05, -5.7983318e-05, 1, -1, 3.352186e-05, -5.798348e-05, -53.6927, 8.465125, -1.4703394)
 bone_name = "log"
 bone_idx = 7
 use_external_skeleton = true
@@ -154,7 +152,7 @@ process_mode = 1
 stream = ExtResource("3_6r8nl")
 bus = &"GAME SFX"
 
-[connection signal="Activated" from="." to="Camera/CameraReference" method="Activate"]
+[connection signal="Activated" from="." to="Camera" method="Activate"]
 [connection signal="EventFinished" from="." to="Camera/CameraReference/CameraDeactivateTrigger" method="Activate"]
 [connection signal="EventSkipped" from="." to="RiverSFX" method="stop"]
 

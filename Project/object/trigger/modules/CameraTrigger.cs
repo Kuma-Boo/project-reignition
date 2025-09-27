@@ -56,13 +56,13 @@ public partial class CameraTrigger : StageTriggerModule
 		if (data.SettingsResource != settings || !IsOverridingCameraTransform) return;
 
 		if (data.SettingsResource.copyPosition)
-			data.Position = GlobalPosition;
+			data.Position = _followObject.GlobalPosition;
 
 		if (data.SettingsResource.copyRotation)
-			data.RotationBasis = GlobalBasis;
+			data.RotationBasis = _followObject.GlobalBasis;
 
-		if (data.SettingsResource.copyFov && _referenceCamera != null)
-			data.Fov = _referenceCamera.Fov;
+		if (data.SettingsResource.copyFov)
+			data.Fov = _referenceCamera != null ? _referenceCamera.Fov : 0;
 	}
 
 	public override void Activate()
