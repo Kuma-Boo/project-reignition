@@ -102,8 +102,16 @@ public partial class PlayerState : Node
 	protected virtual void Deccelerate() =>
 		Player.MoveSpeed = ActiveMovementSettings.UpdateInterpolate(Player.MoveSpeed, 0);
 
-	protected virtual void AccelerateLockout() =>
+	protected virtual void AccelerateLockout()
+	{
+		if (Player.IsMovingBackward)
+		{
+			Deccelerate();
+			return;
+		}
+
 		Player.MoveSpeed = Player.ActiveLockoutData.ApplySpeed(Player.MoveSpeed, ActiveMovementSettings);
+	}
 
 	protected virtual void Accelerate(float inputStrength)
 	{

@@ -330,14 +330,11 @@ public partial class PlayerInputController : Node
 			inputs *= sign >= 0 ? 1 : -1;
 		}
 
-		if (allowBackstep && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun)) // Check for backstep
-		{
-			if (controlMode == CameraSettingsResource.ControlModeEnum.Reverse) // Transform inputs based on the control mode
-				inputs.Y *= -1;
+		if (controlMode == CameraSettingsResource.ControlModeEnum.Reverse) // Transform inputs based on the control mode
+			inputs.Y *= -1;
 
-			if (Player.IsMovingBackward)
-				baseAngle = Player.PathFollower.BackAngle;
-		}
+		if (Player.IsMovingBackward)
+			baseAngle = Player.PathFollower.BackAngle;
 
 		float strafeAngle = inputs.X * TurningDampingRange;
 		if (Player.IsMovingBackward)
