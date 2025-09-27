@@ -17,10 +17,12 @@ namespace Project.Gameplay.Objects
 		{
 			if (!isInteractingWithPlayer) return;
 
-			if (!Player.Skills.IsSpeedBreakActive && !Player.IsJumpDashOrHomingAttack) return;
+			if (Player.AttackState == PlayerController.AttackStates.None) return;
 
-			if (Player.IsJumpDashOrHomingAttack) // Bounce the player if necessary
-				Player.StartBounce();
+			Player.StartBounce();
+
+			if (Player.Skills.IsSpeedBreakActive) // Turn off speedbreak
+				Player.Skills.ToggleSpeedBreak();
 
 			eventHandler.Activate();
 		}
