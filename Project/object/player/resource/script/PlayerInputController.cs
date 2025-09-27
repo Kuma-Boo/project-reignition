@@ -315,23 +315,20 @@ public partial class PlayerInputController : Node
 
 		if (controlMode == CameraSettingsResource.ControlModeEnum.Sidescrolling)
 		{
-			int rotationDirection = Mathf.Sign(ExtensionMethods.SignedDeltaAngleRad(XformAngle, baseAngle));
+			int rotationDirection = Mathf.Sign(ExtensionMethods.SignedDeltaAngleRad(baseAngle, XformAngle));
 			inputs = inputs.Rotated(rotationDirection * Mathf.Pi * .5f);
 		}
 		else if (controlMode == CameraSettingsResource.ControlModeEnum.Reverse)
 		{
 			// Transform inputs based on the control mode
-			inputs.X *= -1;
+			inputs *= -1;
 		}
 		else if (controlMode == CameraSettingsResource.ControlModeEnum.Auto)
 		{
 			// Transform inputs based on camera angle
-			int sign = Mathf.Sign(ExtensionMethods.DotAngle(Player.PathFollower.ForwardAngle, XformAngle));
+			int sign = Mathf.Sign(ExtensionMethods.DotAngle(baseAngle, XformAngle));
 			inputs *= sign >= 0 ? 1 : -1;
 		}
-
-		if (controlMode == CameraSettingsResource.ControlModeEnum.Reverse) // Transform inputs based on the control mode
-			inputs.Y *= -1;
 
 		if (Player.IsMovingBackward)
 			baseAngle = Player.PathFollower.BackAngle;
