@@ -1,4 +1,4 @@
-[gd_scene load_steps=91 format=3 uid="uid://ctfcgpodfhnp0"]
+[gd_scene load_steps=93 format=3 uid="uid://ctfcgpodfhnp0"]
 
 [ext_resource type="PackedScene" uid="uid://u5so6ulpdpsk" path="res://area/7 night palace/act 1/environment/01Start.tscn" id="1_c3xql"]
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_siayx"]
@@ -43,6 +43,7 @@
 [ext_resource type="Resource" uid="uid://5e5cqnynb00x" path="res://area/7 night palace/act 1/camera/InteriorEntranceCam.tres" id="23_hvi5b"]
 [ext_resource type="PackedScene" uid="uid://c6s2w2y34qk3n" path="res://area/7 night palace/environment/NPSpaceA.tscn" id="24_2lmms"]
 [ext_resource type="Resource" uid="uid://cr8img8j2ucsv" path="res://area/7 night palace/act 1/camera/InteriorCam.tres" id="24_c3npn"]
+[ext_resource type="Resource" uid="uid://b1pan2tr3ydrk" path="res://area/7 night palace/act 1/camera/SpaceCAutorunCam.tres" id="24_mgyvg"]
 [ext_resource type="PackedScene" uid="uid://c7nwnjbl6okjf" path="res://area/7 night palace/environment/NPSpaceB.tscn" id="25_n0r0x"]
 [ext_resource type="PackedScene" uid="uid://kig7ydnck6g5" path="res://area/7 night palace/environment/NPSpaceC.tscn" id="26_1px5b"]
 [ext_resource type="Resource" uid="uid://c255032w6ugb5" path="res://area/7 night palace/act 1/camera/SpaceBCam.tres" id="26_7ubvh"]
@@ -66,6 +67,7 @@
 [ext_resource type="Resource" uid="uid://b3ti60dq0o0ro" path="res://area/7 night palace/act 1/camera/CarpetCam.tres" id="53_51kfd"]
 [ext_resource type="Curve3D" uid="uid://cmcvug7dbe85a" path="res://area/7 night palace/environment/path/SpaceC2Path.tres" id="57_cppoj"]
 [ext_resource type="Curve3D" uid="uid://bhivojgxr36sl" path="res://area/7 night palace/environment/path/SpaceC3Path.tres" id="58_guye2"]
+[ext_resource type="Resource" uid="uid://b808qipr112qt" path="res://area/7 night palace/act 1/camera/CarpetAutorunCam.tres" id="59_guye2"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mow5f"]
 size = Vector3(20, 20, 5)
@@ -265,6 +267,7 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -152.9
 
 [node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoint/CarpetCheckpoint"]
 script = ExtResource("8_irx0t")
+CameraSettings = ExtResource("23_hvi5b")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoint/CarpetCheckpoint"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -592,6 +595,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 951, 0, -298)
 [node name="Lockout" type="Node3D" parent="Trigger/Object/SpaceCAutorunTrigger"]
 script = ExtResource("21_ymvrb")
 lockoutData = ExtResource("23_hbuma")
+
+[node name="Camera" type="Node3D" parent="Trigger/Object/SpaceCAutorunTrigger"]
+script = ExtResource("10_7ghp2")
+settings = ExtResource("24_mgyvg")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/SpaceCAutorunTrigger"]
 shape = SubResource("BoxShape3D_eiht3")
@@ -1114,12 +1121,16 @@ reflectionRenderer = NodePath("../../../../PrimaryReflectionRenderer")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
+[node name="GasRoomReflection" type="Node3D" parent="Trigger/Reflection" node_paths=PackedStringArray("reflectionRenderer")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1140, 0, -560)
+script = ExtResource("8_ucc6w")
+reflectionRenderer = NodePath("../../../PrimaryReflectionRenderer")
+
 [node name="Visuals" type="Node3D" parent="."]
 metadata/_edit_lock_ = true
 metadata/_edit_group_ = true
 
 [node name="CullingMap" type="Node3D" parent="Visuals"]
-visible = false
 
 [node name="02L" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -70)
@@ -1185,12 +1196,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
 [node name="04U" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
-transform = Transform3D(-7.45058e-09, 0, 1, 0, 1, 0, -1, 0, -7.45058e-09, -143.262, 10, -481.825)
-"Trigger Mode" = 2
-"Exit Mode" = 2
+transform = Transform3D(-7.45058e-09, 0, 1, 0, 1, 0, -1, 0, -7.45058e-09, -126.26199, 10, -481.825)
+"Enter Mode" = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/04U"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_mow5f")
 
 [node name="06L" parent="Visuals/CullingMap" instance=ExtResource("4_d1bik")]
@@ -1331,6 +1340,23 @@ curve = ExtResource("58_guye2")
 [node name="Carpet" type="Node3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -148, 10, -481.85)
 
+[node name="AutorunTrigger" parent="Carpet" instance=ExtResource("4_d1bik")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Camera" type="Node3D" parent="Carpet/AutorunTrigger"]
+script = ExtResource("10_7ghp2")
+distanceBlending = 10
+settings = ExtResource("59_guye2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Carpet/AutorunTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_pd5lb")
+
+[node name="Autorun" type="Node3D" parent="Carpet"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.5, 4)
+script = ExtResource("21_ymvrb")
+lockoutData = ExtResource("23_hbuma")
+
 [node name="StartTrigger" parent="Carpet" instance=ExtResource("4_d1bik")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
 
@@ -1419,7 +1445,9 @@ reflectionMaterials = [ExtResource("47_eiuc0")]
 [connection signal="Deactivated" from="Visuals/CullingMap/06L" to="Visuals/MainSection/06Ending" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/05U" to="Visuals/MainSection/05Carpet" method="Deactivate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/05U" to="Visuals/MainSection/05Carpet" method="Activate"]
+[connection signal="Activated" from="Carpet/AutorunTrigger" to="Carpet/Autorun" method="Activate"]
 [connection signal="Activated" from="Carpet/StartTrigger" to="Collision/Collision/CarpetWallOneWay" method="Deactivate"]
+[connection signal="Activated" from="Carpet/StartTrigger" to="Carpet/Autorun" method="Deactivate"]
 [connection signal="JumpFinished" from="Carpet/StartTrigger/JumpTrigger" to="Carpet/Carpet" method="Activate"]
 [connection signal="Activated" from="Carpet/Carpet" to="Carpet/Carpet/Camera" method="Activate"]
 [connection signal="Activated" from="Carpet/Carpet" to="Carpet/Carpet/Path" method="Activate"]

@@ -409,7 +409,7 @@ public partial class Majin : Enemy
 		if (IsRedMajin)
 		{
 			isFlameActive = false;
-			flameTimer = (FlameAggressionRadius != 0 || isInstantFlame) ? flameInactiveTime : 0;
+			flameTimer = isInstantFlame ? flameInactiveTime : 0f;
 		}
 
 		base.Respawn();
@@ -594,7 +594,7 @@ public partial class Majin : Enemy
 			currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, 0, ref rotationVelocity, TrackingSmoothing * PhysicsManager.physicsDelta);
 			if (OutsideFlameAggression && !isFlameActive)
 			{
-				flameTimer = flameInactiveTime;
+				flameTimer = isInstantFlame ? flameInactiveTime : 0f;
 				ProcessRotation(Player.GlobalPosition);
 			}
 			return;
