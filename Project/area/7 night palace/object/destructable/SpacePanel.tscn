@@ -1,13 +1,46 @@
-[gd_scene load_steps=10 format=3 uid="uid://dqy65o3le786n"]
+[gd_scene load_steps=15 format=3 uid="uid://dqy65o3le786n"]
 
 [ext_resource type="Script" uid="uid://bj7jhdknn12cl" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_b4s1c"]
 [ext_resource type="PackedScene" uid="uid://b5k06o7shgnla" path="res://area/7 night palace/object/model/destructable/SpacePanel.gltf" id="1_kpf04"]
 [ext_resource type="PackedScene" uid="uid://beagtyrfmi6fn" path="res://area/7 night palace/object/model/destructable/SpacePanelPieces.gltf" id="2_yvn5j"]
 [ext_resource type="AudioStream" uid="uid://ck7skrmenlkas" path="res://sound/sfx/stage/night palace/STG070_16.wav" id="4_ea64l"]
 [ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="5_qoxap"]
+[ext_resource type="Material" uid="uid://c3gddvyjpl0nv" path="res://effect/particle/material/Glass Shard.tres" id="6_icckp"]
 
 [sub_resource type="ConcavePolygonShape3D" id="1"]
 data = PackedVector3Array(-3.4641, -0.25, -2, 0, -0.25, 0, 0, -0.25, -4, -3.4641, -0.25, -2, -3.4641, -0.25, 0, 0, -0.25, 0, -3.4641, -0.25, 0, -3.4641, -0.25, 2, 0, -0.25, 0, 0, -0.25, 4, 0, -0.25, 0, -3.4641, -0.25, 2, 0, -0.25, 4, 3.4641, -0.25, 2, 0, -0.25, 0, 3.4641, -0.25, 2, 3.4641, -0.25, 0, 0, -0.25, 0, 3.4641, -0.25, 0, 3.4641, -0.25, -2, 0, -0.25, 0, 3.4641, -0.25, -2, 0, -0.25, -4, 0, -0.25, 0, 0, 0.25, 4, 3.4641, -0.25, 2, 0, -0.25, 4, 0, 0.25, 4, 3.4641, 0.25, 2, 3.4641, -0.25, 2, 3.4641, -0.25, -2, 3.4641, 0.25, 0, 3.4641, 0.25, -2, 3.4641, -0.25, -2, 3.4641, -0.25, 0, 3.4641, 0.25, 0, 3.4641, -0.25, 2, 3.4641, 0.25, 2, 3.4641, -0.25, 0, 3.4641, 0.25, 2, 3.4641, 0.25, 0, 3.4641, -0.25, 0, 3.4641, 0.25, 2, 0, 0.25, 0, 3.4641, 0.25, 0, 0, 0.25, 0, 3.4641, 0.25, -2, 3.4641, 0.25, 0, 0, 0.25, 0, 0, 0.25, -4, 3.4641, 0.25, -2, 0, 0.25, 0, -3.4641, 0.25, -2, 0, 0.25, -4, 0, 0.25, 0, -3.4641, 0.25, 0, -3.4641, 0.25, -2, -3.4641, 0.25, 0, 0, 0.25, 0, -3.4641, 0.25, 2, 0, 0.25, 0, 0, 0.25, 4, -3.4641, 0.25, 2, 0, 0.25, 0, 3.4641, 0.25, 2, 0, 0.25, 4, -3.4641, 0.25, -2, -3.4641, -0.25, 0, -3.4641, -0.25, -2, -3.4641, 0.25, -2, -3.4641, 0.25, 0, -3.4641, -0.25, 0, -3.4641, 0.25, 0, -3.4641, -0.25, 2, -3.4641, -0.25, 0, -3.4641, 0.25, 0, -3.4641, 0.25, 2, -3.4641, -0.25, 2, -3.4641, 0.25, 2, 0, -0.25, 4, -3.4641, -0.25, 2, -3.4641, 0.25, 2, 0, 0.25, 4, 0, -0.25, 4, 3.4641, 0.25, -2, 0, -0.25, -4, 3.4641, -0.25, -2, 3.4641, 0.25, -2, 0, 0.25, -4, 0, -0.25, -4, 0, 0.25, -4, -3.4641, -0.25, -2, 0, -0.25, -4, 0, 0.25, -4, -3.4641, 0.25, -2, -3.4641, -0.25, -2)
+
+[sub_resource type="Curve" id="Curve_icckp"]
+_data = [Vector2(0, 0), 0.0, 20.632093, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(0.8, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_icckp"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_icckp")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qoxap"]
+lifetime_randomness = 0.4
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 2.0
+emission_ring_inner_radius = 0.0
+emission_ring_cone_angle = 90.0
+angle_min = 1.0728836e-05
+angle_max = 360.00003
+direction = Vector3(0, 1, 0)
+spread = 30.0
+initial_velocity_min = 10.0
+initial_velocity_max = 20.0
+angular_velocity_min = -720.0
+angular_velocity_max = 386.55
+gravity = Vector3(0, -50, 0)
+scale_max = 2.0
+alpha_curve = SubResource("CurveTexture_icckp")
+
+[sub_resource type="QuadMesh" id="QuadMesh_vpuwi"]
+material = ExtResource("6_icckp")
 
 [sub_resource type="Animation" id="Animation_i1hw5"]
 length = 0.001
@@ -115,6 +148,20 @@ tracks/4/keys = {
 "method": &"play"
 }]
 }
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("ShatterVFX")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [false],
+"method": &"restart"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ww4i0"]
 _data = {
@@ -169,6 +216,20 @@ bus = &"SFX"
 attenuation_filter_cutoff_hz = 20500.0
 script = ExtResource("5_qoxap")
 groupKey = &"glass shatter"
+
+[node name="ShatterVFX" type="GPUParticles3D" parent="."]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 100.0
+emitting = false
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.9
+fixed_fps = 0
+interpolate = false
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_qoxap")
+draw_pass_1 = SubResource("QuadMesh_vpuwi")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
