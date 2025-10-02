@@ -1,9 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://dyfndruxwjpbx"]
+[gd_scene load_steps=21 format=3 uid="uid://dyfndruxwjpbx"]
 
 [ext_resource type="Script" uid="uid://pnh70abopq8e" path="res://object/stage/common/resource/script/Hazard.cs" id="1_b8sv5"]
 [ext_resource type="Script" uid="uid://c27oe48qjsjv4" path="res://area/4 levitated ruin/data/script/Missile.cs" id="1_p3oel"]
 [ext_resource type="PackedScene" uid="uid://b8plug5h7dfgc" path="res://area/7 night palace/object/model/obstacle/Spear.gltf" id="2_yn34g"]
 [ext_resource type="AudioStream" uid="uid://dmm7bvdsitykp" path="res://sound/sfx/stage/night palace/STG070_20.wav" id="3_4tk3g"]
+[ext_resource type="Material" uid="uid://ctkxyqv6hyynk" path="res://area/1 sand oasis/boss/effect/material/Charge.tres" id="4_3h5ia"]
 [ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="5_qlxs2"]
 
 [sub_resource type="BoxShape3D" id="2"]
@@ -11,6 +12,41 @@ size = Vector3(7.5, 3, 2)
 
 [sub_resource type="BoxShape3D" id="3"]
 size = Vector3(2, 25, 2)
+
+[sub_resource type="Gradient" id="Gradient_uau5p"]
+offsets = PackedFloat32Array(0, 0.276018, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_yq8k1"]
+gradient = SubResource("Gradient_uau5p")
+width = 64
+
+[sub_resource type="Curve" id="Curve_hw8iq"]
+_data = [Vector2(0, 0), 0.0, 4.0709653, 0, 0, Vector2(0.6, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_3h5ia"]
+width = 64
+curve = SubResource("Curve_hw8iq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3h5ia"]
+lifetime_randomness = 0.5
+direction = Vector3(0, 1, 0)
+spread = 60.0
+initial_velocity_min = 1.0
+initial_velocity_max = 1.0
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_3h5ia")
+color = Color(0.93333334, 0.91764706, 1, 1)
+color_ramp = SubResource("GradientTexture1D_yq8k1")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_3h5ia"]
+material = ExtResource("4_3h5ia")
+size = Vector2(1, 2)
+center_offset = Vector3(0, 1, 0)
+orientation = 2
 
 [sub_resource type="Animation" id="Animation_qlxs2"]
 resource_name = "RESET"
@@ -39,6 +75,18 @@ tracks/1/keys = {
 "update": 0,
 "values": [Vector3(1, 1, 1)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../TipVFX:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_a3n0m"]
 resource_name = "explode"
@@ -66,6 +114,18 @@ tracks/1/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../TipVFX:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_4tk3g"]
 resource_name = "fly"
@@ -82,6 +142,18 @@ tracks/0/path = NodePath("../Spear:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../TipVFX:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -129,6 +201,18 @@ tracks/2/keys = {
 "update": 0,
 "values": [Vector3(0.1, 0.1, 0.1), Vector3(1, 1, 1)]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../TipVFX:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_p3oel"]
 _data = {
@@ -174,6 +258,21 @@ monitorable = false
 [node name="TipCollision" type="CollisionShape3D" parent="ObjectHitbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("2")
+
+[node name="TipVFX" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 32
+lifetime = 0.4
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-7, -2, -7, 14, 12, 14)
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_3h5ia")
+draw_pass_1 = SubResource("PlaneMesh_3h5ia")
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("3_4tk3g")
