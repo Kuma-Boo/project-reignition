@@ -1,13 +1,109 @@
-[gd_scene load_steps=4 format=3 uid="uid://bil31auctbk52"]
+[gd_scene load_steps=22 format=3 uid="uid://bil31auctbk52"]
 
 [ext_resource type="PackedScene" uid="uid://c0cem0iuvnuim" path="res://area/7 night palace/act 1/environment/hall stretch event/HallStretchEvent.gltf" id="1_k87xg"]
 [ext_resource type="Script" uid="uid://coiui4qvdxbqe" path="res://object/trigger/modules/EventTrigger.cs" id="2_vso22"]
+[ext_resource type="Material" uid="uid://4batii1hel0b" path="res://effect/particle/material/explosion/Explosion Smoke.tres" id="3_nfwg6"]
+[ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="3_yp2x4"]
 [ext_resource type="AudioStream" uid="uid://da8cmcv5jkhe8" path="res://sound/sfx/stage/night palace/hall stretch.ogg" id="4_v3rrf"]
+[ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="5_0icbk"]
+
+[sub_resource type="Curve" id="Curve_nfwg6"]
+_data = [Vector2(0, 0), 0.0, 14.205401, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_nfwg6"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_nfwg6")
+
+[sub_resource type="Gradient" id="Gradient_nfwg6"]
+offsets = PackedFloat32Array(0.38545454, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.24989977, 0.09228707, 0.41825932, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_0icbk"]
+gradient = SubResource("Gradient_nfwg6")
+width = 64
+
+[sub_resource type="Gradient" id="Gradient_0icbk"]
+offsets = PackedFloat32Array(0, 0.58181816)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_s8pt3"]
+gradient = SubResource("Gradient_0icbk")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0icbk"]
+emission_shape = 3
+emission_box_extents = Vector3(45, 0, 2)
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 10.0
+initial_velocity_max = 20.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+color_ramp = SubResource("GradientTexture1D_s8pt3")
+color_initial_ramp = SubResource("GradientTexture1D_0icbk")
+alpha_curve = SubResource("CurveTexture_nfwg6")
+
+[sub_resource type="QuadMesh" id="QuadMesh_s8pt3"]
+material = ExtResource("3_nfwg6")
+
+[sub_resource type="Curve" id="Curve_s8pt3"]
+_data = [Vector2(0, 0), 0.0, 3.1934624, 0, 0, Vector2(0.3, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_0icbk"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_s8pt3")
+
+[sub_resource type="Curve" id="Curve_0icbk"]
+_data = [Vector2(0, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_s8pt3"]
+width = 64
+curve = SubResource("Curve_0icbk")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nfwg6"]
+emission_shape = 3
+emission_box_extents = Vector3(50, 0, 1)
+angle_min = 1.0728836e-05
+angle_max = 360.00003
+direction = Vector3(0, 1, 0)
+spread = 10.0
+initial_velocity_min = 2.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_min = 20.0
+scale_max = 30.0
+scale_curve = SubResource("CurveTexture_s8pt3")
+color = Color(0.60784316, 0.18431373, 1, 1)
+alpha_curve = SubResource("CurveTexture_0icbk")
+
+[sub_resource type="QuadMesh" id="QuadMesh_0icbk"]
+material = ExtResource("5_0icbk")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_s8pt3"]
+emission_shape = 3
+emission_box_extents = Vector3(15, 0, 2)
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 10.0
+initial_velocity_max = 20.0
+gravity = Vector3(0, 0, 0)
+scale_min = 15.0
+scale_max = 15.0
+color_ramp = SubResource("GradientTexture1D_s8pt3")
+color_initial_ramp = SubResource("GradientTexture1D_0icbk")
+alpha_curve = SubResource("CurveTexture_nfwg6")
 
 [node name="HallStretchEvent" node_paths=PackedStringArray("animator") instance=ExtResource("1_k87xg")]
 script = ExtResource("2_vso22")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("PlayerStandin")
 "Player Event Settings/Animation Fadeout Time" = 0.0
 "Player Event Settings/Position Smoothing" = 0.2
@@ -15,7 +111,6 @@ script = ExtResource("2_vso22")
 "Player Event Settings/Exit Move Speed" = 0.0
 "Player Event Settings/Exit Vertical Speed" = 0.0
 "Player Event Settings/Exit Lockout" = null
-animator = NodePath("AnimationPlayer")
 
 [node name="Add1Mesh" parent="HallStretchRoot" index="0"]
 layers = 4
@@ -171,10 +266,184 @@ layers = 4
 [node name="ev_01_stg070_Mesh_0084" parent="HallStretchRoot/Skeleton3D" index="22"]
 layers = 4
 
-[node name="SFX" type="AudioStreamPlayer" parent="." index="2"]
+[node name="HallSpawnParticles1" type="GPUParticles3D" parent="." index="2" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 578, -96, -490)
+layers = 32
+emitting = false
+amount = 64
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-50, -4, -4, 100, 20, 8)
+process_material = SubResource("ParticleProcessMaterial_0icbk")
+draw_pass_1 = SubResource("QuadMesh_s8pt3")
+script = ExtResource("3_yp2x4")
+subSystems = [NodePath("CommonDust")]
+
+[node name="CommonDust" type="GPUParticles3D" parent="HallSpawnParticles1" index="0"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 2.0
+one_shot = true
+explosiveness = 0.9
+use_fixed_seed = true
+seed = 1217582406
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-50, -4, -4, 100, 20, 8)
+process_material = SubResource("ParticleProcessMaterial_nfwg6")
+draw_pass_1 = SubResource("QuadMesh_0icbk")
+
+[node name="HallSpawnParticles2" type="GPUParticles3D" parent="." index="3" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 497, -96, -490)
+layers = 32
+emitting = false
+amount = 64
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-50, -4, -4, 100, 20, 8)
+process_material = SubResource("ParticleProcessMaterial_0icbk")
+draw_pass_1 = SubResource("QuadMesh_s8pt3")
+script = ExtResource("3_yp2x4")
+subSystems = [NodePath("CommonDust")]
+
+[node name="CommonDust" type="GPUParticles3D" parent="HallSpawnParticles2" index="0"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 2.0
+one_shot = true
+explosiveness = 0.9
+use_fixed_seed = true
+seed = 2088831970
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-50, -4, -4, 100, 20, 8)
+process_material = SubResource("ParticleProcessMaterial_nfwg6")
+draw_pass_1 = SubResource("QuadMesh_0icbk")
+
+[node name="HallSpawnParticles3" type="GPUParticles3D" parent="." index="4" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 424, -96, -490)
+layers = 32
+emitting = false
+amount = 64
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-50, -4, -4, 100, 20, 8)
+process_material = SubResource("ParticleProcessMaterial_0icbk")
+draw_pass_1 = SubResource("QuadMesh_s8pt3")
+script = ExtResource("3_yp2x4")
+subSystems = [NodePath("CommonDust")]
+
+[node name="CommonDust" type="GPUParticles3D" parent="HallSpawnParticles3" index="0"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 2.0
+one_shot = true
+explosiveness = 0.9
+use_fixed_seed = true
+seed = 3365059229
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-50, -4, -4, 100, 20, 8)
+process_material = SubResource("ParticleProcessMaterial_nfwg6")
+draw_pass_1 = SubResource("QuadMesh_0icbk")
+
+[node name="HallLoopParticles" type="Node3D" parent="." index="5"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 584, -96, -490)
+
+[node name="Hall1L" type="GPUParticles3D" parent="HallLoopParticles" index="0" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.99997, 13, 151.00006)
+layers = 32
+emitting = false
+amount = 16
+lifetime = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-25, -4, -4, 50, 20, 8)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_s8pt3")
+draw_pass_1 = SubResource("QuadMesh_s8pt3")
+script = ExtResource("3_yp2x4")
+subSystems = [NodePath("../Hall1R"), NodePath("../Hall2L"), NodePath("../Hall2R"), NodePath("../Hall3L"), NodePath("../Hall3R")]
+
+[node name="Hall1R" type="GPUParticles3D" parent="HallLoopParticles" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.99997, 13, 151.00003)
+layers = 32
+emitting = false
+amount = 16
+lifetime = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-25, -4, -4, 50, 20, 8)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_s8pt3")
+draw_pass_1 = SubResource("QuadMesh_s8pt3")
+
+[node name="Hall2L" type="GPUParticles3D" parent="HallLoopParticles" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.99997, 13, 81.00006)
+layers = 32
+emitting = false
+amount = 16
+lifetime = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-25, -4, -4, 50, 20, 8)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_s8pt3")
+draw_pass_1 = SubResource("QuadMesh_s8pt3")
+
+[node name="Hall2R" type="GPUParticles3D" parent="HallLoopParticles" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.99997, 13, 81.00003)
+layers = 32
+emitting = false
+amount = 16
+lifetime = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-25, -4, -4, 50, 20, 8)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_s8pt3")
+draw_pass_1 = SubResource("QuadMesh_s8pt3")
+
+[node name="Hall3L" type="GPUParticles3D" parent="HallLoopParticles" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.99997, 13, 0)
+layers = 32
+emitting = false
+amount = 16
+lifetime = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-25, -4, -4, 50, 20, 8)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_s8pt3")
+draw_pass_1 = SubResource("QuadMesh_s8pt3")
+
+[node name="Hall3R" type="GPUParticles3D" parent="HallLoopParticles" index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.99997, 13, 0)
+layers = 32
+emitting = false
+amount = 16
+lifetime = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-25, -4, -4, 50, 20, 8)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_s8pt3")
+draw_pass_1 = SubResource("QuadMesh_s8pt3")
+
+[node name="SFX" type="AudioStreamPlayer" parent="." index="6"]
+process_mode = 1
 stream = ExtResource("4_v3rrf")
 bus = &"GAME SFX"
-process_mode = 1
 
-[node name="PlayerStandin" type="Node3D" parent="." index="3"]
+[node name="PlayerStandin" type="Node3D" parent="." index="7"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 335, -104, -490)
+
+[connection signal="EventFinished" from="." to="HallLoopParticles/Hall1L" method="RestartGroup"]
+[connection signal="EventSkipped" from="." to="HallLoopParticles/Hall1L" method="RestartGroup"]
+[connection signal="Respawned" from="." to="HallLoopParticles/Hall1L" method="StopGroup"]
