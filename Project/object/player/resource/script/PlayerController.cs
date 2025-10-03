@@ -685,6 +685,7 @@ public partial class PlayerController : CharacterBody3D
 	}
 
 	[Export] private PathTravellerState pathTravellerState;
+	public bool IsPathTravellerActive => pathTravellerState.Traveller != null;
 	public void StartPathTraveller(PathTraveller traveller)
 	{
 		pathTravellerState.Traveller = traveller;

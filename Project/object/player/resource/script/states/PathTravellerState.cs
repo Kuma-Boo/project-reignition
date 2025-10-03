@@ -6,16 +6,23 @@ namespace Project.Gameplay;
 public partial class PathTravellerState : PlayerState
 {
 	public PathTraveller Traveller { get; set; }
+	public bool IsCrouching { get; private set; }
 	private bool isRespawning;
 
 	public override void EnterState()
 	{
-		Player.MoveSpeed = Player.VerticalSpeed = 0;
-		Player.Skills.IsSpeedBreakEnabled = false;
+		IsCrouching = Player.Skills.IsSpeedBreakActive;
+
+		Player.IsOnGround = true;
+		Player.MoveSpeed = IsCrouching ? Player.Skills.speedBreakSpeed : 0f;
+		Player.VerticalSpeed = 0;
 		Player.Animator.StartBalancing(); // Carpet uses balancing animations
 		Player.Animator.UpdateBalanceSpeed(1f, 0f);
 		Player.Animator.ExternalAngle = 0; // Rotate to follow pathfollower
 		Player.StartExternal(this, Traveller.PlayerStandin, .1f);
+
+		Player.Skills.SpeedBreakStarted += ProcessSpeedbreakCrouch;
+		Player.Skills.SpeedBreakStopped += ProcessSpeedbreakCrouch;
 
 		Player.Knockback += OnDamage;
 		Traveller.Advanced += OnAdvance;
@@ -26,10 +33,13 @@ public partial class PathTravellerState : PlayerState
 	public override void ExitState()
 	{
 		isRespawning = false;
+		Player.IsOnGround = false;
 
 		Player.StopExternal();
 		Player.Animator.ResetState();
-		Player.Skills.IsSpeedBreakEnabled = true;
+
+		Player.Skills.SpeedBreakStarted -= ProcessSpeedbreakCrouch;
+		Player.Skills.SpeedBreakStopped -= ProcessSpeedbreakCrouch;
 
 		Player.Knockback -= OnDamage;
 		Traveller.StopMovement();
@@ -46,8 +56,15 @@ public partial class PathTravellerState : PlayerState
 
 		Traveller.ProcessPathTraveller();
 		Player.CallDeferred(PlayerController.MethodName.UpdateExternalControl, true);
-		Player.Animator.UpdateBalancing(Player.Controller.InputAxis.X - (Player.PathFollower.DeltaAngle * 20.0f));
-		Player.Animator.UpdateBalanceSpeed(1f + Player.Stats.GroundSettings.GetSpeedRatio(Traveller.CurrentSpeed));
+
+		float targetBalanceDirection = Player.Controller.InputAxis.X - (Player.PathFollower.DeltaAngle * 20.0f);
+		float targetBalanceSpeed = 1f;
+		if (!Player.Skills.IsSpeedBreakActive)
+			targetBalanceSpeed += Player.Stats.GroundSettings.GetSpeedRatio(Traveller.CurrentSpeed);
+
+		Player.Animator.UpdateBalancing(targetBalanceDirection);
+		Player.Animator.UpdateBalanceSpeed(targetBalanceSpeed);
+		Player.Animator.UpdateBalanceCrouch(IsCrouching || Traveller.IsCrouching);
 		return null;
 	}
 
@@ -55,6 +72,9 @@ public partial class PathTravellerState : PlayerState
 
 	private void OnStagger()
 	{
+		if (Player.Skills.IsSpeedBreakActive) // Disable staggering during a speedbreak
+			return;
+
 		Player.StartInvincibility();
 		Player.Animator.StartBalanceStagger();
 		Player.TakeDamage(true);
@@ -82,11 +102,16 @@ public partial class PathTravellerState : PlayerState
 		LaunchSettings launchSettings = LaunchSettings.Create(Player.GlobalPosition, targetEndPosition, 2);
 		launchSettings.AllowDamage = !Traveller.AutoDefeat;
 
+		if (Player.Skills.IsSpeedBreakActive)
+			Player.Skills.ToggleSpeedBreak();
+
 		Player.StartLauncher(launchSettings);
 		Player.Animator.ResetState(0.1f);
 		Player.Animator.StartSpin(3.0f);
-		Player.Animator.SnapRotation(Player.Animator.ExternalAngle);
+		Player.Animator.CallDeferred(PlayerAnimator.MethodName.SnapRotation, Player.Animator.ExternalAngle);
 	}
+
+	private void ProcessSpeedbreakCrouch() => IsCrouching = Player.Skills.IsSpeedBreakActive;
 
 	private void ForceRespawn()
 	{

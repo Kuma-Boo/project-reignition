@@ -57,6 +57,9 @@ public partial class PathTraveller : Node3D
 	/// <summary> Reference to the animator. </summary>
 	[Export] protected AnimationPlayer animator;
 
+	/// <summary> Should the player play the crouching animation? </summary>
+	public bool IsCrouching { get; protected set; }
+
 	/// <summary> How fast is the object currently moving? </summary>
 	public float CurrentSpeed { get; protected set; }
 	/// <summary> How much is the object currently turning? </summary>
@@ -178,6 +181,9 @@ public partial class PathTraveller : Node3D
 		if (IsVerticalMovementDisabled) // Ignore vertical input
 			inputVector.Y = 0;
 
+		if (Player.Skills.IsSpeedBreakActive) // Reduce turning strength during speedbreak
+			inputVector *= 0.2f;
+
 		if (!disableStepButtons)
 		{
 			// Add step input influence
@@ -205,11 +211,17 @@ public partial class PathTraveller : Node3D
 
 	protected virtual void Accelerate()
 	{
-		CurrentSpeed = ExtensionMethods.SmoothDamp(CurrentSpeed, GetCurrentMaxSpeed, ref speedVelocity, SpeedSmoothing * PhysicsManager.physicsDelta);
+		CurrentSpeed = ExtensionMethods.SmoothDamp(CurrentSpeed, GetCurrentMaxSpeed(), ref speedVelocity, SpeedSmoothing * PhysicsManager.physicsDelta);
 	}
 
 	/// <summary> Override this if you want specific control over the PathFollower's speed. </summary>
-	protected virtual float GetCurrentMaxSpeed => MaxSpeed;
+	protected virtual float GetCurrentMaxSpeed()
+	{
+		if (Player.Skills.IsSpeedBreakActive)
+			return Player.MoveSpeed;
+
+		return MaxSpeed;
+	}
 	/// <summary> Override this if you want specific control over the PathFollower's turning. </summary>
 	protected virtual float GetCurrentTurnSpeed => TurnSpeed;
 

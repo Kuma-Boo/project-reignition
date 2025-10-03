@@ -439,7 +439,10 @@ public partial class PlayerSkillController : Node3D
 			Player.Effect.PlayVoice("speed break");
 			Player.MovementAngle = Player.PathFollower.ForwardAngle;
 			Player.CollisionMask = Runtime.Instance.environmentMask; // Don't collide with any objects
-			Player.Animator.SpeedBreak();
+
+			if (!Player.IsPathTravellerActive)
+				Player.Animator.SpeedBreak();
+
 			Player.ChangeHitbox("speed break");
 			Player.AttackState = PlayerController.AttackStates.OneShot;
 
