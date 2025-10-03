@@ -347,7 +347,7 @@ public partial class PlayerSkillController : Node3D
 
 				bool disablingSpeedBreak = (SaveManager.Config.useHoldBreakMode && !Input.IsActionPressed("button_speedbreak")) ||
 					(!SaveManager.Config.useHoldBreakMode && Input.IsActionJustPressed("button_speedbreak"));
-				if (IsSoulGaugeEmpty || disablingSpeedBreak)// Check whether we shoudl cancel speed break
+				if (IsSoulGaugeEmpty || disablingSpeedBreak)// Check whether we should cancel speed break
 					ToggleSpeedBreak();
 
 				if (!IsSpeedBreakOverrideActive && Player.IsOnGround) // Speed is only applied while on the ground
@@ -359,7 +359,6 @@ public partial class PlayerSkillController : Node3D
 			else
 			{
 				Player.MoveSpeed = 0;
-				Player.Camera.StartCrossfade(); // Crossfade the screen briefly
 			}
 
 			return;
