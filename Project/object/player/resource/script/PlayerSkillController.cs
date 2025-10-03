@@ -244,13 +244,14 @@ public partial class PlayerSkillController : Node3D
 	public float speedBreakSpeed; // Movement speed during speed break
 	public bool IsTimeBreakActive { get; private set; }
 	public bool IsSpeedBreakActive { get; private set; }
+	public bool AllowExternalSpeedBreak { get; set; } // Allow speedbreaking when on a gimmick?
 	public bool IsSpeedBreakCharging => IsSpeedBreakActive && !Mathf.IsZeroApprox(breakTimer);
 	public bool IsUsingBreakSkills => IsTimeBreakActive || IsSpeedBreakActive;
 
 	private float breakTimer; // Timer for break skills
 	public const float TimebreakRatio = .6f; // Time scale
 	private const float SpeedBreakDelay = 0.2f; // Time to say SPEED BREAK!
-	private const float BreakSkillsCooldown = 1f; // Prevent skill spam
+	private const float BreakSkillsCooldown = 0.5f; // Prevent skill spam
 	private readonly string SpeedbreakOverlayOpacityKey = "opacity";
 
 	public void ProcessPhysics()
@@ -350,7 +351,7 @@ public partial class PlayerSkillController : Node3D
 				if (IsSoulGaugeEmpty || disablingSpeedBreak)// Check whether we should cancel speed break
 					ToggleSpeedBreak();
 
-				if (!IsSpeedBreakOverrideActive && Player.IsOnGround) // Speed is only applied while on the ground
+				if (!IsSpeedBreakOverrideActive && (Player.IsOnGround || AllowExternalSpeedBreak)) // Speed is only applied while on the ground
 				{
 					IsSpeedBreakOverrideActive = true;
 					Player.MoveSpeed = speedBreakSpeed;
@@ -373,7 +374,7 @@ public partial class PlayerSkillController : Node3D
 		{
 			if (!IsSoulGaugeCharged) return;
 			if (!IsSpeedBreakEnabled) return;
-			if (!Player.IsOnGround || Player.IsDefeated) return;
+			if ((!Player.IsOnGround && !AllowExternalSpeedBreak) || Player.IsDefeated) return;
 			if (Player.IsDrifting && !IsSpeedBreakActive) return;
 
 			ToggleSpeedBreak();
@@ -424,7 +425,16 @@ public partial class PlayerSkillController : Node3D
 		breakDrainTimer = 0;
 		IsSpeedBreakActive = !IsSpeedBreakActive;
 		SoundManager.IsBreakChannelMuted = IsSpeedBreakActive;
-		breakTimer = IsSpeedBreakActive ? SpeedBreakDelay : BreakSkillsCooldown;
+
+		if (IsSpeedBreakActive)
+		{
+			breakTimer = SpeedBreakDelay;
+		}
+		else
+		{
+			breakTimer = BreakSkillsCooldown;
+		}
+
 		IsSpeedBreakOverrideActive = false; // Always disable override
 
 		if (IsSpeedBreakActive)

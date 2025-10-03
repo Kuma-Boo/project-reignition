@@ -15,6 +15,8 @@ public partial class ZiplineState : PlayerState
 	/// <summary> How strong the player's input has to be to count as a tap. </summary>
 	private readonly float TapRadius = .8f;
 
+	private bool isSpeedBreaking;
+
 	private bool isPromptShown;
 	/// <summary> Localization key for swinging. </summary>
 	private readonly string SwingAction = "action_swing";
@@ -50,15 +52,17 @@ public partial class ZiplineState : PlayerState
 	public override void EnterState()
 	{
 		isPromptShown = false;
+		isSpeedBreaking = Player.Skills.IsSpeedBreakActive;
 
 		damageLockout = 0;
 		animationVelocity = 0;
 		fullSwingDirection = 0;
 
+		Player.MoveSpeed = isSpeedBreaking ? Player.Skills.speedBreakSpeed : 0f;
+		Player.Skills.AllowExternalSpeedBreak = true;
 		Player.Animator.StartZipline();
 		Player.Animator.SetZiplineBlend(0f);
 		Player.Animator.ExternalAngle = 0;
-		Player.Skills.IsSpeedBreakEnabled = false;
 		Player.StartExternal(Trigger, Trigger.FollowObject, .5f);
 
 		// Update button prompt(s), but don't show them yet
@@ -70,7 +74,7 @@ public partial class ZiplineState : PlayerState
 
 	public override void ExitState()
 	{
-		Player.Skills.IsSpeedBreakEnabled = true;
+		Player.Skills.AllowExternalSpeedBreak = false;
 		Player.StopExternal();
 
 		HeadsUpDisplay.Instance.HidePrompts();
@@ -91,8 +95,10 @@ public partial class ZiplineState : PlayerState
 		UpdateAnimations();
 
 		UpdateSwing();
-		Trigger.UpdateSpeed(Trigger.ZiplineSpeed);
+		Trigger.UpdateSpeed(isSpeedBreaking ? Player.MoveSpeed : Trigger.ZiplineSpeed, isSpeedBreaking);
 		Player.UpdateExternalControl(false);
+		isSpeedBreaking = Player.Skills.IsSpeedBreakActive;
+
 		return null;
 	}
 
@@ -297,6 +303,7 @@ public partial class ZiplineState : PlayerState
 			return;
 		}
 
+		isSpeedBreaking = false;
 		fullSwingDirection = 0;
 		damageLockout = DamageLockoutLength;
 		InvalidateTapping();
@@ -305,6 +312,9 @@ public partial class ZiplineState : PlayerState
 		Player.StartInvincibility();
 		Player.Animator.CancelZiplineTap();
 		Player.Camera.StartMediumCameraShake();
+
+		if (Player.Skills.IsSpeedBreakActive)
+			Player.Skills.ToggleSpeedBreak();
 
 		Trigger.UpdateSpeed(0, true); // Kill speed
 	}
