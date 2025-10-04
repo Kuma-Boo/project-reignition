@@ -17,6 +17,7 @@ public partial class Zipline : PathFollow3D
 	public float CurrentRotation { get; private set; }
 	/// <summary> The side the zipline is currently on. </summary>
 	public float SwingSide => -Mathf.Sign(CurrentRotation);
+	public float SwingVelocitySide => Mathf.Sign(rotationVelocity);
 
 	private float startingProgress;
 	private float rotationVelocity;
