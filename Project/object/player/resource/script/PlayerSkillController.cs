@@ -479,8 +479,8 @@ public partial class PlayerSkillController : Node3D
 
 	public void CancelSpeedbreakFX()
 	{
-		speedBreakAnimator.Play("RESET");
-		speedBreakAnimator.Advance(0.0);
+		speedBreakAnimator.Play("stop");
+		speedBreakAnimator.Advance(speedBreakAnimator.CurrentAnimationLength);
 	}
 
 	public void EnableBreakSkills() => IsTimeBreakEnabled = IsSpeedBreakEnabled = true;

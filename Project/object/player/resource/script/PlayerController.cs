@@ -1259,6 +1259,7 @@ public partial class PlayerController : CharacterBody3D
 
 	public void Deactivate()
 	{
+		Engine.TimeScale = 1f;
 		if (Skills.IsUsingBreakSkills)
 			Skills.CancelBreakSkills();
 
