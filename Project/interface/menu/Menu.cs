@@ -131,7 +131,7 @@ public partial class Menu : Control
 			return;
 		}
 
-		if (Runtime.Instance.IsActionJustPressed("sys_cancel", "ui_cancel"))
+		if (Runtime.Instance.IsActionJustPressed("sys_cancel", "ui_cancel", "escape"))
 		{
 			Cancel();
 			return;

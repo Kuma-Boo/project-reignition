@@ -103,7 +103,7 @@ public partial class ExperienceResult : Control
 			return;
 		}
 
-		if (Runtime.Instance.IsActionJustPressed("sys_select", "ui_select") || Input.IsActionJustPressed("button_jump") || Runtime.Instance.IsActionJustPressed("sys_cancel", "ui_cancel"))
+		if (Runtime.Instance.IsActionJustPressed("sys_select", "ui_select") || Input.IsActionJustPressed("button_jump") || Runtime.Instance.IsActionJustPressed("sys_cancel", "ui_cancel", "escape"))
 		{
 			if (isSkippingLevel)
 			{

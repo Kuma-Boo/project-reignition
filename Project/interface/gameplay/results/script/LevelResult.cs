@@ -60,7 +60,7 @@ public partial class LevelResult : Control
 				return;
 
 			if (Runtime.Instance.IsActionJustPressed("sys_select", "ui_select") ||
-				Runtime.Instance.IsActionJustPressed("sys_cancel", "ui_cancel")) // Skip animation
+				Runtime.Instance.IsActionJustPressed("sys_cancel", "ui_cancel", "escape")) // Skip animation
 			{
 				StringName nextAnimation = animator.AnimationGetNext(animator.CurrentAnimation);
 				animator.Advance(animator.CurrentAnimationLength);
@@ -74,13 +74,13 @@ public partial class LevelResult : Control
 			}
 		}
 		else if (Runtime.Instance.IsActionJustPressed("sys_select", "ui_select") ||
-			Runtime.Instance.IsActionJustPressed("sys_cancel", "ui_cancel"))
+			Runtime.Instance.IsActionJustPressed("sys_cancel", "ui_cancel", "escape"))
 		{
 			isFadingBgm = true; // Start fading bgm
 			SetInputProcessing(false);
 
 			// Determine which scene to load without connecting it
-			if (Runtime.Instance.IsActionJustPressed("sys_cancel", "ui_cancel")) // Retry stage
+			if (Runtime.Instance.IsActionJustPressed("sys_cancel", "ui_cancel", "escape")) // Retry stage
 				TransitionManager.instance.QueuedScene = string.Empty;
 			else// if (Level.storyEventIndex == 0) // Load main menu
 				TransitionManager.instance.QueuedScene = TransitionManager.MenuScenePath;

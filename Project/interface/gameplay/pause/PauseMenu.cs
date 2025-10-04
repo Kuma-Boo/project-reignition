@@ -150,7 +150,7 @@ public partial class PauseMenu : Node
 			isCancelButtonBuffered = false;
 		}
 
-		if (Runtime.Instance.IsActionJustPressed("sys_cancel", "ui_cancel"))
+		if (Runtime.Instance.IsActionJustPressed("sys_cancel", "ui_cancel", "escape"))
 		{
 			isConfirmButtonBuffered = false;
 			isCancelButtonBuffered = true;

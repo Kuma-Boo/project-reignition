@@ -266,10 +266,15 @@ public partial class Runtime : Node
 	/// <param name="actionId"> The primary inputId to use. </param>
 	/// <param name="builtInId"> The fallback used if actionId isn't assigned to anything. </param>
 	/// <returns></returns>
-	public bool IsActionJustPressed(StringName actionId, StringName builtInId)
+	public bool IsActionJustPressed(StringName actionId, StringName builtInId, StringName fallbackId = null)
 	{
-		return Input.IsActionJustPressed(actionId) ||
+		bool pressed = Input.IsActionJustPressed(actionId) ||
 			(Input.IsActionJustPressed(builtInId) && Runtime.Instance.IsActionUnmapped(actionId));
+
+		if (pressed || fallbackId == null)
+			return pressed;
+
+		return Input.IsActionJustPressed(fallbackId);
 	}
 
 	public bool IsActionUnmapped(StringName action)

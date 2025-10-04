@@ -71,7 +71,7 @@ public partial class EventPlayer : Node
 		}
 
 		// Allow players to exit immediately when viewing from the special book
-		if (Runtime.Instance.IsActionJustPressed("sys_cancel", "ui_cancel"))
+		if (Runtime.Instance.IsActionJustPressed("sys_cancel", "ui_cancel", "escape"))
 			OnEventFinished();
 	}
 
