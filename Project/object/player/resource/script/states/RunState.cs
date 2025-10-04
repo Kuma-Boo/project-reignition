@@ -5,21 +5,14 @@ namespace Project.Gameplay;
 
 public partial class RunState : PlayerState
 {
-	[Export]
-	private PlayerState fallState;
-	[Export]
-	private PlayerState idleState;
-	[Export]
-	private PlayerState backstepState;
-	[Export]
-	private PlayerState slideState;
-	[Export]
-	private PlayerState jumpState;
-	[Export]
-	private PlayerState backflipState;
+	[Export] private PlayerState fallState;
+	[Export] private PlayerState idleState;
+	[Export] private PlayerState backstepState;
+	[Export] private PlayerState slideState;
+	[Export] private PlayerState jumpState;
+	[Export] private PlayerState backflipState;
 
-	[Export]
-	private Curve turningSpeedLossCurve;
+	[Export] private Curve turningSpeedLossCurve;
 
 	/// <summary> What speed ratio should be considered as fully running? </summary>
 	private readonly float RunRatio = .9f;
@@ -59,35 +52,40 @@ public partial class RunState : PlayerState
 		if (Player.CheckCeiling())
 			return null;
 
+		if (Player.Controller.IsJumpBufferActive)
+		{
+			Player.Controller.ResetJumpBuffer();
+			if (Player.Skills.IsSpeedBreakActive)
+				Player.Skills.ToggleSpeedBreak();
+
+			float inputAngle = Player.Controller.GetTargetInputAngle();
+			float inputStrength = Player.Controller.GetInputStrength();
+
+			if (!Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.Backflip) &&
+				!Mathf.IsZeroApprox(inputStrength) &&
+				Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+			{
+				return backflipState;
+			}
+
+			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
+				return slideState;
+
+			return jumpState;
+		}
+
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
+			Player.Controller.IsActionBufferActive)
+		{
+			Player.Controller.ResetActionBuffer();
+			if (Player.Skills.IsSpeedBreakActive)
+				Player.Skills.ToggleSpeedBreak();
+
+			return slideState;
+		}
+
 		if (!Player.Skills.IsSpeedBreakActive)
 		{
-			if (Player.Controller.IsJumpBufferActive)
-			{
-				Player.Controller.ResetJumpBuffer();
-
-				float inputAngle = Player.Controller.GetTargetInputAngle();
-				float inputStrength = Player.Controller.GetInputStrength();
-
-				if (!Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.Backflip) &&
-					!Mathf.IsZeroApprox(inputStrength) &&
-					Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
-				{
-					return backflipState;
-				}
-
-				if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
-					return slideState;
-
-				return jumpState;
-			}
-
-			if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
-				Player.Controller.IsActionBufferActive)
-			{
-				Player.Controller.ResetActionBuffer();
-				return slideState;
-			}
-
 			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LightSpeedDash) &&
 				Player.Controller.IsLightDashBufferActive && Player.StartLightSpeedDash())
 			{
