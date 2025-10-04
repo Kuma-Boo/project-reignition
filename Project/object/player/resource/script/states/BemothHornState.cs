@@ -84,7 +84,7 @@ public partial class BemothHornState : PlayerState
 		if (!CanPullHorns)
 			return;
 
-		if (Input.IsActionPressed("button_action"))
+		if (Input.IsActionPressed("button_action") || Input.IsActionPressed("button_attack"))
 		{
 			if (Mathf.IsEqualApprox(pullChargeTimer, OptimalPullChargeTiming)) // Already charged
 				return;
