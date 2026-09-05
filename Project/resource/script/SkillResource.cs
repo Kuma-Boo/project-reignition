@@ -118,6 +118,8 @@ public partial class SkillResource : Resource
 		return null;
 	}
 
+	public string VisibilityKey => IsAugment ? $"{Key}{AugmentIndex}" : Key.ToString();
+
 	[ExportGroup("Custom Character Settings")]
 	/// <summary> The name of this custom character. Only used if key is set to Character. </summary>
 	[Export] private string CustomCharacterName;

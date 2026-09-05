@@ -1106,24 +1106,38 @@ public partial class SaveManager : Node
 
 		public Array<SkillKey> equippedSkills;
 		public Dictionary<SkillKey, int> equippedAugments;
-		public Array<SkillKey> viewedSkills;
+		public Array<string> viewedSkills;
 		/// <summary> Ties a BGM resource to a stageID. Any stageID not found can be presumed to be default music. </summary>
 		public Dictionary<string, string> selectedMusic;
 		public LevelSaveData LevelData => levelData;
 		private LevelSaveData levelData = new();
 
-		/// <summary> Determines if a skill hasn't been viewed yet </summary>
+		/// <summary> Determines if a skill hasn't been viewed yet. </summary>
 		public bool HasNewSkill()
 		{
 			for (int i = 0; i < (int)SkillKey.Count; i++)
 			{
-				if ((SkillKey)i == SkillKey.Character)
+				SkillKey key = (SkillKey)i;
+				if (key == SkillKey.Character)
 					continue;
 
-				if (!viewedSkills.Contains((SkillKey)i) && ActiveSkillRing.IsSkillUnlocked((SkillKey)i))
+				SkillResource skill = Runtime.Instance.SkillList.GetSkill(key);
+				if (ActiveSkillRing.IsSkillUnlocked(key) && !viewedSkills.Contains(skill.VisibilityKey))
 				{
 					GD.Print($"Has new skill {(SkillKey)i}");
 					return true;
+				}
+
+				if (skill.HasAugments)
+				{
+					foreach (SkillResource augment in skill.Augments)
+					{
+						if (ActiveSkillRing.IsSkillUnlocked(key) && !viewedSkills.Contains(augment.VisibilityKey))
+						{
+							GD.Print($"Has new skill {(SkillKey)i}");
+							return true;
+						}
+					}
 				}
 			}
 			return false;
@@ -1238,7 +1252,7 @@ public partial class SaveManager : Node
 				{ nameof(playTime), Mathf.RoundToInt(playTime) },
 				{ nameof(equippedSkills), SaveSkills(equippedSkills) },
 				{ nameof(equippedAugments), SaveAugments(equippedAugments) },
-				{ nameof(viewedSkills), SaveSkills(viewedSkills)},
+				{ nameof(viewedSkills), viewedSkills},
 				{ nameof(presetNames), presetNames},
 				{ nameof(presetSkills), presetDictionary},
 				{ nameof(presetSkillAugments), augmentDictionary},
@@ -1304,7 +1318,7 @@ public partial class SaveManager : Node
 				equippedAugments = LoadAugments((Dictionary<string, int>)var);
 
 			if (dictionary.TryGetValue(nameof(viewedSkills), out var))
-				viewedSkills = LoadSkills((Array<string>)var);
+				viewedSkills = (Array<string>)var;
 
 			// Load Presets
 			if (dictionary.TryGetValue(nameof(presetNames), out var))

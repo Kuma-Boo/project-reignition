@@ -432,7 +432,7 @@ public partial class SkillSelect : Menu
 				unlockedWindSkillCount++;
 
 			UpdateAugmentHierarchy(skillOptionList[i]);
-			skillOptionList[i].EnableNewTag(!SaveManager.ActiveGameData.viewedSkills.Contains(skillOptionList[i].Skill.Key));
+			skillOptionList[i].EnableNewTag(!SaveManager.ActiveGameData.viewedSkills.Contains(skillOptionList[i].Skill.VisibilityKey));
 		}
 
 		SortSkills();
@@ -533,10 +533,10 @@ public partial class SkillSelect : Menu
 
 	public void UpdateNewText()
 	{
-		if (!SaveManager.ActiveGameData.viewedSkills.Contains(SelectedSkill.Skill.Key))
+		if (SelectedSkill.HasNew())
 		{
 			SelectedSkill.EnableNewTag(false);
-			SaveManager.ActiveGameData.viewedSkills.Add(SelectedSkill.Skill.Key);
+			SaveManager.ActiveGameData.viewedSkills.Add(SelectedSkill.Skill.VisibilityKey);
 		}
 	}
 

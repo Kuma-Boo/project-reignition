@@ -198,4 +198,15 @@ public partial class SkillOption : Control
 		animator.Play(enable ? "new" : "new-disable");
 		animator.Advance(0.0);
 	}
+
+	public bool HasNew()
+	{
+		for (int i = 0; i < unlockedAugments.Count; i++)
+		{
+			if (!SaveManager.ActiveGameData.viewedSkills.Contains(unlockedAugments[i].Skill.VisibilityKey))
+				return true;
+		}
+
+		return false;
+	}
 }
