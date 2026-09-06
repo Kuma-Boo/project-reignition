@@ -406,7 +406,7 @@ public partial class StageSettings : Node3D
 	public void UpdateScore(int amount, MathModeEnum mode)
 	{
 		CurrentScore = CalculateMath(CurrentScore, amount, mode);
-		DisplayScore = ExtensionMethods.FormatMenuNumber(CurrentScore);
+		DisplayScore = ExtensionMethods.FormatMenuNumber(TotalScore);
 		EmitSignal(SignalName.ScoreChanged);
 	}
 
@@ -418,11 +418,13 @@ public partial class StageSettings : Node3D
 	{
 		DamageCount++;
 		CalculateTechnicalBonus();
+		UpdateScore(0, MathModeEnum.Add);
 	}
 	public void IncrementRespawnCount()
 	{
 		RespawnCount++;
 		CalculateTechnicalBonus();
+		UpdateScore(0, MathModeEnum.Add);
 	}
 	public float TechnicalBonus { get; private set; }
 

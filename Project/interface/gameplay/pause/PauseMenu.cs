@@ -223,6 +223,9 @@ public partial class PauseMenu : Node
 		else
 			isControlMethodToggleAvailable = true;
 
+		if (!IsInstanceValid(controlMethodAnimator))
+			return;
+
 		controlMethodAnimator.Play(isControlMethodToggleAvailable ? "show" : "hide");
 		controlMethodAnimator.Advance(0.0);
 
