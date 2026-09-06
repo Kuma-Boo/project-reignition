@@ -57,7 +57,7 @@ public partial class SkillOption : Control
 		Connect(SignalName.OnRedraw, new(augment, MethodName.Redraw));
 	}
 
-	public bool IsAugmentDropdown => augments.Count != 0;
+	public bool IsAugmentDropdown => augments.Count != 0 && unlockedAugments.Count > 1;
 	/// <summary> Returns the number of augments available for selection. </summary>
 	public int AugmentMenuCount => unlockedAugments.Count;
 	/// <summary> Returns the description key of an augment. </summary>
