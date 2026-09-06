@@ -81,7 +81,7 @@ public partial class StompState : PlayerState
 		{
 			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.StompBounce) &&
 				(Input.IsActionPressed("button_action") ||
-				(Input.IsActionPressed("button_jump") && SaveManager.Config.jumpButtonMode != SaveManager.JumpButtonModeEnum.Attack)))
+				(Input.IsActionPressed("button_jump") && SaveManager.Config.jumpButtonMode != SaveManager.JumpButtonModeEnum.Attack && SaveManager.Config.jumpButtonMode != SaveManager.JumpButtonModeEnum.Disabled)))
 			{
 				Player.IsBounceJumping = true;
 
