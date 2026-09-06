@@ -266,7 +266,7 @@ public partial class SaveManager : Node
 		public int mouseVerticalRange = 80;
 		/// <summary> How much to offset the mouse inputs vertically. </summary>
 		public int mouseVerticalOffset = -10;
-		public JumpButtonModeEnum jumpButtonMode;
+		public JumpButtonModeEnum jumpButtonMode = JumpButtonModeEnum.Attack;
 		public int[] partyModeDevices = [0, 0, 0, 0];
 		public Dictionary inputConfiguration = [];
 
