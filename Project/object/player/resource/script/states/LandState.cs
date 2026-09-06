@@ -118,7 +118,7 @@ public partial class LandState : PlayerState
 	{
 		bool applyLandingBoost = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LandDash) && !Player.IsStomping;
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.StompDash) && Player.IsStomping &&
-			SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) && !Input.IsActionPressed("button_jump"))
+			(!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) || !Input.IsActionPressed("button_jump")))
 		{
 			applyLandingBoost = true;
 		}
