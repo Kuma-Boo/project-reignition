@@ -281,7 +281,7 @@ public partial class PlayerLockonController : Area3D
 
 		Vector3 direction = (target.GlobalPosition - Player.GlobalPosition).RemoveVertical();
 		float angle = ExtensionMethods.CalculateForwardAngle(direction);
-		if (ExtensionMethods.DotAngle(angle, Player.PathFollower.ForwardAngle) > 0) // Player is moving towards lockon-don't ignore it!
+		if (!direction.IsZeroApprox() && ExtensionMethods.DotAngle(angle, Player.PathFollower.ForwardAngle) > 0) // Player is moving towards lockon-don't ignore it!
 			return false;
 
 		float inputStrength = Player.Controller.GetInputStrength();
