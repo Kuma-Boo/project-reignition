@@ -343,6 +343,7 @@ public partial class SkillSelect : Menu
 			scrollAmount = Mathf.Clamp(scrollAmount, 0, listSize - PageSize);
 			scrollRatio = (float)selection / (listSize - 1);
 			cursorPosition = Mathf.Clamp(cursorPosition, 0, PageSize - 1);
+			UpdateNewText();
 		}
 	}
 
@@ -432,7 +433,7 @@ public partial class SkillSelect : Menu
 				unlockedWindSkillCount++;
 
 			UpdateAugmentHierarchy(skillOptionList[i]);
-			skillOptionList[i].EnableNewTag(!SaveManager.ActiveGameData.viewedSkills.Contains(skillOptionList[i].Skill.VisibilityKey));
+			skillOptionList[i].SetNewTag(skillOptionList[i].IsNew());
 		}
 
 		SortSkills();
@@ -533,11 +534,12 @@ public partial class SkillSelect : Menu
 
 	public void UpdateNewText()
 	{
-		if (SelectedSkill.HasNew())
-		{
-			SelectedSkill.EnableNewTag(false);
-			SaveManager.ActiveGameData.viewedSkills.Add(SelectedSkill.Skill.VisibilityKey);
-		}
+		SkillOption targetSkill = IsEditingAugment ? SelectedSkill.GetAugment(AugmentSelection) : SelectedSkill;
+		if (!targetSkill.IsAugmentDropdown)
+			targetSkill.SetNewTag(false);
+
+		if (SelectedSkill.IsAugmentDropdown && IsEditingAugment)
+			SelectedSkill.SetNewTag(SelectedSkill.IsNew());
 	}
 
 	private void SwapConflictSkills()
@@ -947,9 +949,6 @@ public partial class SkillSelect : Menu
 		{
 			isNothingSelected = false;
 			AugmentSelection = skill.GetIndex();
-			if (skill.Skill.Key == SkillKey.Character)
-				AugmentSelection--;
-
 			cursorPosition = VerticalSelection - scrollAmount + AugmentSelection + 1;
 			MoveCursor();
 			UpdateDescription();

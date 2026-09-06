@@ -27,6 +27,7 @@ public partial class SkillOption : Control
 	[Export]
 	private VBoxContainer augmentContainer;
 	private float augmentMenuMinimumSize;
+	private bool isNewTagActive;
 
 	private SkillRing ActiveSkillRing => SaveManager.ActiveSkillRing;
 
@@ -56,12 +57,14 @@ public partial class SkillOption : Control
 		Connect(SignalName.OnRedraw, new(augment, MethodName.Redraw));
 	}
 
+	public bool IsAugmentDropdown => augments.Count != 0;
 	/// <summary> Returns the number of augments available for selection. </summary>
 	public int AugmentMenuCount => unlockedAugments.Count;
 	/// <summary> Returns the description key of an augment. </summary>
 	public StringName GetAugmentDescription(int index) => unlockedAugments[index].Skill.DescriptionKey;
 	/// <summary> Returns the SkillResource of an augment. </summary>
 	public SkillResource GetAugmentSkill(int index) => augments[index].Skill;
+	public SkillOption GetAugment(int index) => unlockedAugments[index];
 
 	public void UpdateUnlockedAugments()
 	{
@@ -79,6 +82,7 @@ public partial class SkillOption : Control
 
 			unlockedAugments.Add(augment); // Add to unlocked augment list
 			augmentMenuMinimumSize += MinimumSizeIncrement; // Update submenu size
+			augment.SetNewTag(augment.IsNew());
 
 			augment.Number = AugmentMenuCount; // Update augment number
 			augment.Initialize(); // Redraw
@@ -193,17 +197,30 @@ public partial class SkillOption : Control
 		return offset;
 	}
 
-	public void EnableNewTag(bool enable)
+	public void SetNewTag(bool enable)
 	{
+		if (isNewTagActive == enable)
+			return;
+
+		isNewTagActive = enable;
 		animator.Play(enable ? "new" : "new-disable");
 		animator.Advance(0.0);
+
+		if (IsAugmentDropdown)
+			return;
+
+		if (!enable && !SaveManager.ActiveGameData.viewedSkills.Contains(Skill.VisibilityKey))
+			SaveManager.ActiveGameData.viewedSkills.Add(Skill.VisibilityKey);
 	}
 
-	public bool HasNew()
+	public bool IsNew()
 	{
-		for (int i = 0; i < unlockedAugments.Count; i++)
+		if (!IsAugmentDropdown)
+			return !SaveManager.ActiveGameData.viewedSkills.Contains(Skill.VisibilityKey);
+
+		foreach (SkillOption augment in unlockedAugments)
 		{
-			if (!SaveManager.ActiveGameData.viewedSkills.Contains(unlockedAugments[i].Skill.VisibilityKey))
+			if (!SaveManager.ActiveGameData.viewedSkills.Contains(augment.Skill.VisibilityKey))
 				return true;
 		}
 

@@ -1123,20 +1123,14 @@ public partial class SaveManager : Node
 
 				SkillResource skill = Runtime.Instance.SkillList.GetSkill(key);
 				if (ActiveSkillRing.IsSkillUnlocked(key) && !viewedSkills.Contains(skill.VisibilityKey))
-				{
-					GD.Print($"Has new skill {(SkillKey)i}");
 					return true;
-				}
 
 				if (skill.HasAugments)
 				{
 					foreach (SkillResource augment in skill.Augments)
 					{
 						if (ActiveSkillRing.IsSkillUnlocked(key) && !viewedSkills.Contains(augment.VisibilityKey))
-						{
-							GD.Print($"Has new skill {(SkillKey)i}");
 							return true;
-						}
 					}
 				}
 			}
