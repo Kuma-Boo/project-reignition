@@ -1122,16 +1122,18 @@ public partial class SaveManager : Node
 					continue;
 
 				SkillResource skill = Runtime.Instance.SkillList.GetSkill(key);
-				if (ActiveSkillRing.IsSkillUnlocked(key) && !viewedSkills.Contains(skill.VisibilityKey))
-					return true;
-
 				if (skill.HasAugments)
 				{
-					foreach (SkillResource augment in skill.Augments)
+					for (int j = 0; j < skill.Augments.Count; j++)
 					{
-						if (ActiveSkillRing.IsSkillUnlocked(key) && !viewedSkills.Contains(augment.VisibilityKey))
+						SkillResource augment = skill.GetAugment(j);
+						if (ActiveSkillRing.IsSkillUnlocked(augment) && !viewedSkills.Contains(augment.VisibilityKey))
 							return true;
 					}
+				}
+				else if (ActiveSkillRing.IsSkillUnlocked(key) && !viewedSkills.Contains(skill.VisibilityKey))
+				{
+					return true;
 				}
 			}
 			return false;

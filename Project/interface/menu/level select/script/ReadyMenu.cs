@@ -1,5 +1,3 @@
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using Godot;
 using Project.Core;
 using Project.Gameplay;
@@ -53,7 +51,7 @@ public partial class ReadyMenu : Menu
 				SetupReadyMenu(TimeAttackManager.Instance.GetCurrentLevel());
 		}
 
-		if (SaveManager.ActiveGameData.HasNewSkill() && !TimeAttackManager.Instance.IsRunActive)
+		if (!TimeAttackManager.Instance.IsRunActive && SaveManager.ActiveGameData.HasNewSkill())
 			notifAnimPlayer.Play("show");
 		else
 			notifAnimPlayer.Play("hide");
