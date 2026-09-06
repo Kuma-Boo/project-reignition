@@ -108,7 +108,7 @@ public partial class HomingAttackState : PlayerState
 		Player.PathFollower.Resync();
 
 		if (Player.Controller.IsActionBufferActive ||
-			(Player.Controller.IsJumpBufferActive && SaveManager.Config.jumpButtonMode != SaveManager.JumpButtonModeEnum.Attack))
+			(Player.Controller.IsJumpBufferActive && SaveManager.Config.jumpButtonMode != SaveManager.JumpButtonModeEnum.Attack && SaveManager.Config.jumpButtonMode != SaveManager.JumpButtonModeEnum.Disabled))
 		{
 			Player.Controller.ResetJumpBuffer();
 			Player.Controller.ResetActionBuffer();
