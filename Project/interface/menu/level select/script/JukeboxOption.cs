@@ -17,7 +17,10 @@ public partial class JukeboxOption : Control
 	public void SetBgmResource(BGMResource resource)
 	{
 		Bgm = resource;
-		name.Text = Bgm.SongName.GetBaseName();
+		if (string.IsNullOrEmpty(Bgm.SongName))
+			name.Text = string.Empty;
+		else
+			name.Text = Bgm.SongName.GetBaseName();
 	}
 
 	public void Equip()
