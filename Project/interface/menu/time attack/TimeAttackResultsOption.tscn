@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b04nx00ecsmme"]
 
 [ext_resource type="Script" uid="uid://23xgow2qfeck" path="res://interface/menu/time attack/script/TimeAttackResultsOption.cs" id="1_ex1gf"]
-[ext_resource type="FontFile" uid="uid://cislueb5bhi02" path="res://interface/font/bitmap fonts/Experience.fnt" id="1_wuyv4"]
+[ext_resource type="FontFile" uid="uid://t6opdwcs42tg" path="res://interface/font/bitmap fonts/Experience.fnt" id="1_wuyv4"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_xfl4h"]
 font = ExtResource("1_wuyv4")
@@ -17,6 +17,7 @@ font_size = 64
 
 [sub_resource type="Animation" id="Animation_wuyv4"]
 resource_name = "RESET"
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -24,7 +25,35 @@ tracks/0/path = NodePath("HBoxContainer:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.033333335),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HBoxContainer:offset_transform_scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_xfl4h"]
+resource_name = "init"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HBoxContainer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
@@ -32,7 +61,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("HBoxContainer:scale")
+tracks/1/path = NodePath("HBoxContainer:offset_transform_scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -61,7 +90,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("HBoxContainer:scale")
+tracks/1/path = NodePath("HBoxContainer:offset_transform_scale")
 tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -74,6 +103,7 @@ tracks/1/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_xfl4h"]
 _data = {
 &"RESET": SubResource("Animation_wuyv4"),
+&"init": SubResource("Animation_xfl4h"),
 &"show": SubResource("Animation_ex1gf")
 }
 
@@ -89,7 +119,6 @@ timeLabel = NodePath("HBoxContainer/Time")
 animator = NodePath("AnimationPlayer")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=699186566]
-modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(0, 72)
 layout_mode = 1
 anchors_preset = -1
@@ -99,7 +128,7 @@ offset_left = 1.0
 offset_right = 0.40637207
 offset_bottom = -0.0335083
 pivot_offset = Vector2(544, 33)
-theme_override_constants/separation = 190
+offset_transform_enabled = true
 alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=51645873]
@@ -124,13 +153,18 @@ label_settings = SubResource("LabelSettings_ex1gf")
 vertical_alignment = 1
 uppercase = true
 
+[node name="Seperator" type="Control" parent="HBoxContainer" unique_id=710200965]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="Time" type="Label" parent="HBoxContainer" unique_id=1878994793]
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
-text = "99:99:99"
+text = "99:99:99.99"
 label_settings = SubResource("LabelSettings_itwy4")
 horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1366389591]
 libraries/ = SubResource("AnimationLibrary_xfl4h")
+autoplay = &"init"
