@@ -534,7 +534,7 @@ public partial class SkillSelect : Menu
 
 	public void UpdateNewText()
 	{
-		SkillOption targetSkill = IsEditingAugment ? SelectedSkill.GetAugment(AugmentSelection) : SelectedSkill;
+		SkillOption targetSkill = IsEditingAugment ? SelectedSkill.GetUnlockedAugment(AugmentSelection) : SelectedSkill;
 		if (!targetSkill.IsAugmentDropdown)
 			targetSkill.SetNewTag(false);
 
@@ -548,14 +548,14 @@ public partial class SkillSelect : Menu
 		// Be mindful when designing skill conflicts to avoid this
 		SkillResource baseSkill = SelectedSkill.Skill;
 		if (IsEditingAugment)
-			baseSkill = baseSkill.GetAugment(AugmentSelection);
+			baseSkill = SelectedSkill.GetUnlockedAugment(AugmentSelection).Skill;
 		SkillResource conflictingSkill = ActiveSkillRing.GetConflictingSkill(baseSkill.Key);
 
 		ActiveSkillRing.ForceUnequipSkill(conflictingSkill.Key, ActiveSkillRing.GetAugmentIndex(conflictingSkill.Key));
 
 		// Revert to base skill if unequipped
 		ActiveSkillRing.ResetAugmentIndex(conflictingSkill.Key);
-		ActiveSkillRing.EquipSkill(baseSkill.Key, IsEditingAugment ? AugmentSelection : 0);
+		ActiveSkillRing.EquipSkill(baseSkill.Key, IsEditingAugment ? SelectedSkill.GetUnlockedAugment(AugmentSelection).Skill.AugmentIndex : 0);
 
 		Redraw();
 	}
@@ -563,13 +563,16 @@ public partial class SkillSelect : Menu
 	private bool ToggleSkill()
 	{
 		SkillKey key = SelectedSkill.Skill.Key;
-		if (!IsEditingAugment && SelectedSkill.HasUnlockedAugments()) // Open the augment menu
+		if (!IsEditingAugment && SelectedSkill.HasMultipleAugments()) // Open the augment menu
 		{
 			ShowAugmentMenu();
 			return false;
 		}
 
-		int augmentIndex = IsEditingAugment ? AugmentSelection : 0;
+		int augmentIndex = IsEditingAugment ? SelectedSkill.GetUnlockedAugment(AugmentSelection).Skill.AugmentIndex : 0;
+		if (!IsEditingAugment && SelectedSkill.HasUnlockedAugments())
+			augmentIndex = SelectedSkill.GetUnlockedAugment(0).Skill.AugmentIndex;
+
 		if (key == SkillKey.Character)
 			augmentIndex++;
 
@@ -864,7 +867,16 @@ public partial class SkillSelect : Menu
 		animator.Play("augment-show");
 		cursorAnimator.Play("hide");
 
-		AugmentSelection = SaveManager.ActiveSkillRing.GetAugmentIndex(SelectedSkill.Skill.Key);
+		AugmentSelection = 0;
+		for (int i = 0; i < SelectedSkill.AugmentMenuCount; i++)
+		{
+			if (SelectedSkill.GetAugmentSkill(i) == SelectedSkill.Skill)
+				break;
+
+			if (SaveManager.ActiveSkillRing.IsSkillUnlocked(SelectedSkill.GetAugmentSkill(i)))
+				AugmentSelection++;
+		}
+
 		if (SelectedSkill.Skill.Key == SkillKey.Character && AugmentSelection != 0)
 			AugmentSelection--;
 
@@ -913,8 +925,16 @@ public partial class SkillSelect : Menu
 		if (!Runtime.Instance.SkillList.GetSkill(skillOption.Skill.Key).HasAugments)
 			return;
 
-		int augmentIndex = ActiveSkillRing.GetAugmentIndex(skillOption.Skill.Key);
-		skillOption.Skill = skillOption.GetAugmentSkill(augmentIndex);
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(skillOption.Skill.Key))
+		{
+			int augmentIndex = ActiveSkillRing.GetAugmentIndex(skillOption.Skill.Key);
+			skillOption.Skill = skillOption.GetAugmentSkill(augmentIndex);
+		}
+		else if (skillOption.HasUnlockedAugments())
+		{
+			skillOption.Skill = skillOption.GetUnlockedAugment(0).Skill;
+		}
+
 		skillOption.UpdateUnlockedAugments();
 		skillOption.Initialize();
 	}
@@ -930,6 +950,9 @@ public partial class SkillSelect : Menu
 
 	private void ReceiveMouseInput(SkillOption skill, bool isAugment)
 	{
+		if (skill != null)
+			GD.PrintT(skill.Name, skill.Skill.Key, skill.Skill.AugmentIndex);
+
 		if (!isProcessing)
 			return;
 
@@ -948,7 +971,16 @@ public partial class SkillSelect : Menu
 		if (IsEditingAugment)
 		{
 			isNothingSelected = false;
-			AugmentSelection = skill.GetIndex();
+			AugmentSelection = 0;
+			for (int i = 0; i < SelectedSkill.AugmentMenuCount; i++)
+			{
+				if (SelectedSkill.GetAugmentSkill(i) == skill.Skill)
+					break;
+
+				if (SaveManager.ActiveSkillRing.IsSkillUnlocked(SelectedSkill.GetAugmentSkill(i)))
+					AugmentSelection++;
+			}
+
 			cursorPosition = VerticalSelection - scrollAmount + AugmentSelection + 1;
 			MoveCursor();
 			UpdateDescription();

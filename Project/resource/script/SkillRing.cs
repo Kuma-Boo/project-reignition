@@ -229,7 +229,23 @@ public class SkillRing
 	}
 
 	/// <summary> Checks whether a skill is unlocked on the active save file. </summary>
-	public bool IsSkillUnlocked(SkillKey key, bool countEquipAsUnlocked = true) => IsSkillUnlocked(Runtime.Instance.SkillList.GetSkill(key), countEquipAsUnlocked);
+	public bool IsSkillUnlocked(SkillKey key, bool countEquipAsUnlocked = true)
+	{
+		SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(key);
+		if (IsSkillUnlocked(baseSkill, countEquipAsUnlocked))
+			return true;
+
+		if (baseSkill.HasAugments)
+		{
+			foreach (SkillResource augment in baseSkill.Augments)
+			{
+				if (IsSkillUnlocked(augment, countEquipAsUnlocked))
+					return true;
+			}
+		}
+
+		return false;
+	}
 
 	/// <summary> Overload method for checking a skill resource directly. </summary>
 	public bool IsSkillUnlocked(SkillResource skill, bool countEquipAsUnlocked = true)

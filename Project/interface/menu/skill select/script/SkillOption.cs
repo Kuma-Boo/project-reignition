@@ -64,7 +64,7 @@ public partial class SkillOption : Control
 	public StringName GetAugmentDescription(int index) => unlockedAugments[index].Skill.DescriptionKey;
 	/// <summary> Returns the SkillResource of an augment. </summary>
 	public SkillResource GetAugmentSkill(int index) => augments[index].Skill;
-	public SkillOption GetAugment(int index) => unlockedAugments[index];
+	public SkillOption GetUnlockedAugment(int index) => unlockedAugments[index];
 
 	public void UpdateUnlockedAugments()
 	{
@@ -174,16 +174,8 @@ public partial class SkillOption : Control
 		return predictedCost > ActiveSkillRing.MaxSkillPoints;
 	}
 
-	public bool HasUnlockedAugments()
-	{
-		for (int i = 1; i < augments.Count; i++)
-		{
-			if (SaveManager.ActiveSkillRing.IsSkillUnlocked(GetAugmentSkill(i)))
-				return true;
-		}
-
-		return false;
-	}
+	public bool HasUnlockedAugments() => unlockedAugments.Count > 0;
+	public bool HasMultipleAugments() => unlockedAugments.Count > 1;
 
 	public int GetAugmentOffset()
 	{
