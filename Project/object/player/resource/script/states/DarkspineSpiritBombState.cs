@@ -131,7 +131,7 @@ public partial class DarkspineSpiritBombState : PlayerState
 		isKickingSpiritBomb = true;
 		SpiritBomb.StartSpiritBombKick();
 		Player.Skills.ModifySoulGauge(-Player.Skills.MaxSoulPower);
-		Player.Effect.PlayVoice("ds push");
+		Player.Effect.PlayVoice("ds push", -1, true);
 		Player.Effect.PlayDarkspineSpiritBombBurst();
 		Player.Animator.KickSpiritBomb();
 		Player.Animator.SpiritBombKicked += OnSpiritBombKicked;
