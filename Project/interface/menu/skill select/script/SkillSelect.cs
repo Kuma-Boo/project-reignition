@@ -733,25 +733,6 @@ public partial class SkillSelect : Menu
 		scrollAmount += targetSelection - initialSelection;
 		VerticalSelection = targetSelection;
 		UpdateScrollAmount(0);
-
-		// Reupdate cursor since clamping is applied in UpdateScrollAmount()
-		cursorPosition = VerticalSelection - scrollAmount;
-
-		if (VerticalSelection != 0 && VerticalSelection != unlockedSkillCount - 1)
-		{
-			// Ensure cursor doesn't get stuck on the edges of the list
-			if (cursorPosition == 0) // Top of the list
-			{
-				cursorPosition++;
-				scrollAmount--;
-			}
-			else if (cursorPosition == PageSize - 1)
-			{
-				cursorPosition--;
-				scrollAmount++;
-			}
-		}
-
 		if (VerticalSelection != initialSelection)
 			MoveCursor();
 	}
