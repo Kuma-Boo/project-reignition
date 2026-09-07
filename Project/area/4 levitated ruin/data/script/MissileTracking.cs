@@ -68,11 +68,11 @@ public partial class MissileTracking : PathFollow3D
 		EmitSignal(SignalName.Activated);
 	}
 
-	public override void _PhysicsProcess(double _)
+	public override void _Process(double _)
 	{
 		if (!Mathf.IsZeroApprox(activationTimer))
 		{
-			activationTimer = Mathf.MoveToward(activationTimer, 0, PhysicsManager.physicsDelta);
+			activationTimer = Mathf.MoveToward(activationTimer, 0, PhysicsManager.normalDelta);
 			if (!Mathf.IsZeroApprox(activationTimer))
 				return;
 
@@ -83,7 +83,7 @@ public partial class MissileTracking : PathFollow3D
 			return;
 
 		CalculateSpeed();
-		Progress += moveSpeed * PhysicsManager.physicsDelta;
+		Progress += moveSpeed * PhysicsManager.normalDelta;
 
 		if ((explosionPoint != 0 && Progress > explosionPoint) || Mathf.IsEqualApprox(ProgressRatio, 1f))
 			Explode();
