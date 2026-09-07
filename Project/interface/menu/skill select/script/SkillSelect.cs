@@ -950,9 +950,6 @@ public partial class SkillSelect : Menu
 
 	private void ReceiveMouseInput(SkillOption skill, bool isAugment)
 	{
-		if (skill != null)
-			GD.PrintT(skill.Name, skill.Skill.Key, skill.Skill.AugmentIndex);
-
 		if (!isProcessing)
 			return;
 
