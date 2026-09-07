@@ -203,8 +203,11 @@ public partial class SandScorpion : Node3D
 
 	private void StartFinalBlow()
 	{
-		if (attackState == AttackState.Recovery)
+		if (Mathf.IsZeroApprox(flyingEyeBlend))
+		{
 			DefeatBoss();
+			return;
+		}
 
 		TransitionManager.StartTransition(new()
 		{
@@ -868,6 +871,9 @@ public partial class SandScorpion : Node3D
 
 	private void RetreatEyeAttack()
 	{
+		if (attackState == AttackState.Inactive)
+			return;
+
 		attackState = AttackState.Recovery;
 		flyingEyeAnimationTree.Set(EyeParameter, EyeRetreatState);
 		flyingEyeHitbox.Monitorable = true;
@@ -1026,7 +1032,7 @@ public partial class SandScorpion : Node3D
 
 		if (Player.Skills.IsSpeedBreakActive) // Special attack
 		{
-			if (attackState == AttackState.Strike)
+			if (attackState == AttackState.Strike || attackState == AttackState.Recovery)
 			{
 				flyingEyeAnimationTree.Set(DamageParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 				rootAnimationTree.Set(PhaseTwoDamageParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
