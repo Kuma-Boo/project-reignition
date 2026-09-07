@@ -15,6 +15,9 @@ namespace Project.Gameplay.Triggers
 
 		public override void Activate()
 		{
+			if (Stage.CurrentCheckpoint != null && IsTimeAttackDisabled())
+				return;
+
 			// Already the current checkpoint!
 			if (Stage.CurrentCheckpoint == this)
 				return;
@@ -33,6 +36,15 @@ namespace Project.Gameplay.Triggers
 
 			if (CameraSettings == null)
 				CameraSettings = StageSettings.Player.Camera.ActiveSettings;
+		}
+
+		private bool IsTimeAttackDisabled()
+		{
+			return Stage.Data.MissionType switch
+			{
+				LevelDataResource.MissionTypeEnum.Deathless or LevelDataResource.MissionTypeEnum.Perfect or LevelDataResource.MissionTypeEnum.Pearl => true,
+				_ => false,
+			};
 		}
 	}
 }

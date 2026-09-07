@@ -1212,7 +1212,7 @@ public partial class PlayerController : CharacterBody3D
 
 		DefeatPlayer();
 
-		if (!IsDebugRespawn &&
+		if (!IsDebugRespawn && !TimeAttackManager.Instance.IsRunActive &&
 			(Stage.Data.MissionType == LevelDataResource.MissionTypeEnum.Deathless
 			|| Stage.Data.MissionType == LevelDataResource.MissionTypeEnum.Perfect))
 		{
