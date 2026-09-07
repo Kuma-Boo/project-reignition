@@ -151,7 +151,7 @@ public partial class SkillSelect : Menu
 				if (sign != 0)
 				{
 					isNothingSelected = false;
-					VerticalSelection = targetIndex;
+					VerticalSelection = WrapSelection(targetIndex, unlockedSkillCount);
 					UpdateScrollAmount(sign);
 					MoveCursor();
 					UpdateDescription();
