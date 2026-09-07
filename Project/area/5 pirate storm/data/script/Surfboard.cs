@@ -135,13 +135,13 @@ public partial class Surfboard : PathTraveller
 
 	protected override void Accelerate()
 	{
+		base.Accelerate();
+
 		if (currentWave?.IsWaveCleared == false && !Player.Skills.IsSpeedBreakCharging && CurrentSpeed < MinimumSpeed) // Going too slow! Fall off the board
 		{
 			CallDeferred(MethodName.EmitSignal, SignalName.Damaged);
 			return;
 		}
-
-		base.Accelerate();
 	}
 
 	public void SetCurrentWave(Wave wave)
