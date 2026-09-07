@@ -15,7 +15,7 @@ public partial class TimeAttackResultsOption : Menu
 	public void SetTimeLabel(float time)
 	{
 		TimeSpan span = TimeSpan.FromSeconds(time);
-		timeLabel.Text = span.ToString(@"mm\:ss\.ff");
+		timeLabel.Text = span.ToString(@"hh\:mm\:ss\.ff");
 	}
 	public void ShowOption() => animator.Play("show");
 }
