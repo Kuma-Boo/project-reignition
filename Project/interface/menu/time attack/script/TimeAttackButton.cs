@@ -1,12 +1,11 @@
 using Godot;
-using System;
 
 namespace Project.Interface.Menus;
 
 public partial class TimeAttackButton : Menu
 {
-	[Export] private String text;
-	[Export] public String description { get; private set; }
+	[Export] private string text;
+	[Export] public string description { get; private set; }
 	[Export] private Label label;
 	[Export] public Texture2D image { get; private set; }
 	[Export] private AnimationPlayer confirmAnim;
