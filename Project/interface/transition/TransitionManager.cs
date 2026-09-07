@@ -82,6 +82,7 @@ public partial class TransitionManager : Node
 
 	private TransitionData CurrentTransitionData { get; set; }
 	public static bool IsTransitionActive { get; set; }
+	public static bool IsLoadingLevel => IsTransitionActive && Instance.CurrentTransitionData.loadAsynchronously;
 	/// <summary> Called when the scene changes. </summary>
 	[Signal] public delegate void SceneChangedEventHandler();
 	/// <summary> Called whenever a transition is started. </summary>

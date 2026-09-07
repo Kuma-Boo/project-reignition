@@ -63,8 +63,11 @@ public partial class Runtime : Node
 		if (SaveManager.ActiveSaveSlotIndex == -1)
 			return;
 
-		SaveManager.ActiveGameData.playTime = Mathf.MoveToward(SaveManager.ActiveGameData.playTime,
-			SaveManager.MaxPlayTime, PhysicsManager.normalDelta);
+		if (!TransitionManager.IsLoadingLevel)
+		{
+			SaveManager.ActiveGameData.playTime = Mathf.MoveToward(SaveManager.ActiveGameData.playTime,
+				SaveManager.MaxPlayTime, PhysicsManager.normalDelta);
+		}
 	}
 
 	/// <summary> Collision layer for the environment. </summary>
