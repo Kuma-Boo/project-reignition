@@ -37,6 +37,10 @@ public partial class PlayerController : CharacterBody3D
 		InstancePlayerAnimator();
 		Controller.Initialize(this);
 		Stats.Initialize();
+
+		if (Animator.Skills != null)
+			Skills = Animator.Skills;
+
 		Skills.Initialize(this);
 		Lockon.Initialize(this);
 		Effect.Initialize(this);

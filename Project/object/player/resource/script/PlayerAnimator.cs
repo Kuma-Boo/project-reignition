@@ -10,6 +10,7 @@ public partial class PlayerAnimator : Node3D
 {
 	[Signal] public delegate void CountdownLandingEventHandler();
 
+	[Export] public PlayerSkillController Skills { get; private set; }
 	[Export] public Node3D RightFoot { get; private set; }
 	[Export] public Node3D LeftFoot { get; private set; }
 	[Export] public PlayerEffect Effect { get; private set; }

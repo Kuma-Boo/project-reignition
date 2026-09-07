@@ -6,6 +6,7 @@
 [ext_resource type="AnimationLibrary" uid="uid://bo26mw8v8m0eh" path="res://object/player/resource/model/animation/EventLibrary.gltf" id="6_i74hg"]
 [ext_resource type="AnimationLibrary" uid="uid://dpd4w3nuuvybs" path="res://object/player/resource/model/animation/GimmickLibrary.gltf" id="7_17bir"]
 [ext_resource type="AnimationLibrary" uid="uid://ql8twqq248an" path="res://object/player/resource/model/animation/SidleLibrary.gltf" id="8_h6me1"]
+[ext_resource type="PackedScene" uid="uid://bemb37fo0seak" path="res://object/player/resource/component/Skills.tscn" id="9_7jka2"]
 [ext_resource type="PackedScene" uid="uid://clet3u3mrcb8g" path="res://object/player/resource/effect/countdown/CountdownBoostParticle.tscn" id="9_d1ipk"]
 [ext_resource type="PackedScene" uid="uid://c2bl1sk5cfyq3" path="res://object/player/resource/effect/countdown/CountdownFlameParticle.tscn" id="10_p6bek"]
 [ext_resource type="AnimationLibrary" uid="uid://q4oqwf6xeerw" path="res://object/player/resource/model/animation/DarkspineLibrary.gltf" id="10_sb2k4"]
@@ -807,11 +808,12 @@ _data = {
 &"teleport-start": SubResource("Animation_jxy1t")
 }
 
-[node name="Model" type="Node3D" unique_id=781135473 node_paths=PackedStringArray("RightFoot", "LeftFoot", "Effect", "animationTree", "eventAnimationPlayer")]
+[node name="Model" type="Node3D" unique_id=781135473 node_paths=PackedStringArray("Skills", "RightFoot", "LeftFoot", "Effect", "animationTree", "eventAnimationPlayer")]
 script = ExtResource("1_l38yo")
+Skills = NodePath("Skills")
 RightFoot = NodePath("RFoot/SoleOffset")
 LeftFoot = NodePath("LFoot/SoleOffset")
-Effect = NodePath("Effect")
+Effect = NodePath("CountdownRoot/Effect")
 animationTree = NodePath("AnimationTree")
 eventAnimationPlayer = NodePath("EventAnimationPlayer")
 movementAnimationSpeedCurve = SubResource("Curve_skwgn")
@@ -887,6 +889,11 @@ followObject = NodePath(".")
 [node name="CountdownRoot" type="Node3D" parent="." unique_id=1657771510]
 transform = Transform3D(0.7191743, 0, 0.6948295, 0, 1, 0, -0.6948295, 0, 0.7191743, 0, 0, 0)
 
+[node name="Effect" parent="CountdownRoot" unique_id=806076737 node_paths=PackedStringArray("landingParticles", "stepEmitters") instance=ExtResource("15_bc7c7")]
+transform = Transform3D(0.7191745, 0, -0.6948297, 0, 1, 0, 0.6948297, 0, 0.7191745, 0, 0, 0)
+landingParticles = [NodePath("VFX/LandingFX/LandingDust"), NodePath("VFX/LandingFX/LandingSand"), NodePath("VFX/LandingFX/LandingGrass"), null, NodePath("VFX/LandingFX/LandingSnow"), null, NodePath("VFX/LandingFX/LandingWater"), null, NodePath("VFX/LandingFX/LandingWet"), NodePath("VFX/LandingFX/LandingWet"), null]
+stepEmitters = [NodePath("VFX/StepFX/PavementStep"), NodePath("VFX/StepFX/SandStep"), NodePath("VFX/StepFX/GrassStep"), null, NodePath("VFX/StepFX/SnowStep"), null, NodePath("VFX/StepFX/WaterStep"), null, NodePath("VFX/StepFX/WetStep"), NodePath("VFX/StepFX/WetStep"), null]
+
 [node name="FlameBurstSFX" type="AudioStreamPlayer" parent="CountdownRoot" unique_id=37315899]
 process_mode = 1
 stream = ExtResource("12_m0cgj")
@@ -901,9 +908,7 @@ settings = ExtResource("14_fi8xb")
 UpdateEveryFrame = true
 followObject = NodePath(".")
 
-[node name="Effect" parent="." unique_id=806076737 node_paths=PackedStringArray("landingParticles", "stepEmitters") instance=ExtResource("15_bc7c7")]
-landingParticles = [NodePath("VFX/LandingFX/LandingDust"), NodePath("VFX/LandingFX/LandingSand"), NodePath("VFX/LandingFX/LandingGrass"), null, NodePath("VFX/LandingFX/LandingSnow"), null, NodePath("VFX/LandingFX/LandingWater"), null, NodePath("VFX/LandingFX/LandingWet"), NodePath("VFX/LandingFX/LandingWet"), null]
-stepEmitters = [NodePath("VFX/StepFX/PavementStep"), NodePath("VFX/StepFX/SandStep"), NodePath("VFX/StepFX/GrassStep"), null, NodePath("VFX/StepFX/SnowStep"), null, NodePath("VFX/StepFX/WaterStep"), null, NodePath("VFX/StepFX/WetStep"), NodePath("VFX/StepFX/WetStep"), null]
+[node name="Skills" parent="." unique_id=1803456563 instance=ExtResource("9_7jka2")]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1818809983]
 libraries/ = SubResource("AnimationLibrary_6smkh")
@@ -1075,3 +1080,5 @@ parameters/spin_speed/scale = 1.0
 parameters/state_transition/current_state = "normal"
 parameters/state_transition/transition_request = ""
 parameters/state_transition/current_index = 0
+
+[editable path="CountdownRoot/Effect"]
