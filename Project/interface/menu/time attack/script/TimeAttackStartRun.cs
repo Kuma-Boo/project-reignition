@@ -18,6 +18,10 @@ public partial class TimeAttackStartRun : Menu
 	private int currentSelection = 1;
 	private int maxSelection = 2;
 
+	[Export] private AnimationPlayer alertAnimator;
+	private bool isAlertMenuActive = false;
+	private bool isYesSelected = false;
+
 	public override void ShowMenu()
 	{
 		base.ShowMenu();
@@ -31,18 +35,42 @@ public partial class TimeAttackStartRun : Menu
 	public override void EnableProcessing()
 	{
 		base.EnableProcessing();
-		RedrawSelection();
+		//RedrawSelection();
 	}
 
 	protected override void UpdateSelection()
 	{
+		if (isAlertMenuActive)
+		{
+			int inputReturn = Mathf.Sign(Input.GetAxis("ui_left", "ui_right"));
+			if ((inputReturn > 0 && isYesSelected) || (inputReturn < 0 && !isYesSelected))
+			{
+				isYesSelected = !isYesSelected;
+				alertAnimator.Play(isYesSelected ? "select-yes" : "select-no");
+			}
+
+			return;
+		}
+
 		Vector2I input = new(Mathf.Sign(Input.GetAxis("ui_left", "ui_right")), Mathf.Sign(Input.GetAxis("ui_up", "ui_down")));
 		StartSelectionTimer();
 		ProcessMenuInput(input);
 	}
 
+    protected override void ProcessMenu()
+    {
+		if (Input.IsActionJustPressed("ui_text_delete") && !isAlertMenuActive)
+		{
+			ShowAlertMenu();
+			return;
+		}
+
+        base.ProcessMenu();
+    }
+
 	private void ProcessMenuInput(Vector2I input)
 	{
+		
 		if (isLeaderboardActive)
 		{
 			if (input.X != 0)
@@ -70,6 +98,8 @@ public partial class TimeAttackStartRun : Menu
 
 			RedrawSelection();
 		}
+
+		
 	}
 
 	private void EnterLeaderboard()
@@ -97,6 +127,7 @@ public partial class TimeAttackStartRun : Menu
 
 	private void RedrawSelection()
 	{
+		
 		for (int i = 0; i < buttonList.Count; i++)
 			buttonList[i].DeselectButton();
 
@@ -108,6 +139,27 @@ public partial class TimeAttackStartRun : Menu
 
 	protected override void Confirm()
 	{
+		if (isAlertMenuActive)
+		{
+			if (isYesSelected)
+			{
+				isAlertMenuActive = false;
+				alertAnimator.Advance(0.0);
+				alertAnimator.Play("confirm");
+				SaveManager.TimeData.ResetCategory(TimeAttackManager.Instance.CurrentRunType);
+				SaveManager.SaveTimeAttackData();
+				leaderboard.SpawnLeaderboardOptionsSub();
+				leaderboard.SpawnLeaderboardOptionsMain();
+				leaderboard.SwapToMain();
+			}
+			else
+			{
+				isAlertMenuActive = false;
+				alertAnimator.Advance(0.0);
+				alertAnimator.Play("hide");
+			}
+			return;
+		}
 		if (isLeaderboardActive)
 			return;
 
@@ -117,10 +169,18 @@ public partial class TimeAttackStartRun : Menu
 			readyMenu.SetupReadyMenu();
 		}
 		animator.Play("confirm-" + currentSelection);
+		base.Confirm();
 	}
 
 	protected override void Cancel()
 	{
+		if (isAlertMenuActive)
+		{
+			isAlertMenuActive = false;
+			CancelAlertMenu();
+			return;
+		}
+
 		if (!isLeaderboardActive)
 			animator.Play("hide");
 	}
@@ -143,5 +203,34 @@ public partial class TimeAttackStartRun : Menu
 		currentSelection = selection;
 		if (isProcessing)
 			RedrawSelection();
+	}
+
+	private void ShowAlertMenu()
+	{
+		isAlertMenuActive = true;
+		isYesSelected = false;
+		leaderboard.DisableProcessing();
+
+		alertAnimator.Advance(0.0);
+		alertAnimator.Play("show");
+	}
+
+	private void CancelAlertMenu()
+	{
+		if (isYesSelected)
+		{
+			alertAnimator.Play("select-no");
+			alertAnimator.Advance(0.0);
+		}
+
+		alertAnimator.Play("hide");
+		leaderboard.EnableProcessing();
+	}
+
+	private void AlertMenuClosed()
+	{
+		isAlertMenuActive = false;
+		leaderboard.EnableProcessing();
+		EnableProcessing();
 	}
 }

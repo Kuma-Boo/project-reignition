@@ -129,8 +129,6 @@ public partial class LevelSelect : Menu
 
 	protected override void ProcessMenu()
 	{
-		
-
 		if (statusMenu != null && statusMenu.IsVisibleInTree() && isAlertMenuActive)
 			return;
 
@@ -304,7 +302,6 @@ public partial class LevelSelect : Menu
 
 		if (isAlertMenuActive)
 		{
-			GD.Print("Selecting option");
 			if (isYesSelected)
 			{
 				isAlertMenuActive = false;

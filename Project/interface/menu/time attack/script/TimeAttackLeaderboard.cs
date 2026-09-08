@@ -98,74 +98,13 @@ public partial class TimeAttackLeaderboard : Menu
 
 	protected override void Confirm()
 	{
-		bool hasTimes = false;
-
-		switch (TimeAttackManager.Instance.CurrentRunType)
-		{
-			case TimeAttackManager.RunType.AnyP:
-				if (anyP.Count > VerticalSelection)
-				{
-					if (anyP[VerticalSelection].Count > 0)
-						hasTimes = true;
-				}
-				break;
-			case TimeAttackManager.RunType.GoalPercent:
-				if (goalP.Count > VerticalSelection)
-				{
-					if (goalP[VerticalSelection].Count > 0)
-						hasTimes = true;
-				}
-				break;
-			case TimeAttackManager.RunType.BossRush:
-				if (bossRush.Count > VerticalSelection)
-				{
-					if (bossRush[VerticalSelection].Count > 0)
-						hasTimes = true;
-				}
-				break;
-		}
-
-		if (!isSubActive && hasTimes)
-		{
-			isSubActive = true;
-
-			switch (TimeAttackManager.Instance.CurrentRunType)
-			{
-				case TimeAttackManager.RunType.AnyP:
-					SetSubTimes(anyP[VerticalSelection]);
-					break;
-				case TimeAttackManager.RunType.GoalPercent:
-					SetSubTimes(goalP[VerticalSelection]);
-					break;
-				case TimeAttackManager.RunType.BossRush:
-					SetSubTimes(bossRush[VerticalSelection]);
-					break;
-			}
-			VerticalSelection = 0;
-			RecalculateListPositionSub();
-			UpdateListPositionSub(0);
-
-			SetUpSub();
-			animator.Play("showsub");
-		}
-		else if (isSubActive)
-		{
-			isSubActive = false;
-			VerticalSelection = 0;
-			RecalculateListPositionSub();
-			UpdateListPositionSub(0);
-			RecalculateListPosition();
-			UpdateListPosition(0);
-			SetUp();
-			animator.Play("hidesub");
-
-		}
+		SwapMenu();
 	}
 
 	protected override void Cancel()
 	{
 		if (isSubActive)
-			Confirm();
+			SwapMenu();
 	}
 
 	protected override void UpdateSelection()
@@ -327,7 +266,6 @@ public partial class TimeAttackLeaderboard : Menu
 			option.SetLevel(Tr(TimeAttackManager.Instance.GetCurrentRunLevels()[i].MissionTypeKey));
 			optionsSub.AddChild(option);
 		}
-
 	}
 
 	public void SetSubTimes(List<float> times)
@@ -336,6 +274,78 @@ public partial class TimeAttackLeaderboard : Menu
 		{
 			TimeAttackLeaderboardOptionSub option = optionsSub.GetChildren()[i] as TimeAttackLeaderboardOptionSub;
 			option.SetTime(times[i]);
+		}
+	}
+
+	public void SwapMenu()
+	{
+		bool hasTimes = false;
+
+		switch (TimeAttackManager.Instance.CurrentRunType)
+		{
+			case TimeAttackManager.RunType.AnyP:
+				if (anyP.Count > VerticalSelection)
+				{
+					if (anyP[VerticalSelection].Count > 0)
+						hasTimes = true;
+				}
+				break;
+			case TimeAttackManager.RunType.GoalPercent:
+				if (goalP.Count > VerticalSelection)
+				{
+					if (goalP[VerticalSelection].Count > 0)
+						hasTimes = true;
+				}
+				break;
+			case TimeAttackManager.RunType.BossRush:
+				if (bossRush.Count > VerticalSelection)
+				{
+					if (bossRush[VerticalSelection].Count > 0)
+						hasTimes = true;
+				}
+				break;
+		}
+
+		if (!isSubActive && hasTimes)
+		{
+			isSubActive = true;
+
+			switch (TimeAttackManager.Instance.CurrentRunType)
+			{
+				case TimeAttackManager.RunType.AnyP:
+					SetSubTimes(anyP[VerticalSelection]);
+					break;
+				case TimeAttackManager.RunType.GoalPercent:
+					SetSubTimes(goalP[VerticalSelection]);
+					break;
+				case TimeAttackManager.RunType.BossRush:
+					SetSubTimes(bossRush[VerticalSelection]);
+					break;
+			}
+			VerticalSelection = 0;
+			RecalculateListPositionSub();
+			UpdateListPositionSub(0);
+
+			SetUpSub();
+			animator.Play("showsub");
+		}
+		else if (isSubActive)
+			SwapToMain();
+	}
+
+	public void SwapToMain()
+	{
+		if (isSubActive)
+		{
+			isSubActive = false;
+			VerticalSelection = 0;
+			RecalculateListPositionSub();
+			UpdateListPositionSub(0);
+			RecalculateListPosition();
+			UpdateListPosition(0);
+			SetUp();
+			animator.Play("hidesub");
+
 		}
 	}
 
