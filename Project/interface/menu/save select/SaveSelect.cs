@@ -27,6 +27,7 @@ public partial class SaveSelect : Menu
 	}
 	private PopupMode currentPopupMode;
 	private int popupSelection;
+	private bool isLoadingGame;
 
 	[Export] private string descriptionText;
 	[Export] private Description description;
@@ -73,6 +74,9 @@ public partial class SaveSelect : Menu
 
 	protected override void Confirm()
 	{
+		if (!isProcessing)
+			return;
+
 		if (currentPopupMode != PopupMode.Disabled)
 		{
 			if (currentPopupMode == PopupMode.Delete)
@@ -90,6 +94,8 @@ public partial class SaveSelect : Menu
 			else
 			{
 				// Select a control mode
+				DisableProcessing();
+				isLoadingGame = true;
 				popupAnimator.Play("confirm");
 				base.Confirm();
 			}
@@ -110,6 +116,9 @@ public partial class SaveSelect : Menu
 
 	protected override void Cancel()
 	{
+		if (!isProcessing)
+			return;
+
 		if (currentPopupMode != PopupMode.Disabled)
 		{
 			CancelPopupMenu();
@@ -124,6 +133,15 @@ public partial class SaveSelect : Menu
 
 		parentMenu.PlayReturnAnim();
 		animator.Play("cancel-for-time-attack");
+	}
+
+	public override void EnableProcessing()
+	{
+		GD.Print(isLoadingGame);
+		if (isLoadingGame)
+			return;
+
+		base.EnableProcessing();
 	}
 
 	private void ShowDeleteMenu()
@@ -261,7 +279,6 @@ public partial class SaveSelect : Menu
 
 			SaveManager.SaveGameData();
 
-
 			if (!DebugManager.Instance.UseDemoSave) // Don't load into cutscenes in the demo
 			{
 				// Load directly into the first cutscene
@@ -286,6 +303,7 @@ public partial class SaveSelect : Menu
 
 	public override void ShowMenu()
 	{
+		isLoadingGame = false;
 		SaveManager.LoadGameData(); // Check for file updates
 		base.ShowMenu();
 	}
