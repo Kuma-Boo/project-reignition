@@ -24,7 +24,8 @@ public partial class FireSoul : Pickup
 		base.SetUp();
 
 		// Check save data
-		isCollectedInSaveFile = SaveManager.ActiveGameData.LevelData.IsFireSoulCollected(Stage.Data.LevelID, fireSoulIndex);
+		if (!TimeAttackManager.Instance.IsRunActive)
+			isCollectedInSaveFile = SaveManager.ActiveGameData.LevelData.IsFireSoulCollected(Stage.Data.LevelID, fireSoulIndex);
 
 		Stage.Respawned += Respawn;
 		Stage.TriggeredCheckpoint += SaveCheckpoint;

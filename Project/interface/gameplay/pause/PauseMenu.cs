@@ -416,7 +416,7 @@ public partial class PauseMenu : Node
 
 	private void UpdateFireSouls()
 	{
-		fireSoulParent.Visible = Stage.Data.HasFireSouls;
+		fireSoulParent.Visible = Stage.Data.HasFireSouls && !TimeAttackManager.Instance.IsRunActive;
 		if (!Stage.Data.HasFireSouls)
 			return;
 
