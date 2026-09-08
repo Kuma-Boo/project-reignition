@@ -1781,10 +1781,9 @@ public partial class SaveManager : Node
 
 		}
 
-		public static TimeAttackData CreateDefaultData()
+		public void ResetCategory(TimeAttackManager.RunType runType)
 		{
 			//Sets up default leaderboard data
-
 			int StandardCount = 28;
 			int MinimalistCount = 7;
 			int BossRushCount = 5;
@@ -1806,7 +1805,59 @@ public partial class SaveManager : Node
 			float BossBronze = 420f; //7 Minutes
 			float BossFour = 480f; //8 Minutes
 			float BossFive = 540f; //9 Minutes
+			switch(runType)
+			{
+				case TimeAttackManager.RunType.AnyP:
+					AnyP = [];
 
+					for (int i = 0; i < 5; i++)
+					{
+						AnyP.Add(new Array<float>());
+					}
+					for (int i = 0; i < StandardCount; i++)
+					{
+						AnyP[0].Add(StandardGold / StandardCount);
+						AnyP[1].Add(StandardSilver / StandardCount);
+						AnyP[2].Add(StandardBronze / StandardCount);
+						AnyP[3].Add(StandardFour / StandardCount);
+						AnyP[4].Add(StandardFive / StandardCount);
+					}
+				break;
+				case TimeAttackManager.RunType.GoalPercent:
+					GoalP = [];
+					for (int i = 0; i < 5; i++)
+					{
+						GoalP.Add(new Array<float>());
+					}
+					for (int i = 0; i < MinimalistCount; i++)
+					{
+						GoalP[0].Add(MiniGold / MinimalistCount);
+						GoalP[1].Add(MiniSilver / MinimalistCount);
+						GoalP[2].Add(MiniBronze / MinimalistCount);
+						GoalP[3].Add(MiniFour / MinimalistCount);
+						GoalP[4].Add(MiniFive / MinimalistCount);
+					}
+				break;
+				case TimeAttackManager.RunType.BossRush:
+					BossRush = [];
+					for (int i = 0; i < 5; i++)
+					{
+						BossRush.Add(new Array<float>());
+					}
+					for (int i = 0; i < BossRushCount; i++)
+					{
+						BossRush[0].Add(BossGold / BossRushCount);
+						BossRush[1].Add(BossSilver / BossRushCount);
+						BossRush[2].Add(BossBronze / BossRushCount);
+						BossRush[3].Add(BossFour / BossRushCount);
+						BossRush[4].Add(BossFive / BossRushCount);
+					}
+				break;
+			}
+		}
+
+		public static TimeAttackData CreateDefaultData()
+		{
 			TimeAttackData data = new()
 			{
 				AnyP = [],
@@ -1820,38 +1871,11 @@ public partial class SaveManager : Node
 				equippedAugmentsSingle = [],
 
 			};
-			for (int i = 0; i < 5; i++)
-			{
-				data.AnyP.Add(new Array<float>());
-				data.GoalP.Add(new Array<float>());
-				data.BossRush.Add(new Array<float>());
-			}
-			for (int i = 0; i < StandardCount; i++)
-			{
-				data.AnyP[0].Add(StandardGold / StandardCount);
-				data.AnyP[1].Add(StandardSilver / StandardCount);
-				data.AnyP[2].Add(StandardBronze / StandardCount);
-				data.AnyP[3].Add(StandardFour / StandardCount);
-				data.AnyP[4].Add(StandardFive / StandardCount);
-			}
 
-			for (int i = 0; i < MinimalistCount; i++)
-			{
-				data.GoalP[0].Add(MiniGold / MinimalistCount);
-				data.GoalP[1].Add(MiniSilver / MinimalistCount);
-				data.GoalP[2].Add(MiniBronze / MinimalistCount);
-				data.GoalP[3].Add(MiniFour / MinimalistCount);
-				data.GoalP[4].Add(MiniFive / MinimalistCount);
-			}
-
-			for (int i = 0; i < BossRushCount; i++)
-			{
-				data.BossRush[0].Add(BossGold / BossRushCount);
-				data.BossRush[1].Add(BossSilver / BossRushCount);
-				data.BossRush[2].Add(BossBronze / BossRushCount);
-				data.BossRush[3].Add(BossFour / BossRushCount);
-				data.BossRush[4].Add(BossFive / BossRushCount);
-			}
+			data.ResetCategory(TimeAttackManager.RunType.AnyP);
+			data.ResetCategory(TimeAttackManager.RunType.GoalPercent);
+			data.ResetCategory(TimeAttackManager.RunType.BossRush);
+			
 			return data;
 		}
 	}
