@@ -454,7 +454,8 @@ public partial class IfritGolem : Node3D
 
 		if (Player.IsOnGround && headHealth != MaxHeadHealth)
 		{
-			EnterRecovery();
+			GD.Print("Starting Bounce!");
+			Player.StartBounce();
 			return;
 		}
 
@@ -578,7 +579,7 @@ public partial class IfritGolem : Node3D
 				UpdateHeadDamage(2);
 				break;
 			case PlayerController.AttackStates.None:
-				EnterRecovery();
+				Player.StartBounce();
 				return;
 		}
 
@@ -778,18 +779,6 @@ public partial class IfritGolem : Node3D
 
 		Vector3 targetPosition = isLaserFromRightEye ? RightEye.GlobalPosition : LeftEye.GlobalPosition;
 		float targetRotation = (samplePosition - targetPosition).Flatten().AngleTo(Vector2.Down);
-		float activeRotation = (Player.PathFollower.GlobalPosition - targetPosition).Flatten().AngleTo(Vector2.Down);
-
-		// Player is out of range
-		if (ExtensionMethods.DeltaAngleRad(activeRotation, Root.Rotation.Y) > Mathf.Pi * .4f ||
-			ExtensionMethods.DeltaAngleRad(targetRotation, Root.Rotation.Y) > Mathf.Pi * .4f)
-		{
-			if (currentState == GolemState.SpecialAttack) // Cancel special attack early
-				FinishSpecialAttack();
-
-			return;
-		}
-
 		LaserRoot.Rotation = Vector3.Up * targetRotation;
 		LaserRoot.GlobalPosition = targetPosition;
 		LaserRoot.ResetPhysicsInterpolation();
@@ -816,6 +805,23 @@ public partial class IfritGolem : Node3D
 	private void ProcessLaserAttack()
 	{
 		LaserRoot.GlobalPosition = isLaserFromRightEye ? RightEye.GlobalPosition : LeftEye.GlobalPosition;
+	}
+
+	private bool AttemptSkipSpecialAttack()
+	{
+		Vector3 samplePosition = Player.PathFollower.GlobalPosition;
+		Vector3 targetPosition = HeadHurtbox.GlobalPosition;
+		float targetRotation = (samplePosition - targetPosition).Flatten().AngleTo(Vector2.Down);
+		float activeRotation = (Player.PathFollower.GlobalPosition - targetPosition).Flatten().AngleTo(Vector2.Down);
+		// Player is out of range
+		if (ExtensionMethods.DeltaAngleRad(activeRotation, Root.Rotation.Y) > Mathf.Pi * .4f ||
+			ExtensionMethods.DeltaAngleRad(targetRotation, Root.Rotation.Y) > Mathf.Pi * .4f)
+		{
+			// Cancel special attack early
+			return true;
+		}
+
+		return false;
 	}
 
 	private void StopLaserAttack()
@@ -1071,7 +1077,7 @@ public partial class IfritGolem : Node3D
 
 		specialAttackCount++;
 		specialAttackTimer = 0;
-		if (specialAttackCount > targetSpecialAttackCount)
+		if (specialAttackCount > targetSpecialAttackCount || AttemptSkipSpecialAttack())
 		{
 			// Finished special attacks
 			FinishSpecialAttack();
