@@ -43,7 +43,6 @@ public partial class BemothHornState : PlayerState
 
 		Player.Animator.StartBemothHorn();
 		Player.StartExternal(Trigger, Trigger.FollowObject, 1f);
-
 		Trigger.CallDeferred(CaptainBemothHorn.MethodName.JoltHorn, 1);
 
 		HeadsUpDisplay.Instance.SetPrompt(PullAction, 0);

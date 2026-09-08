@@ -145,6 +145,7 @@ public partial class CaptainBemoth : PathFollow3D
 		if (!StageSettings.Instance.IsLevelIngame)
 			return;
 
+		animator.SetDeferred("active", false);
 		eventAnimator.Play("finish-defeat");
 		eventAnimator.Advance(0f);
 		Player.Animator.CancelOneshot();
@@ -307,7 +308,7 @@ public partial class CaptainBemoth : PathFollow3D
 	private readonly float MoveSpeedSmoothing = 10f;
 	private readonly float DamageSpeedSmoothing = 30f;
 	private readonly float BaseMoveSpeed = 20f;
-	private readonly float ChargeSpeed = -100f;
+	private readonly float ChargeSpeed = -80f;
 	private readonly float WraparoundSpeed = -100f;
 	private readonly float MinimumDistance = 2f;
 	private readonly float MinimumDistanceSmoothingStart = 10f;
@@ -443,7 +444,11 @@ public partial class CaptainBemoth : PathFollow3D
 	}
 
 	private readonly string HornDamageTrigger = "parameters/horn_damage_trigger/request";
-	private void TakeHornDamage() => animator.Set(HornDamageTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	private void TakeHornDamage()
+	{
+		animator.Set(WaveTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animator.Set(HornDamageTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
 
 	private readonly string DamageTrigger = "parameters/damage_trigger/request";
 	private void TakeDamage()
@@ -968,6 +973,8 @@ public partial class CaptainBemoth : PathFollow3D
 
 		isAttackDisabled = false;
 		isAttackQueued = true;
+		eventAnimator.Play("RESET");
+		eventAnimator.Advance(0);
 	}
 
 	private void OnHitboxEntered(Area3D a)
