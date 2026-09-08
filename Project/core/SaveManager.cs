@@ -1211,7 +1211,7 @@ public partial class SaveManager : Node
 				UnlockWorld((WorldEnum)i);
 		}
 
-		public bool CanSkipCutscene(StringName cutsceneId) => skippableCutscenes.Contains(cutsceneId) || OS.IsDebugBuild();
+		public bool CanSkipCutscene(StringName cutsceneId) => skippableCutscenes.Contains(cutsceneId) || TimeAttackManager.Instance.IsRunActive || OS.IsDebugBuild();
 		public void AllowSkippingCutscene(StringName cutsceneId)
 		{
 			if (!skippableCutscenes.Contains(cutsceneId))
