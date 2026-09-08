@@ -56,8 +56,8 @@ public partial class BemothHornState : PlayerState
 		Player.Animator.ResetState();
 		Player.StopExternal();
 
-		Player.Effect.StopChargeFX();
 		Player.Effect.StopFullChargeFX();
+		Player.Effect.StopChargeFX();
 
 		HeadsUpDisplay.Instance.HidePrompts();
 	}
@@ -68,23 +68,24 @@ public partial class BemothHornState : PlayerState
 
 		if (Trigger.IsPopping || Trigger.IsPopReady)
 		{
-			Player.Effect.StopChargeFX();
 			Player.Effect.StopFullChargeFX();
+			Player.Effect.StopChargeFX();
 			return null;
+		}
+
+		if (!Trigger.IsJoltingHorn)
+		{
+			if (CanJump && Player.Controller.IsJumpBufferActive)
+			{
+				CanPullHorns = false;
+				Trigger.JumpOff();
+				Player.Effect.PlayVoice(CanPullHorns ? "grunt" : "sidle hurt");
+				Player.Controller.ResetJumpBuffer();
+				return null;
+			}
 		}
 
 		ProcessPullCharge();
-
-		if (Trigger.IsJoltingHorn)
-			return null;
-
-		if (CanJump && Player.Controller.IsJumpBufferActive)
-		{
-			Trigger.JumpOff();
-			Player.Effect.PlayVoice(CanPullHorns ? "grunt" : "sidle hurt");
-			Player.Controller.ResetJumpBuffer();
-		}
-
 		return null;
 	}
 
@@ -134,8 +135,8 @@ public partial class BemothHornState : PlayerState
 
 		if (Mathf.IsZeroApprox(pullChargeTimer))
 		{
-			Player.Effect.StopChargeFX();
 			Player.Effect.StopFullChargeFX();
+			Player.Effect.StopChargeFX();
 			return;
 		}
 
@@ -150,8 +151,8 @@ public partial class BemothHornState : PlayerState
 
 	private void StartPull()
 	{
-		Player.Effect.StopChargeFX();
 		Player.Effect.StopFullChargeFX();
+		Player.Effect.StopChargeFX();
 
 		Trigger.JoltHorn(PullStrength);
 		if (PullStrength > 2) // Feedback
