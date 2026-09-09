@@ -733,6 +733,9 @@ public partial class SkillSelect : Menu
 		scrollAmount += targetSelection - initialSelection;
 		VerticalSelection = targetSelection;
 		UpdateScrollAmount(0);
+
+		// Reupdate cursor since clamping is applied in UpdateScrollAmount()
+		cursorPosition = VerticalSelection - scrollAmount;
 		if (VerticalSelection != initialSelection)
 			MoveCursor();
 	}
