@@ -45,7 +45,7 @@ public partial class LevelSelect : Menu
 	[Export] private AnimationPlayer alertAnimator;
 	private bool isAlertMenuActive = false;
 	private bool isYesSelected = false;
-	
+
 
 	public bool HasNewLevel()
 	{
@@ -196,7 +196,7 @@ public partial class LevelSelect : Menu
 			nav_delete.Visible = true;
 		else
 			nav_delete.Visible = false;
-			
+
 
 		VerticalSelection = menuMemory[MemoryKeys.LevelSelect];
 		RecalculateListPosition();
@@ -239,7 +239,7 @@ public partial class LevelSelect : Menu
 	private int storyLevelIndex = -1;
 	private void ProcessStoryMarkers()
 	{
-		if (storyLevelIndex == -1)
+		if (storyLevelIndex == -1 || TimeAttackManager.Instance.IsRunActive)
 			return;
 
 		int centerPosition = scrollAmount + (PageSize / 2);
