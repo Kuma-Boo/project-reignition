@@ -735,7 +735,9 @@ public partial class SkillSelect : Menu
 		UpdateScrollAmount(0);
 
 		// Reupdate cursor since clamping is applied in UpdateScrollAmount()
-		cursorPosition = VerticalSelection - scrollAmount;
+		if (targetSelection != 0)
+			cursorPosition = VerticalSelection - scrollAmount;
+
 		if (VerticalSelection != initialSelection)
 			MoveCursor();
 	}
@@ -866,12 +868,6 @@ public partial class SkillSelect : Menu
 
 		// Frame augments to stay on screen
 		scrollAmount += AugmentSelection + 1;
-		if (cursorPosition == PageSize - 1 && AugmentSelection < SelectedSkill.AugmentMenuCount)
-		{
-			cursorPosition--;
-			scrollAmount += 1;
-		}
-
 		UpdateScrollAmount(0);
 
 		SelectedSkill.ShowAugmentMenu();
@@ -896,6 +892,7 @@ public partial class SkillSelect : Menu
 		cursorPosition = VerticalSelection - scrollAmount;
 		SelectedSkill.HideAugmentMenu();
 
+		AugmentSelection = 0;
 		UpdateScrollAmount(0);
 		SortSkills();
 
