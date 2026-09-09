@@ -853,7 +853,7 @@ public partial class Options : Menu
 		}
 		else if (VerticalSelection == 6)
 		{
-			SaveManager.Config.renderScale = WrapSelection(SaveManager.Config.renderScale + direction * 10, 150, 10);
+			SaveManager.Config.renderScale = WrapSelection(SaveManager.Config.renderScale + direction * 5, 150, 10);
 		}
 		else if (VerticalSelection == 7)
 		{
