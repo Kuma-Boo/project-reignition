@@ -1211,7 +1211,7 @@ public partial class SaveManager : Node
 				UnlockWorld((WorldEnum)i);
 		}
 
-		public bool CanSkipCutscene(StringName cutsceneId) => skippableCutscenes.Contains(cutsceneId) || TimeAttackManager.Instance.IsRunActive || OS.IsDebugBuild();
+		public bool CanSkipCutscene(StringName cutsceneId) => true;//skippableCutscenes.Contains(cutsceneId) || TimeAttackManager.Instance.IsRunActive || OS.IsDebugBuild();
 		public void AllowSkippingCutscene(StringName cutsceneId)
 		{
 			if (!skippableCutscenes.Contains(cutsceneId))
@@ -1815,7 +1815,7 @@ public partial class SaveManager : Node
 			float BossBronze = 420f; //7 Minutes
 			float BossFour = 480f; //8 Minutes
 			float BossFive = 540f; //9 Minutes
-			switch(runType)
+			switch (runType)
 			{
 				case TimeAttackManager.RunType.AnyP:
 					AnyP = [];
@@ -1832,7 +1832,7 @@ public partial class SaveManager : Node
 						AnyP[3].Add(StandardFour / StandardCount);
 						AnyP[4].Add(StandardFive / StandardCount);
 					}
-				break;
+					break;
 				case TimeAttackManager.RunType.GoalPercent:
 					GoalP = [];
 					for (int i = 0; i < 5; i++)
@@ -1847,7 +1847,7 @@ public partial class SaveManager : Node
 						GoalP[3].Add(MiniFour / MinimalistCount);
 						GoalP[4].Add(MiniFive / MinimalistCount);
 					}
-				break;
+					break;
 				case TimeAttackManager.RunType.BossRush:
 					BossRush = [];
 					for (int i = 0; i < 5; i++)
@@ -1862,7 +1862,7 @@ public partial class SaveManager : Node
 						BossRush[3].Add(BossFour / BossRushCount);
 						BossRush[4].Add(BossFive / BossRushCount);
 					}
-				break;
+					break;
 			}
 		}
 
@@ -1885,7 +1885,7 @@ public partial class SaveManager : Node
 			data.ResetCategory(TimeAttackManager.RunType.AnyP);
 			data.ResetCategory(TimeAttackManager.RunType.GoalPercent);
 			data.ResetCategory(TimeAttackManager.RunType.BossRush);
-			
+
 			return data;
 		}
 	}
