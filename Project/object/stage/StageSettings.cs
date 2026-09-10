@@ -305,7 +305,7 @@ public partial class StageSettings : Node3D
 			return -1;
 
 		int rank = 0; // DEFAULT - No rank
-		float completionTime = Mathf.RoundToInt(CurrentTime * 100f) * 0.01f; // Round to nearest millisecond
+		float completionTime = Mathf.FloorToInt(CurrentTime * 100f) * 0.01f; // Round to nearest millisecond
 
 		if (TimeAttackManager.Instance.IsRunActive)
 		{
