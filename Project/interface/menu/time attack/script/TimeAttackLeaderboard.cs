@@ -31,8 +31,8 @@ public partial class TimeAttackLeaderboard : Menu
 	private readonly List<TimeAttackLeaderboardOptionMain> leaderboardOptionsMain = [];
 	private readonly List<TimeAttackLeaderboardOptionSub> leaderboardOptionsSub = [];
 
-	private bool isActive;
-	private bool isSubActive;
+	public bool isActive {get; private set;}
+	public bool isSubActive {get; private set;}
 
 
 	List<List<float>> anyP;

@@ -224,13 +224,17 @@ public partial class TimeAttackStartRun : Menu
 		}
 
 		alertAnimator.Play("hide");
-		leaderboard.EnableProcessing();
+
+		if (leaderboard.isActive)
+			leaderboard.EnableProcessing();
 	}
 
 	private void AlertMenuClosed()
 	{
 		isAlertMenuActive = false;
-		leaderboard.EnableProcessing();
+		
+		if (leaderboard.isActive)
+			leaderboard.EnableProcessing();
 		EnableProcessing();
 	}
 }
