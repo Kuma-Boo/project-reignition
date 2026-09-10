@@ -137,7 +137,6 @@ public partial class SaveSelect : Menu
 
 	public override void EnableProcessing()
 	{
-		GD.Print(isLoadingGame);
 		if (isLoadingGame)
 			return;
 
