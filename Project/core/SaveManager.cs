@@ -1661,6 +1661,8 @@ public partial class SaveManager : Node
 		///<summary>The player's saved augments for single runs
 		public Dictionary<SkillKey, int> equippedAugmentsSingle;
 
+		/// <summary> Total number of gold medals the player has collected. </summary>
+		public int GoldMedalCount { get; set; }
 
 		///<summary>Adds the current run to the saved runs</summary>
 		public void AddCurrentRun()
@@ -1679,27 +1681,19 @@ public partial class SaveManager : Node
 			}
 		}
 
-		public float CalculateTotalTime(Dictionary<string, float> times)
-		{
-			float total = 0f;
-
-			foreach (float time in times.Values)
-			{
-				total += time;
-			}
-
-			return total;
-		}
-
-		public void AddToRunInProgress(float time)
-		{
-			RunInProgress.Add(time);
-		}
+		public void AddToRunInProgress(float time) => RunInProgress.Add(time);
 
 		///<summary>Is Time Attack unlocked?</summary>
-		public bool CheckUnlocked()
+		public bool CheckUnlocked() => SharedData.achievements.Contains("true hero"); //Checking if Alf Layla is defeated
+
+		/// <summary> Recursively calculates the number of gold medals obtained in Time Attack. </summary>
+		public int GetGoldMedalCount(LevelDataResource rootLevel)
 		{
-			return SharedData.achievements.Contains("true hero"); //Checking if Alf Layla is defeated
+			int amount = HasRank(rootLevel) ? 1 : 0;
+			foreach (LevelDataResource level in rootLevel.UnlockStage)
+				amount += GetGoldMedalCount(level);
+
+			return amount;
 		}
 
 		public float GetBestTimeForLevel(LevelDataResource level)
@@ -1709,8 +1703,8 @@ public partial class SaveManager : Node
 				SingleRun[level.LevelID].Sort();
 				return SingleRun[level.LevelID][0];
 			}
-			else
-				return -1;
+
+			return -1;
 		}
 
 		public void DeleteTimesForLevel(LevelDataResource level)
@@ -1789,7 +1783,38 @@ public partial class SaveManager : Node
 			if (dictionary.TryGetValue(nameof(equippedAugmentsSingle), out var))
 				equippedAugmentsSingle = ActiveGameData.LoadAugments((Dictionary<string, int>)var);
 
+			RecalculateGoldMedalCount();
 		}
+
+		public void RecalculateGoldMedalCount()
+		{
+			GoldMedalCount = GetGoldMedalCount(Instance.initialLevelData);
+			// Add on Category Runs
+			if (AnyP.Count != 0 && Mathf.RoundToInt(AnyP[0].Sum()) != StandardGold)
+				GoldMedalCount++;
+			if (GoalP.Count != 0 && Mathf.RoundToInt(GoalP[0].Sum()) != MiniGold)
+				GoldMedalCount++;
+			if (BossRush.Count != 0 && Mathf.RoundToInt(BossRush[0].Sum()) != BossGold)
+				GoldMedalCount++;
+		}
+
+		public const float StandardGold = 1920f; //32 Minutes
+		public const float StandardSilver = 2040; //34 Minutes
+		public const float StandardBronze = 2100; //35 Minutes
+		public const float StandardFour = 2280f; //38 Minutes
+		public const float StandardFive = 2340; //39 Minutes
+
+		public const float MiniGold = 720f; //12 Minutes
+		public const float MiniSilver = 840f; //14 Minutes
+		public const float MiniBronze = 900f; //15 Minutes
+		public const float MiniFour = 960f; //16 Minutes
+		public const float MiniFive = 1020f; //17 Minutes
+
+		public const float BossGold = 300f; //5 Minutes
+		public const float BossSilver = 360f; //6 Minutes
+		public const float BossBronze = 420f; //7 Minutes
+		public const float BossFour = 480f; //8 Minutes
+		public const float BossFive = 540f; //9 Minutes
 
 		public void ResetCategory(TimeAttackManager.RunType runType)
 		{
@@ -1797,24 +1822,6 @@ public partial class SaveManager : Node
 			int StandardCount = 28;
 			int MinimalistCount = 7;
 			int BossRushCount = 5;
-
-			float StandardGold = 1920f; //32 Minutes
-			float StandardSilver = 2040; //34 Minutes
-			float StandardBronze = 2100; //35 Minutes
-			float StandardFour = 2280f; //38 Minutes
-			float StandardFive = 2340; //39 Minutes
-
-			float MiniGold = 720f; //12 Minutes
-			float MiniSilver = 840f; //14 Minutes
-			float MiniBronze = 900f; //15 Minutes
-			float MiniFour = 960f; //16 Minutes
-			float MiniFive = 1020f; //17 Minutes
-
-			float BossGold = 300f; //5 Minutes
-			float BossSilver = 360f; //6 Minutes
-			float BossBronze = 420f; //7 Minutes
-			float BossFour = 480f; //8 Minutes
-			float BossFive = 540f; //9 Minutes
 			switch (runType)
 			{
 				case TimeAttackManager.RunType.AnyP:

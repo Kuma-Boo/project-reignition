@@ -310,9 +310,7 @@ public partial class StageSettings : Node3D
 		if (TimeAttackManager.Instance.IsRunActive)
 		{
 			if (completionTime <= Data.GoldTimeTA)
-			{
 				rank = 3;
-			}
 		}
 		else
 		{

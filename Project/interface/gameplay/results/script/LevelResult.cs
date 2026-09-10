@@ -2,7 +2,6 @@ using System.Globalization;
 using Godot;
 using Project.Core;
 using Project.Gameplay;
-using Project.Interface.Menus;
 
 namespace Project.Interface;
 
@@ -34,6 +33,8 @@ public partial class LevelResult : Control
 
 	private readonly StringName AchievementGoldKey = "the ultimate";
 	private readonly int AchievementGoldRequirement = 111;
+	public const string AchievementGoldTimeAttackKey = "record buster";
+	public const int AchievementGoldTimeAttackRequirement = 114; // All gold medals and categories
 
 	public override void _Ready()
 	{
@@ -174,6 +175,9 @@ public partial class LevelResult : Control
 			}
 			else
 			{
+				if (!SaveManager.TimeData.HasRank(Stage.Data) && Stage.CalculateRank() == 3)
+					SaveManager.TimeData.GoldMedalCount++;
+
 				if (SaveManager.TimeData.SingleRun.ContainsKey(Stage.Data.LevelID))
 					SaveManager.TimeData.SingleRun[Stage.Data.LevelID].Add(Stage.CurrentTime);
 				else
@@ -292,6 +296,9 @@ public partial class LevelResult : Control
 
 		if (SaveManager.ActiveGameData.LevelData.GoldMedalCount >= AchievementGoldRequirement)
 			AchievementManager.Instance.UnlockAchievement(AchievementGoldKey);
+
+		if (SaveManager.TimeData.GoldMedalCount >= AchievementGoldTimeAttackRequirement)
+			AchievementManager.Instance.UnlockAchievement(AchievementGoldTimeAttackKey);
 
 		resultsVoicePlayer.Stream = StageSettings.Player.Effect.voiceLibrary.GetStream(key, SaveManager.GetCurrentVoiceLocaleIndex());
 		resultsVoicePlayer.Play();

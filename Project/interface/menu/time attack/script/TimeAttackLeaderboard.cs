@@ -31,8 +31,8 @@ public partial class TimeAttackLeaderboard : Menu
 	private readonly List<TimeAttackLeaderboardOptionMain> leaderboardOptionsMain = [];
 	private readonly List<TimeAttackLeaderboardOptionSub> leaderboardOptionsSub = [];
 
-	public bool isActive {get; private set;}
-	public bool isSubActive {get; private set;}
+	public bool isActive { get; private set; }
+	public bool isSubActive { get; private set; }
 
 
 	List<List<float>> anyP;
@@ -211,7 +211,6 @@ public partial class TimeAttackLeaderboard : Menu
 		}
 		for (int i = 0; i < options.GetChildren().Count; i++)
 		{
-
 			TimeAttackLeaderboardOptionMain option = options.GetChildren()[i] as TimeAttackLeaderboardOptionMain;
 			switch (TimeAttackManager.Instance.CurrentRunType)
 			{
@@ -237,8 +236,6 @@ public partial class TimeAttackLeaderboard : Menu
 					}
 					break;
 			}
-
-
 		}
 	}
 

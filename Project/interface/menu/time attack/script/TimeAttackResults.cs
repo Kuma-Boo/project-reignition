@@ -75,11 +75,15 @@ public partial class TimeAttackResults : Menu
 
 		if (TimeAttackManager.Instance.IsPersonalBest(TimeAttackManager.Instance.GetTotalRunTime()))
 		{
-			GD.Print("Personal Best Acquired");
 			animator.Play("show_pb");
+
+			SaveManager.TimeData.RecalculateGoldMedalCount(); // Technically expensive, but idc
+			if (SaveManager.TimeData.GoldMedalCount == LevelResult.AchievementGoldTimeAttackRequirement)
+				AchievementManager.Instance.UnlockAchievement(LevelResult.AchievementGoldTimeAttackKey);
 		}
 		else
 			animator.Play("show");
+
 
 		if (!bgm.Playing)
 			bgm.Play();
