@@ -17,7 +17,7 @@ public partial class TimeAttackLeaderboardOptionSub : Menu
 	public void SetTime(float thisTime)
 	{
 		TimeSpan span = TimeSpan.FromSeconds(thisTime);
-		time.Text = span.ToString(@"hh\:mm\:ss\.ff");
+		time.Text = span.ToString(@"mm\:ss\.ff");
 	}
 
 	public void TimeVisible(bool isVisible) => time.Visible = isVisible;
