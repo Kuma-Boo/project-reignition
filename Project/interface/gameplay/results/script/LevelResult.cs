@@ -156,8 +156,7 @@ public partial class LevelResult : Control
 		}
 
 		retryButton.Visible = !isRetryButtonDisabled;
-
-		score.Text = Stage.DisplayScore;
+		score.Text = ExtensionMethods.FormatMenuNumber(Stage.CurrentScore);
 		time.Text = Stage.DisplayTime;
 
 		if (TimeAttackManager.Instance.IsRunActive && Stage.LevelState != StageSettings.LevelStateEnum.Failed)
