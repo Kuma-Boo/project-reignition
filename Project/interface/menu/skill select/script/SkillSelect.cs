@@ -738,6 +738,21 @@ public partial class SkillSelect : Menu
 		if (targetSelection != 0)
 			cursorPosition = VerticalSelection - scrollAmount;
 
+		if (VerticalSelection != 0 && VerticalSelection != unlockedSkillCount - 1)
+		{
+			// Ensure cursor doesn't get stuck on the edges of the list
+			if (cursorPosition == 0) // Top of the list
+			{
+				cursorPosition++;
+				scrollAmount--;
+			}
+			else if (cursorPosition == PageSize - 1)
+			{
+				cursorPosition--;
+				scrollAmount++;
+			}
+		}
+
 		if (VerticalSelection != initialSelection)
 			MoveCursor();
 	}
@@ -867,7 +882,14 @@ public partial class SkillSelect : Menu
 			AugmentSelection--;
 
 		// Frame augments to stay on screen
-		scrollAmount += AugmentSelection + 1;
+		cursorPosition += AugmentSelection + 1;
+		if (cursorPosition > PageSize - 1)
+		{
+			// Scroll page instead of moving cursor
+			cursorPosition -= AugmentSelection + 1;
+			scrollAmount += AugmentSelection + 1;
+		}
+
 		UpdateScrollAmount(0);
 
 		SelectedSkill.ShowAugmentMenu();
