@@ -813,7 +813,7 @@ script = ExtResource("1_l38yo")
 Skills = NodePath("Skills")
 RightFoot = NodePath("RFoot/SoleOffset")
 LeftFoot = NodePath("LFoot/SoleOffset")
-Effect = NodePath("CountdownRoot/Effect")
+Effect = NodePath("Effect")
 animationTree = NodePath("AnimationTree")
 eventAnimationPlayer = NodePath("EventAnimationPlayer")
 movementAnimationSpeedCurve = SubResource("Curve_skwgn")
@@ -889,11 +889,6 @@ followObject = NodePath(".")
 [node name="CountdownRoot" type="Node3D" parent="." unique_id=1657771510]
 transform = Transform3D(0.7191743, 0, 0.6948295, 0, 1, 0, -0.6948295, 0, 0.7191743, 0, 0, 0)
 
-[node name="Effect" parent="CountdownRoot" unique_id=806076737 node_paths=PackedStringArray("landingParticles", "stepEmitters") instance=ExtResource("15_bc7c7")]
-transform = Transform3D(0.7191745, 0, -0.6948297, 0, 1, 0, 0.6948297, 0, 0.7191745, 0, 0, 0)
-landingParticles = [NodePath("VFX/LandingFX/LandingDust"), NodePath("VFX/LandingFX/LandingSand"), NodePath("VFX/LandingFX/LandingGrass"), null, NodePath("VFX/LandingFX/LandingSnow"), null, NodePath("VFX/LandingFX/LandingWater"), null, NodePath("VFX/LandingFX/LandingWet"), NodePath("VFX/LandingFX/LandingWet"), null]
-stepEmitters = [NodePath("VFX/StepFX/PavementStep"), NodePath("VFX/StepFX/SandStep"), NodePath("VFX/StepFX/GrassStep"), null, NodePath("VFX/StepFX/SnowStep"), null, NodePath("VFX/StepFX/WaterStep"), null, NodePath("VFX/StepFX/WetStep"), NodePath("VFX/StepFX/WetStep"), null]
-
 [node name="FlameBurstSFX" type="AudioStreamPlayer" parent="CountdownRoot" unique_id=37315899]
 process_mode = 1
 stream = ExtResource("12_m0cgj")
@@ -907,6 +902,10 @@ transitionTime = 0.0
 settings = ExtResource("14_fi8xb")
 UpdateEveryFrame = true
 followObject = NodePath(".")
+
+[node name="Effect" parent="." unique_id=806076737 node_paths=PackedStringArray("landingParticles", "stepEmitters") instance=ExtResource("15_bc7c7")]
+landingParticles = [NodePath("VFX/LandingFX/LandingDust"), NodePath("VFX/LandingFX/LandingSand"), NodePath("VFX/LandingFX/LandingGrass"), null, NodePath("VFX/LandingFX/LandingSnow"), null, NodePath("VFX/LandingFX/LandingWater"), null, NodePath("VFX/LandingFX/LandingWet"), NodePath("VFX/LandingFX/LandingWet"), null]
+stepEmitters = [NodePath("VFX/StepFX/PavementStep"), NodePath("VFX/StepFX/SandStep"), NodePath("VFX/StepFX/GrassStep"), null, NodePath("VFX/StepFX/SnowStep"), null, NodePath("VFX/StepFX/WaterStep"), null, NodePath("VFX/StepFX/WetStep"), NodePath("VFX/StepFX/WetStep"), null]
 
 [node name="Skills" parent="." unique_id=1803456563 instance=ExtResource("9_7jka2")]
 
@@ -1081,4 +1080,4 @@ parameters/state_transition/current_state = "normal"
 parameters/state_transition/transition_request = ""
 parameters/state_transition/current_index = 0
 
-[editable path="CountdownRoot/Effect"]
+[editable path="Effect"]
