@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://co2akledxygt2" path="res://effect/sun/Sun.tscn" id="2_hjwqu"]
 [ext_resource type="Script" uid="uid://2o7w04fafmsf" path="res://effect/buffer/script/DepthRenderer.cs" id="3_yp1hb"]
 [ext_resource type="Material" uid="uid://tma3nv6ewgck" path="res://effect/buffer/material/Depth Renderer Material.tres" id="4_7ow87"]
+[ext_resource type="Script" uid="uid://ri8vyp7b5bne" path="res://effect/buffer/script/LightShaftEnabler.cs" id="5_7ow87"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_xgfr5"]
 flip_faces = true
@@ -121,22 +122,22 @@ func _process(_delta: float) -> void:
 [node name="Sun" parent="." index="0" unique_id=790927598 instance=ExtResource("2_hjwqu")]
 transform = Transform3D(1, 0, 0, 0, 0.576019, -0.817436, 0, 0.817436, 0.576019, -200, 662.481, -2146.96)
 
-[node name="stg010_sky_Mesh_0000" parent="SkyRoot/Skeleton3D" parent_id_path=PackedInt32Array(1620463724) index="0" unique_id=1420226009]
+[node name="stg010_sky_Mesh_0000" parent="SkyRoot/Skeleton3D" parent_id_path=PackedInt32Array(1715794553) index="0" unique_id=57302425]
 layers = 16
 
-[node name="stg010_sky_Mesh_0001" parent="SkyRoot/Skeleton3D" parent_id_path=PackedInt32Array(1620463724) index="1" unique_id=224972863]
+[node name="stg010_sky_Mesh_0001" parent="SkyRoot/Skeleton3D" parent_id_path=PackedInt32Array(1715794553) index="1" unique_id=438436882]
 layers = 16
 
-[node name="stg010_sky_Mesh_0002" parent="SkyRoot/Skeleton3D" parent_id_path=PackedInt32Array(1620463724) index="2" unique_id=2031847063]
+[node name="stg010_sky_Mesh_0002" parent="SkyRoot/Skeleton3D" parent_id_path=PackedInt32Array(1715794553) index="2" unique_id=630594203]
 layers = 16
 
-[node name="stg010_sky_Mesh_0003" parent="SkyRoot/Skeleton3D" parent_id_path=PackedInt32Array(1620463724) index="3" unique_id=975341166]
+[node name="stg010_sky_Mesh_0003" parent="SkyRoot/Skeleton3D" parent_id_path=PackedInt32Array(1715794553) index="3" unique_id=1910247128]
 layers = 16
 
-[node name="stg010_sky_Mesh_0004" parent="SkyRoot/Skeleton3D" parent_id_path=PackedInt32Array(1620463724) index="4" unique_id=1046250852]
+[node name="stg010_sky_Mesh_0004" parent="SkyRoot/Skeleton3D" parent_id_path=PackedInt32Array(1715794553) index="4" unique_id=2116955208]
 layers = 16
 
-[node name="AnimationPlayer" parent="." index="2" unique_id=1954958898]
+[node name="AnimationPlayer" parent="." index="2" unique_id=421923299]
 autoplay = &"sky"
 
 [node name="DepthRenderer" type="Node" parent="." index="3" unique_id=253755007 node_paths=PackedStringArray("depthCamera", "depthViewport", "depthViewportContainer")]
@@ -201,6 +202,7 @@ mesh = SubResource("QuadMesh_xgfr5")
 
 [node name="CanvasLayerLightShafts" type="CanvasLayer" parent="DepthRenderer" index="1" unique_id=208896064]
 layer = -1
+script = ExtResource("5_7ow87")
 
 [node name="ColorRect_LightRays" type="ColorRect" parent="DepthRenderer/CanvasLayerLightShafts" index="0" unique_id=974145098]
 material = SubResource("ShaderMaterial_3353e")

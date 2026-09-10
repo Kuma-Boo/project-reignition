@@ -584,15 +584,16 @@ public partial class Options : Menu
 				break;
 		}
 		videoLabels[9].Text = GetQualityString(SaveManager.Config.bloomMode);
+		videoLabels[10].Text = SaveManager.Config.useVolumetricLighting ? EnabledString : DisabledString;
 
 		if (SaveManager.Config.softShadowQuality == SaveManager.QualitySetting.Disabled)
-			videoLabels[10].Text = "option_hard_shadows";
+			videoLabels[11].Text = "option_hard_shadows";
 		else
-			videoLabels[10].Text = GetQualityString(SaveManager.Config.softShadowQuality);
-		videoLabels[11].Text = GetQualityString(SaveManager.Config.postProcessingQuality);
-		videoLabels[12].Text = GetQualityString(SaveManager.Config.reflectionQuality);
-		videoLabels[13].Text = SaveManager.Config.useMotionBlur ? EnabledString : DisabledString;
-		videoLabels[14].Text = SaveManager.Config.useScreenShake ? $"{SaveManager.Config.screenShake}%" : DisabledString;
+			videoLabels[11].Text = GetQualityString(SaveManager.Config.softShadowQuality);
+		videoLabels[12].Text = GetQualityString(SaveManager.Config.postProcessingQuality);
+		videoLabels[13].Text = GetQualityString(SaveManager.Config.reflectionQuality);
+		videoLabels[14].Text = SaveManager.Config.useMotionBlur ? EnabledString : DisabledString;
+		videoLabels[15].Text = SaveManager.Config.useScreenShake ? $"{SaveManager.Config.screenShake}%" : DisabledString;
 
 		audioLabels[0].Text = SaveManager.Config.isMasterMuted ? MuteString : $"{SaveManager.Config.masterVolume}%";
 		audioLabels[1].Text = SaveManager.Config.isBgmMuted ? MuteString : $"{SaveManager.Config.bgmVolume}%";
@@ -876,28 +877,32 @@ public partial class Options : Menu
 		}
 		else if (VerticalSelection == 10)
 		{
+			SaveManager.Config.useVolumetricLighting = !SaveManager.Config.useVolumetricLighting;
+		}
+		else if (VerticalSelection == 11)
+		{
 			int softShadowQuality = (int)SaveManager.Config.softShadowQuality;
 			softShadowQuality = WrapSelection(softShadowQuality + direction, (int)SaveManager.QualitySetting.Count);
 			SaveManager.Config.softShadowQuality = (SaveManager.QualitySetting)softShadowQuality;
 		}
-		else if (VerticalSelection == 11)
+		else if (VerticalSelection == 12)
 		{
 			int postProcessingQuality = (int)SaveManager.Config.postProcessingQuality;
 			postProcessingQuality = WrapSelection(postProcessingQuality + direction, (int)SaveManager.QualitySetting.Count);
 			SaveManager.Config.postProcessingQuality = (SaveManager.QualitySetting)postProcessingQuality;
 			StageSettings.Instance.UpdateQualitySettings();
 		}
-		else if (VerticalSelection == 12)
+		else if (VerticalSelection == 13)
 		{
 			int reflectionQuality = (int)SaveManager.Config.reflectionQuality;
 			reflectionQuality = WrapSelection(reflectionQuality + direction, (int)SaveManager.QualitySetting.Count);
 			SaveManager.Config.reflectionQuality = (SaveManager.QualitySetting)reflectionQuality;
 		}
-		else if (VerticalSelection == 13)
+		else if (VerticalSelection == 14)
 		{
 			SaveManager.Config.useMotionBlur = !SaveManager.Config.useMotionBlur;
 		}
-		else if (VerticalSelection == 14)
+		else if (VerticalSelection == 15)
 		{
 			if (!IsSlideVolumeValid(SaveManager.Config.screenShake, direction))
 				return false;

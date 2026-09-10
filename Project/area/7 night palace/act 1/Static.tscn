@@ -62,6 +62,7 @@
 [ext_resource type="Texture2D" uid="uid://cnts85o3iikny" path="res://area/7 night palace/data/skybox/model/texture/space sky hd.png" id="43_ikryj"]
 [ext_resource type="Shader" uid="uid://cf2qpsrx41yxw" path="res://area/7 night palace/data/shader/SpaceFog.gdshader" id="44_5jqgc"]
 [ext_resource type="Curve3D" uid="uid://0mdq7j1l2xsa" path="res://area/7 night palace/act 1/environment/path/MainPath4.tres" id="44_ee14p"]
+[ext_resource type="Script" uid="uid://ri8vyp7b5bne" path="res://effect/buffer/script/LightShaftEnabler.cs" id="44_scag8"]
 [ext_resource type="Texture2D" uid="uid://bsc1djsie84ox" path="res://area/7 night palace/data/skybox/model/texture/space fog.png" id="45_c5pob"]
 [ext_resource type="Curve3D" uid="uid://btaj2vveuk3yl" path="res://area/7 night palace/act 1/environment/path/SpaceAAutomationPath.tres" id="45_n5usr"]
 [ext_resource type="Material" uid="uid://c3kendmmffv8b" path="res://area/7 night palace/data/material/Effect Primary Reflection.tres" id="46_3fvhm"]
@@ -1093,7 +1094,7 @@ Environment = NodePath("WorldEnvironment")
 [node name="Collision" parent="." unique_id=380368419 instance=ExtResource("9_oaikh")]
 visible = false
 
-[node name="CarpetWallOneWay" parent="Collision" index="5" unique_id=710230373]
+[node name="CarpetWallOneWay" parent="Collision" index="5" unique_id=920277187]
 mesh = SubResource("ArrayMesh_mgnt4")
 
 [node name="Trigger" type="Node3D" parent="." unique_id=148784477]
@@ -2257,13 +2258,13 @@ startEnabled = true
 [node name="Skybox" parent="Visuals/MainSection" unique_id=1114181453 instance=ExtResource("3_dbu0p")]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
 
-[node name="BloomMesh" parent="Visuals/MainSection/Skybox/SkyRoot/Skeleton3D" parent_id_path=PackedInt32Array(1114181453, 1072610300) index="1" unique_id=1027493214]
+[node name="BloomMesh" parent="Visuals/MainSection/Skybox/SkyRoot/Skeleton3D" parent_id_path=PackedInt32Array(1114181453, 1362330681) index="1" unique_id=93914323]
 surface_material_override/0 = SubResource("StandardMaterial3D_w6bbh")
 
-[node name="MoonBackgroundMesh" parent="Visuals/MainSection/Skybox/SkyRoot/Skeleton3D" parent_id_path=PackedInt32Array(1114181453, 1072610300) index="4" unique_id=660597119]
+[node name="MoonBackgroundMesh" parent="Visuals/MainSection/Skybox/SkyRoot/Skeleton3D" parent_id_path=PackedInt32Array(1114181453, 1362330681) index="4" unique_id=908575604]
 surface_material_override/0 = SubResource("StandardMaterial3D_81pee")
 
-[node name="MoonMesh" parent="Visuals/MainSection/Skybox/SkyRoot/Skeleton3D" parent_id_path=PackedInt32Array(1114181453, 1072610300) index="5" unique_id=1502130074]
+[node name="MoonMesh" parent="Visuals/MainSection/Skybox/SkyRoot/Skeleton3D" parent_id_path=PackedInt32Array(1114181453, 1362330681) index="5" unique_id=551842240]
 surface_material_override/0 = SubResource("StandardMaterial3D_ikryj")
 
 [node name="DepthRenderer" type="Node" parent="Visuals/MainSection" unique_id=5560633 node_paths=PackedStringArray("depthCamera", "depthViewport", "depthViewportContainer")]
@@ -2328,6 +2329,7 @@ mesh = SubResource("QuadMesh_cl5sw")
 
 [node name="CanvasLayerLightShafts" type="CanvasLayer" parent="Visuals/MainSection/DepthRenderer" unique_id=452127697]
 layer = -1
+script = ExtResource("44_scag8")
 
 [node name="ColorRect_LightRays" type="ColorRect" parent="Visuals/MainSection/DepthRenderer/CanvasLayerLightShafts" unique_id=2021292303]
 material = SubResource("ShaderMaterial_ikryj")
@@ -2349,16 +2351,16 @@ isStageVisuals = true
 
 [node name="SpaceSkybox" parent="Visuals/SpaceSection" unique_id=401803570 instance=ExtResource("19_grfne")]
 
-[node name="SpaceSky" parent="Visuals/SpaceSection/SpaceSkybox" index="0" unique_id=207323677]
+[node name="SpaceSky" parent="Visuals/SpaceSection/SpaceSkybox" index="0" unique_id=99300310]
 surface_material_override/0 = SubResource("ShaderMaterial_tj2qf")
 
-[node name="SpaceSkyBlend" parent="Visuals/SpaceSection/SpaceSkybox" index="1" unique_id=2068591657]
+[node name="SpaceSkyBlend" parent="Visuals/SpaceSection/SpaceSkybox" index="1" unique_id=702668393]
 surface_material_override/0 = SubResource("ShaderMaterial_g4ytx")
 
-[node name="SpaceFog" parent="Visuals/SpaceSection/SpaceSkybox" index="2" unique_id=1780659614]
+[node name="SpaceFog" parent="Visuals/SpaceSection/SpaceSkybox" index="2" unique_id=1200514165]
 surface_material_override/0 = SubResource("ShaderMaterial_tc8c3")
 
-[node name="SpaceFog2" parent="Visuals/SpaceSection/SpaceSkybox" index="3" unique_id=316023255]
+[node name="SpaceFog2" parent="Visuals/SpaceSection/SpaceSkybox" index="3" unique_id=1078166695]
 surface_material_override/0 = SubResource("ShaderMaterial_scag8")
 
 [node name="07GasRoom" parent="Visuals/SpaceSection" unique_id=6521878 instance=ExtResource("23_fk3k1")]

@@ -234,6 +234,7 @@ public partial class SaveManager : Node
 		public QualitySetting bloomMode = QualitySetting.High;
 		public bool useMotionBlur = true;
 		public bool useScreenShake = true;
+		public bool useVolumetricLighting = true;
 		public int screenShake = 100;
 		public QualitySetting softShadowQuality = QualitySetting.Medium;
 		public QualitySetting postProcessingQuality = QualitySetting.Medium;
@@ -320,6 +321,7 @@ public partial class SaveManager : Node
 				{ nameof(useMotionBlur), useMotionBlur },
 				{ nameof(useScreenShake), useScreenShake },
 				{ nameof(screenShake), screenShake },
+				{ nameof(useVolumetricLighting), useVolumetricLighting },
 
 				// Audio
 				{ nameof(isMasterMuted), isMasterMuted },
@@ -414,6 +416,8 @@ public partial class SaveManager : Node
 				useScreenShake = (bool)var;
 			if (dictionary.TryGetValue(nameof(screenShake), out var))
 				screenShake = (int)var;
+			if (dictionary.TryGetValue(nameof(useVolumetricLighting), out var))
+				useVolumetricLighting = (bool)var;
 
 			// Audio
 			if (dictionary.TryGetValue(nameof(isMasterMuted), out var))
