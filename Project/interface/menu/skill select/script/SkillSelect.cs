@@ -881,17 +881,18 @@ public partial class SkillSelect : Menu
 		if (SelectedSkill.Skill.Key == SkillKey.Character && AugmentSelection != 0)
 			AugmentSelection--;
 
-		// Frame augments to stay on screen
+		int finalAugmentIndex = cursorPosition + SelectedSkill.AugmentMenuCount;
 		cursorPosition += AugmentSelection + 1;
-		if (cursorPosition > PageSize - 1)
+		// Frame augments to stay on screen
+		if (finalAugmentIndex >= PageSize - 2)
 		{
+			int extraScrollAmount = finalAugmentIndex - (PageSize - 2);
 			// Scroll page instead of moving cursor
-			cursorPosition -= AugmentSelection + 1;
-			scrollAmount += AugmentSelection + 1;
+			scrollAmount += extraScrollAmount;
+			cursorPosition -= extraScrollAmount;
 		}
 
 		UpdateScrollAmount(0);
-
 		SelectedSkill.ShowAugmentMenu();
 
 		if (Runtime.Instance.IsUsingMouse)
