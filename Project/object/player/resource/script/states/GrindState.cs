@@ -320,7 +320,8 @@ public partial class GrindState : PlayerState
 		}
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.GrindUp) &&
-			SaveManager.ActiveSkillRing.GetAugmentIndex(SkillKey.GrindUp) == 3)
+			SaveManager.ActiveSkillRing.GetAugmentIndex(SkillKey.GrindUp) == 3 &&
+			StageSettings.Instance.CurrentRingCount >= 5)
 		{
 			// Auto-grind
 			StageSettings.Instance.UpdateRingCount(5, StageSettings.MathModeEnum.Subtract, true);
