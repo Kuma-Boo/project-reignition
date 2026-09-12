@@ -1704,7 +1704,7 @@ public partial class SaveManager : Node
 
 				foreach (string levelFile in access.GetFiles())
 				{
-					Resource level = ResourceLoader.Load(path.PathJoin(levelFile));
+					Resource level = ResourceLoader.Load(path.PathJoin(levelFile.Replace(".remap", string.Empty)));
 					if (level is LevelDataResource && HasRank(level as LevelDataResource))
 						GoldMedalCount++;
 				}
