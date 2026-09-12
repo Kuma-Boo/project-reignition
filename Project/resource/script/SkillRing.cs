@@ -214,7 +214,7 @@ public class SkillRing
 	{
 		SkillResource targetSkill = Runtime.Instance.SkillList.GetSkill(key).GetAugment(augmentIndex);
 
-		if (EquippedSkills.Remove(key))
+		if (EquippedSkills.Remove(key) && targetSkill != null)
 		{
 			TotalCost -= targetSkill.Cost; // Refund skill points
 			SkillCountByElement[(int)targetSkill.Element]--;

@@ -97,6 +97,7 @@ public partial class PauseMenu : Node
 			pauseSkill.Skill = Runtime.Instance.SkillList.GetSkill(key);
 			if (pauseSkill.Skill.HasAugments)
 				pauseSkill.Skill = pauseSkill.Skill.GetAugment(SaveManager.ActiveSkillRing.GetAugmentIndex(key));
+
 			pauseSkill.Initialize();
 			pauseSkill.MouseEntered += () => ReceiveMouseInput(pauseSkill, true);
 			skillContainer.AddChild(pauseSkill);

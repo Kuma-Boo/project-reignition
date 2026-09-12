@@ -47,7 +47,7 @@ public partial class PlayerController : CharacterBody3D
 		PathFollower.Initialize(this);
 		Camera.Initialize(this);
 
-		// Initialize state machine last to ensure components are ready		
+		// Initialize state machine last to ensure components are ready
 		StateMachine.Initialize(this);
 
 		CanDoubleJump = true;
@@ -87,8 +87,12 @@ public partial class PlayerController : CharacterBody3D
 		{
 			SkillResource customCharacterSkill = Runtime.Instance.SkillList.GetSkill(SkillKey.Character);
 			int selection = SaveManager.ActiveSkillRing.GetAugmentIndex(SkillKey.Character);
-			customCharacterSkill = customCharacterSkill.GetAugment(selection);
-			modelPath = IsDarkspineSonic ? customCharacterSkill.SuperModel : customCharacterSkill.NormalModel;
+			customCharacterSkill = customCharacterSkill?.GetAugment(selection);
+
+			if (customCharacterSkill == null)
+				SaveManager.ActiveSkillRing.ForceUnequipSkill(SkillKey.Character);
+			else
+				modelPath = IsDarkspineSonic ? customCharacterSkill.SuperModel : customCharacterSkill.NormalModel;
 		}
 
 		if (string.IsNullOrEmpty(modelPath) || !ResourceLoader.Exists(modelPath)) // Default back to normal model
@@ -531,7 +535,7 @@ public partial class PlayerController : CharacterBody3D
 	public enum AttackStates
 	{
 		None, // Player is not attacking
-		Weak, // Player will deal a single point of damage 
+		Weak, // Player will deal a single point of damage
 		Strong, // Double Damage -- Perfect homing attacks
 		OneShot, // Destroy enemies immediately (i.e. Speedbreak and Crest of Fire)
 	}
