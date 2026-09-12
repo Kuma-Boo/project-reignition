@@ -10,9 +10,10 @@ public partial class TimeAttackLeaderboardOptionMain : Menu
 
 	public void SetPlacement(int place) => placement.Text = place.ToString() + ".";
 	//public void SetTime(float thisTime) => time.Text = ExtensionMethods.FormatTime(thisTime);
-	public void SetTime(float thisTime)
+	public void SetTime(float seconds)
 	{
-		TimeSpan span = TimeSpan.FromSeconds(thisTime);
+		seconds = Mathf.RoundToInt(seconds * 100) * 0.01f;
+		TimeSpan span = TimeSpan.FromSeconds(seconds);
 		time.Text = span.ToString(@"hh\:mm\:ss\.ff");
 	}
 
