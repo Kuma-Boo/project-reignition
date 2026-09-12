@@ -27,7 +27,10 @@ public partial class TimeAttack : Menu
 		SaveManager.ActiveSkillRing.UpdateTotalSkillPoints();
 		SaveManager.ActiveGameData.LevelData.SetClearStatus("np_last", SaveManager.LevelSaveData.LevelStatus.Cleared); //Makes it so no story indicators will show up in time attack single run
 
-		SaveManager.LoadTimeAttackData();//Creates a new timeattack file if there isn't one
+		SaveManager.TimeData.RecalculateGoldMedalCount();
+		if (SaveManager.TimeData.GoldMedalCount >= LevelResult.AchievementGoldTimeAttackRequirement)
+			AchievementManager.Instance.UnlockAchievement(LevelResult.AchievementGoldTimeAttackKey);
+
 		SaveManager.SaveTimeAttackData();
 		SaveManager.SaveGameData();
 
@@ -119,7 +122,7 @@ public partial class TimeAttack : Menu
 			buttonList[i].DeselectButton();
 
 		buttonImageAnimator.Play("show");
-		
+
 		if (isRunInProgress)
 		{
 			buttonList[currentSelection - 1].SelectButton();
@@ -262,7 +265,7 @@ public partial class TimeAttack : Menu
 		}
 
 		returnAnimator.Play("hide");
-		
+
 	}
 
 	private void AlertMenuClosed()

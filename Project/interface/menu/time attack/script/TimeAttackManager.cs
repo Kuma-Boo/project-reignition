@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using Godot.Collections;
 using Project.Gameplay;
 using System.Linq;
@@ -31,11 +30,11 @@ public partial class TimeAttackManager : Node
 	public bool IsRunActive { get; private set; }
 	public bool LoadIntoSingle { get; private set; }
 
-
 	public override void _EnterTree()
 	{
 		Instance = this;
 	}
+
 	public void SetRunType(RunType type)
 	{
 		CurrentRunType = type;

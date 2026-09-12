@@ -22,7 +22,6 @@ public partial class TimeAttackNewRun : Menu
 	{
 		base.ShowMenu();
 		description.Text = buttonList[0].description;
-		SaveManager.LoadTimeAttackData();
 	}
 
 	public override void EnableProcessing()

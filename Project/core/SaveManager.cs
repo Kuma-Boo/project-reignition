@@ -13,6 +13,7 @@ public partial class SaveManager : Node
 	[Signal] public delegate void ConfigAppliedEventHandler();
 	/// <summary> The first level loaded when a new game is started. </summary>
 	[Export] private LevelDataResource initialLevelData;
+	[Export] private string[] levelPathParents;
 
 	[Export] public Array<LocalizationResource> TextLocalizations { get; private set; } = [];
 	[Export] public Array<LocalizationResource> VoiceLocalizations { get; private set; } = [];
@@ -618,7 +619,6 @@ public partial class SaveManager : Node
 		// Backwards compatability with old save file's folder structure
 		DirAccess dir = DirAccess.Open(DataDirectory);
 		string[] files = dir.GetFiles();
-		GD.Print(files);
 		for (int i = files.Length - 1; i >= 0; i--)
 		{
 			if (files[i].EndsWith(".dat"))
@@ -1647,6 +1647,8 @@ public partial class SaveManager : Node
 		public Array<Array<float>> GoalP = [];
 		///<summary>The times stored for Boss Rush runs</summary>
 		public Array<Array<float>> BossRush = [];
+		private readonly int LeaderboardSize = 5;
+
 		///<summary>The times stored for single runs</summary>
 		public Dictionary<string, Array<float>> SingleRun;
 		///<summary>The times stored for the current run.</summary>
@@ -1691,13 +1693,30 @@ public partial class SaveManager : Node
 		public bool CheckUnlocked() => SharedData.achievements.Contains("true hero"); //Checking if Alf Layla is defeated
 
 		/// <summary> Recursively calculates the number of gold medals obtained in Time Attack. </summary>
-		public int GetGoldMedalCount(LevelDataResource rootLevel)
+		public void RecalculateGoldMedalCount()
 		{
-			int amount = HasRank(rootLevel) ? 1 : 0;
-			foreach (LevelDataResource level in rootLevel.UnlockStage)
-				amount += GetGoldMedalCount(level);
+			GoldMedalCount = 0;
+			foreach (string path in Instance.levelPathParents)
+			{
+				DirAccess access = DirAccess.Open(path);
+				if (DirAccess.GetOpenError() != Error.Ok)
+					continue;
 
-			return amount;
+				foreach (string levelFile in access.GetFiles())
+				{
+					Resource level = ResourceLoader.Load(path.PathJoin(levelFile));
+					if (level is LevelDataResource && HasRank(level as LevelDataResource))
+						GoldMedalCount++;
+				}
+			}
+
+			// Add on Category Runs
+			if (AnyP.Count != 0 && Mathf.RoundToInt(AnyP[0].Sum()) != StandardGold)
+				GoldMedalCount++;
+			if (GoalP.Count != 0 && Mathf.RoundToInt(GoalP[0].Sum()) != MiniGold)
+				GoldMedalCount++;
+			if (BossRush.Count != 0 && Mathf.RoundToInt(BossRush[0].Sum()) != BossGold)
+				GoldMedalCount++;
 		}
 
 		public float GetBestTimeForLevel(LevelDataResource level)
@@ -1752,11 +1771,11 @@ public partial class SaveManager : Node
 		public void FromDictionary(Dictionary dictionary)
 		{
 			if (dictionary.TryGetValue(nameof(AnyP), out Variant var))
-				AnyP = (Array<Array<float>>)var;
+				AnyP = SortArrayTimes((Array<Array<float>>)var);
 			if (dictionary.TryGetValue(nameof(GoalP), out var))
-				GoalP = (Array<Array<float>>)var;
+				GoalP = SortArrayTimes((Array<Array<float>>)var);
 			if (dictionary.TryGetValue(nameof(BossRush), out var))
-				BossRush = (Array<Array<float>>)var;
+				BossRush = SortArrayTimes((Array<Array<float>>)var);
 			if (dictionary.TryGetValue(nameof(SingleRun), out var))
 				SingleRun = (Dictionary<string, Array<float>>)var;
 			if (dictionary.TryGetValue(nameof(RunInProgress), out var))
@@ -1786,20 +1805,33 @@ public partial class SaveManager : Node
 
 			if (dictionary.TryGetValue(nameof(equippedAugmentsSingle), out var))
 				equippedAugmentsSingle = ActiveGameData.LoadAugments((Dictionary<string, int>)var);
-
-			RecalculateGoldMedalCount();
 		}
 
-		public void RecalculateGoldMedalCount()
+		private Array<Array<float>> SortArrayTimes(Array<Array<float>> times)
 		{
-			GoldMedalCount = GetGoldMedalCount(Instance.initialLevelData);
-			// Add on Category Runs
-			if (AnyP.Count != 0 && Mathf.RoundToInt(AnyP[0].Sum()) != StandardGold)
-				GoldMedalCount++;
-			if (GoalP.Count != 0 && Mathf.RoundToInt(GoalP[0].Sum()) != MiniGold)
-				GoldMedalCount++;
-			if (BossRush.Count != 0 && Mathf.RoundToInt(BossRush[0].Sum()) != BossGold)
-				GoldMedalCount++;
+			if (times.Count == 0)
+				return times;
+
+			// Basic selection sort
+			for (int i = 1; i < times.Count; i++)
+			{
+				int smallestIndex = 0;
+				float smallest = times[0].Sum();
+				for (int j = i + 1; j < times.Count; j++)
+				{
+					float sum = times[j].Sum();
+					if (sum < smallest)
+					{
+						smallestIndex = j;
+						smallest = sum;
+					}
+				}
+				(times[smallestIndex], times[0]) = (times[0], times[smallestIndex]);
+			}
+
+			if (times.Count > LeaderboardSize)
+				times.Resize(LeaderboardSize);
+			return times;
 		}
 
 		public const float StandardGold = 1920f; //32 Minutes
@@ -1833,7 +1865,7 @@ public partial class SaveManager : Node
 
 					for (int i = 0; i < 5; i++)
 					{
-						AnyP.Add(new Array<float>());
+						AnyP.Add([]);
 					}
 					for (int i = 0; i < StandardCount; i++)
 					{

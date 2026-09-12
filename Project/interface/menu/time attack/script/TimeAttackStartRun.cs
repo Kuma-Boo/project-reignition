@@ -25,7 +25,6 @@ public partial class TimeAttackStartRun : Menu
 	public override void ShowMenu()
 	{
 		base.ShowMenu();
-		SaveManager.LoadTimeAttackData();
 		isLeaderboardActive = false;
 		leaderboard.SpawnLeaderboardOptionsSub();
 		leaderboard.SpawnLeaderboardOptionsMain();
@@ -57,20 +56,20 @@ public partial class TimeAttackStartRun : Menu
 		ProcessMenuInput(input);
 	}
 
-    protected override void ProcessMenu()
-    {
+	protected override void ProcessMenu()
+	{
 		if (Input.IsActionJustPressed("ui_text_delete") && !isAlertMenuActive)
 		{
 			ShowAlertMenu();
 			return;
 		}
 
-        base.ProcessMenu();
-    }
+		base.ProcessMenu();
+	}
 
 	private void ProcessMenuInput(Vector2I input)
 	{
-		
+
 		if (isLeaderboardActive)
 		{
 			if (input.X != 0)
@@ -99,7 +98,7 @@ public partial class TimeAttackStartRun : Menu
 			RedrawSelection();
 		}
 
-		
+
 	}
 
 	private void EnterLeaderboard()
@@ -127,7 +126,7 @@ public partial class TimeAttackStartRun : Menu
 
 	private void RedrawSelection()
 	{
-		
+
 		for (int i = 0; i < buttonList.Count; i++)
 			buttonList[i].DeselectButton();
 
@@ -232,7 +231,7 @@ public partial class TimeAttackStartRun : Menu
 	private void AlertMenuClosed()
 	{
 		isAlertMenuActive = false;
-		
+
 		if (leaderboard.isActive)
 			leaderboard.EnableProcessing();
 		EnableProcessing();
